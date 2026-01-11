@@ -73,6 +73,18 @@
   gap: 0.75rem;
   text-decoration: none;
   margin: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.logoSection .logo:hover,
+.logoSection .logo:focus {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
 .logoSection .logoIcon {
@@ -94,6 +106,17 @@
   gap: 0.75rem;
   text-decoration: none;
   width: fit-content;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+.logo:hover,
+.logo:focus {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
 .statsLink {
@@ -209,6 +232,9 @@
 
 .logo:hover .logoText {
   background: linear-gradient(135deg, #f3e8ff 0%, #d8b4fe 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   letter-spacing: 0.08em;
 }
 
