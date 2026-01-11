@@ -29,9 +29,9 @@ export default function Home() {
   return (
     <div className={styles.home}>
       <div className={styles.hero}>
-        <h1 className={styles.title}>Welcome to Enigma</h1>
+        <h1 className={styles.title} data-text="Enigma Catalogue">Enigma Catalogue</h1>
         <p className={styles.subtitle}>
-          A collection of classic word and number puzzles. Challenge yourself and have fun!
+          It's Puzzle time!
         </p>
         <div className={styles.stats}>
           <div className={styles.statItem}>
