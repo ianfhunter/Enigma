@@ -141,16 +141,6 @@
   }
 }
 
-.subtitle {
-  font-size: 1.1rem;
-  color: rgba(196, 181, 253, 0.7);
-  max-width: 500px;
-  margin: 0 auto 0.75rem;
-  line-height: 1.4;
-  font-style: italic;
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 10px rgba(139, 92, 246, 0.2);
-}
 
 .stats {
   display: flex;
@@ -434,10 +424,6 @@
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 0.75rem;
     padding: 0 0.5rem;
-  }
-
-  .subtitle {
-    font-size: 1rem;
   }
 
   .stats {

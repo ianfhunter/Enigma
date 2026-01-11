@@ -80,14 +80,6 @@
   width: auto;
 }
 
-.subtitle {
-  font-size: 0.85rem;
-  color: rgba(196, 181, 253, 0.6);
-  margin: 0;
-  font-style: italic;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
 
 .headerControls {
   display: flex;
@@ -178,39 +170,19 @@
   text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
   position: relative;
   transition: all 0.3s ease;
-}
-
-.logo:hover .logoText {
-  background: linear-gradient(135deg, #f3e8ff 0%, #d8b4fe 50%, #c084fc 100%);
-  letter-spacing: 0.08em;
-}
-
-/* Home header title */
-.title {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 800;
-  background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 40%, #a855f7 60%, #9333ea 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0;
-  letter-spacing: 0.08em;
-  line-height: 1.1;
-  text-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
-  position: relative;
-  animation: titleGlow 5s ease-in-out infinite, glitch 8s infinite;
   display: inline-block;
+  animation: titleGlow 5s ease-in-out infinite, glitch 8s infinite;
 }
 
-.title::before,
-.title::after {
+.logoText::before,
+.logoText::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 40%, #a855f7 60%, #9333ea 100%);
+  background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 50%, #a855f7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -219,17 +191,23 @@
   z-index: -1;
 }
 
-.title::before {
+.logoText::before {
   animation: glitchTop 8s infinite;
   clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
   transform: translate(-2px, 0);
 }
 
-.title::after {
+.logoText::after {
   animation: glitchBottom 8s infinite;
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
   transform: translate(2px, 0);
 }
+
+.logo:hover .logoText {
+  background: linear-gradient(135deg, #f3e8ff 0%, #d8b4fe 50%, #c084fc 100%);
+  letter-spacing: 0.08em;
+}
+
 
 @keyframes titleGlow {
   0%, 100% { 
@@ -531,10 +509,6 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
-  }
-
-  .subtitle {
-    font-size: 0.75rem;
   }
 
   .headerControls {

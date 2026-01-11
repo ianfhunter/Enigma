@@ -32,9 +32,8 @@ export default function Layout() {
               <div className={styles.logoSection}>
                 <Link to="/" className={styles.logo}>
                   <img src={logo} alt="Enigma" className={styles.logoIcon} />
-                  <h1 className={styles.title} data-text="Enigma Catalogue">Enigma Catalogue</h1>
+                  <span className={styles.logoText} data-text="Enigma">Enigma</span>
                 </Link>
-                <p className={styles.subtitle}>It's Puzzle time!</p>
               </div>
               
               <div className={styles.headerControls}>
