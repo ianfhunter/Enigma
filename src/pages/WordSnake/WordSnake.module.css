@@ -1,0 +1,184 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+  color: white;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: #fff;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: #aaa;
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.clue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.clueLabel {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: #22c55e;
+}
+
+.currentWord {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #22c55e;
+  letter-spacing: 4px;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.cell {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.cell:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cell.selected {
+  background: rgba(34, 197, 94, 0.4);
+}
+
+.cell.start {
+  box-shadow: inset 0 0 0 3px #22c55e;
+}
+
+.cell.end {
+  box-shadow: inset 0 0 0 3px #16a34a;
+}
+
+.letter {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.pathNumber {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 10px;
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #22c55e;
+}
+
+.foundWord {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 10px 0 0 0;
+  letter-spacing: 3px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.resetBtn,
+.newGameBtn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(34, 197, 94, 0.3);
+}

@@ -1,0 +1,78 @@
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.75rem 0 1rem;
+}
+
+.group { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+
+.button {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
+  padding: 0.45rem 0.7rem;
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+}
+
+.status { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+.win { color: #22c55e; font-weight: 700; }
+.bad { color: #fb7185; font-weight: 700; }
+
+.board {
+  display: grid;
+  gap: 6px;
+  justify-content: center;
+  user-select: none;
+}
+
+.cell {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+}
+
+.edge {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.10);
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.75);
+}
+
+.corner { background: transparent; border-color: transparent; }
+
+.gridCell { cursor: pointer; }
+.mirror { background: rgba(59,130,246,0.14); border-color: rgba(59,130,246,0.35); }
+.badCell { outline: 2px solid rgba(251,113,133,0.85); outline-offset: 2px; }
+
+.counts {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.85);
+  font-weight: 800;
+}
+

@@ -1,0 +1,415 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #84cc16;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.levelSelector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.settingGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settingGroup label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.generateBtn {
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #84cc16, #65a30d);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.generateBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(132, 204, 22, 0.3);
+}
+
+.levelBtn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.levelBtn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.levelBtn.active {
+  color: #fff;
+  background: rgba(132, 204, 22, 0.3);
+  border-color: rgba(132, 204, 22, 0.5);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+}
+
+.trackContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trackLabel {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.trackCapacity {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+  margin-left: 0.5rem;
+}
+
+.trackRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.engineArea {
+  width: 80px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.engineArea:hover {
+  border-color: rgba(132, 204, 22, 0.5);
+  background: rgba(132, 204, 22, 0.05);
+}
+
+.engineArea.hasEngine {
+  border-style: solid;
+  border-color: rgba(132, 204, 22, 0.5);
+  background: rgba(132, 204, 22, 0.1);
+}
+
+.engine {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1.5rem;
+}
+
+.attachedCars {
+  display: flex;
+  gap: 2px;
+}
+
+.track {
+  flex: 1;
+  position: relative;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.rails {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+  border-radius: 3px;
+}
+
+.rails::before,
+.rails::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #666;
+}
+
+.rails::before {
+  top: -4px;
+}
+
+.rails::after {
+  bottom: -4px;
+}
+
+.carsContainer {
+  display: flex;
+  gap: 4px;
+  padding: 0 10px;
+  z-index: 1;
+}
+
+.car {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.emptySlot {
+  width: 36px;
+  height: 36px;
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.trackActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.actionBtn {
+  padding: 0.35rem 0.75rem;
+  background: rgba(132, 204, 22, 0.2);
+  border: 1px solid rgba(132, 204, 22, 0.4);
+  border-radius: 6px;
+  color: #84cc16;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: rgba(132, 204, 22, 0.3);
+}
+
+.actionBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.targetRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 100px;
+}
+
+.targetLabel {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+.targetCar {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: #fff;
+  opacity: 0.6;
+}
+
+.emptyTarget {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.winMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(132, 204, 22, 0.1);
+  border: 1px solid rgba(132, 204, 22, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.winEmoji {
+  font-size: 3rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.winMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.winMessage p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.undoBtn,
+.resetBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.undoBtn:hover:not(:disabled),
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.undoBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.nextBtn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #84cc16, #65a30d);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nextBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(132, 204, 22, 0.4);
+}
+
+@media (max-width: 600px) {
+  .trackRow {
+    flex-wrap: wrap;
+  }
+
+  .engineArea {
+    width: 60px;
+  }
+
+  .targetRow {
+    padding-left: 0;
+  }
+
+  .car {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .emptySlot {
+    width: 28px;
+    height: 28px;
+  }
+}

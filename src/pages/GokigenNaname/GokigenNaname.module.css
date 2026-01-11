@@ -1,0 +1,260 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+  color: white;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: #fff;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: #aaa;
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.sizeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sizeBtn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sizeBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sizeBtn.active {
+  background: linear-gradient(135deg, #ec4899, #f472b6);
+  border-color: transparent;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.gridWrapper {
+  padding: 10px;
+}
+
+.board {
+  display: grid;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.vertex {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.clue {
+  font-size: 12px;
+  font-weight: bold;
+  color: #f472b6;
+  background: rgba(0, 0, 0, 0.6);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edge {
+  width: 20px;
+  height: 20px;
+}
+
+.cell {
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  padding: 0;
+}
+
+.cell:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cell.error {
+  box-shadow: inset 0 0 0 2px #ef4444;
+}
+
+.slash {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.slash::after {
+  content: '';
+  position: absolute;
+  width: 140%;
+  height: 2px;
+  background: #f472b6;
+  top: 50%;
+  left: 50%;
+}
+
+.slash.forward::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.slash.backward::after {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(244, 114, 182, 0.2));
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #f472b6;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #f472b6;
+}
+
+.winMessage p {
+  margin: 0;
+  color: #aaa;
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #ec4899;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(20px);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.resetBtn,
+.newGameBtn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #ec4899, #f472b6);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(236, 72, 153, 0.3);
+}

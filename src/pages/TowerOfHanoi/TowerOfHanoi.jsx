@@ -1,0 +1,186 @@
+import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import styles from './TowerOfHanoi.module.css';
+
+const DISK_COUNTS = [3, 4, 5, 6, 7];
+const DISK_COLORS = [
+  '#ef4444', // red
+  '#f97316', // orange
+  '#eab308', // yellow
+  '#22c55e', // green
+  '#06b6d4', // cyan
+  '#3b82f6', // blue
+  '#8b5cf6', // purple
+];
+
+export default function TowerOfHanoi() {
+  const [diskCount, setDiskCount] = useState(4);
+  const [towers, setTowers] = useState([[], [], []]);
+  const [selectedTower, setSelectedTower] = useState(null);
+  const [moves, setMoves] = useState(0);
+  const [gameState, setGameState] = useState('playing'); // 'playing', 'won'
+  const [bestMoves, setBestMoves] = useState(() => {
+    const saved = localStorage.getItem('tower-hanoi-best');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const minMoves = Math.pow(2, diskCount) - 1;
+
+  const initGame = useCallback(() => {
+    // Initialize with all disks on the first tower (largest at bottom)
+    const firstTower = Array.from({ length: diskCount }, (_, i) => diskCount - i);
+    setTowers([firstTower, [], []]);
+    setSelectedTower(null);
+    setMoves(0);
+    setGameState('playing');
+  }, [diskCount]);
+
+  useEffect(() => {
+    initGame();
+  }, [initGame]);
+
+  useEffect(() => {
+    localStorage.setItem('tower-hanoi-best', JSON.stringify(bestMoves));
+  }, [bestMoves]);
+
+  const checkWin = useCallback((newTowers) => {
+    // Win if all disks are on the third tower
+    return newTowers[2].length === diskCount;
+  }, [diskCount]);
+
+  const handleTowerClick = (towerIndex) => {
+    if (gameState === 'won') return;
+
+    if (selectedTower === null) {
+      // Select a tower (only if it has disks)
+      if (towers[towerIndex].length > 0) {
+        setSelectedTower(towerIndex);
+      }
+    } else {
+      // Try to move disk
+      if (towerIndex === selectedTower) {
+        // Deselect
+        setSelectedTower(null);
+      } else {
+        const sourceTower = towers[selectedTower];
+        const targetTower = towers[towerIndex];
+        const diskToMove = sourceTower[sourceTower.length - 1];
+        const topDiskOnTarget = targetTower[targetTower.length - 1];
+
+        // Check if move is valid (can only place smaller on larger)
+        if (topDiskOnTarget === undefined || diskToMove < topDiskOnTarget) {
+          const newTowers = towers.map(t => [...t]);
+          newTowers[selectedTower] = sourceTower.slice(0, -1);
+          newTowers[towerIndex] = [...targetTower, diskToMove];
+
+          setTowers(newTowers);
+          setMoves(prev => prev + 1);
+          setSelectedTower(null);
+
+          if (checkWin(newTowers)) {
+            setGameState('won');
+            const key = diskCount.toString();
+            const totalMoves = moves + 1;
+            if (!bestMoves[key] || totalMoves < bestMoves[key]) {
+              setBestMoves(prev => ({ ...prev, [key]: totalMoves }));
+            }
+          }
+        } else {
+          // Invalid move - just deselect
+          setSelectedTower(null);
+        }
+      }
+    }
+  };
+
+  const getDiskWidth = (diskSize) => {
+    const minWidth = 30;
+    const maxWidth = 100;
+    const widthPerDisk = (maxWidth - minWidth) / diskCount;
+    return minWidth + (diskSize * widthPerDisk);
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <Link to="/" className={styles.backLink}>← Back to Games</Link>
+        <h1 className={styles.title}>Tower of Hanoi</h1>
+        <p className={styles.instructions}>
+          Move all disks to the rightmost peg. Larger disks can't go on smaller ones!
+        </p>
+      </div>
+
+      <div className={styles.diskSelector}>
+        {DISK_COUNTS.map((count) => (
+          <button
+            key={count}
+            className={`${styles.diskBtn} ${diskCount === count ? styles.active : ''}`}
+            onClick={() => setDiskCount(count)}
+          >
+            {count} Disks
+          </button>
+        ))}
+      </div>
+
+      <div className={styles.gameArea}>
+        <div className={styles.statsBar}>
+          <div className={styles.stat}>
+            <span className={styles.statLabel}>Moves</span>
+            <span className={styles.statValue}>{moves}</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statLabel}>Minimum</span>
+            <span className={styles.statValue}>{minMoves}</span>
+          </div>
+          {bestMoves[diskCount.toString()] && (
+            <div className={styles.stat}>
+              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statValue}>{bestMoves[diskCount.toString()]}</span>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.towersContainer}>
+          {towers.map((tower, towerIndex) => (
+            <div
+              key={towerIndex}
+              className={`${styles.tower} ${selectedTower === towerIndex ? styles.selected : ''}`}
+              onClick={() => handleTowerClick(towerIndex)}
+            >
+              <div className={styles.peg} />
+              <div className={styles.base} />
+              <div className={styles.disksContainer}>
+                {tower.map((diskSize, diskIndex) => (
+                  <div
+                    key={diskIndex}
+                    className={`${styles.disk} ${
+                      selectedTower === towerIndex && diskIndex === tower.length - 1
+                        ? styles.selectedDisk
+                        : ''
+                    }`}
+                    style={{
+                      width: `${getDiskWidth(diskSize)}%`,
+                      backgroundColor: DISK_COLORS[diskSize - 1],
+                      bottom: `${diskIndex * 28}px`,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {gameState === 'won' && (
+          <div className={styles.winMessage}>
+            🎉 Solved in {moves} moves!
+            {moves === minMoves && <span className={styles.perfect}> Perfect!</span>}
+          </div>
+        )}
+
+        <button className={styles.resetBtn} onClick={initGame}>
+          {gameState === 'won' ? 'Play Again' : 'Reset'}
+        </button>
+      </div>
+    </div>
+  );
+}

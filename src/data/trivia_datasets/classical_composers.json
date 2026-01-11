@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "title": "Symphony No. 5 in C minor, Op. 67 - 1st Movement",
+    "composer": "Ludwig van Beethoven",
+    "year": 1808,
+    "era": "Classical/Romantic",
+    "nationality": "German",
+    "audio_url": "/audio/classical/01.mp3",
+    "fun_fact": "The famous 'da-da-da-DUM' motif is one of the most recognizable in all of classical music."
+  },
+  {
+    "id": 2,
+    "title": "Für Elise",
+    "composer": "Ludwig van Beethoven",
+    "year": 1810,
+    "era": "Classical/Romantic",
+    "nationality": "German",
+    "audio_url": "/audio/classical/02.ogg",
+    "fun_fact": "The identity of 'Elise' remains a mystery - it may have been 'Therese' misread in Beethoven's handwriting."
+  },
+  {
+    "id": 3,
+    "title": "Eine kleine Nachtmusik - 1st Movement",
+    "composer": "Wolfgang Amadeus Mozart",
+    "year": 1787,
+    "era": "Classical",
+    "nationality": "Austrian",
+    "audio_url": "/audio/classical/03.ogg",
+    "fun_fact": "The title translates to 'A Little Night Music' - it's one of Mozart's most popular compositions."
+  },
+  {
+    "id": 4,
+    "title": "Symphony No. 40 in G minor - 1st Movement",
+    "composer": "Wolfgang Amadeus Mozart",
+    "year": 1788,
+    "era": "Classical",
+    "nationality": "Austrian",
+    "audio_url": "/audio/classical/04.ogg",
+    "fun_fact": "One of only two Mozart symphonies in a minor key, known for its emotional intensity."
+  },
+  {
+    "id": 5,
+    "title": "The Four Seasons: Spring - 1st Movement",
+    "composer": "Antonio Vivaldi",
+    "year": 1723,
+    "era": "Baroque",
+    "nationality": "Italian",
+    "audio_url": "/audio/classical/05.ogg",
+    "fun_fact": "Each concerto is accompanied by a sonnet, possibly written by Vivaldi himself."
+  },
+  {
+    "id": 6,
+    "title": "The Four Seasons: Winter - 1st Movement",
+    "composer": "Antonio Vivaldi",
+    "year": 1723,
+    "era": "Baroque",
+    "nationality": "Italian",
+    "audio_url": "/audio/classical/06.ogg",
+    "fun_fact": "The sonnet describes trembling in the freezing snow and the harsh wind."
+  },
+  {
+    "id": 7,
+    "title": "Toccata and Fugue in D minor, BWV 565",
+    "composer": "Johann Sebastian Bach",
+    "year": 1708,
+    "era": "Baroque",
+    "nationality": "German",
+    "audio_url": "/audio/classical/07.mp3",
+    "fun_fact": "Often used in horror films, this piece is one of the most famous organ works ever written."
+  },
+  {
+    "id": 8,
+    "title": "Cello Suite No. 1 in G major - Prelude",
+    "composer": "Johann Sebastian Bach",
+    "year": 1720,
+    "era": "Baroque",
+    "nationality": "German",
+    "audio_url": "/audio/classical/08.ogg",
+    "fun_fact": "Pablo Casals rediscovered these suites and championed them, saving them from obscurity."
+  },
+  {
+    "id": 9,
+    "title": "Canon in D",
+    "composer": "Johann Pachelbel",
+    "year": 1680,
+    "era": "Baroque",
+    "nationality": "German",
+    "audio_url": "/audio/classical/09.ogg",
+    "fun_fact": "Despite being Pachelbel's most famous work, it was largely forgotten until the 20th century."
+  },
+  {
+    "id": 10,
+    "title": "Ride of the Valkyries",
+    "composer": "Richard Wagner",
+    "year": 1856,
+    "era": "Romantic",
+    "nationality": "German",
+    "audio_url": "/audio/classical/10.ogg",
+    "fun_fact": "Made famous by its use in the film Apocalypse Now during a helicopter assault scene."
+  },
+  {
+    "id": 11,
+    "title": "The Blue Danube Waltz",
+    "composer": "Johann Strauss II",
+    "year": 1867,
+    "era": "Romantic",
+    "nationality": "Austrian",
+    "audio_url": "/audio/classical/11.ogg",
+    "fun_fact": "Often called Austria's unofficial national anthem, it's performed annually at the Vienna New Year's Concert."
+  },
+  {
+    "id": 12,
+    "title": "Hungarian Rhapsody No. 2",
+    "composer": "Franz Liszt",
+    "year": 1847,
+    "era": "Romantic",
+    "nationality": "Hungarian",
+    "audio_url": "/audio/classical/12.mp3",
+    "fun_fact": "This piece has been featured in numerous cartoons, including Tom and Jerry and Bugs Bunny."
+  },
+  {
+    "id": 13,
+    "title": "Piano Sonata No. 14 'Moonlight' - 1st Movement",
+    "composer": "Ludwig van Beethoven",
+    "year": 1801,
+    "era": "Classical/Romantic",
+    "nationality": "German",
+    "audio_url": "/audio/classical/13.mp3",
+    "fun_fact": "Beethoven himself was not fond of this piece, despite its immense popularity."
+  },
+  {
+    "id": 14,
+    "title": "Symphony No. 9 'Ode to Joy' - 4th Movement (excerpt)",
+    "composer": "Ludwig van Beethoven",
+    "year": 1824,
+    "era": "Classical/Romantic",
+    "nationality": "German",
+    "audio_url": "/audio/classical/14.ogg",
+    "fun_fact": "Beethoven was completely deaf when he composed this symphony."
+  },
+  {
+    "id": 15,
+    "title": "In the Hall of the Mountain King",
+    "composer": "Edvard Grieg",
+    "year": 1875,
+    "era": "Romantic",
+    "nationality": "Norwegian",
+    "audio_url": "/audio/classical/15.ogg",
+    "fun_fact": "Grieg himself said he 'literally can't stand' this piece because it 'reeks of cow dung and Norwegian nationalism.'"
+  },
+  {
+    "id": 16,
+    "title": "Morning Mood (Peer Gynt)",
+    "composer": "Edvard Grieg",
+    "year": 1875,
+    "era": "Romantic",
+    "nationality": "Norwegian",
+    "audio_url": "/audio/classical/16.mp3",
+    "fun_fact": "Despite being about a Norwegian troll, this piece was meant to depict a sunrise in Morocco."
+  },
+  {
+    "id": 17,
+    "title": "Swan Lake - Scene",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "year": 1876,
+    "era": "Romantic",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/17.mp3",
+    "fun_fact": "The original 1877 production was a failure; the ballet only became popular after Tchaikovsky's death."
+  },
+  {
+    "id": 18,
+    "title": "The Nutcracker - Dance of the Sugar Plum Fairy",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "year": 1892,
+    "era": "Romantic",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/18.ogg",
+    "fun_fact": "Tchaikovsky used the celesta, a new instrument at the time, to create the magical tinkling sound."
+  },
+  {
+    "id": 19,
+    "title": "1812 Overture (finale)",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "year": 1880,
+    "era": "Romantic",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/19.mp3",
+    "fun_fact": "The score calls for actual cannons to be fired during the finale."
+  },
+  {
+    "id": 20,
+    "title": "Piano Concerto No. 1 - Opening",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "year": 1875,
+    "era": "Romantic",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/20.mp3",
+    "fun_fact": "Initially rejected by pianist Nikolai Rubinstein as unplayable, it's now one of the most popular concertos."
+  },
+  {
+    "id": 21,
+    "title": "Nocturne in E-flat major, Op. 9 No. 2",
+    "composer": "Frédéric Chopin",
+    "year": 1832,
+    "era": "Romantic",
+    "nationality": "Polish",
+    "audio_url": "/audio/classical/21.mp3",
+    "fun_fact": "Chopin dedicated this to his student Marie Pleyel, a famous pianist."
+  },
+  {
+    "id": 22,
+    "title": "Minute Waltz (Waltz in D-flat major, Op. 64 No. 1)",
+    "composer": "Frédéric Chopin",
+    "year": 1847,
+    "era": "Romantic",
+    "nationality": "Polish",
+    "audio_url": "/audio/classical/22.mp3",
+    "fun_fact": "The name means 'small' waltz (from Latin 'minutus'), not that it should be played in one minute."
+  },
+  {
+    "id": 23,
+    "title": "Clair de Lune",
+    "composer": "Claude Debussy",
+    "year": 1905,
+    "era": "Impressionist",
+    "nationality": "French",
+    "audio_url": "/audio/classical/23.ogg",
+    "fun_fact": "The title means 'moonlight' in French and was inspired by a poem by Paul Verlaine."
+  },
+  {
+    "id": 24,
+    "title": "Prélude à l'après-midi d'un faune",
+    "composer": "Claude Debussy",
+    "year": 1894,
+    "era": "Impressionist",
+    "nationality": "French",
+    "audio_url": "/audio/classical/24.mp3",
+    "fun_fact": "This piece is often credited with starting the modernist movement in music."
+  },
+  {
+    "id": 25,
+    "title": "Boléro",
+    "composer": "Maurice Ravel",
+    "year": 1928,
+    "era": "Impressionist/Modern",
+    "nationality": "French",
+    "audio_url": "/audio/classical/25.mp3",
+    "fun_fact": "Ravel described it as 'a piece for orchestra without music' - it's one continuous crescendo."
+  },
+  {
+    "id": 26,
+    "title": "William Tell Overture (Finale)",
+    "composer": "Gioachino Rossini",
+    "year": 1829,
+    "era": "Romantic",
+    "nationality": "Italian",
+    "audio_url": "/audio/classical/26.mp3",
+    "fun_fact": "This finale became famous as the theme for The Lone Ranger TV series."
+  },
+  {
+    "id": 27,
+    "title": "The Barber of Seville Overture",
+    "composer": "Gioachino Rossini",
+    "year": 1816,
+    "era": "Romantic",
+    "nationality": "Italian",
+    "audio_url": "/audio/classical/27.mp3",
+    "fun_fact": "Rossini wrote this entire opera in just 13 days."
+  },
+  {
+    "id": 28,
+    "title": "Habanera (Carmen)",
+    "composer": "Georges Bizet",
+    "year": 1875,
+    "era": "Romantic",
+    "nationality": "French",
+    "audio_url": "/audio/classical/28.mp3",
+    "fun_fact": "Bizet died just three months after the opera's premiere, never knowing it would become a masterpiece."
+  },
+  {
+    "id": 29,
+    "title": "Also sprach Zarathustra (Opening)",
+    "composer": "Richard Strauss",
+    "year": 1896,
+    "era": "Late Romantic",
+    "nationality": "German",
+    "audio_url": "/audio/classical/29.mp3",
+    "fun_fact": "Made iconic by Stanley Kubrick's film 2001: A Space Odyssey."
+  },
+  {
+    "id": 30,
+    "title": "Ave Maria",
+    "composer": "Franz Schubert",
+    "year": 1825,
+    "era": "Romantic",
+    "nationality": "Austrian",
+    "audio_url": "/audio/classical/30.mp3",
+    "fun_fact": "The original text was from a Walter Scott poem, not the Latin prayer, which was added later."
+  },
+  {
+    "id": 31,
+    "title": "Symphony No. 8 'Unfinished' - 1st Movement",
+    "composer": "Franz Schubert",
+    "year": 1822,
+    "era": "Romantic",
+    "nationality": "Austrian",
+    "audio_url": "/audio/classical/31.mp3",
+    "fun_fact": "Schubert only completed two movements, and no one knows why he stopped."
+  },
+  {
+    "id": 32,
+    "title": "Piano Concerto No. 2 - 1st Movement",
+    "composer": "Sergei Rachmaninoff",
+    "year": 1901,
+    "era": "Late Romantic",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/32.mp3",
+    "fun_fact": "Composed after recovering from depression with the help of hypnotherapy."
+  },
+  {
+    "id": 33,
+    "title": "Symphony No. 5 - 2nd Movement (Adagio)",
+    "composer": "Gustav Mahler",
+    "year": 1902,
+    "era": "Late Romantic",
+    "nationality": "Austrian",
+    "audio_url": "/audio/classical/33.mp3",
+    "fun_fact": "This Adagietto was used in the film Death in Venice and is often played at funerals."
+  },
+  {
+    "id": 34,
+    "title": "The Planets: Mars, the Bringer of War",
+    "composer": "Gustav Holst",
+    "year": 1916,
+    "era": "Modern",
+    "nationality": "British",
+    "audio_url": "/audio/classical/34.mp3",
+    "fun_fact": "Holst wrote this before World War I ended, and it seems to predict the mechanized warfare."
+  },
+  {
+    "id": 35,
+    "title": "The Planets: Jupiter, the Bringer of Jollity",
+    "composer": "Gustav Holst",
+    "year": 1916,
+    "era": "Modern",
+    "nationality": "British",
+    "audio_url": "/audio/classical/35.mp3",
+    "fun_fact": "The central melody was later adapted into the hymn 'I Vow to Thee, My Country.'"
+  },
+  {
+    "id": 36,
+    "title": "Carmina Burana: O Fortuna",
+    "composer": "Carl Orff",
+    "year": 1937,
+    "era": "Modern",
+    "nationality": "German",
+    "audio_url": "/audio/classical/36.mp3",
+    "fun_fact": "Based on medieval poems and now one of the most frequently used pieces in film and TV."
+  },
+  {
+    "id": 37,
+    "title": "Requiem: Dies Irae",
+    "composer": "Giuseppe Verdi",
+    "year": 1874,
+    "era": "Romantic",
+    "nationality": "Italian",
+    "audio_url": "/audio/classical/37.mp3",
+    "fun_fact": "Written in memory of Italian writer Alessandro Manzoni."
+  },
+  {
+    "id": 38,
+    "title": "La donna è mobile (Rigoletto)",
+    "composer": "Giuseppe Verdi",
+    "year": 1851,
+    "era": "Romantic",
+    "nationality": "Italian",
+    "audio_url": "/audio/classical/38.mp3",
+    "fun_fact": "Verdi kept this aria secret until the premiere to prevent it from being leaked."
+  },
+  {
+    "id": 39,
+    "title": "Nessun dorma (Turandot)",
+    "composer": "Giacomo Puccini",
+    "year": 1926,
+    "era": "Late Romantic",
+    "nationality": "Italian",
+    "audio_url": "/audio/classical/39.mp3",
+    "fun_fact": "Made world-famous by Luciano Pavarotti's performances, especially at the 1990 World Cup."
+  },
+  {
+    "id": 40,
+    "title": "Air on the G String",
+    "composer": "Johann Sebastian Bach",
+    "year": 1731,
+    "era": "Baroque",
+    "nationality": "German",
+    "audio_url": "/audio/classical/40.mp3",
+    "fun_fact": "The title refers to an arrangement that can be played entirely on the violin's lowest string."
+  },
+  {
+    "id": 41,
+    "title": "Brandenburg Concerto No. 3 - 1st Movement",
+    "composer": "Johann Sebastian Bach",
+    "year": 1721,
+    "era": "Baroque",
+    "nationality": "German",
+    "audio_url": "/audio/classical/41.mp3",
+    "fun_fact": "Bach sent these concertos as a job application to the Margrave of Brandenburg, who never responded."
+  },
+  {
+    "id": 42,
+    "title": "Hallelujah Chorus (Messiah)",
+    "composer": "George Frideric Handel",
+    "year": 1741,
+    "era": "Baroque",
+    "nationality": "German-British",
+    "audio_url": "/audio/classical/42.mp3",
+    "fun_fact": "Tradition says King George II stood during this chorus, starting the custom of audiences standing."
+  },
+  {
+    "id": 43,
+    "title": "Water Music Suite - Hornpipe",
+    "composer": "George Frideric Handel",
+    "year": 1717,
+    "era": "Baroque",
+    "nationality": "German-British",
+    "audio_url": "/audio/classical/43.mp3",
+    "fun_fact": "Composed for a royal boat party on the River Thames for King George I."
+  },
+  {
+    "id": 44,
+    "title": "Hungarian Dance No. 5",
+    "composer": "Johannes Brahms",
+    "year": 1869,
+    "era": "Romantic",
+    "nationality": "German",
+    "audio_url": "/audio/classical/44.mp3",
+    "fun_fact": "This is actually based on a Hungarian folk song, which led to accusations of plagiarism."
+  },
+  {
+    "id": 45,
+    "title": "Symphony No. 9 'From the New World' - 2nd Movement (Largo)",
+    "composer": "Antonín Dvořák",
+    "year": 1893,
+    "era": "Romantic",
+    "nationality": "Czech",
+    "audio_url": "/audio/classical/45.mp3",
+    "fun_fact": "Composed in New York, it was inspired by Native American music and African American spirituals."
+  },
+  {
+    "id": 46,
+    "title": "The Sorcerer's Apprentice",
+    "composer": "Paul Dukas",
+    "year": 1897,
+    "era": "Impressionist",
+    "nationality": "French",
+    "audio_url": "/audio/classical/46.mp3",
+    "fun_fact": "Made famous by Mickey Mouse in Disney's Fantasia (1940)."
+  },
+  {
+    "id": 47,
+    "title": "The Rite of Spring - Introduction",
+    "composer": "Igor Stravinsky",
+    "year": 1913,
+    "era": "Modern",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/47.mp3",
+    "fun_fact": "The premiere caused a near-riot due to its revolutionary rhythms and dissonances."
+  },
+  {
+    "id": 48,
+    "title": "Firebird Suite - Finale",
+    "composer": "Igor Stravinsky",
+    "year": 1910,
+    "era": "Modern",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/48.mp3",
+    "fun_fact": "This ballet launched Stravinsky's international career at age 27."
+  },
+  {
+    "id": 49,
+    "title": "Peter and the Wolf - Opening",
+    "composer": "Sergei Prokofiev",
+    "year": 1936,
+    "era": "Modern",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/49.mp3",
+    "fun_fact": "Each character is represented by a different instrument of the orchestra."
+  },
+  {
+    "id": 50,
+    "title": "Romeo and Juliet - Dance of the Knights",
+    "composer": "Sergei Prokofiev",
+    "year": 1935,
+    "era": "Modern",
+    "nationality": "Russian",
+    "audio_url": "/audio/classical/50.mp3",
+    "fun_fact": "Also known as 'Montagues and Capulets,' it became the theme for the UK show The Apprentice."
+  }
+]

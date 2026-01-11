@@ -1,0 +1,109 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.75rem 0 1rem;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.label {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+}
+
+.select, .input {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+  padding: 0.35rem 0.5rem;
+  color: rgba(255,255,255,0.92);
+}
+
+.button {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
+  padding: 0.45rem 0.7rem;
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.85);
+}
+.win { color: #22c55e; font-weight: 700; }
+.bad { color: #fb7185; font-weight: 700; }
+
+.board {
+  display: grid;
+  gap: 6px;
+  justify-content: center;
+  user-select: none;
+}
+
+.cell {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.innerCell {
+  background: rgba(255,255,255,0.04);
+}
+
+.laser {
+  background: rgba(245,158,11,0.14);
+  border-color: rgba(245,158,11,0.35);
+  font-weight: 800;
+}
+
+.corner {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+}
+
+.guess {
+  background: rgba(0,0,0,0.45);
+  border-color: rgba(255,255,255,0.22);
+}
+
+.revealedBall {
+  background: rgba(239,68,68,0.22);
+  border-color: rgba(239,68,68,0.4);
+}
+
+.small {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+

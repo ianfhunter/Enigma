@@ -1,0 +1,151 @@
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+.select {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.35rem 0.6rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.button {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.45rem 0.75rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.button.active {
+  background: rgba(250, 204, 21, 0.3);
+  border-color: rgba(250, 204, 21, 0.5);
+  color: #fff;
+}
+
+.settingGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settingGroup label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.generateBtn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #facc15, #eab308);
+  border: none;
+  border-radius: 10px;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.generateBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
+}
+
+.status {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+.win {
+  color: #22c55e;
+}
+
+.grid {
+  display: grid;
+  gap: 6px;
+  width: min(92vw, 560px);
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.floor {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.wall {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.lit {
+  background: rgba(250, 204, 21, 0.16);
+}
+
+.bulb .icon {
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+}
+
+.mark .icon {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 900;
+}
+
+.num {
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+.bad {
+  outline: 2px solid rgba(251, 113, 133, 0.75);
+}
+

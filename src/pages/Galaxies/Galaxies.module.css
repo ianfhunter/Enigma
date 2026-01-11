@@ -1,0 +1,103 @@
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.75rem 0 1rem;
+}
+
+.group { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+
+.button {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
+  padding: 0.45rem 0.7rem;
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.button.active {
+  background: rgba(168, 85, 247, 0.3);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #fff;
+}
+
+.group label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.generateBtn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.generateBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.status { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+.win { color: #22c55e; font-weight: 700; }
+.bad { color: #fb7185; font-weight: 700; }
+
+.palette { display: flex; gap: 0.5rem; align-items: center; }
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.20);
+  cursor: pointer;
+}
+.active { outline: 2px solid rgba(255,255,255,0.95); outline-offset: 2px; }
+
+.grid {
+  display: grid;
+  gap: 6px;
+  justify-content: center;
+  user-select: none;
+}
+
+.cell {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+  position: relative;
+}
+
+.dot {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: rgba(255,255,255,0.95);
+  text-shadow: 0 1px 10px rgba(0,0,0,0.45);
+}
+
+.badCell { outline: 2px solid rgba(251,113,133,0.85); outline-offset: 2px; }
+

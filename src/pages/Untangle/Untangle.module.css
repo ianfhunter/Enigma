@@ -1,0 +1,90 @@
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+.select {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.35rem 0.6rem;
+}
+
+.button {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.45rem 0.75rem;
+  font-weight: 900;
+}
+
+.status {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+.win {
+  color: #22c55e;
+}
+
+.stageWrap {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+}
+
+.edge {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 2;
+}
+
+.nodeGroup {
+  cursor: grab;
+}
+
+.nodeGroup:active {
+  cursor: grabbing;
+}
+
+.node {
+  fill: rgba(56, 189, 248, 0.85);
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 2;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+.nodeLabel {
+  font-size: 12px;
+  font-weight: 900;
+  fill: #0b1220;
+  user-select: none;
+}
+

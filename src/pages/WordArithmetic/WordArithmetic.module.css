@@ -1,0 +1,327 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+  color: white;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: #fff;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: #aaa;
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.equation {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px 40px;
+  border-radius: 12px;
+  text-align: right;
+}
+
+.operands {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.wordRow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.operator {
+  font-size: 2rem;
+  color: #f59e0b;
+  font-weight: bold;
+  width: 30px;
+}
+
+.word {
+  display: flex;
+  gap: 8px;
+}
+
+.letter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 50px;
+}
+
+.letter:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.letter.selected {
+  background: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 0 2px #f59e0b;
+}
+
+.letter.error {
+  box-shadow: 0 0 0 2px #ef4444;
+}
+
+.letterChar {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.letterDigit {
+  font-size: 1.2rem;
+  color: #f59e0b;
+  margin-top: 4px;
+}
+
+.line {
+  height: 3px;
+  background: #f59e0b;
+  margin: 15px 0;
+}
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.letterBank {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.letterBank h3 {
+  margin: 0 0 15px 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.letters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.letterBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.letterBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.letterBtn.selected {
+  background: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 0 2px #f59e0b;
+}
+
+.letterBtn.assigned {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.letterBtn.error {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.assignedDigit {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+.digitPad {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 350px;
+}
+
+.digitBtn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.digitBtn:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.4);
+  transform: translateY(-2px);
+}
+
+.digitBtn.used {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #f59e0b;
+}
+
+.winMessage p {
+  margin: 0;
+  color: #aaa;
+}
+
+.solution {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #f59e0b;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(20px);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.resetBtn,
+.newGameBtn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+}

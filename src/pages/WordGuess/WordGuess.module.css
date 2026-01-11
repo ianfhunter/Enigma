@@ -1,0 +1,272 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  /* Set CSS variables for GameHeader styling */
+  --game-accent: #6aaa64;
+  --game-gradient: #fff;
+}
+
+.modeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.modeBtn {
+  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modeBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.modeBtn.active {
+  background: rgba(106, 170, 100, 0.2);
+  border-color: rgba(106, 170, 100, 0.4);
+  color: #6aaa64;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+}
+
+.row.shake {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+}
+
+.cell {
+  width: 58px;
+  height: 58px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  transition: border-color 0.1s ease;
+}
+
+.cell.filled {
+  border-color: rgba(255, 255, 255, 0.5);
+  animation: pop 0.1s ease;
+}
+
+@keyframes pop {
+  50% { transform: scale(1.1); }
+}
+
+.cell.correct {
+  background: #538d4e;
+  border-color: #538d4e;
+}
+
+.cell.present {
+  background: #b59f3b;
+  border-color: #b59f3b;
+}
+
+.cell.absent {
+  background: #3a3a3c;
+  border-color: #3a3a3c;
+}
+
+.cell.revealing {
+  animation: flip 0.6s ease forwards;
+}
+
+@keyframes flip {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+.message {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a2e;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result {
+  text-align: center;
+}
+
+.winMessage {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #6aaa64;
+  margin-bottom: 1rem;
+}
+
+.loseMessage {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+}
+
+.loseMessage strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.playAgainBtn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #6aaa64, #538d4e);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.playAgainBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(106, 170, 100, 0.3);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.keyboardRow {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.key {
+  min-width: 32px;
+  height: 52px;
+  padding: 0 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+
+.key:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.key:active {
+  transform: scale(0.95);
+}
+
+.key.wideKey {
+  min-width: 60px;
+  font-size: 0.75rem;
+}
+
+.key.correct {
+  background: #538d4e;
+}
+
+.key.present {
+  background: #b59f3b;
+}
+
+.key.absent {
+  background: #3a3a3c;
+}
+
+.statsPanel {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  width: 100%;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statValue {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 400px) {
+  .cell {
+    width: 50px;
+    height: 50px;
+    font-size: 1.75rem;
+  }
+
+  .key {
+    min-width: 26px;
+    height: 48px;
+    font-size: 0.8rem;
+  }
+
+  .key.wideKey {
+    min-width: 50px;
+  }
+}

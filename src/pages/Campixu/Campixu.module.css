@@ -1,0 +1,288 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+  color: white;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: #fff;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #22c55e 0%, #84cc16 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: #aaa;
+  max-width: 550px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.sizeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sizeBtn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sizeBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sizeBtn.active {
+  background: linear-gradient(135deg, #22c55e, #84cc16);
+  border-color: transparent;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.colClues {
+  display: grid;
+  gap: 2px;
+}
+
+.corner {
+  /* Empty corner */
+}
+
+.colClue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  font-size: 12px;
+  color: #888;
+}
+
+.colClue.complete {
+  color: #22c55e;
+}
+
+.colClue span {
+  display: block;
+}
+
+.mainGrid {
+  display: flex;
+}
+
+.rowClues {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rowClue {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-right: 8px;
+  font-size: 12px;
+  color: #888;
+}
+
+.rowClue.complete {
+  color: #22c55e;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.cell {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+.cell:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cell.tree {
+  background: rgba(34, 197, 94, 0.2);
+  cursor: default;
+}
+
+.cell.tent {
+  background: rgba(234, 179, 8, 0.3);
+}
+
+.cell.grass {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.cell.grass::after {
+  content: '·';
+  color: #22c55e;
+  font-size: 24px;
+}
+
+.cell.error {
+  box-shadow: inset 0 0 0 2px #ef4444;
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(132, 204, 22, 0.2));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #22c55e;
+}
+
+.winMessage p {
+  margin: 0;
+  color: #aaa;
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #22c55e;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(20px);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.resetBtn,
+.newGameBtn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #22c55e, #84cc16);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(34, 197, 94, 0.3);
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  color: #888;
+  font-size: 13px;
+}

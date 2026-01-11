@@ -1,0 +1,547 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #ffd93d;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffd93d 0%, #f0c419 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.gameArea {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .gameArea {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.puzzleSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.timer {
+  text-align: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  min-width: 120px;
+}
+
+.timerLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.25rem;
+}
+
+.timerValue {
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.timerWarning .timerValue {
+  color: #ffa500;
+}
+
+.timerCritical .timerValue {
+  color: #ff4444;
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+.letterGrid {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+  padding: 0 1rem;
+}
+
+.letterTile {
+  width: 60px;
+  height: 70px;
+  background: linear-gradient(145deg, rgba(255, 217, 61, 0.15), rgba(255, 217, 61, 0.05));
+  border: 2px solid rgba(255, 217, 61, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.letterTile.revealed {
+  animation: flipIn 0.4s ease-out forwards;
+}
+
+@keyframes flipIn {
+  0% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+.letterContent {
+  display: block;
+}
+
+.letterTile:not(.revealed) {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.letterTile:not(.revealed) .letterContent {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.letterTile.used {
+  opacity: 0.35;
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.letterTile.used .letterContent {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.startBtn {
+  padding: 1rem 3rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffd93d, #f0c419);
+  border: none;
+  border-radius: 16px;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(255, 217, 61, 0.3);
+}
+
+.startBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(255, 217, 61, 0.4);
+}
+
+.startBtn:active {
+  transform: translateY(0);
+}
+
+.inputArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.guessInput {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.2em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 217, 61, 0.3);
+  border-radius: 16px;
+  color: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.guessInput:focus {
+  border-color: rgba(255, 217, 61, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(255, 217, 61, 0.1);
+}
+
+.guessInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
+.inputButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.submitBtn {
+  background: linear-gradient(135deg, #ffd93d, #f0c419);
+  border-color: transparent;
+  color: #1a1a2e;
+  padding: 0.75rem 2rem;
+}
+
+.submitBtn:hover {
+  background: linear-gradient(135deg, #ffe566, #ffd93d);
+  box-shadow: 0 4px 15px rgba(255, 217, 61, 0.3);
+}
+
+.giveUpBtn {
+  background: linear-gradient(135deg, #636e72, #535c68);
+  border-color: transparent;
+  color: #dfe6e9;
+}
+
+.giveUpBtn:hover {
+  background: linear-gradient(135deg, #747d80, #636e72);
+  box-shadow: 0 4px 12px rgba(99, 110, 114, 0.3);
+}
+
+.message {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.error {
+  background: rgba(255, 100, 100, 0.2);
+  color: #ff8888;
+  border: 1px solid rgba(255, 100, 100, 0.3);
+}
+
+.message.success {
+  background: rgba(100, 255, 150, 0.2);
+  color: #88ff99;
+  border: 1px solid rgba(100, 255, 150, 0.3);
+}
+
+.resultArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.answerReveal {
+  text-align: center;
+}
+
+.answerLabel {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.answerWord {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.answerLetter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(100, 255, 150, 0.2), rgba(100, 255, 150, 0.1));
+  border: 2px solid rgba(100, 255, 150, 0.4);
+  border-radius: 8px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #88ff99;
+  animation: popIn 0.3s ease backwards;
+}
+
+.answerLetter:nth-child(1) { animation-delay: 0s; }
+.answerLetter:nth-child(2) { animation-delay: 0.05s; }
+.answerLetter:nth-child(3) { animation-delay: 0.1s; }
+.answerLetter:nth-child(4) { animation-delay: 0.15s; }
+.answerLetter:nth-child(5) { animation-delay: 0.2s; }
+.answerLetter:nth-child(6) { animation-delay: 0.25s; }
+.answerLetter:nth-child(7) { animation-delay: 0.3s; }
+.answerLetter:nth-child(8) { animation-delay: 0.35s; }
+.answerLetter:nth-child(9) { animation-delay: 0.4s; }
+
+@keyframes popIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.answerWord.missed .answerLetter {
+  background: linear-gradient(135deg, rgba(255, 100, 100, 0.2), rgba(255, 100, 100, 0.1));
+  border-color: rgba(255, 100, 100, 0.4);
+  color: #ff8888;
+}
+
+.feedbackSection {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.feedbackLabel {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.75rem;
+}
+
+.feedbackButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.feedbackBtn {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+}
+
+.feedbackBtn.archaicBtn {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.3);
+  color: #ffc107;
+}
+
+.feedbackBtn.archaicBtn:hover {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.5);
+}
+
+.feedbackBtn.obscureBtn {
+  background: rgba(156, 39, 176, 0.1);
+  border-color: rgba(156, 39, 176, 0.3);
+  color: #ce93d8;
+}
+
+.feedbackBtn.obscureBtn:hover {
+  background: rgba(156, 39, 176, 0.2);
+  border-color: rgba(156, 39, 176, 0.5);
+}
+
+.feedbackBtn.flagged {
+  background: rgba(76, 175, 80, 0.15);
+  border-color: rgba(76, 175, 80, 0.4);
+  color: #81c784;
+}
+
+.feedbackBtn.flagged:hover {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.newGameBtn {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4ecdc4, #3dbdb5);
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
+}
+
+.statsSection {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 1.5rem;
+}
+
+.statsSection h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+  text-align: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+}
+
+.statValue {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffd93d;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.25rem;
+}
+
+.howToPlay {
+  padding-top: 0.5rem;
+}
+
+.howToPlay h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.75rem;
+}
+
+.howToPlay ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.howToPlay li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+.howToPlay li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #ffd93d;
+}
+
+@media (max-width: 600px) {
+  .letterTile {
+    width: 50px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .letterGrid {
+    gap: 0.35rem;
+  }
+
+  .guessInput {
+    font-size: 1.25rem;
+    letter-spacing: 0.15em;
+  }
+
+  .answerLetter {
+    width: 32px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

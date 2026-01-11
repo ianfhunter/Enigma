@@ -1,0 +1,746 @@
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { getGameGradient } from '../../data/gameRegistry';
+import { usePersistedState } from '../../hooks/usePersistedState';
+import { useKeyboardInput } from '../../hooks/useKeyboardInput';
+import GameHeader from '../../components/GameHeader';
+import {
+  parseCluesData,
+  generateCrossword,
+  getDailySeed,
+  getTodayDateString,
+  isPuzzleComplete,
+  getEmptyCells,
+} from '../../data/crosswordUtils';
+import styles from './Crossword.module.css';
+
+// Import clues data
+import cluesRaw from '../../data/nyt_clues.txt?raw';
+
+// Parse clues on module load
+const CLUES_DATA = parseCluesData(cluesRaw);
+
+// Fun loading phrases
+const LOADING_PHRASES = [
+  "Scheming...",
+  "Concocting Dastardly Plans...",
+  "Thinking...",
+  "Churning...",
+  "Consulting the Oracle...",
+  "Summoning Words...",
+  "Weaving Letters...",
+  "Plotting Intersections...",
+  "Arranging the Universe...",
+  "Channeling Crossword Spirits...",
+];
+
+export default function Crossword() {
+  const [mode, setMode] = useState('daily'); // 'daily' or 'practice'
+  const [difficulty, setDifficulty] = useState('medium');
+  const [puzzle, setPuzzle] = useState(null);
+  const [userGrid, setUserGrid] = useState([]);
+  const [selectedCell, setSelectedCell] = useState(null);
+  const [direction, setDirection] = useState('across'); // 'across' or 'down'
+  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'gaveUp'
+  const [missedWords, setMissedWords] = useState([]);
+  const [timer, setTimer] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
+  const [_puzzleSeed, setPuzzleSeed] = useState(() => Date.now());
+  const gridRef = useRef(null);
+
+  const [stats, setStats] = usePersistedState('crossword-stats', {
+    played: 0,
+    won: 0,
+    bestTime: null,
+    avgTime: 0,
+    totalTime: 0,
+  });
+
+  const [dailyState, setDailyState] = usePersistedState('crossword-daily', {
+    date: null,
+    userGrid: [],
+    timer: 0,
+    completed: false,
+  });
+
+  // Generate puzzle
+  const generatePuzzle = useCallback((gameMode, diff, seed, forceNewSeed = false) => {
+    // Use daily seed only for daily mode when not forcing a new puzzle
+    const actualSeed = (gameMode === 'daily' && !forceNewSeed)
+      ? getDailySeed(getTodayDateString())
+      : seed;
+
+    const newPuzzle = generateCrossword(CLUES_DATA, {
+      gridSize: 20,
+      targetWords: diff === 'easy' ? 10 : diff === 'hard' ? 18 : 14,
+      seed: actualSeed,
+      difficulty: diff,
+    });
+
+    return newPuzzle;
+  }, []);
+
+  // Initialize game
+  const initGame = useCallback((gameMode, diff = difficulty, forceNew = false) => {
+    setMode(gameMode);
+    setDifficulty(diff);
+    setGameState('playing');
+    setShowErrors(false);
+    setMissedWords([]);
+
+    // Generate a new seed for new puzzles
+    const newSeed = Date.now() + Math.floor(Math.random() * 1000000);
+
+    // Check for saved daily progress
+    if (gameMode === 'daily' && !forceNew) {
+      const today = getTodayDateString();
+      if (dailyState.date === today && dailyState.userGrid && dailyState.userGrid.length > 0) {
+        const newPuzzle = generatePuzzle('daily', diff, newSeed, false);
+        // Validate that saved grid matches puzzle dimensions
+        if (newPuzzle.grid &&
+            dailyState.userGrid.length === newPuzzle.grid.length &&
+            dailyState.userGrid[0]?.length === newPuzzle.grid[0]?.length) {
+          setPuzzle(newPuzzle);
+          setUserGrid(dailyState.userGrid);
+          setTimer(dailyState.timer || 0);
+          setIsTimerRunning(!dailyState.completed);
+          if (dailyState.completed) {
+            setGameState('won');
+          }
+          return;
+        }
+        // If grid dimensions don't match, fall through to generate fresh
+      }
+    }
+
+    setPuzzleSeed(newSeed);
+
+    const newPuzzle = generatePuzzle(gameMode, diff, newSeed, forceNew);
+    setPuzzle(newPuzzle);
+
+    // Initialize empty user grid
+    const emptyGrid = newPuzzle.grid.map(row =>
+      row.map(cell => cell === null ? null : '')
+    );
+    setUserGrid(emptyGrid);
+    setSelectedCell(null);
+    setDirection('across');
+    setTimer(0);
+    setIsTimerRunning(true);
+  }, [difficulty, dailyState, generatePuzzle]);
+
+  useEffect(() => {
+    initGame('daily');
+  }, []);
+
+  // Timer
+  useEffect(() => {
+    let interval;
+    if (isTimerRunning && gameState === 'playing') {
+      interval = setInterval(() => {
+        setTimer(t => t + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning, gameState]);
+
+  // Save daily progress
+  useEffect(() => {
+    if (mode === 'daily' && puzzle && userGrid.length > 0) {
+      setDailyState({
+        date: getTodayDateString(),
+        userGrid,
+        timer,
+        completed: gameState === 'won',
+      });
+    }
+  }, [mode, puzzle, userGrid, timer, gameState, setDailyState]);
+
+  // Check for win
+  useEffect(() => {
+    if (puzzle && userGrid.length > 0 && gameState === 'playing') {
+      if (isPuzzleComplete(puzzle, userGrid)) {
+        setGameState('won');
+        setIsTimerRunning(false);
+
+        setStats(prev => ({
+          played: prev.played + 1,
+          won: prev.won + 1,
+          bestTime: prev.bestTime ? Math.min(prev.bestTime, timer) : timer,
+          totalTime: prev.totalTime + timer,
+          avgTime: Math.round((prev.totalTime + timer) / (prev.won + 1)),
+        }));
+      }
+    }
+  }, [userGrid, puzzle, gameState, timer, setStats]);
+
+  // Format time
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Get the current word being worked on
+  const getCurrentWord = useCallback(() => {
+    if (!selectedCell || !puzzle) return null;
+
+    const { row, col } = selectedCell;
+    const clueList = direction === 'across' ? puzzle.across : puzzle.down;
+
+    for (const clue of clueList) {
+      const startRow = clue.row;
+      const startCol = clue.col;
+      const endRow = direction === 'across' ? startRow : startRow + clue.answer.length - 1;
+      const endCol = direction === 'across' ? startCol + clue.answer.length - 1 : startCol;
+
+      if (direction === 'across') {
+        if (row === startRow && col >= startCol && col <= endCol) {
+          return clue;
+        }
+      } else {
+        if (col === startCol && row >= startRow && row <= endRow) {
+          return clue;
+        }
+      }
+    }
+    return null;
+  }, [selectedCell, puzzle, direction]);
+
+  // Get cells for current word
+  const getWordCells = useCallback((clue, dir) => {
+    if (!clue) return [];
+    const cells = [];
+    for (let i = 0; i < clue.answer.length; i++) {
+      cells.push({
+        row: dir === 'across' ? clue.row : clue.row + i,
+        col: dir === 'across' ? clue.col + i : clue.col,
+      });
+    }
+    return cells;
+  }, []);
+
+  const currentWord = getCurrentWord();
+  const currentWordCells = useMemo(() => {
+    return currentWord ? getWordCells(currentWord, direction) : [];
+  }, [currentWord, direction, getWordCells]);
+
+  // Handle cell click
+  const handleCellClick = useCallback((row, col) => {
+    if (!puzzle || puzzle.grid[row][col] === null) return;
+
+    if (selectedCell?.row === row && selectedCell?.col === col) {
+      // Toggle direction
+      setDirection(d => d === 'across' ? 'down' : 'across');
+    } else {
+      setSelectedCell({ row, col });
+    }
+  }, [puzzle, selectedCell]);
+
+  // Handle clue click
+  const handleClueClick = useCallback((clue, dir) => {
+    setDirection(dir);
+    setSelectedCell({ row: clue.row, col: clue.col });
+  }, []);
+
+  // Move to next cell
+  const moveToNextCell = useCallback(() => {
+    if (!selectedCell || !puzzle || !puzzle.grid || !puzzle.size) return;
+
+    let { row, col } = selectedCell;
+
+    if (direction === 'across') {
+      col++;
+      while (col < puzzle.size.cols && puzzle.grid[row]?.[col] === null) {
+        col++;
+      }
+      if (col < puzzle.size.cols && puzzle.grid[row]?.[col] !== null) {
+        setSelectedCell({ row, col });
+      }
+    } else {
+      row++;
+      while (row < puzzle.size.rows && puzzle.grid[row]?.[col] === null) {
+        row++;
+      }
+      if (row < puzzle.size.rows && puzzle.grid[row]?.[col] !== null) {
+        setSelectedCell({ row, col });
+      }
+    }
+  }, [selectedCell, puzzle, direction]);
+
+  // Move to previous cell
+  const moveToPrevCell = useCallback(() => {
+    if (!selectedCell || !puzzle || !puzzle.grid) return;
+
+    let { row, col } = selectedCell;
+
+    if (direction === 'across') {
+      col--;
+      while (col >= 0 && puzzle.grid[row]?.[col] === null) {
+        col--;
+      }
+      if (col >= 0 && puzzle.grid[row]?.[col] !== null) {
+        setSelectedCell({ row, col });
+      }
+    } else {
+      row--;
+      while (row >= 0 && puzzle.grid[row]?.[col] === null) {
+        row--;
+      }
+      if (row >= 0 && puzzle.grid[row]?.[col] !== null) {
+        setSelectedCell({ row, col });
+      }
+    }
+  }, [selectedCell, puzzle, direction]);
+
+  // Handle letter input
+  const handleLetter = useCallback((letter) => {
+    if (!selectedCell || gameState !== 'playing' || !puzzle || !puzzle.grid) return;
+
+    const { row, col } = selectedCell;
+    if (!puzzle.grid[row] || puzzle.grid[row][col] === null) return;
+
+    setUserGrid(prev => {
+      if (!prev || !prev[row]) return prev;
+      const newGrid = prev.map(r => [...r]);
+      newGrid[row][col] = letter;
+      return newGrid;
+    });
+
+    moveToNextCell();
+  }, [selectedCell, puzzle, gameState, moveToNextCell]);
+
+  // Handle backspace
+  const handleBackspace = useCallback(() => {
+    if (!selectedCell || gameState !== 'playing' || !userGrid) return;
+
+    const { row, col } = selectedCell;
+
+    if (userGrid[row]?.[col]) {
+      // Clear current cell
+      setUserGrid(prev => {
+        if (!prev || !prev[row]) return prev;
+        const newGrid = prev.map(r => [...r]);
+        newGrid[row][col] = '';
+        return newGrid;
+      });
+    } else {
+      // Move to previous cell and clear
+      moveToPrevCell();
+    }
+  }, [selectedCell, userGrid, gameState, moveToPrevCell]);
+
+  // Handle arrow keys
+  const handleArrow = useCallback((dir) => {
+    if (!selectedCell || !puzzle || !puzzle.grid) return;
+
+    let { row, col } = selectedCell;
+
+    switch (dir) {
+      case 'up':
+        row--;
+        while (row >= 0 && puzzle.grid[row]?.[col] === null) row--;
+        if (row >= 0 && puzzle.grid[row]?.[col] !== null) {
+          setSelectedCell({ row, col });
+          if (direction === 'across') setDirection('down');
+        }
+        break;
+      case 'down':
+        row++;
+        while (row < puzzle.size.rows && puzzle.grid[row]?.[col] === null) row++;
+        if (row < puzzle.size.rows && puzzle.grid[row]?.[col] !== null) {
+          setSelectedCell({ row, col });
+          if (direction === 'across') setDirection('down');
+        }
+        break;
+      case 'left':
+        col--;
+        while (col >= 0 && puzzle.grid[row]?.[col] === null) col--;
+        if (col >= 0 && puzzle.grid[row]?.[col] !== null) {
+          setSelectedCell({ row, col });
+          if (direction === 'down') setDirection('across');
+        }
+        break;
+      case 'right':
+        col++;
+        while (col < puzzle.size.cols && puzzle.grid[row]?.[col] === null) col++;
+        if (col < puzzle.size.cols && puzzle.grid[row]?.[col] !== null) {
+          setSelectedCell({ row, col });
+          if (direction === 'down') setDirection('across');
+        }
+        break;
+    }
+  }, [selectedCell, puzzle, direction]);
+
+  // Keyboard input
+  useKeyboardInput({
+    onLetter: handleLetter,
+    onBackspace: handleBackspace,
+    onArrow: handleArrow,
+    enabled: gameState === 'playing',
+  });
+
+  // Reveal random letter
+  const revealRandomLetter = useCallback(() => {
+    if (gameState !== 'playing' || !puzzle || !puzzle.grid) return;
+
+    const emptyCells = getEmptyCells(puzzle, userGrid);
+    if (!emptyCells || emptyCells.length === 0) return;
+
+    // Pick a random empty cell
+    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    if (!randomCell || randomCell.answer === undefined) return;
+
+    setUserGrid(prev => {
+      const newGrid = prev.map(r => [...r]);
+      if (newGrid[randomCell.row] && randomCell.col < newGrid[randomCell.row].length) {
+        newGrid[randomCell.row][randomCell.col] = randomCell.answer;
+      }
+      return newGrid;
+    });
+
+    // Select the revealed cell
+    setSelectedCell({ row: randomCell.row, col: randomCell.col });
+  }, [puzzle, userGrid, gameState]);
+
+  // Reveal word
+  const revealWord = useCallback(() => {
+    if (!currentWord || gameState !== 'playing' || !puzzle || !puzzle.grid) return;
+    if (!currentWordCells || currentWordCells.length === 0) return;
+
+    setUserGrid(prev => {
+      const newGrid = prev.map(r => [...r]);
+      currentWordCells.forEach(({ row, col }) => {
+        if (newGrid[row] && col < newGrid[row].length && puzzle.grid[row] && puzzle.grid[row][col] !== null) {
+          newGrid[row][col] = puzzle.grid[row][col];
+        }
+      });
+      return newGrid;
+    });
+  }, [currentWord, currentWordCells, puzzle, gameState]);
+
+  // Check cell correctness
+  const isCellCorrect = useCallback((row, col) => {
+    if (!puzzle || !userGrid[row]) return true;
+    if (puzzle.grid[row][col] === null) return true;
+    if (!userGrid[row][col]) return true;
+    return userGrid[row][col].toUpperCase() === puzzle.grid[row][col];
+  }, [puzzle, userGrid]);
+
+  // Give up and show solution
+  const giveUp = useCallback(() => {
+    if (gameState !== 'playing' || !puzzle) return;
+
+    // Find missed words
+    const missed = [];
+    const allClues = [...(puzzle.across || []), ...(puzzle.down || [])];
+
+    for (const clue of allClues) {
+      const dir = puzzle.across.includes(clue) ? 'across' : 'down';
+      const dr = dir === 'down' ? 1 : 0;
+      const dc = dir === 'across' ? 1 : 0;
+
+      let wordCorrect = true;
+      for (let i = 0; i < clue.answer.length; i++) {
+        const r = clue.row + dr * i;
+        const c = clue.col + dc * i;
+        if (!userGrid[r]?.[c] || userGrid[r][c].toUpperCase() !== clue.answer[i]) {
+          wordCorrect = false;
+          break;
+        }
+      }
+
+      if (!wordCorrect) {
+        missed.push({
+          number: clue.number,
+          direction: dir,
+          answer: clue.answer,
+          clue: clue.clue,
+        });
+      }
+    }
+
+    setMissedWords(missed);
+    setGameState('gaveUp');
+    setIsTimerRunning(false);
+
+    // Fill in the solution
+    setUserGrid(prev => {
+      if (!puzzle.grid) return prev;
+      return puzzle.grid.map(row => row.map(cell => cell));
+    });
+
+    // Update stats
+    setStats(prev => ({
+      ...prev,
+      played: prev.played + 1,
+    }));
+  }, [gameState, puzzle, userGrid, setStats]);
+
+  // Random loading phrase
+  const loadingPhrase = useMemo(() =>
+    LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)],
+  []);
+
+  if (!puzzle) {
+    return (
+      <div className={styles.container}>
+        <GameHeader
+          title="Crossword"
+          instructions={loadingPhrase}
+          gradient={getGameGradient('crossword')}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <GameHeader
+        title="Crossword"
+        instructions="Fill in the grid using the clues. Click a cell or clue to start!"
+        gradient={getGameGradient('crossword')}
+      />
+
+      <div className={styles.controls}>
+        <div className={styles.modeSelector}>
+          <button
+            className={`${styles.modeBtn} ${mode === 'daily' ? styles.active : ''}`}
+            onClick={() => initGame('daily', difficulty)}
+          >
+            Daily {dailyState.completed && dailyState.date === getTodayDateString() && '✓'}
+          </button>
+          <button
+            className={`${styles.modeBtn} ${mode === 'practice' ? styles.active : ''}`}
+            onClick={() => initGame('practice', difficulty)}
+          >
+            Practice
+          </button>
+        </div>
+
+        <div className={styles.difficultySelector}>
+          {['easy', 'medium', 'hard'].map(d => (
+            <button
+              key={d}
+              className={`${styles.diffBtn} ${difficulty === d ? styles.active : ''}`}
+              onClick={() => initGame(mode, d)}
+            >
+              {d.charAt(0).toUpperCase() + d.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.gameArea}>
+        <div className={styles.topBar}>
+          <div className={styles.timer}>
+            <span className={styles.timerIcon}>⏱️</span>
+            <span className={styles.timerValue}>{formatTime(timer)}</span>
+          </div>
+
+          <button
+            className={styles.newPuzzleBtn}
+            onClick={() => initGame(mode, difficulty, true)}
+          >
+            🔄 New Puzzle
+          </button>
+        </div>
+
+        <div className={styles.mainContent}>
+          <div className={styles.gridSection}>
+            <div
+              className={styles.grid}
+              ref={gridRef}
+              style={{
+                gridTemplateColumns: `repeat(${puzzle.size.cols}, 1fr)`,
+                gridTemplateRows: `repeat(${puzzle.size.rows}, 1fr)`,
+              }}
+            >
+              {puzzle.grid.map((row, r) =>
+                row.map((cell, c) => {
+                  const cellKey = `${r},${c}`;
+                  const cellNumber = puzzle.cellNumbers[cellKey];
+                  const isSelected = selectedCell?.row === r && selectedCell?.col === c;
+                  const isInWord = currentWordCells.some(wc => wc.row === r && wc.col === c);
+                  const isBlack = cell === null;
+                  const userLetter = userGrid[r]?.[c] || '';
+                  const isError = showErrors && !isCellCorrect(r, c);
+
+                  return (
+                    <div
+                      key={`${r}-${c}`}
+                      className={`
+                        ${styles.cell}
+                        ${isBlack ? styles.black : ''}
+                        ${isSelected ? styles.selected : ''}
+                        ${isInWord && !isSelected ? styles.highlighted : ''}
+                        ${isError ? styles.error : ''}
+                      `}
+                      onClick={() => handleCellClick(r, c)}
+                    >
+                      {cellNumber && (
+                        <span className={styles.cellNumber}>{cellNumber}</span>
+                      )}
+                      {!isBlack && (
+                        <span className={styles.cellLetter}>{userLetter}</span>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {gameState === 'won' && (
+              <div className={styles.winBanner}>
+                <div className={styles.winTitle}>🎉 Congratulations!</div>
+                <div className={styles.winSubtitle}>Completed in {formatTime(timer)}</div>
+                <button
+                  className={styles.playAgainBtn}
+                  onClick={() => initGame(mode, difficulty, true)}
+                >
+                  New Puzzle
+                </button>
+              </div>
+            )}
+
+            {gameState === 'gaveUp' && (
+              <div className={styles.gaveUpBanner}>
+                <div className={styles.gaveUpTitle}>Puzzle Revealed</div>
+                <div className={styles.gaveUpSubtitle}>
+                  Time: {formatTime(timer)} • Missed {missedWords.length} word{missedWords.length !== 1 ? 's' : ''}
+                </div>
+                {missedWords.length > 0 && (
+                  <div className={styles.missedWords}>
+                    <div className={styles.missedWordsTitle}>Words you missed:</div>
+                    <div className={styles.missedWordsList}>
+                      {missedWords.map((word, idx) => (
+                        <div key={idx} className={styles.missedWord}>
+                          <span className={styles.missedWordNumber}>
+                            {word.number} {word.direction.charAt(0).toUpperCase()}
+                          </span>
+                          <span className={styles.missedWordAnswer}>{word.answer}</span>
+                          <span className={styles.missedWordClue}>{word.clue}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <button
+                  className={styles.playAgainBtn}
+                  onClick={() => initGame(mode, difficulty, true)}
+                >
+                  New Puzzle
+                </button>
+              </div>
+            )}
+
+            <div className={styles.toolButtons}>
+              <button
+                className={styles.toolBtn}
+                onClick={revealRandomLetter}
+                disabled={gameState !== 'playing'}
+              >
+                Reveal Random Letter
+              </button>
+              <button
+                className={styles.toolBtn}
+                onClick={revealWord}
+                disabled={gameState !== 'playing' || !currentWord}
+              >
+                Reveal Word
+              </button>
+              <button
+                className={`${styles.toolBtn} ${showErrors ? styles.active : ''}`}
+                onClick={() => setShowErrors(!showErrors)}
+                disabled={gameState !== 'playing'}
+              >
+                {showErrors ? 'Hide Errors' : 'Show Errors'}
+              </button>
+              <button
+                className={`${styles.toolBtn} ${styles.giveUpBtn}`}
+                onClick={giveUp}
+                disabled={gameState !== 'playing'}
+              >
+                Give Up
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.cluesSection}>
+            <div className={styles.clueColumn}>
+              <h3 className={styles.clueHeader}>Across</h3>
+              <div className={styles.clueList}>
+                {puzzle.across.map(clue => {
+                  const isActive = currentWord?.number === clue.number && direction === 'across';
+                  return (
+                    <div
+                      key={`across-${clue.number}`}
+                      className={`${styles.clue} ${isActive ? styles.activeClue : ''}`}
+                      onClick={() => handleClueClick(clue, 'across')}
+                    >
+                      <span className={styles.clueNumber}>{clue.number}.</span>
+                      <span className={styles.clueText}>{clue.clue}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={styles.clueColumn}>
+              <h3 className={styles.clueHeader}>Down</h3>
+              <div className={styles.clueList}>
+                {puzzle.down.map(clue => {
+                  const isActive = currentWord?.number === clue.number && direction === 'down';
+                  return (
+                    <div
+                      key={`down-${clue.number}`}
+                      className={`${styles.clue} ${isActive ? styles.activeClue : ''}`}
+                      onClick={() => handleClueClick(clue, 'down')}
+                    >
+                      <span className={styles.clueNumber}>{clue.number}.</span>
+                      <span className={styles.clueText}>{clue.clue}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.currentClue}>
+          {currentWord && (
+            <>
+              <span className={styles.currentClueDirection}>
+                {currentWord.number} {direction.toUpperCase()}
+              </span>
+              <span className={styles.currentClueText}>{currentWord.clue}</span>
+            </>
+          )}
+        </div>
+
+        <div className={styles.statsPanel}>
+          <div className={styles.stat}>
+            <span className={styles.statValue}>{stats.played}</span>
+            <span className={styles.statLabel}>Played</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statValue}>{stats.won}</span>
+            <span className={styles.statLabel}>Won</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statValue}>
+              {stats.bestTime ? formatTime(stats.bestTime) : '-'}
+            </span>
+            <span className={styles.statLabel}>Best</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statValue}>
+              {stats.avgTime ? formatTime(stats.avgTime) : '-'}
+            </span>
+            <span className={styles.statLabel}>Avg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
