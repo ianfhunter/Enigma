@@ -5,14 +5,18 @@
 
 .card {
   position: relative;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(30, 0, 60, 0.4) 0%, rgba(10, 8, 32, 0.3) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: 16px;
   padding: 1.25rem;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(139, 92, 246, 0.1);
 }
 
 .card::before {
@@ -38,10 +42,13 @@
 
 .card:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: var(--card-primary);
+  border-color: rgba(139, 92, 246, 0.6);
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 60px rgba(var(--card-primary), 0.1);
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(139, 92, 246, 0.3),
+    0 0 100px rgba(124, 58, 237, 0.2),
+    inset 0 1px 0 rgba(167, 139, 250, 0.3);
+  background: linear-gradient(145deg, rgba(30, 0, 60, 0.6) 0%, rgba(20, 8, 40, 0.5) 100%);
 }
 
 .card.disabled {
@@ -70,17 +77,25 @@
   align-items: center;
   justify-content: center;
   box-shadow:
-    0 6px 20px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(196, 181, 253, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .card:hover .iconWrapper {
   transform: scale(1.1) rotate(-3deg);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.5),
+    0 0 50px rgba(167, 139, 250, 0.5),
+    inset 0 1px 0 rgba(196, 181, 253, 0.5);
+  border-color: rgba(167, 139, 250, 0.5);
 }
 
 .card.disabled .iconWrapper {
-  background: linear-gradient(145deg, #666, #555);
+  background: linear-gradient(145deg, rgba(88, 28, 135, 0.3), rgba(59, 7, 100, 0.2));
+  border-color: rgba(139, 92, 246, 0.1);
 }
 
 .icon {
@@ -91,29 +106,31 @@
 .title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
+  color: #e9d5ff;
   margin-bottom: 0.35rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
 .description {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(196, 181, 253, 0.7);
   line-height: 1.4;
   margin-bottom: 0.75rem;
+  font-style: italic;
 }
 
 .badge {
   display: inline-block;
   padding: 0.3rem 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(30, 0, 60, 0.5);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 100px;
   font-size: 0.65rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(196, 181, 253, 0.6);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .playBadge {
@@ -125,14 +142,20 @@
   font-weight: 600;
   color: #fff;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.08em;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.3);
   transition: all 0.3s ease;
+  border: 1px solid rgba(167, 139, 250, 0.3);
 }
 
 .card:hover .playBadge {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(167, 139, 250, 0.5);
   transform: scale(1.05);
+  border-color: rgba(196, 181, 253, 0.6);
 }
 
 .card.tagged {
