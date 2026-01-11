@@ -73,6 +73,36 @@ One of the best ways to contribute is by adding new puzzle games! Here's how:
 - Use CSS Modules for component styling
 - Keep components focused and reusable
 
+## AI-Assisted Contributions
+
+We welcome contributions that are created or assisted by AI tools (such as ChatGPT, GitHub Copilot, Claude, etc.). However, **all AI-generated or AI-assisted code must be thoroughly tested** before submission.
+
+### Requirements for AI Contributions
+
+1. **Comprehensive Testing**: 
+   - Test all functionality manually in multiple browsers
+   - Test edge cases and error scenarios
+   - Verify the code works as intended, not just that it compiles
+   - Test on different screen sizes if UI-related
+
+2. **Code Review**:
+   - Review AI-generated code carefully before submitting
+   - Ensure it follows our code style guidelines
+   - Verify it integrates properly with existing code
+   - Check for any obvious bugs or issues
+
+3. **Documentation**:
+   - If using AI assistance, you may mention it in your PR (optional)
+   - Ensure code comments are clear and helpful
+   - Update relevant documentation if needed
+
+4. **Quality Standards**:
+   - AI-generated code is held to the same quality standards as human-written code
+   - All PRs will be reviewed regardless of the source
+   - Be prepared to iterate based on feedback
+
+**Remember**: AI tools are powerful assistants, but they can produce code that looks correct but doesn't work as expected. Always test thoroughly!
+
 ## Development Setup
 
 1. **Fork the repository**
