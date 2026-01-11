@@ -2,14 +2,45 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+  background: linear-gradient(135deg, #050510 0%, #0a0820 25%, #0d0b2e 50%, #08061a 75%, #050510 100%);
+  background-size: 400% 400%;
+  animation: mysteriousShift 20s ease infinite;
+  position: relative;
+}
+
+@keyframes mysteriousShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .header {
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  backdrop-filter: blur(15px) saturate(180%);
+  background: rgba(5, 5, 16, 0.7);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(139, 92, 246, 0.1);
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(139, 92, 246, 0.5) 50%, 
+    transparent 100%);
+  animation: shimmerLine 3s ease-in-out infinite;
+}
+
+@keyframes shimmerLine {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
 }
 
 .nav {
@@ -60,18 +91,53 @@
 .logoIcon {
   height: 2rem;
   width: auto;
-  filter: drop-shadow(0 0 10px rgba(128, 70, 253, 0.5));
+  filter: 
+    drop-shadow(0 0 8px rgba(139, 92, 246, 0.6))
+    drop-shadow(0 0 16px rgba(124, 58, 237, 0.4))
+    drop-shadow(0 0 24px rgba(88, 28, 135, 0.3));
+  animation: mysteriousGlow 4s ease-in-out infinite;
+  transition: filter 0.3s ease;
+}
+
+.logo:hover .logoIcon {
+  filter: 
+    drop-shadow(0 0 12px rgba(167, 139, 250, 0.8))
+    drop-shadow(0 0 24px rgba(139, 92, 246, 0.6))
+    drop-shadow(0 0 36px rgba(124, 58, 237, 0.4));
+}
+
+@keyframes mysteriousGlow {
+  0%, 100% { 
+    filter: 
+      drop-shadow(0 0 8px rgba(139, 92, 246, 0.6))
+      drop-shadow(0 0 16px rgba(124, 58, 237, 0.4))
+      drop-shadow(0 0 24px rgba(88, 28, 135, 0.3));
+  }
+  50% { 
+    filter: 
+      drop-shadow(0 0 12px rgba(167, 139, 250, 0.8))
+      drop-shadow(0 0 24px rgba(139, 92, 246, 0.6))
+      drop-shadow(0 0 36px rgba(124, 58, 237, 0.5));
+  }
 }
 
 .logoText {
   font-family: 'Outfit', sans-serif;
   font-size: 1.75rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #f8f8f8 0%, #a8a8a8 100%);
+  background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 50%, #a855f7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.logo:hover .logoText {
+  background: linear-gradient(135deg, #f3e8ff 0%, #d8b4fe 50%, #c084fc 100%);
+  letter-spacing: 0.08em;
 }
 
 .main {
@@ -85,13 +151,30 @@
 .footer {
   padding: 1.5rem 2rem;
   text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(139, 92, 246, 0.15);
+  background: rgba(5, 5, 16, 0.6);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(139, 92, 246, 0.4) 50%, 
+    transparent 100%);
 }
 
 .footer p {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(167, 139, 250, 0.5);
   font-size: 0.875rem;
   margin: 0;
   font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
