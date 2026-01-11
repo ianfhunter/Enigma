@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getGameIcon, defaultIcon } from '../config/gameIcons';
+import logo from '../branding/logo.svg';
 
 // Convert emoji to favicon SVG data URL
 function emojiToFavicon(emoji) {
@@ -24,7 +25,12 @@ export function useFavicon() {
       document.head.appendChild(link);
     }
 
-    link.href = emojiToFavicon(icon);
+    // Use Enigma logo for home page, otherwise use game icon
+    if (!slug) {
+      link.href = logo;
+    } else {
+      link.href = emojiToFavicon(icon);
+    }
   }, [location.pathname]);
 }
 

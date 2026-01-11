@@ -1,5 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useFavicon } from '../../hooks/useFavicon';
+import logo from '../../branding/logo.svg';
 import styles from './Layout.module.css';
 
 export default function Layout() {
@@ -10,8 +11,8 @@ export default function Layout() {
       <header className={styles.header}>
         <nav className={styles.nav}>
           <Link to="/" className={styles.logo}>
-            <span className={styles.logoIcon}>🎮</span>
-            <span className={styles.logoText}>Game Hub</span>
+            <img src={logo} alt="Enigma" className={styles.logoIcon} />
+            <span className={styles.logoText}>Enigma</span>
           </Link>
         </nav>
       </header>

@@ -1,7 +1,9 @@
 #!/bin/bash
 # Download remaining paintings using curl with proper headers
 
-cd /home/ian/splash/selfhost_games/src/assets/paintings
+# Get the script directory and navigate to project root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$SCRIPT_DIR/../src/assets/paintings"
 
 # Function to download with retries
 download() {

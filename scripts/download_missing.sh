@@ -1,7 +1,9 @@
 #!/bin/bash
 # Download missing paintings - with longer delays and updated URLs
 
-cd /home/ian/splash/selfhost_games/src/assets/paintings
+# Get the script directory and navigate to project root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$SCRIPT_DIR/../src/assets/paintings"
 
 download() {
     local url="$1"

@@ -58,8 +58,9 @@
 }
 
 .logoIcon {
-  font-size: 2rem;
-  filter: drop-shadow(0 0 10px rgba(255, 200, 100, 0.5));
+  height: 2rem;
+  width: auto;
+  filter: drop-shadow(0 0 10px rgba(128, 70, 253, 0.5));
 }
 
 .logoText {
