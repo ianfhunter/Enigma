@@ -171,7 +171,7 @@
   position: relative;
   transition: all 0.3s ease;
   display: inline-block;
-  animation: titleGlow 5s ease-in-out infinite, glitch 8s infinite;
+  animation: titleGlow 5s ease-in-out infinite, glitch 3s infinite;
 }
 
 .logoText::before,
@@ -192,15 +192,19 @@
 }
 
 .logoText::before {
-  animation: glitchTop 8s infinite;
+  animation: glitchTop 3s infinite;
   clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-  transform: translate(-2px, 0);
+  transform: translate(-4px, 0);
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00;
 }
 
 .logoText::after {
-  animation: glitchBottom 8s infinite;
+  animation: glitchBottom 3s infinite;
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-  transform: translate(2px, 0);
+  transform: translate(4px, 0);
+  color: #ff00ff;
+  text-shadow: 0 0 10px #ff00ff;
 }
 
 .logo:hover .logoText {
@@ -214,86 +218,154 @@
     filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
     transform: translate(0);
   }
-  48% {
-    filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.6));
-    transform: translate(0);
-  }
-  48.5% {
-    filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.6));
-    transform: translate(-1px, 1px) skew(0.5deg);
-  }
-  49% {
-    filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.6));
-    transform: translate(1px, -1px) skew(-0.5deg);
-  }
-  49.5% {
+  50% {
     filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.6));
     transform: translate(0);
   }
 }
 
 @keyframes glitch {
-  0%, 89%, 90%, 91%, 100% {
+  0%, 90%, 100% {
     transform: translate(0);
     filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
   }
-  89.5% {
-    transform: translate(-2px, 1px);
-    filter: drop-shadow(-2px 1px 20px rgba(139, 92, 246, 0.6));
+  91% {
+    transform: translate(-5px, 3px) skew(2deg);
+    filter: drop-shadow(-5px 3px 20px rgba(0, 255, 0, 0.8));
   }
-  90.5% {
-    transform: translate(2px, -1px);
-    filter: drop-shadow(2px -1px 20px rgba(167, 139, 250, 0.6));
+  92% {
+    transform: translate(5px, -3px) skew(-2deg);
+    filter: drop-shadow(5px -3px 20px rgba(255, 0, 255, 0.8));
   }
-  91.5% {
-    transform: translate(-1px, -1px);
-    filter: drop-shadow(-1px -1px 20px rgba(139, 92, 246, 0.5));
+  93% {
+    transform: translate(-3px, 2px) skew(1deg);
+    filter: drop-shadow(-3px 2px 20px rgba(139, 92, 246, 0.6));
+  }
+  94% {
+    transform: translate(3px, -2px) skew(-1deg);
+    filter: drop-shadow(3px -2px 20px rgba(167, 139, 250, 0.6));
+  }
+  95% {
+    transform: translate(-4px, 1px);
+    filter: drop-shadow(-4px 1px 20px rgba(0, 255, 0, 0.7));
+  }
+  96% {
+    transform: translate(4px, -1px);
+    filter: drop-shadow(4px -1px 20px rgba(255, 0, 255, 0.7));
+  }
+  97% {
+    transform: translate(-2px, 3px) skew(1.5deg);
+    filter: drop-shadow(-2px 3px 20px rgba(139, 92, 246, 0.5));
+  }
+  98% {
+    transform: translate(2px, -3px) skew(-1.5deg);
+    filter: drop-shadow(2px -3px 20px rgba(167, 139, 250, 0.5));
+  }
+  99% {
+    transform: translate(0);
+    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
   }
 }
 
 @keyframes glitchTop {
-  0%, 88%, 89%, 90%, 100% {
+  0%, 85%, 100% {
     opacity: 0;
-    transform: translate(-2px, 0);
+    transform: translate(-4px, 0);
   }
-  88.5% {
-    opacity: 0.85;
-    transform: translate(3px, -1px);
+  86% {
+    opacity: 1;
+    transform: translate(6px, -3px);
+    background: linear-gradient(135deg, #00ff00 0%, #00ff00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
   }
-  89.5% {
+  87% {
     opacity: 0;
-    transform: translate(-3px, 1px);
+    transform: translate(-6px, 3px);
   }
-  90.5% {
+  88% {
+    opacity: 0.9;
+    transform: translate(5px, -2px);
+    background: linear-gradient(135deg, #00ff00 0%, #00ff00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  89% {
+    opacity: 0;
+    transform: translate(-5px, 2px);
+  }
+  90% {
+    opacity: 0.8;
+    transform: translate(4px, -4px);
+    background: linear-gradient(135deg, #00ff00 0%, #00ff00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  91% {
+    opacity: 0;
+    transform: translate(-4px, 4px);
+  }
+  92% {
     opacity: 0.7;
-    transform: translate(2px, -2px);
+    transform: translate(3px, -1px);
+    background: linear-gradient(135deg, #00ff00 0%, #00ff00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
   }
-  91.5% {
+  93% {
     opacity: 0;
-    transform: translate(-2px, 0);
+    transform: translate(-4px, 0);
   }
 }
 
 @keyframes glitchBottom {
-  0%, 88%, 89%, 90%, 100% {
+  0%, 85%, 100% {
     opacity: 0;
-    transform: translate(2px, 0);
+    transform: translate(4px, 0);
   }
-  88.5% {
+  86% {
+    opacity: 1;
+    transform: translate(-6px, 3px);
+    background: linear-gradient(135deg, #ff00ff 0%, #ff00ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  87% {
+    opacity: 0;
+    transform: translate(6px, -3px);
+  }
+  88% {
+    opacity: 0.9;
+    transform: translate(-5px, 2px);
+    background: linear-gradient(135deg, #ff00ff 0%, #ff00ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  89% {
+    opacity: 0;
+    transform: translate(5px, -2px);
+  }
+  90% {
     opacity: 0.8;
+    transform: translate(-4px, 4px);
+    background: linear-gradient(135deg, #ff00ff 0%, #ff00ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  91% {
+    opacity: 0;
+    transform: translate(4px, -4px);
+  }
+  92% {
+    opacity: 0.7;
     transform: translate(-3px, 1px);
+    background: linear-gradient(135deg, #ff00ff 0%, #ff00ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
   }
-  89.5% {
+  93% {
     opacity: 0;
-    transform: translate(3px, -1px);
-  }
-  90.5% {
-    opacity: 0.65;
-    transform: translate(-2px, 2px);
-  }
-  91.5% {
-    opacity: 0;
-    transform: translate(2px, 0);
+    transform: translate(4px, 0);
   }
 }
 
