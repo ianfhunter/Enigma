@@ -210,9 +210,8 @@ const LOADING_PHRASES = [
   "Warming Up",
 ];
 
-// Loading fallback component with playful game-themed animation
+// Loading fallback component with mysterious eye animation
 function GameLoading() {
-  const colors = ['#22c55e', '#3b82f6', '#f59e0b', '#ec4899', '#a855f7'];
   const phrase = LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)];
 
   return (
@@ -224,76 +223,138 @@ function GameLoading() {
       minHeight: '50vh',
       gap: '2rem',
     }}>
-      {/* Bouncing blocks container */}
+      {/* Mysterious eye container */}
       <div style={{
-        display: 'flex',
-        gap: '8px',
-        alignItems: 'flex-end',
-        height: '60px',
+        position: 'relative',
+        width: '120px',
+        height: '80px',
       }}>
-        {colors.map((color, i) => (
-          <div
-            key={i}
-            style={{
-              width: '16px',
-              height: '16px',
-              borderRadius: '4px',
-              backgroundColor: color,
-              boxShadow: `0 0 20px ${color}40`,
-              animation: `bounce 0.6s ease-in-out infinite`,
-              animationDelay: `${i * 0.1}s`,
-            }}
-          />
-        ))}
+        {/* Eye outline */}
+        <div style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          borderRadius: '50%',
+          border: '3px solid rgba(139, 92, 246, 0.6)',
+          background: 'rgba(30, 0, 60, 0.3)',
+          boxShadow: `
+            0 0 30px rgba(139, 92, 246, 0.4),
+            inset 0 0 20px rgba(88, 28, 135, 0.2)
+          `,
+          overflow: 'hidden',
+        }}>
+          {/* Eye blink overlay */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(5, 5, 16, 0.95)',
+            borderRadius: '50%',
+            animation: 'eyeBlink 3s ease-in-out infinite',
+            zIndex: 3,
+          }} />
+          
+          {/* Pupil container */}
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '40px',
+            height: '40px',
+            transform: 'translate(-50%, -50%)',
+            animation: 'lookAround 4s ease-in-out infinite',
+          }}>
+            {/* Pupil */}
+            <div style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, #a855f7 0%, #7c3aed 50%, #5b21b6 100%)',
+              boxShadow: `
+                0 0 20px rgba(139, 92, 246, 0.8),
+                0 0 40px rgba(124, 58, 237, 0.5),
+                inset 0 0 10px rgba(0, 0, 0, 0.5)
+              `,
+              position: 'relative',
+            }}>
+              {/* Pupil highlight */}
+              <div style={{
+                position: 'absolute',
+                top: '20%',
+                left: '30%',
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.6)',
+                boxShadow: '0 0 8px rgba(255, 255, 255, 0.8)',
+              }} />
+            </div>
+          </div>
+        </div>
       </div>
-      {/* Playful loading text */}
+      
+      {/* Mysterious loading text */}
       <div style={{
-        display: 'flex',
-        gap: '2px',
-        fontSize: '1rem',
+        fontSize: '0.9rem',
         fontWeight: 600,
-        letterSpacing: '0.02em',
+        letterSpacing: '0.1em',
+        color: 'rgba(196, 181, 253, 0.7)',
+        textTransform: 'uppercase',
+        fontStyle: 'italic',
+        textShadow: '0 2px 10px rgba(139, 92, 246, 0.3)',
       }}>
-        {phrase.split('').map((char, i) => (
-          <span
-            key={i}
-            style={{
-              color: char === ' ' ? 'transparent' : colors[i % colors.length],
-              animation: 'wave 1.2s ease-in-out infinite',
-              animationDelay: `${i * 0.08}s`,
-              display: 'inline-block',
-              width: char === ' ' ? '0.3em' : 'auto',
-            }}
-          >
-            {char}
-          </span>
-        ))}
-        <span style={{
-          color: 'rgba(255,255,255,0.6)',
-          animation: 'blink 1s step-end infinite',
-        }}>...</span>
+        {phrase}
       </div>
+      
       {/* Keyframe animations */}
       <style>{`
-        @keyframes bounce {
+        @keyframes lookAround {
           0%, 100% {
-            transform: translateY(0) scale(1);
+            transform: translate(-50%, -50%) translate(0, 0);
+          }
+          10% {
+            transform: translate(-50%, -50%) translate(-15px, -10px);
+          }
+          20% {
+            transform: translate(-50%, -50%) translate(15px, -8px);
+          }
+          30% {
+            transform: translate(-50%, -50%) translate(-10px, 12px);
+          }
+          40% {
+            transform: translate(-50%, -50%) translate(18px, 10px);
           }
           50% {
-            transform: translateY(-30px) scale(1.1);
+            transform: translate(-50%, -50%) translate(-20px, -5px);
+          }
+          60% {
+            transform: translate(-50%, -50%) translate(12px, -15px);
+          }
+          70% {
+            transform: translate(-50%, -50%) translate(-8px, 8px);
+          }
+          80% {
+            transform: translate(-50%, -50%) translate(20px, 5px);
+          }
+          90% {
+            transform: translate(-50%, -50%) translate(-12px, -12px);
           }
         }
-        @keyframes wave {
-          0%, 100% {
-            transform: translateY(0);
+        @keyframes eyeBlink {
+          0%, 90%, 100% {
+            height: 0;
+            top: 50%;
           }
-          50% {
-            transform: translateY(-4px);
+          92%, 94% {
+            height: 100%;
+            top: 0;
           }
-        }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
+          96% {
+            height: 0;
+            top: 50%;
+          }
         }
       `}</style>
     </div>
