@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Search from './pages/Search';
 import NotFound from './pages/NotFound';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
@@ -75,7 +76,6 @@ const slugToFolder = {
   'lits': 'LITS',
   'loopy': 'Loopy',
   'magnets': 'Magnets',
-  'mainarizumu': 'Mainarizumu',
   'map': 'Map',
   'maze': 'Maze',
   'memory-match': 'MemoryMatch',
@@ -391,6 +391,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="search" element={<Search />} />
               <Route path="profile" element={<Profile />} />
               {generateGameRoutes()}
               <Route path="*" element={<NotFound />} />

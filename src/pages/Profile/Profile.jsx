@@ -1021,6 +1021,45 @@ function AdminTab() {
     }
   };
 
+  const handleToggleDevGames = async () => {
+    const devGames = allGames.filter(g => g.version === 'DEV');
+    if (devGames.length === 0) {
+      setMessage({ type: 'info', text: 'No DEV games found.' });
+      return;
+    }
+
+    // Check if any DEV games are currently enabled
+    const anyEnabled = devGames.some(game => {
+      const config = gameConfigs.find(g => g.gameSlug === game.slug);
+      return config ? config.enabled : true; // default is enabled
+    });
+
+    const newEnabled = !anyEnabled;
+
+    try {
+      await Promise.all(devGames.map(game =>
+        admin.updateGameConfig(game.slug, { enabled: newEnabled })
+      ));
+
+      setGameConfigs(prev => {
+        const updated = [...prev];
+        devGames.forEach(game => {
+          const existingIdx = updated.findIndex(g => g.gameSlug === game.slug);
+          if (existingIdx >= 0) {
+            updated[existingIdx] = { ...updated[existingIdx], enabled: newEnabled };
+          } else {
+            updated.push({ gameSlug: game.slug, enabled: newEnabled, settings: {} });
+          }
+        });
+        return updated;
+      });
+
+      setMessage({ type: 'success', text: `${newEnabled ? 'Enabled' : 'Disabled'} ${devGames.length} DEV game(s) server-wide!` });
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message });
+    }
+  };
+
   if (loading) {
     return <div className={styles.loading}>Loading admin data...</div>;
   }
@@ -1224,12 +1263,27 @@ function AdminTab() {
         </section>
       )}
 
-      {activeSection === 'games' && (
+      {activeSection === 'games' && (() => {
+        const devGames = allGames.filter(g => g.version === 'DEV');
+        const devGamesEnabled = devGames.some(game => {
+          const config = configMap.get(game.slug);
+          return config ? config.enabled : true;
+        });
+
+        return (
         <section className={styles.card}>
           <h3 className={styles.cardTitle}>Server Game Configuration</h3>
           <p className={styles.cardDescription}>
             Enable or disable games server-wide. Disabled games won&apos;t appear for any user.
           </p>
+          <div className={styles.devGamesActions}>
+            <button
+              className={devGamesEnabled ? styles.actionButtonDanger : styles.actionButton}
+              onClick={handleToggleDevGames}
+            >
+              {devGamesEnabled ? '🚫 Disable All DEV Games' : '✅ Enable All DEV Games'}
+            </button>
+          </div>
           <div className={styles.gameConfigList}>
             {allGames.map(game => {
               const config = configMap.get(game.slug);
@@ -1253,7 +1307,8 @@ function AdminTab() {
             })}
           </div>
         </section>
-      )}
+        );
+      })()}
     </div>
   );
 }

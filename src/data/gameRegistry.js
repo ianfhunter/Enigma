@@ -19,7 +19,7 @@ export const categories = [
         icon: '🟩',
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-        version: 'v0.1',
+        version: 'v1.0',
       },
       {
         title: 'Word Wheel',
@@ -702,15 +702,6 @@ export const categories = [
         colors: { primary: '#f472b6', secondary: '#c084fc' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #c084fc 100%)',
         version: 'v0.1',
-      },
-      {
-        title: 'Mainarizumu',
-        slug: 'mainarizumu',
-        description: 'Fill regions with numbers 1 to N. Same numbers cannot touch, even diagonally!',
-        icon: '🔢',
-        colors: { primary: '#f472b6', secondary: '#c084fc' },
-        gradient: 'linear-gradient(135deg, #f472b6 0%, #c084fc 100%)',
-        version: 'DEV',
       },
       {
         title: 'Palisade',

@@ -1033,6 +1033,12 @@
 }
 
 /* Admin - Game config */
+.devGamesActions {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
 .gameConfigList {
   display: flex;
   flex-direction: column;

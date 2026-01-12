@@ -6,36 +6,6 @@
   --game-gradient: #fff;
 }
 
-.modeSelector {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.modeBtn {
-  padding: 0.5rem 1.25rem;
-  background: var(--game-key-bg);
-  border: 1px solid var(--game-key-border);
-  border-radius: 8px;
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.modeBtn:hover {
-  background: var(--game-key-hover-bg);
-  color: var(--color-text);
-}
-
-.modeBtn.active {
-  background: var(--game-accent-green-bg);
-  border-color: var(--game-accent-green-border);
-  color: var(--game-accent-green);
-}
-
 .gameArea {
   display: flex;
   flex-direction: column;
@@ -172,6 +142,24 @@
 .playAgainBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(106, 170, 100, 0.3);
+}
+
+.giveUpBtn {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--color-text-tertiary);
+  border-radius: 6px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text);
+  background: var(--color-bg-card);
 }
 
 .keyboard {

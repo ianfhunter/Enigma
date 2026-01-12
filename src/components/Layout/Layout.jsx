@@ -69,6 +69,11 @@ export default function Layout() {
     navigate(`/${slug}`);
   };
 
+  const handleViewAllResults = () => {
+    setIsSearchFocused(false);
+    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -145,9 +150,12 @@ export default function Layout() {
                           </button>
                         ))}
                         {searchResults.total > 5 && (
-                          <div className={styles.searchResultsMore}>
-                            +{searchResults.total - 5} more...
-                          </div>
+                          <button
+                            className={styles.searchResultsMore}
+                            onClick={handleViewAllResults}
+                          >
+                            +{searchResults.total - 5} more — view all results
+                          </button>
                         )}
                       </>
                     ) : (
@@ -192,6 +200,63 @@ export default function Layout() {
                 <span className={styles.logoText}>Enigma</span>
               </Link>
 
+              <div className={styles.searchWrapper} ref={searchWrapperRef}>
+                <span className={styles.searchIcon}>🔍</span>
+                <input
+                  type="text"
+                  className={styles.searchInput}
+                  placeholder="Search games..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  aria-label="Search games"
+                />
+                {searchQuery && (
+                  <button
+                    className={styles.clearButton}
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
+
+                {/* Search Dropdown */}
+                {isSearchFocused && searchQuery.trim() && (
+                  <div className={styles.searchDropdown}>
+                    {searchResults.matches.length > 0 ? (
+                      <>
+                        {searchResults.matches.map((game) => (
+                          <button
+                            key={game.slug}
+                            className={styles.searchResultItem}
+                            onClick={() => handleGameClick(game.slug)}
+                          >
+                            <span className={styles.searchResultIcon}>{getGameIcon(game.slug)}</span>
+                            <div className={styles.searchResultText}>
+                              <span className={styles.searchResultTitle}>{game.title}</span>
+                              <span className={styles.searchResultDesc}>{game.description}</span>
+                            </div>
+                          </button>
+                        ))}
+                        {searchResults.total > 5 && (
+                          <button
+                            className={styles.searchResultsMore}
+                            onClick={handleViewAllResults}
+                          >
+                            +{searchResults.total - 5} more — view all results
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      <div className={styles.searchNoResults}>
+                        No games found
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <Link to="/profile" className={styles.profileButton} aria-label="Profile">
                 <span className={styles.profileAvatar}>
                   {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
@@ -205,7 +270,7 @@ export default function Layout() {
         </nav>
       </header>
       <main className={styles.main}>
-        <Outlet context={{ settings, showDevItems, searchQuery }} />
+        <Outlet context={{ settings, showDevItems }} />
       </main>
       <footer className={styles.footer}>
         <p>Self-hosted games collection</p>

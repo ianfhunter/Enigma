@@ -1,160 +1,66 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { formatTime } from '../../data/wordUtils';
+import puzzleDataset from '../../data/suguruPuzzles.json';
 import styles from './Suguru.module.css';
 
 const GRID_SIZES = {
   '6×6': 6,
+  '7×7': 7,
   '8×8': 8,
+  '9×9': 9,
   '10×10': 10,
 };
 
-// Generate regions using flood-fill approach
-function generateRegions(size) {
-  const regionGrid = Array(size).fill(null).map(() => Array(size).fill(-1));
-  const regions = [];
-  
-  let regionId = 0;
-  
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (regionGrid[r][c] !== -1) continue;
-      
-      // Start a new region
-      const regionSize = 2 + Math.floor(Math.random() * 4); // 2-5 cells
-      const cells = [[r, c]];
-      regionGrid[r][c] = regionId;
-      
-      // Grow the region
-      for (let i = 1; i < regionSize; i++) {
-        const frontier = [];
-        for (const [cr, cc] of cells) {
-          for (const [nr, nc] of [[cr-1, cc], [cr+1, cc], [cr, cc-1], [cr, cc+1]]) {
-            if (nr >= 0 && nr < size && nc >= 0 && nc < size && regionGrid[nr][nc] === -1) {
-              if (!frontier.some(([fr, fc]) => fr === nr && fc === nc)) {
-                frontier.push([nr, nc]);
-              }
-            }
-          }
-        }
-        
-        if (frontier.length === 0) break;
-        
-        const [nr, nc] = frontier[Math.floor(Math.random() * frontier.length)];
-        cells.push([nr, nc]);
-        regionGrid[nr][nc] = regionId;
-      }
-      
-      regions.push({ id: regionId, cells, size: cells.length });
-      regionId++;
-    }
-  }
-  
-  return { regionGrid, regions };
-}
+// Load a puzzle from the curated dataset
+function loadDatasetPuzzle(size, usedIds = new Set()) {
+  // Filter puzzles by size, excluding already used ones
+  const available = puzzleDataset.filter(p => p.size === size && !usedIds.has(p.id));
 
-// Generate a valid Suguru solution
-function generateSolution(regions, regionGrid, size) {
-  const solution = Array(size).fill(null).map(() => Array(size).fill(0));
-  
-  function isValid(r, c, num) {
-    // Check all 8 neighbors for same number
-    for (let dr = -1; dr <= 1; dr++) {
-      for (let dc = -1; dc <= 1; dc++) {
-        if (dr === 0 && dc === 0) continue;
-        const nr = r + dr;
-        const nc = c + dc;
-        if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-          if (solution[nr][nc] === num) return false;
-        }
-      }
-    }
-    return true;
-  }
-  
-  function solve(regionIdx, cellIdx) {
-    if (regionIdx >= regions.length) return true;
-    
-    const region = regions[regionIdx];
-    if (cellIdx >= region.cells.length) {
-      return solve(regionIdx + 1, 0);
-    }
-    
-    const [r, c] = region.cells[cellIdx];
-    const maxNum = region.size;
-    
-    // Shuffle numbers for variety
-    const nums = Array.from({ length: maxNum }, (_, i) => i + 1);
-    for (let i = nums.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [nums[i], nums[j]] = [nums[j], nums[i]];
-    }
-    
-    for (const num of nums) {
-      // Check if num already used in region
-      let used = false;
-      for (let i = 0; i < cellIdx; i++) {
-        const [pr, pc] = region.cells[i];
-        if (solution[pr][pc] === num) {
-          used = true;
-          break;
-        }
-      }
-      if (used) continue;
-      
-      if (isValid(r, c, num)) {
-        solution[r][c] = num;
-        if (solve(regionIdx, cellIdx + 1)) return true;
-        solution[r][c] = 0;
-      }
-    }
-    
-    return false;
-  }
-  
-  solve(0, 0);
-  return solution;
-}
+  // Fall back to all puzzles of this size if we've used them all
+  const candidates = available.length > 0
+    ? available
+    : puzzleDataset.filter(p => p.size === size);
 
-// Remove some numbers to create puzzle
-function createPuzzle(solution, regions, difficulty = 0.5) {
-  const puzzle = solution.map(row => [...row]);
-  
-  for (const region of regions) {
-    // Remove some cells from each region
-    const numToRemove = Math.floor(region.cells.length * difficulty);
-    const indices = region.cells.map((_, i) => i);
-    
-    for (let i = indices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
-    }
-    
-    for (let i = 0; i < numToRemove; i++) {
-      const [r, c] = region.cells[indices[i]];
-      puzzle[r][c] = 0;
-    }
-  }
-  
-  return puzzle;
-}
+  if (candidates.length === 0) return null;
 
-function generatePuzzle(size) {
-  const { regionGrid, regions } = generateRegions(size);
-  const solution = generateSolution(regions, regionGrid, size);
-  const puzzle = createPuzzle(solution, regions);
-  
-  return { regionGrid, regions, solution, puzzle };
+  // Pick a random puzzle
+  const puzzleData = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Convert to our internal format
+  const regionGrid = puzzleData.regions;
+
+  // Build regions array from regionCells
+  const regions = Object.entries(puzzleData.regionCells).map(([id, cells]) => ({
+    id: parseInt(id),
+    cells,
+    size: cells.length
+  }));
+
+  // Convert clues (null -> 0) for puzzle grid
+  const puzzle = puzzleData.clues.map(row =>
+    row.map(c => c === null ? 0 : c)
+  );
+
+  return {
+    regionGrid,
+    regions,
+    solution: puzzleData.solution,
+    puzzle,
+    puzzleId: puzzleData.id,
+    source: puzzleData.source,
+    attribution: puzzleData.attribution
+  };
 }
 
 function checkValidity(grid, regionGrid, regions, size) {
   const errors = new Set();
-  
+
   // Check no touching same numbers (8 neighbors)
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       if (grid[r][c] === 0) continue;
-      
+
       for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
           if (dr === 0 && dc === 0) continue;
@@ -170,7 +76,7 @@ function checkValidity(grid, regionGrid, regions, size) {
       }
     }
   }
-  
+
   // Check region constraints
   for (const region of regions) {
     const seen = new Set();
@@ -190,7 +96,7 @@ function checkValidity(grid, regionGrid, regions, size) {
       seen.add(grid[r][c]);
     }
   }
-  
+
   return errors;
 }
 
@@ -207,12 +113,12 @@ function checkSolved(grid, solution, size) {
 function getRegionBorders(r, c, regionGrid, size) {
   const regionId = regionGrid[r][c];
   const borders = [];
-  
+
   if (r === 0 || regionGrid[r-1][c] !== regionId) borders.push('top');
   if (r === size - 1 || regionGrid[r+1][c] !== regionId) borders.push('bottom');
   if (c === 0 || regionGrid[r][c-1] !== regionId) borders.push('left');
   if (c === size - 1 || regionGrid[r][c+1] !== regionId) borders.push('right');
-  
+
   return borders;
 }
 
@@ -221,24 +127,37 @@ export default function Suguru() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'gave_up'
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const timerRef = useRef(null);
+  const usedPuzzleIdsRef = useRef(new Set());
 
   const size = GRID_SIZES[sizeKey];
 
+  // Count available puzzles per size
+  const puzzleCounts = useMemo(() => {
+    const counts = {};
+    for (const s of Object.values(GRID_SIZES)) {
+      counts[s] = puzzleDataset.filter(p => p.size === s).length;
+    }
+    return counts;
+  }, []);
+
   const initGame = useCallback(() => {
-    const data = generatePuzzle(size);
-    setPuzzleData(data);
-    setGrid(data.puzzle.map(row => [...row]));
-    setSelectedCell(null);
-    setGameState('playing');
-    setErrors(new Set());
-    setTimer(0);
-    setIsRunning(true);
+    const data = loadDatasetPuzzle(size, usedPuzzleIdsRef.current);
+    if (data) {
+      usedPuzzleIdsRef.current.add(data.puzzleId);
+      setPuzzleData(data);
+      setGrid(data.puzzle.map(row => [...row]));
+      setSelectedCell(null);
+      setGameState('playing');
+      setErrors(new Set());
+      setTimer(0);
+      setIsRunning(true);
+    }
   }, [size]);
 
   useEffect(() => {
@@ -257,7 +176,7 @@ export default function Suguru() {
   useEffect(() => {
     if (!puzzleData) return;
 
-    const newErrors = showErrors 
+    const newErrors = showErrors
       ? checkValidity(grid, puzzleData.regionGrid, puzzleData.regions, size)
       : new Set();
     setErrors(newErrors);
@@ -278,11 +197,11 @@ export default function Suguru() {
     if (!selectedCell || gameState !== 'playing') return;
     const { row, col } = selectedCell;
     if (puzzleData.puzzle[row][col] !== 0) return;
-    
+
     const regionId = puzzleData.regionGrid[row][col];
     const region = puzzleData.regions.find(r => r.id === regionId);
     if (num > region.size) return;
-    
+
     setGrid(prev => {
       const newGrid = prev.map(r => [...r]);
       newGrid[row][col] = num;
@@ -294,7 +213,7 @@ export default function Suguru() {
     if (!selectedCell || gameState !== 'playing') return;
     const { row, col } = selectedCell;
     if (puzzleData.puzzle[row][col] !== 0) return;
-    
+
     setGrid(prev => {
       const newGrid = prev.map(r => [...r]);
       newGrid[row][col] = 0;
@@ -346,21 +265,35 @@ export default function Suguru() {
       </div>
 
       <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
+        {Object.entries(GRID_SIZES).map(([key, s]) => {
+          const count = puzzleCounts[s] || 0;
+          const noDataset = count === 0;
+          return (
+            <button
+              key={key}
+              className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''} ${noDataset ? styles.disabled : ''}`}
+              onClick={() => !noDataset && setSizeKey(key)}
+              disabled={noDataset}
+              title={`${count} puzzles available`}
+            >
+              {key}
+              {count > 0 && <span className={styles.puzzleCount}>{count}</span>}
+            </button>
+          );
+        })}
       </div>
 
       <div className={styles.gameArea}>
-        <div className={styles.timerDisplay}>
-          <span className={styles.timerIcon}>⏱</span>
-          <span>{formatTime(timer)}</span>
+        <div className={styles.statusBar}>
+          <div className={styles.timerDisplay}>
+            <span className={styles.timerIcon}>⏱</span>
+            <span>{formatTime(timer)}</span>
+          </div>
+          {puzzleData?.source && (
+            <div className={styles.attribution}>
+              Puzzle from {puzzleData.source}
+            </div>
+          )}
         </div>
 
         <div className={styles.board} style={{ '--grid-size': size }}>
@@ -420,6 +353,14 @@ export default function Suguru() {
           </div>
         )}
 
+        {gameState === 'gave_up' && (
+          <div className={styles.gaveUpMessage}>
+            <div className={styles.gaveUpEmoji}>💡</div>
+            <h3>Solution Revealed</h3>
+            <p>Try another puzzle!</p>
+          </div>
+        )}
+
         <div className={styles.controls}>
           <label className={styles.toggle}>
             <input
@@ -441,6 +382,15 @@ export default function Suguru() {
           }}>
             Reset
           </button>
+          {gameState === 'playing' && (
+            <button className={styles.giveUpBtn} onClick={() => {
+              setGrid(puzzleData.solution);
+              setGameState('gave_up');
+              setIsRunning(false);
+            }}>
+              Give Up
+            </button>
+          )}
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   isValidWord,
-  getDailyWordGuessWord,
   getRandomWordGuessWord,
   checkWordGuessGuess,
-  getTodayDateString
 } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
@@ -21,11 +19,10 @@ const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
 export default function WordGuess() {
-  const [mode, setMode] = useState('daily'); // 'daily' or 'practice'
   const [targetWord, setTargetWord] = useState('');
   const [guesses, setGuesses] = useState([]);
   const [currentGuess, setCurrentGuess] = useState('');
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
+  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost', 'gaveup'
   const [message, setMessage] = useState('');
   const [letterStates, setLetterStates] = useState({});
   const [shakeRow, setShakeRow] = useState(false);
@@ -36,37 +33,9 @@ export default function WordGuess() {
     streak: 0,
     maxStreak: 0,
   });
-  const [dailyCompleted, setDailyCompleted] = useState(() => {
-    const saved = localStorage.getItem('wordguess-daily');
-    if (saved) {
-      const data = JSON.parse(saved);
-      return data.date === getTodayDateString();
-    }
-    return false;
-  });
 
-  const initGame = useCallback((gameMode) => {
-    setMode(gameMode);
-    if (gameMode === 'daily') {
-      const today = getTodayDateString();
-      const saved = localStorage.getItem('wordguess-daily');
-      if (saved) {
-        const data = JSON.parse(saved);
-        if (data.date === today) {
-          // Restore daily game
-          setTargetWord(data.word);
-          setGuesses(data.guesses);
-          setGameState(data.gameState);
-          setLetterStates(data.letterStates);
-          setDailyCompleted(data.gameState !== 'playing');
-          setCurrentGuess('');
-          return;
-        }
-      }
-      setTargetWord(getDailyWordGuessWord(today));
-    } else {
-      setTargetWord(getRandomWordGuessWord());
-    }
+  const initGame = useCallback(() => {
+    setTargetWord(getRandomWordGuessWord());
     setGuesses([]);
     setCurrentGuess('');
     setGameState('playing');
@@ -75,21 +44,17 @@ export default function WordGuess() {
   }, []);
 
   useEffect(() => {
-    initGame('daily');
+    initGame();
   }, [initGame]);
 
-  // Save daily progress
-  useEffect(() => {
-    if (mode === 'daily' && targetWord) {
-      localStorage.setItem('wordguess-daily', JSON.stringify({
-        date: getTodayDateString(),
-        word: targetWord,
-        guesses,
-        gameState,
-        letterStates,
-      }));
-    }
-  }, [mode, targetWord, guesses, gameState, letterStates]);
+  const handleGiveUp = useCallback(() => {
+    setGameState('gaveup');
+    setStats(prev => ({
+      ...prev,
+      played: prev.played + 1,
+      streak: 0,
+    }));
+  }, [setStats]);
 
   const updateLetterStates = (guess, feedback) => {
     const newStates = { ...letterStates };
@@ -136,7 +101,6 @@ export default function WordGuess() {
       setRevealRow(-1);
       if (currentGuess.toUpperCase() === targetWord) {
         setGameState('won');
-        if (mode === 'daily') setDailyCompleted(true);
         setStats(prev => ({
           played: prev.played + 1,
           won: prev.won + 1,
@@ -145,7 +109,6 @@ export default function WordGuess() {
         }));
       } else if (newGuesses.length >= MAX_GUESSES) {
         setGameState('lost');
-        if (mode === 'daily') setDailyCompleted(true);
         setStats(prev => ({
           ...prev,
           played: prev.played + 1,
@@ -153,7 +116,7 @@ export default function WordGuess() {
         }));
       }
     }, WORD_LENGTH * 300 + 100);
-  }, [currentGuess, targetWord, guesses, mode, setStats, letterStates]);
+  }, [currentGuess, targetWord, guesses, setStats, letterStates]);
 
   const handleKeyPress = useCallback((key) => {
     if (gameState !== 'playing') return;
@@ -237,21 +200,6 @@ export default function WordGuess() {
         instructions="Guess the 5-letter word in 6 tries. Colors show how close you are!"
       />
 
-      <div className={styles.modeSelector}>
-        <button
-          className={`${styles.modeBtn} ${mode === 'daily' ? styles.active : ''}`}
-          onClick={() => initGame('daily')}
-        >
-          Daily {dailyCompleted && '✓'}
-        </button>
-        <button
-          className={`${styles.modeBtn} ${mode === 'practice' ? styles.active : ''}`}
-          onClick={() => initGame('practice')}
-        >
-          Practice
-        </button>
-      </div>
-
       <div className={styles.gameArea}>
         <div className={styles.grid}>
           {renderGrid()}
@@ -259,6 +207,12 @@ export default function WordGuess() {
 
         {message && (
           <div className={styles.message}>{message}</div>
+        )}
+
+        {gameState === 'playing' && guesses.length > 0 && (
+          <button className={styles.giveUpBtn} onClick={handleGiveUp}>
+            Give Up
+          </button>
         )}
 
         {gameState !== 'playing' && (
@@ -272,11 +226,9 @@ export default function WordGuess() {
                 The word was <strong>{targetWord}</strong>
               </div>
             )}
-            {mode === 'practice' && (
-              <button className={styles.playAgainBtn} onClick={() => initGame('practice')}>
-                Play Again
-              </button>
-            )}
+            <button className={styles.playAgainBtn} onClick={initGame}>
+              Play Again
+            </button>
           </div>
         )}
 
