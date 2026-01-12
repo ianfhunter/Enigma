@@ -29,23 +29,23 @@ function generateDominoTiling(w, h) {
   const n = w * h;
   const used = new Array(n).fill(false);
   const dominoes = [];
-  
+
   // Randomly try to pair adjacent cells
   const cells = [];
   for (let i = 0; i < n; i++) cells.push(i);
-  
+
   // Shuffle cells for randomness
   for (let i = cells.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [cells[i], cells[j]] = [cells[j], cells[i]];
   }
-  
+
   for (const i of cells) {
     if (used[i]) continue;
-    
+
     const { r, c } = idxToRC(i, w);
     const neighbors = [];
-    
+
     // Right neighbor
     if (c + 1 < w && !used[rcToIdx(r, c + 1, w)]) {
       neighbors.push(rcToIdx(r, c + 1, w));
@@ -62,22 +62,22 @@ function generateDominoTiling(w, h) {
     if (r - 1 >= 0 && !used[rcToIdx(r - 1, c, w)]) {
       neighbors.push(rcToIdx(r - 1, c, w));
     }
-    
+
     if (neighbors.length === 0) continue;
-    
+
     // Pick random neighbor
     const j = neighbors[Math.floor(Math.random() * neighbors.length)];
     used[i] = true;
     used[j] = true;
     dominoes.push([Math.min(i, j), Math.max(i, j)]);
   }
-  
+
   // If any cells are unpaired, try to fix by regenerating
   if (used.some(u => !u)) {
     // Fallback: use a simple regular tiling
     return generateRegularTiling(w, h);
   }
-  
+
   return dominoes;
 }
 
@@ -85,15 +85,15 @@ function generateDominoTiling(w, h) {
 function generateRegularTiling(w, h) {
   const dominoes = [];
   const used = new Array(w * h).fill(false);
-  
+
   for (let r = 0; r < h; r++) {
     for (let c = 0; c < w; c++) {
       const i = rcToIdx(r, c, w);
       if (used[i]) continue;
-      
+
       // Alternate between horizontal and vertical based on position
       const tryHorizontal = (r + Math.floor(c / 2)) % 2 === 0;
-      
+
       if (tryHorizontal && c + 1 < w && !used[rcToIdx(r, c + 1, w)]) {
         const j = rcToIdx(r, c + 1, w);
         used[i] = true;
@@ -112,7 +112,7 @@ function generateRegularTiling(w, h) {
       }
     }
   }
-  
+
   return dominoes;
 }
 
@@ -121,23 +121,23 @@ function generatePuzzle(size, difficulty) {
   const w = size;
   const h = size;
   const n = w * h;
-  
+
   // Generate domino tiling
   const dominoes = generateDominoTiling(w, h);
-  
+
   // Create domOf mapping
   const domOf = new Array(n).fill(-1);
   dominoes.forEach(([a, b], di) => {
     domOf[a] = di;
     domOf[b] = di;
   });
-  
+
   // Generate solution
   const sol = new Array(dominoes.length).fill(0);
   const cellPole = new Array(n).fill(0);
-  
+
   const blankRate = difficulty === 'easy' ? 0.4 : difficulty === 'medium' ? 0.3 : 0.2;
-  
+
   const setDomino = (di, state) => {
     sol[di] = state;
     const [a, b] = dominoes[di];
@@ -148,7 +148,7 @@ function generatePuzzle(size, difficulty) {
     if (state === 1) { cellPole[a] = +1; cellPole[b] = -1; }
     if (state === 2) { cellPole[a] = -1; cellPole[b] = +1; }
   };
-  
+
   const neighbors = (i) => {
     const { r, c } = idxToRC(i, w);
     const out = [];
@@ -160,7 +160,7 @@ function generatePuzzle(size, difficulty) {
     }
     return out;
   };
-  
+
   const conflicts = () => {
     for (let i = 0; i < n; i++) {
       if (cellPole[i] === 0) continue;
@@ -170,7 +170,7 @@ function generatePuzzle(size, difficulty) {
     }
     return false;
   };
-  
+
   // Assign dominos
   for (let di = 0; di < dominoes.length; di++) {
     const roll = Math.random();
@@ -180,7 +180,7 @@ function generatePuzzle(size, difficulty) {
       setDomino(di, 3);
     }
   }
-  
+
   // Compute clues
   const rowPlus = new Array(h).fill(0);
   const rowMinus = new Array(h).fill(0);
@@ -191,7 +191,7 @@ function generatePuzzle(size, difficulty) {
     if (cellPole[i] === 1) { rowPlus[r]++; colPlus[c]++; }
     if (cellPole[i] === -1) { rowMinus[r]++; colMinus[c]++; }
   }
-  
+
   return {
     name: `${w}×${h}`,
     w,
@@ -320,7 +320,7 @@ export default function Magnets() {
     <div className={styles.container}>
       <GameHeader
         title="Magnets"
-        instructions="Each domino is either a magnet (+/−) or blank (·). Adjacent equal poles are not allowed. The outside clues (here shown in the side panel) give totals of + and − in each row/column."
+        instructions="Each domino is either a magnet (+/−) or blank (·). Adjacent equal poles are not allowed. Clues along the edges show how many + and − poles belong in each row/column."
       />
 
       <div className={styles.toolbar}>
@@ -361,42 +361,76 @@ export default function Magnets() {
 
       {puz && (
         <div className={styles.wrap}>
-          <div className={styles.board} style={{ gridTemplateColumns: `repeat(${puz.w}, 44px)` }}>
-            {Array.from({ length: puz.w * puz.h }, (_, i) => (
-              <button
-                key={i}
-                className={[styles.cell, styles.domino, bad.has(i) ? styles.badCell : ''].join(' ')}
-                onClick={(e) => clickCell(i, e)}
-                onContextMenu={(e) => clickCell(i, e)}
-                title="Click to cycle this domino"
-              >
-                {renderCell(i)}
-              </button>
+          <div
+            className={styles.gridContainer}
+            style={{
+              gridTemplateColumns: `44px repeat(${puz.w}, 44px) 44px`,
+              gridTemplateRows: `44px repeat(${puz.h}, 44px) 44px`
+            }}
+          >
+            {/* Top-left corner (empty) */}
+            <div className={styles.corner}></div>
+
+            {/* Top edge: Column + clues */}
+            {puz.colPlus.map((count, c) => (
+              <div key={`col-plus-${c}`} className={`${styles.clueCell} ${styles.clueTop}`}>
+                <span className={styles.plus}>+{count}</span>
+              </div>
             ))}
+
+            {/* Top-right corner (empty) */}
+            <div className={styles.corner}></div>
+
+            {/* Main rows with left/right clues */}
+            {Array.from({ length: puz.h }, (_, r) => (
+              <>
+                {/* Left edge: Row + clue */}
+                <div key={`row-plus-${r}`} className={`${styles.clueCell} ${styles.clueLeft}`}>
+                  <span className={styles.plus}>+{puz.rowPlus[r]}</span>
+                </div>
+
+                {/* Grid cells for this row */}
+                {Array.from({ length: puz.w }, (_, c) => {
+                  const i = rcToIdx(r, c, puz.w);
+                  return (
+                    <button
+                      key={`cell-${i}`}
+                      className={[styles.cell, styles.domino, bad.has(i) ? styles.badCell : ''].join(' ')}
+                      onClick={(e) => clickCell(i, e)}
+                      onContextMenu={(e) => clickCell(i, e)}
+                      title="Click to cycle this domino"
+                    >
+                      {renderCell(i)}
+                    </button>
+                  );
+                })}
+
+                {/* Right edge: Row - clue */}
+                <div key={`row-minus-${r}`} className={`${styles.clueCell} ${styles.clueRight}`}>
+                  <span className={styles.minus}>−{puz.rowMinus[r]}</span>
+                </div>
+              </>
+            ))}
+
+            {/* Bottom-left corner (empty) */}
+            <div className={styles.corner}></div>
+
+            {/* Bottom edge: Column - clues */}
+            {puz.colMinus.map((count, c) => (
+              <div key={`col-minus-${c}`} className={`${styles.clueCell} ${styles.clueBottom}`}>
+                <span className={styles.minus}>−{count}</span>
+              </div>
+            ))}
+
+            {/* Bottom-right corner (empty) */}
+            <div className={styles.corner}></div>
           </div>
 
-          <div className={styles.clues}>
-            <div className={styles.clueBox}>
-              <div><strong>Row + / −</strong></div>
-              <div className={styles.mono}>
-                {puz.rowPlus.map((p, i) => `${p}/${puz.rowMinus[i]}`).join('  ')}
-              </div>
-            </div>
-            <div className={styles.clueBox}>
-              <div><strong>Col + / −</strong></div>
-              <div className={styles.mono}>
-                {puz.colPlus.map((p, i) => `${p}/${puz.colMinus[i]}`).join('  ')}
-              </div>
-            </div>
-            <div className={styles.clueBox}>
-              <div style={{ opacity: 0.85 }}>
-                Tip: left-clicking either half or right-clicking both works here (we use the same cycle).
-              </div>
-            </div>
+          <div className={styles.legend}>
+            <span className={styles.plus}>+</span> clues on left/top &nbsp;|&nbsp; <span className={styles.minus}>−</span> clues on right/bottom
           </div>
         </div>
       )}
     </div>
   );
 }
-

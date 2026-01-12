@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import GameHeader from '../../components/GameHeader/GameHeader';
-import { getGameGradient } from '../../data/gameRegistry';
 import styles from './ColorCube.module.css';
 
 const FACE_ORDER = /** @type {const} */ (['U', 'R', 'F', 'D', 'L', 'B']);
@@ -280,7 +279,6 @@ function FaceGrid({ label, colors, faceClassName, stickerClassName }) {
 }
 
 export default function ColorCube() {
-  const gradient = useMemo(() => getGameGradient('color-cube'), []);
   const [stickers, setStickers] = useState(() => makeSolvedStickers());
   const [moves, setMoves] = useState(0);
   const [moveHistory, setMoveHistory] = useState(() => /** @type {string[]} */ ([]));
@@ -437,7 +435,6 @@ export default function ColorCube() {
     <div className={styles.container}>
       <GameHeader
         title="3×3×3 Color Cube"
-        gradient={gradient}
         instructions={(
           <>
             Scramble the cube, then solve it using standard moves. Drag to rotate the view. Keyboard: <strong>u d l r f b</strong> (Shift = prime).
@@ -538,4 +535,3 @@ export default function ColorCube() {
     </div>
   );
 }
-

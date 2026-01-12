@@ -74,18 +74,47 @@
   gap: 1.25rem;
 }
 
-.colCounts {
-  display: grid;
+.gridContainer {
+  display: flex;
+}
+
+.rowCountsColumn {
+  display: flex;
+  flex-direction: column;
+  margin-right: 4px;
   gap: 2px;
-  margin-bottom: -2px;
+  padding-bottom: 2px;
 }
 
 .corner {
-  width: 40px;
+  width: 30px;
   height: 30px;
 }
 
-.countCell {
+.rowCountCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #22d3ee;
+  width: 30px;
+  height: 40px;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.colCounts {
+  display: grid;
+  gap: 2px;
+  padding: 0 2px;
+  margin-bottom: 2px;
+}
+
+.colCountCell {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,22 +122,6 @@
   font-weight: 700;
   color: #22d3ee;
   height: 30px;
-}
-
-.gridContainer {
-  display: flex;
-}
-
-.rowCounts {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-right: 4px;
-}
-
-.rowCounts .countCell {
-  width: 30px;
-  height: 40px;
 }
 
 .grid {

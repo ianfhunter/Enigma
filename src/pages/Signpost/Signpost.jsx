@@ -21,40 +21,199 @@ function dirToArrow(dr, dc) {
   return '•';
 }
 
-function generateSnake(w, h) {
-  // Simple Hamiltonian path (snake)
-  const path = [];
-  for (let r = 0; r < h; r++) {
-    if (r % 2 === 0) {
-      for (let c = 0; c < w; c++) path.push(rcToIdx(r, c, w));
-    } else {
-      for (let c = w - 1; c >= 0; c--) path.push(rcToIdx(r, c, w));
+// Get all cells reachable from idx in a given direction (any distance)
+function getCellsInDirection(idx, dr, dc, w, h) {
+  const { r, c } = idxToRC(idx, w);
+  const cells = [];
+  let nr = r + dr;
+  let nc = c + dc;
+  while (nr >= 0 && nr < h && nc >= 0 && nc < w) {
+    cells.push(rcToIdx(nr, nc, w));
+    nr += dr;
+    nc += dc;
+  }
+  return cells;
+}
+
+// Get all cells reachable from idx in any of the 8 directions
+function getAllReachable(idx, w, h) {
+  const cells = [];
+  for (let dr = -1; dr <= 1; dr++) {
+    for (let dc = -1; dc <= 1; dc++) {
+      if (dr === 0 && dc === 0) continue;
+      cells.push(...getCellsInDirection(idx, dr, dc, w, h));
+    }
+  }
+  return cells;
+}
+
+// Shuffle array in place
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Generate a Hamiltonian path where moves can be any distance in 8 directions
+function generateRandomPath(w, h, maxAttempts = 100) {
+  const n = w * h;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const visited = new Set();
+    const path = [];
+
+    // Start from a random cell
+    const startIdx = Math.floor(Math.random() * n);
+    path.push(startIdx);
+    visited.add(startIdx);
+
+    while (path.length < n) {
+      const current = path[path.length - 1];
+
+      // Get all unvisited cells reachable in any direction
+      let candidates = getAllReachable(current, w, h).filter(c => !visited.has(c));
+
+      if (candidates.length === 0) break;
+
+      // Prefer cells that have more future options (modified Warnsdorff)
+      // But heavily prefer longer jumps to make the puzzle interesting
+      candidates = shuffle(candidates);
+
+      // Score candidates: prefer those with escape routes AND longer distances
+      const { r: cr, c: cc } = idxToRC(current, w);
+      candidates.sort((a, b) => {
+        const aReach = getAllReachable(a, w, h).filter(x => !visited.has(x) && x !== a).length;
+        const bReach = getAllReachable(b, w, h).filter(x => !visited.has(x) && x !== b).length;
+
+        // Calculate distances
+        const { r: ar, c: ac } = idxToRC(a, w);
+        const { r: br, c: bc } = idxToRC(b, w);
+        const aDist = Math.max(Math.abs(ar - cr), Math.abs(ac - cc));
+        const bDist = Math.max(Math.abs(br - cr), Math.abs(bc - cc));
+
+        // Primary: cells with fewer options first (Warnsdorff)
+        // Secondary: prefer longer distances for more interesting puzzles
+        if (aReach !== bReach) return aReach - bReach;
+        return bDist - aDist; // Prefer longer jumps
+      });
+
+      // Pick from top candidates with some randomness
+      const topCount = Math.min(3, candidates.length);
+      const next = candidates[Math.floor(Math.random() * topCount)];
+
+      path.push(next);
+      visited.add(next);
+    }
+
+    if (path.length === n) {
+      return path;
     }
   }
 
+  // Fallback: create a path with some longer jumps
+  // Use a diagonal-heavy pattern
+  const path = [];
+  const visited = new Set();
+  let current = 0;
+  path.push(current);
+  visited.add(current);
+
+  while (path.length < n) {
+    const candidates = getAllReachable(current, w, h).filter(c => !visited.has(c));
+    if (candidates.length === 0) {
+      // Find any unvisited cell
+      for (let i = 0; i < n; i++) {
+        if (!visited.has(i)) {
+          current = i;
+          break;
+        }
+      }
+    } else {
+      current = candidates[Math.floor(Math.random() * candidates.length)];
+    }
+    path.push(current);
+    visited.add(current);
+  }
+
+  return path;
+}
+
+function normalizeDirection(dr, dc) {
+  if (dr === 0 && dc === 0) return { dr: 0, dc: 0 };
+  const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+  const g = gcd(Math.abs(dr), Math.abs(dc));
+  return { dr: dr / g, dc: dc / g };
+}
+
+// Check if a link from->to has ambiguity (multiple cells in that direction)
+function hasAmbiguity(fromIdx, toIdx, w, h) {
+  const { r: fr, c: fc } = idxToRC(fromIdx, w);
+  const { r: tr, c: tc } = idxToRC(toIdx, w);
+  const dr = tr - fr;
+  const dc = tc - fc;
+  if (dr === 0 && dc === 0) return false;
+
+  const dir = normalizeDirection(dr, dc);
+  const cellsInDir = getCellsInDirection(fromIdx, dir.dr, dir.dc, w, h);
+
+  // If there's more than one cell in this direction, there's ambiguity
+  return cellsInDir.length > 1;
+}
+
+function generatePuzzle(w, h) {
   const n = w * h;
-  const arrows = new Array(n).fill(null); // {dr,dc} or null for last
+  const path = generateRandomPath(w, h);
+
+  const arrows = new Array(n).fill(null);
   const numbers = new Array(n).fill(null);
+
+  // Always show 1 at start and n at end
   numbers[path[0]] = 1;
   numbers[path[n - 1]] = n;
 
+  // Compute arrows (direction from each cell to its successor)
   for (let i = 0; i < n - 1; i++) {
     const a = path[i];
     const b = path[i + 1];
     const ra = idxToRC(a, w);
     const rb = idxToRC(b, w);
-    arrows[a] = { dr: rb.r - ra.r, dc: rb.c - ra.c };
+    const dir = normalizeDirection(rb.r - ra.r, rb.c - ra.c);
+    arrows[a] = dir;
   }
 
-  // Reveal a few early numbers (like the original often does)
-  const extra = Math.max(2, Math.floor(n * 0.07));
-  for (let k = 0; k < extra; k++) {
+  // Smart clue placement: reveal numbers at ambiguous points
+  // and ensure the puzzle is solvable
+  const revealIndices = new Set([0, n - 1]);
+
+  // Find positions where there's ambiguity (multiple cells in arrow direction)
+  const ambiguousPositions = [];
+  for (let i = 0; i < n - 1; i++) {
+    if (hasAmbiguity(path[i], path[i + 1], w, h)) {
+      ambiguousPositions.push(i + 1); // Reveal the destination
+    }
+  }
+
+  // Reveal some ambiguous destinations to help solve
+  shuffle(ambiguousPositions);
+  const numToReveal = Math.max(3, Math.floor(ambiguousPositions.length * 0.4));
+  for (let i = 0; i < Math.min(numToReveal, ambiguousPositions.length); i++) {
+    revealIndices.add(ambiguousPositions[i]);
+  }
+
+  // Also add a few random clues spread throughout
+  const extraClues = Math.max(2, Math.floor(n * 0.1));
+  for (let i = 0; i < extraClues; i++) {
     const t = 1 + Math.floor(Math.random() * (n - 2));
-    const idx = path[t];
-    numbers[idx] = t + 1;
+    revealIndices.add(t);
   }
 
-  return { w, h, arrows, fixedNumbers: numbers };
+  for (const t of revealIndices) {
+    numbers[path[t]] = t + 1;
+  }
+
+  return { w, h, arrows, fixedNumbers: numbers, solutionPath: path };
 }
 
 function inArrowDirection(fromIdx, toIdx, arrows, w) {
@@ -135,13 +294,13 @@ function analyze(puz, succ, pred) {
 export default function Signpost() {
   const [w, setW] = useState(6);
   const [h, setH] = useState(6);
-  const [puz, setPuz] = useState(() => generateSnake(6, 6));
+  const [puz, setPuz] = useState(() => generatePuzzle(6, 6));
   const [succ, setSucc] = useState(() => new Array(36).fill(null));
   const [pred, setPred] = useState(() => new Array(36).fill(null));
   const [selected, setSelected] = useState(null);
 
   const reset = useCallback((nw = w, nh = h) => {
-    const np = generateSnake(nw, nh);
+    const np = generatePuzzle(nw, nh);
     setPuz(np);
     setSucc(new Array(nw * nh).fill(null));
     setPred(new Array(nw * nh).fill(null));
@@ -229,17 +388,17 @@ export default function Signpost() {
           <button
             className={styles.button}
             onClick={() => {
-              // reveal the generated snake solution
+              // reveal the stored solution
               const s = new Array(n).fill(null);
               const p = new Array(n).fill(null);
-              // reconstruct snake path as in generator
-              const path = [];
-              for (let rr = 0; rr < puz.h; rr++) {
-                if (rr % 2 === 0) for (let cc = 0; cc < puz.w; cc++) path.push(rcToIdx(rr, cc, puz.w));
-                else for (let cc = puz.w - 1; cc >= 0; cc--) path.push(rcToIdx(rr, cc, puz.w));
+              const path = puz.solutionPath;
+              for (let i = 0; i < path.length - 1; i++) {
+                s[path[i]] = path[i + 1];
+                p[path[i + 1]] = path[i];
               }
-              for (let i = 0; i < path.length - 1; i++) { s[path[i]] = path[i + 1]; p[path[i + 1]] = path[i]; }
-              setSucc(s); setPred(p); setSelected(null);
+              setSucc(s);
+              setPred(p);
+              setSelected(null);
             }}
           >
             Reveal
@@ -256,9 +415,13 @@ export default function Signpost() {
           const fixed = puz.fixedNumbers[i];
           const num = fixed ?? derived[i];
           const arrow = puz.arrows[i] ? dirToArrow(puz.arrows[i].dr, puz.arrows[i].dc) : '⛳';
+          const isStart = fixed === 1;
+          const isEnd = fixed === n;
           const cls = [
             styles.cell,
             fixed != null ? styles.fixed : '',
+            isStart ? styles.startCell : '',
+            isEnd ? styles.endCell : '',
             selected === i ? styles.selected : '',
             bad.has(i) ? styles.badCell : '',
           ].join(' ');
@@ -284,4 +447,3 @@ export default function Signpost() {
     </div>
   );
 }
-

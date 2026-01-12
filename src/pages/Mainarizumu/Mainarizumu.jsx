@@ -30,7 +30,8 @@ function generateRegions(size) {
   for (const [startR, startC] of positions) {
     if (regions[startR][startC] !== -1) continue;
 
-    const targetSize = 2 + Math.floor(Math.random() * 4); // 2-5 cells per region
+    // Smaller regions (2-4 cells) are easier to solve and still interesting
+    const targetSize = 2 + Math.floor(Math.random() * 3); // 2-4 cells per region
     const cells = [[startR, startC]];
     regions[startR][startC] = regionId;
 
@@ -75,52 +76,120 @@ function canPlace(grid, r, c, num, size) {
   return true;
 }
 
-// Generate a valid solution using backtracking
+// Solver: counts solutions (stops at 2 to check uniqueness)
+function countSolutions(puzzle, regions, regionCells, size, maxCount = 2) {
+  const grid = puzzle.map(row => [...row]);
+
+  // Find all empty cells
+  const emptyCells = [];
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c] === null) {
+        emptyCells.push([r, c]);
+      }
+    }
+  }
+
+  let count = 0;
+
+  function solve(idx) {
+    if (count >= maxCount) return; // Early exit once we find enough solutions
+
+    if (idx >= emptyCells.length) {
+      count++;
+      return;
+    }
+
+    const [r, c] = emptyCells[idx];
+    const regionId = regions[r][c];
+    const regionSize = regionCells[regionId].length;
+
+    // Find which numbers are already used in this region
+    const usedInRegion = new Set();
+    for (const [rr, cc] of regionCells[regionId]) {
+      if (grid[rr][cc] !== null) {
+        usedInRegion.add(grid[rr][cc]);
+      }
+    }
+
+    // Try each valid number for this cell
+    for (let num = 1; num <= regionSize; num++) {
+      if (usedInRegion.has(num)) continue;
+      if (!canPlace(grid, r, c, num, size)) continue;
+
+      grid[r][c] = num;
+      solve(idx + 1);
+      grid[r][c] = null;
+
+      if (count >= maxCount) return;
+    }
+  }
+
+  solve(0);
+  return count;
+}
+
+// Check if puzzle has exactly one solution
+function hasUniqueSolution(puzzle, regions, regionCells, size) {
+  return countSolutions(puzzle, regions, regionCells, size, 2) === 1;
+}
+
+// Generate a valid solution using global backtracking
 function generateSolution(regions, regionCells, size) {
   const solution = Array(size).fill(null).map(() => Array(size).fill(0));
 
-  // For each region, fill with numbers 1 to regionSize
-  const regionIds = Object.keys(regionCells).map(Number);
-  
-  function solve(regionIdx) {
-    if (regionIdx >= regionIds.length) return true;
+  // Get all cells and sort them for better backtracking (process cells with fewer options first)
+  const allCells = [];
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      allCells.push([r, c]);
+    }
+  }
 
-    const rid = regionIds[regionIdx];
-    const cells = regionCells[rid];
-    const regionSize = cells.length;
+  // Shuffle for variety
+  for (let i = allCells.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allCells[i], allCells[j]] = [allCells[j], allCells[i]];
+  }
 
-    // Try to assign numbers 1 to regionSize to cells
-    const numbers = Array.from({ length: regionSize }, (_, i) => i + 1);
-    
-    function assignNumbers(cellIdx, usedNumbers) {
-      if (cellIdx >= cells.length) return true;
+  function getValidNumbers(r, c) {
+    const regionId = regions[r][c];
+    const regionSize = regionCells[regionId].length;
 
-      const [r, c] = cells[cellIdx];
-      const availableNumbers = numbers.filter(n => !usedNumbers.has(n));
-
-      // Shuffle available numbers
-      for (let i = availableNumbers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [availableNumbers[i], availableNumbers[j]] = [availableNumbers[j], availableNumbers[i]];
+    // Find used numbers in this region
+    const usedInRegion = new Set();
+    for (const [rr, cc] of regionCells[regionId]) {
+      if (solution[rr][cc] !== 0) {
+        usedInRegion.add(solution[rr][cc]);
       }
-
-      for (const num of availableNumbers) {
-        if (canPlace(solution, r, c, num, size)) {
-          solution[r][c] = num;
-          usedNumbers.add(num);
-
-          if (assignNumbers(cellIdx + 1, usedNumbers)) return true;
-
-          usedNumbers.delete(num);
-          solution[r][c] = 0;
-        }
-      }
-
-      return false;
     }
 
-    if (assignNumbers(0, new Set())) {
-      return solve(regionIdx + 1);
+    const valid = [];
+    for (let num = 1; num <= regionSize; num++) {
+      if (usedInRegion.has(num)) continue;
+      if (!canPlace(solution, r, c, num, size)) continue;
+      valid.push(num);
+    }
+
+    // Shuffle for variety
+    for (let i = valid.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [valid[i], valid[j]] = [valid[j], valid[i]];
+    }
+
+    return valid;
+  }
+
+  function solve(idx) {
+    if (idx >= allCells.length) return true;
+
+    const [r, c] = allCells[idx];
+    const validNumbers = getValidNumbers(r, c);
+
+    for (const num of validNumbers) {
+      solution[r][c] = num;
+      if (solve(idx + 1)) return true;
+      solution[r][c] = 0;
     }
 
     return false;
@@ -135,7 +204,7 @@ function generateSolution(regions, regionCells, size) {
 
 function generatePuzzle(size) {
   let attempts = 0;
-  const maxAttempts = 20;
+  const maxAttempts = 30;
 
   while (attempts < maxAttempts) {
     attempts++;
@@ -143,35 +212,65 @@ function generatePuzzle(size) {
     const solution = generateSolution(regions, regionCells, size);
 
     if (solution) {
-      // Create puzzle by removing some numbers (keep ~40%)
+      // Start with full solution and remove cells while maintaining unique solvability
       const puzzle = solution.map(row => [...row]);
-      const fixed = Array(size).fill(null).map(() => Array(size).fill(false));
+      const fixed = Array(size).fill(null).map(() => Array(size).fill(true));
 
+      // Create a shuffled list of all cells to try removing
+      const allCells = [];
       for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
-          if (Math.random() > 0.4) {
-            puzzle[r][c] = null;
-          } else {
-            fixed[r][c] = true;
-          }
+          allCells.push([r, c]);
+        }
+      }
+      // Shuffle
+      for (let i = allCells.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allCells[i], allCells[j]] = [allCells[j], allCells[i]];
+      }
+
+      // Target: remove about 55% of cells (keep ~45%)
+      const targetRemoved = Math.floor(size * size * 0.55);
+      let removed = 0;
+
+      for (const [r, c] of allCells) {
+        if (removed >= targetRemoved) break;
+
+        // Try removing this cell
+        const savedValue = puzzle[r][c];
+        puzzle[r][c] = null;
+
+        // Ensure each region still has at least one hint
+        const regionId = regions[r][c];
+        const regionHasHint = regionCells[regionId].some(([rr, cc]) =>
+          puzzle[rr][cc] !== null
+        );
+
+        if (!regionHasHint) {
+          // Must keep at least one hint per region
+          puzzle[r][c] = savedValue;
+          continue;
+        }
+
+        // Check if puzzle still has unique solution
+        if (hasUniqueSolution(puzzle, regions, regionCells, size)) {
+          fixed[r][c] = false;
+          removed++;
+        } else {
+          // Restore the cell - removing it makes puzzle non-unique or unsolvable
+          puzzle[r][c] = savedValue;
         }
       }
 
-      // Ensure each region has at least one hint
-      for (const cells of Object.values(regionCells)) {
-        const hasHint = cells.some(([r, c]) => puzzle[r][c] !== null);
-        if (!hasHint) {
-          const [r, c] = cells[Math.floor(Math.random() * cells.length)];
-          puzzle[r][c] = solution[r][c];
-          fixed[r][c] = true;
-        }
+      // Final verification: ensure the puzzle is solvable
+      if (hasUniqueSolution(puzzle, regions, regionCells, size)) {
+        return { regions, regionCells, solution, puzzle, fixed };
       }
-
-      return { regions, regionCells, solution, puzzle, fixed };
+      // If somehow not solvable, try again
     }
   }
 
-  // Fallback to a simple puzzle
+  // Fallback to a guaranteed simple puzzle
   return generateSimplePuzzle(size);
 }
 
@@ -180,7 +279,7 @@ function generateSimplePuzzle(size) {
   const regionCells = {};
   let rid = 0;
 
-  // Create 2x2 regions
+  // Create 2x2 regions (or 1x2/2x1/1x1 at edges for odd sizes)
   for (let r = 0; r < size; r += 2) {
     for (let c = 0; c < size; c += 2) {
       const cells = [];
@@ -195,9 +294,35 @@ function generateSimplePuzzle(size) {
     }
   }
 
-  const solution = Array(size).fill(null).map(() => Array(size).fill(1));
+  // Create a guaranteed valid solution using a simple pattern
+  // For 2x2 regions: assign 1,2,3,4 in reading order (top-left, top-right, bottom-left, bottom-right)
+  // This pattern ensures no adjacent cells (including diagonals) between regions have same numbers
+  const solution = Array(size).fill(null).map(() => Array(size).fill(0));
+
+  for (const [regionId, cells] of Object.entries(regionCells)) {
+    // For each cell in region, assign 1, 2, 3, ... based on position within region
+    cells.forEach(([r, c], idx) => {
+      solution[r][c] = idx + 1;
+    });
+  }
+
+  // Create puzzle - for simplicity, keep one hint per region (this is always uniquely solvable for 2x2)
   const puzzle = solution.map(row => row.map(() => null));
   const fixed = Array(size).fill(null).map(() => Array(size).fill(false));
+
+  for (const cells of Object.values(regionCells)) {
+    // Keep the first cell as a hint
+    const [r, c] = cells[0];
+    puzzle[r][c] = solution[r][c];
+    fixed[r][c] = true;
+
+    // For 2x2 regions, also keep one more hint to ensure uniqueness
+    if (cells.length >= 2) {
+      const [r2, c2] = cells[1];
+      puzzle[r2][c2] = solution[r2][c2];
+      fixed[r2][c2] = true;
+    }
+  }
 
   return { regions, regionCells, solution, puzzle, fixed };
 }
@@ -393,13 +518,26 @@ export default function Mainarizumu() {
 
   if (!puzzleData) return null;
 
-  // Generate region colors
+  // Guard against size mismatch during transitions
+  if (grid.length !== size || (grid[0] && grid[0].length !== size)) {
+    return null;
+  }
+
+  // Generate region colors - muted jewel tones for dark theme
   const regionColors = {};
   const colorPalette = [
-    'rgba(239, 68, 68, 0.12)', 'rgba(34, 197, 94, 0.12)', 'rgba(59, 130, 246, 0.12)',
-    'rgba(168, 85, 247, 0.12)', 'rgba(251, 191, 36, 0.12)', 'rgba(236, 72, 153, 0.12)',
-    'rgba(20, 184, 166, 0.12)', 'rgba(249, 115, 22, 0.12)', 'rgba(99, 102, 241, 0.12)',
-    'rgba(132, 204, 22, 0.12)', 'rgba(6, 182, 212, 0.12)', 'rgba(244, 114, 182, 0.12)',
+    'rgba(56, 189, 248, 0.15)',   // sky blue
+    'rgba(52, 211, 153, 0.15)',   // emerald
+    'rgba(167, 139, 250, 0.15)',  // violet
+    'rgba(251, 191, 36, 0.12)',   // amber
+    'rgba(45, 212, 191, 0.15)',   // teal
+    'rgba(244, 114, 182, 0.12)',  // pink
+    'rgba(129, 140, 248, 0.15)',  // indigo
+    'rgba(249, 115, 22, 0.12)',   // orange
+    'rgba(163, 230, 53, 0.12)',   // lime
+    'rgba(14, 165, 233, 0.15)',   // cyan
+    'rgba(192, 132, 252, 0.15)',  // purple
+    'rgba(74, 222, 128, 0.15)',   // green
   ];
 
   for (const rid of Object.keys(puzzleData.regionCells)) {
@@ -448,11 +586,11 @@ export default function Mainarizumu() {
               const isFixed = puzzleData.fixed[r][c];
               const hasError = errors.has(`${r},${c}`);
 
-              // Determine borders for region boundaries
-              const borderTop = r === 0 || puzzleData.regions[r-1][c] !== regionId;
-              const borderBottom = r === size - 1 || puzzleData.regions[r+1][c] !== regionId;
-              const borderLeft = c === 0 || puzzleData.regions[r][c-1] !== regionId;
-              const borderRight = c === size - 1 || puzzleData.regions[r][c+1] !== regionId;
+              // Determine borders for region boundaries (with safety checks)
+              const borderTop = r === 0 || !puzzleData.regions[r-1] || puzzleData.regions[r-1][c] !== regionId;
+              const borderBottom = r === size - 1 || !puzzleData.regions[r+1] || puzzleData.regions[r+1][c] !== regionId;
+              const borderLeft = c === 0 || puzzleData.regions[r][c-1] === undefined || puzzleData.regions[r][c-1] !== regionId;
+              const borderRight = c === size - 1 || puzzleData.regions[r][c+1] === undefined || puzzleData.regions[r][c+1] !== regionId;
 
               return (
                 <button

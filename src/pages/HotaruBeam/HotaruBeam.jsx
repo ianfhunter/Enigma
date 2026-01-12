@@ -21,56 +21,334 @@ const DIFFICULTY = {
 // - Each cell can have 0, 1, or 2 line segments passing through it
 // - Lines connect orthogonally adjacent cells through their edges
 
-function generatePuzzle(size, difficultyKey) {
-  const { circles, minValue, maxValue } = DIFFICULTY[difficultyKey];
-  
-  // Create empty grid for circles (0 means no circle)
-  const circleGrid = Array(size).fill(null).map(() => Array(size).fill(0));
-  
-  // Place circles randomly
-  const positions = [];
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      positions.push([r, c]);
-    }
-  }
-  
-  // Shuffle positions
-  for (let i = positions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [positions[i], positions[j]] = [positions[j], positions[i]];
-  }
-  
-  // Place circles with some minimum distance
-  const placedCircles = [];
-  for (const [r, c] of positions) {
-    if (placedCircles.length >= circles) break;
-    
-    // Check minimum distance from other circles
-    let tooClose = false;
-    for (const [pr, pc] of placedCircles) {
-      if (Math.abs(r - pr) + Math.abs(c - pc) < 2) {
-        tooClose = true;
-        break;
-      }
-    }
-    
-    if (!tooClose) {
-      const value = minValue + Math.floor(Math.random() * (maxValue - minValue + 1));
-      circleGrid[r][c] = value;
-      placedCircles.push([r, c]);
-    }
-  }
-  
-  // Generate a valid solution (simplified approach)
-  // Solution stores edges: horizontal edges at [r][c] means edge between (r,c) and (r,c+1)
-  // Vertical edges at [r][c] means edge between (r,c) and (r+1,c)
+// Generate a loop using random walk that creates a closed path
+function generateRandomLoop(size) {
   const solutionH = Array(size).fill(null).map(() => Array(size - 1).fill(false));
   const solutionV = Array(size - 1).fill(null).map(() => Array(size).fill(false));
-  
-  // For simplicity, create a simple loop that satisfies some circle constraints
-  // This is a simplified puzzle generator
-  
+
+  // Pick a random starting point not on edges
+  const startR = 1 + Math.floor(Math.random() * (size - 2));
+  const startC = 1 + Math.floor(Math.random() * (size - 2));
+
+  // Perform a random walk to create a loop
+  const path = [[startR, startC]];
+  const visited = new Set([`${startR},${startC}`]);
+  let r = startR, c = startC;
+
+  const dirs = [
+    [-1, 0], // up
+    [1, 0],  // down
+    [0, -1], // left
+    [0, 1],  // right
+  ];
+
+  // Random walk until we can close the loop
+  const maxSteps = size * size;
+  for (let step = 0; step < maxSteps; step++) {
+    // Shuffle directions
+    const shuffled = [...dirs].sort(() => Math.random() - 0.5);
+    let moved = false;
+
+    for (const [dr, dc] of shuffled) {
+      const nr = r + dr;
+      const nc = c + dc;
+
+      // Check bounds
+      if (nr < 0 || nr >= size || nc < 0 || nc >= size) continue;
+
+      // Check if we can close the loop (back to start and path is long enough)
+      if (nr === startR && nc === startC && path.length >= 4) {
+        // Close the loop by adding edge back to start
+        addEdge(r, c, nr, nc, solutionH, solutionV, size);
+        return { solutionH, solutionV, valid: true };
+      }
+
+      // Check if already visited
+      if (visited.has(`${nr},${nc}`)) continue;
+
+      // Move to new cell
+      addEdge(r, c, nr, nc, solutionH, solutionV, size);
+      path.push([nr, nc]);
+      visited.add(`${nr},${nc}`);
+      r = nr;
+      c = nc;
+      moved = true;
+      break;
+    }
+
+    // If stuck, try to close loop if adjacent to start
+    if (!moved) {
+      for (const [dr, dc] of dirs) {
+        const nr = r + dr;
+        const nc = c + dc;
+        if (nr === startR && nc === startC && path.length >= 4) {
+          addEdge(r, c, nr, nc, solutionH, solutionV, size);
+          return { solutionH, solutionV, valid: true };
+        }
+      }
+      break;
+    }
+  }
+
+  return { solutionH, solutionV, valid: false };
+}
+
+// Add an edge between two adjacent cells
+function addEdge(r1, c1, r2, c2, solutionH, solutionV, size) {
+  if (r1 === r2) {
+    // Horizontal edge
+    const minC = Math.min(c1, c2);
+    if (minC >= 0 && minC < size - 1) {
+      solutionH[r1][minC] = true;
+    }
+  } else {
+    // Vertical edge
+    const minR = Math.min(r1, r2);
+    if (minR >= 0 && minR < size - 1) {
+      solutionV[minR][c1] = true;
+    }
+  }
+}
+
+// Generate an L-shaped or U-shaped loop
+function generateShapedLoop(size, shape) {
+  const solutionH = Array(size).fill(null).map(() => Array(size - 1).fill(false));
+  const solutionV = Array(size - 1).fill(null).map(() => Array(size).fill(false));
+
+  const margin = 1;
+  const maxW = size - 2 * margin;
+  const maxH = size - 2 * margin;
+
+  if (shape === 'L') {
+    // L-shape: vertical bar + horizontal bar at bottom
+    const vHeight = 2 + Math.floor(Math.random() * (maxH - 2));
+    const hWidth = 2 + Math.floor(Math.random() * (maxW - 2));
+    const thickness = 1 + Math.floor(Math.random() * 2);
+
+    const top = margin;
+    const left = margin;
+    const right = left + thickness;
+    const bottom = top + vHeight;
+    const farRight = left + hWidth;
+
+    // Draw outer L
+    // Vertical part - left side
+    for (let r = top; r < bottom; r++) solutionV[r][left] = true;
+    // Vertical part - right side (partial)
+    for (let r = top; r < bottom - thickness; r++) solutionV[r][right] = true;
+    // Top horizontal
+    for (let c = left; c < right; c++) solutionH[top][c] = true;
+    // Inner corner horizontal
+    for (let c = right; c < farRight; c++) solutionH[bottom - thickness][c] = true;
+    // Bottom horizontal
+    for (let c = left; c < farRight; c++) solutionH[bottom][c] = true;
+    // Right vertical
+    for (let r = bottom - thickness; r < bottom; r++) solutionV[r][farRight] = true;
+
+  } else if (shape === 'U') {
+    // U-shape
+    const width = 3 + Math.floor(Math.random() * (maxW - 3));
+    const height = 3 + Math.floor(Math.random() * (maxH - 3));
+    const thickness = 1;
+    const gapWidth = Math.max(1, width - 2 * thickness);
+
+    const top = margin;
+    const left = margin;
+    const right = left + width;
+    const bottom = top + height;
+    const innerLeft = left + thickness;
+    const innerRight = right - thickness;
+    const innerBottom = bottom - thickness;
+
+    // Left vertical
+    for (let r = top; r < bottom; r++) solutionV[r][left] = true;
+    // Right vertical
+    for (let r = top; r < bottom; r++) solutionV[r][right] = true;
+    // Bottom horizontal
+    for (let c = left; c < right; c++) solutionH[bottom][c] = true;
+    // Top left horizontal
+    for (let c = left; c < innerLeft; c++) solutionH[top][c] = true;
+    // Top right horizontal
+    for (let c = innerRight; c < right; c++) solutionH[top][c] = true;
+    // Inner left vertical
+    for (let r = top; r < innerBottom; r++) solutionV[r][innerLeft] = true;
+    // Inner right vertical
+    for (let r = top; r < innerBottom; r++) solutionV[r][innerRight] = true;
+    // Inner bottom horizontal
+    for (let c = innerLeft; c < innerRight; c++) solutionH[innerBottom][c] = true;
+
+  } else if (shape === 'S') {
+    // S-shape / staircase
+    const width = 4 + Math.floor(Math.random() * (maxW - 4));
+    const height = 4 + Math.floor(Math.random() * (maxH - 4));
+    const midH = Math.floor(height / 2);
+    const midW = Math.floor(width / 2);
+
+    const top = margin;
+    const left = margin;
+
+    // Top rectangle
+    for (let c = left; c < left + width; c++) solutionH[top][c] = true;
+    for (let c = left + midW; c < left + width; c++) solutionH[top + midH][c] = true;
+    for (let r = top; r < top + midH; r++) solutionV[r][left] = true;
+    for (let r = top; r < top + midH; r++) solutionV[r][left + width] = true;
+
+    // Bottom rectangle (offset)
+    for (let c = left; c < left + midW; c++) solutionH[top + midH][c] = true;
+    for (let c = left; c < left + width; c++) solutionH[top + height][c] = true;
+    for (let r = top + midH; r < top + height; r++) solutionV[r][left] = true;
+    for (let r = top + midH; r < top + height; r++) solutionV[r][left + width] = true;
+  }
+
+  return { solutionH, solutionV };
+}
+
+// Generate a simple rectangle with optional notches
+function generateRectWithNotches(size) {
+  const solutionH = Array(size).fill(null).map(() => Array(size - 1).fill(false));
+  const solutionV = Array(size - 1).fill(null).map(() => Array(size).fill(false));
+
+  const minLoopSize = 3;
+  const margin = Math.floor(Math.random() * 2);
+
+  const loopTop = margin;
+  const loopLeft = margin;
+  const loopHeight = minLoopSize + Math.floor(Math.random() * (size - margin - minLoopSize));
+  const loopWidth = minLoopSize + Math.floor(Math.random() * (size - margin - minLoopSize));
+
+  const loopBottom = loopTop + loopHeight - 1;
+  const loopRight = loopLeft + loopWidth - 1;
+
+  // Draw basic rectangle
+  for (let c = loopLeft; c < loopRight; c++) solutionH[loopTop][c] = true;
+  for (let c = loopLeft; c < loopRight; c++) solutionH[loopBottom][c] = true;
+  for (let r = loopTop; r < loopBottom; r++) solutionV[r][loopLeft] = true;
+  for (let r = loopTop; r < loopBottom; r++) solutionV[r][loopRight] = true;
+
+  // Add notches (indentations) randomly
+  const notchCount = Math.floor(Math.random() * 3);
+  for (let n = 0; n < notchCount; n++) {
+    const side = Math.floor(Math.random() * 4);
+
+    if (side === 0 && loopRight - loopLeft > 3) {
+      // Top notch
+      const notchPos = loopLeft + 1 + Math.floor(Math.random() * (loopRight - loopLeft - 2));
+      const notchDepth = 1;
+      if (loopTop + notchDepth < loopBottom - 1) {
+        solutionH[loopTop][notchPos] = false;
+        solutionH[loopTop + notchDepth][notchPos - 1] = true;
+        solutionH[loopTop + notchDepth][notchPos] = true;
+        solutionV[loopTop][notchPos] = true;
+        solutionV[loopTop][notchPos + 1] = true;
+      }
+    } else if (side === 1 && loopRight - loopLeft > 3) {
+      // Bottom notch
+      const notchPos = loopLeft + 1 + Math.floor(Math.random() * (loopRight - loopLeft - 2));
+      const notchDepth = 1;
+      if (loopBottom - notchDepth > loopTop + 1) {
+        solutionH[loopBottom][notchPos] = false;
+        solutionH[loopBottom - notchDepth][notchPos - 1] = true;
+        solutionH[loopBottom - notchDepth][notchPos] = true;
+        solutionV[loopBottom - notchDepth][notchPos] = true;
+        solutionV[loopBottom - notchDepth][notchPos + 1] = true;
+      }
+    } else if (side === 2 && loopBottom - loopTop > 3) {
+      // Left notch
+      const notchPos = loopTop + 1 + Math.floor(Math.random() * (loopBottom - loopTop - 2));
+      const notchDepth = 1;
+      if (loopLeft + notchDepth < loopRight - 1) {
+        solutionV[notchPos][loopLeft] = false;
+        solutionV[notchPos - 1][loopLeft + notchDepth] = true;
+        solutionV[notchPos][loopLeft + notchDepth] = true;
+        solutionH[notchPos][loopLeft] = true;
+        solutionH[notchPos + 1][loopLeft] = true;
+      }
+    } else if (side === 3 && loopBottom - loopTop > 3) {
+      // Right notch
+      const notchPos = loopTop + 1 + Math.floor(Math.random() * (loopBottom - loopTop - 2));
+      const notchDepth = 1;
+      if (loopRight - notchDepth > loopLeft + 1) {
+        solutionV[notchPos][loopRight] = false;
+        solutionV[notchPos - 1][loopRight - notchDepth] = true;
+        solutionV[notchPos][loopRight - notchDepth] = true;
+        solutionH[notchPos][loopRight - notchDepth] = true;
+        solutionH[notchPos + 1][loopRight - notchDepth] = true;
+      }
+    }
+  }
+
+  return { solutionH, solutionV };
+}
+
+function generatePuzzle(size, difficultyKey) {
+  const { circles } = DIFFICULTY[difficultyKey];
+
+  let solutionH, solutionV;
+
+  // Choose a random loop generation method
+  const method = Math.floor(Math.random() * 5);
+
+  if (method === 0) {
+    // Random walk loop
+    const result = generateRandomLoop(size);
+    if (result.valid) {
+      solutionH = result.solutionH;
+      solutionV = result.solutionV;
+    } else {
+      // Fallback to rectangle with notches
+      const fallback = generateRectWithNotches(size);
+      solutionH = fallback.solutionH;
+      solutionV = fallback.solutionV;
+    }
+  } else if (method === 1) {
+    // L-shaped loop
+    const result = generateShapedLoop(size, 'L');
+    solutionH = result.solutionH;
+    solutionV = result.solutionV;
+  } else if (method === 2) {
+    // U-shaped loop
+    const result = generateShapedLoop(size, 'U');
+    solutionH = result.solutionH;
+    solutionV = result.solutionV;
+  } else if (method === 3) {
+    // S-shaped loop
+    const result = generateShapedLoop(size, 'S');
+    solutionH = result.solutionH;
+    solutionV = result.solutionV;
+  } else {
+    // Rectangle with notches
+    const result = generateRectWithNotches(size);
+    solutionH = result.solutionH;
+    solutionV = result.solutionV;
+  }
+
+  // Create circle grid - place circles on cells that are part of the loop
+  const circleGrid = Array(size).fill(null).map(() => Array(size).fill(0));
+
+  // Find all cells that have edges (part of the loop)
+  const loopCells = [];
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const edgeCount = countEdgesForSolution(r, c, solutionH, solutionV, size);
+      if (edgeCount > 0) {
+        loopCells.push({ r, c, edgeCount });
+      }
+    }
+  }
+
+  // Shuffle loop cells and place circles
+  for (let i = loopCells.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [loopCells[i], loopCells[j]] = [loopCells[j], loopCells[i]];
+  }
+
+  // Place circles with their actual edge counts
+  const numCircles = Math.min(circles, loopCells.length);
+  for (let i = 0; i < numCircles; i++) {
+    const { r, c, edgeCount } = loopCells[i];
+    circleGrid[r][c] = edgeCount;
+  }
+
   return {
     circleGrid,
     solutionH,
@@ -79,10 +357,20 @@ function generatePuzzle(size, difficultyKey) {
   };
 }
 
+// Helper to count edges for a cell during puzzle generation
+function countEdgesForSolution(r, c, hEdges, vEdges, size) {
+  let count = 0;
+  if (c > 0 && hEdges[r][c - 1]) count++;
+  if (c < size - 1 && hEdges[r][c]) count++;
+  if (r > 0 && vEdges[r - 1][c]) count++;
+  if (r < size - 1 && vEdges[r][c]) count++;
+  return count;
+}
+
 // Count edges touching a cell
 function countEdges(r, c, hEdges, vEdges, size) {
   let count = 0;
-  
+
   // Left edge
   if (c > 0 && hEdges[r][c - 1]) count++;
   // Right edge
@@ -91,7 +379,7 @@ function countEdges(r, c, hEdges, vEdges, size) {
   if (r > 0 && vEdges[r - 1][c]) count++;
   // Bottom edge
   if (r < size - 1 && vEdges[r][c]) count++;
-  
+
   return count;
 }
 
@@ -108,7 +396,7 @@ function checkSolved(circleGrid, hEdges, vEdges, size) {
       }
     }
   }
-  
+
   // Check that lines form valid paths (each cell has 0 or 2 edges, not 1 or 3)
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
@@ -118,7 +406,7 @@ function checkSolved(circleGrid, hEdges, vEdges, size) {
       }
     }
   }
-  
+
   // Check that at least some edges exist
   let hasEdges = false;
   for (let r = 0; r < size; r++) {
@@ -131,9 +419,9 @@ function checkSolved(circleGrid, hEdges, vEdges, size) {
       if (vEdges[r][c]) hasEdges = true;
     }
   }
-  
+
   if (!hasEdges) return false;
-  
+
   // Check connectivity of the loop
   return checkLoopConnectivity(hEdges, vEdges, size);
 }
@@ -149,20 +437,20 @@ function checkLoopConnectivity(hEdges, vEdges, size) {
       }
     }
   }
-  
+
   if (!start) return true; // No edges is technically valid
-  
+
   // BFS to check all edge-connected cells are reachable
   const visited = Array(size).fill(null).map(() => Array(size).fill(false));
   const queue = [start];
   let visitedCount = 0;
-  
+
   while (queue.length > 0) {
     const [r, c] = queue.shift();
     if (visited[r][c]) continue;
     visited[r][c] = true;
     visitedCount++;
-    
+
     // Check connected neighbors via edges
     // Left
     if (c > 0 && hEdges[r][c - 1] && !visited[r][c - 1]) {
@@ -181,7 +469,7 @@ function checkLoopConnectivity(hEdges, vEdges, size) {
       queue.push([r + 1, c]);
     }
   }
-  
+
   // Count cells with edges
   let cellsWithEdges = 0;
   for (let r = 0; r < size; r++) {
@@ -191,36 +479,36 @@ function checkLoopConnectivity(hEdges, vEdges, size) {
       }
     }
   }
-  
+
   return visitedCount === cellsWithEdges;
 }
 
 // Find errors in current state
 function findErrors(circleGrid, hEdges, vEdges, size) {
   const errors = new Set();
-  
+
   // Check circle constraints
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       const edgeCount = countEdges(r, c, hEdges, vEdges, size);
-      
+
       // Circle constraint violation
       if (circleGrid[r][c] > 0 && edgeCount > circleGrid[r][c]) {
         errors.add(`cell-${r}-${c}`);
       }
-      
+
       // Invalid edge count (1 or 3 edges means incomplete path)
       if (edgeCount === 1 || edgeCount === 3) {
         errors.add(`cell-${r}-${c}`);
       }
-      
+
       // More than 2 edges is always invalid
       if (edgeCount > 2) {
         errors.add(`cell-${r}-${c}`);
       }
     }
   }
-  
+
   return errors;
 }
 
@@ -251,17 +539,18 @@ export default function HotaruBeam() {
 
   useEffect(() => {
     if (!puzzleData) return;
-    
+
     if (showErrors) {
       setErrors(findErrors(puzzleData.circleGrid, hEdges, vEdges, size));
     } else {
       setErrors(new Set());
     }
-    
-    if (checkSolved(puzzleData.circleGrid, hEdges, vEdges, size)) {
+
+    // Only check for win if still playing (not revealed)
+    if (gameState === 'playing' && checkSolved(puzzleData.circleGrid, hEdges, vEdges, size)) {
       setGameState('won');
     }
-  }, [hEdges, vEdges, puzzleData, size, showErrors]);
+  }, [hEdges, vEdges, puzzleData, size, showErrors, gameState]);
 
   const toggleHEdge = (r, c) => {
     if (gameState !== 'playing') return;
@@ -285,6 +574,13 @@ export default function HotaruBeam() {
     setHEdges(Array(size).fill(null).map(() => Array(size - 1).fill(false)));
     setVEdges(Array(size - 1).fill(null).map(() => Array(size).fill(false)));
     setGameState('playing');
+  };
+
+  const handleGiveUp = () => {
+    if (!puzzleData) return;
+    setHEdges(puzzleData.solutionH.map(row => [...row]));
+    setVEdges(puzzleData.solutionV.map(row => [...row]));
+    setGameState('revealed');
   };
 
   if (!puzzleData) return null;
@@ -331,7 +627,7 @@ export default function HotaruBeam() {
       </div>
 
       <div className={styles.gameArea}>
-        <div 
+        <div
           className={styles.gridContainer}
           style={{ width: gridWidth, height: gridHeight }}
         >
@@ -340,7 +636,7 @@ export default function HotaruBeam() {
             row.map((circle, c) => {
               const hasError = errors.has(`cell-${r}-${c}`);
               const edgeCount = countEdges(r, c, hEdges, vEdges, size);
-              
+
               return (
                 <div
                   key={`cell-${r}-${c}`}
@@ -433,6 +729,14 @@ export default function HotaruBeam() {
           </div>
         )}
 
+        {gameState === 'revealed' && (
+          <div className={styles.revealedMessage}>
+            <div className={styles.revealedEmoji}>💡</div>
+            <h3>Solution Revealed</h3>
+            <p>Better luck next time!</p>
+          </div>
+        )}
+
         <div className={styles.controls}>
           <label className={styles.toggle}>
             <input
@@ -449,6 +753,11 @@ export default function HotaruBeam() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
+          {gameState === 'playing' && (
+            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
+              Give Up
+            </button>
+          )}
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

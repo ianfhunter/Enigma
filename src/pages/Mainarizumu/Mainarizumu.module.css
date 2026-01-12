@@ -18,13 +18,13 @@
 }
 
 .backLink:hover {
-  color: #f472b6;
+  color: #38bdf8;
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+  background: linear-gradient(135deg, #38bdf8 0%, #a78bfa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -63,8 +63,8 @@
 
 .sizeBtn.active {
   color: #fff;
-  background: rgba(244, 114, 182, 0.3);
-  border-color: rgba(244, 114, 182, 0.5);
+  background: rgba(56, 189, 248, 0.3);
+  border-color: rgba(56, 189, 248, 0.5);
 }
 
 .gameArea {
@@ -77,9 +77,10 @@
 .grid {
   display: grid;
   gap: 0;
-  background: rgba(244, 114, 182, 0.2);
-  padding: 2px;
-  border-radius: 8px;
+  background: rgba(51, 65, 85, 0.6);
+  padding: 3px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .cell {
@@ -87,20 +88,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(244, 114, 182, 0.2);
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(71, 85, 105, 0.4);
   cursor: pointer;
   transition: all 0.15s ease;
   padding: 0;
 }
 
 .cell:hover {
-  filter: brightness(0.95);
+  filter: brightness(1.15);
 }
 
 .cell.selected {
-  background: rgba(244, 114, 182, 0.3) !important;
-  box-shadow: inset 0 0 0 2px #f472b6;
+  background: rgba(56, 189, 248, 0.25) !important;
+  box-shadow: inset 0 0 0 2px #38bdf8;
 }
 
 .cell.fixed {
@@ -108,34 +109,34 @@
 }
 
 .cell.fixed .number {
-  color: #7c3aed;
+  color: #e2e8f0;
   font-weight: 800;
 }
 
 .cell.error {
-  background: rgba(239, 68, 68, 0.3) !important;
+  background: rgba(239, 68, 68, 0.35) !important;
 }
 
 .cell.borderTop {
-  border-top: 2px solid #db2777;
+  border-top: 2px solid rgba(148, 163, 184, 0.7);
 }
 
 .cell.borderBottom {
-  border-bottom: 2px solid #db2777;
+  border-bottom: 2px solid rgba(148, 163, 184, 0.7);
 }
 
 .cell.borderLeft {
-  border-left: 2px solid #db2777;
+  border-left: 2px solid rgba(148, 163, 184, 0.7);
 }
 
 .cell.borderRight {
-  border-right: 2px solid #db2777;
+  border-right: 2px solid rgba(148, 163, 184, 0.7);
 }
 
 .number {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #94a3b8;
 }
 
 .numPad {
@@ -163,8 +164,8 @@
 }
 
 .numBtn:hover {
-  background: rgba(244, 114, 182, 0.3);
-  border-color: rgba(244, 114, 182, 0.5);
+  background: rgba(56, 189, 248, 0.3);
+  border-color: rgba(56, 189, 248, 0.5);
 }
 
 .winMessage {
@@ -173,8 +174,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1.5rem 2rem;
-  background: rgba(244, 114, 182, 0.1);
-  border: 1px solid rgba(244, 114, 182, 0.3);
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
   border-radius: 16px;
   animation: fadeIn 0.5s ease;
 }
@@ -281,7 +282,7 @@
 }
 
 .toggle input:checked + .toggleSlider {
-  background: #f472b6;
+  background: #38bdf8;
 }
 
 .toggle input:checked + .toggleSlider::after {
@@ -311,7 +312,7 @@
 
 .newGameBtn {
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #f472b6, #c084fc);
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -323,7 +324,7 @@
 
 .newGameBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
 }
 
 .giveUpBtn {

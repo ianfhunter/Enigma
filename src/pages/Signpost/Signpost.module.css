@@ -61,6 +61,16 @@
   border-color: rgba(255,255,255,0.22);
 }
 
+.startCell {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.endCell {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
 .selected {
   outline: 2px solid rgba(255,255,255,0.95);
   outline-offset: 2px;
@@ -93,4 +103,3 @@
   display: flex;
   justify-content: space-between;
 }
-

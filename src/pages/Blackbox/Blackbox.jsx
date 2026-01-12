@@ -157,6 +157,10 @@ function normalizePair(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
 
+// Scoring constants
+const SHOT_COST = 1;
+const WRONG_GUESS_PENALTY = 5;
+
 export default function Blackbox() {
   const [w, setW] = useState(8);
   const [h, setH] = useState(8);
@@ -171,6 +175,10 @@ export default function Blackbox() {
   const [nextLabel, setNextLabel] = useState(1);
   const [checkMsg, setCheckMsg] = useState(null);
 
+  // Scoring state
+  const [shotCount, setShotCount] = useState(0);
+  const [finalScore, setFinalScore] = useState(null); // { shots, penalty, total } when game ends
+
   const ports = useMemo(() => allPorts(w, h), [w, h]);
 
   const newGame = useCallback(() => {
@@ -181,9 +189,14 @@ export default function Blackbox() {
     setPairLabels(new Map());
     setNextLabel(1);
     setCheckMsg(null);
+    setShotCount(0);
+    setFinalScore(null);
   }, [w, h, ballCount]);
 
   const toggleGuess = (r, c) => {
+    // Don't allow guessing if game is already won
+    if (finalScore) return;
+
     const k = keyRC(r, c);
     setGuesses((prev) => {
       const n = new Set(prev);
@@ -195,6 +208,12 @@ export default function Blackbox() {
   };
 
   const fire = (port) => {
+    // Don't allow firing if game is already won
+    if (finalScore) return;
+
+    // Check if this is a new shot (not already fired)
+    const isNewShot = !fired.has(port);
+
     const shot = simulateShot(port, solution, w, h);
     setFired((prev) => {
       const n = new Map(prev);
@@ -218,10 +237,19 @@ export default function Blackbox() {
       });
       setNextLabel((x) => x + (pairLabels.has(pk) ? 0 : 1));
     }
+
+    // Increment shot count only for new shots
+    if (isNewShot) {
+      setShotCount((prev) => prev + 1);
+    }
+
     setCheckMsg(null);
   };
 
   const check = () => {
+    // Don't allow checking if game is already won
+    if (finalScore) return;
+
     // Compare *all* ports against the hidden solution (accept any equivalent ball layout).
     for (const p of ports) {
       const sol = simulateShot(p, solution, w, h);
@@ -229,7 +257,26 @@ export default function Blackbox() {
       const solKey = sol.kind === 'X' ? `${sol.kind}:${normalizePair(sol.entry, sol.exit)}` : sol.kind;
       const usrKey = usr.kind === 'X' ? `${usr.kind}:${normalizePair(usr.entry, usr.exit)}` : usr.kind;
       if (solKey !== usrKey) {
-        setCheckMsg({ ok: false, text: `Not consistent: shot at ${p} differs.`, port: p });
+        // Calculate penalty for wrong check
+        let wrongGuesses = 0;
+        let missedBalls = 0;
+
+        // Count wrong guesses (guessed but no ball there)
+        for (const g of guesses) {
+          if (!solution.has(g)) wrongGuesses++;
+        }
+        // Count missed balls (ball there but not guessed)
+        for (const s of solution) {
+          if (!guesses.has(s)) missedBalls++;
+        }
+
+        const penalty = (wrongGuesses + missedBalls) * WRONG_GUESS_PENALTY;
+
+        setCheckMsg({
+          ok: false,
+          text: `Incorrect! Shot at ${p} differs. Wrong: ${wrongGuesses}, Missed: ${missedBalls} (+${penalty} penalty)`,
+          port: p
+        });
         // Reveal just that shot result (like the original shows minimal info)
         const s = simulateShot(p, solution, w, h);
         setFired((prev) => {
@@ -240,7 +287,14 @@ export default function Blackbox() {
         return;
       }
     }
-    setCheckMsg({ ok: true, text: 'Solved! Your ball layout matches all beam behaviour.', port: null });
+
+    // Win! Calculate final score
+    const shotPoints = shotCount * SHOT_COST;
+    const total = shotPoints;
+
+    setFinalScore({ shots: shotCount, shotPoints, penalty: 0, total });
+    setCheckMsg({ ok: true, text: 'Solved!', port: null });
+    setRevealed(true);
   };
 
   const cellType = (rr, cc) => {
@@ -269,13 +323,13 @@ export default function Blackbox() {
     return null;
   };
 
-  const solved = checkMsg?.ok === true;
+  const solved = finalScore !== null;
 
   return (
     <div className={styles.container}>
       <GameHeader
         title="Black Box"
-        instructions="Fire lasers from the edge to deduce hidden balls. H = hit, R = reflection, matching numbers indicate entry/exit pairs. You can win with any ball layout that reproduces the same beam behaviour."
+        instructions="Fire lasers from the edge to deduce hidden balls. H = hit, R = reflection, matching numbers indicate entry/exit pairs. Each shot costs 1 point — lower score is better! You can win with any ball layout that reproduces the same beam behaviour."
       />
 
       <div className={styles.toolbar}>
@@ -312,9 +366,27 @@ export default function Blackbox() {
         </div>
 
         <div className={styles.status}>
-          {solved && <span className={styles.win}>Solved!</span>}
-          {!solved && checkMsg?.ok === false && <span className={styles.bad}>{checkMsg.text}</span>}
-          {!checkMsg && <span className={styles.small}>Guesses: {guesses.size}</span>}
+          {/* Running score display */}
+          <span className={styles.scoreDisplay}>
+            Score: {shotCount * SHOT_COST} ({shotCount} shots)
+          </span>
+
+          {/* Final score breakdown on win */}
+          {finalScore && (
+            <span className={styles.win}>
+              🎉 Solved! Final Score: {finalScore.total} points
+            </span>
+          )}
+
+          {/* Error message on failed check */}
+          {!finalScore && checkMsg?.ok === false && (
+            <span className={styles.bad}>{checkMsg.text}</span>
+          )}
+
+          {/* Guess count when no message */}
+          {!finalScore && !checkMsg && (
+            <span className={styles.small}>Guesses: {guesses.size} / {ballCount}</span>
+          )}
         </div>
       </div>
 
@@ -369,4 +441,3 @@ export default function Blackbox() {
     </div>
   );
 }
-

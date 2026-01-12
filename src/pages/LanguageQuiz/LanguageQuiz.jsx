@@ -67,18 +67,30 @@ export default function LanguageQuiz() {
     const correctLanguages = current.languages;
     const guessed = Array.from(guessLanguages);
 
-    const isCorrect =
-      guessed.length === correctLanguages.length &&
-      guessed.every(l => correctLanguages.includes(l));
+    // Count correct selections and wrong selections
+    const correctSelected = guessed.filter(l => correctLanguages.includes(l));
+    const wrongSelected = guessed.filter(l => !correctLanguages.includes(l));
 
-    setResult({ correct: isCorrect, correctLanguages });
+    const correctCount = correctSelected.length;
+    const totalCorrect = correctLanguages.length;
+    const isFullyCorrect = correctCount === totalCorrect && wrongSelected.length === 0;
+    const isPartiallyCorrect = correctCount > 0 && !isFullyCorrect;
+
+    setResult({
+      correct: isFullyCorrect,
+      partial: isPartiallyCorrect,
+      correctLanguages,
+      correctCount,
+      totalCorrect,
+      wrongCount: wrongSelected.length,
+    });
 
     setStats(prev => {
       const played = prev.played + 1;
-      const correctCount = prev.correct + (isCorrect ? 1 : 0);
-      const streak = isCorrect ? prev.streak + 1 : 0;
+      const correctStat = prev.correct + (isFullyCorrect ? 1 : 0);
+      const streak = isFullyCorrect ? prev.streak + 1 : 0;
       const maxStreak = Math.max(prev.maxStreak, streak);
-      return { played, correct: correctCount, streak, maxStreak };
+      return { played, correct: correctStat, streak, maxStreak };
     });
   };
 
@@ -145,11 +157,15 @@ export default function LanguageQuiz() {
             </div>
 
             {result && (
-              <div className={`${styles.result} ${result.correct ? styles.ok : styles.nope}`}>
+              <div className={`${styles.result} ${result.correct ? styles.ok : result.partial ? styles.partial : styles.nope}`}>
                 <div className={styles.resultTitle}>
-                  {result.correct ? '✓ Correct!' : '✗ Incorrect'}
+                  {result.correct ? '✓ Correct!' : result.partial ? '◐ Partially Correct' : '✗ Incorrect'}
                 </div>
                 <div className={styles.resultBody}>
+                  <div className={styles.scoreBreakdown}>
+                    {result.correctCount}/{result.totalCorrect} correct
+                    {result.wrongCount > 0 && `, ${result.wrongCount} wrong`}
+                  </div>
                   Official languages: <strong>{result.correctLanguages.join(', ')}</strong>
                 </div>
               </div>

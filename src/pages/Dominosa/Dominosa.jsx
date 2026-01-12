@@ -77,7 +77,7 @@ function buildPuzzle(maxN) {
       numbers[r2][c2] = a;
     }
   }
-  return { w, h, maxN, numbers };
+  return { w, h, maxN, numbers, solution: tiling };
 }
 
 function edgeKey(a, b) {
@@ -98,6 +98,7 @@ export default function Dominosa() {
   // placed: map cell "r,c" -> partner "r,c"
   const [placed, setPlaced] = useState(() => new Map());
   const [crossed, setCrossed] = useState(() => new Set()); // edgeKey
+  const [gaveUp, setGaveUp] = useState(false);
 
   const w = puzzle.w;
   const h = puzzle.h;
@@ -106,7 +107,22 @@ export default function Dominosa() {
     setPuzzle(buildPuzzle(n));
     setPlaced(new Map());
     setCrossed(new Set());
+    setGaveUp(false);
   }, [maxN]);
+
+  const giveUp = useCallback(() => {
+    // Reveal the solution by placing all dominoes from the tiling
+    const solutionMap = new Map();
+    for (const [[r1, c1], [r2, c2]] of puzzle.solution) {
+      const ka = `${r1},${c1}`;
+      const kb = `${r2},${c2}`;
+      solutionMap.set(ka, kb);
+      solutionMap.set(kb, ka);
+    }
+    setPlaced(solutionMap);
+    setCrossed(new Set());
+    setGaveUp(true);
+  }, [puzzle.solution]);
 
   const toggleDomino = (a, b) => {
     if (!adjacent(a, b)) return;
@@ -216,8 +232,17 @@ export default function Dominosa() {
           </select>
         </label>
         <button className={styles.button} onClick={() => newGame(maxN)}>New</button>
+        {!solved && !gaveUp && (
+          <button className={`${styles.button} ${styles.giveUpBtn}`} onClick={giveUp}>Give Up</button>
+        )}
         <div className={styles.status}>
-          {solved ? <span className={styles.win}>Solved!</span> : <span>Placed: {usedPairs.length}/{requiredCount}</span>}
+          {gaveUp ? (
+            <span className={styles.gaveUp}>Solution shown</span>
+          ) : solved ? (
+            <span className={styles.win}>Solved!</span>
+          ) : (
+            <span>Placed: {usedPairs.length}/{requiredCount}</span>
+          )}
         </div>
       </div>
 
@@ -279,4 +304,3 @@ export default function Dominosa() {
     </div>
   );
 }
-

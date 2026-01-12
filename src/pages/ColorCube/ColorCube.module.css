@@ -4,6 +4,14 @@
   padding: 24px 16px 48px;
 }
 
+/* Override the gradient title to plain text */
+.container h1 {
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.95);
+  background-clip: initial;
+}
+
 .topBar {
   display: flex;
   align-items: center;
@@ -175,6 +183,7 @@
   display: grid;
   place-items: center;
   perspective: 900px;
+  padding-top: 80px;
 }
 
 .cube {
@@ -294,4 +303,3 @@
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.10);
 }
-

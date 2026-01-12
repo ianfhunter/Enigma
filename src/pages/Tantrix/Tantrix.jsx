@@ -43,37 +43,33 @@ function getEdgeColor(paths, edge) {
   return null;
 }
 
-// Hex grid neighbor directions (pointy-top hexagons)
-// Edge 0 = top, 1 = top-right, 2 = bottom-right, 3 = bottom, 4 = bottom-left, 5 = top-left
+// Hex grid neighbor directions (pointy-top hexagons, odd-r offset coordinates)
+// Edge 0 = upper-right, 1 = right, 2 = lower-right, 3 = lower-left, 4 = left, 5 = upper-left
 function getNeighbor(row, col, edge) {
+  // For odd-r offset coordinates (odd rows shifted right):
+  // Neighbor offsets differ based on row parity
   const isOddRow = row % 2 === 1;
-  const offsets = isOddRow ? [
-    [-1, 0],  // 0: top
-    [-1, 1],  // 1: top-right
-    [0, 1],   // 2: bottom-right
-    [1, 0],   // 3: bottom
-    [0, -1],  // 4: bottom-left (fixed for odd row)
-    [-1, -1], // 5: top-left (fixed for odd row)
-  ] : [
-    [-1, 0],  // 0: top
-    [-1, 1],  // 1: top-right (fixed for even row)
-    [0, 1],   // 2: bottom-right (fixed for even row)
-    [1, 0],   // 3: bottom
-    [0, -1],  // 4: bottom-left
-    [-1, -1], // 5: top-left
+
+  const oddRowOffsets = [
+    [-1, 1],  // 0: upper-right
+    [0, 1],   // 1: right
+    [1, 1],   // 2: lower-right
+    [1, 0],   // 3: lower-left
+    [0, -1],  // 4: left
+    [-1, 0],  // 5: upper-left
   ];
-  
-  // Simplified: use offset grid
-  const simpleOffsets = [
-    [-1, 0],  // 0: top
-    [0, 1],   // 1: right-ish
-    [1, 1],   // 2: bottom-right
-    [1, 0],   // 3: bottom
-    [1, -1],  // 4: bottom-left
-    [0, -1],  // 5: left-ish
+
+  const evenRowOffsets = [
+    [-1, 0],  // 0: upper-right
+    [0, 1],   // 1: right
+    [1, 0],   // 2: lower-right
+    [1, -1],  // 3: lower-left
+    [0, -1],  // 4: left
+    [-1, -1], // 5: upper-left
   ];
-  
-  const [dr, dc] = simpleOffsets[edge];
+
+  const offsets = isOddRow ? oddRowOffsets : evenRowOffsets;
+  const [dr, dc] = offsets[edge];
   return [row + dr, col + dc];
 }
 
@@ -82,47 +78,141 @@ function oppositeEdge(edge) {
   return (edge + 3) % 6;
 }
 
-// Generate a puzzle
+// Check if a tile at given rotation is compatible with already-placed neighbors
+function isCompatible(tiles, solutionRotations, r, c, tileType, rotation, size) {
+  const paths = rotateTile(tileType, rotation);
+
+  // Check all 6 edges for neighbors that are already placed
+  for (let edge = 0; edge < 6; edge++) {
+    const [nr, nc] = getNeighbor(r, c, edge);
+
+    // Skip if neighbor is out of bounds or not yet placed
+    if (nr < 0 || nr >= size || nc < 0 || nc >= size) continue;
+    if (!tiles[nr]?.[nc]) continue;
+
+    const neighborPaths = rotateTile(tiles[nr][nc], solutionRotations[nr][nc]);
+    const myColor = getEdgeColor(paths, edge);
+    const theirColor = getEdgeColor(neighborPaths, oppositeEdge(edge));
+
+    // If both edges have colors, they must match
+    if (myColor && theirColor && myColor !== theirColor) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// Find a valid tile and rotation for a position
+function findValidTile(tiles, solutionRotations, r, c, size) {
+  // Shuffle tile types to add variety
+  const shuffledTypes = [...TILE_TYPES].sort(() => Math.random() - 0.5);
+
+  for (const tileType of shuffledTypes) {
+    // Try all 6 rotations in random order
+    const rotations = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
+
+    for (const rotation of rotations) {
+      if (isCompatible(tiles, solutionRotations, r, c, tileType, rotation, size)) {
+        return { tileType: [...tileType], rotation };
+      }
+    }
+  }
+
+  return null; // No valid tile found
+}
+
+// Generate a puzzle by building from a solved state
 function generatePuzzle(size = 3) {
   const gridSize = size;
+  const maxAttempts = 50;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const tiles = [];
+    const solutionRotations = [];
+    let success = true;
+
+    // Initialize empty grid
+    for (let r = 0; r < gridSize; r++) {
+      tiles.push(new Array(gridSize).fill(null));
+      solutionRotations.push(new Array(gridSize).fill(0));
+    }
+
+    // Place tiles one by one, ensuring compatibility with neighbors
+    for (let r = 0; r < gridSize && success; r++) {
+      for (let c = 0; c < gridSize && success; c++) {
+        // Skip some cells to make hex-like pattern
+        if (r === 0 && c === gridSize - 1) continue;
+        if (r === gridSize - 1 && c === 0) continue;
+
+        const result = findValidTile(tiles, solutionRotations, r, c, gridSize);
+
+        if (result) {
+          tiles[r][c] = result.tileType;
+          solutionRotations[r][c] = result.rotation;
+        } else {
+          success = false; // Backtrack by restarting
+        }
+      }
+    }
+
+    if (success) {
+      // Randomize starting rotations (different from solution)
+      const startRotations = solutionRotations.map((row, r) =>
+        row.map((solRot, c) => {
+          if (!tiles[r][c]) return 0;
+          // Pick a random rotation that's NOT the solution
+          const options = [0, 1, 2, 3, 4, 5].filter(rot => rot !== solRot);
+          return options[Math.floor(Math.random() * options.length)];
+        })
+      );
+
+      return {
+        tiles,
+        rotations: startRotations,
+        solution: solutionRotations,
+        size: gridSize,
+      };
+    }
+  }
+
+  // Fallback: return a simple solvable puzzle if generation fails
+  return generateFallbackPuzzle(gridSize);
+}
+
+// Fallback puzzle generation using a simpler pattern
+function generateFallbackPuzzle(size) {
   const tiles = [];
-  const rotations = [];
-  const solution = [];
-  
-  // Place tiles in a pattern
-  for (let r = 0; r < gridSize; r++) {
+  const solutionRotations = [];
+
+  for (let r = 0; r < size; r++) {
     const row = [];
-    const rotRow = [];
     const solRow = [];
-    for (let c = 0; c < gridSize; c++) {
-      // Skip some cells to make hex-like pattern
-      if (r === 0 && c === gridSize - 1) {
+    for (let c = 0; c < size; c++) {
+      if ((r === 0 && c === size - 1) || (r === size - 1 && c === 0)) {
         row.push(null);
-        rotRow.push(0);
         solRow.push(0);
-        continue;
-      }
-      if (r === gridSize - 1 && c === 0) {
-        row.push(null);
-        rotRow.push(0);
+      } else {
+        // Use the same tile type for all - guaranteed compatible
+        row.push([...TILE_TYPES[0]]);
         solRow.push(0);
-        continue;
       }
-      
-      const tileType = TILE_TYPES[Math.floor(Math.random() * TILE_TYPES.length)];
-      const solutionRotation = Math.floor(Math.random() * 6);
-      const startRotation = Math.floor(Math.random() * 6);
-      
-      row.push([...tileType]);
-      solRow.push(solutionRotation);
-      rotRow.push(startRotation);
     }
     tiles.push(row);
-    rotations.push(rotRow);
-    solution.push(solRow);
+    solutionRotations.push(solRow);
   }
-  
-  return { tiles, rotations, solution, size: gridSize };
+
+  // Randomize starting rotations
+  const startRotations = solutionRotations.map((row, r) =>
+    row.map((_, c) => tiles[r][c] ? Math.floor(Math.random() * 5) + 1 : 0)
+  );
+
+  return {
+    tiles,
+    rotations: startRotations,
+    solution: solutionRotations,
+    size,
+  };
 }
 
 // Check how many edges match
@@ -130,23 +220,23 @@ function checkMatches(tiles, rotations, size) {
   let matches = 0;
   let total = 0;
   const mismatches = new Set();
-  
+
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       if (!tiles[r][c]) continue;
-      
+
       const currentPaths = rotateTile(tiles[r][c], rotations[r][c]);
-      
+
       // Check edges 1, 2, 3 (avoid double counting)
       for (const edge of [1, 2, 3]) {
         const [nr, nc] = getNeighbor(r, c, edge);
-        
+
         if (nr >= 0 && nr < size && nc >= 0 && nc < size && tiles[nr]?.[nc]) {
           total++;
           const neighborPaths = rotateTile(tiles[nr][nc], rotations[nr][nc]);
           const myColor = getEdgeColor(currentPaths, edge);
           const theirColor = getEdgeColor(neighborPaths, oppositeEdge(edge));
-          
+
           if (myColor && theirColor && myColor === theirColor) {
             matches++;
           } else if (myColor && theirColor) {
@@ -157,7 +247,7 @@ function checkMatches(tiles, rotations, size) {
       }
     }
   }
-  
+
   return { matches, total, mismatches, solved: matches === total && total > 0 };
 }
 
@@ -188,50 +278,56 @@ export default function Tantrix() {
   const [rotations, setRotations] = useState([]);
   const [gameState, setGameState] = useState('playing');
   const [matchInfo, setMatchInfo] = useState({ matches: 0, total: 0, mismatches: new Set() });
-  
+
   const initGame = useCallback(() => {
     const data = generatePuzzle(puzzleSize);
     setPuzzleData(data);
     setRotations(data.rotations.map(row => [...row]));
     setGameState('playing');
   }, [puzzleSize]);
-  
+
   useEffect(() => {
     initGame();
   }, [initGame]);
-  
+
   useEffect(() => {
     if (!puzzleData) return;
-    
+
     const info = checkMatches(puzzleData.tiles, rotations, puzzleData.size);
     setMatchInfo(info);
-    
+
     if (info.solved) {
       setGameState('won');
     }
   }, [rotations, puzzleData]);
-  
+
   const handleTileClick = (r, c, e) => {
     if (gameState !== 'playing' || !puzzleData?.tiles[r]?.[c]) return;
-    
+
     e.preventDefault();
     const delta = e.button === 2 || e.shiftKey ? -1 : 1;
-    
+
     setRotations(prev => {
       const newRotations = prev.map(row => [...row]);
       newRotations[r][c] = (newRotations[r][c] + delta + 6) % 6;
       return newRotations;
     });
   };
-  
+
+  const handleGiveUp = () => {
+    if (gameState !== 'playing' || !puzzleData) return;
+    setRotations(puzzleData.solution.map(row => [...row]));
+    setGameState('gaveUp');
+  };
+
   if (!puzzleData) return null;
-  
+
   const hexSize = 45;
   const hexWidth = hexSize * 2;
   const hexHeight = hexSize * Math.sqrt(3);
   const svgWidth = puzzleData.size * hexWidth * 0.85 + hexSize;
   const svgHeight = puzzleData.size * hexHeight + hexSize;
-  
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -242,7 +338,7 @@ export default function Tantrix() {
           Click to rotate clockwise, Shift+click for counter-clockwise.
         </p>
       </div>
-      
+
       <div className={styles.sizeSelector}>
         {[2, 3, 4].map((size) => (
           <button
@@ -254,14 +350,14 @@ export default function Tantrix() {
           </button>
         ))}
       </div>
-      
+
       <div className={styles.gameArea}>
         <div className={styles.stats}>
           <span className={styles.matchCount}>
             Matches: {matchInfo.matches} / {matchInfo.total}
           </span>
         </div>
-        
+
         <svg
           className={styles.board}
           width={svgWidth}
@@ -271,12 +367,12 @@ export default function Tantrix() {
           {puzzleData.tiles.map((row, r) =>
             row.map((tile, c) => {
               if (!tile) return null;
-              
+
               const cx = hexSize + c * hexWidth * 0.75 + (r % 2) * hexWidth * 0.375;
               const cy = hexSize + r * hexHeight * 0.85;
               const paths = rotateTile(tile, rotations[r][c]);
               const hasMismatch = matchInfo.mismatches.has(`${r},${c}`);
-              
+
               return (
                 <g
                   key={`${r}-${c}`}
@@ -292,16 +388,16 @@ export default function Tantrix() {
                     stroke={hasMismatch ? '#ef4444' : 'rgba(255, 255, 255, 0.3)'}
                     strokeWidth={hasMismatch ? 3 : 2}
                   />
-                  
+
                   {/* Draw colored paths */}
                   {paths.map(([e1, e2, color], i) => {
                     const [x1, y1] = getEdgeMidpoint(cx, cy, hexSize - 4, e1);
                     const [x2, y2] = getEdgeMidpoint(cx, cy, hexSize - 4, e2);
-                    
+
                     // Curved path through center-ish
                     const midX = cx + (x1 + x2 - 2 * cx) * 0.2;
                     const midY = cy + (y1 + y2 - 2 * cy) * 0.2;
-                    
+
                     return (
                       <path
                         key={i}
@@ -318,7 +414,7 @@ export default function Tantrix() {
             })
           )}
         </svg>
-        
+
         {gameState === 'won' && (
           <div className={styles.winMessage}>
             <div className={styles.winEmoji}>🎉</div>
@@ -326,13 +422,25 @@ export default function Tantrix() {
             <p>All paths are connected!</p>
           </div>
         )}
-        
+
+        {gameState === 'gaveUp' && (
+          <div className={styles.gaveUpMessage}>
+            <h3>Solution Revealed</h3>
+            <p>Here's how it should look!</p>
+          </div>
+        )}
+
         <div className={styles.buttons}>
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>
+          {gameState === 'playing' && (
+            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
+              Give Up
+            </button>
+          )}
         </div>
-        
+
         <div className={styles.legend}>
           <span className={styles.legendTitle}>Colors:</span>
           {Object.entries(COLORS).map(([key, color]) => (

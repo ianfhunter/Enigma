@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  --game-gradient: #fff;
 }
 
 .subHeader {
@@ -84,6 +85,7 @@
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .button {
@@ -111,6 +113,7 @@
 .boardWrap {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
 }
 
@@ -296,13 +299,13 @@
   .dpad {
     display: flex;
   }
-  
+
   .dpadBtn {
     width: 60px;
     height: 60px;
     font-size: 1.4rem;
   }
-  
+
   .dpadCenter {
     width: 60px;
     height: 60px;

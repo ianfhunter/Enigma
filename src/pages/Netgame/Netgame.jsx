@@ -124,8 +124,11 @@ function maskToGlyph(mask) {
   const deg = (hasN ? 1 : 0) + (hasE ? 1 : 0) + (hasS ? 1 : 0) + (hasW ? 1 : 0);
   if (deg === 0) return '·';
   if (deg === 1) {
-    if (hasN || hasS) return '│';
-    return '─';
+    // Use directional half-line characters to show which way single arms point
+    if (hasN) return '╵'; // connects up only
+    if (hasS) return '╷'; // connects down only
+    if (hasE) return '╶'; // connects right only
+    return '╴'; // connects left only (hasW)
   }
   if (deg === 2) {
     if (hasN && hasS) return '│';
@@ -237,4 +240,3 @@ export default function Netgame() {
     </div>
   );
 }
-

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import styles from './Cube.module.css';
 
@@ -11,6 +11,91 @@ function roll(ori, dir) {
   return { U: W, D: E, N, S, W: D, E: U }; // right
 }
 
+// 3D Cube component with CSS transforms
+function Cube3D({ ori, lastMove }) {
+  const [rotation, setRotation] = useState({ x: -25, y: 35 });
+
+  useEffect(() => {
+    if (!lastMove) return;
+    const { dir } = lastMove;
+    setRotation(prev => {
+      if (dir === 'up') return { ...prev, x: prev.x - 90 };
+      if (dir === 'down') return { ...prev, x: prev.x + 90 };
+      if (dir === 'left') return { ...prev, y: prev.y + 90 };
+      if (dir === 'right') return { ...prev, y: prev.y - 90 };
+      return prev;
+    });
+  }, [lastMove]);
+
+  return (
+    <div className={styles.cube3dContainer}>
+      <div className={styles.cube3dScene}>
+        <div
+          className={styles.cube3d}
+          style={{ transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` }}
+        >
+          <div className={`${styles.cube3dFace} ${styles.cube3dFront} ${ori.S ? styles.facePainted : ''}`}>
+            <span>S</span>
+          </div>
+          <div className={`${styles.cube3dFace} ${styles.cube3dBack} ${ori.N ? styles.facePainted : ''}`}>
+            <span>N</span>
+          </div>
+          <div className={`${styles.cube3dFace} ${styles.cube3dRight} ${ori.E ? styles.facePainted : ''}`}>
+            <span>E</span>
+          </div>
+          <div className={`${styles.cube3dFace} ${styles.cube3dLeft} ${ori.W ? styles.facePainted : ''}`}>
+            <span>W</span>
+          </div>
+          <div className={`${styles.cube3dFace} ${styles.cube3dTop} ${ori.U ? styles.facePainted : ''}`}>
+            <span>U</span>
+          </div>
+          <div className={`${styles.cube3dFace} ${styles.cube3dBottom} ${ori.D ? styles.facePainted : ''}`}>
+            <span>D</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Unfolded cube net showing all faces
+function CubeNet({ ori }) {
+  return (
+    <div className={styles.cubeNet}>
+      <div className={styles.netRow}>
+        <div className={styles.netEmpty} />
+        <div className={`${styles.netFace} ${ori.U ? styles.netPainted : ''}`}>
+          <span>U</span>
+        </div>
+        <div className={styles.netEmpty} />
+        <div className={styles.netEmpty} />
+      </div>
+      <div className={styles.netRow}>
+        <div className={`${styles.netFace} ${ori.W ? styles.netPainted : ''}`}>
+          <span>W</span>
+        </div>
+        <div className={`${styles.netFace} ${ori.S ? styles.netPainted : ''}`}>
+          <span>S</span>
+        </div>
+        <div className={`${styles.netFace} ${ori.E ? styles.netPainted : ''}`}>
+          <span>E</span>
+        </div>
+        <div className={`${styles.netFace} ${ori.N ? styles.netPainted : ''}`}>
+          <span>N</span>
+        </div>
+      </div>
+      <div className={styles.netRow}>
+        <div className={styles.netEmpty} />
+        <div className={`${styles.netFace} ${ori.D ? styles.netPainted : ''}`}>
+          <span>D</span>
+        </div>
+        <div className={styles.netEmpty} />
+        <div className={styles.netEmpty} />
+      </div>
+    </div>
+  );
+}
+
 function makeGridBlues() {
   const idxs = Array.from({ length: 16 }, (_, i) => i);
   for (let i = idxs.length - 1; i > 0; i--) {
@@ -21,11 +106,13 @@ function makeGridBlues() {
   return blues;
 }
 
-export default function Cube() {
+export default function CubeGame() {
   const [blueSquares, setBlueSquares] = useState(() => makeGridBlues());
   const [pos, setPos] = useState(() => Math.floor(Math.random() * 16));
   const [ori, setOri] = useState(() => ({ U: false, D: false, N: false, S: false, W: false, E: false }));
   const [moves, setMoves] = useState(0);
+  const [lastMove, setLastMove] = useState(null);
+  const moveCounter = useRef(0);
 
   const blueFaces = useMemo(() => Object.values(ori).filter(Boolean).length, [ori]);
   const solved = blueFaces === 6;
@@ -35,6 +122,8 @@ export default function Cube() {
     setPos(Math.floor(Math.random() * 16));
     setOri({ U: false, D: false, N: false, S: false, W: false, E: false });
     setMoves(0);
+    setLastMove(null);
+    moveCounter.current = 0;
   }, []);
 
   const tryMove = useCallback((dir) => {
@@ -65,14 +154,16 @@ export default function Cube() {
     setBlueSquares(nextSquares);
     setPos(npos);
     setMoves((m) => m + 1);
+    moveCounter.current += 1;
+    setLastMove({ dir, id: moveCounter.current });
   }, [blueSquares, ori, pos, solved]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
-      if (e.key === 'ArrowUp') { e.preventDefault(); tryMove('up'); }
-      if (e.key === 'ArrowDown') { e.preventDefault(); tryMove('down'); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); tryMove('left'); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); tryMove('right'); }
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') { e.preventDefault(); tryMove('up'); }
+      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); tryMove('down'); }
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { e.preventDefault(); tryMove('left'); }
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { e.preventDefault(); tryMove('right'); }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -122,14 +213,16 @@ export default function Cube() {
         })}
       </div>
 
-      <div className={styles.faces}>
-        {(['U', 'D', 'N', 'S', 'W', 'E']).map((k) => (
-          <div key={k} className={`${styles.face} ${ori[k] ? styles.faceBlue : ''}`}>
-            {k}
-          </div>
-        ))}
+      <div className={styles.visualizations}>
+        <div className={styles.vizSection}>
+          <div className={styles.vizLabel}>3D View</div>
+          <Cube3D ori={ori} lastMove={lastMove} />
+        </div>
+        <div className={styles.vizSection}>
+          <div className={styles.vizLabel}>Unfolded</div>
+          <CubeNet ori={ori} />
+        </div>
       </div>
     </div>
   );
 }
-

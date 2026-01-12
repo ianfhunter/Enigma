@@ -172,6 +172,35 @@
   margin: 0;
 }
 
+.gaveUpMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.gaveUpEmoji {
+  font-size: 3rem;
+  animation: bounce 0.6s ease;
+}
+
+.gaveUpMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0;
+}
+
+.gaveUpMessage p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
 .controls {
   display: flex;
   justify-content: center;
@@ -238,6 +267,23 @@
 
 .resetBtn:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 10px;
+  color: #fbbf24;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover {
+  background: rgba(251, 191, 36, 0.25);
+  border-color: rgba(251, 191, 36, 0.5);
 }
 
 .newGameBtn {

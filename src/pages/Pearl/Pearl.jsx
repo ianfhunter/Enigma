@@ -81,14 +81,38 @@ function generatePearl(w, h) {
   const isCorner = (i) => deg[i] === 2 && hasH[i] && hasV[i];
   const isStraight = (i) => deg[i] === 2 && ((hasH[i] && !hasV[i]) || (!hasH[i] && hasV[i]));
 
+  // Build adjacency for loop cells
+  const adj = Array.from({ length: h * w }, () => []);
+  for (let r = 0; r < h; r++) {
+    for (let c = 0; c < w - 1; c++) {
+      if (hEdges[idxH(r, c, w)] === 1) {
+        const a = cellIdx(r, c, w);
+        const b = cellIdx(r, c + 1, w);
+        adj[a].push(b);
+        adj[b].push(a);
+      }
+    }
+  }
+  for (let r = 0; r < h - 1; r++) {
+    for (let c = 0; c < w; c++) {
+      if (vEdges[idxV(r, c, w)] === 1) {
+        const a = cellIdx(r, c, w);
+        const b = cellIdx(r + 1, c, w);
+        adj[a].push(b);
+        adj[b].push(a);
+      }
+    }
+  }
+
   // Place pearls consistent with this loop.
   const pearls = new Array(h * w).fill(0); // 0 none, 1 white, 2 black
   const loopCells = [];
   for (let i = 0; i < deg.length; i++) if (deg[i] === 2) loopCells.push(i);
 
-  // Candidate black pearls: corners where both neighbors are straight in this rectangle loop (true here).
-  const blackCandidates = loopCells.filter((i) => isCorner(i));
-  const whiteCandidates = loopCells.filter((i) => isStraight(i));
+  // Candidate black pearls: corners where both neighbors are straight.
+  const blackCandidates = loopCells.filter((i) => isCorner(i) && adj[i].every((n) => isStraight(n)));
+  // Candidate white pearls: straight cells where at least one neighbor is a corner.
+  const whiteCandidates = loopCells.filter((i) => isStraight(i) && adj[i].some((n) => isCorner(n)));
 
   // Shuffle candidates
   const shuffle = (arr) => {
@@ -419,4 +443,3 @@ export default function Pearl() {
     </div>
   );
 }
-

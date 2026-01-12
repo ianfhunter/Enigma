@@ -98,8 +98,11 @@ export default function Untangle() {
       const svg = svgRef.current;
       if (!svg) return;
       const rect = svg.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      // Convert screen coordinates to SVG viewBox coordinates (600x600)
+      const scaleX = 600 / rect.width;
+      const scaleY = 600 / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
       setPoints((prev) => prev.map((p, i) => (i === dragIdx ? { x, y } : p)));
     };
     const onUp = () => setDragIdx(null);
@@ -169,4 +172,3 @@ export default function Untangle() {
     </div>
   );
 }
-

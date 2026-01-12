@@ -99,7 +99,6 @@ const slugToFolder = {
   'provincial-map-fill': 'ProvincialMapFill',
   'pyramid': 'Pyramid',
   'range': 'Range',
-  'ripple-effect': 'RippleEffect',
   'samegame': 'Samegame',
   'sandwich-sudoku': 'SandwichSudoku',
   'sequence': 'Sequence',

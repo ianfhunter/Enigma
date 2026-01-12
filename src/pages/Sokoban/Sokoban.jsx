@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import GameHeader from '../../components/GameHeader';
-import { getGameGradient } from '../../data/gameRegistry';
 import styles from './Sokoban.module.css';
 
 const GRID_SIZE = 10;
@@ -123,7 +122,6 @@ function isSolved(targets, boxes) {
 }
 
 export default function Sokoban() {
-  const gradient = getGameGradient('sokoban');
   const boardRef = useRef(null);
 
   const [packId, setPackId] = useState(() => localStorage.getItem('sokoban.packId') || PACKS[0].id);
@@ -285,7 +283,7 @@ export default function Sokoban() {
 
   return (
     <div className={styles.page}>
-      <GameHeader title="Sokoban" instructions={instructions} gradient={gradient}>
+      <GameHeader title="Sokoban" instructions={instructions}>
         <div className={styles.subHeader}>
           <div className={styles.packRow}>
             <label className={styles.label}>
@@ -423,4 +421,3 @@ export default function Sokoban() {
     </div>
   );
 }
-

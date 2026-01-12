@@ -47,6 +47,16 @@
   color: #22c55e;
 }
 
+.gaveUp {
+  color: #f59e0b;
+}
+
+.giveUpBtn {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
 .grid {
   display: grid;
   gap: 8px;
@@ -124,4 +134,3 @@
 .bad {
   color: #fb7185;
 }
-

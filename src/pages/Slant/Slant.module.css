@@ -51,58 +51,122 @@
   color: #fb7185;
 }
 
+.gaveUp {
+  color: #f59e0b;
+}
+
+.giveUpButton {
+  background: rgba(251, 113, 133, 0.15);
+  border-color: rgba(251, 113, 133, 0.3);
+  color: #fb7185;
+}
+
+.giveUpButton:hover:not(:disabled) {
+  background: rgba(251, 113, 133, 0.25);
+}
+
+.giveUpButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .boardWrap {
-  position: relative;
   width: min(92vw, 720px);
   margin: 0 auto;
-  padding: 16px;
+  padding: 24px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.03);
+  overflow: visible;
 }
 
-.vertexGrid {
+.cellGrid {
   display: grid;
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 4px;
 }
 
+.cellWrapper {
+  position: relative;
+}
+
+/* Vertex circles positioned absolutely at cell corners */
 .vertex {
-  height: 26px;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 11px;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.5), 0 0 0 2px rgba(15, 15, 20, 0.8);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.vertexTL {
+  top: -12px;
+  left: -12px;
+}
+
+.vertexTR {
+  top: -12px;
+  right: -12px;
+}
+
+.vertexBL {
+  bottom: -12px;
+  left: -12px;
+}
+
+.vertexBR {
+  bottom: -12px;
+  right: -12px;
+}
+
+.vertexBad {
+  background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+  box-shadow: 0 2px 6px rgba(244, 63, 94, 0.5), 0 0 0 2px rgba(15, 15, 20, 0.8);
+}
+
+.cell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  overflow: hidden;
 }
 
-.vertexBad {
-  border-color: rgba(251, 113, 133, 0.6);
-  background: rgba(251, 113, 133, 0.12);
+.cell:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
-.cellGrid {
-  display: grid;
-  gap: 6px;
+.cell:disabled {
+  cursor: default;
 }
 
-.cell {
-  aspect-ratio: 1 / 1;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.cellSolution {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
-.slash {
-  font-size: clamp(16px, 3vw, 28px);
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.9);
-  user-select: none;
+.slashSvg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
 }
-

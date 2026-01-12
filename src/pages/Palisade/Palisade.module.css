@@ -22,11 +22,56 @@
   padding: 0.45rem 0.7rem;
   color: rgba(255,255,255,0.92);
   cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.button:hover:not(:disabled) {
+  background: rgba(255,255,255,0.16);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.newButton {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-color: rgba(139, 92, 246, 0.4);
+  font-weight: 600;
+}
+
+.newButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+.select {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
+  padding: 0.45rem 0.7rem;
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.select option {
+  background: #1e1e2e;
+  color: rgba(255,255,255,0.92);
 }
 
 .status { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
 .win { color: #22c55e; font-weight: 700; }
 .bad { color: #fb7185; font-weight: 700; }
+.generating { color: #60a5fa; font-weight: 600; }
 
 .palette { display: flex; gap: 0.5rem; align-items: center; }
 .swatch {
@@ -59,4 +104,3 @@
 }
 
 .badCell { outline: 2px solid rgba(251,113,133,0.85); outline-offset: 2px; }
-

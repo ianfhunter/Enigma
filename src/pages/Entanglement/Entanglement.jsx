@@ -51,10 +51,15 @@ function hexPoints(cx, cy) {
 }
 
 function sideMidpoint(cx, cy, side) {
-  const angle = (Math.PI / 180) * (60 * side - 30);
+  // Side midpoint must align with DIRS[side] direction
+  // DIRS angles (in screen coords): 0°, -60°, -120°, 180°, 120°, 60° for sides 0-5
+  // This is -60 * side degrees
+  const angle = (Math.PI / 180) * (-60 * side);
+  // Distance is the apothem (inner radius), not the vertex distance
+  const apothem = HEX_SIZE * Math.sqrt(3) / 2;
   return {
-    x: cx + HEX_SIZE * Math.cos(angle),
-    y: cy + HEX_SIZE * Math.sin(angle),
+    x: cx + apothem * Math.cos(angle),
+    y: cy + apothem * Math.sin(angle),
   };
 }
 
@@ -121,6 +126,7 @@ function makeNewGameState(tileTypes) {
   return {
     board,
     visited: new Set(initial.visitedKeys),
+    pathSegments: initial.pathSegments,
     frontier: initial.frontier,
     nextTileIdx: randomInt(tileTypes.length),
     nextRot: 0,
@@ -131,6 +137,7 @@ function makeNewGameState(tileTypes) {
 function traverseForward(startCell, entrySide, board, tileTypes) {
   const visitedKeys = [];
   const visitedDirected = new Set(); // `${key}:${entrySide}`
+  const pathSegments = []; // Track the actual path through tiles
 
   let q = startCell.q;
   let r = startCell.r;
@@ -138,24 +145,28 @@ function traverseForward(startCell, entrySide, board, tileTypes) {
 
   while (true) {
     if (!inBoard(q, r)) {
-      return { visitedKeys, frontier: null, ended: 'escaped' };
+      return { visitedKeys, pathSegments, frontier: null, ended: 'escaped' };
     }
 
     const k = keyOf(q, r);
     const directedKey = `${k}:${entry}`;
     if (visitedDirected.has(directedKey)) {
       // Loop detected: path is now closed.
-      return { visitedKeys, frontier: null, ended: 'loop' };
+      return { visitedKeys, pathSegments, frontier: null, ended: 'loop' };
     }
     visitedDirected.add(directedKey);
 
     const tile = board.get(k);
     if (!tile) {
-      return { visitedKeys, frontier: { q, r, entrySide: entry }, ended: null };
+      return { visitedKeys, pathSegments, frontier: { q, r, entrySide: entry }, ended: null };
     }
 
     visitedKeys.push(k);
     const exit = rotatedExit(tileTypes[tile.typeIdx], tile.rot, entry);
+
+    // Record the path segment through this tile
+    pathSegments.push({ q, r, entry, exit });
+
     const next = neighbor(q, r, exit);
     q = next.q;
     r = next.r;
@@ -196,6 +207,57 @@ function drawTilePaths(cx, cy, baseMap, rot, stroke, strokeWidth) {
   return paths;
 }
 
+// Draw the active thread path through all segments
+function drawActiveThread(pathSegments, frontier) {
+  if (!pathSegments || pathSegments.length === 0) return null;
+
+  // Build a continuous path through all segments
+  let pathD = '';
+
+  for (let i = 0; i < pathSegments.length; i++) {
+    const seg = pathSegments[i];
+    const { x: cx, y: cy } = axialToPixel(seg.q, seg.r);
+    const entryPt = sideMidpoint(cx, cy, seg.entry);
+    const exitPt = sideMidpoint(cx, cy, seg.exit);
+
+    if (i === 0) {
+      // Start from entry point of first segment
+      pathD += `M ${entryPt.x.toFixed(2)} ${entryPt.y.toFixed(2)} `;
+    }
+
+    // Curve through the center to exit
+    pathD += `Q ${cx.toFixed(2)} ${cy.toFixed(2)} ${exitPt.x.toFixed(2)} ${exitPt.y.toFixed(2)} `;
+
+    // If there's a next segment, draw line to its entry
+    if (i < pathSegments.length - 1) {
+      const nextSeg = pathSegments[i + 1];
+      const { x: nx, y: ny } = axialToPixel(nextSeg.q, nextSeg.r);
+      const nextEntryPt = sideMidpoint(nx, ny, nextSeg.entry);
+      pathD += `L ${nextEntryPt.x.toFixed(2)} ${nextEntryPt.y.toFixed(2)} `;
+    }
+  }
+
+  // If there's a frontier, draw to its entry point
+  if (frontier) {
+    const { x: fx, y: fy } = axialToPixel(frontier.q, frontier.r);
+    const frontierEntry = sideMidpoint(fx, fy, frontier.entrySide);
+    pathD += `L ${frontierEntry.x.toFixed(2)} ${frontierEntry.y.toFixed(2)} `;
+  }
+
+  return (
+    <path
+      d={pathD}
+      fill="none"
+      stroke="#22d3ee"
+      strokeWidth={5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity={0.95}
+      style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.7))' }}
+    />
+  );
+}
+
 export default function Entanglement() {
   const gradient = getGameGradient('entanglement');
 
@@ -203,7 +265,7 @@ export default function Entanglement() {
   const cells = CELLS;
 
   const [game, setGame] = useState(() => makeNewGameState(tileTypes));
-  const { board, frontier, nextTileIdx, nextRot, visited, gameOverReason } = game;
+  const { board, frontier, nextTileIdx, nextRot, visited, pathSegments, gameOverReason } = game;
 
   const svgRef = useRef(null);
 
@@ -219,16 +281,6 @@ export default function Entanglement() {
   const rotateRight = useCallback(() => {
     setGame(g => ({ ...g, nextRot: (g.nextRot + 1) % 6 }));
   }, []);
-
-  useEffect(() => {
-    const onKeyDown = (e) => {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') rotateLeft();
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') rotateRight();
-      if (e.key === 'r' || e.key === 'R') newGame();
-    };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [newGame, rotateLeft, rotateRight]);
 
   const canPlay = !!frontier && !gameOverReason;
 
@@ -251,6 +303,7 @@ export default function Entanglement() {
         ...g,
         board: b2,
         visited: v2,
+        pathSegments: [...g.pathSegments, ...step.pathSegments],
         frontier: step.frontier,
         gameOverReason: step.ended,
         nextTileIdx: randomInt(tileTypes.length),
@@ -258,6 +311,26 @@ export default function Entanglement() {
       };
     });
   }, [tileTypes]);
+
+  const placeCurrentTile = useCallback(() => {
+    if (frontier && !gameOverReason) {
+      placeTile(frontier.q, frontier.r);
+    }
+  }, [frontier, gameOverReason, placeTile]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') rotateLeft();
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') rotateRight();
+      if (e.key === 'r' || e.key === 'R') newGame();
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        placeCurrentTile();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [newGame, rotateLeft, rotateRight, placeCurrentTile]);
 
   // Compute SVG bounds
   const points = useMemo(() => {
@@ -274,10 +347,9 @@ export default function Entanglement() {
 
   const instructions = (
     <>
-      Place the next hex tile on the highlighted cell to keep the path going. Rotate with{' '}
-      <span className={styles.pill}>←</span>/<span className={styles.pill}>→</span> (or{' '}
-      <span className={styles.pill}>A</span>/<span className={styles.pill}>D</span>). Restart with{' '}
-      <span className={styles.pill}>R</span>.
+      Rotate with <span className={styles.pill}>←</span>/<span className={styles.pill}>→</span> (or{' '}
+      <span className={styles.pill}>A</span>/<span className={styles.pill}>D</span>), place with{' '}
+      <span className={styles.pill}>Space</span> or click. Restart with <span className={styles.pill}>R</span>.
     </>
   );
 
@@ -316,7 +388,7 @@ export default function Entanglement() {
           )}
 
           <div className={styles.help}>
-            Tip: Only the highlighted cell is placeable — it’s where the path is about to enter.
+            The preview shows where your tile will be placed. The cyan line shows entry direction.
           </div>
         </div>
 
@@ -379,29 +451,28 @@ export default function Entanglement() {
                         y,
                         tileTypes[tile.typeIdx],
                         tile.rot,
-                        isVisited ? 'rgba(34,211,238,0.95)' : 'rgba(255,255,255,0.65)',
-                        isVisited ? 4 : 3
+                        isVisited ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.65)',
+                        isVisited ? 2.5 : 3
                       )}
                     </>
                   )}
 
-                  {isFrontier && (
+                  {/* Entry direction indicator on frontier */}
+                  {isFrontier && canPlay && (
                     (() => {
                       const entryMid = sideMidpoint(x, y, frontier.entrySide);
                       return (
-                        <>
-                          <circle cx={x} cy={y} r={5.2} fill="#fbbf24" opacity={0.95} />
-                          <line
-                            x1={x}
-                            y1={y}
-                            x2={entryMid.x}
-                            y2={entryMid.y}
-                            stroke="#fbbf24"
-                            strokeWidth={3}
-                            strokeLinecap="round"
-                            opacity={0.9}
-                          />
-                        </>
+                        <line
+                          x1={entryMid.x + (x - entryMid.x) * 0.3}
+                          y1={entryMid.y + (y - entryMid.y) * 0.3}
+                          x2={entryMid.x}
+                          y2={entryMid.y}
+                          stroke="#22d3ee"
+                          strokeWidth={5}
+                          strokeLinecap="round"
+                          opacity={0.95}
+                          style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.8))' }}
+                        />
                       );
                     })()
                   )}
@@ -409,24 +480,30 @@ export default function Entanglement() {
               );
             })}
 
-            {/* Next tile preview (top-right in viewBox space) */}
-            {(() => {
-              const previewPos = { x: points.minX + points.width - HEX_SIZE * 2.4, y: points.minY + HEX_SIZE * 2.0 };
+            {/* Active thread - the path through all visited tiles */}
+            {drawActiveThread(pathSegments, frontier)}
+
+            {/* Next tile preview - positioned at the frontier cell */}
+            {frontier && canPlay && (() => {
+              const { x, y } = axialToPixel(frontier.q, frontier.r);
               return (
-                <g opacity={canPlay ? 1 : 0.6}>
+                <g
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => placeTile(frontier.q, frontier.r)}
+                >
                   <polygon
-                    points={hexPoints(previewPos.x, previewPos.y)}
-                    fill="rgba(255,255,255,0.05)"
-                    stroke="rgba(255,255,255,0.25)"
-                    strokeWidth={1.2}
+                    points={hexPoints(x, y)}
+                    fill="rgba(251, 191, 36, 0.15)"
+                    stroke="#fbbf24"
+                    strokeWidth={2.4}
                   />
                   {drawTilePaths(
-                    previewPos.x,
-                    previewPos.y,
+                    x,
+                    y,
                     tileTypes[nextTileIdx],
                     nextRot,
-                    'rgba(255,255,255,0.85)',
-                    3.2
+                    'rgba(251, 191, 36, 0.9)',
+                    3.5
                   )}
                 </g>
               );
@@ -437,4 +514,3 @@ export default function Entanglement() {
     </div>
   );
 }
-

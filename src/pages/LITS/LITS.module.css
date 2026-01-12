@@ -32,9 +32,102 @@
 }
 
 .instructions {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.instructions p {
+  margin-bottom: 0.75rem;
+}
+
+.instructions ul {
+  text-align: left;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.instructions li {
+  margin-bottom: 0.35rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.instructions li:last-child {
+  margin-bottom: 0;
+}
+
+.rulesList {
+  transition: all 0.2s ease;
+}
+
+.ruleViolated {
+  color: rgba(239, 68, 68, 0.9) !important;
+  font-weight: 500;
+  position: relative;
+}
+
+.ruleViolated::before {
+  content: '⚠';
+  position: absolute;
+  left: -1.1rem;
+  font-size: 0.75rem;
+}
+
+.shapesDiagram {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.shapeBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.shapeGrid {
+  display: grid;
+  gap: 2px;
+}
+
+.shapeGrid[data-shape="L"] {
+  grid-template-columns: repeat(2, 12px);
+}
+
+.shapeGrid[data-shape="I"] {
+  grid-template-columns: 12px;
+}
+
+.shapeGrid[data-shape="T"],
+.shapeGrid[data-shape="S"] {
+  grid-template-columns: repeat(3, 12px);
+}
+
+.shapeGrid span {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.shapeGrid span.filled {
+  background: rgba(168, 85, 247, 0.7);
+  border: 1px solid rgba(168, 85, 247, 0.9);
+}
+
+.shapeLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .sizeSelector {

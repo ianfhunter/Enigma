@@ -337,6 +337,15 @@
   color: #1e293b;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+}
+
 @media (max-width: 450px) {
   .grid {
     width: 100% !important;

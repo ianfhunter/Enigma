@@ -17,104 +17,37 @@ const DIRECTIONS = {
 
 const DIR_KEYS = Object.keys(DIRECTIONS);
 
-// Cell states: null (empty), 'shaded', 'line-h', 'line-v', 'line-corner-XX'
-const LINE_STATES = ['line-h', 'line-v', 'line-tl', 'line-tr', 'line-bl', 'line-br'];
-
-function generatePuzzle(size) {
-  // Generate a valid solution with loop and shaded cells
-  const shaded = Array(size).fill(null).map(() => Array(size).fill(false));
-  const clues = Array(size).fill(null).map(() => Array(size).fill(null));
-  
-  // Place some random shaded cells (avoiding adjacent)
-  const numShaded = Math.floor(size * size * 0.15);
-  const positions = [];
-  
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      positions.push([r, c]);
-    }
-  }
-  
-  // Shuffle
-  for (let i = positions.length - 1; i > 0; i--) {
+// Shuffle array in place
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [positions[i], positions[j]] = [positions[j], positions[i]];
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  
-  let placed = 0;
-  for (const [r, c] of positions) {
-    if (placed >= numShaded) break;
-    
-    const hasAdjacentShaded = [
-      [r-1, c], [r+1, c], [r, c-1], [r, c+1]
-    ].some(([nr, nc]) => 
-      nr >= 0 && nr < size && nc >= 0 && nc < size && shaded[nr][nc]
-    );
-    
-    if (!hasAdjacentShaded) {
-      shaded[r][c] = true;
-      placed++;
-    }
-  }
-  
-  // Generate clues for some cells
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (shaded[r][c]) continue;
-      if (Math.random() < 0.15) {
-        const dir = DIR_KEYS[Math.floor(Math.random() * DIR_KEYS.length)];
-        const { dr, dc } = DIRECTIONS[dir];
-        
-        // Count shaded cells in that direction
-        let count = 0;
-        let nr = r + dr;
-        let nc = c + dc;
-        
-        while (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-          if (shaded[nr][nc]) count++;
-          nr += dr;
-          nc += dc;
-        }
-        
-        clues[r][c] = { direction: dir, count };
-      }
-    }
-  }
-  
-  return { clues, solutionShaded: shaded };
+  return arr;
 }
 
-// Check if a clue is satisfied
-function checkClue(grid, clue, r, c, size) {
-  if (!clue) return null;
-  
-  const { direction, count } = clue;
-  const { dr, dc } = DIRECTIONS[direction];
-  
-  let shadedCount = 0;
+// Count shaded cells in a direction from a position
+function countShadedInDirection(shaded, r, c, dir, size) {
+  const { dr, dc } = DIRECTIONS[dir];
+  let count = 0;
   let nr = r + dr;
   let nc = c + dc;
-  
   while (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-    if (grid[nr][nc] === 'shaded') shadedCount++;
+    if (shaded[nr][nc]) count++;
     nr += dr;
     nc += dc;
   }
-  
-  return shadedCount === count;
+  return count;
 }
 
-// Check if shaded cells are not adjacent
-function checkNoAdjacentShaded(grid, size) {
+// Check if all clues are satisfied
+function cluesSatisfied(shaded, clues, size) {
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      if (grid[r][c] === 'shaded') {
-        for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
-          const nr = r + dr;
-          const nc = c + dc;
-          if (nr >= 0 && nr < size && nc >= 0 && nc < size && grid[nr][nc] === 'shaded') {
-            return false;
-          }
+      if (clues[r][c]) {
+        const { direction, count } = clues[r][c];
+        if (countShadedInDirection(shaded, r, c, direction, size) !== count) {
+          return false;
         }
       }
     }
@@ -122,112 +55,352 @@ function checkNoAdjacentShaded(grid, size) {
   return true;
 }
 
-// Get line connections for a cell
-function getLineConnections(cellState) {
-  if (!cellState || cellState === 'shaded') return [];
-  switch (cellState) {
-    case 'line-h': return ['left', 'right'];
-    case 'line-v': return ['up', 'down'];
-    case 'line-tl': return ['up', 'left'];
-    case 'line-tr': return ['up', 'right'];
-    case 'line-bl': return ['down', 'left'];
-    case 'line-br': return ['down', 'right'];
-    default: return [];
-  }
-}
+// Solve puzzle using backtracking with iteration limit
+function solvePuzzle(clues, size, maxSolutions = 2) {
+  const solutions = [];
+  const shaded = Array(size).fill(null).map(() => Array(size).fill(false));
 
-// Check if the loop is valid (single closed loop passing through all non-shaded/non-clue cells)
-function checkLoop(grid, clues, size) {
-  const connections = getLineConnections;
-  
-  // Find all line cells
-  const lineCells = [];
+  // Iteration limit to prevent hanging
+  let iterations = 0;
+  const maxIterations = 50000;
+
+  // Get cells that can potentially be shaded (not clue cells)
+  // Sort by most constrained first (cells with clues pointing at them)
+  const cells = [];
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      if (grid[r][c] && grid[r][c].startsWith('line-')) {
-        lineCells.push([r, c]);
+      if (!clues[r][c]) {
+        cells.push([r, c]);
       }
     }
   }
-  
-  if (lineCells.length === 0) return false;
-  
-  // Check each line cell has exactly 2 connections that match neighbors
-  const opposites = {
-    'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left'
-  };
-  const deltas = {
-    'up': [-1, 0], 'down': [1, 0], 'left': [0, -1], 'right': [0, 1]
-  };
-  
-  for (const [r, c] of lineCells) {
-    const myConnections = connections(grid[r][c]);
-    for (const dir of myConnections) {
-      const [dr, dc] = deltas[dir];
-      const nr = r + dr;
-      const nc = c + dc;
-      
-      if (nr < 0 || nr >= size || nc < 0 || nc >= size) return false;
-      
-      const neighborConn = connections(grid[nr][nc]);
-      if (!neighborConn.includes(opposites[dir])) return false;
+
+  function canPlace(r, c) {
+    // Check no adjacent shaded cells
+    for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      const nr = r + dr, nc = c + dc;
+      if (nr >= 0 && nr < size && nc >= 0 && nc < size && shaded[nr][nc]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // More aggressive pruning - check if clues can possibly be satisfied
+  function checkPartialClues() {
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (clues[r][c]) {
+          const { direction, count } = clues[r][c];
+          const current = countShadedInDirection(shaded, r, c, direction, size);
+          // Too many shaded cells already
+          if (current > count) return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  function solve(idx) {
+    iterations++;
+    if (iterations > maxIterations) return;
+    if (solutions.length >= maxSolutions) return;
+
+    if (idx === cells.length) {
+      if (cluesSatisfied(shaded, clues, size)) {
+        solutions.push(shaded.map(row => [...row]));
+      }
+      return;
+    }
+
+    const [r, c] = cells[idx];
+
+    // Try not shading this cell first
+    solve(idx + 1);
+
+    // Try shading this cell
+    if (canPlace(r, c)) {
+      shaded[r][c] = true;
+      if (checkPartialClues()) {
+        solve(idx + 1);
+      }
+      shaded[r][c] = false;
     }
   }
-  
-  // Check loop is connected (single component)
-  if (lineCells.length === 0) return false;
-  
-  const visited = new Set();
-  const queue = [lineCells[0]];
-  visited.add(`${lineCells[0][0]},${lineCells[0][1]}`);
-  
-  while (queue.length > 0) {
-    const [r, c] = queue.shift();
-    const myConnections = connections(grid[r][c]);
-    
-    for (const dir of myConnections) {
-      const [dr, dc] = deltas[dir];
-      const nr = r + dr;
-      const nc = c + dc;
-      const key = `${nr},${nc}`;
-      
-      if (!visited.has(key) && nr >= 0 && nr < size && nc >= 0 && nc < size) {
-        const neighborConn = connections(grid[nr][nc]);
-        if (neighborConn.includes(opposites[dir])) {
-          visited.add(key);
-          queue.push([nr, nc]);
+
+  solve(0);
+  return solutions;
+}
+
+// Generate a valid shading (no adjacent shaded cells)
+function generateValidShading(size) {
+  const shaded = Array(size).fill(null).map(() => Array(size).fill(false));
+  // Fewer shaded cells for larger grids to keep solver fast
+  // 5x5: ~4-5 cells, 7x7: ~6-7 cells, 9x9: ~8-10 cells
+  const basePercent = size <= 5 ? 0.16 : size <= 7 ? 0.12 : 0.10;
+  const numShaded = Math.floor(size * size * basePercent) + Math.floor(Math.random() * 2);
+
+  const positions = [];
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      positions.push([r, c]);
+    }
+  }
+  shuffle(positions);
+
+  let placed = 0;
+  for (const [r, c] of positions) {
+    if (placed >= numShaded) break;
+
+    const hasAdjacentShaded = [
+      [r-1, c], [r+1, c], [r, c-1], [r, c+1]
+    ].some(([nr, nc]) =>
+      nr >= 0 && nr < size && nc >= 0 && nc < size && shaded[nr][nc]
+    );
+
+    if (!hasAdjacentShaded) {
+      shaded[r][c] = true;
+      placed++;
+    }
+  }
+
+  return shaded;
+}
+
+// Generate puzzle with unique solution
+function generatePuzzle(size) {
+  const maxAttempts = size <= 5 ? 50 : 30; // Fewer attempts for larger grids
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const solutionShaded = generateValidShading(size);
+
+    // Count actual shaded cells
+    let shadedCount = 0;
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (solutionShaded[r][c]) shadedCount++;
+      }
+    }
+
+    // Skip if too few shaded cells
+    const minShaded = size <= 5 ? 3 : size <= 7 ? 4 : 5;
+    if (shadedCount < minShaded) continue;
+
+    const clues = Array(size).fill(null).map(() => Array(size).fill(null));
+
+    // Collect ALL potential clues
+    const potentialClues = [];
+
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (solutionShaded[r][c]) continue;
+
+        for (const dir of DIR_KEYS) {
+          const count = countShadedInDirection(solutionShaded, r, c, dir, size);
+          potentialClues.push({ r, c, direction: dir, count });
+        }
+      }
+    }
+
+    // Sort by informativeness: clues with count > 0 first (they pinpoint shaded cells)
+    // Then by count (higher counts = more constraint)
+    potentialClues.sort((a, b) => {
+      if (a.count > 0 && b.count === 0) return -1;
+      if (a.count === 0 && b.count > 0) return 1;
+      return b.count - a.count; // Higher count first
+    });
+
+    // Add some randomness while keeping general order
+    for (let i = 0; i < potentialClues.length - 1; i++) {
+      if (Math.random() < 0.2) {
+        const j = Math.min(i + 1 + Math.floor(Math.random() * 2), potentialClues.length - 1);
+        [potentialClues[i], potentialClues[j]] = [potentialClues[j], potentialClues[i]];
+      }
+    }
+
+    // Start with more clues for larger grids (helps solver converge faster)
+    const initialClues = size <= 5 ? 5 : size <= 7 ? 8 : 12;
+    let clueIdx = 0;
+
+    for (let i = 0; i < initialClues && clueIdx < potentialClues.length; clueIdx++) {
+      const { r, c, direction, count } = potentialClues[clueIdx];
+      if (!clues[r][c]) {
+        clues[r][c] = { direction, count };
+        i++;
+      }
+    }
+
+    // Add clues until unique solution
+    let iterations = 0;
+    const maxIterations = size <= 5 ? 100 : 50; // Fewer iterations for larger grids
+
+    while (iterations < maxIterations && clueIdx < potentialClues.length) {
+      iterations++;
+      const solutions = solvePuzzle(clues, size, 2);
+
+      if (solutions.length === 1) {
+        const found = solutions[0];
+        let matches = true;
+        for (let r = 0; r < size && matches; r++) {
+          for (let c = 0; c < size && matches; c++) {
+            if (found[r][c] !== solutionShaded[r][c]) matches = false;
+          }
+        }
+        if (matches) {
+          // Puzzle is uniquely solvable - return it
+          // Skip minimization to ensure uniqueness
+          return { clues, solutionShaded };
+        }
+      }
+
+      if (solutions.length === 0) break;
+
+      // Add another clue
+      let added = false;
+      while (clueIdx < potentialClues.length && !added) {
+        const { r, c, direction, count } = potentialClues[clueIdx];
+        clueIdx++;
+        if (!clues[r][c]) {
+          clues[r][c] = { direction, count };
+          added = true;
         }
       }
     }
   }
-  
-  return visited.size === lineCells.length;
+
+  return generateSimplePuzzle(size);
 }
 
-function checkSolved(grid, clues, size) {
-  // Check no adjacent shaded
-  if (!checkNoAdjacentShaded(grid, size)) return false;
-  
-  // Check all clues
+// Try to remove clues while maintaining unique solution
+function minimizeClues(clues, solutionShaded, size) {
+  // Make a copy to work with
+  const workingClues = clues.map(row => row.map(c => c ? { ...c } : null));
+
+  const clueList = [];
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      const result = checkClue(grid, clues[r][c], r, c, size);
-      if (result === false) return false;
+      if (workingClues[r][c]) {
+        clueList.push({ r, c });
+      }
     }
   }
-  
-  // Check valid loop
-  if (!checkLoop(grid, clues, size)) return false;
-  
-  // Check all non-shaded, non-clue cells are part of the loop
+
+  // Shuffle to randomize which clues we try to remove
+  shuffle(clueList);
+
+  for (const { r, c } of clueList) {
+    const backup = workingClues[r][c];
+    workingClues[r][c] = null;
+
+    const solutions = solvePuzzle(workingClues, size, 2);
+
+    if (solutions.length === 1) {
+      // Verify solution still matches our intended solution
+      const found = solutions[0];
+      let matches = true;
+      for (let pr = 0; pr < size && matches; pr++) {
+        for (let pc = 0; pc < size && matches; pc++) {
+          if (found[pr][pc] !== solutionShaded[pr][pc]) matches = false;
+        }
+      }
+      if (!matches) {
+        // Wrong solution, restore clue
+        workingClues[r][c] = backup;
+      }
+      // If matches, keep the clue removed (puzzle is still unique)
+    } else {
+      // Multiple or no solutions, restore clue
+      workingClues[r][c] = backup;
+    }
+  }
+
+  // FINAL VERIFICATION: ensure puzzle is truly unique
+  const finalCheck = solvePuzzle(workingClues, size, 2);
+  if (finalCheck.length !== 1) {
+    // Minimization broke uniqueness somehow, return original
+    return { clues, solutionShaded };
+  }
+
+  // Verify final solution matches
+  const finalSolution = finalCheck[0];
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      if (!clues[r][c] && grid[r][c] !== 'shaded' && !grid[r][c]?.startsWith('line-')) {
+      if (finalSolution[r][c] !== solutionShaded[r][c]) {
+        // Solution doesn't match, return original
+        return { clues, solutionShaded };
+      }
+    }
+  }
+
+  return { clues: workingClues, solutionShaded };
+}
+
+// Simple fallback puzzle generator - uses deterministic pattern, no solver needed
+function generateSimplePuzzle(size) {
+  const solutionShaded = Array(size).fill(null).map(() => Array(size).fill(false));
+  const clues = Array(size).fill(null).map(() => Array(size).fill(null));
+
+  // Place shaded cells in a simple diagonal pattern (guaranteed no adjacency)
+  for (let i = 1; i < size - 1; i += 2) {
+    if (i < size && i < size) {
+      solutionShaded[i][i] = true;
+    }
+    if (i + 1 < size - 1 && size - i - 2 >= 1 && size - i - 2 !== i) {
+      solutionShaded[i + 1][size - i - 2] = true;
+    }
+  }
+
+  // Add clues pointing to each shaded cell from multiple directions
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (solutionShaded[r][c]) continue;
+
+      // Add a clue for this cell
+      for (const dir of DIR_KEYS) {
+        const count = countShadedInDirection(solutionShaded, r, c, dir, size);
+        if (count > 0 && !clues[r][c]) {
+          clues[r][c] = { direction: dir, count };
+          break;
+        }
+      }
+    }
+  }
+
+  return { clues, solutionShaded };
+}
+
+// Check if a clue is satisfied
+function checkClue(grid, clue, r, c, size) {
+  if (!clue) return null;
+  if (!grid || !grid[r]) return null; // Safety check
+
+  const { direction, count } = clue;
+  const { dr, dc } = DIRECTIONS[direction];
+
+  let shadedCount = 0;
+  let nr = r + dr;
+  let nc = c + dc;
+
+  while (nr >= 0 && nr < size && nc >= 0 && nc < size) {
+    if (grid[nr] && grid[nr][nc] === 'shaded') shadedCount++;
+    nr += dr;
+    nc += dc;
+  }
+
+  return shadedCount === count;
+}
+
+function checkSolved(grid, clues, solutionShaded, size) {
+  // Check if player's shaded cells match the solution exactly
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const playerShaded = grid[r][c] === 'shaded';
+      const solutionIsShaded = solutionShaded[r][c];
+      if (playerShaded !== solutionIsShaded) {
         return false;
       }
     }
   }
-  
   return true;
 }
 
@@ -237,7 +410,7 @@ export default function Yajilin() {
   const [grid, setGrid] = useState([]);
   const [gameState, setGameState] = useState('playing');
   const [showErrors, setShowErrors] = useState(true);
-  const [mode, setMode] = useState('shade'); // 'shade' or 'line'
+  const [showSolution, setShowSolution] = useState(false);
 
   const size = GRID_SIZES[sizeKey];
 
@@ -246,6 +419,7 @@ export default function Yajilin() {
     setPuzzleData(data);
     setGrid(Array(size).fill(null).map(() => Array(size).fill(null)));
     setGameState('playing');
+    setShowSolution(false);
   }, [size]);
 
   useEffect(() => {
@@ -254,35 +428,26 @@ export default function Yajilin() {
 
   useEffect(() => {
     if (!puzzleData) return;
-    
-    if (checkSolved(grid, puzzleData.clues, size)) {
+
+    if (checkSolved(grid, puzzleData.clues, puzzleData.solutionShaded, size)) {
       setGameState('won');
     }
   }, [grid, puzzleData, size]);
 
+  const handleGiveUp = () => {
+    setShowSolution(true);
+    setGameState('gaveUp');
+  };
+
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (gameState !== 'playing' || showSolution) return;
     if (puzzleData.clues[r][c]) return; // Can't modify clue cells
 
     setGrid(prev => {
       const newGrid = prev.map(row => [...row]);
       const current = newGrid[r][c];
-      
-      if (mode === 'shade') {
-        // Toggle between null and shaded
-        newGrid[r][c] = current === 'shaded' ? null : 'shaded';
-      } else {
-        // Cycle through line states
-        const currentIndex = LINE_STATES.indexOf(current);
-        if (currentIndex === -1) {
-          newGrid[r][c] = LINE_STATES[0];
-        } else if (currentIndex === LINE_STATES.length - 1) {
-          newGrid[r][c] = null;
-        } else {
-          newGrid[r][c] = LINE_STATES[currentIndex + 1];
-        }
-      }
-      
+      // Toggle between null and shaded
+      newGrid[r][c] = current === 'shaded' ? null : 'shaded';
       return newGrid;
     });
   };
@@ -292,7 +457,8 @@ export default function Yajilin() {
     setGameState('playing');
   };
 
-  if (!puzzleData) return null;
+  // Don't render until puzzle data matches current size
+  if (!puzzleData || puzzleData.clues.length !== size || grid.length !== size) return null;
 
   return (
     <div className={styles.container}>
@@ -300,9 +466,8 @@ export default function Yajilin() {
         <Link to="/" className={styles.backLink}>← Back to Games</Link>
         <h1 className={styles.title}>Yajilin</h1>
         <p className={styles.instructions}>
-          Shade cells and draw a single closed loop through all remaining cells.
-          Arrow clues show how many shaded cells are in that direction.
-          Shaded cells cannot be adjacent.
+          Find and shade all the hidden cells. Arrow clues show how many
+          shaded cells are in that direction. Shaded cells cannot be adjacent.
         </p>
       </div>
 
@@ -318,21 +483,6 @@ export default function Yajilin() {
         ))}
       </div>
 
-      <div className={styles.modeSelector}>
-        <button
-          className={`${styles.modeBtn} ${mode === 'shade' ? styles.active : ''}`}
-          onClick={() => setMode('shade')}
-        >
-          ⬛ Shade
-        </button>
-        <button
-          className={`${styles.modeBtn} ${mode === 'line' ? styles.active : ''}`}
-          onClick={() => setMode('line')}
-        >
-          ➰ Line
-        </button>
-      </div>
-
       <div className={styles.gameArea}>
         <div
           className={styles.grid}
@@ -345,40 +495,29 @@ export default function Yajilin() {
           {grid.map((row, r) =>
             row.map((cell, c) => {
               const clue = puzzleData.clues[r][c];
-              const clueResult = showErrors && clue ? checkClue(grid, clue, r, c, size) : null;
+              const clueResult = showErrors && !showSolution && clue ? checkClue(grid, clue, r, c, size) : null;
               const hasError = clueResult === false;
-              const isShaded = cell === 'shaded';
-              const isLine = cell?.startsWith('line-');
-              
+              const isShaded = showSolution ? puzzleData.solutionShaded[r][c] : cell === 'shaded';
+
               return (
                 <button
                   key={`${r}-${c}`}
                   className={`
                     ${styles.cell}
                     ${isShaded ? styles.shaded : ''}
-                    ${isLine ? styles[cell] : ''}
                     ${hasError ? styles.error : ''}
                     ${clueResult === true ? styles.satisfied : ''}
                     ${clue ? styles.clueCell : ''}
+                    ${showSolution && isShaded ? styles.solutionShaded : ''}
                   `}
                   onClick={() => handleCellClick(r, c)}
-                  disabled={!!clue}
+                  disabled={!!clue || showSolution}
                 >
                   {clue && (
                     <span className={styles.clue}>
                       <span className={styles.arrow}>{DIRECTIONS[clue.direction].symbol}</span>
                       <span className={styles.count}>{clue.count}</span>
                     </span>
-                  )}
-                  {isLine && (
-                    <svg className={styles.lineSvg} viewBox="0 0 100 100">
-                      {cell === 'line-h' && <line x1="0" y1="50" x2="100" y2="50" />}
-                      {cell === 'line-v' && <line x1="50" y1="0" x2="50" y2="100" />}
-                      {cell === 'line-tl' && <path d="M 50 0 Q 50 50 0 50" fill="none" />}
-                      {cell === 'line-tr' && <path d="M 50 0 Q 50 50 100 50" fill="none" />}
-                      {cell === 'line-bl' && <path d="M 50 100 Q 50 50 0 50" fill="none" />}
-                      {cell === 'line-br' && <path d="M 50 100 Q 50 50 100 50" fill="none" />}
-                    </svg>
                   )}
                 </button>
               );
@@ -390,7 +529,15 @@ export default function Yajilin() {
           <div className={styles.winMessage}>
             <div className={styles.winEmoji}>🎉</div>
             <h3>Puzzle Solved!</h3>
-            <p>The loop is complete!</p>
+            <p>All shaded cells found!</p>
+          </div>
+        )}
+
+        {gameState === 'gaveUp' && (
+          <div className={styles.gaveUpMessage}>
+            <div className={styles.gaveUpEmoji}>😔</div>
+            <h3>Solution Revealed</h3>
+            <p>Shaded cells are shown above.</p>
           </div>
         )}
 
@@ -410,6 +557,11 @@ export default function Yajilin() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
+          {gameState === 'playing' && (
+            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
+              Give Up
+            </button>
+          )}
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

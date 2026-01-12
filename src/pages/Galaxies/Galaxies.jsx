@@ -20,6 +20,7 @@ const COLORS = [
   '#f43f5e',
 ];
 
+// Helper functions
 function rcToIdx(r, c, w) {
   return r * w + c;
 }
@@ -30,134 +31,335 @@ function inBounds(r, c, h, w) {
   return r >= 0 && r < h && c >= 0 && c < w;
 }
 
-// Generate a puzzle by growing symmetric regions
+// Check if galaxy region is connected (BFS)
+function isConnected(sol, g, w, h) {
+  const cells = [];
+  for (let i = 0; i < sol.length; i++) {
+    if (sol[i] === g) cells.push(i);
+  }
+  if (cells.length === 0) return true;
+
+  const visited = new Set([cells[0]]);
+  const queue = [cells[0]];
+  const cellSet = new Set(cells);
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+  while (queue.length > 0) {
+    const curr = queue.shift();
+    const { r, c } = idxToRC(curr, w);
+
+    for (const [dr, dc] of dirs) {
+      const nr = r + dr;
+      const nc = c + dc;
+      if (!inBounds(nr, nc, h, w)) continue;
+      const ni = rcToIdx(nr, nc, w);
+      if (!cellSet.has(ni) || visited.has(ni)) continue;
+      visited.add(ni);
+      queue.push(ni);
+    }
+  }
+
+  return visited.size === cells.length;
+}
+
+// ============================================================================
+// REVERSE GENERATION ALGORITHM
+// Key insight: Generate the SOLUTION first, then extract the puzzle
+// This guarantees valid, solvable puzzles by construction
+// ============================================================================
+
+// Main puzzle generator using reverse generation
 function generatePuzzle(size, numDots) {
   const w = size;
   const h = size;
   const n = w * h;
-  
-  for (let attempt = 0; attempt < 50; attempt++) {
-    // Generate random dot positions
-    const dots = [];
-    const used = new Set();
-    
-    for (let d = 0; d < numDots; d++) {
-      let r, c, key;
-      let tries = 0;
-      do {
-        r = Math.floor(Math.random() * h);
-        c = Math.floor(Math.random() * w);
-        key = `${r},${c}`;
-        tries++;
-      } while (used.has(key) && tries < 100);
-      
-      if (tries >= 100) break;
-      
-      used.add(key);
-      dots.push({ r, c });
-    }
-    
-    if (dots.length < numDots) continue;
-    
-    // Initialize solution (all unassigned)
-    const sol = new Array(n).fill(-1);
-    
-    // Assign dot cells to their galaxies
-    for (let g = 0; g < dots.length; g++) {
-      const { r, c } = dots[g];
-      sol[rcToIdx(r, c, w)] = g;
-    }
-    
-    // Grow galaxies symmetrically
-    const dirs = [
-      { dr: -1, dc: 0 }, { dr: 1, dc: 0 },
-      { dr: 0, dc: -1 }, { dr: 0, dc: 1 },
-      { dr: -1, dc: -1 }, { dr: -1, dc: 1 },
-      { dr: 1, dc: -1 }, { dr: 1, dc: 1 },
-    ];
-    
-    // Repeat growth until no more cells can be added
-    let changed = true;
-    let iterations = 0;
-    while (changed && iterations < n * 2) {
-      changed = false;
-      iterations++;
-      
-      // Shuffle galaxy order for fairness
-      const order = dots.map((_, i) => i).sort(() => Math.random() - 0.5);
-      
-      for (const g of order) {
-        const { r: cr, c: cc } = dots[g];
-        
-        // Find frontier cells for this galaxy
-        const frontier = [];
-        for (let i = 0; i < n; i++) {
-          if (sol[i] !== g) continue;
-          const { r, c } = idxToRC(i, w);
-          
-          for (const d of dirs) {
-            const nr = r + d.dr;
-            const nc = c + d.dc;
-            if (!inBounds(nr, nc, h, w)) continue;
-            const ni = rcToIdx(nr, nc, w);
-            if (sol[ni] !== -1) continue;
-            
-            // Check if symmetric cell is available
-            const sr = 2 * cr - nr;
-            const sc = 2 * cc - nc;
-            if (!inBounds(sr, sc, h, w)) continue;
-            const si = rcToIdx(sr, sc, w);
-            if (sol[si] !== -1 && sol[si] !== g) continue;
-            
-            frontier.push({ ni, si });
-          }
-        }
-        
-        // Try to add one cell from frontier
-        if (frontier.length > 0) {
-          const { ni, si } = frontier[Math.floor(Math.random() * frontier.length)];
-          if (sol[ni] === -1 && (sol[si] === -1 || sol[si] === g || ni === si)) {
-            sol[ni] = g;
-            if (ni !== si) sol[si] = g;
-            changed = true;
-          }
-        }
-      }
-    }
-    
-    // Check if all cells are assigned
-    if (sol.every(x => x >= 0)) {
-      return { w, h, dots, solution: sol };
-    }
+
+  // Try reverse generation multiple times
+  for (let attempt = 0; attempt < 100; attempt++) {
+    const result = reverseGenerate(w, h, numDots);
+    if (result) return result;
   }
-  
-  // Fallback: simple 2x2 grid pattern
-  const dots = [];
+
+  // Fallback: simple grid partition (guaranteed to work)
+  return generateSimplePartition(size, numDots);
+}
+
+// Reverse generation: carve out symmetric regions, then place dots at centers
+function reverseGenerate(w, h, numDots) {
+  const n = w * h;
   const sol = new Array(n).fill(-1);
-  const blockSize = Math.ceil(size / 2);
-  let dotIdx = 0;
-  
-  for (let br = 0; br < 2; br++) {
-    for (let bc = 0; bc < 2; bc++) {
-      const cr = br * blockSize + Math.floor(blockSize / 2);
-      const cc = bc * blockSize + Math.floor(blockSize / 2);
-      if (cr < h && cc < w) {
-        dots.push({ r: cr, c: cc });
-        for (let r = br * blockSize; r < Math.min((br + 1) * blockSize, h); r++) {
-          for (let c = bc * blockSize; c < Math.min((bc + 1) * blockSize, w); c++) {
-            sol[rcToIdx(r, c, w)] = dotIdx;
-          }
+    const dots = [];
+
+  // Target cells per galaxy (with some variance)
+  const avgCells = Math.floor(n / numDots);
+
+  for (let g = 0; g < numDots; g++) {
+    // Find all valid center positions (where we can grow a symmetric region)
+    const validCenters = [];
+
+    for (let r = 0; r < h; r++) {
+      for (let c = 0; c < w; c++) {
+        const idx = rcToIdx(r, c, w);
+        if (sol[idx] !== -1) continue;
+
+        // Check if this position can be a center (has symmetric growth potential)
+        if (canBeCenter(r, c, sol, w, h)) {
+          validCenters.push({ r, c });
         }
-        dotIdx++;
       }
     }
+
+    if (validCenters.length === 0) break;
+
+    // Pick a random valid center
+    const center = validCenters[Math.floor(Math.random() * validCenters.length)];
+    dots.push(center);
+
+    // Grow a symmetric region from this center
+    const targetSize = Math.max(1, avgCells + Math.floor((Math.random() - 0.5) * avgCells * 0.6));
+    growSymmetricRegion(sol, g, center, w, h, targetSize);
   }
-  
+
+  // Fill any remaining unassigned cells
+  fillRemainingCells(sol, dots, w, h);
+
+  // Validate result
+  if (sol.some(x => x === -1)) return null;
+  if (dots.length !== numDots) return null;
+  if (!verifySymmetry(sol, dots, w, h)) return null;
+  if (!allGalaxiesConnected(sol, dots, w, h)) return null;
+
   return { w, h, dots, solution: sol };
 }
 
-const SIZES = [4, 6, 8];
-const DOT_COUNTS = [3, 4, 5, 6];
+// Check if a cell can be the center of a new galaxy
+function canBeCenter(r, c, sol, w, h) {
+  const idx = rcToIdx(r, c, w);
+  if (sol[idx] !== -1) return false;
+
+  // Must have at least one direction where symmetric growth is possible
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+  for (const [dr, dc] of dirs) {
+    const nr = r + dr, nc = c + dc;
+    const sr = r - dr, sc = c - dc;
+
+    if (!inBounds(nr, nc, h, w) || !inBounds(sr, sc, h, w)) continue;
+
+    const ni = rcToIdx(nr, nc, w);
+    const si = rcToIdx(sr, sc, w);
+
+    if (sol[ni] === -1 && sol[si] === -1) return true;
+  }
+
+  return true; // Single cell is always valid
+}
+
+// Grow a symmetric region using BFS
+function growSymmetricRegion(sol, g, center, w, h, targetSize) {
+  const { r: cr, c: cc } = center;
+  const centerIdx = rcToIdx(cr, cc, w);
+
+  // Claim center
+  sol[centerIdx] = g;
+  let size = 1;
+
+  // BFS queue with random direction preference
+  const frontier = [{ r: cr, c: cc }];
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+  while (frontier.length > 0 && size < targetSize) {
+    // Pick random cell from frontier
+    const idx = Math.floor(Math.random() * frontier.length);
+    const { r, c } = frontier[idx];
+    frontier.splice(idx, 1);
+
+    // Shuffle directions for variety
+    const shuffledDirs = [...dirs].sort(() => Math.random() - 0.5);
+
+    for (const [dr, dc] of shuffledDirs) {
+      if (size >= targetSize) break;
+
+      const nr = r + dr, nc = c + dc;
+      const sr = 2 * cr - nr, sc = 2 * cc - nc; // Symmetric cell
+
+      // Both cells must be in bounds
+      if (!inBounds(nr, nc, h, w) || !inBounds(sr, sc, h, w)) continue;
+
+      const ni = rcToIdx(nr, nc, w);
+      const si = rcToIdx(sr, sc, w);
+
+      // Both cells must be unclaimed
+      if (sol[ni] !== -1 || sol[si] !== -1) continue;
+
+      // Claim both cells symmetrically
+      sol[ni] = g;
+      sol[si] = g;
+      size += (ni === si) ? 1 : 2;
+
+      // Add to frontier
+      frontier.push({ r: nr, c: nc });
+      if (ni !== si) {
+        frontier.push({ r: sr, c: sc });
+      }
+    }
+
+    // Re-add current cell if it still has potential
+    if (frontier.length === 0 && size < targetSize) {
+      // Find cells belonging to this galaxy that might still grow
+      for (let i = 0; i < sol.length; i++) {
+        if (sol[i] === g) {
+          const { r: fr, c: fc } = idxToRC(i, w);
+          for (const [dr, dc] of dirs) {
+            const nr = fr + dr, nc = fc + dc;
+            const sr = 2 * cr - nr, sc = 2 * cc - nc;
+            if (inBounds(nr, nc, h, w) && inBounds(sr, sc, h, w)) {
+              const ni = rcToIdx(nr, nc, w);
+              const si = rcToIdx(sr, sc, w);
+              if (sol[ni] === -1 && sol[si] === -1) {
+                frontier.push({ r: fr, c: fc });
+                break;
+              }
+            }
+          }
+        }
+        if (frontier.length > 0) break;
+      }
+    }
+  }
+}
+
+// Fill remaining unassigned cells by expanding existing galaxies
+function fillRemainingCells(sol, dots, w, h) {
+  const n = w * h;
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+  let changed = true;
+  let iterations = 0;
+  const maxIterations = n * 2;
+
+  while (changed && iterations < maxIterations) {
+    changed = false;
+    iterations++;
+
+    // Process cells in random order for variety
+    const indices = Array.from({ length: n }, (_, i) => i);
+    indices.sort(() => Math.random() - 0.5);
+
+    for (const i of indices) {
+      if (sol[i] !== -1) continue;
+
+      const { r, c } = idxToRC(i, w);
+
+      // Find neighboring galaxies that can claim this cell
+      const candidates = [];
+
+      for (const [dr, dc] of dirs) {
+        const nr = r + dr, nc = c + dc;
+        if (!inBounds(nr, nc, h, w)) continue;
+
+        const ni = rcToIdx(nr, nc, w);
+        const g = sol[ni];
+        if (g === -1) continue;
+
+        // Check if galaxy g can claim this cell symmetrically
+        const { r: cr, c: cc } = dots[g];
+        const sr = 2 * cr - r, sc = 2 * cc - c;
+
+        if (!inBounds(sr, sc, h, w)) continue;
+        const si = rcToIdx(sr, sc, w);
+        if (sol[si] !== -1 && sol[si] !== g) continue;
+
+        candidates.push({ g, si });
+      }
+
+      if (candidates.length > 0) {
+        // Pick random candidate
+        const { g, si } = candidates[Math.floor(Math.random() * candidates.length)];
+        sol[i] = g;
+        sol[si] = g;
+        changed = true;
+      }
+    }
+  }
+}
+
+// Check if all galaxies are connected
+function allGalaxiesConnected(sol, dots, w, h) {
+  for (let g = 0; g < dots.length; g++) {
+    if (!isConnected(sol, g, w, h)) return false;
+  }
+  return true;
+}
+
+// Simple partition fallback - guaranteed to work
+function generateSimplePartition(size, numDots) {
+  const w = size, h = size;
+  const n = w * h;
+  const sol = new Array(n).fill(-1);
+  const dots = [];
+
+  // Arrange dots in a grid pattern
+  const cols = Math.ceil(Math.sqrt(numDots));
+  const rows = Math.ceil(numDots / cols);
+  const cellW = w / cols;
+  const cellH = h / rows;
+
+  let g = 0;
+  for (let gr = 0; gr < rows && g < numDots; gr++) {
+    for (let gc = 0; gc < cols && g < numDots; gc++) {
+      // Place dot at center of grid cell
+      const cr = Math.floor((gr + 0.5) * cellH);
+      const cc = Math.floor((gc + 0.5) * cellW);
+      dots.push({ r: cr, c: cc });
+
+      // Assign cells in this grid region
+      const rStart = Math.floor(gr * cellH);
+      const rEnd = gr === rows - 1 ? h : Math.floor((gr + 1) * cellH);
+      const cStart = Math.floor(gc * cellW);
+      const cEnd = gc === cols - 1 ? w : Math.floor((gc + 1) * cellW);
+
+      for (let r = rStart; r < rEnd; r++) {
+        for (let c = cStart; c < cEnd; c++) {
+          sol[rcToIdx(r, c, w)] = g;
+        }
+      }
+      g++;
+    }
+  }
+
+  return { w, h, dots, solution: sol };
+}
+
+// Verify that a solution has valid symmetry for all galaxies
+function verifySymmetry(sol, dots, w, h) {
+  for (let g = 0; g < dots.length; g++) {
+    const { r: cr, c: cc } = dots[g];
+
+    for (let i = 0; i < sol.length; i++) {
+      if (sol[i] !== g) continue;
+
+      const { r, c } = idxToRC(i, w);
+      const sr = 2 * cr - r;
+      const sc = 2 * cc - c;
+
+      // Symmetric cell must be in bounds and belong to same galaxy
+      if (!inBounds(sr, sc, h, w)) return false;
+      const si = rcToIdx(sr, sc, w);
+      if (sol[si] !== g) return false;
+    }
+  }
+  return true;
+}
+
+// Grid sizes and recommended dot counts
+// Rule of thumb: ~6-12 cells per galaxy works well
+const SIZES = [5, 7, 9, 11];
+const DOT_COUNTS_BY_SIZE = {
+  5: [2, 3, 4],      // 25 cells: 6-12 cells per galaxy
+  7: [3, 4, 5, 6],   // 49 cells: 8-16 cells per galaxy
+  9: [4, 6, 8, 10],  // 81 cells: 8-20 cells per galaxy
+  11: [6, 8, 10, 12] // 121 cells: 10-20 cells per galaxy
+};
 
 function analyze(puz, assign) {
   const n = puz.w * puz.h;
@@ -223,11 +425,26 @@ function analyze(puz, assign) {
 }
 
 export default function Galaxies() {
-  const [size, setSize] = useState(6);
+  const [size, setSize] = useState(7);
   const [numDots, setNumDots] = useState(4);
   const [puz, setPuz] = useState(null);
   const [sel, setSel] = useState(0);
   const [assign, setAssign] = useState([]);
+
+  // Get valid dot counts for current size
+  const dotCounts = DOT_COUNTS_BY_SIZE[size] || [3, 4, 5];
+
+  // When size changes, adjust numDots if needed
+  useEffect(() => {
+    const validCounts = DOT_COUNTS_BY_SIZE[size] || [3, 4, 5];
+    if (!validCounts.includes(numDots)) {
+      // Pick closest valid value
+      const closest = validCounts.reduce((prev, curr) =>
+        Math.abs(curr - numDots) < Math.abs(prev - numDots) ? curr : prev
+      );
+      setNumDots(closest);
+    }
+  }, [size, numDots]);
 
   const generateNew = useCallback(() => {
     const newPuz = generatePuzzle(size, numDots);
@@ -238,7 +455,7 @@ export default function Galaxies() {
 
   useEffect(() => {
     generateNew();
-  }, []);
+  }, [generateNew]);
 
   const { bad, solved } = useMemo(() => {
     if (!puz) return { bad: new Set(), solved: false };
@@ -275,7 +492,7 @@ export default function Galaxies() {
         </div>
         <div className={styles.group}>
           <label>Dots:</label>
-          {DOT_COUNTS.map((d) => (
+          {dotCounts.map((d) => (
             <button
               key={d}
               className={`${styles.button} ${numDots === d ? styles.active : ''}`}
@@ -338,4 +555,3 @@ export default function Galaxies() {
     </div>
   );
 }
-

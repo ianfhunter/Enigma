@@ -111,6 +111,11 @@
   background: rgba(34, 197, 94, 0.12);
 }
 
+.partial {
+  border-color: rgba(251, 191, 36, 0.55);
+  background: rgba(251, 191, 36, 0.12);
+}
+
 .nope {
   border-color: rgba(239, 68, 68, 0.55);
   background: rgba(239, 68, 68, 0.10);
@@ -124,6 +129,13 @@
 .resultBody {
   margin-top: 0.2rem;
   color: rgba(255, 255, 255, 0.86);
+}
+
+.scoreBreakdown {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .statsPanel {

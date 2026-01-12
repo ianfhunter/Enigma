@@ -318,6 +318,55 @@
   box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
 }
 
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  color: #ef4444;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.gaveUpMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.gaveUpEmoji {
+  font-size: 3rem;
+}
+
+.gaveUpMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.gaveUpMessage p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.cell.solutionShaded::after {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
 @media (max-width: 450px) {
   .grid {
     width: 100% !important;

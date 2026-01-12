@@ -228,6 +228,44 @@ input, button, textarea, select {
   font: inherit;
 }
 
+/* Default select/dropdown styling */
+select {
+  appearance: none;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.4rem 2rem 0.4rem 0.65rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  min-width: 60px;
+}
+
+select:hover {
+  border-color: var(--color-primary-border-hover);
+  background-color: var(--color-bg-hover);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-bg);
+}
+
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+select option {
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: 0.5rem;
+}
+
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }

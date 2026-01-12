@@ -65,26 +65,144 @@
   filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35));
 }
 
-.faces {
-  margin: 1rem auto 0;
-  width: min(92vw, 520px);
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
+/* Visualizations container */
+.visualizations {
+  margin: 1.5rem auto 0;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-.face {
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.85);
+.vizSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vizLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 3D Cube */
+.cube3dContainer {
+  perspective: 400px;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cube3dScene {
+  width: 70px;
+  height: 70px;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.cube3d {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cube3dFace {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 900;
-  text-align: center;
-  padding: 0.65rem 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(30, 30, 40, 0.85);
+  backface-visibility: visible;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
-.faceBlue {
-  background: rgba(59, 130, 246, 0.35);
-  border-color: rgba(59, 130, 246, 0.65);
+.cube3dFace span {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
+.facePainted {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(99, 102, 241, 0.8) 100%);
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow:
+    inset 0 0 20px rgba(99, 102, 241, 0.4),
+    0 0 15px rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
+.cube3dFront {
+  transform: translateZ(35px);
+}
+
+.cube3dBack {
+  transform: rotateY(180deg) translateZ(35px);
+}
+
+.cube3dRight {
+  transform: rotateY(90deg) translateZ(35px);
+}
+
+.cube3dLeft {
+  transform: rotateY(-90deg) translateZ(35px);
+}
+
+.cube3dTop {
+  transform: rotateX(90deg) translateZ(35px);
+}
+
+.cube3dBottom {
+  transform: rotateX(-90deg) translateZ(35px);
+}
+
+/* Unfolded Cube Net */
+.cubeNet {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.netRow {
+  display: flex;
+  gap: 4px;
+}
+
+.netFace {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(30, 30, 40, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.netPainted {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.85) 0%, rgba(99, 102, 241, 0.85) 100%);
+  border-color: rgba(139, 92, 246, 0.7);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  color: white;
+}
+
+.netEmpty {
+  width: 36px;
+  height: 36px;
+}

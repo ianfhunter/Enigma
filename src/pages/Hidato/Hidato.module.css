@@ -185,27 +185,69 @@
   margin: 0;
 }
 
-.numberPad {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+.revealedMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 0.5rem;
-  max-width: 280px;
+  padding: 1.5rem 2rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.revealedEmoji {
+  font-size: 3rem;
+  animation: bounce 0.6s ease;
+}
+
+.revealedMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.revealedMessage p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.numberPad {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  max-width: 400px;
 }
 
 .numBtn {
-  padding: 0.75rem;
+  min-width: 38px;
+  padding: 0.5rem 0.6rem;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
+  border-radius: 6px;
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.numBtn:hover {
+.numBtn:hover:not(:disabled) {
   background: rgba(245, 158, 11, 0.3);
+}
+
+.numBtnUsed {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.25);
+  cursor: not-allowed;
+}
+
+.numBtnUsed:hover {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .controls {
@@ -276,6 +318,28 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  color: #ef4444;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.giveUpBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .newGameBtn {
   padding: 0.75rem 2rem;
   background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -315,11 +379,12 @@
   }
 
   .numberPad {
-    max-width: 240px;
+    max-width: 300px;
   }
 
   .numBtn {
-    padding: 0.6rem;
-    font-size: 1rem;
+    min-width: 32px;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8rem;
   }
 }
