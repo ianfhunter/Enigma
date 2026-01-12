@@ -3,7 +3,9 @@ import { lazy, Suspense } from 'react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import { SettingsProvider } from './context/SettingsContext';
 import { allGames } from './data/gameRegistry';
+import logo from './branding/logo.svg';
 import './index.css';
 
 /**
@@ -187,7 +189,7 @@ function getGameComponent(slug) {
     }
     return componentCache['__dev__'];
   }
-  
+
   if (!componentCache[slug]) {
     componentCache[slug] = lazy(() => import(`./pages/${folder}/index.js`));
   }
@@ -210,7 +212,7 @@ const LOADING_PHRASES = [
   "Warming Up",
 ];
 
-// Loading fallback component with mysterious eye animation
+// Loading fallback component with spinning logo animation
 function GameLoading() {
   const phrase = LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)];
 
@@ -223,78 +225,76 @@ function GameLoading() {
       minHeight: '50vh',
       gap: '2rem',
     }}>
-      {/* Mysterious eye container */}
+      {/* Spinning logo container */}
       <div style={{
         position: 'relative',
-        width: '120px',
-        height: '80px',
+        width: '100px',
+        height: '100px',
+        perspective: '600px',
       }}>
-        {/* Eye outline */}
+        {/* Outer glow ring */}
         <div style={{
           position: 'absolute',
+          inset: '-15px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+          animation: 'pulseGlow 2s ease-in-out infinite',
+        }} />
+
+        {/* Logo wrapper with 3D rotation */}
+        <div style={{
           width: '100%',
           height: '100%',
-          borderRadius: '50%',
-          border: '3px solid rgba(139, 92, 246, 0.6)',
-          background: 'rgba(30, 0, 60, 0.3)',
-          boxShadow: `
-            0 0 30px rgba(139, 92, 246, 0.4),
-            inset 0 0 20px rgba(88, 28, 135, 0.2)
-          `,
-          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          animation: 'logoSpin 3s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+          transformStyle: 'preserve-3d',
         }}>
-          {/* Eye blink overlay */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'rgba(5, 5, 16, 0.95)',
-            borderRadius: '50%',
-            animation: 'eyeBlink 3s ease-in-out infinite',
-            zIndex: 3,
-          }} />
-          
-          {/* Pupil container */}
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: '40px',
-            height: '40px',
-            transform: 'translate(-50%, -50%)',
-            animation: 'lookAround 4s ease-in-out infinite',
-          }}>
-            {/* Pupil */}
-            <div style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, #a855f7 0%, #7c3aed 50%, #5b21b6 100%)',
-              boxShadow: `
-                0 0 20px rgba(139, 92, 246, 0.8),
-                0 0 40px rgba(124, 58, 237, 0.5),
-                inset 0 0 10px rgba(0, 0, 0, 0.5)
+          <img
+            src={logo}
+            alt="Loading"
+            style={{
+              width: '80px',
+              height: 'auto',
+              filter: `
+                drop-shadow(0 0 12px rgba(139, 92, 246, 0.8))
+                drop-shadow(0 0 24px rgba(124, 58, 237, 0.5))
+                drop-shadow(0 0 36px rgba(88, 28, 135, 0.3))
               `,
-              position: 'relative',
-            }}>
-              {/* Pupil highlight */}
-              <div style={{
-                position: 'absolute',
-                top: '20%',
-                left: '30%',
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.6)',
-                boxShadow: '0 0 8px rgba(255, 255, 255, 0.8)',
-              }} />
-            </div>
-          </div>
+              animation: 'logoGlow 2s ease-in-out infinite',
+            }}
+          />
         </div>
+
+        {/* Orbiting particle 1 */}
+        <div style={{
+          position: 'absolute',
+          width: '6px',
+          height: '6px',
+          borderRadius: '50%',
+          background: '#a855f7',
+          boxShadow: '0 0 10px #a855f7, 0 0 20px #a855f7',
+          top: '50%',
+          left: '50%',
+          animation: 'orbit 2.5s linear infinite',
+        }} />
+
+        {/* Orbiting particle 2 */}
+        <div style={{
+          position: 'absolute',
+          width: '4px',
+          height: '4px',
+          borderRadius: '50%',
+          background: '#c084fc',
+          boxShadow: '0 0 8px #c084fc, 0 0 16px #c084fc',
+          top: '50%',
+          left: '50%',
+          animation: 'orbit 2.5s linear infinite reverse',
+          animationDelay: '-0.8s',
+        }} />
       </div>
-      
+
       {/* Mysterious loading text */}
       <div style={{
         fontSize: '0.9rem',
@@ -304,56 +304,68 @@ function GameLoading() {
         textTransform: 'uppercase',
         fontStyle: 'italic',
         textShadow: '0 2px 10px rgba(139, 92, 246, 0.3)',
+        animation: 'textFade 2s ease-in-out infinite',
       }}>
         {phrase}
       </div>
-      
+
       {/* Keyframe animations */}
       <style>{`
-        @keyframes lookAround {
-          0%, 100% {
-            transform: translate(-50%, -50%) translate(0, 0);
+        @keyframes logoSpin {
+          0% {
+            transform: rotateY(0deg) rotateX(0deg);
           }
-          10% {
-            transform: translate(-50%, -50%) translate(-15px, -10px);
-          }
-          20% {
-            transform: translate(-50%, -50%) translate(15px, -8px);
-          }
-          30% {
-            transform: translate(-50%, -50%) translate(-10px, 12px);
-          }
-          40% {
-            transform: translate(-50%, -50%) translate(18px, 10px);
+          25% {
+            transform: rotateY(180deg) rotateX(10deg);
           }
           50% {
-            transform: translate(-50%, -50%) translate(-20px, -5px);
+            transform: rotateY(360deg) rotateX(0deg);
           }
-          60% {
-            transform: translate(-50%, -50%) translate(12px, -15px);
+          75% {
+            transform: rotateY(540deg) rotateX(-10deg);
           }
-          70% {
-            transform: translate(-50%, -50%) translate(-8px, 8px);
-          }
-          80% {
-            transform: translate(-50%, -50%) translate(20px, 5px);
-          }
-          90% {
-            transform: translate(-50%, -50%) translate(-12px, -12px);
+          100% {
+            transform: rotateY(720deg) rotateX(0deg);
           }
         }
-        @keyframes eyeBlink {
-          0%, 90%, 100% {
-            height: 0;
-            top: 50%;
+        @keyframes logoGlow {
+          0%, 100% {
+            filter:
+              drop-shadow(0 0 12px rgba(139, 92, 246, 0.8))
+              drop-shadow(0 0 24px rgba(124, 58, 237, 0.5))
+              drop-shadow(0 0 36px rgba(88, 28, 135, 0.3));
           }
-          92%, 94% {
-            height: 100%;
-            top: 0;
+          50% {
+            filter:
+              drop-shadow(0 0 20px rgba(167, 139, 250, 1))
+              drop-shadow(0 0 40px rgba(139, 92, 246, 0.7))
+              drop-shadow(0 0 60px rgba(124, 58, 237, 0.5));
           }
-          96% {
-            height: 0;
-            top: 50%;
+        }
+        @keyframes pulseGlow {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 0.5;
+          }
+          50% {
+            transform: scale(1.2);
+            opacity: 1;
+          }
+        }
+        @keyframes orbit {
+          0% {
+            transform: rotate(0deg) translateX(55px) rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg) translateX(55px) rotate(-360deg);
+          }
+        }
+        @keyframes textFade {
+          0%, 100% {
+            opacity: 0.7;
+          }
+          50% {
+            opacity: 1;
           }
         }
       `}</style>
@@ -407,15 +419,17 @@ function generateGameRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          {generateGameRoutes()}
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <SettingsProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            {generateGameRoutes()}
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </SettingsProvider>
   );
 }
 

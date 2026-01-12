@@ -1,6 +1,7 @@
 // Load words from the word dictionary
 import wordListRaw from './word_list.txt?raw';
 import { getDeprioritizationScore } from './wordFeedback';
+import { isCommonWord, filterToCommonWords, getZipfScore } from './wordFrequency';
 
 // Parse the dictionary file into a Set for O(1) lookup
 const WORD_SET = new Set(
@@ -12,6 +13,28 @@ const WORD_SET = new Set(
 
 // Cache of 9-letter words for puzzle generation
 const NINE_LETTER_WORDS = Array.from(WORD_SET).filter(word => word.length === 9);
+
+// Pre-filter common words by length for target selection
+// These are words that appear frequently enough in spoken English to be recognizable
+const COMMON_WORDS_BY_LENGTH = {};
+for (const word of WORD_SET) {
+  if (isCommonWord(word)) {
+    const len = word.length;
+    if (!COMMON_WORDS_BY_LENGTH[len]) {
+      COMMON_WORDS_BY_LENGTH[len] = [];
+    }
+    COMMON_WORDS_BY_LENGTH[len].push(word);
+  }
+}
+
+/**
+ * Get common words of a specific length (for target selection)
+ * @param {number} length
+ * @returns {string[]}
+ */
+export function getCommonWordsByLength(length) {
+  return COMMON_WORDS_BY_LENGTH[length] || [];
+}
 
 /**
  * Sort words by deprioritization score (unflagged first)
@@ -208,24 +231,33 @@ export function findAllWords(letters, centerLetter) {
 
 /**
  * Generate a valid puzzle with at least minWords possible words
- * Prioritizes unflagged words over flagged (archaic/obscure) words
+ * Prioritizes common words (by frequency) and unflagged words
  * @param {number} minWords - Minimum number of possible words required (default 10)
  * @param {number} maxAttempts - Maximum number of 9-letter words to try (default 100)
  * @returns {{ letters: string[], center: string, nineLetterWord: string } | null}
  */
 export function generatePuzzle(minWords = 10, maxAttempts = 100) {
-  // Sort by priority (unflagged first), then shuffle within priority groups
-  const prioritized = sortByPriority(NINE_LETTER_WORDS);
-  // Add randomness while maintaining priority order
-  const shuffled = prioritized.sort((a, b) => {
-    const scoreA = getDeprioritizationScore(a);
-    const scoreB = getDeprioritizationScore(b);
-    if (scoreA !== scoreB) return scoreA - scoreB;
-    return Math.random() - 0.5;
+  // Prefer common 9-letter words for better puzzles
+  const common9LetterWords = COMMON_WORDS_BY_LENGTH[9] || [];
+
+  // Score words: higher frequency + not flagged = better
+  const scoredWords = NINE_LETTER_WORDS.map(word => ({
+    word,
+    score: (isCommonWord(word) ? 1000 : 0) + getZipfScore(word) * 100 - getDeprioritizationScore(word) * 50
+  }));
+
+  // Sort by score (best first), then add randomness within similar scores
+  scoredWords.sort((a, b) => {
+    const scoreDiff = b.score - a.score;
+    // Add randomness for words with similar scores (within 50 points)
+    if (Math.abs(scoreDiff) < 50) return Math.random() - 0.5;
+    return scoreDiff;
   });
 
-  for (let i = 0; i < Math.min(maxAttempts, shuffled.length); i++) {
-    const word = shuffled[i];
+  const candidates = scoredWords.map(s => s.word);
+
+  for (let i = 0; i < Math.min(maxAttempts, candidates.length); i++) {
+    const word = candidates[i];
     const letters = word.split('');
 
     // Get unique letters to try as center
@@ -349,6 +381,7 @@ export function findWordLadder(startWord, endWord) {
 
 /**
  * Generate a Word Ladder puzzle
+ * Uses frequency-filtered common words for better puzzles
  * @param {number} wordLength - Length of words (default 4)
  * @param {number} minSteps - Minimum number of steps (default 3)
  * @param {number} maxSteps - Maximum number of steps (default 6)
@@ -358,15 +391,20 @@ export function generateWordLadderPuzzle(wordLength = 4, minSteps = 3, maxSteps 
   const words = getWordsByLength(wordLength);
   if (words.length < 100) return null;
 
-  // Common words that make better puzzles (filter to common-ish words)
-  const commonWords = words.filter(w => {
-    // Prefer words without double letters and common patterns
-    const uniqueLetters = new Set(w.split(''));
-    return uniqueLetters.size >= wordLength - 1;
-  });
+  // Use frequency-filtered common words for recognizable start/end words
+  const commonWords = COMMON_WORDS_BY_LENGTH[wordLength] || [];
+
+  // Fallback to structural filtering if not enough common words
+  const candidateWords = commonWords.length >= 50
+    ? commonWords
+    : words.filter(w => {
+        // Prefer words without double letters and common patterns
+        const uniqueLetters = new Set(w.split(''));
+        return uniqueLetters.size >= wordLength - 1;
+      });
 
   // Shuffle and try pairs
-  const shuffled = [...commonWords].sort(() => Math.random() - 0.5);
+  const shuffled = [...candidateWords].sort(() => Math.random() - 0.5);
   const maxAttempts = 200;
 
   for (let i = 0; i < Math.min(maxAttempts, shuffled.length); i++) {
@@ -393,17 +431,18 @@ export function generateWordLadderPuzzle(wordLength = 4, minSteps = 3, maxSteps 
 
 /**
  * Generate a conundrum puzzle (scrambled 9-letter word)
- * Prioritizes unflagged words over flagged (archaic/obscure) words
+ * Prioritizes common words (by frequency) and unflagged words
  * @returns {{ word: string, scrambled: string }} - The answer and scrambled letters
  */
 export function generateConundrum() {
-  // Sort by priority (unflagged first) and pick from the front with some randomness
-  const prioritized = sortByPriority(NINE_LETTER_WORDS);
+  // Prefer common 9-letter words for recognizable puzzles
+  const common9LetterWords = (COMMON_WORDS_BY_LENGTH[9] || [])
+    .filter(w => getDeprioritizationScore(w) === 0);
 
-  // Find a word with minimal flagging
-  // Pick randomly from unflagged words, or fall back to least-flagged
-  const unflaggedWords = prioritized.filter(w => getDeprioritizationScore(w) === 0);
-  const pool = unflaggedWords.length > 0 ? unflaggedWords : prioritized.slice(0, 1000);
+  // Use common words if available, otherwise fall back to all 9-letter words
+  const pool = common9LetterWords.length > 0
+    ? common9LetterWords
+    : NINE_LETTER_WORDS.filter(w => getDeprioritizationScore(w) === 0).slice(0, 1000);
 
   const randomIndex = Math.floor(Math.random() * pool.length);
   const word = pool[randomIndex];
@@ -422,10 +461,13 @@ export function generateConundrum() {
 // ===========================================
 
 // Cache of 5-letter words for WordGuess
+// ALL 5-letter words (for validating guesses)
 const FIVE_LETTER_WORDS = Array.from(WORD_SET).filter(word => word.length === 5);
+// COMMON 5-letter words only (for selecting targets - avoids obscure words)
+const COMMON_FIVE_LETTER_WORDS = COMMON_WORDS_BY_LENGTH[5] || [];
 
 /**
- * Get all 5-letter words
+ * Get all 5-letter words (for validation)
  * @returns {string[]}
  */
 export function getFiveLetterWords() {
@@ -433,23 +475,35 @@ export function getFiveLetterWords() {
 }
 
 /**
- * Get a random 5-letter word for WordGuess
- * @returns {string}
+ * Get common 5-letter words (for target selection)
+ * @returns {string[]}
  */
-export function getRandomWordGuessWord() {
-  return FIVE_LETTER_WORDS[Math.floor(Math.random() * FIVE_LETTER_WORDS.length)];
+export function getCommonFiveLetterWords() {
+  return COMMON_FIVE_LETTER_WORDS;
 }
 
 /**
- * Get the daily WordGuess word (seeded by date)
+ * Get a random 5-letter word for WordGuess (common words only)
+ * @returns {string}
+ */
+export function getRandomWordGuessWord() {
+  // Use common words for target selection to avoid obscure words
+  const pool = COMMON_FIVE_LETTER_WORDS.length > 0 ? COMMON_FIVE_LETTER_WORDS : FIVE_LETTER_WORDS;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+/**
+ * Get the daily WordGuess word (seeded by date, common words only)
  * @param {string} dateStr - Date string in YYYY-MM-DD format
  * @returns {string}
  */
 export function getDailyWordGuessWord(dateStr) {
   const seed = stringToSeed(`wordguess-${dateStr}`);
   const random = createSeededRandom(seed);
-  const index = Math.floor(random() * FIVE_LETTER_WORDS.length);
-  return FIVE_LETTER_WORDS[index];
+  // Use common words for target selection
+  const pool = COMMON_FIVE_LETTER_WORDS.length > 0 ? COMMON_FIVE_LETTER_WORDS : FIVE_LETTER_WORDS;
+  const index = Math.floor(random() * pool.length);
+  return pool[index];
 }
 
 /**
@@ -506,14 +560,27 @@ export function getWordsInRange(minLength, maxLength) {
 }
 
 /**
- * Get a random word for Hangman
+ * Get a random word for Hangman (common words only)
  * @param {number} minLength - Minimum word length (default 5)
  * @param {number} maxLength - Maximum word length (default 8)
  * @returns {string}
  */
 export function getRandomHangmanWord(minLength = 5, maxLength = 8) {
-  const words = getWordsInRange(minLength, maxLength);
-  return words[Math.floor(Math.random() * words.length)];
+  // Prefer common words for better gameplay
+  const commonWords = [];
+  for (let len = minLength; len <= maxLength; len++) {
+    if (COMMON_WORDS_BY_LENGTH[len]) {
+      commonWords.push(...COMMON_WORDS_BY_LENGTH[len]);
+    }
+  }
+
+  // Fallback to all words if no common words in range
+  if (commonWords.length === 0) {
+    const words = getWordsInRange(minLength, maxLength);
+    return words[Math.floor(Math.random() * words.length)];
+  }
+
+  return commonWords[Math.floor(Math.random() * commonWords.length)];
 }
 
 // ===========================================

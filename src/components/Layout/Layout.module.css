@@ -18,7 +18,7 @@
   border-bottom: 1px solid rgba(139, 92, 246, 0.2);
   backdrop-filter: blur(15px) saturate(180%);
   background: rgba(5, 5, 16, 0.7);
-  box-shadow: 
+  box-shadow:
     0 4px 30px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(139, 92, 246, 0.1);
   position: relative;
@@ -31,9 +31,9 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(139, 92, 246, 0.5) 50%, 
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.5) 50%,
     transparent 100%);
   animation: shimmerLine 3s ease-in-out infinite;
 }
@@ -151,7 +151,7 @@
 .logoIcon {
   height: 2rem;
   width: auto;
-  filter: 
+  filter:
     drop-shadow(0 0 8px rgba(139, 92, 246, 0.6))
     drop-shadow(0 0 16px rgba(124, 58, 237, 0.4))
     drop-shadow(0 0 24px rgba(88, 28, 135, 0.3));
@@ -160,21 +160,21 @@
 }
 
 .logo:hover .logoIcon {
-  filter: 
+  filter:
     drop-shadow(0 0 12px rgba(167, 139, 250, 0.8))
     drop-shadow(0 0 24px rgba(139, 92, 246, 0.6))
     drop-shadow(0 0 36px rgba(124, 58, 237, 0.4));
 }
 
 @keyframes mysteriousGlow {
-  0%, 100% { 
-    filter: 
+  0%, 100% {
+    filter:
       drop-shadow(0 0 8px rgba(139, 92, 246, 0.6))
       drop-shadow(0 0 16px rgba(124, 58, 237, 0.4))
       drop-shadow(0 0 24px rgba(88, 28, 135, 0.3));
   }
-  50% { 
-    filter: 
+  50% {
+    filter:
       drop-shadow(0 0 12px rgba(167, 139, 250, 0.8))
       drop-shadow(0 0 24px rgba(139, 92, 246, 0.6))
       drop-shadow(0 0 36px rgba(124, 58, 237, 0.5));
@@ -240,7 +240,7 @@
 
 
 @keyframes titleGlow {
-  0%, 100% { 
+  0%, 100% {
     filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
     transform: translate(0);
   }
@@ -405,7 +405,7 @@
   border-radius: 12px;
   border: 1px solid rgba(139, 92, 246, 0.3);
   backdrop-filter: blur(10px);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(139, 92, 246, 0.2);
 }
@@ -447,9 +447,9 @@
 .statDivider {
   width: 1px;
   height: 2rem;
-  background: linear-gradient(180deg, 
-    transparent 0%, 
-    rgba(139, 92, 246, 0.5) 50%, 
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.5) 50%,
     transparent 100%);
 }
 
@@ -495,7 +495,7 @@
 .toggle input:checked + .toggleSlider {
   background: rgba(139, 92, 246, 0.4);
   border-color: rgba(167, 139, 250, 0.6);
-  box-shadow: 
+  box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.3),
     0 0 20px rgba(139, 92, 246, 0.3);
 }
@@ -524,7 +524,7 @@
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(139, 92, 246, 0.4),
     0 0 30px rgba(124, 58, 237, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -535,16 +535,16 @@
 }
 
 @keyframes mysteriousShimmer {
-  0%, 100% { 
+  0%, 100% {
     background-position: 0% 50%;
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(139, 92, 246, 0.4),
       0 0 30px rgba(124, 58, 237, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
-  50% { 
+  50% {
     background-position: 100% 50%;
-    box-shadow: 
+    box-shadow:
       0 4px 24px rgba(167, 139, 250, 0.6),
       0 0 50px rgba(139, 92, 246, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -553,7 +553,7 @@
 
 .surpriseButton:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 6px 24px rgba(167, 139, 250, 0.7),
     0 0 60px rgba(139, 92, 246, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -573,6 +573,59 @@
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-10deg); }
   75% { transform: rotate(10deg); }
+}
+
+/* Settings button in header */
+.settingsButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  color: rgba(196, 181, 253, 0.9);
+  background: rgba(30, 0, 60, 0.5);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(139, 92, 246, 0.1);
+}
+
+.settingsButton:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(167, 139, 250, 0.5);
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 12px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(139, 92, 246, 0.2);
+}
+
+.settingsButton:active {
+  transform: translateY(0);
+}
+
+.settingsIcon {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.settingsButton:hover .settingsIcon {
+  transform: rotate(45deg);
+}
+
+.languageIndicator {
+  font-size: 0.9rem;
+}
+
+/* Game page header layout */
+.gamePageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
 }
 
 @media (max-width: 1024px) {
@@ -653,9 +706,9 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(139, 92, 246, 0.4) 50%, 
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.4) 50%,
     transparent 100%);
 }
 

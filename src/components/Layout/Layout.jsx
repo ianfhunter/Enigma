@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useFavicon } from '../../hooks/useFavicon';
 import { enabledGames, allGames } from '../../data/gameRegistry';
+import { useSettings } from '../../context/SettingsContext';
+import { setEnglishVariant } from '../../data/wordFrequency';
+import SettingsModal from '../SettingsModal';
 import logo from '../../branding/logo.svg';
 import styles from './Layout.module.css';
 
@@ -10,9 +13,16 @@ export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
-  
+  const { settings } = useSettings();
+
   const [showDevItems, setShowDevItems] = useState(false);
-  
+  const [showSettings, setShowSettings] = useState(false);
+
+  // Sync frequency module with settings on mount and when settings change
+  useEffect(() => {
+    setEnglishVariant(settings.englishVariant);
+  }, [settings.englishVariant]);
+
   // Count total games and games in development
   const totalGames = allGames.length;
   const devGames = allGames.filter(game => game.version === 'DEV').length;
@@ -35,7 +45,7 @@ export default function Layout() {
                   <span className={styles.logoText} data-text="Enigma">Enigma</span>
                 </Link>
               </div>
-              
+
               <div className={styles.headerControls}>
                 <div className={styles.stats}>
                   <div className={styles.statItem}>
@@ -48,7 +58,7 @@ export default function Layout() {
                     <span className={styles.statLabel}>In Dev</span>
                   </div>
                 </div>
-                
+
                 <label className={styles.toggle}>
                   <input
                     type="checkbox"
@@ -58,18 +68,42 @@ export default function Layout() {
                   <span className={styles.toggleSlider}></span>
                   <span className={styles.toggleLabel}>DEV</span>
                 </label>
-                
+
                 <button className={styles.surpriseButton} onClick={handleSurpriseMe}>
                   <span className={styles.surpriseIcon}>🎲</span>
                   Surprise Me!
                 </button>
+
+                <button
+                  className={styles.settingsButton}
+                  onClick={() => setShowSettings(true)}
+                  aria-label="Settings"
+                >
+                  <span className={styles.settingsIcon}>⚙️</span>
+                  <span className={styles.languageIndicator}>
+                    {settings.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                  </span>
+                </button>
               </div>
             </div>
           ) : (
-            <Link to="/" className={styles.logo}>
-              <img src={logo} alt="Enigma" className={styles.logoIcon} />
-              <span className={styles.logoText}>Enigma</span>
-            </Link>
+            <div className={styles.gamePageHeader}>
+              <Link to="/" className={styles.logo}>
+                <img src={logo} alt="Enigma" className={styles.logoIcon} />
+                <span className={styles.logoText}>Enigma</span>
+              </Link>
+
+              <button
+                className={styles.settingsButton}
+                onClick={() => setShowSettings(true)}
+                aria-label="Settings"
+              >
+                <span className={styles.settingsIcon}>⚙️</span>
+                <span className={styles.languageIndicator}>
+                  {settings.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                </span>
+              </button>
+            </div>
           )}
         </nav>
       </header>
@@ -79,6 +113,11 @@ export default function Layout() {
       <footer className={styles.footer}>
         <p>Self-hosted games collection</p>
       </footer>
+
+      <SettingsModal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+      />
     </div>
   );
 }

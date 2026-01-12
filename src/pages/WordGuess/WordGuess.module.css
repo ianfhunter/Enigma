@@ -219,7 +219,8 @@
 }
 
 .key.absent {
-  background: #3a3a3c;
+  background: #1a1a1c;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .statsPanel {
