@@ -8,6 +8,188 @@
  */
 
 // ============================================================================
+// INTEGUMENTARY SYSTEM - Skin, hair, nails (outermost layer)
+// ============================================================================
+
+export const INTEGUMENTARY_PATHS = {
+  // SKIN LAYERS
+  epidermis: {
+    id: 'epidermis',
+    name: 'Epidermis',
+    hint: 'The outermost visible layer covering the entire body',
+    path: `M 150 12
+           C 115 12, 105 40, 105 60
+           C 105 75, 115 90, 125 95 L 125 105 L 135 105 L 133 118 L 100 125
+           C 80 130, 65 150, 60 175 L 50 220 C 45 245, 40 280, 35 320 L 30 355
+           C 28 365, 35 375, 45 378 L 58 378 C 62 375, 60 365, 58 355 L 62 320
+           L 72 280 L 80 240 L 92 200 L 98 170 L 98 165 L 95 200 L 95 255
+           L 102 295 L 110 330 L 108 360 L 105 420 L 100 480 L 98 520 L 95 535
+           L 140 535 L 142 520 L 145 480 L 148 420 L 150 360 L 150 330
+           L 152 360 L 155 420 L 158 480 L 160 520 L 165 535 L 205 535
+           L 202 520 L 200 480 L 195 420 L 192 360 L 190 330 L 198 295
+           L 205 255 L 205 200 L 202 165 L 202 170 L 208 200 L 220 240
+           L 228 280 L 238 320 L 242 355 C 240 365, 238 375, 242 378 L 255 378
+           C 265 375, 272 365, 270 355 L 265 320 C 260 280, 255 245, 250 220
+           L 240 175 C 235 150, 220 130, 200 125 L 167 118 L 165 105 L 175 105
+           L 175 95 C 185 90, 195 75, 195 60 C 195 40, 185 12, 150 12 Z`,
+    fill: '#deb887',
+  },
+  dermis: {
+    id: 'dermis',
+    name: 'Dermis',
+    hint: 'The layer beneath the surface, throughout the body',
+    path: `M 150 18
+           C 120 18, 112 42, 112 58
+           C 112 72, 118 85, 128 92 L 128 100 L 138 100 L 136 115 L 108 122
+           C 90 127, 75 145, 70 168 L 62 210 C 58 232, 54 268, 50 305 L 46 335
+           L 50 365 L 68 365 L 72 335 L 78 295 L 85 255 L 95 215 L 100 185
+           L 100 175 L 98 205 L 98 250 L 105 290 L 112 325 L 112 355
+           L 110 410 L 106 465 L 104 510 L 102 530 L 135 530 L 137 515
+           L 140 470 L 143 415 L 145 365 L 145 335 L 155 335 L 155 365
+           L 157 415 L 160 470 L 163 515 L 165 530 L 198 530 L 196 510
+           L 194 465 L 190 410 L 188 355 L 188 325 L 195 290 L 202 250
+           L 202 205 L 200 175 L 200 185 L 205 215 L 215 255 L 222 295
+           L 228 335 L 232 365 L 250 365 L 254 335 L 250 305 C 246 268, 242 232, 238 210
+           L 230 168 C 225 145, 210 127, 192 122 L 164 115 L 162 100 L 172 100
+           L 172 92 C 182 85, 188 72, 188 58 C 188 42, 180 18, 150 18 Z`,
+    fill: '#d4a574',
+  },
+  hypodermis: {
+    id: 'hypodermis',
+    name: 'Hypodermis',
+    hint: 'The deepest skin layer, also called subcutaneous tissue',
+    path: `M 150 25
+           C 128 25, 120 45, 120 58
+           C 120 68, 124 78, 132 85 L 132 95 L 140 95 L 140 110 L 118 118
+           C 102 123, 90 138, 85 158 L 80 195 C 78 215, 76 245, 74 280 L 72 310
+           L 78 340 L 88 340 L 90 315 L 94 285 L 100 250 L 105 220 L 108 200
+           L 106 220 L 104 255 L 108 290 L 114 320 L 116 350
+           L 115 400 L 114 450 L 113 495 L 112 520 L 130 520 L 132 500
+           L 134 455 L 136 405 L 138 360 L 140 340 L 160 340 L 162 360
+           L 164 405 L 166 455 L 168 500 L 170 520 L 188 520 L 187 495
+           L 186 450 L 185 400 L 184 350 L 186 320 L 192 290 L 196 255
+           L 194 220 L 192 200 L 195 220 L 200 250 L 206 285 L 210 315
+           L 212 340 L 222 340 L 228 310 L 226 280 C 224 245, 222 215, 220 195
+           L 215 158 C 210 138, 198 123, 182 118 L 160 110 L 160 95 L 168 95
+           L 168 85 C 176 78, 180 68, 180 58 C 180 45, 172 25, 150 25 Z`,
+    fill: '#c4956a',
+  },
+
+  // HAIR
+  'scalp-hair': {
+    id: 'scalp-hair',
+    name: 'Scalp Hair',
+    hint: 'Located on top of the head',
+    path: `M 150 5
+           C 108 5, 98 25, 100 45
+           C 95 30, 100 15, 115 8
+           C 105 12, 95 25, 95 45
+           C 90 25, 98 10, 120 5
+           C 135 3, 165 3, 180 5
+           C 202 10, 210 25, 205 45
+           C 205 25, 195 12, 185 8
+           C 200 15, 205 30, 200 45
+           C 202 25, 192 5, 150 5 Z
+           M 105 40 C 102 50, 103 60, 108 70 L 112 65 C 108 55, 108 48, 110 42 Z
+           M 195 40 C 198 50, 197 60, 192 70 L 188 65 C 192 55, 192 48, 190 42 Z`,
+    fill: '#4a3728',
+  },
+  eyebrows: {
+    id: 'eyebrows',
+    name: 'Eyebrows',
+    hint: 'Located above the eyes',
+    path: `M 118 42 C 122 40, 135 40, 140 43 L 140 46 C 135 44, 124 44, 120 46 Z
+           M 182 42 C 178 40, 165 40, 160 43 L 160 46 C 165 44, 176 44, 180 46 Z`,
+    fill: '#4a3728',
+  },
+  eyelashes: {
+    id: 'eyelashes',
+    name: 'Eyelashes',
+    hint: 'Located at the edge of the eyelids',
+    path: `M 122 52 L 120 48 L 122 52 L 124 48 L 126 52 L 128 48 L 130 52 L 132 48 L 134 52 L 136 48 L 138 52
+           M 162 52 L 164 48 L 166 52 L 168 48 L 170 52 L 172 48 L 174 52 L 176 48 L 178 52 L 180 48 L 180 52`,
+    fill: '#2d1f14',
+  },
+
+  // NAILS
+  fingernails: {
+    id: 'fingernails',
+    name: 'Fingernails',
+    hint: 'Located at the tips of the fingers',
+    path: `M 28 385 L 26 392 L 30 394 L 32 388 Z
+           M 35 392 L 34 400 L 38 402 L 39 394 Z
+           M 42 398 L 42 408 L 46 410 L 46 400 Z
+           M 50 396 L 50 406 L 54 408 L 54 398 Z
+           M 60 382 L 64 392 L 60 394 L 56 385 Z
+           M 272 385 L 274 392 L 270 394 L 268 388 Z
+           M 265 392 L 266 400 L 262 402 L 261 394 Z
+           M 258 398 L 258 408 L 254 410 L 254 400 Z
+           M 250 396 L 250 406 L 246 408 L 246 398 Z
+           M 240 382 L 236 392 L 240 394 L 244 385 Z`,
+    fill: '#f5e6d3',
+  },
+  toenails: {
+    id: 'toenails',
+    name: 'Toenails',
+    hint: 'Located at the tips of the toes',
+    path: `M 95 528 L 95 540 L 142 540 L 142 528 C 138 525, 132 525, 128 528 C 124 525, 118 525, 114 528 C 110 525, 104 525, 100 528 Z
+           M 158 528 L 158 540 L 205 540 L 205 528 C 201 525, 195 525, 191 528 C 187 525, 181 525, 177 528 C 173 525, 167 525, 163 528 Z`,
+    fill: '#f5e6d3',
+  },
+
+  // GLANDS
+  'sweat-glands': {
+    id: 'sweat-glands',
+    name: 'Sweat Glands',
+    hint: 'Found throughout the skin, especially in armpits and palms',
+    path: `M 95 150 A 3 3 0 1 1 95.01 150 Z
+           M 205 150 A 3 3 0 1 1 205.01 150 Z
+           M 45 350 A 2 2 0 1 1 45.01 350 Z
+           M 255 350 A 2 2 0 1 1 255.01 350 Z
+           M 150 250 A 2 2 0 1 1 150.01 250 Z
+           M 130 280 A 2 2 0 1 1 130.01 280 Z
+           M 170 280 A 2 2 0 1 1 170.01 280 Z`,
+    fill: '#87ceeb',
+  },
+  'sebaceous-glands': {
+    id: 'sebaceous-glands',
+    name: 'Sebaceous Glands',
+    hint: 'Found near hair follicles throughout the body',
+    path: `M 135 35 A 2 2 0 1 1 135.01 35 Z
+           M 165 35 A 2 2 0 1 1 165.01 35 Z
+           M 150 30 A 2 2 0 1 1 150.01 30 Z
+           M 120 50 A 1.5 1.5 0 1 1 120.01 50 Z
+           M 180 50 A 1.5 1.5 0 1 1 180.01 50 Z`,
+    fill: '#f0e68c',
+  },
+
+  // FEATURES
+  lips: {
+    id: 'lips',
+    name: 'Lips',
+    hint: 'Located on the face, around the mouth opening',
+    path: `M 135 72 C 140 70, 160 70, 165 72 C 168 75, 165 80, 150 82 C 135 80, 132 75, 135 72 Z
+           M 138 76 C 143 74, 157 74, 162 76 C 165 78, 162 82, 150 84 C 138 82, 135 78, 138 76 Z`,
+    fill: '#dc7f7f',
+  },
+  nipples: {
+    id: 'nipples',
+    name: 'Nipples',
+    hint: 'Located on the chest, one on each side',
+    path: `M 125 175 A 5 5 0 1 1 125.01 175 Z
+           M 175 175 A 5 5 0 1 1 175.01 175 Z`,
+    fill: '#c48c78',
+  },
+  navel: {
+    id: 'navel',
+    name: 'Navel',
+    hint: 'Located in the center of the abdomen',
+    path: `M 150 268 C 145 268, 143 272, 145 278 C 147 282, 153 282, 155 278 C 157 272, 155 268, 150 268 Z`,
+    fill: '#a67c52',
+  },
+};
+
+// ============================================================================
 // SKELETAL SYSTEM - Accurate bone shapes
 // ============================================================================
 
@@ -1009,6 +1191,8 @@ export const BODY_OUTLINE_PATH = `
  */
 export function getSystemPaths(systemId) {
   switch (systemId) {
+    case 'integumentary':
+      return INTEGUMENTARY_PATHS;
     case 'skeletal':
       return SKELETAL_PATHS;
     case 'muscular':
@@ -1025,6 +1209,7 @@ export function getSystemPaths(systemId) {
  */
 export function getAllPaths() {
   return [
+    ...Object.values(INTEGUMENTARY_PATHS),
     ...Object.values(SKELETAL_PATHS),
     ...Object.values(MUSCULAR_PATHS),
     ...Object.values(ORGAN_PATHS),
@@ -1036,6 +1221,7 @@ export function getAllPaths() {
  */
 export function getPartPath(partId) {
   return (
+    INTEGUMENTARY_PATHS[partId] ||
     SKELETAL_PATHS[partId] ||
     MUSCULAR_PATHS[partId] ||
     ORGAN_PATHS[partId] ||

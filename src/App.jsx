@@ -130,7 +130,6 @@ const slugToFolder = {
   'theseus-minotaur': 'TheseusMinotaur',
   'tile-swap': 'TileSwap',
   'tower-of-hanoi': 'TowerOfHanoi',
-  'towers': 'Skyscraper', // Alias
   'tracks': 'Tracks',
   'train-shunting': 'TrainShunting',
   'trivia': 'Trivia',
@@ -152,33 +151,6 @@ const slugToFolder = {
   'yajilin': 'Yajilin',
   'yajisan-kazusan': 'YajisanKazusan',
   'yin-yang': 'YinYang',
-};
-
-/**
- * Aliases for alternate route paths (e.g., Simon Tatham puzzle names)
- * Maps alias slug -> primary slug
- */
-const routeAliases = {
-  'solo': 'sudoku',
-  'unblock-me': 'congestion',
-  'traffic-jam': 'congestion',
-  'rush-hour': 'congestion',
-  'mines': 'minesweeper',
-  'keen': 'calcudoku',
-  'flip': 'lights-out',
-  'flood': 'flood-it',
-  'unequal': 'futoshiki',
-  'singles': 'hitori',
-  'unruly': 'takuzu',
-  'bridges': 'hashi',
-  'rect': 'shikaku',
-  'filling': 'fillomino',
-  'pattern': 'nonogram',
-  'hakyuu': 'ripple-effect',
-  'hidoku': 'hidato',
-  'factor-rooms': 'inshi-no-heya',
-  'corral': 'bag',
-  'cryptarithmetic': 'word-arithmetic',
 };
 
 // Cache for lazy-loaded components
@@ -407,18 +379,6 @@ function generateGameRoutes() {
         />
       );
     }
-  }
-
-  // Add alias routes
-  for (const [alias, primarySlug] of Object.entries(routeAliases)) {
-    const Component = getGameComponent(primarySlug);
-    routes.push(
-      <Route
-        key={alias}
-        path={alias}
-        element={<GameRoute component={Component} />}
-      />
-    );
   }
 
   return routes;

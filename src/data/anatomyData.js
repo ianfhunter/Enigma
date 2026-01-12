@@ -3,46 +3,77 @@
  *
  * Body part definitions organized by system.
  * Now uses SVG paths from anatomySvgPaths.js for accurate anatomical rendering.
+ * Hints are location-based to avoid giving away the answer.
  *
  * License: Data compiled for educational purposes.
  */
 
 export const BODY_SYSTEMS = {
+  integumentary: {
+    name: 'Integumentary System',
+    icon: '🧴',
+    color: '#deb887',
+    parts: [
+      // Skin layers
+      { id: 'epidermis', name: 'Epidermis', hint: 'The outermost visible layer covering the entire body' },
+      { id: 'dermis', name: 'Dermis', hint: 'The layer beneath the surface, throughout the body' },
+      { id: 'hypodermis', name: 'Hypodermis', hint: 'The deepest skin layer, also called subcutaneous tissue' },
+
+      // Hair
+      { id: 'scalp-hair', name: 'Scalp Hair', hint: 'Located on top of the head' },
+      { id: 'eyebrows', name: 'Eyebrows', hint: 'Located above the eyes' },
+      { id: 'eyelashes', name: 'Eyelashes', hint: 'Located at the edge of the eyelids' },
+
+      // Nails
+      { id: 'fingernails', name: 'Fingernails', hint: 'Located at the tips of the fingers' },
+      { id: 'toenails', name: 'Toenails', hint: 'Located at the tips of the toes' },
+
+      // Glands
+      { id: 'sweat-glands', name: 'Sweat Glands', hint: 'Found throughout the skin, especially in armpits and palms' },
+      { id: 'sebaceous-glands', name: 'Sebaceous Glands', hint: 'Found near hair follicles throughout the body' },
+
+      // Features
+      { id: 'lips', name: 'Lips', hint: 'Located on the face, around the mouth opening' },
+      { id: 'nipples', name: 'Nipples', hint: 'Located on the chest, one on each side' },
+      { id: 'navel', name: 'Navel', hint: 'Located in the center of the abdomen' },
+    ],
+  },
+
   skeletal: {
     name: 'Skeletal System',
     icon: '🦴',
     color: '#f5f0e6',
     parts: [
       // Head
-      { id: 'skull', name: 'Skull', hint: 'Protects the brain' },
-      { id: 'mandible', name: 'Mandible', hint: 'The jawbone' },
+      { id: 'skull', name: 'Skull', hint: 'Located at the top of the body, encases the head' },
+      { id: 'mandible', name: 'Mandible', hint: 'Located at the lower part of the face' },
 
       // Spine & Torso
-      { id: 'cervical-vertebrae', name: 'Cervical Vertebrae', hint: 'Neck bones (7 vertebrae)' },
-      { id: 'clavicle', name: 'Clavicle', hint: 'The collarbone' },
-      { id: 'scapula', name: 'Scapula', hint: 'The shoulder blade' },
-      { id: 'sternum', name: 'Sternum', hint: 'The breastbone' },
-      { id: 'ribs', name: 'Ribs', hint: 'Protect heart and lungs (12 pairs)' },
-      { id: 'thoracic-vertebrae', name: 'Thoracic Vertebrae', hint: 'Upper back (12 vertebrae)' },
-      { id: 'lumbar-vertebrae', name: 'Lumbar Vertebrae', hint: 'Lower back (5 vertebrae)' },
-      { id: 'pelvis', name: 'Pelvis', hint: 'Hip bones, supports upper body' },
-      { id: 'sacrum', name: 'Sacrum', hint: 'Base of the spine' },
+      { id: 'cervical-vertebrae', name: 'Cervical Vertebrae', hint: 'Located in the neck region' },
+      { id: 'clavicle', name: 'Clavicle', hint: 'Located horizontally at the top of the chest' },
+      { id: 'scapula', name: 'Scapula', hint: 'Located on the upper back, behind the shoulders' },
+      { id: 'sternum', name: 'Sternum', hint: 'Located in the center of the chest' },
+      { id: 'ribs', name: 'Ribs', hint: 'Located around the chest, forming a cage' },
+      { id: 'thoracic-vertebrae', name: 'Thoracic Vertebrae', hint: 'Located in the upper and middle back' },
+      { id: 'lumbar-vertebrae', name: 'Lumbar Vertebrae', hint: 'Located in the lower back' },
+      { id: 'pelvis', name: 'Pelvis', hint: 'Located at the base of the torso, around the hips' },
+      { id: 'sacrum', name: 'Sacrum', hint: 'Located at the base of the spine, above the tailbone' },
 
       // Arms
-      { id: 'humerus', name: 'Humerus', hint: 'Upper arm bone' },
-      { id: 'radius', name: 'Radius', hint: 'Forearm bone (thumb side)' },
-      { id: 'ulna', name: 'Ulna', hint: 'Forearm bone (pinky side)' },
-      { id: 'carpals', name: 'Carpals', hint: 'Wrist bones (8 bones)' },
-      { id: 'metacarpals', name: 'Metacarpals', hint: 'Hand bones (5 bones)' },
-      { id: 'phalanges-hand', name: 'Phalanges (Hand)', hint: 'Finger bones (14 per hand)' },
+      { id: 'humerus', name: 'Humerus', hint: 'Located in the upper arm, between shoulder and elbow' },
+      { id: 'radius', name: 'Radius', hint: 'Located in the forearm, on the thumb side' },
+      { id: 'ulna', name: 'Ulna', hint: 'Located in the forearm, on the pinky side' },
+      { id: 'carpals', name: 'Carpals', hint: 'Located in the wrist area' },
+      { id: 'metacarpals', name: 'Metacarpals', hint: 'Located in the palm of the hand' },
+      { id: 'phalanges-hand', name: 'Phalanges (Hand)', hint: 'Located in the fingers' },
 
       // Legs
-      { id: 'femur', name: 'Femur', hint: 'Thigh bone - longest bone in the body' },
-      { id: 'patella', name: 'Patella', hint: 'The kneecap' },
-      { id: 'tibia', name: 'Tibia', hint: 'Shinbone (larger lower leg bone)' },
-      { id: 'fibula', name: 'Fibula', hint: 'Smaller lower leg bone' },
-      { id: 'tarsals', name: 'Tarsals', hint: 'Ankle bones (7 bones)' },
-      { id: 'metatarsals', name: 'Metatarsals', hint: 'Foot bones (5 bones)' },
+      { id: 'femur', name: 'Femur', hint: 'Located in the thigh, between hip and knee' },
+      { id: 'patella', name: 'Patella', hint: 'Located at the front of the knee' },
+      { id: 'tibia', name: 'Tibia', hint: 'Located in the lower leg, on the inner/front side' },
+      { id: 'fibula', name: 'Fibula', hint: 'Located in the lower leg, on the outer side' },
+      { id: 'tarsals', name: 'Tarsals', hint: 'Located in the ankle and heel area' },
+      { id: 'metatarsals', name: 'Metatarsals', hint: 'Located in the middle of the foot' },
     ],
   },
 
@@ -52,40 +83,40 @@ export const BODY_SYSTEMS = {
     color: '#c0392b',
     parts: [
       // Head & Neck
-      { id: 'temporalis', name: 'Temporalis', hint: 'Closes the jaw, temple area' },
-      { id: 'masseter', name: 'Masseter', hint: 'Jaw muscle for chewing' },
-      { id: 'sternocleidomastoid', name: 'Sternocleidomastoid', hint: 'Rotates and tilts the head' },
+      { id: 'temporalis', name: 'Temporalis', hint: 'Located on the side of the head, near the temple' },
+      { id: 'masseter', name: 'Masseter', hint: 'Located at the angle of the jaw' },
+      { id: 'sternocleidomastoid', name: 'Sternocleidomastoid', hint: 'Located on the side of the neck' },
 
       // Shoulders & Chest
-      { id: 'trapezius', name: 'Trapezius', hint: 'Large muscle of upper back and neck' },
-      { id: 'deltoid', name: 'Deltoid', hint: 'Shoulder muscle, raises arm' },
-      { id: 'pectoralis-major', name: 'Pectoralis Major', hint: 'Chest muscle' },
-      { id: 'serratus-anterior', name: 'Serratus Anterior', hint: 'Side of ribs, stabilizes scapula' },
+      { id: 'trapezius', name: 'Trapezius', hint: 'Located across the upper back and neck' },
+      { id: 'deltoid', name: 'Deltoid', hint: 'Located at the top of the shoulder' },
+      { id: 'pectoralis-major', name: 'Pectoralis Major', hint: 'Located on the front of the chest' },
+      { id: 'serratus-anterior', name: 'Serratus Anterior', hint: 'Located on the side of the chest, over the ribs' },
 
       // Arms
-      { id: 'biceps-brachii', name: 'Biceps Brachii', hint: 'Flexes the elbow' },
-      { id: 'triceps-brachii', name: 'Triceps Brachii', hint: 'Extends the elbow' },
-      { id: 'brachioradialis', name: 'Brachioradialis', hint: 'Forearm flexor' },
-      { id: 'flexor-carpi', name: 'Flexor Carpi', hint: 'Flexes the wrist' },
+      { id: 'biceps-brachii', name: 'Biceps Brachii', hint: 'Located on the front of the upper arm' },
+      { id: 'triceps-brachii', name: 'Triceps Brachii', hint: 'Located on the back of the upper arm' },
+      { id: 'brachioradialis', name: 'Brachioradialis', hint: 'Located on the outer forearm, near the elbow' },
+      { id: 'flexor-carpi', name: 'Flexor Carpi', hint: 'Located on the inner forearm' },
 
       // Core
-      { id: 'rectus-abdominis', name: 'Rectus Abdominis', hint: 'The "six-pack" muscle' },
-      { id: 'external-oblique', name: 'External Oblique', hint: 'Side abdominal muscle' },
-      { id: 'latissimus-dorsi', name: 'Latissimus Dorsi', hint: 'Large back muscle, "lats"' },
+      { id: 'rectus-abdominis', name: 'Rectus Abdominis', hint: 'Located on the front of the abdomen' },
+      { id: 'external-oblique', name: 'External Oblique', hint: 'Located on the sides of the abdomen' },
+      { id: 'latissimus-dorsi', name: 'Latissimus Dorsi', hint: 'Located on the sides of the back' },
 
       // Hips & Glutes
-      { id: 'gluteus-maximus', name: 'Gluteus Maximus', hint: 'Largest muscle, extends hip' },
-      { id: 'gluteus-medius', name: 'Gluteus Medius', hint: 'Hip abductor' },
-      { id: 'iliopsoas', name: 'Iliopsoas', hint: 'Hip flexor' },
+      { id: 'gluteus-maximus', name: 'Gluteus Maximus', hint: 'Located in the buttocks region' },
+      { id: 'gluteus-medius', name: 'Gluteus Medius', hint: 'Located on the outer hip' },
+      { id: 'iliopsoas', name: 'Iliopsoas', hint: 'Located deep in the front of the hip' },
 
       // Legs
-      { id: 'quadriceps', name: 'Quadriceps', hint: 'Front thigh, extends knee' },
-      { id: 'hamstrings', name: 'Hamstrings', hint: 'Back thigh, flexes knee' },
-      { id: 'adductors', name: 'Adductors', hint: 'Inner thigh muscles' },
-      { id: 'sartorius', name: 'Sartorius', hint: 'Longest muscle, crosses leg' },
-      { id: 'gastrocnemius', name: 'Gastrocnemius', hint: 'Calf muscle' },
-      { id: 'soleus', name: 'Soleus', hint: 'Deep calf muscle' },
-      { id: 'tibialis-anterior', name: 'Tibialis Anterior', hint: 'Shin muscle, dorsiflexes foot' },
+      { id: 'quadriceps', name: 'Quadriceps', hint: 'Located on the front of the thigh' },
+      { id: 'hamstrings', name: 'Hamstrings', hint: 'Located on the back of the thigh' },
+      { id: 'adductors', name: 'Adductors', hint: 'Located on the inner thigh' },
+      { id: 'sartorius', name: 'Sartorius', hint: 'Located diagonally across the front of the thigh' },
+      { id: 'gastrocnemius', name: 'Gastrocnemius', hint: 'Located on the back of the lower leg' },
+      { id: 'soleus', name: 'Soleus', hint: 'Located beneath the calf, in the lower leg' },
+      { id: 'tibialis-anterior', name: 'Tibialis Anterior', hint: 'Located on the front of the lower leg' },
     ],
   },
 
@@ -95,39 +126,39 @@ export const BODY_SYSTEMS = {
     color: '#9b59b6',
     parts: [
       // Head
-      { id: 'brain', name: 'Brain', hint: 'Control center of the nervous system' },
-      { id: 'eyes', name: 'Eyes', hint: 'Organs of vision' },
-      { id: 'tongue', name: 'Tongue', hint: 'Taste and speech organ' },
+      { id: 'brain', name: 'Brain', hint: 'Located inside the skull' },
+      { id: 'eyes', name: 'Eyes', hint: 'Located in the front of the face, in the eye sockets' },
+      { id: 'tongue', name: 'Tongue', hint: 'Located inside the mouth' },
 
       // Neck & Throat
-      { id: 'thyroid', name: 'Thyroid', hint: 'Produces hormones for metabolism' },
-      { id: 'larynx', name: 'Larynx', hint: 'Voice box' },
-      { id: 'esophagus', name: 'Esophagus', hint: 'Tube connecting mouth to stomach' },
-      { id: 'trachea', name: 'Trachea', hint: 'Windpipe' },
+      { id: 'thyroid', name: 'Thyroid', hint: 'Located in the front of the neck, below the Adam\'s apple' },
+      { id: 'larynx', name: 'Larynx', hint: 'Located in the throat, at the top of the windpipe' },
+      { id: 'esophagus', name: 'Esophagus', hint: 'Located in the neck and chest, behind the windpipe' },
+      { id: 'trachea', name: 'Trachea', hint: 'Located in the front of the neck, going down to the lungs' },
 
       // Chest
-      { id: 'heart', name: 'Heart', hint: 'Pumps blood throughout the body' },
-      { id: 'lungs', name: 'Lungs', hint: 'Organs of respiration' },
-      { id: 'diaphragm', name: 'Diaphragm', hint: 'Muscle for breathing' },
+      { id: 'heart', name: 'Heart', hint: 'Located in the center-left of the chest' },
+      { id: 'lungs', name: 'Lungs', hint: 'Located in the chest, on either side of the heart' },
+      { id: 'diaphragm', name: 'Diaphragm', hint: 'Located horizontally below the lungs' },
 
       // Abdomen - Upper
-      { id: 'liver', name: 'Liver', hint: 'Largest internal organ, detoxifies blood' },
-      { id: 'gallbladder', name: 'Gallbladder', hint: 'Stores bile' },
-      { id: 'stomach', name: 'Stomach', hint: 'Digests food with acid' },
-      { id: 'spleen', name: 'Spleen', hint: 'Filters blood, immune function' },
-      { id: 'pancreas', name: 'Pancreas', hint: 'Produces insulin and digestive enzymes' },
+      { id: 'liver', name: 'Liver', hint: 'Located in the upper right abdomen' },
+      { id: 'gallbladder', name: 'Gallbladder', hint: 'Located beneath the liver' },
+      { id: 'stomach', name: 'Stomach', hint: 'Located in the upper left abdomen' },
+      { id: 'spleen', name: 'Spleen', hint: 'Located in the upper left abdomen, behind the stomach' },
+      { id: 'pancreas', name: 'Pancreas', hint: 'Located behind the stomach, horizontally across' },
 
       // Abdomen - Lower
-      { id: 'small-intestine', name: 'Small Intestine', hint: 'Absorbs nutrients (about 20 feet long)' },
-      { id: 'large-intestine', name: 'Large Intestine', hint: 'Absorbs water, forms waste' },
-      { id: 'appendix', name: 'Appendix', hint: 'Small pouch attached to large intestine' },
+      { id: 'small-intestine', name: 'Small Intestine', hint: 'Located in the central abdomen, coiled' },
+      { id: 'large-intestine', name: 'Large Intestine', hint: 'Located around the edges of the abdomen' },
+      { id: 'appendix', name: 'Appendix', hint: 'Located in the lower right abdomen' },
 
       // Urinary
-      { id: 'kidneys', name: 'Kidneys', hint: 'Filter blood, produce urine' },
-      { id: 'bladder', name: 'Bladder', hint: 'Stores urine' },
+      { id: 'kidneys', name: 'Kidneys', hint: 'Located in the back of the abdomen, one on each side' },
+      { id: 'bladder', name: 'Bladder', hint: 'Located in the lower abdomen, in the pelvic area' },
 
       // Misc
-      { id: 'adrenal-glands', name: 'Adrenal Glands', hint: 'Produce adrenaline and cortisol' },
+      { id: 'adrenal-glands', name: 'Adrenal Glands', hint: 'Located on top of each kidney' },
     ],
   },
 };

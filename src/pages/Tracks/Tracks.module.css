@@ -70,6 +70,51 @@
   align-items: flex-start;
 }
 
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  user-select: none;
+}
+
+.colCluesRow {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  padding-bottom: 4px;
+}
+
+.colClue {
+  width: 42px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.gridRow {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.rowClue {
+  width: 28px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  margin-left: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
 .grid {
   display: grid;
   gap: 6px;
@@ -109,22 +154,4 @@
   outline-offset: 2px;
 }
 
-.clues {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-  min-width: 200px;
-}
-
-.clueRow {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.25rem;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 12px;
-  padding: 0.6rem 0.75rem;
-}
-
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-

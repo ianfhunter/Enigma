@@ -68,10 +68,10 @@ export default function AnatomyQuiz() {
     setIsTransitioning(false);
   }, [getActiveParts, currentPart]);
 
-  // Initialize on mount and when system changes
+  // Initialize on mount only - never change target when switching systems
   useEffect(() => {
     pickNewPart();
-  }, [selectedSystem]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle clicking on a body part
   const handlePartClick = useCallback((clickedPart) => {

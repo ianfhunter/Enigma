@@ -8,6 +8,7 @@
 import { useState, useMemo } from 'react';
 import styles from './AnatomyQuiz.module.css';
 import {
+  INTEGUMENTARY_PATHS,
   SKELETAL_PATHS,
   MUSCULAR_PATHS,
   ORGAN_PATHS,
@@ -29,6 +30,7 @@ export default function BodySVG({
   // Get SVG path data for a part
   const getPartPathData = (part) => {
     return (
+      INTEGUMENTARY_PATHS[part.id] ||
       SKELETAL_PATHS[part.id] ||
       MUSCULAR_PATHS[part.id] ||
       ORGAN_PATHS[part.id] ||
@@ -234,7 +236,7 @@ export default function BodySVG({
                 strokeOpacity={strokeOpacity}
                 strokeWidth={strokeWidth}
                 filter={filter}
-                className={`${styles.anatomyPart} ${isTarget && showHints ? styles.pulse : ''}`}
+                className={styles.anatomyPart}
                 onClick={(e) => handleClick(part, e)}
                 onMouseEnter={() => setHoveredPart(part)}
                 onMouseLeave={() => setHoveredPart(null)}

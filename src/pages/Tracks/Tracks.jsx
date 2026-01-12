@@ -28,12 +28,12 @@ function generatePath(w, h, startR, startC, endR, endC) {
   const visited = new Set();
   const path = [[startR, startC]];
   visited.add(`${startR},${startC}`);
-  
+
   let r = startR;
   let c = startC;
   let stuck = 0;
   const maxSteps = w * h * 2;
-  
+
   while ((r !== endR || c !== endC) && stuck < maxSteps) {
     // Get valid neighbors
     const neighbors = [];
@@ -42,11 +42,11 @@ function generatePath(w, h, startR, startC, endR, endC) {
       const nc = c + dc;
       if (!inBounds(nr, nc, h, w)) continue;
       if (visited.has(`${nr},${nc}`)) continue;
-      
+
       // Don't trap ourselves - ensure we can still reach end
       neighbors.push({ r: nr, c: nc, dist: Math.abs(nr - endR) + Math.abs(nc - endC) });
     }
-    
+
     if (neighbors.length === 0) {
       // Backtrack
       if (path.length <= 1) break;
@@ -57,28 +57,28 @@ function generatePath(w, h, startR, startC, endR, endC) {
       stuck++;
       continue;
     }
-    
+
     // Sort by distance to end (prefer getting closer) with some randomness
     neighbors.sort((a, b) => {
       const ra = a.dist + Math.random() * 3;
       const rb = b.dist + Math.random() * 3;
       return ra - rb;
     });
-    
+
     // Sometimes take a random neighbor instead
     const next = Math.random() < 0.3 ? neighbors[Math.floor(Math.random() * neighbors.length)] : neighbors[0];
-    
+
     r = next.r;
     c = next.c;
     path.push([r, c]);
     visited.add(`${r},${c}`);
     stuck = 0;
   }
-  
+
   if (r !== endR || c !== endC) {
     return null; // Failed to find path
   }
-  
+
   return path;
 }
 
@@ -86,35 +86,35 @@ function generatePath(w, h, startR, startC, endR, endC) {
 function generatePuzzle(size, difficulty) {
   const w = size;
   const h = size;
-  
+
   const minPathLen = difficulty === 'easy' ? size : difficulty === 'medium' ? size * 1.5 : size * 2;
   const fixedRatio = difficulty === 'easy' ? 0.4 : difficulty === 'medium' ? 0.25 : 0.15;
-  
+
   for (let attempt = 0; attempt < 50; attempt++) {
     // Random start and end positions (on edges or near edges)
     const aR = Math.floor(Math.random() * (h - 2)) + 1;
     const aC = Math.floor(Math.random() * (w - 2)) + 1;
     const bR = Math.floor(Math.random() * (h - 2)) + 1;
     const bC = Math.floor(Math.random() * (w - 2)) + 1;
-    
+
     // Ensure A and B are far enough apart
     if (Math.abs(aR - bR) + Math.abs(aC - bC) < size / 2) continue;
-    
+
     const path = generatePath(w, h, aR, aC, bR, bC);
     if (!path || path.length < minPathLen) continue;
-    
+
     // Create solution set
     const solution = new Set(path.map(([r, c]) => rcToIdx(r, c, w)));
     const a = rcToIdx(aR, aC, w);
     const b = rcToIdx(bR, bC, w);
-    
+
     // Pick fixed cells (not A or B)
     const fixedCount = Math.max(2, Math.floor(path.length * fixedRatio));
     const middleCells = path.slice(1, -1); // Exclude A and B
     const shuffled = [...middleCells].sort(() => Math.random() - 0.5);
     const fixedCells = shuffled.slice(0, fixedCount);
     const fixed = new Set(fixedCells.map(([r, c]) => rcToIdx(r, c, w)));
-    
+
     // Calculate clues
     const rowClues = new Array(h).fill(0);
     const colClues = new Array(w).fill(0);
@@ -123,7 +123,7 @@ function generatePuzzle(size, difficulty) {
       rowClues[r]++;
       colClues[c]++;
     }
-    
+
     return {
       w,
       h,
@@ -138,7 +138,7 @@ function generatePuzzle(size, difficulty) {
       colClues,
     };
   }
-  
+
   // Fallback
   return {
     w: 8,
@@ -278,7 +278,7 @@ export default function Tracks() {
     <div className={styles.container}>
       <GameHeader
         title="Tracks"
-        instructions="Complete a single non-branching track from A to B (no crossings). The row/column clues (derived from this puzzle’s solution) indicate how many track squares must appear in each row/column. Click squares to toggle track."
+        instructions="Build a single non-branching track from A to B. Some track segments are pre-filled as hints. Row/column numbers show how many track squares belong in each (including A and B). Click to toggle track."
       />
 
       <div className={styles.toolbar}>
@@ -334,41 +334,43 @@ export default function Tracks() {
 
       {puz && (
         <div className={styles.wrap}>
-          <div className={styles.grid} style={{ gridTemplateColumns: `repeat(${puz.w}, 42px)` }}>
-            {Array.from({ length: puz.w * puz.h }, (_, i) => {
-              const isTrack = marks[i] === 1;
-              const isEnd = i === a || i === b;
-              const isFixed = puz.fixed.has(i);
-              const cls = [
-                styles.cell,
-                isTrack ? styles.track : '',
-                isEnd ? styles.endpoint : '',
-                isFixed ? styles.fixed : '',
-                bad.has(i) ? styles.badCell : '',
-              ].join(' ');
-              let text = '';
-              if (isEnd) text = i === a ? 'A' : 'B';
-              return (
-                <button key={i} className={cls} onClick={() => toggle(i)}>
-                  {text}
-                </button>
-              );
-            })}
-          </div>
+          <div className={styles.gridWrapper}>
+            {/* Column clues at top */}
+            <div className={styles.colCluesRow}>
+              {puz.colClues.map((clue, c) => (
+                <div key={c} className={styles.colClue}>{clue}</div>
+              ))}
+            </div>
 
-          <div className={styles.clues}>
-            <div className={styles.clueRow}>
-              <div><strong>Row clues</strong></div>
-              <div className={styles.mono}>{puz.rowClues.join(' ')}</div>
-            </div>
-            <div className={styles.clueRow}>
-              <div><strong>Column clues</strong></div>
-              <div className={styles.mono}>{puz.colClues.join(' ')}</div>
-            </div>
+            {/* Main grid with row clues on right */}
+            {Array.from({ length: puz.h }, (_, row) => (
+              <div key={row} className={styles.gridRow}>
+                {Array.from({ length: puz.w }, (_, col) => {
+                  const i = rcToIdx(row, col, puz.w);
+                  const isTrack = marks[i] === 1;
+                  const isEnd = i === a || i === b;
+                  const isFixed = puz.fixed.has(i);
+                  const cls = [
+                    styles.cell,
+                    isTrack ? styles.track : '',
+                    isEnd ? styles.endpoint : '',
+                    isFixed ? styles.fixed : '',
+                    bad.has(i) ? styles.badCell : '',
+                  ].join(' ');
+                  let text = '';
+                  if (isEnd) text = i === a ? 'A' : 'B';
+                  return (
+                    <button key={i} className={cls} onClick={() => toggle(i)}>
+                      {text}
+                    </button>
+                  );
+                })}
+                <div className={styles.rowClue}>{puz.rowClues[row]}</div>
+              </div>
+            ))}
           </div>
         </div>
       )}
     </div>
   );
 }
-

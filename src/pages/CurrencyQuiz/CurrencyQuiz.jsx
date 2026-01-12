@@ -41,15 +41,60 @@ export default function CurrencyQuiz() {
   const generateOptions = useCallback((correct) => {
     if (!countries.length) return [];
     const correctCurrency = correct.currency;
-    // Get unique currencies different from the correct one
-    const otherCurrencies = [...new Set(
-      countries
-        .filter(c => c.currency !== correctCurrency)
-        .map(c => c.currency)
-    )];
-    const shuffled = otherCurrencies.sort(() => Math.random() - 0.5).slice(0, 3);
-    const allOptions = [correctCurrency, ...shuffled].sort(() => Math.random() - 0.5);
-    return allOptions;
+
+    // Currency types to detect (check longer/multi-word ones first)
+    const currencyTypes = [
+      'Convertible Mark', 'CFA Franc', 'New Shekel',
+      'Dollar', 'Peso', 'Dinar', 'Franc', 'Pound', 'Rupee', 'Rupiah',
+      'Yen', 'Yuan', 'Won', 'Krone', 'Krona', 'Króna', 'Ruble', 'Real',
+      'Rial', 'Riyal', 'Lira', 'Shilling', 'Rand', 'Koruna', 'Forint',
+      'Zloty', 'Baht', 'Ringgit', 'Dirham', 'Kwacha', 'Leu', 'Som',
+      'Manat', 'Taka', 'Dram', 'Lek', 'Afghani', 'Kwanza', 'Ngultrum',
+      'Boliviano', 'Pula', 'Lev', 'Riel', 'Escudo', 'Colón', 'Nakfa',
+      'Birr', 'Dalasi', 'Lari', 'Cedi', 'Quetzal', 'Gourde', 'Lempira',
+      'Tenge', 'Kip', 'Loti', 'Denar', 'Ariary', 'Rufiyaa', 'Ouguiya',
+      'Tugrik', 'Metical', 'Kyat', 'Naira', 'Córdoba', 'Balboa', 'Kina',
+      'Guarani', 'Sol', 'Tala', 'Dobra', 'Leone', "Pa'anga", 'Somoni',
+      'Hryvnia', 'Vatu', 'Bolívar', 'Dong'
+    ];
+
+    // Common types for generating believable fake currencies
+    const commonTypes = ['Dollar', 'Peso', 'Franc', 'Pound', 'Dinar', 'Rupee', 'Yen', 'Shilling', 'Krone'];
+
+    // Try to extract adjective and type from currency name
+    let adjective = null;
+    let correctType = null;
+
+    for (const type of currencyTypes) {
+      if (correctCurrency.endsWith(type)) {
+        correctType = type;
+        adjective = correctCurrency.slice(0, correctCurrency.length - type.length).trim();
+        break;
+      }
+    }
+
+    let distractors = [];
+
+    if (adjective && adjective.length > 0) {
+      // Generate fake currencies: same adjective + different type
+      // e.g., "Mexican Peso" → "Mexican Dollar", "Mexican Franc", "Mexican Yen"
+      const fakeTypes = commonTypes
+        .filter(t => t !== correctType)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+
+      distractors = fakeTypes.map(type => `${adjective} ${type}`);
+    } else {
+      // Fallback for "Euro" or currencies we couldn't parse - use real currencies
+      const otherCurrencies = [...new Set(
+        countries
+          .filter(c => c.currency !== correctCurrency)
+          .map(c => c.currency)
+      )];
+      distractors = otherCurrencies.sort(() => Math.random() - 0.5).slice(0, 3);
+    }
+
+    return [correctCurrency, ...distractors].sort(() => Math.random() - 0.5);
   }, [countries]);
 
   const startRound = useCallback(() => {
