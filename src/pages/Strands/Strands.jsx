@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
-import { wordCategories } from '../../data/wordCategories';
+import { wordCategories } from '@datasets/wordCategories';
 import styles from './Strands.module.css';
 
 const GRID_ROWS = 8;
@@ -66,13 +66,13 @@ const CATEGORY_SPANGRAMS = {
 function generatePuzzleGrid(puzzle, random) {
   const grid = Array(GRID_ROWS).fill(null).map(() => Array(GRID_COLS).fill(''));
   const wordPositions = {};
-  
+
   // Place spangram across the top row(s)
   const spangram = puzzle.spangram;
   const spangramPositions = [];
   let col = 0;
   let row = 0;
-  
+
   for (let i = 0; i < spangram.length; i++) {
     if (col >= GRID_COLS) {
       col = 0;
@@ -83,14 +83,14 @@ function generatePuzzleGrid(puzzle, random) {
     col++;
   }
   wordPositions[spangram] = spangramPositions;
-  
+
   // Place theme words in remaining rows
   let currentRow = Math.ceil(spangram.length / GRID_COLS);
-  
+
   for (const word of puzzle.themeWords) {
     const positions = [];
     col = 0;
-    
+
     // Try to fit word in current row
     if (col + word.length <= GRID_COLS && currentRow < GRID_ROWS) {
       for (let i = 0; i < word.length; i++) {
@@ -99,7 +99,7 @@ function generatePuzzleGrid(puzzle, random) {
         col++;
       }
       wordPositions[word] = positions;
-      
+
       // Move to next row if current row is full
       if (col >= GRID_COLS - 1) {
         currentRow++;
@@ -117,13 +117,13 @@ function generatePuzzleGrid(puzzle, random) {
         wordPositions[word] = positions;
       }
     }
-    
+
     // Advance row for variety
     if (random() > 0.5 && currentRow < GRID_ROWS - 1) {
       currentRow++;
     }
   }
-  
+
   // Fill empty cells with random letters
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   for (let r = 0; r < GRID_ROWS; r++) {
@@ -133,32 +133,32 @@ function generatePuzzleGrid(puzzle, random) {
       }
     }
   }
-  
+
   return { grid, wordPositions };
 }
 
 // Generate a puzzle from word categories
 function generatePuzzleFromCategories(seed) {
   const random = createSeededRandom(seed);
-  
+
   // Get category keys that have spangrams defined and shuffle
   const categoryKeys = Object.keys(wordCategories).filter(key => CATEGORY_SPANGRAMS[key]);
   const shuffledKeys = seededShuffleArray(categoryKeys, random);
-  
+
   // Pick a category
   const categoryKey = shuffledKeys[0];
   const category = wordCategories[categoryKey];
-  
+
   // Get words that fit well (3-7 letters)
   const suitableWords = category.words.filter(w => w.length >= 3 && w.length <= 7);
   const shuffledWords = seededShuffleArray(suitableWords, random);
-  
+
   // Pick 5 theme words
   const themeWords = shuffledWords.slice(0, 5);
-  
+
   // Get the spangram for this category
   const spangram = CATEGORY_SPANGRAMS[categoryKey];
-  
+
   return {
     theme: category.name,
     hint: `Find the ${category.name.toLowerCase()}`,
@@ -178,13 +178,13 @@ function areAdjacent(cell1, cell2) {
 function getPuzzleForDate(dateStr) {
   const seed = stringToSeed(`strands-${dateStr}`);
   const random = createSeededRandom(seed);
-  
+
   // Always generate puzzle from categories
   const basePuzzle = generatePuzzleFromCategories(seed);
-  
+
   // Generate the grid
   const { grid, wordPositions } = generatePuzzleGrid(basePuzzle, random);
-  
+
   return {
     ...basePuzzle,
     grid,
@@ -247,15 +247,15 @@ export default function Strands() {
 
   const getCellFromEvent = (e) => {
     if (!gridRef.current) return null;
-    
+
     const touch = e.touches ? e.touches[0] : e;
     const rect = gridRef.current.getBoundingClientRect();
     const cellWidth = rect.width / GRID_COLS;
     const cellHeight = rect.height / GRID_ROWS;
-    
+
     const col = Math.floor((touch.clientX - rect.left) / cellWidth);
     const row = Math.floor((touch.clientY - rect.top) / cellHeight);
-    
+
     if (row >= 0 && row < GRID_ROWS && col >= 0 && col < GRID_COLS) {
       return [row, col];
     }
@@ -270,15 +270,15 @@ export default function Strands() {
 
   const handleMove = (row, col) => {
     if (!isDragging || gameWon) return;
-    
+
     const lastCell = selectedCells[selectedCells.length - 1];
     if (!lastCell) return;
-    
+
     // Check if this cell is already selected (allow backtracking)
     const existingIndex = selectedCells.findIndex(
       c => c[0] === row && c[1] === col
     );
-    
+
     if (existingIndex !== -1) {
       // Backtracking - remove cells after this one
       if (existingIndex < selectedCells.length - 1) {
@@ -286,7 +286,7 @@ export default function Strands() {
       }
       return;
     }
-    
+
     // Only add if adjacent to last cell
     if (areAdjacent(lastCell, [row, col])) {
       setSelectedCells([...selectedCells, [row, col]]);
@@ -296,17 +296,17 @@ export default function Strands() {
   const handleEnd = () => {
     if (!isDragging || !puzzle) return;
     setIsDragging(false);
-    
+
     // Get the selected word
     const selectedWord = selectedCells
       .map(([r, c]) => puzzle.grid[r][c])
       .join('');
-    
+
     if (selectedWord.length < 3) {
       setSelectedCells([]);
       return;
     }
-    
+
     // Check if it's the spangram
     if (selectedWord === puzzle.spangram && !foundSpangram) {
       setFoundSpangram(true);
@@ -319,11 +319,11 @@ export default function Strands() {
     }
     // Check if it's a valid non-theme word (4+ letters)
     else if (selectedWord.length >= 4 && isValidWord(selectedWord)) {
-      if (!foundWords.has(selectedWord) && selectedWord !== puzzle.spangram && 
+      if (!foundWords.has(selectedWord) && selectedWord !== puzzle.spangram &&
           !puzzle.themeWords.includes(selectedWord)) {
         const newCount = nonThemeWordCount + 1;
         setNonThemeWordCount(newCount);
-        
+
         // Every 3 valid non-theme words, give a hint
         if (newCount % 3 === 0) {
           setHintCount(hintCount + 1);
@@ -340,7 +340,7 @@ export default function Strands() {
     else if (selectedWord.length >= 4) {
       showTemporaryMessage(`"${selectedWord}" is not a valid word`, 'invalid', 1500);
     }
-    
+
     setSelectedCells([]);
   };
 
@@ -379,11 +379,11 @@ export default function Strands() {
 
   const useHint = () => {
     if (hintCount <= 0 || !puzzle) return;
-    
+
     // Find an unfound theme word or the spangram
     let targetWord = null;
     let targetPositions = null;
-    
+
     if (!foundSpangram) {
       targetWord = puzzle.spangram;
       targetPositions = puzzle.wordPositions[puzzle.spangram];
@@ -396,9 +396,9 @@ export default function Strands() {
         }
       }
     }
-    
+
     if (!targetWord || !targetPositions) return;
-    
+
     // Find an unrevealed cell in the target word
     for (const [r, c] of targetPositions) {
       const cellKey = `${r},${c}`;
@@ -417,14 +417,14 @@ export default function Strands() {
 
   const isFoundCell = (row, col) => {
     if (!puzzle) return false;
-    
+
     // Check spangram
     if (foundSpangram && puzzle.wordPositions[puzzle.spangram]) {
       if (puzzle.wordPositions[puzzle.spangram].some(([r, c]) => r === row && c === col)) {
         return 'spangram';
       }
     }
-    
+
     // Check theme words
     for (const word of foundWords) {
       if (puzzle.wordPositions[word]) {
@@ -433,7 +433,7 @@ export default function Strands() {
         }
       }
     }
-    
+
     return false;
   };
 
@@ -466,7 +466,7 @@ export default function Strands() {
         {/* Theme hint */}
         <div className={styles.themeArea}>
           <div className={styles.themeLabel}>TODAY&apos;S THEME</div>
-          <button 
+          <button
             className={styles.themeButton}
             onClick={() => setShowHint(!showHint)}
           >
@@ -483,7 +483,7 @@ export default function Strands() {
           </div>
           <div className={styles.stat}>
             <span className={styles.statLabel}>Hints</span>
-            <button 
+            <button
               className={`${styles.hintButton} ${hintCount === 0 ? styles.disabled : ''}`}
               onClick={useHint}
               disabled={hintCount === 0}
@@ -505,7 +505,7 @@ export default function Strands() {
         )}
 
         {/* Grid */}
-        <div 
+        <div
           className={styles.grid}
           ref={gridRef}
           onMouseUp={handleMouseUp}

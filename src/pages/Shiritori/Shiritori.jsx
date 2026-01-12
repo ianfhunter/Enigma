@@ -7,7 +7,7 @@ import {
   getWordData,
   getSafeStartWords,
   startsWithKana,
-} from '../../data/japaneseWords';
+} from '@datasets/japaneseWords';
 import styles from './Shiritori.module.css';
 
 // Japanese Shiritori: Last kana of word = first kana of next word

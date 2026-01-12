@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useFavicon } from '../../hooks/useFavicon';
 import { enabledGames, allGames } from '../../data/gameRegistry';
-import { useSettings } from '../../context/SettingsContext';
+import { useAuth } from '../../context/AuthContext';
 import { setEnglishVariant } from '../../data/wordFrequency';
-import SettingsModal from '../SettingsModal';
+import { users } from '../../api/client';
+import ProfileModal from '../ProfileModal';
+import AuthModal from '../AuthModal';
 import logo from '../../branding/logo.svg';
 import styles from './Layout.module.css';
 
@@ -13,15 +15,21 @@ export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
-  const { settings } = useSettings();
+  const { user, isAuthenticated, loading } = useAuth();
 
   const [showDevItems, setShowDevItems] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [userSettings, setUserSettings] = useState(null);
 
-  // Sync frequency module with settings on mount and when settings change
+  // Load user settings when authenticated
   useEffect(() => {
-    setEnglishVariant(settings.englishVariant);
-  }, [settings.englishVariant]);
+    if (isAuthenticated) {
+      users.getSettings().then(settings => {
+        setUserSettings(settings);
+        setEnglishVariant(settings.englishVariant);
+      }).catch(console.error);
+    }
+  }, [isAuthenticated]);
 
   // Count total games and games in development
   const totalGames = allGames.length;
@@ -32,6 +40,18 @@ export default function Layout() {
     const randomGame = enabledGames[Math.floor(Math.random() * enabledGames.length)];
     navigate(`/${randomGame.slug}`);
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className={styles.layout}>
+        <div className={styles.loadingContainer}>
+          <img src={logo} alt="Loading" className={styles.loadingLogo} />
+          <p className={styles.loadingText}>Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.layout}>
@@ -75,13 +95,18 @@ export default function Layout() {
                 </button>
 
                 <button
-                  className={styles.settingsButton}
-                  onClick={() => setShowSettings(true)}
-                  aria-label="Settings"
+                  className={styles.profileButton}
+                  onClick={() => setShowProfile(true)}
+                  aria-label="Profile"
                 >
-                  <span className={styles.settingsIcon}>⚙️</span>
+                  <span className={styles.profileAvatar}>
+                    {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
+                  </span>
+                  <span className={styles.profileName}>
+                    {user?.displayName || user?.username || 'User'}
+                  </span>
                   <span className={styles.languageIndicator}>
-                    {settings.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                    {userSettings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
                   </span>
                 </button>
               </div>
@@ -94,13 +119,15 @@ export default function Layout() {
               </Link>
 
               <button
-                className={styles.settingsButton}
-                onClick={() => setShowSettings(true)}
-                aria-label="Settings"
+                className={styles.profileButton}
+                onClick={() => setShowProfile(true)}
+                aria-label="Profile"
               >
-                <span className={styles.settingsIcon}>⚙️</span>
+                <span className={styles.profileAvatar}>
+                  {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
+                </span>
                 <span className={styles.languageIndicator}>
-                  {settings.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                  {userSettings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
                 </span>
               </button>
             </div>
@@ -114,9 +141,16 @@ export default function Layout() {
         <p>Self-hosted games collection</p>
       </footer>
 
-      <SettingsModal
-        isOpen={showSettings}
-        onClose={() => setShowSettings(false)}
+      {/* Auth modal - cannot be closed when not authenticated */}
+      <AuthModal
+        isOpen={!isAuthenticated}
+        canClose={false}
+      />
+
+      {/* Profile modal - only when authenticated */}
+      <ProfileModal
+        isOpen={showProfile && isAuthenticated}
+        onClose={() => setShowProfile(false)}
       />
     </div>
   );

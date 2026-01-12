@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
-import { cryptogramQuotes } from '../../data/quotes';
+import { cryptogramQuotes } from '@datasets/quotes';
 import styles from './Cryptogram.module.css';
 
 // Create a random letter substitution cipher

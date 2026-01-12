@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import styles from './Trivia.module.css';
 
 // Import trivia data files
-import generalTrivia from '../../data/trivia_datasets/opentriviaqa.txt?raw';
-import animalsTrivia from '../../data/trivia_datasets/opentriviaqa_animals.txt?raw';
-import entertainmentTrivia from '../../data/trivia_datasets/opentriviaqa_entertainment.txt?raw';
-import geographyTrivia from '../../data/trivia_datasets/opentriviaqa_geography.txt?raw';
-import historyTrivia from '../../data/trivia_datasets/opentriviaqa_history.txt?raw';
-import literatureTrivia from '../../data/trivia_datasets/opentriviaqa_literature.txt?raw';
-import musicTrivia from '../../data/trivia_datasets/opentriviaqa_music.txt?raw';
-import sportsTrivia from '../../data/trivia_datasets/opentriviaqa_sports.txt?raw';
+import generalTrivia from '@datasets/trivia_datasets/opentriviaqa.txt?raw';
+import animalsTrivia from '@datasets/trivia_datasets/opentriviaqa_animals.txt?raw';
+import entertainmentTrivia from '@datasets/trivia_datasets/opentriviaqa_entertainment.txt?raw';
+import geographyTrivia from '@datasets/trivia_datasets/opentriviaqa_geography.txt?raw';
+import historyTrivia from '@datasets/trivia_datasets/opentriviaqa_history.txt?raw';
+import literatureTrivia from '@datasets/trivia_datasets/opentriviaqa_literature.txt?raw';
+import musicTrivia from '@datasets/trivia_datasets/opentriviaqa_music.txt?raw';
+import sportsTrivia from '@datasets/trivia_datasets/opentriviaqa_sports.txt?raw';
 
 const TOTAL_ROUNDS = 15;
 

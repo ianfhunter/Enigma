@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getRandomCountry, getDailyCountry, getTodayString } from '../../data/countries';
-import { getCapital, getRandomCapitalOptions } from '../../data/capitals';
+import { getRandomCountry, getDailyCountry, getTodayString } from '@datasets/countries';
+import { getCapital, getRandomCapitalOptions } from '@datasets/capitals';
 import styles from './CapitalGuesser.module.css';
 
 const TOTAL_ROUNDS = 10;

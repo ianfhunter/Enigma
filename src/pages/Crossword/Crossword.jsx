@@ -14,7 +14,7 @@ import {
 import styles from './Crossword.module.css';
 
 // Import clues data
-import cluesRaw from '../../data/nyt_clues.txt?raw';
+import cluesRaw from '@datasets/nyt_clues.txt?raw';
 
 // Parse clues on module load
 const CLUES_DATA = parseCluesData(cluesRaw);

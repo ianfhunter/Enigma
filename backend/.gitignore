@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Data directory (contains SQLite database)
+data/
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log

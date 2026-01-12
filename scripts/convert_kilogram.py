@@ -15,7 +15,7 @@ import math
 # Paths
 SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR.parent
-KILOGRAM_DIR = PROJECT_ROOT / "kilogram_dataset" / "dataset"
+KILOGRAM_DIR = PROJECT_ROOT / "datasets" / "kilogram_dataset" / "dataset"
 SVG_DIR = KILOGRAM_DIR / "tangrams-svg"
 OUTPUT_FILE = PROJECT_ROOT / "src" / "data" / "kilogramPuzzles.js"
 

@@ -575,17 +575,17 @@
   75% { transform: rotate(10deg); }
 }
 
-/* Settings button in header */
-.settingsButton {
+/* Profile button in header */
+.profileButton {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 1rem;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.4rem;
+  font-size: 0.9rem;
   color: rgba(196, 181, 253, 0.9);
   background: rgba(30, 0, 60, 0.5);
   border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 12px;
+  border-radius: 24px;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow:
@@ -593,7 +593,7 @@
     inset 0 1px 0 rgba(139, 92, 246, 0.1);
 }
 
-.settingsButton:hover {
+.profileButton:hover {
   background: rgba(139, 92, 246, 0.2);
   border-color: rgba(167, 139, 250, 0.5);
   transform: translateY(-1px);
@@ -602,21 +602,75 @@
     inset 0 1px 0 rgba(139, 92, 246, 0.2);
 }
 
-.settingsButton:active {
+.profileButton:active {
   transform: translateY(0);
 }
 
-.settingsIcon {
-  font-size: 1.1rem;
-  transition: transform 0.3s ease;
+.profileAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
 }
 
-.settingsButton:hover .settingsIcon {
-  transform: rotate(45deg);
+.profileName {
+  font-weight: 600;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .profileName {
+    display: none;
+  }
 }
 
 .languageIndicator {
   font-size: 0.9rem;
+}
+
+/* Loading state */
+.loadingContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.loadingLogo {
+  width: 80px;
+  height: auto;
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
+  animation: loadingPulse 2s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.8));
+  }
+}
+
+.loadingText {
+  color: rgba(196, 181, 253, 0.7);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 /* Game page header layout */

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
-import { phraseGuessQuotes } from '../../data/quotes';
+import { phraseGuessQuotes } from '@datasets/quotes';
 import styles from './PhraseGuess.module.css';
 
 const VOWELS = new Set(['A', 'E', 'I', 'O', 'U']);

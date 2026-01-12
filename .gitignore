@@ -37,3 +37,10 @@ coverage/
 # Misc
 .cache/
 .temp/
+
+# Backend data
+backend/data/
+*.db
+
+# Docker
+docker-compose.yml

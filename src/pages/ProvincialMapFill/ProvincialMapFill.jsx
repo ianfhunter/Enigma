@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { REGION_CONFIGS, buildLookup, getRegionCode } from '../../data/provincialMapData';
+import { REGION_CONFIGS, buildLookup, getRegionCode } from '@datasets/provincialMapData';
 import styles from './ProvincialMapFill.module.css';
 
 const REGION_OPTIONS = Object.values(REGION_CONFIGS);

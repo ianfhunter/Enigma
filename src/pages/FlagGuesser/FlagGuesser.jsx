@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getRandomCountry, getRandomOptions, getDailyCountry, getTodayString } from '../../data/countries';
+import { getRandomCountry, getRandomOptions, getDailyCountry, getTodayString } from '@datasets/countries';
 import styles from './FlagGuesser.module.css';
 
 const TOTAL_ROUNDS = 10;

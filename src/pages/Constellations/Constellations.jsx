@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './Constellations.module.css';
 
 // Import constellation data
-import constellationData from '../../data/trivia_datasets/constellations_iau.json';
+import constellationData from '@datasets/trivia_datasets/constellations_iau.json';
 
 const TOTAL_ROUNDS = 12;
 

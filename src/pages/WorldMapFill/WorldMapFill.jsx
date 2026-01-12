@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { countries } from '../../data/countries';
+import { countries } from '@datasets/countries';
 import styles from './WorldMapFill.module.css';
 
 // World map SVG paths - using simplified world map data

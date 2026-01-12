@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
-import { cryptogramQuotes } from '../../data/quotes';
+import { cryptogramQuotes } from '@datasets/quotes';
 import styles from './Fliptogram.module.css';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -133,7 +133,7 @@ export default function Fliptogram() {
 
     // Reveal one random wrong position
     const randomPos = wrongPositions[Math.floor(Math.random() * wrongPositions.length)];
-    
+
     setFlipping(prev => ({ ...prev, [randomPos.idx]: true }));
     setFlipDirection(prev => ({ ...prev, [randomPos.idx]: 'up' }));
 
@@ -214,7 +214,7 @@ export default function Fliptogram() {
                   >
                     ▲
                   </button>
-                  <div 
+                  <div
                     className={`${styles.tile} ${isFlipping ? styles.flipping : ''} ${direction === 'down' ? styles.flipDown : ''}`}
                     onClick={() => handleFlip(idx, 'up')}
                   >

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Stage, Layer, Line, Path, Transformer } from 'react-konva';
 import styles from './Tangram.module.css';
-import { KILOGRAM_PUZZLES } from '../../data/kilogramPuzzles';
+import { KILOGRAM_PUZZLES } from '@datasets/kilogramPuzzles';
 
 // Canonical tangram pieces with mathematically correct proportions
 // Based on a tangram cut from a square where small triangle leg = 50 pixels

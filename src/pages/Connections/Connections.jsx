@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
-import { wordCategories } from '../../data/wordCategories';
+import { wordCategories } from '@datasets/wordCategories';
 import styles from './Connections.module.css';
 
 const GRID_SIZE = 4;
@@ -19,30 +19,30 @@ const DIFFICULTY_COLORS = {
 // Generate a puzzle from word categories
 function generatePuzzle(seed) {
   const random = createSeededRandom(seed);
-  
+
   // Get category keys and shuffle them
   const categoryKeys = Object.keys(wordCategories);
   const shuffledKeys = seededShuffleArray(categoryKeys, random);
-  
+
   // We need 4 categories with non-overlapping words
   const selectedCategories = [];
   const usedWords = new Set();
-  
+
   for (const key of shuffledKeys) {
     if (selectedCategories.length >= 4) break;
-    
+
     const category = wordCategories[key];
     // Filter words: 3-10 chars, not already used
     const availableWords = category.words.filter(
       w => w.length >= 3 && w.length <= 10 && !usedWords.has(w)
     );
-    
+
     if (availableWords.length >= WORDS_PER_CATEGORY) {
       const shuffledWords = seededShuffleArray(availableWords, random);
       const selectedWords = shuffledWords.slice(0, WORDS_PER_CATEGORY);
-      
+
       selectedWords.forEach(w => usedWords.add(w));
-      
+
       selectedCategories.push({
         id: key,
         name: category.name,
@@ -51,19 +51,19 @@ function generatePuzzle(seed) {
       });
     }
   }
-  
+
   // Sort by difficulty and reassign difficulty levels 1-4
   selectedCategories.sort((a, b) => a.difficulty - b.difficulty);
   selectedCategories.forEach((cat, idx) => {
     cat.difficulty = idx + 1;
   });
-  
+
   // Create the word grid (all 16 words shuffled)
-  const allWords = selectedCategories.flatMap(cat => 
+  const allWords = selectedCategories.flatMap(cat =>
     cat.words.map(word => ({ word, categoryId: cat.id }))
   );
   const shuffledWords = seededShuffleArray(allWords, random);
-  
+
   return {
     categories: selectedCategories,
     words: shuffledWords,
@@ -85,7 +85,7 @@ export default function Connections() {
     const today = getTodayDateString();
     const seed = customSeed || stringToSeed(`connections-${today}`);
     const newPuzzle = generatePuzzle(seed);
-    
+
     setPuzzle(newPuzzle);
     setSelectedWords([]);
     setSolvedCategories([]);
@@ -104,7 +104,7 @@ export default function Connections() {
   // Check for win/lose conditions
   useEffect(() => {
     if (!puzzle) return;
-    
+
     if (solvedCategories.length === 4) {
       setGameState('won');
       setMessage('Perfect! You found all connections!');
@@ -135,7 +135,7 @@ export default function Connections() {
   const handleWordClick = (word) => {
     if (gameState !== 'playing') return;
     if (!remainingWords.includes(word)) return;
-    
+
     if (selectedWords.includes(word)) {
       setSelectedWords(selectedWords.filter(w => w !== word));
     } else if (selectedWords.length < WORDS_PER_CATEGORY) {
@@ -146,15 +146,15 @@ export default function Connections() {
   const handleSubmit = () => {
     if (selectedWords.length !== WORDS_PER_CATEGORY) return;
     if (gameState !== 'playing') return;
-    
+
     // Check if all selected words belong to the same category
     const wordCategories = selectedWords.map(word => {
       const wordData = puzzle.words.find(w => w.word === word);
       return wordData?.categoryId;
     });
-    
+
     const allSameCategory = wordCategories.every(cat => cat === wordCategories[0]);
-    
+
     if (allSameCategory) {
       // Correct! Find the category and mark it as solved
       const category = puzzle.categories.find(cat => cat.id === wordCategories[0]);
@@ -169,17 +169,17 @@ export default function Connections() {
         categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
       });
       const maxCount = Math.max(...Object.values(categoryCounts));
-      
+
       if (maxCount === 3) {
         showTemporaryMessage('One away...', 'close', 1500);
       } else {
         showTemporaryMessage('Not quite right', 'wrong', 1500);
       }
-      
+
       // Shake animation for wrong answer
       setShakingWords([...selectedWords]);
       setTimeout(() => setShakingWords([]), 500);
-      
+
       setMistakes(mistakes + 1);
       setSelectedWords([]);
     }
@@ -187,7 +187,7 @@ export default function Connections() {
 
   const handleShuffle = () => {
     if (gameState !== 'playing') return;
-    
+
     const seed = Date.now();
     const random = createSeededRandom(seed);
     setRemainingWords(seededShuffleArray(remainingWords, random));
@@ -247,8 +247,8 @@ export default function Connections() {
             {remainingWords.map((word) => (
               <button
                 key={word}
-                className={`${styles.wordTile} 
-                  ${selectedWords.includes(word) ? styles.selected : ''} 
+                className={`${styles.wordTile}
+                  ${selectedWords.includes(word) ? styles.selected : ''}
                   ${shakingWords.includes(word) ? styles.shaking : ''}
                   ${gameState !== 'playing' ? styles.disabled : ''}
                 `}
@@ -285,21 +285,21 @@ export default function Connections() {
         <div className={styles.controls}>
           {gameState === 'playing' ? (
             <>
-              <button 
-                className={styles.controlBtn} 
+              <button
+                className={styles.controlBtn}
                 onClick={handleShuffle}
               >
                 Shuffle
               </button>
-              <button 
-                className={styles.controlBtn} 
+              <button
+                className={styles.controlBtn}
                 onClick={handleDeselectAll}
                 disabled={selectedWords.length === 0}
               >
                 Deselect All
               </button>
-              <button 
-                className={`${styles.controlBtn} ${styles.submitBtn}`} 
+              <button
+                className={`${styles.controlBtn} ${styles.submitBtn}`}
                 onClick={handleSubmit}
                 disabled={selectedWords.length !== WORDS_PER_CATEGORY}
               >
@@ -307,8 +307,8 @@ export default function Connections() {
               </button>
             </>
           ) : (
-            <button 
-              className={`${styles.controlBtn} ${styles.newGameBtn}`} 
+            <button
+              className={`${styles.controlBtn} ${styles.newGameBtn}`}
               onClick={handleNewGame}
             >
               New Game

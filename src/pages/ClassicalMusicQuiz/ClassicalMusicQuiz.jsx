@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './ClassicalMusicQuiz.module.css';
 
 // Import the classical music dataset
-import composersData from '../../data/trivia_datasets/classical_composers.json';
+import composersData from '@datasets/trivia_datasets/classical_composers.json';
 
 const TOTAL_ROUNDS = 10;
 
@@ -40,7 +40,7 @@ export default function ClassicalMusicQuiz() {
   const [audioError, setAudioError] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const audioRef = useRef(null);
-  
+
   const [stats, setStats] = useState(() => {
     const saved = localStorage.getItem('classical-music-quiz-stats');
     return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 };
@@ -66,7 +66,7 @@ export default function ClassicalMusicQuiz() {
       audioRef.current.pause();
       audioRef.current = null;
     }
-    
+
     const piece = getRandomPiece(usedPieces);
     if (!piece) {
       setGameOver(true);
@@ -111,7 +111,7 @@ export default function ClassicalMusicQuiz() {
 
   const togglePlayPause = () => {
     if (!audioRef.current || audioError) return;
-    
+
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
@@ -328,14 +328,14 @@ export default function ClassicalMusicQuiz() {
               </div>
             ) : (
               <div className={styles.audioControls}>
-                <button 
+                <button
                   className={styles.playBtn}
                   onClick={togglePlayPause}
                   disabled={!audioLoaded}
                 >
                   {isPlaying ? '⏸️ Pause' : '▶️ Play'}
                 </button>
-                <button 
+                <button
                   className={styles.restartBtn}
                   onClick={restartAudio}
                   disabled={!audioLoaded}

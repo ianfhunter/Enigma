@@ -1,5 +1,5 @@
 // Load words from the word dictionary
-import wordListRaw from './word_list.txt?raw';
+import wordListRaw from '@datasets/word_list.txt?raw';
 import { getDeprioritizationScore } from './wordFeedback';
 import { isCommonWord, filterToCommonWords, getZipfScore } from './wordFrequency';
 

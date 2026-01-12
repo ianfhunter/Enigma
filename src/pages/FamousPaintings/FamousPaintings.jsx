@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './FamousPaintings.module.css';
 
 // Import paintings data (with attribution info)
-import paintingsData from '../../data/trivia_datasets/famous_paintings_local.json';
+import paintingsData from '@datasets/trivia_datasets/famous_paintings_local.json';
 
 // Import all local painting images using Vite's glob import
 const localImages = import.meta.glob('/src/assets/paintings/*.{jpg,jpeg,png}', { eager: true, as: 'url' });
