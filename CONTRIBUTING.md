@@ -32,7 +32,7 @@ We welcome feature suggestions! Please:
 
 One of the best ways to contribute is by adding new puzzle games! Here's how:
 
-1. **Choose a game** that fits Enigma's style (word puzzles, number puzzles, logic games, etc.)
+1. **Choose a game** that fits Enigma's style (word puzzles, number puzzles, logic games, etc.). Please note that this project prefers puzzles that can be generated rather than curated, and that we use in-project data rather than relying on APIs. This is to protect the longevity of the project.
 
 2. **Create the game files** in `src/pages/YourGameName/`:
    - `YourGameName.jsx` - Main game component
@@ -53,7 +53,7 @@ One of the best ways to contribute is by adding new puzzle games! Here's how:
 
 4. **Add the route** in `src/App.jsx`
 
-5. **Test thoroughly** - Make sure the game works on different screen sizes and browsers
+5. **Test thoroughly** - Make sure the game works on different screen sizes and browsers. Make sure your game always produces solvable problems and where applicable, unique solutions.
 
 6. **Follow the code style** - Use ESLint, follow React best practices, use CSS Modules
 
@@ -187,4 +187,5 @@ We welcome contributions that are created or assisted by AI tools (such as ChatG
 By contributing, you agree that your contributions will be licensed under the same license as the project (see [LICENSE](LICENSE) file).
 
 Thank you for contributing to Enigma! 🎮
+
 
