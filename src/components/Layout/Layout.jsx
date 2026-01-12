@@ -1,13 +1,13 @@
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useFavicon } from '../../hooks/useFavicon';
-import { enabledGames, allGames } from '../../data/gameRegistry';
+import { enabledGames, allGames, getGameIcon } from '../../data/gameRegistry';
 import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
 import { setEnglishVariant } from '../../data/wordFrequency';
 import AuthModal from '../AuthModal';
 import logo from '../../branding/logo.svg';
 import styles from './Layout.module.css';
-import { useEffect } from 'react';
 
 export default function Layout() {
   useFavicon();
@@ -16,6 +16,9 @@ export default function Layout() {
   const isHome = location.pathname === '/';
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { settings, loading: settingsLoading } = useSettings();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchWrapperRef = useRef(null);
 
   // Update English variant when settings change
   useEffect(() => {
@@ -41,6 +44,42 @@ export default function Layout() {
     }
   };
 
+  // Search results for dropdown
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return { matches: [], total: 0 };
+    const query = searchQuery.toLowerCase().trim();
+    const availableGames = showDevItems
+      ? allGames
+      : allGames.filter(game => game.version !== 'DEV');
+
+    const matches = availableGames.filter(game =>
+      game.title.toLowerCase().includes(query) ||
+      game.description.toLowerCase().includes(query)
+    );
+
+    return {
+      matches: matches.slice(0, 5),
+      total: matches.length
+    };
+  }, [searchQuery, showDevItems]);
+
+  const handleGameClick = (slug) => {
+    setSearchQuery('');
+    setIsSearchFocused(false);
+    navigate(`/${slug}`);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(event.target)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // Show loading state
   if (authLoading || (isAuthenticated && settingsLoading)) {
     return (
@@ -64,6 +103,60 @@ export default function Layout() {
                   <img src={logo} alt="Enigma" className={styles.logoIcon} />
                   <span className={styles.logoText} data-text="Enigma">Enigma</span>
                 </Link>
+              </div>
+
+              <div className={styles.searchWrapper} ref={searchWrapperRef}>
+                <span className={styles.searchIcon}>🔍</span>
+                <input
+                  type="text"
+                  className={styles.searchInput}
+                  placeholder="Search games..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  aria-label="Search games"
+                />
+                {searchQuery && (
+                  <button
+                    className={styles.clearButton}
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
+
+                {/* Search Dropdown */}
+                {isSearchFocused && searchQuery.trim() && (
+                  <div className={styles.searchDropdown}>
+                    {searchResults.matches.length > 0 ? (
+                      <>
+                        {searchResults.matches.map((game) => (
+                          <button
+                            key={game.slug}
+                            className={styles.searchResultItem}
+                            onClick={() => handleGameClick(game.slug)}
+                          >
+                            <span className={styles.searchResultIcon}>{getGameIcon(game.slug)}</span>
+                            <div className={styles.searchResultText}>
+                              <span className={styles.searchResultTitle}>{game.title}</span>
+                              <span className={styles.searchResultDesc}>{game.description}</span>
+                            </div>
+                          </button>
+                        ))}
+                        {searchResults.total > 5 && (
+                          <div className={styles.searchResultsMore}>
+                            +{searchResults.total - 5} more...
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className={styles.searchNoResults}>
+                        No games found
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className={styles.headerControls}>
@@ -112,7 +205,7 @@ export default function Layout() {
         </nav>
       </header>
       <main className={styles.main}>
-        <Outlet context={{ settings, showDevItems }} />
+        <Outlet context={{ settings, showDevItems, searchQuery }} />
       </main>
       <footer className={styles.footer}>
         <p>Self-hosted games collection</p>

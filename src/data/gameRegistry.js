@@ -88,7 +88,7 @@ export const categories = [
         title: 'Pyramid',
         slug: 'pyramid',
         description: 'Build words in a pyramid shape, adding one letter per row from clues.',
-        icon: '🔺',
+        icon: '🐪',
         colors: { primary: '#c084fc', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #c084fc 0%, #a855f7 100%)',
         version: 'v0.1',
