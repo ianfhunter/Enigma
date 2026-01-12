@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
@@ -16,6 +17,7 @@ import './index.css';
 const slugToFolder = {
   'abc-end-view': 'ABCEndView',
   'anagrams': 'Anagrams',
+  'anatomy-quiz': 'AnatomyQuiz',
   'aquarium': 'Aquarium',
   'bag': 'Bag',
   'blackbox': 'Blackbox',
@@ -110,6 +112,7 @@ const slugToFolder = {
   'skyscraper': 'Skyscraper',
   'slant': 'Slant',
   'sliding-puzzle': 'SlidingPuzzle',
+  'congestion': 'Congestion',
   'sokoban': 'Sokoban',
   'stained-glass': 'StainedGlass',
   'star-battle': 'StarBattle',
@@ -157,6 +160,9 @@ const slugToFolder = {
  */
 const routeAliases = {
   'solo': 'sudoku',
+  'unblock-me': 'congestion',
+  'traffic-jam': 'congestion',
+  'rush-hour': 'congestion',
   'mines': 'minesweeper',
   'keen': 'calcudoku',
   'flip': 'lights-out',
@@ -426,6 +432,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="profile" element={<Profile />} />
               {generateGameRoutes()}
               <Route path="*" element={<NotFound />} />
             </Route>

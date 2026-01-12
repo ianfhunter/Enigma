@@ -14,6 +14,9 @@ const WORD_SET = new Set(
 // Cache of 9-letter words for puzzle generation
 const NINE_LETTER_WORDS = Array.from(WORD_SET).filter(word => word.length === 9);
 
+// Cache of 7-letter words for Spelling Bee mode
+const SEVEN_LETTER_WORDS = Array.from(WORD_SET).filter(word => word.length === 7);
+
 // Pre-filter common words by length for target selection
 // These are words that appear frequently enough in spoken English to be recognizable
 const COMMON_WORDS_BY_LENGTH = {};
@@ -233,15 +236,16 @@ export function findAllWords(letters, centerLetter) {
  * Generate a valid puzzle with at least minWords possible words
  * Prioritizes common words (by frequency) and unflagged words
  * @param {number} minWords - Minimum number of possible words required (default 10)
- * @param {number} maxAttempts - Maximum number of 9-letter words to try (default 100)
- * @returns {{ letters: string[], center: string, nineLetterWord: string } | null}
+ * @param {number} maxAttempts - Maximum number of words to try (default 100)
+ * @param {number} letterCount - Number of letters in puzzle (7 or 9, default 9)
+ * @returns {{ letters: string[], center: string, pangram: string, letterCount: number } | null}
  */
-export function generatePuzzle(minWords = 10, maxAttempts = 100) {
-  // Prefer common 9-letter words for better puzzles
-  const common9LetterWords = COMMON_WORDS_BY_LENGTH[9] || [];
+export function generatePuzzle(minWords = 10, maxAttempts = 100, letterCount = 9) {
+  // Choose word pool based on letter count
+  const wordPool = letterCount === 7 ? SEVEN_LETTER_WORDS : NINE_LETTER_WORDS;
 
   // Score words: higher frequency + not flagged = better
-  const scoredWords = NINE_LETTER_WORDS.map(word => ({
+  const scoredWords = wordPool.map(word => ({
     word,
     score: (isCommonWord(word) ? 1000 : 0) + getZipfScore(word) * 100 - getDeprioritizationScore(word) * 50
   }));
@@ -273,7 +277,8 @@ export function generatePuzzle(minWords = 10, maxAttempts = 100) {
         return {
           letters,
           center: centerLetter,
-          nineLetterWord: word
+          pangram: word,
+          letterCount
         };
       }
     }

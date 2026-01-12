@@ -12,10 +12,21 @@ function isFirstUser() {
   return result.count === 0;
 }
 
+// Log login attempt
+function logLogin(userId, req, success = true) {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || 'unknown';
+  const userAgent = req.headers['user-agent'] || 'unknown';
+
+  db.prepare(`
+    INSERT INTO login_history (user_id, ip_address, user_agent, success)
+    VALUES (?, ?, ?, ?)
+  `).run(userId, ip, userAgent, success ? 1 : 0);
+}
+
 // Register new user
 router.post('/register', async (req, res) => {
   try {
-    const { username, password, displayName } = req.body;
+    const { username, password, displayName, email } = req.body;
 
     // Validation
     if (!username || !password) {
@@ -34,6 +45,10 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
     // Check if username exists
     const existing = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
     if (existing) {
@@ -48,9 +63,9 @@ router.post('/register', async (req, res) => {
 
     // Create user
     const result = db.prepare(`
-      INSERT INTO users (username, password_hash, display_name, role)
-      VALUES (?, ?, ?, ?)
-    `).run(username, passwordHash, displayName || username, role);
+      INSERT INTO users (username, password_hash, display_name, email, role)
+      VALUES (?, ?, ?, ?, ?)
+    `).run(username, passwordHash, displayName || username, email || null, role);
 
     const userId = result.lastInsertRowid;
 
@@ -64,10 +79,14 @@ router.post('/register', async (req, res) => {
     req.session.userId = userId;
     req.session.role = role;
 
+    // Log successful registration as a login
+    logLogin(userId, req, true);
+
     res.status(201).json({
       id: userId,
       username,
       displayName: displayName || username,
+      email: email || null,
       role
     });
   } catch (error) {
@@ -87,7 +106,7 @@ router.post('/login', async (req, res) => {
 
     // Find user
     const user = db.prepare(`
-      SELECT id, username, password_hash, display_name, role, created_at
+      SELECT id, username, password_hash, display_name, email, role, created_at
       FROM users WHERE username = ?
     `).get(username);
 
@@ -98,6 +117,8 @@ router.post('/login', async (req, res) => {
     // Verify password
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) {
+      // Log failed login attempt
+      logLogin(user.id, req, false);
       return res.status(401).json({ error: 'Invalid username or password' });
     }
 
@@ -105,10 +126,14 @@ router.post('/login', async (req, res) => {
     req.session.userId = user.id;
     req.session.role = user.role;
 
+    // Log successful login
+    logLogin(user.id, req, true);
+
     res.json({
       id: user.id,
       username: user.username,
       displayName: user.display_name,
+      email: user.email,
       role: user.role,
       createdAt: user.created_at
     });
@@ -133,7 +158,7 @@ router.post('/logout', requireAuth, (req, res) => {
 // Get current user
 router.get('/me', requireAuth, (req, res) => {
   const user = db.prepare(`
-    SELECT id, username, display_name, role, created_at
+    SELECT id, username, display_name, email, role, created_at
     FROM users WHERE id = ?
   `).get(req.session.userId);
 
@@ -146,6 +171,7 @@ router.get('/me', requireAuth, (req, res) => {
     id: user.id,
     username: user.username,
     displayName: user.display_name,
+    email: user.email,
     role: user.role,
     createdAt: user.created_at
   });

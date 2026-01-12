@@ -10,7 +10,7 @@
 
 .backLink {
   display: inline-block;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -21,13 +21,13 @@
 }
 
 .backLink:hover {
-  color: #8b5cf6;
+  color: var(--color-primary);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -35,7 +35,7 @@
 }
 
 .instructions {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
 }
 
@@ -49,7 +49,7 @@
 .sectionTitle {
   font-size: 1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -72,21 +72,21 @@
   align-items: center;
   gap: 0.25rem;
   padding: 1rem 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 2px solid var(--game-panel-border);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .categoryCard:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--cat-color, #8b5cf6);
+  background: var(--game-key-bg);
+  border-color: var(--cat-color, var(--color-primary));
 }
 
 .categoryCard.selected {
-  background: rgba(124, 58, 237, 0.15);
-  border-color: var(--cat-color, #8b5cf6);
+  background: var(--color-primary-bg);
+  border-color: var(--cat-color, var(--color-primary));
   box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
 }
 
@@ -97,13 +97,13 @@
 .categoryName {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text);
   text-align: center;
 }
 
 .categoryCount {
   font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-muted);
 }
 
 /* Mode Section */
@@ -123,16 +123,16 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .modeCard:hover {
-  background: rgba(124, 58, 237, 0.15);
-  border-color: rgba(139, 92, 246, 0.4);
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary-border);
   transform: translateY(-2px);
 }
 
@@ -143,12 +143,12 @@
 .modeTitle {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .modeDesc {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
 }
 
 /* Game Info */
@@ -163,18 +163,18 @@
 
 .categoryBadge {
   padding: 0.25rem 0.75rem;
-  background: rgba(124, 58, 237, 0.2);
-  border: 1px solid var(--cat-color, rgba(139, 92, 246, 0.3));
+  background: var(--color-primary-bg);
+  border: 1px solid var(--cat-color, var(--color-primary-border));
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--cat-color, #8b5cf6);
+  color: var(--cat-color, var(--color-primary));
 }
 
 .roundInfo,
 .scoreInfo {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
 }
 
 .streakBadge {
@@ -202,15 +202,15 @@
 
 .questionCard {
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 20px;
 }
 
 .questionText {
   font-size: 1.25rem;
   line-height: 1.6;
-  color: #fff;
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -226,8 +226,8 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 2px solid var(--game-panel-border);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -235,8 +235,8 @@
 }
 
 .optionBtn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(139, 92, 246, 0.4);
+  background: var(--game-key-bg);
+  border-color: var(--color-primary-border);
   transform: translateX(4px);
 }
 
@@ -245,8 +245,8 @@
 }
 
 .optionBtn.correct {
-  background: rgba(76, 175, 80, 0.2);
-  border-color: #4caf50;
+  background: var(--game-accent-green-bg);
+  border-color: var(--game-accent-green);
   animation: correctPop 0.3s ease;
 }
 
@@ -257,8 +257,8 @@
 }
 
 .optionBtn.wrong {
-  background: rgba(244, 67, 54, 0.2);
-  border-color: #f44336;
+  background: var(--game-accent-red-bg);
+  border-color: var(--game-accent-red);
   animation: wrongShake 0.3s ease;
 }
 
@@ -274,18 +274,18 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--game-key-bg);
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   flex-shrink: 0;
 }
 
 .optionText {
   font-size: 1rem;
   font-weight: 500;
-  color: #fff;
+  color: var(--color-text);
 }
 
 /* Result Area */
@@ -299,19 +299,19 @@
 .correctMsg {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #4caf50;
+  color: var(--game-accent-green);
 }
 
 .wrongMsg {
   font-size: 1rem;
   font-weight: 600;
-  color: #f44336;
+  color: var(--game-accent-red);
   text-align: center;
 }
 
 .nextBtn {
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -333,8 +333,8 @@
   align-items: center;
   gap: 1.5rem;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 20px;
 }
 
@@ -347,7 +347,7 @@
 .scoreNumber {
   font-size: 5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -357,13 +357,13 @@
 .scoreTotal {
   font-size: 2rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
 }
 
 .resultMessage {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .perfect {
@@ -382,7 +382,7 @@
 
 .playAgainBtn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -399,10 +399,10 @@
 
 .menuBtn {
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--game-key-bg);
+  border: 1px solid var(--game-key-border);
   border-radius: 10px;
-  color: #fff;
+  color: var(--color-text);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -410,7 +410,7 @@
 }
 
 .menuBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--game-key-hover-bg);
 }
 
 /* Stats Panel */
@@ -419,8 +419,8 @@
   gap: 2rem;
   justify-content: center;
   padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
   flex-wrap: wrap;
 }
@@ -433,7 +433,7 @@
   display: block;
   font-size: 1.5rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .statLabel {
@@ -441,20 +441,20 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   margin-top: 0.25rem;
 }
 
 .dataInfo {
   text-align: center;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-muted);
 }
 
 .loading {
   text-align: center;
   padding: 4rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
 }
 
 /* Responsive */

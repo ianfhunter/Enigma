@@ -5,8 +5,8 @@
 
 .card {
   position: relative;
-  background: linear-gradient(145deg, rgba(30, 0, 60, 0.4) 0%, rgba(10, 8, 32, 0.3) 100%);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 1.25rem;
   text-align: center;
@@ -14,7 +14,12 @@
   cursor: pointer;
   overflow: hidden;
   backdrop-filter: blur(10px);
-  box-shadow: 
+  box-shadow: var(--shadow-card);
+}
+
+:global([data-theme="dark"]) .card {
+  background: linear-gradient(145deg, rgba(30, 0, 60, 0.4) 0%, rgba(10, 8, 32, 0.3) 100%);
+  box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(139, 92, 246, 0.1);
 }
@@ -42,13 +47,24 @@
 
 .card:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: rgba(139, 92, 246, 0.6);
+  border-color: var(--color-primary-border-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+:global([data-theme="dark"]) .card:hover {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.5),
     0 0 60px rgba(139, 92, 246, 0.3),
     0 0 100px rgba(124, 58, 237, 0.2),
     inset 0 1px 0 rgba(167, 139, 250, 0.3);
   background: linear-gradient(145deg, rgba(30, 0, 60, 0.6) 0%, rgba(20, 8, 40, 0.5) 100%);
+}
+
+:global([data-theme="light"]) .card:hover {
+  box-shadow:
+    0 12px 32px rgba(139, 92, 246, 0.2),
+    0 0 40px rgba(139, 92, 246, 0.1);
+  background: #ffffff;
 }
 
 .card.disabled {
@@ -59,8 +75,8 @@
 
 .card.disabled:hover {
   transform: none;
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: none;
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .card.disabled::before {
@@ -76,26 +92,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-card);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--color-border);
+}
+
+:global([data-theme="dark"]) .iconWrapper {
   box-shadow:
     0 6px 20px rgba(0, 0, 0, 0.4),
     0 0 30px rgba(139, 92, 246, 0.3),
     inset 0 1px 0 rgba(196, 181, 253, 0.3);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .card:hover .iconWrapper {
   transform: scale(1.1) rotate(-3deg);
+  border-color: var(--color-primary-border-hover);
+}
+
+:global([data-theme="dark"]) .card:hover .iconWrapper {
   box-shadow:
     0 8px 30px rgba(0, 0, 0, 0.5),
     0 0 50px rgba(167, 139, 250, 0.5),
     inset 0 1px 0 rgba(196, 181, 253, 0.5);
-  border-color: rgba(167, 139, 250, 0.5);
 }
 
 .card.disabled .iconWrapper {
   background: linear-gradient(145deg, rgba(88, 28, 135, 0.3), rgba(59, 7, 100, 0.2));
-  border-color: rgba(139, 92, 246, 0.1);
+  border-color: var(--color-border-light);
 }
 
 .icon {
@@ -106,15 +129,20 @@
 .title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #e9d5ff;
+  color: var(--color-text);
   margin-bottom: 0.35rem;
   letter-spacing: 0.03em;
+  transition: color 0.3s ease;
+}
+
+:global([data-theme="dark"]) .title {
+  color: #e9d5ff;
   text-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
 .description {
   font-size: 0.8rem;
-  color: rgba(196, 181, 253, 0.7);
+  color: var(--color-text-secondary);
   line-height: 1.4;
   margin-bottom: 0.75rem;
   font-style: italic;
@@ -123,12 +151,12 @@
 .badge {
   display: inline-block;
   padding: 0.3rem 0.75rem;
-  background: rgba(30, 0, 60, 0.5);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
   border-radius: 100px;
   font-size: 0.65rem;
   font-weight: 600;
-  color: rgba(196, 181, 253, 0.6);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -143,19 +171,26 @@
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(139, 92, 246, 0.3);
+  box-shadow: var(--shadow-card);
   transition: all 0.3s ease;
   border: 1px solid rgba(167, 139, 250, 0.3);
 }
 
+:global([data-theme="dark"]) .playBadge {
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.3);
+}
+
 .card:hover .playBadge {
-  box-shadow: 
+  transform: scale(1.05);
+  border-color: var(--color-primary-border-hover);
+}
+
+:global([data-theme="dark"]) .card:hover .playBadge {
+  box-shadow:
     0 6px 25px rgba(0, 0, 0, 0.4),
     0 0 40px rgba(167, 139, 250, 0.5);
-  transform: scale(1.05);
-  border-color: rgba(196, 181, 253, 0.6);
 }
 
 .card.tagged {
@@ -182,12 +217,12 @@
   top: 8px;
   left: 8px;
   padding: 0.15rem 0.4rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.55rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   letter-spacing: 0.02em;
   z-index: 1;
 }
@@ -195,6 +230,18 @@
 /* Under Construction / DEV styles */
 .card.dev {
   border: 2px dashed rgba(251, 191, 36, 0.6);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 10px,
+      rgba(251, 191, 36, 0.03) 10px,
+      rgba(251, 191, 36, 0.03) 20px
+    ),
+    var(--color-bg-card);
+}
+
+:global([data-theme="dark"]) .card.dev {
   background:
     repeating-linear-gradient(
       -45deg,
@@ -226,9 +273,18 @@
 
 .card.dev:hover {
   border-color: rgba(251, 191, 36, 0.8);
+}
+
+:global([data-theme="dark"]) .card.dev:hover {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.3),
     0 0 30px rgba(251, 191, 36, 0.15);
+}
+
+:global([data-theme="light"]) .card.dev:hover {
+  box-shadow:
+    0 12px 32px rgba(251, 191, 36, 0.15),
+    0 0 20px rgba(251, 191, 36, 0.1);
 }
 
 .card.dev .iconWrapper {

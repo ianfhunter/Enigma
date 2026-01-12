@@ -10,7 +10,7 @@
 
 .backLink {
   display: inline-block;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -18,13 +18,13 @@
 }
 
 .backLink:hover {
-  color: #e74c3c;
+  color: var(--game-accent-red);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  background: linear-gradient(135deg, var(--game-accent-red) 0%, var(--game-accent-red-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -32,7 +32,7 @@
 }
 
 .instructions {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
 }
 
@@ -53,14 +53,14 @@
 }
 
 .gallows {
-  stroke: rgba(255, 255, 255, 0.4);
+  stroke: var(--game-gallows);
   stroke-width: 4;
   stroke-linecap: round;
   fill: none;
 }
 
 .bodyPart {
-  stroke: #e74c3c;
+  stroke: var(--game-accent-red);
   stroke-width: 4;
   stroke-linecap: round;
   fill: none;
@@ -83,7 +83,7 @@
 .wrongCount {
   margin-top: 0.5rem;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
 }
 
 .wordArea {
@@ -101,17 +101,17 @@
 .letterSlot {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--color-text);
   min-width: 2rem;
   text-align: center;
 }
 
 .blank {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--game-slot-blank);
 }
 
 .revealed {
-  color: #e74c3c;
+  color: var(--game-accent-red);
 }
 
 .result {
@@ -121,18 +121,18 @@
 .winMessage {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #27ae60;
+  color: var(--game-accent-green);
   margin-bottom: 1rem;
 }
 
 .loseMessage {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
 .loseMessage strong {
-  color: #e74c3c;
+  color: var(--game-accent-red);
   font-weight: 700;
 }
 
@@ -140,14 +140,14 @@
   text-align: center;
   padding: 1rem;
   margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
 }
 
 .feedbackLabel {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   margin-bottom: 0.75rem;
 }
 
@@ -169,20 +169,20 @@
 }
 
 .feedbackBtn.archaicBtn {
-  background: rgba(255, 193, 7, 0.1);
-  border-color: rgba(255, 193, 7, 0.3);
-  color: #ffc107;
+  background: var(--game-accent-yellow-bg);
+  border-color: var(--game-accent-yellow-border);
+  color: var(--game-accent-yellow);
 }
 
 .feedbackBtn.archaicBtn:hover {
-  background: rgba(255, 193, 7, 0.2);
-  border-color: rgba(255, 193, 7, 0.5);
+  background: rgba(241, 196, 15, 0.25);
+  border-color: rgba(241, 196, 15, 0.5);
 }
 
 .feedbackBtn.obscureBtn {
-  background: rgba(156, 39, 176, 0.1);
-  border-color: rgba(156, 39, 176, 0.3);
-  color: #ce93d8;
+  background: var(--game-accent-purple-bg);
+  border-color: var(--game-accent-purple-border);
+  color: var(--game-accent-purple-light);
 }
 
 .feedbackBtn.obscureBtn:hover {
@@ -191,19 +191,19 @@
 }
 
 .feedbackBtn.flagged {
-  background: rgba(76, 175, 80, 0.15);
-  border-color: rgba(76, 175, 80, 0.4);
-  color: #81c784;
+  background: var(--game-accent-green-bg);
+  border-color: var(--game-accent-green-border);
+  color: var(--game-accent-green);
 }
 
 .feedbackBtn.flagged:hover {
-  background: rgba(76, 175, 80, 0.1);
-  border-color: rgba(76, 175, 80, 0.3);
+  background: rgba(76, 175, 80, 0.15);
+  border-color: rgba(76, 175, 80, 0.4);
 }
 
 .playAgainBtn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  background: linear-gradient(135deg, var(--game-accent-red), var(--game-accent-red-dark));
   border: none;
   border-radius: 8px;
   color: #fff;
@@ -215,7 +215,7 @@
 
 .playAgainBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 4px 15px var(--game-accent-red-bg);
 }
 
 .keyboard {
@@ -229,10 +229,10 @@
 .key {
   width: 36px;
   height: 42px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--game-key-bg);
+  border: 1px solid var(--game-key-border);
   border-radius: 6px;
-  color: #fff;
+  color: var(--game-key-text);
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
@@ -240,7 +240,7 @@
 }
 
 .key:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--game-key-hover-bg);
   transform: translateY(-2px);
 }
 
@@ -254,23 +254,24 @@
 }
 
 .key.correct {
-  background: rgba(39, 174, 96, 0.3);
-  border-color: rgba(39, 174, 96, 0.5);
-  color: #27ae60;
+  background: var(--game-accent-green-bg);
+  border-color: var(--game-accent-green-border);
+  color: var(--game-accent-green);
 }
 
 .key.wrong {
-  background: rgba(231, 76, 60, 0.2);
-  border-color: rgba(231, 76, 60, 0.3);
-  color: rgba(231, 76, 60, 0.6);
+  background: var(--game-accent-red-bg);
+  border-color: var(--game-accent-red-border);
+  color: var(--game-accent-red);
+  opacity: 0.6;
 }
 
 .hintBtn {
   padding: 0.6rem 1.25rem;
-  background: rgba(241, 196, 15, 0.15);
-  border: 1px solid rgba(241, 196, 15, 0.3);
+  background: var(--game-accent-yellow-bg);
+  border: 1px solid var(--game-accent-yellow-border);
   border-radius: 8px;
-  color: #f1c40f;
+  color: var(--game-accent-yellow);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -291,8 +292,8 @@
   gap: 2rem;
   justify-content: center;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
 }
 
@@ -304,7 +305,7 @@
   display: block;
   font-size: 1.5rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .statLabel {
@@ -312,7 +313,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   margin-top: 0.25rem;
 }
 

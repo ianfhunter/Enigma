@@ -134,6 +134,22 @@
   color: rgba(255, 255, 255, 0.86);
 }
 
+.resultBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.pointOk {
+  color: rgba(34, 197, 94, 0.95);
+}
+
+.pointMiss {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .statsPanel {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -173,4 +189,3 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-

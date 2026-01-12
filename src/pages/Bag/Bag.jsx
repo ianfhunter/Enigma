@@ -4,7 +4,7 @@ import styles from './Bag.module.css';
 
 /**
  * Bag (Corral) Puzzle
- * 
+ *
  * Rules:
  * - Draw a single closed loop along grid edges
  * - All numbered cells must be inside the loop
@@ -26,78 +26,266 @@ function idxVEdge(r, c, w) {
   return r * (w + 1) + c;
 }
 
-// Generate a puzzle with a simple rectangular loop
+// Generate a puzzle with an irregular loop shape for varied clue numbers
 function generatePuzzle(w, h) {
-  // Create a random rectangular loop
-  const top = Math.floor(Math.random() * (h - 1));
-  const bottom = top + 2 + Math.floor(Math.random() * (h - top - 2));
-  const left = Math.floor(Math.random() * (w - 1));
-  const right = left + 2 + Math.floor(Math.random() * (w - left - 2));
+  // Start with a random rectangular base
+  const baseTop = 1 + Math.floor(Math.random() * Math.max(1, h - 4));
+  const baseBottom = baseTop + 2 + Math.floor(Math.random() * Math.max(1, h - baseTop - 2));
+  const baseLeft = 1 + Math.floor(Math.random() * Math.max(1, w - 4));
+  const baseRight = baseLeft + 2 + Math.floor(Math.random() * Math.max(1, w - baseLeft - 2));
 
-  // Build solved edges for the rectangle
-  const hEdges = new Array((h + 1) * w).fill(0);
-  const vEdges = new Array(h * (w + 1)).fill(0);
-
-  // Top and bottom horizontal edges
-  for (let c = left; c < right; c++) {
-    hEdges[idxHEdge(top, c, w)] = 1;
-    hEdges[idxHEdge(bottom, c, w)] = 1;
-  }
-  // Left and right vertical edges
-  for (let r = top; r < bottom; r++) {
-    vEdges[idxVEdge(r, left, w)] = 1;
-    vEdges[idxVEdge(r, right, w)] = 1;
+  // Build a set of "inside" cells - start with rectangle, then modify
+  const insideCells = new Set();
+  for (let r = baseTop; r < baseBottom; r++) {
+    for (let c = baseLeft; c < baseRight; c++) {
+      insideCells.add(`${r},${c}`);
+    }
   }
 
-  // Calculate clues for cells inside the loop
-  const clues = new Array(h * w).fill(null);
-  
-  // A cell is inside if it's within the rectangle bounds
-  const isInside = (r, c) => r >= top && r < bottom && c >= left && c < right;
+  // Helper to check if removing a cell keeps the region connected
+  const isConnectedWithout = (cells, removeKey) => {
+    const remaining = new Set([...cells].filter(k => k !== removeKey));
+    if (remaining.size === 0) return false;
 
-  // For cells inside, calculate visibility count
-  for (let r = 0; r < h; r++) {
-    for (let c = 0; c < w; c++) {
-      if (!isInside(r, c)) continue;
-      
-      let count = 1; // Count self
-      
-      // Look up
-      for (let nr = r - 1; nr >= top; nr--) {
-        count++;
+    const visited = new Set();
+    const start = [...remaining][0];
+    const queue = [start];
+    visited.add(start);
+
+    while (queue.length > 0) {
+      const key = queue.shift();
+      const [r, c] = key.split(',').map(Number);
+
+      for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        const nkey = `${r + dr},${c + dc}`;
+        if (remaining.has(nkey) && !visited.has(nkey)) {
+          visited.add(nkey);
+          queue.push(nkey);
+        }
       }
-      // Look down
-      for (let nr = r + 1; nr < bottom; nr++) {
-        count++;
+    }
+
+    return visited.size === remaining.size;
+  };
+
+  // Helper to check if adding a cell keeps the region simply connected (no holes)
+  const hasNoHoles = (cells) => {
+    if (cells.size < 4) return true;
+
+    // Find bounding box
+    let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
+    for (const key of cells) {
+      const [r, c] = key.split(',').map(Number);
+      minR = Math.min(minR, r);
+      maxR = Math.max(maxR, r);
+      minC = Math.min(minC, c);
+      maxC = Math.max(maxC, c);
+    }
+
+    // Flood fill from outside to count non-inside cells
+    const outside = new Set();
+    const queue = [];
+
+    // Start from all boundary positions of extended bounding box
+    for (let r = minR - 1; r <= maxR + 1; r++) {
+      queue.push(`${r},${minC - 1}`);
+      queue.push(`${r},${maxC + 1}`);
+    }
+    for (let c = minC - 1; c <= maxC + 1; c++) {
+      queue.push(`${minR - 1},${c}`);
+      queue.push(`${maxR + 1},${c}`);
+    }
+
+    while (queue.length > 0) {
+      const key = queue.shift();
+      if (outside.has(key) || cells.has(key)) continue;
+
+      const [r, c] = key.split(',').map(Number);
+      if (r < minR - 1 || r > maxR + 1 || c < minC - 1 || c > maxC + 1) continue;
+
+      outside.add(key);
+
+      for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        const nkey = `${r + dr},${c + dc}`;
+        if (!outside.has(nkey) && !cells.has(nkey)) {
+          queue.push(nkey);
+        }
       }
-      // Look left
-      for (let nc = c - 1; nc >= left; nc--) {
-        count++;
+    }
+
+    // Count total cells in bounding box
+    const bbArea = (maxR - minR + 3) * (maxC - minC + 3);
+    // If outside + inside = total, no holes
+    return outside.size + cells.size === bbArea;
+  };
+
+  // Randomly remove some cells from edges to create irregular shape
+  const removals = Math.floor(Math.random() * Math.max(1, insideCells.size / 3));
+  for (let i = 0; i < removals && insideCells.size > 4; i++) {
+    // Find edge cells (cells with at least one neighbor not in the set)
+    const edgeCells = [];
+    for (const key of insideCells) {
+      const [r, c] = key.split(',').map(Number);
+      for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        if (!insideCells.has(`${r + dr},${c + dc}`)) {
+          edgeCells.push(key);
+          break;
+        }
       }
-      // Look right
-      for (let nc = c + 1; nc < right; nc++) {
-        count++;
-      }
-      
-      // Only show some clues (not all, to make puzzle interesting)
-      if (Math.random() < 0.4) {
-        clues[r * w + c] = count;
+    }
+
+    if (edgeCells.length === 0) break;
+
+    // Try to remove a random edge cell
+    const shuffled = edgeCells.sort(() => Math.random() - 0.5);
+    for (const key of shuffled) {
+      if (isConnectedWithout(insideCells, key)) {
+        insideCells.delete(key);
+        if (!hasNoHoles(insideCells)) {
+          insideCells.add(key); // Undo if it created a hole
+        } else {
+          break;
+        }
       }
     }
   }
 
-  // Ensure at least one clue exists
-  let hasClue = clues.some(c => c !== null);
-  if (!hasClue) {
-    const midR = Math.floor((top + bottom) / 2);
-    const midC = Math.floor((left + right) / 2);
-    // Recalculate for this cell
-    let count = 1;
-    for (let nr = midR - 1; nr >= top; nr--) count++;
-    for (let nr = midR + 1; nr < bottom; nr++) count++;
-    for (let nc = midC - 1; nc >= left; nc--) count++;
-    for (let nc = midC + 1; nc < right; nc++) count++;
-    clues[midR * w + midC] = count;
+  // Randomly add some cells to edges to create protrusions
+  const additions = Math.floor(Math.random() * Math.max(1, insideCells.size / 4));
+  for (let i = 0; i < additions; i++) {
+    // Find candidate cells adjacent to current inside cells
+    const candidates = new Set();
+    for (const key of insideCells) {
+      const [r, c] = key.split(',').map(Number);
+      for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        const nr = r + dr, nc = c + dc;
+        if (nr >= 0 && nr < h && nc >= 0 && nc < w) {
+          const nkey = `${nr},${nc}`;
+          if (!insideCells.has(nkey)) {
+            candidates.add(nkey);
+          }
+        }
+      }
+    }
+
+    if (candidates.size === 0) break;
+
+    // Add a random candidate
+    const candidateArr = [...candidates].sort(() => Math.random() - 0.5);
+    for (const key of candidateArr) {
+      const testSet = new Set([...insideCells, key]);
+      if (hasNoHoles(testSet)) {
+        insideCells.add(key);
+        break;
+      }
+    }
+  }
+
+  // Now build the loop boundary from the inside cells
+  const hEdges = new Array((h + 1) * w).fill(0);
+  const vEdges = new Array(h * (w + 1)).fill(0);
+
+  for (const key of insideCells) {
+    const [r, c] = key.split(',').map(Number);
+
+    // Top edge: if cell above is not inside
+    if (!insideCells.has(`${r - 1},${c}`)) {
+      hEdges[idxHEdge(r, c, w)] = 1;
+    }
+    // Bottom edge: if cell below is not inside
+    if (!insideCells.has(`${r + 1},${c}`)) {
+      hEdges[idxHEdge(r + 1, c, w)] = 1;
+    }
+    // Left edge: if cell to left is not inside
+    if (!insideCells.has(`${r},${c - 1}`)) {
+      vEdges[idxVEdge(r, c, w)] = 1;
+    }
+    // Right edge: if cell to right is not inside
+    if (!insideCells.has(`${r},${c + 1}`)) {
+      vEdges[idxVEdge(r, c + 1, w)] = 1;
+    }
+  }
+
+  // Calculate visibility clues for cells inside the loop
+  const clues = new Array(h * w).fill(null);
+
+  // Calculate visibility for a cell considering the actual loop boundary
+  const calcVisibility = (r, c) => {
+    let count = 1; // Count self
+
+    // Look up - stop at loop boundary (horizontal edge)
+    for (let nr = r - 1; nr >= 0; nr--) {
+      if (hEdges[idxHEdge(nr + 1, c, w)] === 1) break;
+      if (!insideCells.has(`${nr},${c}`)) break;
+      count++;
+    }
+    // Look down
+    for (let nr = r + 1; nr < h; nr++) {
+      if (hEdges[idxHEdge(nr, c, w)] === 1) break;
+      if (!insideCells.has(`${nr},${c}`)) break;
+      count++;
+    }
+    // Look left
+    for (let nc = c - 1; nc >= 0; nc--) {
+      if (vEdges[idxVEdge(r, nc + 1, w)] === 1) break;
+      if (!insideCells.has(`${r},${nc}`)) break;
+      count++;
+    }
+    // Look right
+    for (let nc = c + 1; nc < w; nc++) {
+      if (vEdges[idxVEdge(r, nc, w)] === 1) break;
+      if (!insideCells.has(`${r},${nc}`)) break;
+      count++;
+    }
+
+    return count;
+  };
+
+  // Calculate all visibilities first to find variety
+  const visibilities = [];
+  for (const key of insideCells) {
+    const [r, c] = key.split(',').map(Number);
+    visibilities.push({ r, c, vis: calcVisibility(r, c), idx: r * w + c });
+  }
+
+  // Sort by visibility to ensure we show a variety of clue values
+  visibilities.sort((a, b) => a.vis - b.vis);
+
+  // Get unique visibility values
+  const uniqueVis = [...new Set(visibilities.map(v => v.vis))];
+
+  // Select clues strategically: prefer diverse values and strategic positions
+  const selectedIndices = new Set();
+
+  // First, ensure we have at least one clue for each unique visibility value (if possible)
+  for (const vis of uniqueVis) {
+    const candidates = visibilities.filter(v => v.vis === vis && !selectedIndices.has(v.idx));
+    if (candidates.length > 0 && Math.random() < 0.7) {
+      const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+      selectedIndices.add(chosen.idx);
+      clues[chosen.idx] = chosen.vis;
+    }
+  }
+
+  // Add a few more random clues for difficulty (30-50% of remaining cells)
+  const remaining = visibilities.filter(v => !selectedIndices.has(v.idx));
+  const additionalCount = Math.floor(remaining.length * (0.3 + Math.random() * 0.2));
+  const shuffled = remaining.sort(() => Math.random() - 0.5);
+
+  for (let i = 0; i < additionalCount; i++) {
+    const v = shuffled[i];
+    clues[v.idx] = v.vis;
+  }
+
+  // Ensure at least 2 clues exist
+  const clueCount = clues.filter(c => c !== null).length;
+  if (clueCount < 2 && visibilities.length >= 2) {
+    for (let i = 0; i < Math.min(2 - clueCount, visibilities.length); i++) {
+      const v = visibilities[i];
+      if (clues[v.idx] === null) {
+        clues[v.idx] = v.vis;
+      }
+    }
   }
 
   return { w, h, clues, solution: { hEdges, vEdges } };
@@ -107,22 +295,22 @@ function generatePuzzle(w, h) {
 function computeInsideOutside(w, h, hEdges, vEdges) {
   // We'll flood fill from outside the grid to find all outside cells
   // Any cell not reached is inside
-  
+
   const outside = new Set();
   const visited = new Set();
-  
+
   // Start from a virtual "border" - we'll check each cell's connectivity to outside
   // A cell is outside if we can reach it from the grid boundary without crossing edges
-  
+
   const queue = [];
-  
+
   // Add all boundary-adjacent virtual positions
   // We use a slightly different approach: flood fill on an extended grid
   // where we can move between cells if there's no edge blocking
-  
+
   // For simplicity, let's use a cell-based flood fill
   // Mark cells reachable from outside (any cell on boundary with no blocking edge)
-  
+
   // Check boundary cells
   for (let c = 0; c < w; c++) {
     // Top row - can enter if no top edge
@@ -151,9 +339,9 @@ function computeInsideOutside(w, h, hEdges, vEdges) {
     if (visited.has(key)) continue;
     visited.add(key);
     outside.add(key);
-    
+
     const [r, c] = key.split(',').map(Number);
-    
+
     // Try moving in each direction
     // Up: check if there's no horizontal edge between this cell and the one above
     if (r > 0 && hEdges[idxHEdge(r, c, w)] !== 1) {
@@ -179,7 +367,7 @@ function computeInsideOutside(w, h, hEdges, vEdges) {
 
   // Also check cells that weren't visited at all - they might be unreachable
   // from any boundary entry point but still need to be classified
-  
+
   // Build inside set
   const inside = new Set();
   for (let r = 0; r < h; r++) {
@@ -443,10 +631,10 @@ export default function Bag() {
             const isIn = inside.has(key);
             const x = pad + c * cell;
             const y = pad + r * cell;
-            
+
             // Only show inside/outside if we have edges
             if (edgeCount === 0) return null;
-            
+
             return (
               <rect
                 key={`bg-${i}`}
@@ -466,11 +654,11 @@ export default function Bag() {
             const c = i % puz.w;
             const clue = puz.clues[i];
             if (clue === null) return null;
-            
+
             const x = pad + c * cell + cell / 2;
             const y = pad + r * cell + cell / 2 + 6;
             const bad = clueBad.has(i);
-            
+
             return (
               <text
                 key={`clue-${i}`}

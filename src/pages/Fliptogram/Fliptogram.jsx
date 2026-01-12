@@ -39,10 +39,11 @@ export default function Fliptogram() {
     setQuote(selectedQuote);
     setTargetText(text);
 
-    // Initialize each letter position with a random letter that's NOT the correct one
-    const startingLetters = text.split('').map(char => {
+    // Initialize each letter position - some start correct, some start wrong (flipped)
+    // Store the "wrong" letter for each position for toggling
+    const wrongLetters = text.split('').map(char => {
       if (/[A-Z]/.test(char)) {
-        // Start with a random letter that's NOT the correct one
+        // Generate a random letter that's NOT the correct one
         let randomLetter = getRandomLetter(random);
         while (randomLetter === char) {
           randomLetter = getRandomLetter(random);
@@ -52,8 +53,18 @@ export default function Fliptogram() {
       return char;
     });
 
+    // Randomly decide which letters start flipped (showing wrong letter) vs correct
+    const startingLetters = text.split('').map((char, idx) => {
+      if (/[A-Z]/.test(char)) {
+        // ~50% chance to start with the correct letter, ~50% chance to start flipped
+        const startCorrect = random() < 0.5;
+        return startCorrect ? char : wrongLetters[idx];
+      }
+      return char;
+    });
+
     setCurrentLetters(startingLetters);
-    setInitialLetters(startingLetters); // Store the wrong letters for toggling
+    setInitialLetters(wrongLetters); // Store the wrong letters for toggling
     setFlipping({});
     setFlipDirection({});
     setHintsUsed(0);
@@ -183,12 +194,20 @@ export default function Fliptogram() {
 
     return (
       <div className={styles.puzzleText}>
-        {words.map((word, wordIndex) => (
+        {words.map((word, wordIndex) => {
+          // Check if the entire word is correct (all letters match target)
+          const isWordComplete = word.chars.every(({ char, idx }) => {
+            if (!/[A-Z]/.test(char)) return true; // Non-letters always match
+            return currentLetters[idx] === char;
+          });
+
+          return (
           <span key={wordIndex} className={styles.word}>
             {word.chars.map(({ char, idx }) => {
               const isLetter = /[A-Z]/.test(char);
               const currentLetter = currentLetters[idx];
-              const isCorrect = currentLetter === char;
+              // Only mark as correct if the entire word is complete
+              const isCorrect = isWordComplete && currentLetter === char;
               const isFlipping = flipping[idx];
               const direction = flipDirection[idx] || 'up';
 
@@ -232,7 +251,7 @@ export default function Fliptogram() {
             })}
             {wordIndex < words.length - 1 && <span className={styles.space}> </span>}
           </span>
-        ))}
+        );})}
       </div>
     );
   };

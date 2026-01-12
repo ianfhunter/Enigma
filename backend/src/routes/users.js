@@ -9,21 +9,48 @@ const SALT_ROUNDS = 12;
 // All routes require authentication
 router.use(requireAuth);
 
-// Update profile (display name)
+// Update profile (display name, email)
 router.put('/profile', (req, res) => {
-  const { displayName } = req.body;
+  const { displayName, email } = req.body;
 
-  if (!displayName || displayName.length < 1 || displayName.length > 64) {
-    return res.status(400).json({ error: 'Display name must be 1-64 characters' });
+  const updates = [];
+  const values = [];
+
+  if (displayName !== undefined) {
+    if (!displayName || displayName.length < 1 || displayName.length > 64) {
+      return res.status(400).json({ error: 'Display name must be 1-64 characters' });
+    }
+    updates.push('display_name = ?');
+    values.push(displayName);
   }
+
+  if (email !== undefined) {
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+    updates.push('email = ?');
+    values.push(email || null);
+  }
+
+  if (updates.length === 0) {
+    return res.status(400).json({ error: 'No profile data to update' });
+  }
+
+  updates.push("updated_at = datetime('now')");
+  values.push(req.session.userId);
 
   db.prepare(`
     UPDATE users
-    SET display_name = ?, updated_at = datetime('now')
+    SET ${updates.join(', ')}
     WHERE id = ?
-  `).run(displayName, req.session.userId);
+  `).run(...values);
 
-  res.json({ displayName });
+  // Return updated user
+  const user = db.prepare(`
+    SELECT display_name, email FROM users WHERE id = ?
+  `).get(req.session.userId);
+
+  res.json({ displayName: user.display_name, email: user.email });
 });
 
 // Change password
@@ -70,10 +97,54 @@ router.put('/password', async (req, res) => {
   }
 });
 
+// Delete own account
+router.delete('/account', async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({ error: 'Password is required to delete account' });
+    }
+
+    // Verify password
+    const user = db.prepare('SELECT password_hash, role FROM users WHERE id = ?')
+      .get(req.session.userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) {
+      return res.status(401).json({ error: 'Incorrect password' });
+    }
+
+    // Check if user is the last admin
+    if (user.role === 'admin') {
+      const adminCount = db.prepare("SELECT COUNT(*) as count FROM users WHERE role = 'admin'").get();
+      if (adminCount.count <= 1) {
+        return res.status(400).json({ error: 'Cannot delete account: you are the last admin' });
+      }
+    }
+
+    // Delete user (cascades to settings, progress, login_history)
+    db.prepare('DELETE FROM users WHERE id = ?').run(req.session.userId);
+
+    // Destroy session
+    req.session.destroy(() => {
+      res.clearCookie('enigma.sid');
+      res.json({ message: 'Account deleted successfully' });
+    });
+  } catch (error) {
+    console.error('Account deletion error:', error);
+    res.status(500).json({ error: 'Failed to delete account' });
+  }
+});
+
 // Get user settings
 router.get('/settings', (req, res) => {
   const settings = db.prepare(`
-    SELECT english_variant, disabled_games, game_preferences
+    SELECT english_variant, theme, sound_enabled, disabled_games, game_preferences
     FROM user_settings WHERE user_id = ?
   `).get(req.session.userId);
 
@@ -82,6 +153,8 @@ router.get('/settings', (req, res) => {
     db.prepare('INSERT INTO user_settings (user_id) VALUES (?)').run(req.session.userId);
     return res.json({
       englishVariant: 'us',
+      theme: 'dark',
+      soundEnabled: true,
       disabledGames: [],
       gamePreferences: {}
     });
@@ -89,6 +162,8 @@ router.get('/settings', (req, res) => {
 
   res.json({
     englishVariant: settings.english_variant,
+    theme: settings.theme || 'dark',
+    soundEnabled: Boolean(settings.sound_enabled),
     disabledGames: JSON.parse(settings.disabled_games || '[]'),
     gamePreferences: JSON.parse(settings.game_preferences || '{}')
   });
@@ -96,7 +171,7 @@ router.get('/settings', (req, res) => {
 
 // Update user settings
 router.put('/settings', (req, res) => {
-  const { englishVariant, disabledGames, gamePreferences } = req.body;
+  const { englishVariant, theme, soundEnabled, disabledGames, gamePreferences } = req.body;
 
   // Build update query dynamically based on what's provided
   const updates = [];
@@ -108,6 +183,19 @@ router.put('/settings', (req, res) => {
     }
     updates.push('english_variant = ?');
     values.push(englishVariant);
+  }
+
+  if (theme !== undefined) {
+    if (!['dark', 'light'].includes(theme)) {
+      return res.status(400).json({ error: 'Invalid theme' });
+    }
+    updates.push('theme = ?');
+    values.push(theme);
+  }
+
+  if (soundEnabled !== undefined) {
+    updates.push('sound_enabled = ?');
+    values.push(soundEnabled ? 1 : 0);
   }
 
   if (disabledGames !== undefined) {
@@ -139,6 +227,107 @@ router.put('/settings', (req, res) => {
   `).run(...values);
 
   res.json({ message: 'Settings updated' });
+});
+
+// Get active sessions
+router.get('/sessions', (req, res) => {
+  const currentSid = req.session.id;
+
+  // Parse sessions to find those belonging to this user
+  const sessions = db.prepare(`
+    SELECT sid, sess, expire FROM sessions
+    WHERE expire > ?
+  `).all(Date.now() / 1000);
+
+  const userSessions = sessions.filter(s => {
+    try {
+      const sess = JSON.parse(s.sess);
+      return sess.userId === req.session.userId;
+    } catch {
+      return false;
+    }
+  }).map(s => {
+    const sess = JSON.parse(s.sess);
+    return {
+      id: s.sid,
+      isCurrent: s.sid === currentSid,
+      createdAt: sess.cookie?.expires ? new Date(sess.cookie.expires).toISOString() : null,
+      expiresAt: new Date(s.expire * 1000).toISOString()
+    };
+  });
+
+  res.json(userSessions);
+});
+
+// Logout all other sessions
+router.delete('/sessions', (req, res) => {
+  const currentSid = req.session.id;
+
+  // Get all sessions and delete those belonging to this user except current
+  const sessions = db.prepare('SELECT sid, sess FROM sessions').all();
+
+  let deleted = 0;
+  sessions.forEach(s => {
+    try {
+      const sess = JSON.parse(s.sess);
+      if (sess.userId === req.session.userId && s.sid !== currentSid) {
+        db.prepare('DELETE FROM sessions WHERE sid = ?').run(s.sid);
+        deleted++;
+      }
+    } catch {
+      // Skip invalid sessions
+    }
+  });
+
+  res.json({ message: `Logged out of ${deleted} other session(s)` });
+});
+
+// Logout specific session
+router.delete('/sessions/:sid', (req, res) => {
+  const { sid } = req.params;
+
+  if (sid === req.session.id) {
+    return res.status(400).json({ error: 'Cannot delete current session. Use logout instead.' });
+  }
+
+  // Verify the session belongs to this user
+  const session = db.prepare('SELECT sess FROM sessions WHERE sid = ?').get(sid);
+
+  if (!session) {
+    return res.status(404).json({ error: 'Session not found' });
+  }
+
+  try {
+    const sess = JSON.parse(session.sess);
+    if (sess.userId !== req.session.userId) {
+      return res.status(403).json({ error: 'Not your session' });
+    }
+  } catch {
+    return res.status(500).json({ error: 'Invalid session data' });
+  }
+
+  db.prepare('DELETE FROM sessions WHERE sid = ?').run(sid);
+  res.json({ message: 'Session terminated' });
+});
+
+// Get login history
+router.get('/login-history', (req, res) => {
+  const { limit = 20 } = req.query;
+
+  const history = db.prepare(`
+    SELECT ip_address, user_agent, success, created_at
+    FROM login_history
+    WHERE user_id = ?
+    ORDER BY created_at DESC
+    LIMIT ?
+  `).all(req.session.userId, Math.min(parseInt(limit) || 20, 100));
+
+  res.json(history.map(h => ({
+    ipAddress: h.ip_address,
+    userAgent: h.user_agent,
+    success: Boolean(h.success),
+    createdAt: h.created_at
+  })));
 });
 
 export default router;

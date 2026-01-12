@@ -1,6 +1,6 @@
 // Re-export from centralized game registry for backwards compatibility
 // New code should import directly from data/gameRegistry.js
-export { getGameIcon, defaultIcon } from '../data/gameRegistry';
+export { getGameIcon, defaultIcon, getGameBySlug } from '../data/gameRegistry';
 
 // Legacy export - maps slug to icon
 // Deprecated: Use getGameIcon(slug) instead

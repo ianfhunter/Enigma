@@ -1,0 +1,370 @@
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* System selector */
+.systemSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.systemBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.systemBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--system-color, rgba(255, 255, 255, 0.3));
+  color: #fff;
+}
+
+.systemBtn.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--system-color, #a78bfa);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(167, 139, 250, 0.2);
+}
+
+.systemIcon {
+  font-size: 1.1rem;
+}
+
+/* Game area layout */
+.gameArea {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .gameArea {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Body container */
+.bodyContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.bodySvg {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+
+.bodyOutline {
+  fill: url(#bodyGradient);
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1.5;
+}
+
+/* Anatomy parts - clickable regions */
+.anatomyParts path {
+  transition: all 0.2s ease;
+}
+
+.anatomyPart {
+  cursor: pointer;
+}
+
+.anatomyPart:hover {
+  transform-origin: center;
+}
+
+/* Legacy support for circle hotspots */
+.hotspots circle {
+  transition: all 0.15s ease;
+}
+
+.hotspot {
+  cursor: pointer;
+}
+
+.hotspot:hover {
+  transform-origin: center;
+}
+
+/* Label styling */
+.labelGroup {
+  pointer-events: none;
+  animation: labelFadeIn 0.2s ease;
+}
+
+@keyframes labelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulsing animation for hints */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.partLabel {
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.attribution {
+  fill: rgba(255, 255, 255, 0.2);
+  font-size: 8px;
+}
+
+/* Hint box */
+.hintBox {
+  margin-top: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hintLabel {
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+/* Side panel */
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Message display */
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.success {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.message.error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+.message.hint {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.message.reveal {
+  background: rgba(167, 139, 250, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  color: #a78bfa;
+}
+
+/* Target card */
+.targetCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.targetLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.targetName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.targetSystem {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.hintBtn, .skipBtn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hintBtn {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.hintBtn:hover:not(:disabled) {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.hintBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.skipBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.skipBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.skipBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Stats panel */
+.statsPanel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statValue {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.25rem;
+}
+
+/* Attempts info */
+.attemptsInfo {
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .systemSelector {
+    gap: 0.4rem;
+  }
+
+  .systemBtn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .systemBtn span:last-child {
+    display: none;
+  }
+
+  .statsPanel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .targetName {
+    font-size: 1.25rem;
+  }
+}

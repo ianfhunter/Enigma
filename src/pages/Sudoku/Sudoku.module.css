@@ -1,6 +1,8 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  --game-accent: #4ecdc4;
+  --game-accent-dark: #3dbdb5;
 }
 
 .header {
@@ -10,7 +12,7 @@
 
 .backLink {
   display: inline-block;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -18,13 +20,13 @@
 }
 
 .backLink:hover {
-  color: #4ecdc4;
+  color: var(--game-accent);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a3a0 100%);
+  background: linear-gradient(135deg, var(--game-accent) 0%, var(--game-accent-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -32,19 +34,19 @@
 }
 
 .instructions {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   font-size: 1rem;
   max-width: 500px;
   margin: 0 auto;
 }
 
 .instructions strong {
-  color: #4ecdc4;
+  color: var(--game-accent);
   font-weight: 700;
 }
 
 .dailyInfo {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   margin-top: 0.5rem;
 }
@@ -52,7 +54,7 @@
 .loading {
   text-align: center;
   padding: 4rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   font-size: 1.1rem;
 }
 
@@ -91,7 +93,7 @@
 .difficultySelector {
   display: flex;
   gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--game-panel-bg);
   padding: 0.25rem;
   border-radius: 12px;
 }
@@ -101,7 +103,7 @@
   background: transparent;
   border: none;
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -109,12 +111,12 @@
 }
 
 .difficultyBtn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  background: var(--game-key-bg);
 }
 
 .difficultyBtn.active {
-  background: linear-gradient(135deg, #4ecdc4, #3dbdb5);
+  background: linear-gradient(135deg, var(--game-accent), var(--game-accent-dark));
   color: #fff;
   box-shadow: 0 2px 10px rgba(78, 205, 196, 0.3);
 }
@@ -125,7 +127,7 @@
 
 .difficultyBtn .checkmark {
   margin-left: 0.25rem;
-  color: #88ff99;
+  color: var(--game-accent-green);
   font-size: 0.75rem;
 }
 
@@ -138,7 +140,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--game-panel-bg);
   border-radius: 12px;
   font-weight: 600;
 }
@@ -149,7 +151,7 @@
 
 .timerValue {
   font-variant-numeric: tabular-nums;
-  color: #fff;
+  color: var(--color-text);
   font-size: 1.1rem;
 }
 
@@ -157,12 +159,10 @@
 .board {
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--color-bg-tertiary);
   border-radius: 16px;
   padding: 12px;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-card);
   border: 2px solid rgba(78, 205, 196, 0.3);
 }
 
@@ -176,8 +176,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-cell-bg);
+  border: 1px solid var(--game-cell-border);
   cursor: pointer;
   transition: all 0.15s ease;
   position: relative;
@@ -188,17 +188,17 @@
 }
 
 .cell.initial {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--game-key-bg);
 }
 
 .cell.initial .cellValue {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text);
   font-weight: 700;
 }
 
 .cell.selected {
   background: rgba(78, 205, 196, 0.3) !important;
-  box-shadow: inset 0 0 0 2px #4ecdc4;
+  box-shadow: inset 0 0 0 2px var(--game-accent);
 }
 
 .cell.highlighted {
@@ -210,15 +210,15 @@
 }
 
 .cell.sameValue .cellValue {
-  color: #4ecdc4;
+  color: var(--game-accent);
 }
 
 .cell.error {
-  background: rgba(255, 100, 100, 0.2) !important;
+  background: var(--game-accent-red-bg) !important;
 }
 
 .cell.error .cellValue {
-  color: #ff6b6b !important;
+  color: var(--game-accent-red) !important;
 }
 
 /* 3x3 box borders */
@@ -266,7 +266,7 @@
 .cellValue {
   font-size: 1.5rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
   user-select: none;
 }
 
@@ -285,8 +285,9 @@
   align-items: center;
   justify-content: center;
   font-size: 0.65rem;
-  color: rgba(78, 205, 196, 0.8);
+  color: var(--game-accent);
   font-weight: 600;
+  opacity: 0.8;
 }
 
 /* Number Pad */
@@ -305,10 +306,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--game-key-bg);
+  border: 1px solid var(--game-key-border);
   border-radius: 12px;
-  color: #fff;
+  color: var(--game-key-text);
   font-size: 1.5rem;
   font-weight: 700;
   cursor: pointer;
@@ -333,7 +334,7 @@
 
 .numCount {
   font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
@@ -351,10 +352,10 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -363,9 +364,9 @@
 }
 
 .actionBtn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--game-key-bg);
+  border-color: var(--game-key-border);
+  color: var(--color-text);
 }
 
 .actionBtn:disabled {
@@ -376,7 +377,7 @@
 .actionBtn.active {
   background: rgba(78, 205, 196, 0.2);
   border-color: rgba(78, 205, 196, 0.4);
-  color: #4ecdc4;
+  color: var(--game-accent);
 }
 
 .actionIcon {
@@ -391,8 +392,8 @@
 }
 
 .progressPanel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 16px;
   padding: 1.25rem;
 }
@@ -408,25 +409,25 @@
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
 }
 
 .progressValue {
   font-size: 1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .progressBar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--game-key-bg);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #4ecdc4, #3dbdb5);
+  background: linear-gradient(90deg, var(--game-accent), var(--game-accent-dark));
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -460,18 +461,18 @@
 .completeMessage h3 {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #4ecdc4;
+  color: var(--game-accent);
   margin-bottom: 0.25rem;
 }
 
 .completeMessage p {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   margin-bottom: 1rem;
 }
 
 .playAgainBtn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #4ecdc4, #3dbdb5);
+  background: linear-gradient(135deg, var(--game-accent), var(--game-accent-dark));
   border: none;
   border-radius: 12px;
   color: #fff;
@@ -488,8 +489,8 @@
 
 /* Settings Panel */
 .settingsPanel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 16px;
   padding: 1.25rem;
 }
@@ -497,7 +498,7 @@
 .settingsPanel h3 {
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   margin-bottom: 1rem;
 }
 
@@ -505,7 +506,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
   cursor: pointer;
 }
@@ -517,7 +518,7 @@
 .toggleSlider {
   width: 44px;
   height: 24px;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--game-key-bg);
   border-radius: 12px;
   position: relative;
   transition: all 0.2s ease;
@@ -530,23 +531,24 @@
   left: 3px;
   width: 18px;
   height: 18px;
-  background: #fff;
+  background: var(--color-text);
   border-radius: 50%;
   transition: transform 0.2s ease;
 }
 
 .toggle input:checked + .toggleSlider {
-  background: linear-gradient(135deg, #4ecdc4, #3dbdb5);
+  background: linear-gradient(135deg, var(--game-accent), var(--game-accent-dark));
 }
 
 .toggle input:checked + .toggleSlider::after {
   transform: translateX(20px);
+  background: #fff;
 }
 
 /* Help Panel */
 .helpPanel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 16px;
   padding: 1.25rem;
 }
@@ -554,7 +556,7 @@
 .helpPanel h3 {
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   margin-bottom: 0.75rem;
 }
 
@@ -570,19 +572,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
 }
 
 .shortcutList kbd {
   display: inline-block;
   padding: 0.2rem 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--game-key-bg);
+  border: 1px solid var(--game-key-border);
   border-radius: 6px;
   font-family: inherit;
   font-size: 0.75rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
 }
 
 /* New Game Button */
@@ -592,7 +594,7 @@
   background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(78, 205, 196, 0.1));
   border: 1px solid rgba(78, 205, 196, 0.3);
   border-radius: 12px;
-  color: #4ecdc4;
+  color: var(--game-accent);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;

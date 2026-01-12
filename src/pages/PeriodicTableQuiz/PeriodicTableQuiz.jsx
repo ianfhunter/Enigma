@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PeriodicTableQuiz.module.css';
@@ -12,9 +12,12 @@ export default function PeriodicTableQuiz() {
   const [data, setData] = useState(null);
   const [mode, setMode] = useState(MODES[0]);
   const [current, setCurrent] = useState(null);
-  const [options, setOptions] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [inputValue, setInputValue] = useState('');
   const [result, setResult] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const inputRef = useRef(null);
+  const suggestionsRef = useRef(null);
 
   const [stats, setStats] = usePersistedState('periodic-table-quiz-stats', {
     played: 0,
@@ -38,44 +41,53 @@ export default function PeriodicTableQuiz() {
 
   const elements = useMemo(() => data?.elements || [], [data]);
 
+  // All element names for autocomplete
+  const allNames = useMemo(() =>
+    elements.map(e => e.name).sort((a, b) => a.localeCompare(b)),
+    [elements]
+  );
+
+  // Filter suggestions based on input (only for name mode)
+  const suggestions = useMemo(() => {
+    if (mode.answer !== 'name' || !inputValue.trim()) return [];
+    const query = inputValue.toLowerCase().trim();
+    return allNames
+      .filter(name => name.toLowerCase().startsWith(query))
+      .slice(0, 8);
+  }, [mode.answer, inputValue, allNames]);
+
   const pickRandom = useCallback(() => {
     if (!elements.length) return null;
     const idx = Math.floor(Math.random() * elements.length);
     return elements[idx];
   }, [elements]);
 
-  const generateOptions = useCallback((correct, field) => {
-    if (!elements.length) return [];
-    const correctVal = correct[field];
-    const others = elements
-      .filter(e => e[field] !== correctVal)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3)
-      .map(e => e[field]);
-    const allOptions = [correctVal, ...others].sort(() => Math.random() - 0.5);
-    return allOptions;
-  }, [elements]);
-
   const startRound = useCallback(() => {
     const next = pickRandom();
     if (!next) return;
     setCurrent(next);
-    setOptions(generateOptions(next, mode.answer));
-    setSelected(null);
+    setInputValue('');
     setResult(null);
-  }, [pickRandom, generateOptions, mode]);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+    // Focus input after a short delay
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, [pickRandom]);
 
   useEffect(() => {
     if (elements.length) {
       startRound();
     }
-  }, [elements, mode, startRound]);
+  }, [elements, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSelect = (opt) => {
-    if (result) return;
-    setSelected(opt);
+  const checkAnswer = useCallback((answer) => {
+    if (result || !current) return;
+
     const correctAnswer = current[mode.answer];
-    const isCorrect = opt === correctAnswer;
+    const normalizedInput = answer.trim().toLowerCase();
+    const normalizedCorrect = correctAnswer.toLowerCase();
+
+    const isCorrect = normalizedInput === normalizedCorrect;
     setResult({ correct: isCorrect, correctAnswer });
 
     setStats(prev => {
@@ -85,10 +97,85 @@ export default function PeriodicTableQuiz() {
       const maxStreak = Math.max(prev.maxStreak, streak);
       return { played, correct: correctCount, streak, maxStreak };
     });
+  }, [result, current, mode.answer, setStats]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+    checkAnswer(inputValue);
+    setShowSuggestions(false);
   };
+
+  const handleSuggestionClick = (suggestion) => {
+    setInputValue(suggestion);
+    setShowSuggestions(false);
+    checkAnswer(suggestion);
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    setShowSuggestions(true);
+    setSelectedSuggestionIndex(-1);
+  };
+
+  const handleKeyDown = (e) => {
+    if (mode.answer !== 'name' || !showSuggestions || suggestions.length === 0) {
+      if (e.key === 'Enter') {
+        handleSubmit(e);
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev =>
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => prev > 0 ? prev - 1 : -1);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          handleSuggestionClick(suggestions[selectedSuggestionIndex]);
+        } else {
+          handleSubmit(e);
+        }
+        break;
+      case 'Escape':
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(e.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(e.target)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const promptValue = current ? (mode.prompt === 'symbol' ? current.symbol : current.name) : '';
   const promptLabel = mode.prompt === 'symbol' ? 'Element Symbol' : 'Element Name';
+  const answerLabel = mode.answer === 'name' ? 'Element Name' : 'Symbol';
+  const placeholder = mode.answer === 'name'
+    ? 'Type the element name...'
+    : 'Type the symbol (e.g., Fe)...';
 
   return (
     <div className={styles.container}>
@@ -129,33 +216,52 @@ export default function PeriodicTableQuiz() {
 
           <div className={styles.card}>
             <div className={styles.sectionTitle}>
-              {mode.answer === 'name' ? 'What is the element name?' : 'What is the element symbol?'}
+              What is the {answerLabel.toLowerCase()}?
             </div>
 
-            <div className={styles.optionsGrid}>
-              {options.map(opt => {
-                let btnClass = styles.optionBtn;
-                if (result) {
-                  if (opt === result.correctAnswer) {
-                    btnClass += ` ${styles.correct}`;
-                  } else if (opt === selected) {
-                    btnClass += ` ${styles.wrong}`;
-                  }
-                } else if (opt === selected) {
-                  btnClass += ` ${styles.selected}`;
-                }
-                return (
-                  <button
-                    key={opt}
-                    className={btnClass}
-                    onClick={() => handleSelect(opt)}
-                    disabled={!!result}
-                  >
-                    {opt}
-                  </button>
-                );
-              })}
-            </div>
+            <form onSubmit={handleSubmit} className={styles.inputForm}>
+              <div className={styles.inputWrapper}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className={`${styles.textInput} ${result ? (result.correct ? styles.inputCorrect : styles.inputWrong) : ''}`}
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  onFocus={() => mode.answer === 'name' && setShowSuggestions(true)}
+                  placeholder={placeholder}
+                  disabled={!!result}
+                  autoComplete="off"
+                  autoCapitalize={mode.answer === 'symbol' ? 'characters' : 'words'}
+                  spellCheck="false"
+                />
+
+                {/* Autocomplete suggestions - only for names */}
+                {mode.answer === 'name' && showSuggestions && suggestions.length > 0 && !result && (
+                  <div ref={suggestionsRef} className={styles.suggestions}>
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={suggestion}
+                        className={`${styles.suggestionItem} ${index === selectedSuggestionIndex ? styles.suggestionSelected : ''}`}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                      >
+                        <span className={styles.suggestionText}>
+                          <strong>{suggestion.slice(0, inputValue.length)}</strong>
+                          {suggestion.slice(inputValue.length)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {!result && (
+                <button type="submit" className={styles.submitBtn} disabled={!inputValue.trim()}>
+                  Check
+                </button>
+              )}
+            </form>
 
             {result && (
               <>

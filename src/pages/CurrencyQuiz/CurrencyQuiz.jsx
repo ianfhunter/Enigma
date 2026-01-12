@@ -20,7 +20,7 @@ export default function CurrencyQuiz() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const mod = await import('../../data/currencies.json');
+      const mod = await import('../../../datasets/currencies.json');
       if (!mounted) return;
       setData(mod.default);
     })().catch((e) => {

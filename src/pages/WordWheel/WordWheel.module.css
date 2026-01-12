@@ -43,6 +43,47 @@
   font-weight: 700;
 }
 
+.modeSelector {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.modeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modeBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.modeBtn.active {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(238, 90, 90, 0.2));
+  border-color: #ff6b6b;
+  color: #fff;
+}
+
+.modeDesc {
+  font-size: 0.7rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
 .gameArea {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -68,6 +109,11 @@
   position: relative;
   width: 280px;
   height: 280px;
+}
+
+.wheel.smallerWheel {
+  width: 250px;
+  height: 250px;
 }
 
 .centerLetter {
@@ -330,7 +376,7 @@
   letter-spacing: 0.05em;
 }
 
-.word.nineLetterWord {
+.word.pangramWord {
   background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
   box-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
 }

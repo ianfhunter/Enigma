@@ -6,7 +6,7 @@
     "year": 1808,
     "era": "Classical/Romantic",
     "nationality": "German",
-    "audio_url": "/audio/classical/01.mp3",
+    "audio_url": "/audio/classical/01.ogg",
     "fun_fact": "The famous 'da-da-da-DUM' motif is one of the most recognizable in all of classical music."
   },
   {
@@ -66,7 +66,7 @@
     "year": 1708,
     "era": "Baroque",
     "nationality": "German",
-    "audio_url": "/audio/classical/07.mp3",
+    "audio_url": "/audio/classical/07.ogg",
     "fun_fact": "Often used in horror films, this piece is one of the most famous organ works ever written."
   },
   {
@@ -116,7 +116,7 @@
     "year": 1847,
     "era": "Romantic",
     "nationality": "Hungarian",
-    "audio_url": "/audio/classical/12.mp3",
+    "audio_url": "/audio/classical/12.ogg",
     "fun_fact": "This piece has been featured in numerous cartoons, including Tom and Jerry and Bugs Bunny."
   },
   {
@@ -126,7 +126,7 @@
     "year": 1801,
     "era": "Classical/Romantic",
     "nationality": "German",
-    "audio_url": "/audio/classical/13.mp3",
+    "audio_url": "/audio/classical/13.ogg",
     "fun_fact": "Beethoven himself was not fond of this piece, despite its immense popularity."
   },
   {
@@ -156,7 +156,7 @@
     "year": 1875,
     "era": "Romantic",
     "nationality": "Norwegian",
-    "audio_url": "/audio/classical/16.mp3",
+    "audio_url": "/audio/classical/16.ogg",
     "fun_fact": "Despite being about a Norwegian troll, this piece was meant to depict a sunrise in Morocco."
   },
   {
@@ -166,7 +166,7 @@
     "year": 1876,
     "era": "Romantic",
     "nationality": "Russian",
-    "audio_url": "/audio/classical/17.mp3",
+    "audio_url": "/audio/classical/17.ogg",
     "fun_fact": "The original 1877 production was a failure; the ballet only became popular after Tchaikovsky's death."
   },
   {
@@ -186,7 +186,7 @@
     "year": 1880,
     "era": "Romantic",
     "nationality": "Russian",
-    "audio_url": "/audio/classical/19.mp3",
+    "audio_url": "/audio/classical/19.ogg",
     "fun_fact": "The score calls for actual cannons to be fired during the finale."
   },
   {
@@ -196,7 +196,7 @@
     "year": 1875,
     "era": "Romantic",
     "nationality": "Russian",
-    "audio_url": "/audio/classical/20.mp3",
+    "audio_url": "/audio/classical/20.ogg",
     "fun_fact": "Initially rejected by pianist Nikolai Rubinstein as unplayable, it's now one of the most popular concertos."
   },
   {
@@ -206,7 +206,7 @@
     "year": 1832,
     "era": "Romantic",
     "nationality": "Polish",
-    "audio_url": "/audio/classical/21.mp3",
+    "audio_url": "/audio/classical/21.ogg",
     "fun_fact": "Chopin dedicated this to his student Marie Pleyel, a famous pianist."
   },
   {
@@ -216,7 +216,7 @@
     "year": 1847,
     "era": "Romantic",
     "nationality": "Polish",
-    "audio_url": "/audio/classical/22.mp3",
+    "audio_url": "/audio/classical/22.ogg",
     "fun_fact": "The name means 'small' waltz (from Latin 'minutus'), not that it should be played in one minute."
   },
   {
@@ -236,7 +236,7 @@
     "year": 1894,
     "era": "Impressionist",
     "nationality": "French",
-    "audio_url": "/audio/classical/24.mp3",
+    "audio_url": "/audio/classical/24.ogg",
     "fun_fact": "This piece is often credited with starting the modernist movement in music."
   },
   {
@@ -246,7 +246,7 @@
     "year": 1928,
     "era": "Impressionist/Modern",
     "nationality": "French",
-    "audio_url": "/audio/classical/25.mp3",
+    "audio_url": "/audio/classical/25.ogg",
     "fun_fact": "Ravel described it as 'a piece for orchestra without music' - it's one continuous crescendo."
   },
   {
@@ -256,7 +256,7 @@
     "year": 1829,
     "era": "Romantic",
     "nationality": "Italian",
-    "audio_url": "/audio/classical/26.mp3",
+    "audio_url": "/audio/classical/26.ogg",
     "fun_fact": "This finale became famous as the theme for The Lone Ranger TV series."
   },
   {
@@ -266,7 +266,7 @@
     "year": 1816,
     "era": "Romantic",
     "nationality": "Italian",
-    "audio_url": "/audio/classical/27.mp3",
+    "audio_url": "/audio/classical/27.ogg",
     "fun_fact": "Rossini wrote this entire opera in just 13 days."
   },
   {
@@ -276,7 +276,7 @@
     "year": 1875,
     "era": "Romantic",
     "nationality": "French",
-    "audio_url": "/audio/classical/28.mp3",
+    "audio_url": "/audio/classical/28.ogg",
     "fun_fact": "Bizet died just three months after the opera's premiere, never knowing it would become a masterpiece."
   },
   {
@@ -286,7 +286,7 @@
     "year": 1896,
     "era": "Late Romantic",
     "nationality": "German",
-    "audio_url": "/audio/classical/29.mp3",
+    "audio_url": "/audio/classical/29.ogg",
     "fun_fact": "Made iconic by Stanley Kubrick's film 2001: A Space Odyssey."
   },
   {
@@ -296,7 +296,7 @@
     "year": 1825,
     "era": "Romantic",
     "nationality": "Austrian",
-    "audio_url": "/audio/classical/30.mp3",
+    "audio_url": "/audio/classical/30.ogg",
     "fun_fact": "The original text was from a Walter Scott poem, not the Latin prayer, which was added later."
   },
   {
@@ -306,7 +306,7 @@
     "year": 1822,
     "era": "Romantic",
     "nationality": "Austrian",
-    "audio_url": "/audio/classical/31.mp3",
+    "audio_url": "/audio/classical/31.ogg",
     "fun_fact": "Schubert only completed two movements, and no one knows why he stopped."
   },
   {
@@ -316,7 +316,7 @@
     "year": 1901,
     "era": "Late Romantic",
     "nationality": "Russian",
-    "audio_url": "/audio/classical/32.mp3",
+    "audio_url": "/audio/classical/32.ogg",
     "fun_fact": "Composed after recovering from depression with the help of hypnotherapy."
   },
   {
@@ -326,7 +326,7 @@
     "year": 1902,
     "era": "Late Romantic",
     "nationality": "Austrian",
-    "audio_url": "/audio/classical/33.mp3",
+    "audio_url": "/audio/classical/33.ogg",
     "fun_fact": "This Adagietto was used in the film Death in Venice and is often played at funerals."
   },
   {
@@ -336,7 +336,7 @@
     "year": 1916,
     "era": "Modern",
     "nationality": "British",
-    "audio_url": "/audio/classical/34.mp3",
+    "audio_url": "/audio/classical/34.ogg",
     "fun_fact": "Holst wrote this before World War I ended, and it seems to predict the mechanized warfare."
   },
   {
@@ -346,18 +346,18 @@
     "year": 1916,
     "era": "Modern",
     "nationality": "British",
-    "audio_url": "/audio/classical/35.mp3",
+    "audio_url": "/audio/classical/35.ogg",
     "fun_fact": "The central melody was later adapted into the hymn 'I Vow to Thee, My Country.'"
   },
   {
     "id": 36,
-    "title": "Carmina Burana: O Fortuna",
-    "composer": "Carl Orff",
-    "year": 1937,
-    "era": "Modern",
+    "title": "Siegfried's Death and Funeral March (Götterdämmerung)",
+    "composer": "Richard Wagner",
+    "year": 1876,
+    "era": "Romantic",
     "nationality": "German",
-    "audio_url": "/audio/classical/36.mp3",
-    "fun_fact": "Based on medieval poems and now one of the most frequently used pieces in film and TV."
+    "audio_url": "/audio/classical/36.ogg",
+    "fun_fact": "This dramatic scene depicts the death of the hero Siegfried in Wagner's epic Ring Cycle opera."
   },
   {
     "id": 37,
@@ -366,7 +366,7 @@
     "year": 1874,
     "era": "Romantic",
     "nationality": "Italian",
-    "audio_url": "/audio/classical/37.mp3",
+    "audio_url": "/audio/classical/37.ogg",
     "fun_fact": "Written in memory of Italian writer Alessandro Manzoni."
   },
   {
@@ -376,7 +376,7 @@
     "year": 1851,
     "era": "Romantic",
     "nationality": "Italian",
-    "audio_url": "/audio/classical/38.mp3",
+    "audio_url": "/audio/classical/38.ogg",
     "fun_fact": "Verdi kept this aria secret until the premiere to prevent it from being leaked."
   },
   {
@@ -386,7 +386,7 @@
     "year": 1926,
     "era": "Late Romantic",
     "nationality": "Italian",
-    "audio_url": "/audio/classical/39.mp3",
+    "audio_url": "/audio/classical/39.ogg",
     "fun_fact": "Made world-famous by Luciano Pavarotti's performances, especially at the 1990 World Cup."
   },
   {
@@ -396,7 +396,7 @@
     "year": 1731,
     "era": "Baroque",
     "nationality": "German",
-    "audio_url": "/audio/classical/40.mp3",
+    "audio_url": "/audio/classical/40.ogg",
     "fun_fact": "The title refers to an arrangement that can be played entirely on the violin's lowest string."
   },
   {
@@ -406,7 +406,7 @@
     "year": 1721,
     "era": "Baroque",
     "nationality": "German",
-    "audio_url": "/audio/classical/41.mp3",
+    "audio_url": "/audio/classical/41.ogg",
     "fun_fact": "Bach sent these concertos as a job application to the Margrave of Brandenburg, who never responded."
   },
   {
@@ -416,7 +416,7 @@
     "year": 1741,
     "era": "Baroque",
     "nationality": "German-British",
-    "audio_url": "/audio/classical/42.mp3",
+    "audio_url": "/audio/classical/42.ogg",
     "fun_fact": "Tradition says King George II stood during this chorus, starting the custom of audiences standing."
   },
   {
@@ -426,7 +426,7 @@
     "year": 1717,
     "era": "Baroque",
     "nationality": "German-British",
-    "audio_url": "/audio/classical/43.mp3",
+    "audio_url": "/audio/classical/43.ogg",
     "fun_fact": "Composed for a royal boat party on the River Thames for King George I."
   },
   {
@@ -436,7 +436,7 @@
     "year": 1869,
     "era": "Romantic",
     "nationality": "German",
-    "audio_url": "/audio/classical/44.mp3",
+    "audio_url": "/audio/classical/44.ogg",
     "fun_fact": "This is actually based on a Hungarian folk song, which led to accusations of plagiarism."
   },
   {
@@ -446,7 +446,7 @@
     "year": 1893,
     "era": "Romantic",
     "nationality": "Czech",
-    "audio_url": "/audio/classical/45.mp3",
+    "audio_url": "/audio/classical/45.ogg",
     "fun_fact": "Composed in New York, it was inspired by Native American music and African American spirituals."
   },
   {
@@ -456,28 +456,28 @@
     "year": 1897,
     "era": "Impressionist",
     "nationality": "French",
-    "audio_url": "/audio/classical/46.mp3",
+    "audio_url": "/audio/classical/46.ogg",
     "fun_fact": "Made famous by Mickey Mouse in Disney's Fantasia (1940)."
   },
   {
     "id": 47,
-    "title": "The Rite of Spring - Introduction",
-    "composer": "Igor Stravinsky",
-    "year": 1913,
-    "era": "Modern",
-    "nationality": "Russian",
-    "audio_url": "/audio/classical/47.mp3",
-    "fun_fact": "The premiere caused a near-riot due to its revolutionary rhythms and dissonances."
+    "title": "The Moldau (Vltava)",
+    "composer": "Bedřich Smetana",
+    "year": 1874,
+    "era": "Romantic",
+    "nationality": "Czech",
+    "audio_url": "/audio/classical/47.ogg",
+    "fun_fact": "This symphonic poem depicts the journey of the Vltava river through the Czech countryside to Prague."
   },
   {
     "id": 48,
-    "title": "Firebird Suite - Finale",
-    "composer": "Igor Stravinsky",
-    "year": 1910,
-    "era": "Modern",
-    "nationality": "Russian",
-    "audio_url": "/audio/classical/48.mp3",
-    "fun_fact": "This ballet launched Stravinsky's international career at age 27."
+    "title": "The Bartered Bride - Overture",
+    "composer": "Bedřich Smetana",
+    "year": 1866,
+    "era": "Romantic",
+    "nationality": "Czech",
+    "audio_url": "/audio/classical/48.ogg",
+    "fun_fact": "This comic opera is considered the first great Czech national opera and remains Smetana's most popular work."
   },
   {
     "id": 49,
@@ -486,7 +486,7 @@
     "year": 1936,
     "era": "Modern",
     "nationality": "Russian",
-    "audio_url": "/audio/classical/49.mp3",
+    "audio_url": "/audio/classical/49.ogg",
     "fun_fact": "Each character is represented by a different instrument of the orchestra."
   },
   {
@@ -496,7 +496,7 @@
     "year": 1935,
     "era": "Modern",
     "nationality": "Russian",
-    "audio_url": "/audio/classical/50.mp3",
+    "audio_url": "/audio/classical/50.ogg",
     "fun_fact": "Also known as 'Montagues and Capulets,' it became the theme for the UK show The Apprentice."
   }
 ]

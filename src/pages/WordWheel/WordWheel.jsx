@@ -5,8 +5,19 @@ import { flagWord, getWordFeedback, unflagWord, FeedbackType } from '../../data/
 import styles from './WordWheel.module.css';
 
 const STORAGE_KEY = 'wordwheel_puzzle';
+const MODE_KEY = 'wordwheel_mode';
+
+// Game modes
+const MODES = {
+  CLASSIC: { letters: 9, outer: 8, name: 'Classic', description: '9 letters' },
+  SPELLING_BEE: { letters: 7, outer: 6, name: 'Spelling Bee', description: '7 letters' },
+};
 
 export default function WordWheel() {
+  const [mode, setMode] = useState(() => {
+    const saved = localStorage.getItem(MODE_KEY);
+    return saved === 'SPELLING_BEE' ? 'SPELLING_BEE' : 'CLASSIC';
+  });
   const [puzzle, setPuzzle] = useState(null);
   const [outerLetters, setOuterLetters] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
@@ -18,6 +29,11 @@ export default function WordWheel() {
   const [selectedWord, setSelectedWord] = useState(null);
   const [feedbackMap, setFeedbackMap] = useState({});
 
+  // Save mode to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(MODE_KEY, mode);
+  }, [mode]);
+
   // Save game state to localStorage whenever it changes
   useEffect(() => {
     if (puzzle) {
@@ -26,14 +42,16 @@ export default function WordWheel() {
         outerLetters,
         foundWords,
         possibleWords,
+        mode,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
     }
-  }, [puzzle, outerLetters, foundWords, possibleWords]);
+  }, [puzzle, outerLetters, foundWords, possibleWords, mode]);
 
-  const createNewPuzzle = useCallback(() => {
+  const createNewPuzzle = useCallback((newMode = mode) => {
+    const modeConfig = MODES[newMode];
     // Generate a puzzle with at least 10 possible words
-    const generatedPuzzle = generatePuzzle(10);
+    const generatedPuzzle = generatePuzzle(10, 100, modeConfig.letters);
 
     if (!generatedPuzzle) {
       console.error('Failed to generate puzzle');
@@ -48,7 +66,7 @@ export default function WordWheel() {
       outer.splice(centerIndex, 1);
     }
 
-    setPuzzle({ letters, center });
+    setPuzzle({ letters, center, letterCount: modeConfig.letters });
     setOuterLetters(shuffleArray(outer));
     setCurrentWord('');
     setUsedPositions([]);
@@ -61,7 +79,7 @@ export default function WordWheel() {
     setPossibleWords(words);
     setSelectedWord(null);
     setFeedbackMap({});
-  }, []);
+  }, [mode]);
 
   // Load feedback for all words when showing all words
   useEffect(() => {
@@ -106,10 +124,17 @@ export default function WordWheel() {
     if (saved) {
       try {
         const gameState = JSON.parse(saved);
-        setPuzzle(gameState.puzzle);
-        setOuterLetters(gameState.outerLetters);
-        setFoundWords(gameState.foundWords || []);
-        setPossibleWords(gameState.possibleWords || []);
+        // Check if saved puzzle matches current mode
+        const savedMode = gameState.mode || 'CLASSIC';
+        if (savedMode === mode) {
+          setPuzzle(gameState.puzzle);
+          setOuterLetters(gameState.outerLetters);
+          setFoundWords(gameState.foundWords || []);
+          setPossibleWords(gameState.possibleWords || []);
+        } else {
+          // Mode changed, create new puzzle
+          createNewPuzzle();
+        }
       } catch (e) {
         console.error('Failed to load saved puzzle:', e);
         createNewPuzzle();
@@ -117,7 +142,15 @@ export default function WordWheel() {
     } else {
       createNewPuzzle();
     }
-  }, [createNewPuzzle]);
+  }, [createNewPuzzle, mode]);
+
+  // Handle mode change
+  const handleModeChange = (newMode) => {
+    if (newMode !== mode) {
+      setMode(newMode);
+      createNewPuzzle(newMode);
+    }
+  };
 
   const addLetter = (letter, index, isCenter = false) => {
     setCurrentWord(prev => prev + letter);
@@ -183,8 +216,9 @@ export default function WordWheel() {
       return a.localeCompare(b);
     }));
 
-    if (word.length === 9) {
-      setMessage({ text: '🎉 Amazing! You found the 9-letter word!', type: 'success' });
+    const modeConfig = MODES[mode];
+    if (word.length === modeConfig.letters) {
+      setMessage({ text: `🎉 Amazing! You found the ${modeConfig.letters}-letter word!`, type: 'success' });
     } else if (word.length >= 6) {
       setMessage({ text: '✨ Excellent!', type: 'success' });
     } else {
@@ -231,8 +265,10 @@ export default function WordWheel() {
   }, [handleKeyDown]);
 
   const calculateScore = () => {
+    const modeConfig = MODES[mode];
     return foundWords.reduce((score, word) => {
-      if (word.length === 9) return score + 18;
+      // Pangram (uses all letters) gets bonus
+      if (word.length === modeConfig.letters) return score + modeConfig.letters * 2;
       if (word.length >= 7) return score + 7;
       if (word.length >= 5) return score + 5;
       if (word.length >= 4) return score + 2;
@@ -247,6 +283,8 @@ export default function WordWheel() {
 
   if (!puzzle) return null;
 
+  const modeConfig = MODES[mode];
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -258,11 +296,23 @@ export default function WordWheel() {
           Find words using the letters. Every word must include the center letter <strong>{puzzle.center}</strong>.
           Each letter can only be used once per word.
         </p>
+        <div className={styles.modeSelector}>
+          {Object.entries(MODES).map(([key, config]) => (
+            <button
+              key={key}
+              className={`${styles.modeBtn} ${mode === key ? styles.active : ''}`}
+              onClick={() => handleModeChange(key)}
+            >
+              {config.name}
+              <span className={styles.modeDesc}>{config.description}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className={styles.gameArea}>
         <div className={styles.wheelSection}>
-          <div className={styles.wheel}>
+          <div className={`${styles.wheel} ${mode === 'SPELLING_BEE' ? styles.smallerWheel : ''}`}>
             <div
               className={`${styles.centerLetter} ${isPositionUsed(-1, true) ? styles.used : ''}`}
               onClick={() => !isPositionUsed(-1, true) && addLetter(puzzle.center, -1, true)}
@@ -274,7 +324,7 @@ export default function WordWheel() {
                 key={`${letter}-${index}`}
                 className={`${styles.outerLetter} ${isPositionUsed(index, false) ? styles.used : ''}`}
                 style={{
-                  '--angle': `${(index * 360) / 8}deg`,
+                  '--angle': `${(index * 360) / modeConfig.outer}deg`,
                 }}
                 onClick={() => !isPositionUsed(index, false) && addLetter(letter, index)}
               >
@@ -326,7 +376,7 @@ export default function WordWheel() {
                 {foundWords.map((word) => (
                   <span
                     key={word}
-                    className={`${styles.word} ${word.length === 9 ? styles.nineLetterWord : ''}`}
+                    className={`${styles.word} ${word.length === modeConfig.letters ? styles.pangramWord : ''}`}
                   >
                     {word}
                   </span>
@@ -355,7 +405,7 @@ export default function WordWheel() {
                 {possibleWords.map((word) => (
                   <div key={word} className={styles.wordContainer}>
                     <span
-                      className={`${styles.word} ${styles.clickable} ${foundWords.includes(word) ? styles.found : styles.missed} ${word.length === 9 ? styles.nineLetterWord : ''} ${feedbackMap[word] ? styles.flaggedWord : ''} ${selectedWord === word ? styles.selected : ''}`}
+                      className={`${styles.word} ${styles.clickable} ${foundWords.includes(word) ? styles.found : styles.missed} ${word.length === modeConfig.letters ? styles.pangramWord : ''} ${feedbackMap[word] ? styles.flaggedWord : ''} ${selectedWord === word ? styles.selected : ''}`}
                       onClick={() => handleWordClick(word)}
                     >
                       {feedbackMap[word] && <span className={styles.flagIcon}>{feedbackMap[word].type === FeedbackType.ARCHAIC ? '📜' : '🤔'}</span>}

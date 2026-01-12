@@ -33,7 +33,13 @@ All painting images are sourced from **Wikimedia Commons** and are in the **Publ
 
 ### Classical Music
 
-Classical music audio files are sourced from public domain recordings or recordings with appropriate licenses. See `public/audio/classical/README.md` for specific attributions.
+Classical music audio files are sourced from the [Internet Archive](https://archive.org/) collection "[100 Classical Music Masterpieces](https://archive.org/details/100ClassicalMusicMasterpieces)".
+
+- **Compositions**: All musical compositions are in the public domain (composers deceased > 70 years)
+- **Recordings**: From Internet Archive's `opensource_audio` collection
+- **Format**: OGG Vorbis
+
+See `public/audio/classical/README.md` for detailed licensing information and recommendations for commercial use.
 
 ## Word Lists
 
@@ -81,5 +87,4 @@ If you believe your work has been used without proper attribution, please contac
 
 ---
 
-**Last Updated**: 2024
-
+**Last Updated**: January 2026

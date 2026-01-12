@@ -2,7 +2,7 @@
  * Centralized game registry
  * Contains all game metadata including titles, descriptions, colors, and icons
  * Used by Home page, GameCard, favicon, and routing
- * 
+ *
  * Reorganized by Primary Mechanic/Skill for better discoverability
  */
 
@@ -162,7 +162,7 @@ export const categories = [
         icon: '🧵',
         colors: { primary: '#a78bfa', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #6366f1 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
       {
         title: 'Connections',
@@ -180,7 +180,7 @@ export const categories = [
         icon: '🔄',
         colors: { primary: '#f472b6', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #a855f7 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
     ],
   },
@@ -507,7 +507,7 @@ export const categories = [
         icon: '🧱',
         colors: { primary: '#71717a', secondary: '#52525b' },
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
       {
         title: 'Heyawake',
@@ -649,7 +649,7 @@ export const categories = [
         icon: '🎒',
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
     ],
   },
@@ -880,6 +880,15 @@ export const categories = [
         version: 'v0.1',
       },
       {
+        title: 'Congestion',
+        slug: 'congestion',
+        description: 'Slide cars and trucks to free the red car from the traffic jam!',
+        icon: '🚗',
+        colors: { primary: '#ef4444', secondary: '#dc2626' },
+        gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+        version: 'v0.1',
+      },
+      {
         title: 'Tile Swap',
         slug: 'tile-swap',
         description: 'Swap tiles to reassemble the scrambled image.',
@@ -1103,6 +1112,15 @@ export const categories = [
         version: 'v0.1',
       },
       {
+        title: 'Anatomy Quiz',
+        slug: 'anatomy-quiz',
+        description: 'Identify bones, muscles, and organs by clicking on the human body diagram!',
+        icon: '🫀',
+        colors: { primary: '#ec4899', secondary: '#be185d' },
+        gradient: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
+        version: 'v0.1',
+      },
+      {
         title: 'Constellations',
         slug: 'constellations',
         description: 'Identify star constellations! Learn the 88 IAU constellations and their star patterns.',
@@ -1112,7 +1130,7 @@ export const categories = [
         version: 'v0.1',
       },
       {
-        title: 'Pokémon Quiz (Text)',
+        title: 'Pokémon Quiz',
         slug: 'pokemon-quiz',
         description: 'Text-only quiz: identify the generation and type(s) for a Pokémon.',
         icon: '📘',
@@ -1121,13 +1139,13 @@ export const categories = [
         version: 'DEV',
       },
       {
-        title: 'Pokémon Gen Blitz (Text)',
+        title: 'Pokémon Gen Blitz',
         slug: 'pokemon-gen-blitz',
         description: 'Name as many Pokémon as you can from a chosen generation before time runs out.',
         icon: '⌛',
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
       {
         title: 'Periodic Table Quiz',
@@ -1136,7 +1154,7 @@ export const categories = [
         icon: '⚗️',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
       {
         title: 'Language Quiz',
@@ -1172,7 +1190,7 @@ export const categories = [
         icon: '🎼',
         colors: { primary: '#a855f7', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
       {
         title: 'Map',
@@ -1249,7 +1267,7 @@ export const categories = [
         icon: '💧',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
       {
         title: 'Train Shunting',
@@ -1276,7 +1294,7 @@ export const categories = [
         icon: '❓',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-        version: 'DEV',
+        version: 'v0.1',
       },
       {
         title: 'Dominosa',

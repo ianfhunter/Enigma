@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:ui:coverage": "vitest --ui --coverage"
   },
   "dependencies": {
     "american-british-english-translator": "^0.2.1",
@@ -26,6 +28,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/coverage-v8": "^4.0.17",
     "@vitest/ui": "^4.0.16",
     "eslint": "^9.39.1",
     "eslint-plugin-react": "^7.37.5",

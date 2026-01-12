@@ -52,10 +52,10 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const register = useCallback(async (username, password, displayName) => {
+  const register = useCallback(async (username, password, displayName, email) => {
     setError(null);
     try {
-      const userData = await authApi.register(username, password, displayName);
+      const userData = await authApi.register(username, password, displayName, email);
       setUser(userData);
       return userData;
     } catch (err) {

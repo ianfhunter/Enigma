@@ -1,5 +1,186 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
+/* Theme CSS Variables */
+:root {
+  /* Dark theme (default) */
+  --color-bg: #050510;
+  --color-bg-secondary: rgba(30, 0, 60, 0.3);
+  --color-bg-tertiary: rgba(0, 0, 0, 0.3);
+  --color-bg-card: rgba(30, 0, 60, 0.3);
+  --color-bg-input: rgba(0, 0, 0, 0.3);
+  --color-bg-hover: rgba(139, 92, 246, 0.1);
+
+  --color-text: #e0e0e8;
+  --color-text-secondary: #888;
+  --color-text-tertiary: #666;
+  --color-text-muted: #555;
+
+  --color-primary: #a78bfa;
+  --color-primary-light: #c4b5fd;
+  --color-primary-dark: #7c3aed;
+  --color-primary-bg: rgba(139, 92, 246, 0.2);
+  --color-primary-bg-hover: rgba(139, 92, 246, 0.3);
+  --color-primary-border: rgba(139, 92, 246, 0.2);
+  --color-primary-border-hover: rgba(139, 92, 246, 0.4);
+
+  --color-success: #86efac;
+  --color-success-bg: rgba(34, 197, 94, 0.15);
+  --color-success-border: rgba(34, 197, 94, 0.3);
+
+  --color-danger: #fca5a5;
+  --color-danger-bg: rgba(239, 68, 68, 0.15);
+  --color-danger-border: rgba(239, 68, 68, 0.3);
+
+  --color-warning: #fbbf24;
+  --color-warning-bg: rgba(251, 191, 36, 0.2);
+
+  --color-border: rgba(139, 92, 246, 0.2);
+  --color-border-light: rgba(139, 92, 246, 0.1);
+
+  --color-scrollbar-track: rgba(30, 0, 60, 0.3);
+  --color-scrollbar-thumb: rgba(139, 92, 246, 0.4);
+  --color-scrollbar-thumb-hover: rgba(167, 139, 250, 0.6);
+
+  --gradient-bg-1: rgba(88, 28, 135, 0.15);
+  --gradient-bg-2: rgba(59, 7, 100, 0.15);
+  --gradient-bg-3: rgba(79, 10, 190, 0.1);
+
+  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+  /* Game-specific variables */
+  --game-panel-bg: rgba(255, 255, 255, 0.03);
+  --game-panel-border: rgba(255, 255, 255, 0.08);
+
+  --game-key-bg: rgba(255, 255, 255, 0.12);
+  --game-key-border: rgba(255, 255, 255, 0.15);
+  --game-key-text: #fff;
+  --game-key-hover-bg: rgba(255, 255, 255, 0.2);
+
+  --game-cell-bg: rgba(255, 255, 255, 0.05);
+  --game-cell-border: rgba(255, 255, 255, 0.1);
+  --game-cell-text: #fff;
+  --game-cell-hover: rgba(255, 255, 255, 0.1);
+
+  --game-accent-red: #e74c3c;
+  --game-accent-red-dark: #c0392b;
+  --game-accent-red-bg: rgba(231, 76, 60, 0.2);
+  --game-accent-red-border: rgba(231, 76, 60, 0.3);
+
+  --game-accent-green: #27ae60;
+  --game-accent-green-dark: #1e8449;
+  --game-accent-green-bg: rgba(39, 174, 96, 0.3);
+  --game-accent-green-border: rgba(39, 174, 96, 0.5);
+
+  --game-accent-blue: #3498db;
+  --game-accent-blue-dark: #2980b9;
+  --game-accent-blue-bg: rgba(52, 152, 219, 0.2);
+  --game-accent-blue-border: rgba(52, 152, 219, 0.3);
+
+  --game-accent-yellow: #f1c40f;
+  --game-accent-yellow-dark: #d4ac0d;
+  --game-accent-yellow-bg: rgba(241, 196, 15, 0.15);
+  --game-accent-yellow-border: rgba(241, 196, 15, 0.3);
+
+  --game-accent-purple: #9b59b6;
+  --game-accent-purple-light: #ce93d8;
+  --game-accent-purple-bg: rgba(156, 39, 176, 0.1);
+  --game-accent-purple-border: rgba(156, 39, 176, 0.3);
+
+  --game-gallows: rgba(255, 255, 255, 0.4);
+  --game-slot-blank: rgba(255, 255, 255, 0.3);
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --color-bg: #f8f7ff;
+  --color-bg-secondary: rgba(139, 92, 246, 0.08);
+  --color-bg-tertiary: rgba(139, 92, 246, 0.05);
+  --color-bg-card: #ffffff;
+  --color-bg-input: #ffffff;
+  --color-bg-hover: rgba(139, 92, 246, 0.1);
+
+  --color-text: #1a1625;
+  --color-text-secondary: #4a4458;
+  --color-text-tertiary: #6b6580;
+  --color-text-muted: #9992a8;
+
+  --color-primary: #7c3aed;
+  --color-primary-light: #8b5cf6;
+  --color-primary-dark: #5b21b6;
+  --color-primary-bg: rgba(139, 92, 246, 0.15);
+  --color-primary-bg-hover: rgba(139, 92, 246, 0.25);
+  --color-primary-border: rgba(139, 92, 246, 0.3);
+  --color-primary-border-hover: rgba(139, 92, 246, 0.5);
+
+  --color-success: #15803d;
+  --color-success-bg: rgba(34, 197, 94, 0.15);
+  --color-success-border: rgba(34, 197, 94, 0.4);
+
+  --color-danger: #dc2626;
+  --color-danger-bg: rgba(239, 68, 68, 0.1);
+  --color-danger-border: rgba(239, 68, 68, 0.3);
+
+  --color-warning: #b45309;
+  --color-warning-bg: rgba(251, 191, 36, 0.2);
+
+  --color-border: rgba(139, 92, 246, 0.2);
+  --color-border-light: rgba(139, 92, 246, 0.1);
+
+  --color-scrollbar-track: rgba(139, 92, 246, 0.1);
+  --color-scrollbar-thumb: rgba(139, 92, 246, 0.3);
+  --color-scrollbar-thumb-hover: rgba(139, 92, 246, 0.5);
+
+  --gradient-bg-1: rgba(139, 92, 246, 0.08);
+  --gradient-bg-2: rgba(167, 139, 250, 0.06);
+  --gradient-bg-3: rgba(192, 132, 252, 0.05);
+
+  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
+  --shadow-card: 0 4px 20px rgba(139, 92, 246, 0.1);
+
+  /* Game-specific variables - light theme */
+  --game-panel-bg: rgba(139, 92, 246, 0.05);
+  --game-panel-border: rgba(139, 92, 246, 0.15);
+
+  --game-key-bg: rgba(139, 92, 246, 0.1);
+  --game-key-border: rgba(139, 92, 246, 0.2);
+  --game-key-text: #1a1625;
+  --game-key-hover-bg: rgba(139, 92, 246, 0.2);
+
+  --game-cell-bg: rgba(139, 92, 246, 0.08);
+  --game-cell-border: rgba(139, 92, 246, 0.15);
+  --game-cell-text: #1a1625;
+  --game-cell-hover: rgba(139, 92, 246, 0.15);
+
+  --game-accent-red: #dc2626;
+  --game-accent-red-dark: #b91c1c;
+  --game-accent-red-bg: rgba(220, 38, 38, 0.12);
+  --game-accent-red-border: rgba(220, 38, 38, 0.25);
+
+  --game-accent-green: #16a34a;
+  --game-accent-green-dark: #15803d;
+  --game-accent-green-bg: rgba(22, 163, 74, 0.15);
+  --game-accent-green-border: rgba(22, 163, 74, 0.3);
+
+  --game-accent-blue: #2563eb;
+  --game-accent-blue-dark: #1d4ed8;
+  --game-accent-blue-bg: rgba(37, 99, 235, 0.12);
+  --game-accent-blue-border: rgba(37, 99, 235, 0.25);
+
+  --game-accent-yellow: #ca8a04;
+  --game-accent-yellow-dark: #a16207;
+  --game-accent-yellow-bg: rgba(202, 138, 4, 0.15);
+  --game-accent-yellow-border: rgba(202, 138, 4, 0.3);
+
+  --game-accent-purple: #7c3aed;
+  --game-accent-purple-light: #a78bfa;
+  --game-accent-purple-bg: rgba(124, 58, 237, 0.12);
+  --game-accent-purple-border: rgba(124, 58, 237, 0.25);
+
+  --game-gallows: rgba(107, 101, 128, 0.5);
+  --game-slot-blank: rgba(107, 101, 128, 0.3);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -15,10 +196,11 @@ html {
 
 body {
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #050510;
-  color: #e0e0e8;
+  background: var(--color-bg);
+  color: var(--color-text);
   line-height: 1.5;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body::before {
@@ -28,12 +210,13 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(59, 7, 100, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(79, 10, 190, 0.1) 0%, transparent 50%);
+  background:
+    radial-gradient(circle at 20% 50%, var(--gradient-bg-1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--gradient-bg-2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, var(--gradient-bg-3) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
+  transition: background 0.3s ease;
 }
 
 img, picture, video, canvas, svg {
@@ -60,22 +243,26 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(30, 0, 60, 0.3);
+  background: var(--color-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.4);
+  background: var(--color-scrollbar-thumb);
   border-radius: 4px;
   box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 139, 250, 0.6);
+  background: var(--color-scrollbar-thumb-hover);
   box-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
-  }
+}
 
 /* Selection */
 ::selection {
   background: rgba(139, 92, 246, 0.4);
   color: #fff;
+}
+
+[data-theme="light"] ::selection {
+  color: #1a1625;
 }

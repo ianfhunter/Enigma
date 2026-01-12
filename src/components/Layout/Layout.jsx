@@ -1,48 +1,48 @@
-import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useFavicon } from '../../hooks/useFavicon';
 import { enabledGames, allGames } from '../../data/gameRegistry';
 import { useAuth } from '../../context/AuthContext';
+import { useSettings } from '../../context/SettingsContext';
 import { setEnglishVariant } from '../../data/wordFrequency';
-import { users } from '../../api/client';
-import ProfileModal from '../ProfileModal';
 import AuthModal from '../AuthModal';
 import logo from '../../branding/logo.svg';
 import styles from './Layout.module.css';
+import { useEffect } from 'react';
 
 export default function Layout() {
   useFavicon();
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
-  const { user, isAuthenticated, loading } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { settings, loading: settingsLoading } = useSettings();
 
-  const [showDevItems, setShowDevItems] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-  const [userSettings, setUserSettings] = useState(null);
-
-  // Load user settings when authenticated
+  // Update English variant when settings change
   useEffect(() => {
-    if (isAuthenticated) {
-      users.getSettings().then(settings => {
-        setUserSettings(settings);
-        setEnglishVariant(settings.englishVariant);
-      }).catch(console.error);
+    if (settings.englishVariant) {
+      setEnglishVariant(settings.englishVariant);
     }
-  }, [isAuthenticated]);
+  }, [settings.englishVariant]);
 
-  // Count total games and games in development
-  const totalGames = allGames.length;
-  const devGames = allGames.filter(game => game.version === 'DEV').length;
-  const releasedGames = totalGames - devGames;
+  // Count released (non-DEV) games
+  const releasedGames = allGames.filter(game => game.version !== 'DEV').length;
+
+  // Determine if DEV games should be shown (true if any DEV game is not in disabledGames)
+  const devGames = allGames.filter(game => game.version === 'DEV');
+  const disabledGames = settings?.disabledGames || [];
+  const showDevItems = devGames.some(game => !disabledGames.includes(game.slug));
 
   const handleSurpriseMe = () => {
-    const randomGame = enabledGames[Math.floor(Math.random() * enabledGames.length)];
-    navigate(`/${randomGame.slug}`);
+    // Filter enabled games based on user settings
+    const availableGames = enabledGames.filter(game => !disabledGames.includes(game.slug));
+    if (availableGames.length > 0) {
+      const randomGame = availableGames[Math.floor(Math.random() * availableGames.length)];
+      navigate(`/${randomGame.slug}`);
+    }
   };
 
   // Show loading state
-  if (loading) {
+  if (authLoading || (isAuthenticated && settingsLoading)) {
     return (
       <div className={styles.layout}>
         <div className={styles.loadingContainer}>
@@ -72,33 +72,14 @@ export default function Layout() {
                     <span className={styles.statNumber}>{releasedGames}</span>
                     <span className={styles.statLabel}>Games</span>
                   </div>
-                  <div className={styles.statDivider}></div>
-                  <div className={styles.statItem}>
-                    <span className={styles.statNumber}>{devGames}</span>
-                    <span className={styles.statLabel}>In Dev</span>
-                  </div>
                 </div>
-
-                <label className={styles.toggle}>
-                  <input
-                    type="checkbox"
-                    checked={showDevItems}
-                    onChange={(e) => setShowDevItems(e.target.checked)}
-                  />
-                  <span className={styles.toggleSlider}></span>
-                  <span className={styles.toggleLabel}>DEV</span>
-                </label>
 
                 <button className={styles.surpriseButton} onClick={handleSurpriseMe}>
                   <span className={styles.surpriseIcon}>🎲</span>
                   Surprise Me!
                 </button>
 
-                <button
-                  className={styles.profileButton}
-                  onClick={() => setShowProfile(true)}
-                  aria-label="Profile"
-                >
+                <Link to="/profile" className={styles.profileButton} aria-label="Profile">
                   <span className={styles.profileAvatar}>
                     {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
                   </span>
@@ -106,9 +87,9 @@ export default function Layout() {
                     {user?.displayName || user?.username || 'User'}
                   </span>
                   <span className={styles.languageIndicator}>
-                    {userSettings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                    {settings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
                   </span>
-                </button>
+                </Link>
               </div>
             </div>
           ) : (
@@ -118,24 +99,20 @@ export default function Layout() {
                 <span className={styles.logoText}>Enigma</span>
               </Link>
 
-              <button
-                className={styles.profileButton}
-                onClick={() => setShowProfile(true)}
-                aria-label="Profile"
-              >
+              <Link to="/profile" className={styles.profileButton} aria-label="Profile">
                 <span className={styles.profileAvatar}>
                   {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
                 </span>
                 <span className={styles.languageIndicator}>
-                  {userSettings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                  {settings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
                 </span>
-              </button>
+              </Link>
             </div>
           )}
         </nav>
       </header>
       <main className={styles.main}>
-        <Outlet context={{ showDevItems }} />
+        <Outlet context={{ settings, showDevItems }} />
       </main>
       <footer className={styles.footer}>
         <p>Self-hosted games collection</p>
@@ -145,12 +122,6 @@ export default function Layout() {
       <AuthModal
         isOpen={!isAuthenticated}
         canClose={false}
-      />
-
-      {/* Profile modal - only when authenticated */}
-      <ProfileModal
-        isOpen={showProfile && isAuthenticated}
-        onClose={() => setShowProfile(false)}
       />
     </div>
   );

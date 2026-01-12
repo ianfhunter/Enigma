@@ -9,6 +9,85 @@ const SALT_ROUNDS = 12;
 // All routes require admin
 router.use(requireAdmin);
 
+// Get server statistics
+router.get('/stats', (req, res) => {
+  const stats = {};
+
+  // User stats
+  const userStats = db.prepare(`
+    SELECT
+      COUNT(*) as totalUsers,
+      SUM(CASE WHEN role = 'admin' THEN 1 ELSE 0 END) as adminCount,
+      MIN(created_at) as firstUserAt,
+      MAX(created_at) as lastUserAt
+    FROM users
+  `).get();
+
+  stats.users = {
+    total: userStats.totalUsers,
+    admins: userStats.adminCount,
+    firstUserAt: userStats.firstUserAt,
+    lastUserAt: userStats.lastUserAt
+  };
+
+  // Game progress stats
+  const gameStats = db.prepare(`
+    SELECT
+      COUNT(DISTINCT user_id) as usersWithProgress,
+      COUNT(DISTINCT game_slug) as gamesPlayed,
+      SUM(played) as totalGamesPlayed,
+      SUM(won) as totalWins
+    FROM game_progress
+  `).get();
+
+  stats.games = {
+    usersWithProgress: gameStats.usersWithProgress,
+    uniqueGamesPlayed: gameStats.gamesPlayed,
+    totalGamesPlayed: gameStats.totalGamesPlayed,
+    totalWins: gameStats.totalWins
+  };
+
+  // Most popular games
+  const popularGames = db.prepare(`
+    SELECT game_slug, COUNT(*) as players, SUM(played) as totalPlays
+    FROM game_progress
+    GROUP BY game_slug
+    ORDER BY totalPlays DESC
+    LIMIT 10
+  `).all();
+
+  stats.popularGames = popularGames.map(g => ({
+    gameSlug: g.game_slug,
+    players: g.players,
+    totalPlays: g.totalPlays
+  }));
+
+  // Recent activity (logins in last 24h, 7d, 30d)
+  const loginStats = db.prepare(`
+    SELECT
+      SUM(CASE WHEN created_at > datetime('now', '-1 day') THEN 1 ELSE 0 END) as last24h,
+      SUM(CASE WHEN created_at > datetime('now', '-7 days') THEN 1 ELSE 0 END) as last7d,
+      SUM(CASE WHEN created_at > datetime('now', '-30 days') THEN 1 ELSE 0 END) as last30d
+    FROM login_history
+    WHERE success = 1
+  `).get();
+
+  stats.logins = {
+    last24h: loginStats.last24h || 0,
+    last7d: loginStats.last7d || 0,
+    last30d: loginStats.last30d || 0
+  };
+
+  // Active sessions count
+  const activeSessions = db.prepare(`
+    SELECT COUNT(*) as count FROM sessions WHERE expire > ?
+  `).get(Date.now() / 1000);
+
+  stats.activeSessions = activeSessions.count;
+
+  res.json(stats);
+});
+
 // List all users
 router.get('/users', (req, res) => {
   const { search, limit = 50, offset = 0 } = req.query;

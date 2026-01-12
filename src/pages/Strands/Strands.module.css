@@ -65,7 +65,7 @@
   margin-bottom: 0.5rem;
 }
 
-.themeButton {
+.themeDisplay {
   padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(99, 102, 241, 0.2));
   border: 1px solid rgba(167, 139, 250, 0.3);
@@ -73,20 +73,7 @@
   color: #a78bfa;
   font-size: 1.1rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.themeButton:hover {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(99, 102, 241, 0.3));
-  transform: translateY(-1px);
-}
-
-.toggleHint {
-  font-size: 0.9rem;
+  display: inline-block;
 }
 
 /* Stats bar */
@@ -144,66 +131,72 @@
   cursor: not-allowed;
 }
 
-/* Message display */
+/* Message display - fixed position overlay */
 .message {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
   font-weight: 600;
   font-size: 0.95rem;
   animation: slideIn 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateX(-50%) translateY(-15px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
 .message.found {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2));
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  color: #4ade80;
+  background: linear-gradient(135deg, #166534, #15803d);
+  border: 1px solid #22c55e;
+  color: #bbf7d0;
 }
 
 .message.spangram {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  color: #fbbf24;
+  background: linear-gradient(135deg, #92400e, #a16207);
+  border: 1px solid #fbbf24;
+  color: #fef3c7;
 }
 
 .message.hint {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  color: #fbbf24;
+  background: linear-gradient(135deg, #92400e, #a16207);
+  border: 1px solid #fbbf24;
+  color: #fef3c7;
 }
 
 .message.valid {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
-  border: 1px solid rgba(59, 130, 246, 0.4);
-  color: #60a5fa;
+  background: linear-gradient(135deg, #1e40af, #1d4ed8);
+  border: 1px solid #3b82f6;
+  color: #bfdbfe;
 }
 
 .message.invalid {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #f87171;
+  background: linear-gradient(135deg, #991b1b, #b91c1c);
+  border: 1px solid #ef4444;
+  color: #fecaca;
 }
 
 .message.duplicate {
-  background: linear-gradient(135deg, rgba(113, 113, 122, 0.2), rgba(82, 82, 91, 0.2));
-  border: 1px solid rgba(113, 113, 122, 0.4);
-  color: #a1a1aa;
+  background: linear-gradient(135deg, #3f3f46, #52525b);
+  border: 1px solid #71717a;
+  color: #d4d4d8;
 }
 
 .message.win {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(99, 102, 241, 0.2));
-  border: 1px solid rgba(167, 139, 250, 0.4);
-  color: #a78bfa;
+  background: linear-gradient(135deg, #5b21b6, #6d28d9);
+  border: 1px solid #a78bfa;
+  color: #e9d5ff;
 }
 
 /* Grid */
@@ -373,7 +366,7 @@
 
 /* New game button */
 .newGameBtn {
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, #a78bfa 0%, #6366f1 100%);
   border: none;
   border-radius: 10px;
@@ -382,12 +375,85 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 0.5rem;
 }
 
 .newGameBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 20px rgba(167, 139, 250, 0.4);
+}
+
+/* Button row */
+.buttonRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* Give up button */
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 10px;
+  color: #f87171;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+/* Give up message */
+.giveUpMessage {
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  text-align: center;
+  animation: bounceIn 0.5s ease;
+}
+
+.giveUpEmoji {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.giveUpText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f87171;
+  margin-bottom: 0.5rem;
+}
+
+.giveUpTheme {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Message giveup variant */
+.message.giveup {
+  background: linear-gradient(135deg, #991b1b, #b91c1c);
+  border: 1px solid #ef4444;
+  color: #fecaca;
+}
+
+/* Revealed word (gave up, not found by player) */
+.word.revealed {
+  background: rgba(113, 113, 122, 0.15);
+  border-color: rgba(113, 113, 122, 0.4);
+  color: #a1a1aa;
+  font-style: italic;
+}
+
+.spangramLabel.revealed {
+  color: #a1a1aa;
+  font-style: italic;
 }
 
 /* Responsive adjustments */
@@ -396,18 +462,28 @@
     gap: 3px;
     padding: 10px;
   }
-  
+
   .cell {
     font-size: 1.1rem;
   }
-  
+
   .statsBar {
     gap: 1rem;
     padding: 0.6rem 1rem;
   }
-  
+
   .themeButton {
     font-size: 1rem;
     padding: 0.6rem 1.2rem;
+  }
+
+  .buttonRow {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .giveUpBtn,
+  .newGameBtn {
+    width: 100%;
   }
 }

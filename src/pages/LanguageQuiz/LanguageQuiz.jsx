@@ -19,7 +19,7 @@ export default function LanguageQuiz() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const mod = await import('../../data/languages.json');
+      const mod = await import('../../../datasets/languages.json');
       if (!mounted) return;
       setData(mod.default);
     })().catch((e) => {
@@ -66,11 +66,11 @@ export default function LanguageQuiz() {
     if (!current) return;
     const correctLanguages = current.languages;
     const guessed = Array.from(guessLanguages);
-    
-    const isCorrect = 
+
+    const isCorrect =
       guessed.length === correctLanguages.length &&
       guessed.every(l => correctLanguages.includes(l));
-    
+
     setResult({ correct: isCorrect, correctLanguages });
 
     setStats(prev => {

@@ -47,10 +47,10 @@ async function request(endpoint, options = {}) {
 
 // Auth API
 export const auth = {
-  register: (username, password, displayName) =>
+  register: (username, password, displayName, email) =>
     request('/api/auth/register', {
       method: 'POST',
-      body: { username, password, displayName }
+      body: { username, password, displayName, email }
     }),
 
   login: (username, password) =>
@@ -68,16 +68,22 @@ export const auth = {
 
 // User API
 export const users = {
-  updateProfile: (displayName) =>
+  updateProfile: (data) =>
     request('/api/users/profile', {
       method: 'PUT',
-      body: { displayName }
+      body: data
     }),
 
   changePassword: (currentPassword, newPassword) =>
     request('/api/users/password', {
       method: 'PUT',
       body: { currentPassword, newPassword }
+    }),
+
+  deleteAccount: (password) =>
+    request('/api/users/account', {
+      method: 'DELETE',
+      body: { password }
     }),
 
   getSettings: () =>
@@ -88,6 +94,18 @@ export const users = {
       method: 'PUT',
       body: settings
     }),
+
+  getSessions: () =>
+    request('/api/users/sessions'),
+
+  logoutAllSessions: () =>
+    request('/api/users/sessions', { method: 'DELETE' }),
+
+  logoutSession: (sid) =>
+    request(`/api/users/sessions/${encodeURIComponent(sid)}`, { method: 'DELETE' }),
+
+  getLoginHistory: (limit = 20) =>
+    request(`/api/users/login-history?limit=${limit}`),
 };
 
 // Games API
@@ -101,6 +119,18 @@ export const games = {
       body: progress
     }),
 
+  getAllStats: () =>
+    request('/api/games/stats'),
+
+  exportProgress: () =>
+    request('/api/games/export'),
+
+  importProgress: (data, merge = true) =>
+    request('/api/games/import', {
+      method: 'POST',
+      body: { games: data, merge }
+    }),
+
   deleteAllProgress: () =>
     request('/api/games/progress', { method: 'DELETE' }),
 
@@ -110,6 +140,9 @@ export const games = {
 
 // Admin API
 export const admin = {
+  getStats: () =>
+    request('/api/admin/stats'),
+
   getUsers: ({ search, limit = 50, offset = 0 } = {}) => {
     const params = new URLSearchParams();
     if (search) params.set('search', search);

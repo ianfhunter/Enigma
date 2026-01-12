@@ -13,7 +13,6 @@ function sortTypes(types) {
 
 export default function PokemonQuiz() {
   const [data, setData] = useState(null); // loaded pokemon_min.json
-  const [modeGen, setModeGen] = useState(1); // optional: focus quiz on a single generation
   const [current, setCurrent] = useState(null); // { gen, pokemon }
   const [guessGen, setGuessGen] = useState(1);
   const [guessTypes, setGuessTypes] = useState(() => new Set());
@@ -22,6 +21,8 @@ export default function PokemonQuiz() {
   const [stats, setStats] = usePersistedState('pokemon-quiz-stats', {
     played: 0,
     correct: 0,
+    points: 0,
+    totalPossible: 0,
     streak: 0,
     maxStreak: 0,
   });
@@ -46,28 +47,27 @@ export default function PokemonQuiz() {
 
   const allTypes = useMemo(() => sortTypes(data?.types || []), [data]);
 
-  const pickRandomPokemon = useCallback((gen) => {
+  const pickRandomPokemon = useCallback(() => {
     if (!data?.generations?.length) return null;
-    const g = data.generations.find(x => x.gen === gen);
+    // Pick a random generation, then a random pokemon from it
+    const g = data.generations[Math.floor(Math.random() * data.generations.length)];
     if (!g || !g.pokemon?.length) return null;
     const idx = Math.floor(Math.random() * g.pokemon.length);
     return { gen: g.gen, pokemon: g.pokemon[idx] };
   }, [data]);
 
-  const startRound = useCallback((gen) => {
-    const next = pickRandomPokemon(gen);
+  const startRound = useCallback(() => {
+    const next = pickRandomPokemon();
     setCurrent(next);
-    setGuessGen(gen);
+    setGuessGen(1); // Default guess to Gen 1
     setGuessTypes(new Set());
     setResult(null);
   }, [pickRandomPokemon]);
 
   useEffect(() => {
     if (!data?.generations?.length) return;
-    const initialGen = availableGens.includes(modeGen) ? modeGen : availableGens[0];
-    setModeGen(initialGen);
-    startRound(initialGen);
-  }, [data, availableGens, modeGen, startRound]);
+    startRound();
+  }, [data, startRound]);
 
   const toggleType = (t) => {
     if (result) return;
@@ -86,24 +86,46 @@ export default function PokemonQuiz() {
 
     const genOk = guessGen === correctGen;
     const guessedTypes = Array.from(guessTypes);
+
+    // Calculate which types are correct
+    const correctGuessedTypes = guessedTypes.filter(t => correctTypes.includes(t));
     const typesOk =
       guessedTypes.length === correctTypes.length &&
       guessedTypes.every(t => correctTypes.includes(t));
 
+    // Points: 1 for generation, 1 for each correct type
+    const genPoints = genOk ? 1 : 0;
+    const typePoints = correctGuessedTypes.length;
+    const earnedPoints = genPoints + typePoints;
+    const maxPoints = 1 + correctTypes.length; // gen + all types
+
     const correct = genOk && typesOk;
-    setResult({ correct, genOk, typesOk, correctGen, correctTypes });
+    setResult({
+      correct,
+      genOk,
+      typesOk,
+      correctGen,
+      correctTypes,
+      correctGuessedTypes,
+      earnedPoints,
+      maxPoints,
+      genPoints,
+      typePoints
+    });
 
     setStats(prev => {
       const played = prev.played + 1;
       const correctCount = prev.correct + (correct ? 1 : 0);
+      const points = prev.points + earnedPoints;
+      const totalPossible = prev.totalPossible + maxPoints;
       const streak = correct ? prev.streak + 1 : 0;
       const maxStreak = Math.max(prev.maxStreak, streak);
-      return { played, correct: correctCount, streak, maxStreak };
+      return { played, correct: correctCount, points, totalPossible, streak, maxStreak };
     });
   };
 
   const onNext = () => {
-    startRound(modeGen);
+    startRound();
   };
 
   const prompt = current ? titleCase(current.pokemon.name.replaceAll('-', ' ')) : '';
@@ -111,29 +133,9 @@ export default function PokemonQuiz() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Pokémon Quiz (Text)"
+        title="Pokémon Quiz"
         instructions="For the shown Pokémon, pick its generation and its type(s)."
       />
-
-      <div className={styles.controls}>
-        <label className={styles.label}>
-          Generation pool
-          <select
-            className={styles.select}
-            value={modeGen}
-            onChange={(e) => {
-              const g = Number(e.target.value);
-              setModeGen(g);
-              startRound(g);
-            }}
-            disabled={!availableGens.length}
-          >
-            {availableGens.map(g => (
-              <option key={g} value={g}>Gen {g}</option>
-            ))}
-          </select>
-        </label>
-      </div>
 
       {!data && <div className={styles.card}>Loading Pokémon...</div>}
 
@@ -142,7 +144,6 @@ export default function PokemonQuiz() {
           <div className={styles.promptCard}>
             <div className={styles.promptLabel}>Pokémon</div>
             <div className={styles.prompt}>{prompt}</div>
-            <div className={styles.subtle}>Data derived from PokéAPI. No images/sprites included.</div>
           </div>
 
           <div className={styles.card}>
@@ -193,11 +194,16 @@ export default function PokemonQuiz() {
             {result && (
               <div className={`${styles.result} ${result.correct ? styles.ok : styles.nope}`}>
                 <div className={styles.resultTitle}>
-                  {result.correct ? 'Correct!' : 'Not quite.'}
+                  {result.correct ? 'Perfect!' : `${result.earnedPoints}/${result.maxPoints} points`}
                 </div>
-                <div className={styles.resultBody}>
-                  Correct: <strong>Gen {result.correctGen}</strong> •{' '}
-                  <strong>{result.correctTypes.map(titleCase).join(' / ')}</strong>
+                <div className={styles.resultBreakdown}>
+                  <span className={result.genOk ? styles.pointOk : styles.pointMiss}>
+                    Generation: {result.genOk ? '+1' : '0'} {!result.genOk && `(was Gen ${result.correctGen})`}
+                  </span>
+                  <span className={result.typesOk ? styles.pointOk : styles.pointMiss}>
+                    Types: +{result.typePoints}/{result.correctTypes.length}
+                    {!result.typesOk && ` (${result.correctTypes.map(titleCase).join('/')})`}
+                  </span>
                 </div>
               </div>
             )}
@@ -205,22 +211,22 @@ export default function PokemonQuiz() {
 
           <div className={styles.statsPanel}>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
+              <span className={styles.statValue}>{stats.points}</span>
+              <span className={styles.statLabel}>Points</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.correct / stats.played) * 100) : 0}%
+                {stats.totalPossible > 0 ? Math.round((stats.points / stats.totalPossible) * 100) : 0}%
               </span>
-              <span className={styles.statLabel}>Accuracy</span>
+              <span className={styles.statLabel}>Score</span>
+            </div>
+            <div className={styles.stat}>
+              <span className={styles.statValue}>{stats.correct}/{stats.played}</span>
+              <span className={styles.statLabel}>Perfect</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.streak}</span>
               <span className={styles.statLabel}>Streak</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.maxStreak}</span>
-              <span className={styles.statLabel}>Max</span>
             </div>
           </div>
         </>
@@ -228,4 +234,3 @@ export default function PokemonQuiz() {
     </div>
   );
 }
-

@@ -35,6 +35,7 @@ db.exec(`
     username TEXT UNIQUE NOT NULL COLLATE NOCASE,
     password_hash TEXT NOT NULL,
     display_name TEXT,
+    email TEXT,
     role TEXT DEFAULT 'user' CHECK(role IN ('user', 'admin')),
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
@@ -44,6 +45,8 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS user_settings (
     user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     english_variant TEXT DEFAULT 'us',
+    theme TEXT DEFAULT 'dark' CHECK(theme IN ('dark', 'light')),
+    sound_enabled INTEGER DEFAULT 1,
     disabled_games TEXT DEFAULT '[]',
     game_preferences TEXT DEFAULT '{}'
   );
@@ -78,12 +81,49 @@ db.exec(`
     expire INTEGER NOT NULL
   );
 
+  -- Login history for security tracking
+  CREATE TABLE IF NOT EXISTS login_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    ip_address TEXT,
+    user_agent TEXT,
+    success INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
   -- Create index for session expiry cleanup
   CREATE INDEX IF NOT EXISTS idx_sessions_expire ON sessions(expire);
 
   -- Create index for game progress lookups
   CREATE INDEX IF NOT EXISTS idx_game_progress_user ON game_progress(user_id);
   CREATE INDEX IF NOT EXISTS idx_game_progress_game ON game_progress(game_slug);
+
+  -- Create index for login history
+  CREATE INDEX IF NOT EXISTS idx_login_history_user ON login_history(user_id);
+  CREATE INDEX IF NOT EXISTS idx_login_history_created ON login_history(created_at);
 `);
+
+// Migrations for existing databases
+function runMigrations() {
+  // Add email column to users if missing
+  const userCols = db.prepare("PRAGMA table_info(users)").all().map(c => c.name);
+  if (!userCols.includes('email')) {
+    console.log('Migration: Adding email column to users');
+    db.exec('ALTER TABLE users ADD COLUMN email TEXT');
+  }
+
+  // Add theme and sound_enabled to user_settings if missing
+  const settingsCols = db.prepare("PRAGMA table_info(user_settings)").all().map(c => c.name);
+  if (!settingsCols.includes('theme')) {
+    console.log('Migration: Adding theme column to user_settings');
+    db.exec("ALTER TABLE user_settings ADD COLUMN theme TEXT DEFAULT 'dark'");
+  }
+  if (!settingsCols.includes('sound_enabled')) {
+    console.log('Migration: Adding sound_enabled column to user_settings');
+    db.exec('ALTER TABLE user_settings ADD COLUMN sound_enabled INTEGER DEFAULT 1');
+  }
+}
+
+runMigrations();
 
 export default db;

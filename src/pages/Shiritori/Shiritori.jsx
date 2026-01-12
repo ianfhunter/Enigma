@@ -7,6 +7,9 @@ import {
   getWordData,
   getSafeStartWords,
   startsWithKana,
+  setCommonOnlyFilter,
+  getCommonOnlyFilter,
+  getWordStats,
 } from '@datasets/japaneseWords';
 import styles from './Shiritori.module.css';
 
@@ -38,6 +41,9 @@ const TEXT = {
     nLose: (len) => `💀「ん」で終わったので負けです！チェーン: ${len}`,
     gameOver: (len) => `ゲームオーバー！チェーン: ${len}`,
     couldHavePlayed: '言えた言葉:',
+    commonWords: '一般的な言葉のみ',
+    allWords: '全ての言葉',
+    wordCount: (count) => `${count.toLocaleString()} 語`,
   },
   beginner: {
     title: 'しりとり',
@@ -62,6 +68,9 @@ const TEXT = {
     nLose: (len) => `💀 You said a word ending in "ん"! Chain: ${len}`,
     gameOver: (len) => `Game Over! Chain: ${len}`,
     couldHavePlayed: 'You could have played:',
+    commonWords: 'Common words only',
+    allWords: 'All words',
+    wordCount: (count) => `${count.toLocaleString()} words`,
   },
 };
 
@@ -108,10 +117,17 @@ export default function Shiritori() {
     return saved ? JSON.parse(saved) : { wins: 0, losses: 0, longestChain: 0 };
   });
   const [suggestions, setSuggestions] = useState([]);
+  const [commonOnly, setCommonOnly] = useState(() => {
+    const saved = localStorage.getItem('shiritori-common-only');
+    const initial = saved === 'true';
+    setCommonOnlyFilter(initial);
+    return initial;
+  });
 
   const inputRef = useRef(null);
   const chainRef = useRef(null);
   const t = TEXT[lang];
+  const wordStats = getWordStats();
 
   const initGame = useCallback(() => {
     const startWord = getRandomStartWord();
@@ -157,6 +173,17 @@ export default function Shiritori() {
 
   const toggleLang = () => {
     setLang(prev => prev === 'native' ? 'beginner' : 'native');
+  };
+
+  const toggleCommonOnly = () => {
+    setCommonOnly(prev => {
+      const newValue = !prev;
+      setCommonOnlyFilter(newValue);
+      localStorage.setItem('shiritori-common-only', newValue.toString());
+      // Restart game with new word set
+      initGame();
+      return newValue;
+    });
   };
 
   const handleSubmit = (e) => {
@@ -277,14 +304,29 @@ export default function Shiritori() {
         <h1 className={styles.title}>{t.title}</h1>
         <p className={styles.subtitle}>{t.subtitle}</p>
 
-        <button className={styles.langToggle} onClick={toggleLang}>
-          <span className={`${styles.langOption} ${lang === 'native' ? styles.active : ''}`}>
-            Native
-          </span>
-          <span className={`${styles.langOption} ${lang === 'beginner' ? styles.active : ''}`}>
-            Beginner
-          </span>
-        </button>
+        <div className={styles.toggleGroup}>
+          <button className={styles.langToggle} onClick={toggleLang}>
+            <span className={`${styles.langOption} ${lang === 'native' ? styles.active : ''}`}>
+              Native
+            </span>
+            <span className={`${styles.langOption} ${lang === 'beginner' ? styles.active : ''}`}>
+              Beginner
+            </span>
+          </button>
+
+          <button className={styles.langToggle} onClick={toggleCommonOnly}>
+            <span className={`${styles.langOption} ${commonOnly ? styles.active : ''}`}>
+              {t.commonWords}
+            </span>
+            <span className={`${styles.langOption} ${!commonOnly ? styles.active : ''}`}>
+              {t.allWords}
+            </span>
+          </button>
+        </div>
+
+        <p className={styles.wordCountInfo}>
+          {t.wordCount(wordStats.current)}
+        </p>
 
         <p className={styles.instructions}>
           {t.instructions}

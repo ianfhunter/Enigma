@@ -5,6 +5,7 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [react()],
+    cacheDir: process.env.VITE_CACHE_DIR || 'node_modules/.vite',
     resolve: {
         alias: {
             '@datasets': path.resolve(__dirname, 'datasets'),
@@ -26,5 +27,12 @@ export default defineConfig({
     test: {
         environment: 'node',
         globals: true,
+        coverage: {
+            provider: 'v8',
+            reporter: ['text', 'html', 'lcov'],
+            reportsDirectory: './coverage',
+            include: ['src/**/*.{js,jsx}'],
+            exclude: ['**/*.test.js', '**/node_modules/**']
+        }
     }
   })
