@@ -1,3 +1,11 @@
+---
+name: Bug Report
+about: Create a report to help us improve
+title: '[BUG]'
+labels: bug
+assignees:
+---
+
 ## Description
 A clear and concise description of what the bug is.
 
@@ -33,5 +41,6 @@ Add any other context about the problem here.
 
 ## Possible Solution
 If you have ideas on how to fix this, please share them here.
+
 
 
