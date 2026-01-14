@@ -34,9 +34,7 @@ describe('CountdownLetters - findAllWordsFromLetters', () => {
     const words4 = findAllWordsFromLetters(letters, 4);
     const words3 = findAllWordsFromLetters(letters, 3);
 
-    words4.forEach(word => {
-      expect(word.length).toBeGreaterThanOrEqual(4);
-    });
+    expect(words4.every(word => word.length >= 4)).toBe(true);
 
     expect(words3.length).toBeGreaterThan(words4.length);
   });
@@ -45,9 +43,7 @@ describe('CountdownLetters - findAllWordsFromLetters', () => {
     const letters = ['C', 'A', 'T'];
     const words = findAllWordsFromLetters(letters, 3);
 
-    words.forEach(word => {
-      expect(word.length).toBeLessThanOrEqual(letters.length);
-    });
+    expect(words.every(word => word.length <= letters.length)).toBe(true);
   });
 
   it('should respect letter frequency', () => {
@@ -71,9 +67,7 @@ describe('CountdownLetters - findAllWordsFromLetters', () => {
     const letters = ['C', 'A', 'T'];
     const words = findAllWordsFromLetters(letters, 3);
 
-    words.forEach(word => {
-      expect(word).toBe(word.toUpperCase());
-    });
+    expect(words.every(word => word === word.toUpperCase())).toBe(true);
   });
 
   it('should handle empty result gracefully', () => {

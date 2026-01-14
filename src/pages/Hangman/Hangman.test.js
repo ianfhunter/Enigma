@@ -54,10 +54,7 @@ describe('Hangman - getWordsInRange', () => {
     const words = getWordsInRange(5, 7);
 
     expect(words.length).toBeGreaterThan(0);
-    words.forEach(word => {
-      expect(word.length).toBeGreaterThanOrEqual(5);
-      expect(word.length).toBeLessThanOrEqual(7);
-    });
+    expect(words.every(word => word.length >= 5 && word.length <= 7)).toBe(true);
   });
 
   it('should return valid words', () => {
@@ -80,9 +77,7 @@ describe('Hangman - getWordsInRange', () => {
     const words = getWordsInRange(5, 5);
 
     expect(words.length).toBeGreaterThan(0);
-    words.forEach(word => {
-      expect(word.length).toBe(5);
-    });
+    expect(words.every(word => word.length === 5)).toBe(true);
   });
 });
 

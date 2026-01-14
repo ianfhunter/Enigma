@@ -307,9 +307,7 @@ describe('getAllWeightedWords', () => {
   it('should contain the same words as getAllWords', () => {
     const allWords = new Set(getAllWords());
     const weightedWords = getAllWeightedWords();
-    for (const word of weightedWords) {
-      expect(allWords.has(word)).toBe(true);
-    }
+    expect(weightedWords.every(word => allWords.has(word))).toBe(true);
   });
 
   it('should prioritize common words near the beginning', () => {
@@ -347,9 +345,7 @@ describe('generateAnagramsPuzzle', () => {
     expect(puzzle.wordLength).toBeGreaterThan(0);
 
     // All anagrams should have the same length
-    puzzle.anagrams.forEach(word => {
-      expect(word.length).toBe(puzzle.wordLength);
-    });
+    expect(puzzle.anagrams.every(word => word.length === puzzle.wordLength)).toBe(true);
   });
 
   it('should prefer groups with more common words', () => {
@@ -377,9 +373,7 @@ describe('generateAnagramsPuzzle', () => {
     expect(puzzle.letters.length).toBe(puzzle.wordLength);
 
     // Letters should be uppercase
-    puzzle.letters.forEach(letter => {
-      expect(letter).toMatch(/^[A-Z]$/);
-    });
+    expect(puzzle.letters.every(letter => /^[A-Z]$/.test(letter))).toBe(true);
   });
 });
 

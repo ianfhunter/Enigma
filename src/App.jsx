@@ -379,7 +379,7 @@ function App() {
   return (
     <AuthProvider>
       <SettingsProvider>
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true }}>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />

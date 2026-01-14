@@ -222,9 +222,7 @@ describe('WordLadder - getWordsByLength', () => {
     const words = getWordsByLength(4);
 
     expect(words.length).toBeGreaterThan(0);
-    words.forEach(word => {
-      expect(word.length).toBe(4);
-    });
+    expect(words.every(word => word.length === 4)).toBe(true);
   });
 
   it('should return valid words', () => {

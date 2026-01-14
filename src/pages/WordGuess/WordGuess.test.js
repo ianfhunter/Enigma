@@ -719,16 +719,12 @@ describe('getFiveLetterWords', () => {
 
   it('should return only 5-letter words', () => {
     const words = getFiveLetterWords();
-    words.forEach(word => {
-      expect(word).toHaveLength(5);
-    });
+    expect(words.every(word => word.length === 5)).toBe(true);
   });
 
   it('should return uppercase words', () => {
     const words = getFiveLetterWords();
-    words.forEach(word => {
-      expect(word).toBe(word.toUpperCase());
-    });
+    expect(words.every(word => word === word.toUpperCase())).toBe(true);
   });
 
   it('should contain common 5-letter words', () => {
@@ -756,9 +752,7 @@ describe('getFiveLetterWords', () => {
 
     it('should contain only alphabetic characters', () => {
       const words = getFiveLetterWords();
-      words.forEach(word => {
-        expect(word).toMatch(/^[A-Z]+$/);
-      });
+      expect(words.every(word => /^[A-Z]+$/.test(word))).toBe(true);
     });
 
     it('should contain classic starter words', () => {

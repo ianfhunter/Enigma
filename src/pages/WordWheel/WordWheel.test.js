@@ -33,9 +33,7 @@ describe('WordWheel - findAllWords', () => {
     const words = findAllWords(letters, center);
 
     // All words should contain the center letter
-    words.forEach(word => {
-      expect(word.toUpperCase()).toContain(center);
-    });
+    expect(words.every(word => word.toUpperCase().includes(center))).toBe(true);
   });
 
   it('should only return words of 4 or more letters', () => {
@@ -43,9 +41,7 @@ describe('WordWheel - findAllWords', () => {
     const center = 'A';
     const words = findAllWords(letters, center);
 
-    words.forEach(word => {
-      expect(word.length).toBeGreaterThanOrEqual(4);
-    });
+    expect(words.every(word => word.length >= 4)).toBe(true);
   });
 
   it('should return words sorted by length (longest first)', () => {
@@ -82,9 +78,7 @@ describe('WordWheel - findAllWords', () => {
     const words = findAllWords(letters, center);
 
     expect(words.length).toBeGreaterThan(0);
-    words.forEach(word => {
-      expect(word).toBe(word.toUpperCase());
-    });
+    expect(words.every(word => word === word.toUpperCase())).toBe(true);
   });
 
   it('should return empty array if no words possible', () => {

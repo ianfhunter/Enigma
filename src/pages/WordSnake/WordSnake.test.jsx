@@ -19,9 +19,7 @@ describe('WordSnake word selection', () => {
     // Verify word lengths
     for (let len = 6; len <= 10; len++) {
       const words = getCommonWordsByLength(len);
-      words.forEach(word => {
-        expect(word.length).toBe(len);
-      });
+      expect(words.every(word => word.length === len)).toBe(true);
     }
   });
 
@@ -32,9 +30,7 @@ describe('WordSnake word selection', () => {
     }
 
     // All words should be uppercase
-    allPoolWords.forEach(word => {
-      expect(word).toMatch(/^[A-Z]+$/);
-    });
+    expect(allPoolWords.every(word => /^[A-Z]+$/.test(word))).toBe(true);
 
     // Words should be distinct
     const uniqueWords = new Set(allPoolWords);
