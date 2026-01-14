@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "title": "Symphony No. 5 in C minor, Op. 67 - 1st Movement",
+    "composer": "Ludwig van Beethoven",
+    "composerDeathYear": 1827,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Symphony_No.5,_Op.67_(Beethoven,_Ludwig_van)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Symphony%20No.%205%20in%20C%20minor%2C%20Op.%2067%201st%20Movement%20Beethoven",
+    "currentAudioUrl": "/audio/classical/01.ogg"
+  },
+  {
+    "id": 2,
+    "title": "Für Elise",
+    "composer": "Ludwig van Beethoven",
+    "composerDeathYear": 1827,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Für_Elise,_WoO_59_(Beethoven,_Ludwig_van)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=F%C3%BCr%20Elise%20Beethoven",
+    "currentAudioUrl": "/audio/classical/02.ogg"
+  },
+  {
+    "id": 3,
+    "title": "Eine kleine Nachtmusik - 1st Movement",
+    "composer": "Wolfgang Amadeus Mozart",
+    "composerDeathYear": 1791,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Serenade_No.13_in_G_major,_K.525_(Mozart,_Wolfgang_Amadeus)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Eine%20kleine%20Nachtmusik%201st%20Movement%20Mozart",
+    "currentAudioUrl": "/audio/classical/03.ogg"
+  },
+  {
+    "id": 4,
+    "title": "Symphony No. 40 in G minor - 1st Movement",
+    "composer": "Wolfgang Amadeus Mozart",
+    "composerDeathYear": 1791,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Symphony_No.40_in_G_minor,_K.550_(Mozart,_Wolfgang_Amadeus)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Symphony%20No.%2040%20in%20G%20minor%201st%20Movement%20Mozart",
+    "currentAudioUrl": "/audio/classical/04.ogg"
+  },
+  {
+    "id": 5,
+    "title": "The Four Seasons: Spring - 1st Movement",
+    "composer": "Antonio Vivaldi",
+    "composerDeathYear": 1741,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/The_Four_Seasons_(Vivaldi,_Antonio)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Four%20Seasons%3A%20Spring%201st%20Movement%20Vivaldi",
+    "currentAudioUrl": "/audio/classical/05.ogg"
+  },
+  {
+    "id": 6,
+    "title": "The Four Seasons: Winter - 1st Movement",
+    "composer": "Antonio Vivaldi",
+    "composerDeathYear": 1741,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/The_Four_Seasons_(Vivaldi,_Antonio)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Four%20Seasons%3A%20Winter%201st%20Movement%20Vivaldi",
+    "currentAudioUrl": "/audio/classical/06.ogg"
+  },
+  {
+    "id": 7,
+    "title": "Toccata and Fugue in D minor, BWV 565",
+    "composer": "Johann Sebastian Bach",
+    "composerDeathYear": 1750,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Toccata_and_Fugue_in_D_minor,_BWV_565_(Bach,_Johann_Sebastian)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Toccata%20and%20Fugue%20in%20D%20minor%2C%20BWV%20565%20Bach",
+    "currentAudioUrl": "/audio/classical/07.ogg"
+  },
+  {
+    "id": 8,
+    "title": "Cello Suite No. 1 in G major - Prelude",
+    "composer": "Johann Sebastian Bach",
+    "composerDeathYear": 1750,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Cello_Suite_No.1_in_G_major,_BWV_1007_(Bach,_Johann_Sebastian)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Cello%20Suite%20No.%201%20in%20G%20major%20Prelude%20Bach",
+    "currentAudioUrl": "/audio/classical/08.ogg"
+  },
+  {
+    "id": 9,
+    "title": "Canon in D",
+    "composer": "Johann Pachelbel",
+    "composerDeathYear": 1706,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Canon_and_Gigue_in_D_major,_P.37_(Pachelbel,_Johann)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Canon%20in%20D%20Pachelbel",
+    "currentAudioUrl": "/audio/classical/09.ogg"
+  },
+  {
+    "id": 10,
+    "title": "Ride of the Valkyries",
+    "composer": "Richard Wagner",
+    "composerDeathYear": 1883,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Die_Walküre,_WWV_86B_(Wagner,_Richard)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Ride%20of%20the%20Valkyries%20Wagner",
+    "currentAudioUrl": "/audio/classical/10.ogg"
+  },
+  {
+    "id": 11,
+    "title": "The Blue Danube Waltz",
+    "composer": "Johann Strauss II",
+    "composerDeathYear": 1899,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/An_der_schönen_blauen_Donau,_Op.314_(Strauss_Jr.,_Johann)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Blue%20Danube%20Waltz%20II",
+    "currentAudioUrl": "/audio/classical/11.ogg"
+  },
+  {
+    "id": 12,
+    "title": "Hungarian Rhapsody No. 2",
+    "composer": "Franz Liszt",
+    "composerDeathYear": 1886,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Hungarian_Rhapsody_No.2,_S.244/2_(Liszt,_Franz)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Hungarian%20Rhapsody%20No.%202%20Liszt",
+    "currentAudioUrl": "/audio/classical/12.ogg"
+  },
+  {
+    "id": 13,
+    "title": "Piano Sonata No. 14 'Moonlight' - 1st Movement",
+    "composer": "Ludwig van Beethoven",
+    "composerDeathYear": 1827,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Piano_Sonata_No.14,_Op.27_No.2_(Beethoven,_Ludwig_van)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Piano%20Sonata%20No.%2014%20'Moonlight'%201st%20Movement%20Beethoven",
+    "currentAudioUrl": "/audio/classical/13.ogg"
+  },
+  {
+    "id": 14,
+    "title": "Symphony No. 9 'Ode to Joy' - 4th Movement (excerpt)",
+    "composer": "Ludwig van Beethoven",
+    "composerDeathYear": 1827,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Symphony_No.9,_Op.125_(Beethoven,_Ludwig_van)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Symphony%20No.%209%20'Ode%20to%20Joy'%204th%20Movement%20(excerpt)%20Beethoven",
+    "currentAudioUrl": "/audio/classical/14.ogg"
+  },
+  {
+    "id": 15,
+    "title": "In the Hall of the Mountain King",
+    "composer": "Edvard Grieg",
+    "composerDeathYear": 1907,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Peer_Gynt,_Op.23_(Grieg,_Edvard)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=In%20the%20Hall%20of%20the%20Mountain%20King%20Grieg",
+    "currentAudioUrl": "/audio/classical/15.ogg"
+  },
+  {
+    "id": 16,
+    "title": "Morning Mood (Peer Gynt)",
+    "composer": "Edvard Grieg",
+    "composerDeathYear": 1907,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Peer_Gynt,_Op.23_(Grieg,_Edvard)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Morning%20Mood%20(Peer%20Gynt)%20Grieg",
+    "currentAudioUrl": "/audio/classical/16.ogg"
+  },
+  {
+    "id": 17,
+    "title": "Swan Lake - Scene",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "composerDeathYear": 1893,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Swan_Lake,_Op.20_(Tchaikovsky,_Pyotr)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Swan%20Lake%20Scene%20Tchaikovsky",
+    "currentAudioUrl": "/audio/classical/17.ogg"
+  },
+  {
+    "id": 18,
+    "title": "The Nutcracker - Dance of the Sugar Plum Fairy",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "composerDeathYear": 1893,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/The_Nutcracker,_Op.71_(Tchaikovsky,_Pyotr)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Nutcracker%20Dance%20of%20the%20Sugar%20Plum%20Fairy%20Tchaikovsky",
+    "currentAudioUrl": "/audio/classical/18.ogg"
+  },
+  {
+    "id": 19,
+    "title": "1812 Overture (finale)",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "composerDeathYear": 1893,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/1812_Overture,_Op.49_(Tchaikovsky,_Pyotr)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=1812%20Overture%20(finale)%20Tchaikovsky",
+    "currentAudioUrl": "/audio/classical/19.ogg"
+  },
+  {
+    "id": 20,
+    "title": "Piano Concerto No. 1 - Opening",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "composerDeathYear": 1893,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Piano_Concerto_No.1,_Op.23_(Tchaikovsky,_Pyotr)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Piano%20Concerto%20No.%201%20Opening%20Tchaikovsky",
+    "currentAudioUrl": "/audio/classical/20.ogg"
+  },
+  {
+    "id": 21,
+    "title": "Nocturne in E-flat major, Op. 9 No. 2",
+    "composer": "Frédéric Chopin",
+    "composerDeathYear": 1849,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Nocturnes,_Op.9_(Chopin,_Frédéric)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Nocturne%20in%20E%20flat%20major%2C%20Op.%209%20No.%202%20Chopin",
+    "currentAudioUrl": "/audio/classical/21.ogg"
+  },
+  {
+    "id": 22,
+    "title": "Minute Waltz (Waltz in D-flat major, Op. 64 No. 1)",
+    "composer": "Frédéric Chopin",
+    "composerDeathYear": 1849,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Waltzes,_Op.64_(Chopin,_Frédéric)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Minute%20Waltz%20(Waltz%20in%20D%20flat%20major%2C%20Op.%2064%20No.%201)%20Chopin",
+    "currentAudioUrl": "/audio/classical/22.ogg"
+  },
+  {
+    "id": 23,
+    "title": "Clair de Lune",
+    "composer": "Claude Debussy",
+    "composerDeathYear": 1918,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Suite_bergamasque,_L.75_(Debussy,_Claude)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Clair%20de%20Lune%20Debussy",
+    "currentAudioUrl": "/audio/classical/23.ogg"
+  },
+  {
+    "id": 24,
+    "title": "Prélude à l'après-midi d'un faune",
+    "composer": "Claude Debussy",
+    "composerDeathYear": 1918,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Prélude_à_l'après-midi_d'un_faune,_L.86_(Debussy,_Claude)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Pr%C3%A9lude%20%C3%A0%20l'apr%C3%A8s%20midi%20d'un%20faune%20Debussy",
+    "currentAudioUrl": "/audio/classical/24.ogg"
+  },
+  {
+    "id": 25,
+    "title": "Boléro",
+    "composer": "Maurice Ravel",
+    "composerDeathYear": 1937,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Boléro_(Ravel,_Maurice)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Bol%C3%A9ro%20Ravel",
+    "currentAudioUrl": "/audio/classical/25.ogg"
+  },
+  {
+    "id": 26,
+    "title": "William Tell Overture (Finale)",
+    "composer": "Gioachino Rossini",
+    "composerDeathYear": 1868,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Guillaume_Tell_(Rossini,_Gioachino)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=William%20Tell%20Overture%20(Finale)%20Rossini",
+    "currentAudioUrl": "/audio/classical/26.ogg"
+  },
+  {
+    "id": 27,
+    "title": "The Barber of Seville Overture",
+    "composer": "Gioachino Rossini",
+    "composerDeathYear": 1868,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Il_barbiere_di_Siviglia_(Rossini,_Gioachino)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Barber%20of%20Seville%20Overture%20Rossini",
+    "currentAudioUrl": "/audio/classical/27.ogg"
+  },
+  {
+    "id": 28,
+    "title": "Habanera (Carmen)",
+    "composer": "Georges Bizet",
+    "composerDeathYear": 1875,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Carmen_(Bizet,_Georges)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Habanera%20(Carmen)%20Bizet",
+    "currentAudioUrl": "/audio/classical/28.ogg"
+  },
+  {
+    "id": 29,
+    "title": "Also sprach Zarathustra (Opening)",
+    "composer": "Richard Strauss",
+    "composerDeathYear": 1949,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Also_sprach_Zarathustra,_Op.30_(Strauss,_Richard)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Also%20sprach%20Zarathustra%20(Opening)%20Strauss",
+    "currentAudioUrl": "/audio/classical/29.ogg"
+  },
+  {
+    "id": 30,
+    "title": "Ave Maria",
+    "composer": "Franz Schubert",
+    "composerDeathYear": 1828,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Ellens_dritter_Gesang,_D.839_(Schubert,_Franz)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Ave%20Maria%20Schubert",
+    "currentAudioUrl": "/audio/classical/30.ogg"
+  },
+  {
+    "id": 31,
+    "title": "Symphony No. 8 'Unfinished' - 1st Movement",
+    "composer": "Franz Schubert",
+    "composerDeathYear": 1828,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Symphony_No.8,_D.759_(Schubert,_Franz)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Symphony%20No.%208%20'Unfinished'%201st%20Movement%20Schubert",
+    "currentAudioUrl": "/audio/classical/31.ogg"
+  },
+  {
+    "id": 32,
+    "title": "Piano Concerto No. 2 - 1st Movement",
+    "composer": "Sergei Rachmaninoff",
+    "composerDeathYear": 1943,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Piano_Concerto_No.2,_Op.18_(Rachmaninoff,_Sergei)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Piano%20Concerto%20No.%202%201st%20Movement%20Rachmaninoff",
+    "currentAudioUrl": "/audio/classical/32.ogg"
+  },
+  {
+    "id": 33,
+    "title": "Symphony No. 5 - 2nd Movement (Adagio)",
+    "composer": "Gustav Mahler",
+    "composerDeathYear": 1911,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Symphony_No.5_(Mahler,_Gustav)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Symphony%20No.%205%202nd%20Movement%20(Adagio)%20Mahler",
+    "currentAudioUrl": "/audio/classical/33.ogg"
+  },
+  {
+    "id": 34,
+    "title": "The Planets: Mars, the Bringer of War",
+    "composer": "Gustav Holst",
+    "composerDeathYear": 1934,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/The_Planets,_Op.32_(Holst,_Gustav)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Planets%3A%20Mars%2C%20the%20Bringer%20of%20War%20Holst",
+    "currentAudioUrl": "/audio/classical/34.ogg"
+  },
+  {
+    "id": 35,
+    "title": "The Planets: Jupiter, the Bringer of Jollity",
+    "composer": "Gustav Holst",
+    "composerDeathYear": 1934,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/The_Planets,_Op.32_(Holst,_Gustav)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Planets%3A%20Jupiter%2C%20the%20Bringer%20of%20Jollity%20Holst",
+    "currentAudioUrl": "/audio/classical/35.ogg"
+  },
+  {
+    "id": 36,
+    "title": "Siegfried's Death and Funeral March (Götterdämmerung)",
+    "composer": "Richard Wagner",
+    "composerDeathYear": 1883,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Götterdämmerung,_WWV_86D_(Wagner,_Richard)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Siegfried's%20Death%20and%20Funeral%20March%20(G%C3%B6tterd%C3%A4mmerung)%20Wagner",
+    "currentAudioUrl": "/audio/classical/36.ogg"
+  },
+  {
+    "id": 37,
+    "title": "Requiem: Dies Irae",
+    "composer": "Giuseppe Verdi",
+    "composerDeathYear": 1901,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Messa_da_Requiem_(Verdi,_Giuseppe)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Requiem%3A%20Dies%20Irae%20Verdi",
+    "currentAudioUrl": "/audio/classical/37.ogg"
+  },
+  {
+    "id": 38,
+    "title": "La donna è mobile (Rigoletto)",
+    "composer": "Giuseppe Verdi",
+    "composerDeathYear": 1901,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Rigoletto_(Verdi,_Giuseppe)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=La%20donna%20%C3%A8%20mobile%20(Rigoletto)%20Verdi",
+    "currentAudioUrl": "/audio/classical/38.ogg"
+  },
+  {
+    "id": 39,
+    "title": "Nessun dorma (Turandot)",
+    "composer": "Giacomo Puccini",
+    "composerDeathYear": 1924,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Turandot_(Puccini,_Giacomo)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Nessun%20dorma%20(Turandot)%20Puccini",
+    "currentAudioUrl": "/audio/classical/39.ogg"
+  },
+  {
+    "id": 40,
+    "title": "Air on the G String",
+    "composer": "Johann Sebastian Bach",
+    "composerDeathYear": 1750,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Orchestral_Suite_No.3_in_D_major,_BWV_1068_(Bach,_Johann_Sebastian)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Air%20on%20the%20G%20String%20Bach",
+    "currentAudioUrl": "/audio/classical/40.ogg"
+  },
+  {
+    "id": 41,
+    "title": "Brandenburg Concerto No. 3 - 1st Movement",
+    "composer": "Johann Sebastian Bach",
+    "composerDeathYear": 1750,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Brandenburg_Concerto_No.3_in_G_major,_BWV_1048_(Bach,_Johann_Sebastian)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Brandenburg%20Concerto%20No.%203%201st%20Movement%20Bach",
+    "currentAudioUrl": "/audio/classical/41.ogg"
+  },
+  {
+    "id": 42,
+    "title": "Hallelujah Chorus (Messiah)",
+    "composer": "George Frideric Handel",
+    "composerDeathYear": 1759,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Messiah,_HWV_56_(Handel,_George_Frideric)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Hallelujah%20Chorus%20(Messiah)%20Handel",
+    "currentAudioUrl": "/audio/classical/42.ogg"
+  },
+  {
+    "id": 43,
+    "title": "Water Music Suite - Hornpipe",
+    "composer": "George Frideric Handel",
+    "composerDeathYear": 1759,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Water_Music,_HWV_348-350_(Handel,_George_Frideric)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Water%20Music%20Suite%20Hornpipe%20Handel",
+    "currentAudioUrl": "/audio/classical/43.ogg"
+  },
+  {
+    "id": 44,
+    "title": "Hungarian Dance No. 5",
+    "composer": "Johannes Brahms",
+    "composerDeathYear": 1897,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Hungarian_Dances_(Brahms,_Johannes)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Hungarian%20Dance%20No.%205%20Brahms",
+    "currentAudioUrl": "/audio/classical/44.ogg"
+  },
+  {
+    "id": 45,
+    "title": "Symphony No. 9 'From the New World' - 2nd Movement (Largo)",
+    "composer": "Antonín Dvořák",
+    "composerDeathYear": 1904,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Symphony_No.9,_Op.95_(Dvořák,_Antonín)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Symphony%20No.%209%20'From%20the%20New%20World'%202nd%20Movement%20(Largo)%20Dvo%C5%99%C3%A1k",
+    "currentAudioUrl": "/audio/classical/45.ogg"
+  },
+  {
+    "id": 46,
+    "title": "The Sorcerer's Apprentice",
+    "composer": "Paul Dukas",
+    "composerDeathYear": 1935,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/L'Apprenti_sorcier_(Dukas,_Paul)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Sorcerer's%20Apprentice%20Dukas",
+    "currentAudioUrl": "/audio/classical/46.ogg"
+  },
+  {
+    "id": 47,
+    "title": "The Moldau (Vltava)",
+    "composer": "Bedřich Smetana",
+    "composerDeathYear": 1884,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Vltava,_JB_1:112/2_(Smetana,_Bedřich)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Moldau%20(Vltava)%20Smetana",
+    "currentAudioUrl": "/audio/classical/47.ogg"
+  },
+  {
+    "id": 48,
+    "title": "The Bartered Bride - Overture",
+    "composer": "Bedřich Smetana",
+    "composerDeathYear": 1884,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Prodaná_nevěsta_(Smetana,_Bedřich)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=The%20Bartered%20Bride%20Overture%20Smetana",
+    "currentAudioUrl": "/audio/classical/48.ogg"
+  },
+  {
+    "id": 49,
+    "title": "Peter and the Wolf - Opening",
+    "composer": "Sergei Prokofiev",
+    "composerDeathYear": 1953,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Peter_and_the_Wolf,_Op.67_(Prokofiev,_Sergei)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Peter%20and%20the%20Wolf%20Opening%20Prokofiev",
+    "currentAudioUrl": "/audio/classical/49.ogg"
+  },
+  {
+    "id": 50,
+    "title": "Romeo and Juliet - Dance of the Knights",
+    "composer": "Sergei Prokofiev",
+    "composerDeathYear": 1953,
+    "publicDomainStatus": "PUBLIC DOMAIN",
+    "imslpDirectUrl": "https://imslp.org/wiki/Romeo_and_Juliet,_Op.64_(Prokofiev,_Sergei)",
+    "imslpSearchUrl": "https://imslp.org/wiki/Special:Search?search=Romeo%20and%20Juliet%20Dance%20of%20the%20Knights%20Prokofiev",
+    "currentAudioUrl": "/audio/classical/50.ogg"
+  }
+]

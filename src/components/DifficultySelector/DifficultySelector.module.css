@@ -1,0 +1,59 @@
+.selector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.option {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border-color, #3a3a4a);
+  border-radius: 8px;
+  background: var(--bg-secondary, #2a2a3a);
+  color: var(--text-secondary, #a0a0b0);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.option:hover {
+  background: var(--bg-hover, #3a3a4a);
+  color: var(--text-primary, #ffffff);
+  border-color: var(--border-hover, #4a4a5a);
+}
+
+.option.active {
+  background: var(--accent-primary, #6366f1);
+  color: #ffffff;
+  border-color: var(--accent-primary, #6366f1);
+}
+
+.option.active:hover {
+  background: var(--accent-hover, #5558e3);
+  border-color: var(--accent-hover, #5558e3);
+}
+
+.option.completed {
+  position: relative;
+}
+
+.checkmark {
+  font-size: 0.8rem;
+  color: var(--success-color, #22c55e);
+}
+
+.option.active .checkmark {
+  color: #ffffff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .option {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+}

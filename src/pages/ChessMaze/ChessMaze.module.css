@@ -1,0 +1,426 @@
+.container {
+  min-height: 100%;
+  padding: 0 1rem 2rem;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Piece selector */
+.pieceSelector {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.pieceBtn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  background: var(--btn-secondary-bg);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pieceBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.pieceBtn.active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  transform: scale(1.1);
+}
+
+/* Difficulty selector */
+.difficultySelector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.difficultyBtn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--btn-secondary-bg);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficultyBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.difficultyBtn.active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Stats bar */
+.statsBar {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.statIcon {
+  font-size: 1.25rem;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+}
+
+/* Board */
+.boardWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: 8px;
+  background: linear-gradient(145deg, #1a3a2a 0%, #0f241a 100%);
+  border-radius: 8px;
+  box-shadow:
+    0 10px 40px rgba(16, 185, 129, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.board {
+  display: grid;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.square.light {
+  background: #e8efe8;
+}
+
+.square.dark {
+  background: #6b8e6b;
+}
+
+.square.danger {
+  background: rgba(239, 68, 68, 0.35) !important;
+}
+
+.square.validMove {
+  background: rgba(34, 197, 94, 0.5) !important;
+  cursor: pointer;
+}
+
+.square.validMove::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  background: rgba(34, 197, 94, 0.8);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+}
+
+.square.goal {
+  background: rgba(251, 191, 36, 0.4) !important;
+  animation: goalGlow 2s ease-in-out infinite;
+}
+
+@keyframes goalGlow {
+  0%, 100% { box-shadow: inset 0 0 15px rgba(251, 191, 36, 0.4); }
+  50% { box-shadow: inset 0 0 25px rgba(251, 191, 36, 0.6); }
+}
+
+.square.pathSquare {
+  background: rgba(96, 165, 250, 0.3) !important;
+}
+
+/* Pieces */
+.playerPiece {
+  font-size: clamp(1.5rem, calc(60vw / var(--board-size, 8)), 3rem);
+  color: var(--color-text);
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+  line-height: 1;
+  z-index: 2;
+  animation: playerBounce 0.3s ease;
+}
+
+@keyframes playerBounce {
+  0% { transform: scale(1.3); }
+  50% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.enemyPiece {
+  font-size: clamp(1.3rem, calc(50vw / var(--board-size, 8)), 2.5rem);
+  color: #1a1a1a;
+  filter: drop-shadow(1px 1px 2px rgba(255, 255, 255, 0.2));
+  line-height: 1;
+}
+
+.goalMarker {
+  font-size: clamp(1.2rem, calc(45vw / var(--board-size, 8)), 2.2rem);
+  animation: starPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(15deg); }
+}
+
+.startMarker {
+  font-size: clamp(1rem, calc(40vw / var(--board-size, 8)), 2rem);
+  color: var(--color-text-tertiary);
+}
+
+/* Status messages */
+.statusMessage {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.statusMessage.success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.2) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+}
+
+.statusIcon {
+  font-size: 1.5rem;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.undoBtn,
+.movesBtn,
+.dangerBtn,
+.newPuzzleBtn {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.undoBtn {
+  background: var(--btn-secondary-bg);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.undoBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.undoBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.movesBtn {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.movesBtn:hover {
+  background: rgba(34, 197, 94, 0.25);
+  transform: translateY(-2px);
+}
+
+.movesBtn.active {
+  background: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+}
+
+.dangerBtn {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.dangerBtn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  transform: translateY(-2px);
+}
+
+.dangerBtn.active {
+  background: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+}
+
+.newPuzzleBtn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.newPuzzleBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.legendIcon {
+  font-size: 1.2rem;
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.dangerColor {
+  background: rgba(239, 68, 68, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .boardWrapper {
+    padding: 4px;
+  }
+
+  .playerPiece {
+    font-size: clamp(1.2rem, calc(70vw / var(--board-size, 8)), 2.5rem);
+  }
+
+  .enemyPiece {
+    font-size: clamp(1rem, calc(60vw / var(--board-size, 8)), 2rem);
+  }
+
+  .pieceBtn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+  }
+
+  .statsBar {
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .statValue {
+    font-size: 1rem;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  .undoBtn,
+  .movesBtn,
+  .dangerBtn,
+  .newPuzzleBtn {
+    flex: 1;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .legend {
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .legendItem {
+    font-size: 0.75rem;
+  }
+}

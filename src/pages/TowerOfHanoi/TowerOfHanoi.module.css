@@ -1,0 +1,246 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #6366f1;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.diskSelector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.diskBtn {
+  padding: 0.5rem 1rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.diskBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.diskBtn.active {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #6366f1;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.statsBar {
+  display: flex;
+  gap: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #6366f1;
+  font-variant-numeric: tabular-nums;
+}
+
+.towersContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.tower {
+  position: relative;
+  width: 180px;
+  height: 220px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tower:hover {
+  transform: translateY(-2px);
+}
+
+.tower.selected {
+  transform: translateY(-4px);
+}
+
+.peg {
+  position: absolute;
+  bottom: 20px;
+  width: 12px;
+  height: 180px;
+  background: linear-gradient(180deg, #4b5563, #374151);
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.base {
+  position: absolute;
+  bottom: 0;
+  width: 140px;
+  height: 20px;
+  background: linear-gradient(180deg, #4b5563, #374151);
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.disksContainer {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.disk {
+  position: absolute;
+  height: 26px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.disk.selectedDisk {
+  transform: translateY(-40px);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.winMessage {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.2));
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #a5b4fc;
+  text-align: center;
+}
+
+.perfect {
+  color: #fbbf24;
+}
+
+.resetBtn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.resetBtn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .towersContainer {
+    gap: 0.5rem;
+  }
+
+  .tower {
+    width: 100px;
+    height: 180px;
+  }
+
+  .peg {
+    height: 140px;
+    width: 10px;
+  }
+
+  .base {
+    width: 90px;
+    height: 16px;
+  }
+
+  .disk {
+    height: 22px;
+  }
+
+  .disk.selectedDisk {
+    transform: translateY(-30px);
+  }
+
+  .disksContainer {
+    bottom: 16px;
+  }
+}

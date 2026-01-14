@@ -1,0 +1,241 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #10b981;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.speedSelector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.speedBtn {
+  padding: 0.5rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.speedBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.speedBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.speedBtn.active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.scoreDisplay {
+  display: flex;
+  gap: 3rem;
+  padding: 0.75rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.scoreStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.scoreLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scoreValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #10b981;
+  font-variant-numeric: tabular-nums;
+}
+
+.simonBoard {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(20, 20, 30, 0.8);
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+}
+
+.colorBtn {
+  border: none;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  opacity: 0.6;
+}
+
+.colorBtn:disabled {
+  cursor: not-allowed;
+}
+
+.colorBtn.green {
+  background: #22c55e;
+  border-radius: 100% 0 0 0;
+}
+
+.colorBtn.red {
+  background: #ef4444;
+  border-radius: 0 100% 0 0;
+}
+
+.colorBtn.yellow {
+  background: #eab308;
+  border-radius: 0 0 0 100%;
+}
+
+.colorBtn.blue {
+  background: #3b82f6;
+  border-radius: 0 0 100% 0;
+}
+
+.colorBtn.active,
+.colorBtn:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.colorBtn.green.active {
+  box-shadow: 0 0 40px #22c55e, 0 0 80px #22c55e;
+}
+
+.colorBtn.red.active {
+  box-shadow: 0 0 40px #ef4444, 0 0 80px #ef4444;
+}
+
+.colorBtn.yellow.active {
+  box-shadow: 0 0 40px #eab308, 0 0 80px #eab308;
+}
+
+.colorBtn.blue.active {
+  box-shadow: 0 0 40px #3b82f6, 0 0 80px #3b82f6;
+}
+
+.centerCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  background: #0f0f1a;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.startBtn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.startBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.statusText {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.gameOverMessage {
+  padding: 1rem 2rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f87171;
+  text-align: center;
+}
+
+@media (max-width: 400px) {
+  .simonBoard {
+    width: 280px;
+    height: 280px;
+  }
+
+  .centerCircle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .startBtn {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+}

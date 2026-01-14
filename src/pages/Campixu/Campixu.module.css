@@ -1,0 +1,353 @@
+.container {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 20px;
+  color: var(--color-text);
+}
+
+/* Mobile Grass Toggle */
+.grassToggle {
+  padding: 0.6rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.grassToggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.grassToggle.grassModeActive {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: var(--color-text);
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #22c55e 0%, #84cc16 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  max-width: 550px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.sizeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sizeBtn {
+  padding: 8px 16px;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--btn-secondary-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sizeBtn:hover {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.sizeBtn.active {
+  background: linear-gradient(135deg, #22c55e, #84cc16);
+  border-color: transparent;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.colClues {
+  display: grid;
+  gap: 2px;
+}
+
+.corner {
+  /* Empty corner */
+}
+
+.colClue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.colClue.complete {
+  color: #22c55e;
+}
+
+.colClue span {
+  display: block;
+}
+
+.mainGrid {
+  display: flex;
+}
+
+.rowClues {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rowClue {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-right: 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.rowClue.complete {
+  color: #22c55e;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  background: var(--btn-secondary-bg);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.cell {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: var(--btn-secondary-bg);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+.cell:hover:not(:disabled) {
+  background: var(--panel-bg);
+}
+
+.cell.tree {
+  background: rgba(34, 197, 94, 0.2);
+  cursor: default;
+}
+
+.cell.tent {
+  background: rgba(234, 179, 8, 0.3);
+}
+
+.cell.grass {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.cell.grass::after {
+  content: '·';
+  color: #22c55e;
+  font-size: 24px;
+}
+
+.cell.error {
+  box-shadow: inset 0 0 0 2px #ef4444;
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(132, 204, 22, 0.2));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #22c55e;
+}
+
+.winMessage p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 20px;
+  background: var(--btn-secondary-hover-bg);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #22c55e;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(20px);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.resetBtn,
+.newGameBtn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: var(--btn-secondary-bg);
+  color: white;
+}
+
+.resetBtn:hover {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.gaveUpMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.gaveUpIcon {
+  font-size: 2rem;
+}
+
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  color: #fbbf24;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: rgba(245, 158, 11, 0.6);
+}
+
+.giveUpBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #22c55e, #84cc16);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(34, 197, 94, 0.3);
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}

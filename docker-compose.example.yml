@@ -1,0 +1,57 @@
+# Example Docker Compose for Enigma
+# Copy this file to docker-compose.yml and adjust paths as needed
+
+volumes:
+  enigma-data:
+    driver: local
+
+services:
+  # Backend API server
+  enigma-backend:
+    container_name: enigma-backend
+    build: ./backend
+    ports:
+      - "3031:3000"
+    volumes:
+      - enigma-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - SESSION_SECRET=${SESSION_SECRET:-change-me-in-production}
+      - FRONTEND_URL=http://localhost:3030
+    restart: unless-stopped
+
+  # Frontend (production build)
+  enigma-frontend:
+    container_name: enigma-frontend
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - "3030:5173"
+    command: >
+      sh -c "npm install --include=dev && npm run dev -- --host 0.0.0.0"
+    environment:
+      - NODE_ENV=development
+      # API_PROXY_TARGET is used by Vite's dev server proxy (server-side, not exposed to browser)
+      - API_PROXY_TARGET=http://enigma-backend:3000
+    depends_on:
+      - enigma-backend
+    restart: unless-stopped
+
+  # Optional: Run Vitest UI in a separate container
+  enigma-tests:
+    container_name: enigma-tests
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - "51204:51204"
+    command: >
+      sh -c "npm install --include=dev && npm run test:ui -- --host 0.0.0.0"
+    profiles:
+      - testing
+    restart: "no"

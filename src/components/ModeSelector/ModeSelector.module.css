@@ -1,0 +1,178 @@
+.selector {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Base mode button */
+.mode {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border-color, #3a3a4a);
+  border-radius: 8px;
+  background: var(--bg-secondary, #2a2a3a);
+  color: var(--text-secondary, #a0a0b0);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mode:hover:not(:disabled) {
+  background: var(--bg-hover, #3a3a4a);
+  color: var(--text-primary, #ffffff);
+  border-color: var(--border-hover, #4a4a5a);
+}
+
+.mode.active {
+  background: var(--accent-primary, #6366f1);
+  color: #ffffff;
+  border-color: var(--accent-primary, #6366f1);
+}
+
+.mode.active:hover:not(:disabled) {
+  background: var(--accent-hover, #5558e3);
+  border-color: var(--accent-hover, #5558e3);
+}
+
+.mode.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mode.completed {
+  border-color: var(--success-color, #22c55e);
+}
+
+.mode.completed.active {
+  border-color: var(--accent-primary, #6366f1);
+}
+
+/* Icon */
+.icon {
+  font-size: 1.1rem;
+}
+
+/* Label */
+.label {
+  white-space: nowrap;
+}
+
+/* Description (for cards variant) */
+.description {
+  display: none;
+}
+
+/* Checkmark */
+.checkmark {
+  font-size: 0.8rem;
+  color: var(--success-color, #22c55e);
+  margin-left: 0.25rem;
+}
+
+.mode.active .checkmark {
+  color: #ffffff;
+}
+
+/* Tabs variant */
+.tabs {
+  border-bottom: 2px solid var(--border-color, #3a3a4a);
+  gap: 0;
+  padding-bottom: 0;
+}
+
+.tabs .mode {
+  border: none;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: -2px;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs .mode:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tabs .mode.active {
+  background: transparent;
+  color: var(--accent-primary, #6366f1);
+  border-bottom-color: var(--accent-primary, #6366f1);
+}
+
+/* Cards variant */
+.cards {
+  gap: 1rem;
+}
+
+.cards .mode {
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  min-width: 140px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.cards .icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.cards .label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cards .description {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-tertiary, #606070);
+  margin-top: 0.25rem;
+}
+
+.cards .mode.active .description {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cards .checkmark {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Focus state */
+.mode:focus-visible {
+  outline: 2px solid var(--accent-primary, #6366f1);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .cards {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cards .mode {
+    min-width: auto;
+    padding: 1rem 1.5rem;
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .cards .icon {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
+
+  .cards .description {
+    margin-top: 0;
+  }
+}

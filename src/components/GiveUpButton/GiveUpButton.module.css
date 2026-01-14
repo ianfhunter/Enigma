@@ -1,0 +1,77 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--warning-color, #f59e0b);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--warning-color, #f59e0b);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--warning-color, #f59e0b);
+  color: #000000;
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+/* Compact variant */
+.compact {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  gap: 0.3rem;
+}
+
+.compact .icon {
+  font-size: 0.85rem;
+}
+
+/* Text variant - minimal styling */
+.text {
+  border: none;
+  background: none;
+  padding: 0.4rem 0.6rem;
+  color: var(--text-secondary, #a0a0b0);
+  font-size: 0.85rem;
+}
+
+.text:hover:not(:disabled) {
+  background: none;
+  color: var(--warning-color, #f59e0b);
+  text-decoration: underline;
+}
+
+.text .icon {
+  display: none;
+}
+
+/* Focus state for accessibility */
+.button:focus-visible {
+  outline: 2px solid var(--warning-color, #f59e0b);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}

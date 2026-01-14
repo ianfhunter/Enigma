@@ -1,0 +1,678 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  --game-accent: #1e88e5;
+  --game-accent-light: #42a5f5;
+  --game-gradient: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  --cell-size: 32px;
+  --highlight-color: rgba(30, 136, 229, 0.25);
+  --selected-color: rgba(30, 136, 229, 0.5);
+  --error-color: rgba(239, 68, 68, 0.3);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modeSelector,
+.difficultySelector {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--game-panel-bg);
+  border-radius: 10px;
+  padding: 0.25rem;
+}
+
+.modeBtn,
+.diffBtn {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modeBtn:hover,
+.diffBtn:hover {
+  color: var(--color-text);
+  background: var(--game-key-bg);
+}
+
+.modeBtn.active,
+.diffBtn.active {
+  background: var(--game-gradient);
+  color: var(--color-text);
+  box-shadow: 0 2px 8px rgba(30, 136, 229, 0.3);
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+.timerIcon {
+  font-size: 1rem;
+}
+
+.timerValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  min-width: 60px;
+  text-align: center;
+}
+
+.newPuzzleBtn {
+  padding: 0.5rem 1.25rem;
+  background: var(--game-gradient);
+  border: none;
+  border-radius: 20px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.newPuzzleBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+}
+
+.mainContent {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.gridSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1px;
+  background: var(--color-text-secondary);
+  border: 2px solid var(--color-text-secondary);
+  border-radius: 4px;
+  padding: 2px;
+  box-shadow: var(--shadow-card);
+}
+
+.cell {
+  position: relative;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--color-bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+
+.cell.black {
+  background: var(--color-text-muted);
+  cursor: default;
+}
+
+.cell.selected {
+  background: var(--selected-color);
+  box-shadow: inset 0 0 0 2px var(--game-accent);
+}
+
+.cell.highlighted {
+  background: var(--highlight-color);
+}
+
+.cell.error {
+  background: var(--error-color);
+}
+
+.cell.error.selected {
+  background: rgba(239, 68, 68, 0.5);
+}
+
+.cellNumber {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.cellLetter {
+  font-size: calc(var(--cell-size) * 0.55);
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.winBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--game-accent-green-bg);
+  border: 1px solid var(--game-accent-green-border);
+  border-radius: 12px;
+  animation: winPop 0.4s ease;
+}
+
+.winTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--game-accent-green);
+}
+
+.winSubtitle {
+  font-size: 1rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.gaveUpBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--game-accent-red-bg);
+  border: 1px solid var(--game-accent-red-border);
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  animation: winPop 0.4s ease;
+}
+
+.gaveUpTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--game-accent-red);
+}
+
+.gaveUpSubtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.missedWords {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.missedWordsTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.missedWordsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.missedWord {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--game-panel-bg);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.missedWordNumber {
+  font-weight: 700;
+  color: var(--game-accent-red);
+}
+
+.missedWordAnswer {
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.missedWordClue {
+  grid-column: 1 / -1;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+@keyframes winPop {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.playAgainBtn {
+  padding: 0.6rem 1.25rem;
+  background: var(--game-gradient);
+  border: none;
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.playAgainBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+}
+
+.giveUpBtn {
+  background: var(--game-accent-red-bg);
+  border-color: var(--game-accent-red-border);
+  color: var(--game-accent-red);
+}
+
+.giveUpBtn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.toolButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.toolBtn {
+  padding: 0.5rem 1rem;
+  background: var(--game-key-bg);
+  border: 1px solid var(--game-key-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toolBtn:hover:not(:disabled) {
+  background: var(--game-key-hover-bg);
+  color: var(--color-text);
+}
+
+.toolBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.toolBtn.active {
+  background: rgba(30, 136, 229, 0.2);
+  border-color: rgba(30, 136, 229, 0.4);
+  color: var(--game-accent-light);
+}
+
+.cluesSection {
+  display: flex;
+  gap: 1.5rem;
+  max-width: 500px;
+}
+
+.clueColumn {
+  flex: 1;
+  min-width: 200px;
+}
+
+.clueHeader {
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--game-accent);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--game-accent-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.clueList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.clueList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.clueList::-webkit-scrollbar-track {
+  background: var(--game-panel-bg);
+  border-radius: 3px;
+}
+
+.clueList::-webkit-scrollbar-thumb {
+  background: var(--color-text-muted);
+  border-radius: 3px;
+}
+
+.clueList::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+.clue {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--game-panel-bg);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.clue:hover {
+  background: var(--game-key-bg);
+}
+
+.clue.activeClue {
+  background: rgba(30, 136, 229, 0.15);
+  border-color: rgba(30, 136, 229, 0.3);
+}
+
+.clueNumber {
+  font-weight: 700;
+  color: var(--game-accent-light);
+  min-width: 24px;
+}
+
+.clueText {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.currentClue {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(30, 136, 229, 0.1);
+  border: 1px solid rgba(30, 136, 229, 0.2);
+  border-radius: 10px;
+  min-height: 48px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.currentClueDirection {
+  padding: 0.25rem 0.6rem;
+  background: var(--game-gradient);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.currentClueText {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.statsPanel {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 1rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statValue {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text);
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+  .mainContent {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cluesSection {
+    flex-direction: column;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .clueColumn {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .clueList {
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 500px) {
+  .container {
+    --cell-size: 26px;
+  }
+
+  .controls {
+    gap: 0.5rem;
+  }
+
+  .modeBtn,
+  .diffBtn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .clueList {
+    max-height: 150px;
+  }
+
+  .statsPanel {
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+
+  .statValue {
+    font-size: 1rem;
+  }
+}
+
+/* Very small grids */
+@media (max-width: 380px) {
+  .container {
+    --cell-size: 22px;
+  }
+
+  .cellNumber {
+    font-size: 7px;
+  }
+}
+
+/* Mobile Keyboard */
+.nativeInputWrapper {
+  position: fixed;
+  inset: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.nativeHiddenInput {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileKeyboard {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 500px;
+  padding: 0.6rem;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+  border-radius: 12px;
+}
+
+.keyboardRow {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.keyboardKey {
+  min-width: 32px;
+  height: 44px;
+  padding: 0 8px;
+  background: var(--game-key-bg);
+  border: 1px solid var(--game-key-border);
+  border-radius: 6px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  flex: 1;
+  max-width: 40px;
+}
+
+.keyboardKey:hover:not(:disabled) {
+  background: var(--game-key-hover-bg);
+}
+
+.keyboardKey:active:not(:disabled) {
+  transform: scale(0.95);
+  background: var(--game-accent);
+  color: var(--color-text);
+}
+
+.keyboardKey:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.backspaceKey {
+  max-width: 60px;
+  font-size: 1.2rem;
+}
+
+/* Show keyboard on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .mobileKeyboard {
+    display: flex;
+  }
+}
+
+/* Also show on small screens */
+@media (max-width: 768px) {
+  .mobileKeyboard {
+    display: flex;
+  }
+
+  .keyboardControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .focusInputBtn {
+    width: 100%;
+  }
+}
+
+/* Large screens - bigger grid */
+@media (min-width: 1200px) {
+  .container {
+    --cell-size: 38px;
+  }
+
+  .cellNumber {
+    font-size: 10px;
+  }
+}

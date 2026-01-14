@@ -1,0 +1,357 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #fbbf24;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.puzzleContainer {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.puzzleText {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.25rem;
+  justify-content: center;
+  line-height: 3rem;
+}
+
+.word {
+  display: inline-flex;
+  flex-wrap: nowrap;
+}
+
+.space {
+  width: 0.75rem;
+}
+
+.punctuation {
+  font-size: 1.5rem;
+  color: var(--color-text-tertiary);
+  display: inline-flex;
+  align-items: flex-end;
+  padding-bottom: 0.25rem;
+}
+
+.letterCell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-radius: 6px;
+  padding: 0.25rem 0.125rem;
+}
+
+.letterCell:hover {
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.letterCell.selected {
+  background: rgba(251, 191, 36, 0.2);
+  box-shadow: 0 0 0 2px #fbbf24;
+}
+
+.letterCell.correct .guess {
+  color: #4ade80;
+}
+
+.letterCell.wrong .guess {
+  color: #f87171;
+}
+
+.guess {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text);
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.encrypted {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: monospace;
+}
+
+.authorReveal {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: right;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.letterBank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.bankLetter {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.bankLetter.used {
+  color: rgba(255, 255, 255, 0.2);
+  text-decoration: line-through;
+  background: transparent;
+}
+
+.statsRow {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.hintBtn {
+  padding: 0.5rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hintBtn:hover {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.hiddenInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.winMessage {
+  text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 16px;
+}
+
+.winTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fbbf24;
+  margin-bottom: 0.5rem;
+}
+
+.winStats {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.gaveUpMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.gaveUpIcon {
+  font-size: 2rem;
+}
+
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  color: #fbbf24;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: rgba(245, 158, 11, 0.6);
+}
+
+.giveUpBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.newGameBtn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  border: none;
+  border-radius: 10px;
+  color: #1a1a2e;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+}
+
+.dailyBtn {
+  padding: 0.75rem 1.5rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dailyBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+@media (max-width: 600px) {
+  .letterCell {
+    width: 1.6rem;
+  }
+
+  .guess {
+    font-size: 1.2rem;
+  }
+
+  .encrypted {
+    font-size: 0.65rem;
+  }
+
+  .bankLetter {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .buttonRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .newGameBtn, .dailyBtn {
+    width: 100%;
+    max-width: 250px;
+  }
+}

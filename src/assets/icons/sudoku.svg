@@ -1,0 +1,24 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- White background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#ffffff"/>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- Grid lines -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#3b82f6" stroke-width="0.75"/>
+  <line x1="16" y1="1" x2="16" y2="23" stroke="#3b82f6" stroke-width="0.75"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#3b82f6" stroke-width="0.75"/>
+  <line x1="1" y1="16" x2="23" y2="16" stroke="#3b82f6" stroke-width="0.75"/>
+
+  <!-- Numbers -->
+  <text x="4.5" y="6.5" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">1</text>
+  <text x="12" y="6.5" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">2</text>
+  <text x="19.5" y="6.5" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">3</text>
+  <text x="4.5" y="14" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">4</text>
+  <text x="12" y="14" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#6b7280" text-anchor="middle">?</text>
+  <text x="19.5" y="14" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">6</text>
+  <text x="4.5" y="21" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">7</text>
+  <text x="12" y="21" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">8</text>
+  <text x="19.5" y="21" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#3b82f6" text-anchor="middle">9</text>
+</svg>

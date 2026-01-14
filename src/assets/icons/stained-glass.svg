@@ -1,0 +1,31 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stained glass geometric pattern -->
+
+  <!-- Background frame -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#1e1e2e" stroke="#6b7280" stroke-width="0.5"/>
+
+  <!-- Glass panels with lead lines -->
+  <!-- Top left triangle -->
+  <polygon points="2,2 12,2 2,12" fill="#f472b6"/>
+
+  <!-- Top right section -->
+  <polygon points="12,2 22,2 22,10 16,10 12,6" fill="#60a5fa"/>
+
+  <!-- Middle diamond -->
+  <polygon points="12,6 16,10 12,14 8,10" fill="#fbbf24"/>
+
+  <!-- Left section -->
+  <polygon points="2,12 8,10 12,14 8,18 2,18" fill="#a78bfa"/>
+
+  <!-- Right section -->
+  <polygon points="16,10 22,10 22,18 16,18 12,14" fill="#34d399"/>
+
+  <!-- Bottom section -->
+  <polygon points="2,18 8,18 12,22 2,22" fill="#f97316"/>
+  <polygon points="8,18 16,18 12,22" fill="#ec4899"/>
+  <polygon points="16,18 22,18 22,22 12,22" fill="#818cf8"/>
+
+  <!-- Lead lines (dark borders between glass) -->
+  <path d="M2 12 L12 2 M12 2 L12 6 L16 10 L22 10 M8 10 L12 6 M8 10 L12 14 L16 10 M2 18 L8 18 L12 14 L16 18 L22 18 M8 18 L12 22 L16 18"
+        stroke="#1e1e2e" stroke-width="1" fill="none"/>
+</svg>

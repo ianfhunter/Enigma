@@ -1,0 +1,228 @@
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #3498db;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.difficultySelector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.difficultyBtn {
+  padding: 0.5rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficultyBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.difficultyBtn.active {
+  background: rgba(52, 152, 219, 0.2);
+  border-color: rgba(52, 152, 219, 0.4);
+  color: #3498db;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.mineCounter, .timer {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #e74c3c;
+  min-width: 70px;
+}
+
+.timer {
+  color: #3498db;
+  text-align: right;
+}
+
+.resetBtn {
+  width: 40px;
+  height: 40px;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resetBtn:hover {
+  background: var(--panel-bg);
+  transform: scale(1.05);
+}
+
+.board {
+  display: grid;
+  gap: 1px;
+  background: var(--btn-secondary-bg);
+  padding: 4px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.cell {
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cell:hover:not(.revealed) {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.cell:active:not(.revealed) {
+  transform: scale(0.95);
+}
+
+.cell.revealed {
+  background: rgba(0, 0, 0, 0.3);
+  cursor: default;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.cell.mine {
+  background: rgba(231, 76, 60, 0.4);
+}
+
+.cell.flagged {
+  background: rgba(241, 196, 15, 0.15);
+}
+
+/* Number colors */
+.cell.num1 { color: #3498db; }
+.cell.num2 { color: #27ae60; }
+.cell.num3 { color: #e74c3c; }
+.cell.num4 { color: #9b59b6; }
+.cell.num5 { color: #e67e22; }
+.cell.num6 { color: #1abc9c; }
+.cell.num7 { color: #34495e; }
+.cell.num8 { color: #95a5a6; }
+
+.resultMessage {
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Flag Toggle for Mobile */
+.flagToggle {
+  padding: 0.6rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flagToggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.flagToggle.flagModeActive {
+  background: rgba(241, 196, 15, 0.2);
+  border-color: rgba(241, 196, 15, 0.4);
+  color: #f1c40f;
+}
+
+@media (max-width: 600px) {
+  .cell {
+    width: 22px;
+    height: 22px;
+    font-size: 0.75rem;
+  }
+
+  .board {
+    max-width: calc(100vw - 2rem) !important;
+  }
+}

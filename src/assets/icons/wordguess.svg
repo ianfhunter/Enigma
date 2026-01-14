@@ -1,0 +1,7 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 2x2 word guess grid with rounded corners -->
+  <rect x="1" y="1" width="10" height="10" rx="2" fill="#6aaa64"/>
+  <rect x="13" y="1" width="10" height="10" rx="2" fill="#c9b458"/>
+  <rect x="1" y="13" width="10" height="10" rx="2" fill="#787c7e"/>
+  <rect x="13" y="13" width="10" height="10" rx="2" fill="#6aaa64"/>
+</svg>

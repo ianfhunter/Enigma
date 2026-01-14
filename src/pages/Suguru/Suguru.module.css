@@ -1,0 +1,349 @@
+.container {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 20px;
+  color: var(--color-text);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: var(--color-text);
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.sizeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.sizeBtn {
+  padding: 8px 16px;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--btn-secondary-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sizeBtn:hover:not(.disabled) {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.sizeBtn.active {
+  background: linear-gradient(135deg, #f472b6, #c084fc);
+  border-color: transparent;
+}
+
+.sizeBtn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.puzzleCount {
+  font-size: 10px;
+  color: var(--color-text-secondary);
+}
+
+.sizeBtn.active .puzzleCount {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.timerDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  color: var(--color-text);
+  background: var(--btn-secondary-bg);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.timerIcon {
+  font-size: 1rem;
+}
+
+.attribution {
+  font-size: 12px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cell:hover {
+  filter: brightness(1.2);
+}
+
+.cell.given {
+  cursor: default;
+}
+
+.cell.selected {
+  box-shadow: inset 0 0 0 2px #f472b6;
+}
+
+.cell.error {
+  background: rgba(239, 68, 68, 0.4) !important;
+}
+
+/* Region borders */
+.cell.borderTop {
+  border-top: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.cell.borderBottom {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.cell.borderLeft {
+  border-left: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.cell.borderRight {
+  border-right: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.cellValue {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.cell.given .cellValue {
+  color: #f472b6;
+}
+
+.numberPad {
+  display: flex;
+  gap: 8px;
+}
+
+.numBtn {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 8px;
+  background: var(--btn-secondary-bg);
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.numBtn:hover {
+  background: rgba(244, 114, 182, 0.4);
+  transform: translateY(-2px);
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(192, 132, 252, 0.2));
+  border: 1px solid rgba(244, 114, 182, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #f472b6;
+}
+
+.winMessage p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.gaveUpMessage {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(249, 115, 22, 0.2));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.gaveUpEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.gaveUpMessage h3 {
+  margin: 0 0 5px 0;
+  color: #fbbf24;
+}
+
+.gaveUpMessage p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 20px;
+  background: var(--btn-secondary-hover-bg);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #f472b6;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(20px);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.resetBtn,
+.giveUpBtn,
+.newGameBtn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: var(--btn-secondary-bg);
+  color: white;
+}
+
+.resetBtn:hover {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.giveUpBtn {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.giveUpBtn:hover {
+  background: rgba(251, 191, 36, 0.3);
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #f472b6, #c084fc);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(244, 114, 182, 0.3);
+}

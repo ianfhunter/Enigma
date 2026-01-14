@@ -1,0 +1,126 @@
+{
+  "description": "Curated list of public domain classical music recordings from Internet Archive",
+  "generated": "2026-01-14",
+  "sources": [
+    {
+      "id": 1,
+      "piece": "Symphony No. 5 in C minor, Op. 67 - 1st Movement",
+      "composer": "Ludwig van Beethoven",
+      "archiveId": "BeethovenSymphonyNo.5",
+      "url": "https://archive.org/details/BeethovenSymphonyNo.5",
+      "license": "Public Domain",
+      "performer": "NBC Symphony Orchestra / Arturo Toscanini",
+      "year": "1939",
+      "notes": "Historic recording, conductor Toscanini"
+    },
+    {
+      "id": 7,
+      "piece": "Toccata and Fugue in D minor, BWV 565",
+      "composer": "Johann Sebastian Bach",
+      "archiveId": "ToccataAndFugueInDMinor",
+      "url": "https://archive.org/details/ToccataAndFugueInDMinor",
+      "license": "Public Domain",
+      "performer": "Unknown",
+      "notes": "Organ recording"
+    },
+    {
+      "id": 9,
+      "piece": "Canon in D",
+      "composer": "Johann Pachelbel",
+      "archiveId": "Canon_25",
+      "url": "https://archive.org/details/Canon_25",
+      "license": "CC0",
+      "performer": "Unknown",
+      "notes": "Clean recording"
+    },
+    {
+      "id": 10,
+      "piece": "Ride of the Valkyries",
+      "composer": "Richard Wagner",
+      "archiveId": "RideOfTheValkyries",
+      "url": "https://archive.org/details/RideOfTheValkyries",
+      "license": "Public Domain",
+      "performer": "Unknown",
+      "notes": "Orchestral recording"
+    },
+    {
+      "id": 13,
+      "piece": "Piano Sonata No. 14 'Moonlight' - 1st Movement",
+      "composer": "Ludwig van Beethoven",
+      "archiveId": "JV-37849-1959-QmajaTZxuxFfoxCZ4AeWkLhvPkjQqD3hp6HQrg7r6FGc3x.mp3",
+      "url": "https://archive.org/details/JV-37849-1959-QmajaTZxuxFfoxCZ4AeWkLhvPkjQqD3hp6HQrg7r6FGc3x.mp3",
+      "license": "CC0",
+      "performer": "Unknown",
+      "notes": "1st movement only"
+    }
+  ],
+  "needsManualSearch": [
+    "Für Elise",
+    "Eine kleine Nachtmusik - 1st Movement",
+    "Symphony No. 40 in G minor - 1st Movement",
+    "The Four Seasons: Spring - 1st Movement",
+    "The Four Seasons: Winter - 1st Movement",
+    "Cello Suite No. 1 in G major - Prelude",
+    "The Blue Danube Waltz",
+    "Hungarian Rhapsody No. 2",
+    "Symphony No. 9 'Ode to Joy' - 4th Movement (excerpt)",
+    "In the Hall of the Mountain King",
+    "Morning Mood (Peer Gynt)",
+    "Swan Lake - Scene",
+    "The Nutcracker - Dance of the Sugar Plum Fairy",
+    "1812 Overture (finale)",
+    "Piano Concerto No. 1 - Opening",
+    "Nocturne in E-flat major, Op. 9 No. 2",
+    "Minute Waltz (Waltz in D-flat major, Op. 64 No. 1)",
+    "Clair de Lune",
+    "Prélude à l'après-midi d'un faune",
+    "Boléro",
+    "William Tell Overture (Finale)",
+    "The Barber of Seville Overture",
+    "Habanera (Carmen)",
+    "Also sprach Zarathustra (Opening)",
+    "Ave Maria",
+    "Symphony No. 8 'Unfinished' - 1st Movement",
+    "Piano Concerto No. 2 - 1st Movement",
+    "Symphony No. 5 - 2nd Movement (Adagio)",
+    "The Planets: Mars, the Bringer of War",
+    "The Planets: Jupiter, the Bringer of Jollity",
+    "Siegfried's Death and Funeral March (Götterdämmerung)",
+    "Requiem: Dies Irae",
+    "La donna è mobile (Rigoletto)",
+    "Nessun dorma (Turandot)",
+    "Air on the G String",
+    "Brandenburg Concerto No. 3 - 1st Movement",
+    "Hallelujah Chorus (Messiah)",
+    "Water Music Suite - Hornpipe",
+    "Hungarian Dance No. 5",
+    "Symphony No. 9 'From the New World' - 2nd Movement (Largo)",
+    "The Sorcerer's Apprentice",
+    "The Moldau (Vltava)",
+    "The Bartered Bride - Overture",
+    "Peter and the Wolf - Opening",
+    "Romeo and Juliet - Dance of the Knights"
+  ],
+  "recommendedSources": {
+    "internetArchive": {
+      "collections": [
+        "https://archive.org/details/audio?query=classical+public+domain",
+        "https://archive.org/details/opensource_audio"
+      ],
+      "searchTips": [
+        "Search for composer name + piece name",
+        "Look for items marked 'publicdomain' or 'CC0'",
+        "Check the 'licenseurl' field in metadata"
+      ]
+    },
+    "musopen": {
+      "url": "https://musopen.org/music/",
+      "license": "CC-BY-SA or Public Domain",
+      "notes": "Requires free account for downloads"
+    },
+    "imslp": {
+      "url": "https://imslp.org",
+      "notes": "Check individual recording licenses - varies by performer"
+    }
+  }
+}

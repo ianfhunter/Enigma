@@ -1,0 +1,172 @@
+.container {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+.select {
+  background: var(--btn-secondary-bg);
+  color: var(--color-text);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 0.35rem 0.6rem;
+}
+
+.button {
+  background: var(--btn-secondary-bg);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 0.45rem 0.75rem;
+  font-weight: 900;
+}
+
+.status {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+.win {
+  color: #22c55e;
+}
+
+.bad {
+  color: #fb7185;
+}
+
+.gaveUp {
+  color: #f59e0b;
+}
+
+.giveUpButton {
+  background: rgba(251, 113, 133, 0.15);
+  border-color: rgba(251, 113, 133, 0.3);
+  color: #fb7185;
+}
+
+.giveUpButton:hover:not(:disabled) {
+  background: rgba(251, 113, 133, 0.25);
+}
+
+.giveUpButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.boardWrap {
+  width: min(92vw, 720px);
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: visible;
+}
+
+.cellGrid {
+  display: grid;
+  gap: 4px;
+}
+
+.cellWrapper {
+  position: relative;
+}
+
+/* Vertex circles positioned absolutely at cell corners */
+.vertex {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 11px;
+  color: var(--color-text);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.5), 0 0 0 2px rgba(15, 15, 20, 0.8);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.vertexTL {
+  top: -12px;
+  left: -12px;
+}
+
+.vertexTR {
+  top: -12px;
+  right: -12px;
+}
+
+.vertexBL {
+  bottom: -12px;
+  left: -12px;
+}
+
+.vertexBR {
+  bottom: -12px;
+  right: -12px;
+}
+
+.vertexBad {
+  background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+  box-shadow: 0 2px 6px rgba(244, 63, 94, 0.5), 0 0 0 2px rgba(15, 15, 20, 0.8);
+}
+
+.cell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  overflow: hidden;
+}
+
+.cell:hover:not(:disabled) {
+  background: var(--btn-secondary-bg);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cellSolution {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.slashSvg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+}

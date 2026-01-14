@@ -1,0 +1,570 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Mobile Water Toggle */
+.waterToggle {
+  padding: 0.6rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.waterToggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.waterToggle.waterModeActive {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #3b82f6;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #0ea5e9;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #0ea5e9 0%, #1e3a5f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.sizeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sizeBtn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sizeBtn:hover {
+  color: var(--color-text);
+  background: var(--btn-secondary-bg);
+}
+
+.sizeBtn.active {
+  color: var(--color-text);
+  background: rgba(14, 165, 233, 0.3);
+  border-color: rgba(14, 165, 233, 0.5);
+}
+
+.difficultySelector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.difficultyBtn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficultyBtn:hover {
+  color: var(--color-text);
+  background: var(--btn-secondary-bg);
+}
+
+.difficultyBtn.active {
+  color: var(--color-text);
+  background: rgba(14, 165, 233, 0.3);
+  border-color: rgba(14, 165, 233, 0.5);
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.fleetInfo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(30, 58, 95, 0.3));
+  border: 2px solid rgba(14, 165, 233, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+}
+
+.fleetLabel {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0ea5e9;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+}
+
+.fleetShips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.fleetShip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: rgba(10, 30, 50, 0.6);
+  border-radius: 6px;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.shipPreview {
+  display: inline-flex;
+  align-items: center;
+  color: #0ea5e9;
+  font-size: 1rem;
+  letter-spacing: -2px;
+  text-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+}
+
+.shipSegment {
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  border-radius: 3px;
+  box-shadow: 0 0 6px rgba(14, 165, 233, 0.6);
+}
+
+.shipCount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  min-width: 24px;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.colCounts {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.corner {
+  /* Empty corner to align colCounts with grid */
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0ea5e9;
+  height: 32px;
+  transition: all 0.2s ease;
+}
+
+.mainGrid {
+  display: flex;
+}
+
+.rowCounts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: 4px;
+}
+
+.rowCounts .count {
+  width: 32px;
+  height: 32px;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(30, 58, 95, 0.4));
+  padding: 2px;
+  border-radius: 8px;
+  box-shadow:
+    0 0 20px rgba(14, 165, 233, 0.15),
+    inset 0 0 30px rgba(14, 165, 233, 0.05);
+}
+
+.cell {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 30, 50, 0.6);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  font-size: 1rem;
+  border-radius: 2px;
+}
+
+.cell:hover {
+  background: rgba(14, 165, 233, 0.25);
+}
+
+.cell.shipCell {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
+}
+
+.cell.waterCell {
+  background: rgba(30, 58, 95, 0.8);
+}
+
+.cell.hintCell {
+  cursor: default;
+  opacity: 0.9;
+}
+
+.cell.hintCell.shipCell {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+
+.cell.error {
+  background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.ship {
+  font-size: 1.1rem;
+  color: var(--color-text);
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.water {
+  font-size: 1.2rem;
+  color: rgba(14, 165, 233, 0.6);
+  font-weight: 300;
+}
+
+.shipCounter {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 1rem;
+  background: rgba(14, 165, 233, 0.1);
+  border-radius: 8px;
+}
+
+.winMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.winEmoji {
+  font-size: 3rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.winMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.winMessage p {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.gaveUpMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.gaveUpEmoji {
+  font-size: 3rem;
+  animation: bounce 0.6s ease;
+}
+
+.gaveUpMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.gaveUpMessage p {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 22px;
+  background: var(--panel-bg);
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s ease;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #0ea5e9;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(18px);
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.resetBtn {
+  padding: 0.75rem 1.5rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.newGameBtn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #0ea5e9, #1e3a5f);
+  border: none;
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+}
+
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.legendShip {
+  font-size: 1rem;
+  color: #0ea5e9;
+  text-shadow: 0 0 5px rgba(14, 165, 233, 0.5);
+}
+
+.legendWater {
+  font-size: 1.2rem;
+  color: rgba(14, 165, 233, 0.6);
+}
+
+@media (max-width: 450px) {
+  .grid {
+    width: 100% !important;
+    max-width: 280px;
+  }
+
+  .cell {
+    font-size: 0.8rem;
+  }
+
+  .ship {
+    font-size: 0.9rem;
+  }
+
+  .water {
+    font-size: 1rem;
+  }
+
+  .fleetInfo {
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .fleetLabel {
+    font-size: 0.85rem;
+  }
+
+  .fleetShips {
+    gap: 0.5rem;
+  }
+
+  .fleetShip {
+    padding: 0.3rem 0.5rem;
+    gap: 0.35rem;
+  }
+
+  .shipSegment {
+    width: 12px;
+    height: 12px;
+  }
+
+  .shipCount {
+    font-size: 0.8rem;
+  }
+}

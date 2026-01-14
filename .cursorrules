@@ -1,0 +1,25 @@
+# Cursor Rules
+
+## General Development
+- Add Unit Tests for vitest for the code you create
+- Never try to start a server to debug. There is a hot-updating server running on http://ian-2014.local:3030/
+- If you need to login, you can use the username "cursor" and password "cursor"
+- Reuse components where possible to reduce complexity
+
+## Puzzles
+Puzzles should generally:
+- have a "Give Up" button that shows the answer if pressed.
+- always be solvable
+- almost always be uniquely solvable (exceptions for games that dont do this by standard)
+- Be generated, rather than hardcoded.
+- Use a dataset if our generator is not bulletproof.
+- If it is an external dataset, generally trust it over our implementation of a generator
+- Only need a backend if their generator is complex or they require a dataset file.
+- Not infringe on existing copyrights
+- Not have fallbacks to datasets.
+- Be reproducible given a seed number (and display the active puzzle's seed number on screen)
+
+## Tests
+Try to avoid shallow tests which are almost guarnteed to pass. Instead, try ones that challenge the componet you're testing.
+If you need to delete a test, give the user a justification.
+Tests should be deterministic.

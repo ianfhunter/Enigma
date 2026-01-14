@@ -1,0 +1,413 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import styles from './Maze.module.css';
+
+const GRID_SIZES = {
+  'Small': { width: 31, height: 23 },
+  'Medium': { width: 51, height: 37 },
+  'Large': { width: 81, height: 55 },
+};
+
+// Generate maze using recursive backtracking
+function generateMaze(width, height) {
+  // Initialize grid with walls
+  const maze = Array(height).fill(null).map(() => Array(width).fill(1)); // 1 = wall
+
+  // Carve passages
+  function carve(x, y) {
+    maze[y][x] = 0; // 0 = passage
+
+    const directions = [
+      [0, -2], // up
+      [2, 0],  // right
+      [0, 2],  // down
+      [-2, 0], // left
+    ].sort(() => Math.random() - 0.5);
+
+    for (const [dx, dy] of directions) {
+      const nx = x + dx;
+      const ny = y + dy;
+
+      if (nx > 0 && nx < width - 1 && ny > 0 && ny < height - 1 && maze[ny][nx] === 1) {
+        maze[y + dy / 2][x + dx / 2] = 0; // Remove wall between
+        carve(nx, ny);
+      }
+    }
+  }
+
+  // Start from position (1, 1)
+  carve(1, 1);
+
+  // Set start and end
+  const start = { x: 1, y: 1 };
+  const end = { x: width - 2, y: height - 2 };
+
+  return { maze, start, end };
+}
+
+// BFS to find shortest path
+function findPath(maze, start, end) {
+  const height = maze.length;
+  const width = maze[0].length;
+  const visited = new Set();
+  const queue = [[start.x, start.y, []]];
+
+  while (queue.length > 0) {
+    const [x, y, path] = queue.shift();
+    const key = `${x},${y}`;
+
+    if (x === end.x && y === end.y) {
+      return [...path, { x, y }];
+    }
+
+    if (visited.has(key)) continue;
+    visited.add(key);
+
+    const newPath = [...path, { x, y }];
+
+    const neighbors = [
+      [x, y - 1],
+      [x + 1, y],
+      [x, y + 1],
+      [x - 1, y],
+    ];
+
+    for (const [nx, ny] of neighbors) {
+      if (nx >= 0 && nx < width && ny >= 0 && ny < height &&
+          maze[ny][nx] === 0 && !visited.has(`${nx},${ny}`)) {
+        queue.push([nx, ny, newPath]);
+      }
+    }
+  }
+
+  return null;
+}
+
+export default function Maze() {
+  const [sizeKey, setSizeKey] = useState('Medium');
+  const [mazeData, setMazeData] = useState(null);
+  const [playerPos, setPlayerPos] = useState({ x: 1, y: 1 });
+  const [path, setPath] = useState(new Set(['1,1']));
+  const [moves, setMoves] = useState(0);
+  const [timer, setTimer] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [gameState, setGameState] = useState('playing');
+  const [showSolution, setShowSolution] = useState(false);
+  const [solution, setSolution] = useState([]);
+  const [bestTimes, setBestTimes] = useState(() => {
+    const saved = localStorage.getItem('maze-best-times');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const timerRef = useRef(null);
+  const gameAreaRef = useRef(null);
+
+  const { width, height } = GRID_SIZES[sizeKey];
+
+  const initGame = useCallback(() => {
+    const data = generateMaze(width, height);
+    setMazeData(data);
+    setPlayerPos(data.start);
+    setPath(new Set([`${data.start.x},${data.start.y}`]));
+    setMoves(0);
+    setTimer(0);
+    setIsRunning(false);
+    setGameState('playing');
+    setShowSolution(false);
+    setSolution(findPath(data.maze, data.start, data.end) || []);
+  }, [width, height]);
+
+  useEffect(() => {
+    initGame();
+  }, [initGame]);
+
+  useEffect(() => {
+    if (isRunning) {
+      timerRef.current = setInterval(() => {
+        setTimer(prev => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isRunning]);
+
+  useEffect(() => {
+    localStorage.setItem('maze-best-times', JSON.stringify(bestTimes));
+  }, [bestTimes]);
+
+  const movePlayer = useCallback((dx, dy) => {
+    if (gameState !== 'playing' || !mazeData) return;
+
+    const newX = playerPos.x + dx;
+    const newY = playerPos.y + dy;
+
+    // Check bounds and walls
+    if (newX < 0 || newX >= width || newY < 0 || newY >= height) return;
+    if (mazeData.maze[newY][newX] === 1) return;
+
+    // Start timer on first move
+    if (!isRunning) {
+      setIsRunning(true);
+    }
+
+    setPlayerPos({ x: newX, y: newY });
+    setPath(prev => new Set([...prev, `${newX},${newY}`]));
+    setMoves(prev => prev + 1);
+
+    // Check win
+    if (newX === mazeData.end.x && newY === mazeData.end.y) {
+      setGameState('won');
+      setIsRunning(false);
+
+      const key = sizeKey;
+      if (!bestTimes[key] || timer < bestTimes[key]) {
+        setBestTimes(prev => ({ ...prev, [key]: timer }));
+      }
+    }
+  }, [playerPos, mazeData, width, height, isRunning, gameState, timer, sizeKey, bestTimes]);
+
+  // Keyboard controls with key hold for faster movement
+  const movePlayerRef = useRef(movePlayer);
+  const keysHeldRef = useRef(new Set());
+  const moveIntervalRef = useRef(null);
+  const MOVE_INTERVAL = 60; // milliseconds between moves when key is held
+
+  // Keep movePlayer ref up to date
+  useEffect(() => {
+    movePlayerRef.current = movePlayer;
+  }, [movePlayer]);
+
+  useEffect(() => {
+    const getDirection = (key) => {
+      const normalizedKey = key.toLowerCase();
+      switch (normalizedKey) {
+        case 'arrowup':
+        case 'w':
+          return { dx: 0, dy: -1, key: normalizedKey };
+        case 'arrowright':
+        case 'd':
+          return { dx: 1, dy: 0, key: normalizedKey };
+        case 'arrowdown':
+        case 's':
+          return { dx: 0, dy: 1, key: normalizedKey };
+        case 'arrowleft':
+        case 'a':
+          return { dx: -1, dy: 0, key: normalizedKey };
+        default:
+          return null;
+      }
+    };
+
+    const startMoving = () => {
+      if (moveIntervalRef.current) return;
+
+      moveIntervalRef.current = setInterval(() => {
+        // Get the most recent direction from held keys
+        const heldKeys = Array.from(keysHeldRef.current);
+        if (heldKeys.length > 0) {
+          const lastKey = heldKeys[heldKeys.length - 1];
+          const dir = getDirection(lastKey);
+          if (dir) {
+            movePlayerRef.current(dir.dx, dir.dy);
+          }
+        }
+      }, MOVE_INTERVAL);
+    };
+
+    const stopMoving = () => {
+      if (moveIntervalRef.current) {
+        clearInterval(moveIntervalRef.current);
+        moveIntervalRef.current = null;
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      // Ignore browser key repeat
+      if (e.repeat) return;
+
+      const dir = getDirection(e.key);
+      if (!dir) return;
+
+      e.preventDefault();
+
+      const wasEmpty = keysHeldRef.current.size === 0;
+      keysHeldRef.current.add(dir.key);
+
+      // Move immediately on first press
+      if (wasEmpty) {
+        movePlayerRef.current(dir.dx, dir.dy);
+        startMoving();
+      } else {
+        // Switching direction - move immediately in new direction
+        movePlayerRef.current(dir.dx, dir.dy);
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      const dir = getDirection(e.key);
+      if (!dir) return;
+
+      keysHeldRef.current.delete(dir.key);
+
+      if (keysHeldRef.current.size === 0) {
+        stopMoving();
+      }
+    };
+
+    // Stop moving if window loses focus
+    const handleBlur = () => {
+      keysHeldRef.current.clear();
+      stopMoving();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('blur', handleBlur);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('blur', handleBlur);
+      stopMoving();
+    };
+  }, []);
+
+  // Focus game area on mount
+  useEffect(() => {
+    if (gameAreaRef.current) {
+      gameAreaRef.current.focus();
+    }
+  }, [mazeData]);
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  if (!mazeData) return null;
+
+  const cellSize = Math.min(16, Math.floor(500 / width));
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <Link to="/" className={styles.backLink}>← Back to Games</Link>
+        <h1 className={styles.title}>Maze</h1>
+        <p className={styles.instructions}>
+          Navigate from start to finish! Use arrow keys or WASD to move.
+        </p>
+      </div>
+
+      <div className={styles.sizeSelector}>
+        {Object.keys(GRID_SIZES).map((key) => (
+          <button
+            key={key}
+            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
+            onClick={() => setSizeKey(key)}
+          >
+            {key}
+          </button>
+        ))}
+      </div>
+
+      <div className={styles.gameArea} ref={gameAreaRef} tabIndex={0}>
+        <div className={styles.statsBar}>
+          <div className={styles.stat}>
+            <span className={styles.statLabel}>Moves</span>
+            <span className={styles.statValue}>{moves}</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statLabel}>Time</span>
+            <span className={styles.statValue}>{formatTime(timer)}</span>
+          </div>
+          {solution.length > 0 && (
+            <div className={styles.stat}>
+              <span className={styles.statLabel}>Optimal</span>
+              <span className={styles.statValue}>{solution.length - 1}</span>
+            </div>
+          )}
+          {bestTimes[sizeKey] && (
+            <div className={styles.stat}>
+              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statValue}>{formatTime(bestTimes[sizeKey])}</span>
+            </div>
+          )}
+        </div>
+
+        <div
+          className={styles.maze}
+          style={{
+            gridTemplateColumns: `repeat(${width}, ${cellSize}px)`,
+            gridTemplateRows: `repeat(${height}, ${cellSize}px)`,
+          }}
+        >
+          {mazeData.maze.map((row, y) =>
+            row.map((cell, x) => {
+              const isStart = x === mazeData.start.x && y === mazeData.start.y;
+              const isEnd = x === mazeData.end.x && y === mazeData.end.y;
+              const isPlayer = x === playerPos.x && y === playerPos.y;
+              const isPath = path.has(`${x},${y}`);
+              const isSolution = showSolution && solution.some(p => p.x === x && p.y === y);
+
+              return (
+                <div
+                  key={`${x}-${y}`}
+                  className={`
+                    ${styles.cell}
+                    ${cell === 1 ? styles.wall : styles.passage}
+                    ${isStart ? styles.start : ''}
+                    ${isEnd ? styles.end : ''}
+                    ${isPlayer ? styles.player : ''}
+                    ${isPath && !isPlayer ? styles.visited : ''}
+                    ${isSolution ? styles.solution : ''}
+                  `}
+                  style={{ width: cellSize, height: cellSize }}
+                >
+                  {isPlayer && <span className={styles.playerIcon}>●</span>}
+                  {isEnd && !isPlayer && <span className={styles.endIcon}>⭐</span>}
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Mobile controls */}
+        <div className={styles.mobileControls}>
+          <button className={styles.controlBtn} onClick={() => movePlayer(0, -1)}>↑</button>
+          <div className={styles.controlRow}>
+            <button className={styles.controlBtn} onClick={() => movePlayer(-1, 0)}>←</button>
+            <button className={styles.controlBtn} onClick={() => movePlayer(1, 0)}>→</button>
+          </div>
+          <button className={styles.controlBtn} onClick={() => movePlayer(0, 1)}>↓</button>
+        </div>
+
+        {gameState === 'won' && (
+          <div className={styles.winMessage}>
+            <div className={styles.winEmoji}>🎉</div>
+            <h3>Maze Complete!</h3>
+            <p>Time: {formatTime(timer)} • Moves: {moves}</p>
+            {moves === solution.length - 1 && (
+              <p className={styles.perfect}>🏆 Perfect Path!</p>
+            )}
+          </div>
+        )}
+
+        <div className={styles.buttons}>
+          <button
+            className={styles.hintBtn}
+            onClick={() => setShowSolution(!showSolution)}
+          >
+            {showSolution ? 'Hide Solution' : 'Show Solution'}
+          </button>
+          <button className={styles.newGameBtn} onClick={initGame}>
+            {gameState === 'won' ? 'Play Again' : 'New Maze'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

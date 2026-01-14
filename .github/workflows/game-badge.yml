@@ -1,0 +1,57 @@
+name: Update game badge
+
+on:
+  push:
+    paths:
+      - "src/data/gameRegistry.js"
+      - "src/data/**"
+      - "datasets/**"
+      - ".github/workflows/game-badge.yml"
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-badge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute game count
+        run: |
+          node - <<'EOF'
+          import fs from 'fs';
+
+          const registryPath = 'src/data/gameRegistry.js';
+          const content = fs.readFileSync(registryPath, 'utf8');
+          const slugMatches = [...content.matchAll(/slug:\s*['"]([^'"]+)['"]/g)];
+          const count = slugMatches.length;
+
+          const badge = {
+            schemaVersion: 1,
+            label: 'games',
+            message: String(count),
+            color: 'blue'
+          };
+
+          fs.writeFileSync('badge.json', JSON.stringify(badge, null, 2) + '\n');
+          console.log(`Found ${count} games`);
+          EOF
+
+      - name: Commit badge
+        run: |
+          if git status --short badge.json | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add badge.json
+            git commit -m "chore: update game badge"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          else
+            echo "No badge changes";
+          fi

@@ -1,0 +1,541 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #14b8a6;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.titleSmall {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #14b8a6;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Region Selection Grid */
+.regionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  padding: 1rem;
+}
+
+.regionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.regionCard:hover {
+  background: rgba(20, 184, 166, 0.08);
+  border-color: rgba(20, 184, 166, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(20, 184, 166, 0.15);
+}
+
+.regionIcon {
+  font-size: 3rem;
+}
+
+.regionName {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.regionCount {
+  font-size: 0.85rem;
+  color: var(--color-text-tertiary);
+}
+
+.regionBest {
+  font-size: 0.75rem;
+  color: #14b8a6;
+  background: rgba(20, 184, 166, 0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+/* Menu Area */
+.menuArea {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.startBtn {
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  border: none;
+  border-radius: 12px;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.startBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+}
+
+.statsPanel {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  padding: 1.25rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statValue {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  margin-top: 0.25rem;
+}
+
+/* Game Info */
+.gameInfo {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+.score {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #14b8a6;
+}
+
+.timer {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Map Container */
+.mapContainer {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.map {
+  width: 100%;
+  height: auto;
+  max-height: 50vh;
+}
+
+.region {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 0.05;
+  transition: fill 0.3s ease;
+}
+
+.region.guessed {
+  fill: #14b8a6;
+  stroke: #0d9488;
+}
+
+.region.missed {
+  fill: rgba(251, 191, 36, 0.5);
+  stroke: #fbbf24;
+}
+
+/* Input Area */
+.inputArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.input {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: var(--color-text);
+  font-size: 1.1rem;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  border-color: #14b8a6;
+  background: rgba(20, 184, 166, 0.05);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Feedback */
+.feedback {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback.correct {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.feedback.wrong {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+/* Guessed List */
+.guessedSection {
+  width: 100%;
+  max-width: 500px;
+}
+
+.toggleListBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
+}
+
+.toggleListBtn:hover {
+  background: var(--btn-secondary-bg);
+  color: #14b8a6;
+}
+
+.guessedList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0 0 12px 12px;
+  border-top: none;
+  margin-top: -1px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.guessedItem {
+  padding: 0.25rem 0.6rem;
+  background: rgba(20, 184, 166, 0.15);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #14b8a6;
+}
+
+/* Give Up */
+.giveUpBtn {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--btn-secondary-border);
+  border-radius: 8px;
+  color: var(--color-text-tertiary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #f87171;
+}
+
+.confirmModal {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.confirmModal p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+}
+
+.confirmBtns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.confirmYes {
+  padding: 0.5rem 1rem;
+  background: rgba(239, 68, 68, 0.3);
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  color: #f87171;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirmYes:hover {
+  background: rgba(239, 68, 68, 0.5);
+}
+
+.confirmNo {
+  padding: 0.5rem 1rem;
+  background: rgba(20, 184, 166, 0.2);
+  border: 1px solid #14b8a6;
+  border-radius: 8px;
+  color: #14b8a6;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirmNo:hover {
+  background: rgba(20, 184, 166, 0.3);
+}
+
+/* Complete Message */
+.completeMessage {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.completeMessage h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.completeMessage p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.resultSection {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.resultTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4ade80;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.resultTitleMissed {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.resultList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.resultList .guessedItem {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+
+.missedItem {
+  padding: 0.2rem 0.5rem;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #fbbf24;
+}
+
+.completeActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.playAgainBtn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  border: none;
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.playAgainBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+}
+
+.changeRegionBtn {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 2px solid rgba(20, 184, 166, 0.5);
+  border-radius: 10px;
+  color: #14b8a6;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.changeRegionBtn:hover {
+  background: rgba(20, 184, 166, 0.1);
+  border-color: #14b8a6;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 4rem;
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .mapContainer {
+    padding: 0.5rem;
+  }
+
+  .statsPanel {
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+
+  .gameInfo {
+    gap: 1rem;
+  }
+
+  .regionGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .regionCard {
+    padding: 1rem 0.5rem;
+  }
+
+  .regionIcon {
+    font-size: 2rem;
+  }
+
+  .regionName {
+    font-size: 0.95rem;
+  }
+
+  .completeActions {
+    flex-direction: column;
+  }
+}
+

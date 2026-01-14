@@ -1,0 +1,306 @@
+.container {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 20px;
+  color: var(--color-text);
+}
+
+/* Mobile White Toggle */
+.whiteToggle {
+  padding: 0.6rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.whiteToggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.whiteToggle.whiteModeActive {
+  background: var(--btn-secondary-hover-bg);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: var(--color-text);
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  max-width: 550px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.difficultySelector,
+.sizeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.difficultyBtn,
+.sizeBtn {
+  padding: 8px 16px;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--btn-secondary-border);
+  border-radius: 8px;
+  color: var(--btn-secondary-text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.difficultyBtn:hover,
+.sizeBtn:hover {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.difficultyBtn.active,
+.sizeBtn.active {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border-color: transparent;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  background: var(--panel-bg);
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.cell {
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: var(--btn-secondary-bg);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.cell:hover:not(:disabled) {
+  background: var(--panel-bg);
+}
+
+.cell.clue {
+  background: var(--btn-secondary-bg);
+  border-radius: 50%;
+  cursor: default;
+}
+
+.cell.shaded {
+  background: #1e1e1e;
+}
+
+.cell.markedWhite {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.cell.markedWhite::after {
+  content: '·';
+  color: var(--color-text-secondary);
+  font-size: 20px;
+}
+
+.cell.error {
+  box-shadow: 0 0 0 2px #ef4444;
+}
+
+.clueValue {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #a78bfa;
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.2));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #a78bfa;
+}
+
+.winMessage p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 20px;
+  background: var(--btn-secondary-hover-bg);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #8b5cf6;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(20px);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.resetBtn,
+.newGameBtn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: var(--btn-secondary-bg);
+  color: white;
+}
+
+.resetBtn:hover {
+  background: var(--btn-secondary-hover-bg);
+}
+
+.gaveUpMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.gaveUpIcon {
+  font-size: 2rem;
+}
+
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  color: #fbbf24;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: rgba(245, 158, 11, 0.6);
+}
+
+.giveUpBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}

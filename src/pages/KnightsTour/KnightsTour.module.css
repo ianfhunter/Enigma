@@ -1,0 +1,365 @@
+.container {
+  min-height: 100%;
+  padding: 0 1rem 2rem;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Size selector */
+.sizeSelector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sizeBtn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--btn-secondary-bg);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sizeBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sizeBtn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Stats bar */
+.statsBar {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.statIcon {
+  font-size: 1.25rem;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+}
+
+/* Progress bar */
+.progressWrapper {
+  width: 100%;
+  max-width: 480px;
+}
+
+.progressBar {
+  height: 8px;
+  background: var(--btn-secondary-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Chess board */
+.boardWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: 8px;
+  background: linear-gradient(145deg, #2d1b4e 0%, #1a0f2e 100%);
+  border-radius: 8px;
+  box-shadow:
+    0 10px 40px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.board {
+  display: grid;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.square.light {
+  background: #e8ddd4;
+}
+
+.square.dark {
+  background: #8b7355;
+}
+
+.square.visited {
+  background: rgba(99, 102, 241, 0.4) !important;
+}
+
+.square.visited.light {
+  background: rgba(129, 140, 248, 0.5) !important;
+}
+
+.square.validMove {
+  background: rgba(34, 197, 94, 0.4) !important;
+  cursor: pointer;
+}
+
+.square.validMove::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  background: rgba(34, 197, 94, 0.8);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+}
+
+.square.knightSquare {
+  background: rgba(168, 85, 247, 0.6) !important;
+  box-shadow: inset 0 0 0 3px rgba(168, 85, 247, 0.8);
+}
+
+/* Knight piece */
+.knight {
+  font-size: clamp(1.5rem, calc(60vw / var(--board-size, 8)), 3rem);
+  color: #1a0f2e;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+  line-height: 1;
+  animation: knightBounce 0.3s ease;
+}
+
+@keyframes knightBounce {
+  0% { transform: scale(1.3); }
+  50% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Visit numbers */
+.visitNumber {
+  font-size: clamp(0.6rem, calc(40vw / var(--board-size, 8)), 1.2rem);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Status messages */
+.statusMessage {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.statusMessage.success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.2) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+}
+
+.statusMessage.error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.statusIcon {
+  font-size: 1.5rem;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.undoBtn,
+.hintBtn,
+.newPuzzleBtn {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.undoBtn {
+  background: var(--btn-secondary-bg);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.undoBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.undoBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.hintBtn {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.hintBtn:hover {
+  background: rgba(255, 193, 7, 0.25);
+  transform: translateY(-2px);
+}
+
+.hintBtn.active {
+  background: rgba(255, 193, 7, 0.3);
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+}
+
+.newPuzzleBtn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.newPuzzleBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+/* Tips */
+.tips {
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.tipTitle {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.75rem;
+}
+
+.tipList {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.tipList li {
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .boardWrapper {
+    padding: 4px;
+  }
+
+  .knight {
+    font-size: clamp(1.2rem, calc(70vw / var(--board-size, 8)), 2.5rem);
+  }
+
+  .visitNumber {
+    font-size: clamp(0.5rem, calc(50vw / var(--board-size, 8)), 1rem);
+  }
+
+  .statsBar {
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .statValue {
+    font-size: 1rem;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  .undoBtn,
+  .hintBtn,
+  .newPuzzleBtn {
+    flex: 1;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .sizeBtn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}

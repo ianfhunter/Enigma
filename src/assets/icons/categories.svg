@@ -1,0 +1,7 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 2x2 Categories style grid with rounded corners - yellow, green, blue, purple -->
+  <rect x="1" y="1" width="10" height="10" rx="2" fill="#f9df6d"/>
+  <rect x="13" y="1" width="10" height="10" rx="2" fill="#a0c35a"/>
+  <rect x="1" y="13" width="10" height="10" rx="2" fill="#b0c4ef"/>
+  <rect x="13" y="13" width="10" height="10" rx="2" fill="#ba81c5"/>
+</svg>

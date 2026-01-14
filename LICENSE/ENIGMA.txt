@@ -1,0 +1,112 @@
+ENIGMA PERSONAL USE LICENSE
+
+Copyright (c) 2024 Ian Hunter
+
+IMPORTANT: The following components are licensed under GPL-3.0 instead of this license:
+- Crossword puzzle component (see LICENSE/GPL3-CROSSWORD.txt for details)
+  - datasets/crossword_clues.json
+  - scripts/generate-crossword-definitions.mjs
+  - src/data/crosswordUtils.js
+  - src/pages/Crossword/ (all files)
+
+PERSONAL USE PERMISSION
+======================
+
+You are hereby granted permission, free of charge, to use this software and
+associated documentation files (the "Software") for personal, non-commercial
+purposes, subject to the following conditions:
+
+You are free to:
+- Use this software for personal, non-commercial purposes
+- Modify the source code for personal use
+- Share the software with others for personal use
+- Host it on your own server for personal/family use
+- Study how the software works
+- Create derivative works for personal use
+
+COMMERCIAL USE RESTRICTION
+==========================
+
+This license does NOT grant permission for commercial use. Commercial use
+includes, but is not limited to:
+
+- Hosting this service or any derivatives thereof for clients or customers
+- Offering this service or any derivatives thereof as a paid service (SaaS)
+- Using this service or any derivatives thereof in a commercial product
+- Reselling or white-labeling this service or any derivatives thereof
+- Providing this service or any derivatives thereof as part of a commercial
+  offering where you charge users or receive compensation
+- Using this service or any derivatives thereof in any way that generates
+  revenue, directly or indirectly
+
+DERIVATIVES AND MODIFICATIONS
+=============================
+
+For the purposes of this license, "derivatives" includes:
+- Any software based on or derived from this Software
+- Any modifications, adaptations, or variations of this Software
+- Any software that incorporates substantial portions of this Software's code,
+  structure, or functionality
+- Any software that provides similar functionality or services based on this
+  Software
+
+If you create a derivative work and wish to use it commercially, you must
+obtain a commercial license for the original Software.
+
+COMMERCIAL LICENSING
+====================
+
+To obtain a commercial license for hosting, SaaS deployment, or any commercial
+use of this Software or derivatives thereof, please contact:
+
+Email: ianfhunter@gmail.com
+Subject: Commercial License Inquiry - Enigma
+
+We are happy to discuss licensing terms that work for your use case. Commercial
+licenses are typically granted on a case-by-case basis and may include:
+- Per-instance licensing
+- Annual licensing agreements
+- Revenue-sharing arrangements
+- Custom terms based on your specific needs
+
+REDISTRIBUTION
+==============
+
+You may redistribute the Software in source or binary form for personal use,
+provided that:
+1. You include this license and copyright notice
+2. You do not remove or alter any copyright notices
+3. You do not use the Software for commercial purposes
+4. You clearly indicate that commercial use requires a separate license
+
+DISCLAIMER OF WARRANTY
+=======================
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+TERMINATION
+===========
+
+This license is automatically terminated if you violate any of its terms.
+Upon termination, you must immediately cease all use of the Software and
+destroy all copies in your possession.
+
+GOVERNING LAW
+=============
+
+This license shall be governed by and construed in accordance with the laws
+of Ireland, without regard to its conflict of law provisions.
+
+QUESTIONS
+=========
+
+If you have questions about this license or whether your intended use requires
+a commercial license, please contact us at ianfhunter@gmail.com before
+proceeding.
+
