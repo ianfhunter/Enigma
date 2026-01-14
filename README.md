@@ -31,9 +31,9 @@ Perfect for puzzle enthusiasts, educators, or anyone looking to host their own g
 A sample of our puzzles:
 
 - **📝 Word Formation**: WordGuess, Word Wheel, Word Ladder, Anagrams, Hangman, and more
-- **🔢 Number Puzzles**: Sudoku, Kakuro, Calcudoku, Killer Sudoku, Futoshiki, and variants
+- **🔢 Number Puzzles**: Sudoku, Kakuro, Calcudoku, Futoshiki, and variants
 - **🧩 Logic Puzzles**: Nonograms, Einstein's Riddle, Knights and Knaves, Code Breaker
-- **🎯 Pattern Recognition**: Connections, Strands, Word Search, Memory Match
+- **🎯 Pattern Recognition**: Categories, Threads, Word Search, Memory Match
 - **🌍 Geography & Trivia**: Flag Guesser, Capital Guesser, Currency Quiz, Classical Music Quiz
 - **🎨 Visual Puzzles**: Jigsaw, Famous Paintings, Constellations
 - **♟️ Strategy Games**: Chess Puzzles, Sokoban, Minesweeper, Tower of Hanoi
@@ -249,9 +249,6 @@ We welcome contributions from the community! Whether you're fixing bugs, adding 
 ---
 
 ## 🐛 Known Issues
-
-- Mobile experience and Light Theme for some games could be improved
-- Performance optimizations needed for games with large datasets
 
 See [GitHub Issues](https://github.com/ianfhunter/enigma/issues) for a complete list.
 
