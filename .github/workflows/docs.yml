@@ -54,6 +54,15 @@ jobs:
             echo "- [$game_name](games/$game_dir/README.md)" >> docs/index.md
           done
 
+      - name: Add Jekyll config
+        run: |
+          {
+            echo "title: Enigma Game Documentation"
+            echo "description: Documentation for the Enigma puzzle collection"
+            echo "theme: jekyll-theme-minimal"
+            echo "markdown: GFM"
+          } > docs/_config.yml
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
