@@ -1,0 +1,49 @@
+# Dependencies
+node_modules
+backend/node_modules
+
+# Build outputs (we rebuild in Docker)
+dist
+build
+
+# Development files
+.git
+.github
+.gitignore
+.env
+.env.*
+!.env.example
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Test files
+coverage
+*.test.js
+*.spec.js
+__tests__
+
+# Documentation
+*.md
+!README.md
+docs
+.notes
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (avoid recursive copy)
+Dockerfile
+Dockerfile.*
+docker-compose*.yml
+.dockerignore
+
+# Misc
+*.log
+*.tmp
+.cache
