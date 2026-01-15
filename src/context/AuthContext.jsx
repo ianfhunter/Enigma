@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { auth as authApi } from '../api/client';
+import { auth as authApi, clearCsrfToken } from '../api/client';
 
 const AuthContext = createContext(null);
 
@@ -44,6 +44,8 @@ export function AuthProvider({ children }) {
     setError(null);
     try {
       const userData = await authApi.login(username, password);
+      // Clear CSRF token cache since we have a new session
+      clearCsrfToken();
       setUser(userData);
       return userData;
     } catch (err) {
@@ -56,6 +58,8 @@ export function AuthProvider({ children }) {
     setError(null);
     try {
       const userData = await authApi.register(username, password, displayName, email);
+      // Clear CSRF token cache since we have a new session
+      clearCsrfToken();
       setUser(userData);
       return userData;
     } catch (err) {
@@ -70,6 +74,8 @@ export function AuthProvider({ children }) {
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      // Clear CSRF token cache on logout
+      clearCsrfToken();
       setUser(null);
     }
   }, []);

@@ -12,6 +12,8 @@ jobs:
       image: node:22-bookworm
     env:
       CI: true
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

@@ -1,5 +1,46 @@
 const API_URL = import.meta.env.VITE_API_URL || '';
 
+// CSRF token cache
+let csrfToken = null;
+let csrfTokenPromise = null;
+
+// Fetch CSRF token from server
+async function getCsrfToken() {
+  // Return cached token if available
+  if (csrfToken) {
+    return csrfToken;
+  }
+
+  // If a request is already in flight, wait for it
+  if (csrfTokenPromise) {
+    return csrfTokenPromise;
+  }
+
+  // Fetch new token
+  csrfTokenPromise = fetch(`${API_URL}/api/csrf-token`, {
+    credentials: 'include',
+  })
+    .then(res => res.json())
+    .then(data => {
+      csrfToken = data.csrfToken;
+      csrfTokenPromise = null;
+      return csrfToken;
+    })
+    .catch(err => {
+      csrfTokenPromise = null;
+      console.error('Failed to fetch CSRF token:', err);
+      throw err;
+    });
+
+  return csrfTokenPromise;
+}
+
+// Clear CSRF token (e.g., after logout)
+export function clearCsrfToken() {
+  csrfToken = null;
+  csrfTokenPromise = null;
+}
+
 class ApiError extends Error {
   constructor(message, status, data) {
     super(message);
@@ -11,12 +52,29 @@ class ApiError extends Error {
 
 async function request(endpoint, options = {}) {
   const url = `${API_URL}${endpoint}`;
+  const method = options.method || 'GET';
+  
+  // State-changing methods need CSRF token
+  const needsCsrf = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method);
+  
+  // Get CSRF token if needed
+  let token = null;
+  if (needsCsrf) {
+    try {
+      token = await getCsrfToken();
+    } catch (err) {
+      // If CSRF token fetch fails, still try the request
+      // The server will reject it with a proper error
+      console.warn('CSRF token fetch failed, proceeding anyway:', err);
+    }
+  }
 
   const config = {
     ...options,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(token && { 'X-CSRF-Token': token }),
       ...options.headers,
     },
   };
@@ -35,6 +93,11 @@ async function request(endpoint, options = {}) {
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
+    // If CSRF token error, clear cache so we fetch a new one next time
+    if (response.status === 403 && data?.error?.includes('CSRF')) {
+      clearCsrfToken();
+    }
+    
     throw new ApiError(
       data?.error || `Request failed with status ${response.status}`,
       response.status,

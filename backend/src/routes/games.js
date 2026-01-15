@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import db from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
+import { dbRateLimit, strictRateLimit } from '../middleware/rateLimit.js';
 
 const router = Router();
 
@@ -8,7 +9,7 @@ const router = Router();
 router.use(requireAuth);
 
 // Get all game stats for current user
-router.get('/stats', (req, res) => {
+router.get('/stats', dbRateLimit, (req, res) => {
   const progress = db.prepare(`
     SELECT game_slug, played, won, best_score, best_time, current_streak, max_streak, extra_data, updated_at
     FROM game_progress
@@ -40,7 +41,7 @@ router.get('/stats', (req, res) => {
 });
 
 // Export all progress data
-router.get('/export', (req, res) => {
+router.get('/export', strictRateLimit, (req, res) => {
   const progress = db.prepare(`
     SELECT game_slug, played, won, best_score, best_time, current_streak, max_streak, extra_data, updated_at
     FROM game_progress
@@ -67,7 +68,7 @@ router.get('/export', (req, res) => {
 });
 
 // Import progress data
-router.post('/import', (req, res) => {
+router.post('/import', strictRateLimit, (req, res) => {
   const { games, merge = true } = req.body;
 
   if (!Array.isArray(games)) {
@@ -126,7 +127,7 @@ router.post('/import', (req, res) => {
 });
 
 // Get progress for a specific game
-router.get('/:slug/progress', (req, res) => {
+router.get('/:slug/progress', dbRateLimit, (req, res) => {
   const { slug } = req.params;
 
   const progress = db.prepare(`
@@ -160,7 +161,7 @@ router.get('/:slug/progress', (req, res) => {
 });
 
 // Update progress for a specific game
-router.put('/:slug/progress', (req, res) => {
+router.put('/:slug/progress', dbRateLimit, (req, res) => {
   const { slug } = req.params;
   const { played, won, bestScore, bestTime, currentStreak, maxStreak, extraData } = req.body;
 
@@ -269,7 +270,7 @@ router.put('/:slug/progress', (req, res) => {
 });
 
 // Delete all progress for current user
-router.delete('/progress', (req, res) => {
+router.delete('/progress', strictRateLimit, (req, res) => {
   const result = db.prepare('DELETE FROM game_progress WHERE user_id = ?')
     .run(req.session.userId);
 
@@ -280,7 +281,7 @@ router.delete('/progress', (req, res) => {
 });
 
 // Get leaderboard for a specific game
-router.get('/:slug/leaderboard', (req, res) => {
+router.get('/:slug/leaderboard', dbRateLimit, (req, res) => {
   const { slug } = req.params;
   const { sortBy = 'won', limit = 10 } = req.query;
 

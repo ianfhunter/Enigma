@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
 import gamesRoutes from './routes/games.js';
 import adminRoutes from './routes/admin.js';
+import { initCsrf, getCsrfToken, verifyCsrfToken } from './middleware/csrf.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -67,6 +68,17 @@ app.use(session({
 }));
 
 console.log(`Cookie secure mode: ${useSecureCookies} (FRONTEND_URL: ${FRONTEND_URL})`);
+
+// Initialize CSRF for all requests (creates secret in session if needed)
+app.use(initCsrf);
+
+// CSRF token endpoint (must be before verifyCsrfToken middleware)
+app.get('/api/csrf-token', (req, res) => {
+  res.json({ csrfToken: getCsrfToken(req) });
+});
+
+// Apply CSRF protection to all state-changing routes
+app.use(verifyCsrfToken);
 
 // Routes
 app.use('/api/auth', authRoutes);

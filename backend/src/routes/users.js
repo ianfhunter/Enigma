@@ -25,8 +25,16 @@ router.put('/profile', (req, res) => {
   }
 
   if (email !== undefined) {
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
+    if (email) {
+      // Length check to prevent ReDoS attacks
+      if (email.length > 254) {
+        return res.status(400).json({ error: 'Invalid email format' });
+      }
+      // Safer regex pattern that avoids catastrophic backtracking
+      // Uses more specific character classes and avoids nested quantifiers
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        return res.status(400).json({ error: 'Invalid email format' });
+      }
     }
     updates.push('email = ?');
     values.push(email || null);
