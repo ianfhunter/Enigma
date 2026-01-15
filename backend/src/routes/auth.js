@@ -54,7 +54,7 @@ router.post('/register', registerLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (email && !email.includes('@')) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
