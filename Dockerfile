@@ -12,6 +12,9 @@
 # ------------------------------------------------------------------------------
 FROM node:22-alpine AS frontend-builder
 
+# Increase Node memory limit for large builds
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
 WORKDIR /app
 
 # Copy package files for frontend
@@ -20,11 +23,11 @@ COPY package.json package-lock.json ./
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
 
-# Copy frontend source and config
+# Copy all frontend source, config, and assets
 COPY src ./src
 COPY public ./public
-COPY index.html vite.config.js ./
 COPY datasets ./datasets
+COPY index.html vite.config.js eslint.config.js ./
 
 # Build frontend
 RUN npm run build
