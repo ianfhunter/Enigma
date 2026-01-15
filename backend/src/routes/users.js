@@ -2,9 +2,15 @@ import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import db from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
+import rateLimit from 'express-rate-limit';
 
 const router = Router();
 const SALT_ROUNDS = 12;
+
+const loginHistoryLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // limit each IP to 30 login history requests per windowMs
+});
 
 // All routes require authentication
 router.use(requireAuth);
@@ -319,7 +325,7 @@ router.delete('/sessions/:sid', (req, res) => {
 });
 
 // Get login history
-router.get('/login-history', (req, res) => {
+router.get('/login-history', loginHistoryLimiter, (req, res) => {
   const { limit = 20 } = req.query;
 
   const history = db.prepare(`
