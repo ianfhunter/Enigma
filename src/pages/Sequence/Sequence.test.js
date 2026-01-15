@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { COLORS, FREQUENCIES, SPEEDS } from './Sequence.jsx';
+import { COLORS, FREQUENCIES, SPEEDS } from './Sequence.constants';
 
 describe('Sequence - metadata', () => {
   it('exposes colors and frequencies', () => {

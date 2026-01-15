@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
-import styles from './Fliptogram.module.css';
+import styles from './FlipQuotes.module.css';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -11,7 +11,7 @@ function getRandomLetter(random) {
   return ALPHABET[Math.floor(random() * 26)];
 }
 
-export default function Fliptogram() {
+export default function FlipQuotes() {
   const [quote, setQuote] = useState(null);
   const [targetText, setTargetText] = useState('');
   const [currentLetters, setCurrentLetters] = useState([]);
@@ -27,8 +27,8 @@ export default function Fliptogram() {
   const initGame = useCallback((useDailySeed = true) => {
     const today = getTodayDateString();
     const seed = useDailySeed
-      ? stringToSeed(`fliptogram-${today}`)
-      : stringToSeed(`fliptogram-${Date.now()}`);
+      ? stringToSeed(`flipquotes-${today}`)
+      : stringToSeed(`flipquotes-${Date.now()}`);
     const random = createSeededRandom(seed);
 
     // Pick a random quote
@@ -277,7 +277,7 @@ export default function Fliptogram() {
     <div className={styles.container}>
       <div className={styles.header}>
         <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Fliptogram</h1>
+        <h1 className={styles.title}>FlipQuotes</h1>
         <p className={styles.instructions}>
           Flip each tile to toggle between two letters and reveal the hidden quote!
         </p>

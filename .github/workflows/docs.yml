@@ -1,0 +1,74 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/pages/**/README.md"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Collect game documentation
+        run: |
+          mkdir -p docs/games
+          find src/pages -name "README.md" -type f | while read file; do
+            game_dir=$(dirname "$file" | sed 's|src/pages/||')
+            game_name=$(basename "$game_dir")
+            mkdir -p "docs/games/$game_dir"
+            cp "$file" "docs/games/$game_dir/README.md"
+          done
+
+      - name: Generate index
+        run: |
+          cat > docs/index.md << 'EOF'
+          # Game Documentation
+          
+          This directory contains documentation for each game in Enigma.
+          
+          EOF
+          
+          echo "## Available Games" >> docs/index.md
+          echo "" >> docs/index.md
+          
+          find src/pages -name "README.md" -type f | sort | while read file; do
+            game_dir=$(dirname "$file" | sed 's|src/pages/||')
+            game_name=$(basename "$game_dir")
+            slug=$(echo "$game_dir" | tr '[:upper:]' '[:lower:]' | sed 's/\([A-Z]\)/-\1/g' | sed 's/^-//')
+            echo "- [$game_name](games/$game_dir/README.md)" >> docs/index.md
+          done
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+

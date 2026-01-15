@@ -48,7 +48,7 @@ const slugToFolder = {
   'fifteen': 'Fifteen',
   'fillomino': 'Fillomino',
   'flag-guesser': 'FlagGuesser',
-  'fliptogram': 'Fliptogram',
+  'flipquotes': 'FlipQuotes',
   'flood-it': 'FloodIt',
   'futoshiki': 'Futoshiki',
   'galaxies': 'Galaxies',

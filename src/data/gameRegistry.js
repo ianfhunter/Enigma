@@ -203,8 +203,8 @@ export const categories = [
         version: 'v1.0',
       },
       {
-        title: 'Fliptogram',
-        slug: 'fliptogram',
+        title: 'FlipQuotes',
+        slug: 'flipquotes',
         description: 'Flip letter tiles up or down to reveal the hidden quote. A satisfying twist on word puzzles!',
         icon: '🔄',
         colors: { primary: '#f472b6', secondary: '#a855f7' },

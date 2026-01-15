@@ -267,6 +267,12 @@ See the [LICENSE/](LICENSE/) folder for complete terms and conditions.
 
 ---
 
+## 📧 Copyright Issues
+
+If you believe that content in this project infringes on your copyright, please reach out to us through GitHub Issues or Discussions. We take intellectual property rights seriously and will make every effort to address valid copyright concerns promptly.
+
+---
+
 ## 🙏 Attributions
 
 Please see our separate file [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
