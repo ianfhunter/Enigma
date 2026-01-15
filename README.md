@@ -9,8 +9,7 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/license-Custom-blue.svg)](LICENSE)
 
-<img width="1157" height="877" alt="image" src="https://github.com/user-attachments/assets/5bbfbd04-dd2f-4afc-bf92-959d5ffaf735" />
-
+<img width="1917" height="917" alt="image" src="https://github.com/user-attachments/assets/e6062132-728b-46fe-be7d-d6d2fb52f959" />
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Contributing](#-contributing)
 
