@@ -2,6 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import SqliteStore from 'better-sqlite3-session-store';
+import rateLimit from 'express-rate-limit';
 import db from './db.js';
 import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
@@ -79,6 +80,15 @@ app.get('/api/csrf-token', (req, res) => {
 
 // Apply CSRF protection to all state-changing routes
 app.use(verifyCsrfToken);
+
+// Rate limiting for API routes to mitigate brute-force and DoS attacks
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+app.use('/api/', apiLimiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
