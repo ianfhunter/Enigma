@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Search from './pages/Search';
+import GameStore from './pages/GameStore';
 import NotFound from './pages/NotFound';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
@@ -384,6 +385,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="search" element={<Search />} />
+              <Route path="store" element={<GameStore />} />
               <Route path="profile" element={<Profile />} />
               {generateGameRoutes()}
               <Route path="*" element={<NotFound />} />

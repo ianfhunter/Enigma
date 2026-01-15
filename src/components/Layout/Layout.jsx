@@ -201,6 +201,11 @@ export default function Layout() {
                   <span className={styles.surpriseText}>Surprise Me!</span>
                 </button>
 
+                <Link to="/store" className={styles.storeButton} aria-label="Game Store">
+                  <span className={styles.storeIcon}>🏪</span>
+                  <span className={styles.storeText}>Store</span>
+                </Link>
+
                 <Link to="/profile" className={styles.profileButton} aria-label="Profile">
                   <span className={styles.profileAvatar}>
                     {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
