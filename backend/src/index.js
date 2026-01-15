@@ -16,6 +16,12 @@ import { initCsrf, getCsrfToken, verifyCsrfToken } from './middleware/csrf.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Rate limiter for static SPA fallback
+const spaLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 SPA index requests per windowMs
+});
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-secret-change-in-production';
@@ -120,7 +126,7 @@ if (SERVE_STATIC && existsSync(STATIC_PATH)) {
   app.use(express.static(STATIC_PATH));
 
   // SPA fallback: serve index.html for any non-API routes
-  app.get('*', (req, res, next) => {
+  app.get('*', spaLimiter, (req, res, next) => {
     // Don't intercept API routes
     if (req.path.startsWith('/api')) {
       return next();
