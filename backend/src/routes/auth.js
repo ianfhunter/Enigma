@@ -2,9 +2,18 @@ import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import db from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
+import rateLimit from 'express-rate-limit';
 
 const router = Router();
 const SALT_ROUNDS = 12;
+
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5, // limit each IP to 5 registration requests per windowMs
+  message: { error: 'Too many registration attempts, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Check if this is the first user (will become admin)
 function isFirstUser() {
@@ -24,7 +33,7 @@ function logLogin(userId, req, success = true) {
 }
 
 // Register new user
-router.post('/register', async (req, res) => {
+router.post('/register', registerLimiter, async (req, res) => {
   try {
     const { username, password, displayName, email } = req.body;
 
