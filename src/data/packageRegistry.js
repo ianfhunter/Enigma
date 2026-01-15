@@ -114,6 +114,17 @@ export const officialPacks = [
     // Include specific games regardless of category
     includeGames: ['shiritori'],
   },
+  {
+    id: 'card-games',
+    type: 'official',
+    name: 'Card Games',
+    description: 'Classic solitaire and card-based puzzles. Clear the pyramid, build foundations, and more.',
+    icon: '🃏',
+    color: '#16a34a',
+    default: true,
+    removable: true,
+    categories: ['Card Games'],
+  },
 ];
 
 /**

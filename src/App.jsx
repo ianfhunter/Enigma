@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Search from './pages/Search';
 import GameStore from './pages/GameStore';
+import IframeGame from './pages/IframeGame';
 import NotFound from './pages/NotFound';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
@@ -97,6 +98,7 @@ const slugToFolder = {
   'pokemon-quiz': 'PokemonQuiz',
   'provincial-map-fill': 'ProvincialMapFill',
   'pyramid': 'Pyramid',
+  'pyramid-cards': 'PyramidCards',
   'range': 'Range',
   'samegame': 'Samegame',
   'sandwich-sudoku': 'SandwichSudoku',
@@ -387,6 +389,7 @@ function App() {
               <Route path="search" element={<Search />} />
               <Route path="store" element={<GameStore />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="custom/:packId/:gameId" element={<IframeGame />} />
               {generateGameRoutes()}
               <Route path="*" element={<NotFound />} />
             </Route>

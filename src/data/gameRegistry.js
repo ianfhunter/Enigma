@@ -1327,6 +1327,23 @@ export const categories = [
       },
     ],
   },
+  {
+    name: 'Card Games',
+    icon: '🃏',
+    description: 'Classic solitaire and card-based puzzles',
+    games: [
+      {
+        title: 'Pyramid Cards',
+        slug: 'pyramid-cards',
+        aliases: ['Pyramid Solitaire', 'Tut\'s Tomb'],
+        description: 'Remove pairs of cards that sum to 13 to clear the pyramid. Kings remove alone!',
+        icon: '🔺',
+        colors: { primary: '#16a34a', secondary: '#15803d' },
+        gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+        version: 'v1.0',
+      },
+    ],
+  },
 ];
 
 // Flatten all games for easy access
