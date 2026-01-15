@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Numbers in black cells eliminate possibilities
 - Straights don't need to be in order (3,5,4 is valid)
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Str8ts"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Str8ts)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BStr8ts%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

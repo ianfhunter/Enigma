@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Same shapes touching would violate rules
 - Check 2×2 violations as you shade
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "LITS"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+LITS)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BLITS%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

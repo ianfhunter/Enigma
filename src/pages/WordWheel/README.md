@@ -29,6 +29,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Look for common prefixes and suffixes
 - The 9-letter word uses all letters exactly once
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordWheel"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordWheel)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordWheel%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

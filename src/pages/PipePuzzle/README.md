@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - End pieces and corners are more constrained
 - Fill the entire grid with connected pipes
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "PipePuzzle"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+PipePuzzle)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BPipePuzzle%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

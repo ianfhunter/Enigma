@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Note distinctive star patterns and bright stars
 - Constellation myths help with memory
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Constellations"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Constellations)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BConstellations%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

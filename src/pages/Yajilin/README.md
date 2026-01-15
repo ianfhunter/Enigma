@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Arrow clues help count shaded cells precisely
 - The loop must use all non-shaded, non-clue cells
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Yajilin"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Yajilin)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BYajilin%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

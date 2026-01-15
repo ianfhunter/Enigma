@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Move points that have the most crossings first
 - Some graphs have limited valid configurations
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Untangle"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Untangle)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BUntangle%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

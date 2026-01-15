@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Plan the order of box movements carefully
 - Sometimes you need to push boxes around obstacles
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Sokoban"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Sokoban)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSokoban%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

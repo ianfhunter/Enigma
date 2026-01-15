@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Work region by region
 - Island nations and small countries are often missed
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WorldMapFill"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WorldMapFill)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWorldMapFill%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

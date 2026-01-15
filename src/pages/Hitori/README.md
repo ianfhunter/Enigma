@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Shading a cell means its neighbors must stay unshaded
 - Check connectivity as you shade - don't isolate white regions
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Hitori"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Hitori)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BHitori%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

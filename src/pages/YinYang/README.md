@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Connectivity is key - don't isolate any region
 - Corners and edges are often good starting points
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "YinYang"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+YinYang)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BYinYang%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Look for numbers that can only go in one place in a row/column/box
 - Use pencil marks to track possibilities
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Sudoku"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Sudoku)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSudoku%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

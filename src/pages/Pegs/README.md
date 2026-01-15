@@ -28,6 +28,12 @@ This is a sandbox/classic puzzle without generated content.
 - Leaving one peg in the center is the classic goal
 - Some positions are unsolvable - recognize dead ends
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Pegs"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Pegs)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BPegs%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

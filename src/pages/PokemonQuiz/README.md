@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Evolution lines share generation
 - Starter Pokémon help anchor generation knowledge
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "PokemonQuiz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+PokemonQuiz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BPokemonQuiz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

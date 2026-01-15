@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Era helps narrow down (Baroque, Classical, Romantic)
 - Famous pieces are good starting points
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "ClassicalMusicQuiz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+ClassicalMusicQuiz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BClassicalMusicQuiz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

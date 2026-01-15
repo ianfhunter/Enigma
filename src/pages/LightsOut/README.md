@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Work systematically from one edge to the other
 - The solution, if it exists, is unique (up to order)
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "LightsOut"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+LightsOut)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BLightsOut%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

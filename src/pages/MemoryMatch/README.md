@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Develop a systematic scanning pattern
 - Focus on remembering recent card reveals
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "MemoryMatch"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+MemoryMatch)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BMemoryMatch%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

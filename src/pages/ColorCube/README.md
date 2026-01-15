@@ -28,6 +28,12 @@ This is a sandbox/classic puzzle without generated content.
 - Algorithms exist for each step
 - Practice recognition of patterns
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "ColorCube"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+ColorCube)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BColorCube%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

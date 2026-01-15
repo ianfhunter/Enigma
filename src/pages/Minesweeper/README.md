@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - If a number equals its remaining hidden neighbors, they're all mines
 - If a number equals its flagged neighbors, remaining neighbors are safe
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Minesweeper"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Minesweeper)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BMinesweeper%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

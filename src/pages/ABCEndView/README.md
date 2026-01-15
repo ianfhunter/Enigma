@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - A letter seen from opposite sides means it's the only one in that row/column
 - Process of elimination is key
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "ABCEndView"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+ABCEndView)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BABCEndView%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Large numbers need large adjacent groups or multiple groups
 - Shaded groups can touch multiple circle clues
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Kurotto"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Kurotto)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BKurotto%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

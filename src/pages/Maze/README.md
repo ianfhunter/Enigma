@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Dead ends help eliminate wrong paths
 - Keep one hand on the wall (wall-following) as a systematic approach
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Maze"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Maze)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BMaze%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Common short words anchor longer discoveries
 - Work on multiple words simultaneously
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "DropQuotes"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+DropQuotes)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BDropQuotes%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

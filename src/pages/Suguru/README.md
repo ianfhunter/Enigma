@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Numbers touching diagonally can't be the same
 - Small numbers (1, 2) are often easiest to place first
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Suguru"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Suguru)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSuguru%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

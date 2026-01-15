@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Euro zone includes many European countries
 - Some small nations use larger neighbors' currency
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "CurrencyQuiz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+CurrencyQuiz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCurrencyQuiz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

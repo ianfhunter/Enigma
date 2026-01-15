@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Try adding prefixes (UN-, RE-, PRE-) and suffixes (-ING, -TION)
 - Consider less common but longer words
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "LongestWord"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+LongestWord)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BLongestWord%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

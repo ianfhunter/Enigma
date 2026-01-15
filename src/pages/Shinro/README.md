@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Row/column counts are exact
 - Cross-reference multiple arrows pointing to the same area
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Shinro"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Shinro)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BShinro%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

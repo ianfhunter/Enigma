@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Focus on vowels first as they're often easier to swap
 - Common patterns: changing word endings (-at, -an, -it)
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordLadder"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordLadder)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordLadder%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

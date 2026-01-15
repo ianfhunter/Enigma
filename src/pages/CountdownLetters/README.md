@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Look for 9-letter words first, then work down
 - Common long word patterns: -TION, -NESS, -ABLE
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "CountdownLetters"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+CountdownLetters)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCountdownLetters%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

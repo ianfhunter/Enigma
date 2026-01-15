@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Clue of 1 means N is first in that row/column
 - High clues mean low numbers come first
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Skyscraper"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Skyscraper)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSkyscraper%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

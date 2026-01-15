@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Look for common word patterns
 - Letters at junctions can be part of multiple words
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "LetterWeb"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+LetterWeb)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BLetterWeb%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

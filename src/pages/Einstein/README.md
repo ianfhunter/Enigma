@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Eliminate options systematically
 - Some clues are more restrictive - start there
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Einstein"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Einstein)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BEinstein%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

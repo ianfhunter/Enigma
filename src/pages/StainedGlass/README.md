@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Four colors are sufficient for any map (Four Color Theorem)
 - Work systematically through constrained regions first
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "StainedGlass"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+StainedGlass)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BStainedGlass%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

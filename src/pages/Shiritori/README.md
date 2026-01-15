@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Keep a mental list of backup words for common endings
 - Think ahead - don't trap yourself with rare letter endings
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Shiritori"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Shiritori)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BShiritori%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

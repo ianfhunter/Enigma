@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Place double word bonus on your highest-scoring word
 - Sometimes shorter words with rare letters beat longer common words
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordTiles"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordTiles)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordTiles%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

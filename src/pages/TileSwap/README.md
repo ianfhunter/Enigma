@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Swap tiles that are in each other's correct positions
 - Build completed sections from one corner
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "TileSwap"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+TileSwap)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTileSwap%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

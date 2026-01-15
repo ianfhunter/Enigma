@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Work outward from completed connections
 - Some tiles may have multiple valid orientations initially
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Cirkitz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Cirkitz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCirkitz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

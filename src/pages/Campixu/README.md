@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Tents that would touch can't both exist
 - Use nonogram logic for row/column counts
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Campixu"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Campixu)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCampixu%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

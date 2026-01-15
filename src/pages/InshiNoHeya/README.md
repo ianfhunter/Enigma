@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Single-cell rooms give you that number directly
 - Large products with few cells constrain possibilities
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "InshiNoHeya"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+InshiNoHeya)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BInshiNoHeya%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

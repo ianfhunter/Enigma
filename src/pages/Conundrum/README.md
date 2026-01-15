@@ -28,6 +28,12 @@ Puzzles combine algorithmic generation with curated data.
 - Identify rare letters (Q, X, Z) as they limit possibilities
 - Try mentally grouping consonants and vowels
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Conundrum"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Conundrum)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BConundrum%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

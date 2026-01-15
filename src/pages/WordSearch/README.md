@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Check all 8 directions from each starting letter
 - Cross off words as you find them
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordSearch"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordSearch)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordSearch%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

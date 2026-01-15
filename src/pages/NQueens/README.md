@@ -28,6 +28,12 @@ This is a sandbox/classic puzzle without generated content.
 - Diagonals are the tricky constraint
 - For 8×8, there are 92 solutions
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "NQueens"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+NQueens)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BNQueens%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

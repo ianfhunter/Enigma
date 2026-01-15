@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - The snake must be continuous without gaps
 - Dead ends help identify wrong paths
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordSnake"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordSnake)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordSnake%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

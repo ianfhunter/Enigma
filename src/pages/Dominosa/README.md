@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Unique number pairs can only go one place
 - Cross off domino types as you place them
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Dominosa"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Dominosa)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BDominosa%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

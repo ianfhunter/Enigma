@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - A vertex with 4 means all four adjacent cells point to it
 - Corner and edge vertices have fewer adjacent cells
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Slant"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Slant)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSlant%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

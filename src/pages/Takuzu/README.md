@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Count remaining 0s and 1s needed for each line
 - If a row/column has its quota of one digit, fill rest with the other
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Takuzu"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Takuzu)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTakuzu%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

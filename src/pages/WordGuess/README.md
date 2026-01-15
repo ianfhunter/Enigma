@@ -31,6 +31,12 @@ Puzzles combine algorithmic generation with curated data.
 - Avoid repeating letters you know are wrong
 - Pay attention to letter positions, not just which letters are present
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordGuess"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordGuess)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordGuess%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

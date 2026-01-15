@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Watch for words that could fit multiple categories
 - Harder categories often involve wordplay or less obvious connections
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Categories"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Categories)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCategories%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

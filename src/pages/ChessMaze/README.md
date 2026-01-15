@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Some routes may look shorter but pass through danger
 - Consider waiting moves if enemies move too
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "ChessMaze"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+ChessMaze)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BChessMaze%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

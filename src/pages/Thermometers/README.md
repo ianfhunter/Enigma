@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - If count equals available thermometer cells, fill them all
 - Work from both high and low counts
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Thermometers"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Thermometers)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BThermometers%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

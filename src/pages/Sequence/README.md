@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Focus on the sequence, not individual colors
 - Practice improves memory capacity
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Sequence"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Sequence)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSequence%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

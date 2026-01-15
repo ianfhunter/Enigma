@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Use process of elimination
 - Pay attention to all feedback given
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Guess"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Guess)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BGuess%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Large numbers get you close, small numbers adjust
 - Working backwards can help
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "CountdownMath"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+CountdownMath)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCountdownMath%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

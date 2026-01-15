@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - A 4 means all four neighbors have bulbs
 - A 0 means no adjacent bulbs - helpful for elimination
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Lightup"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Lightup)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BLightup%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

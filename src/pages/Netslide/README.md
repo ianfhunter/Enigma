@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Sliding affects an entire row or column
 - The wrap-around can help or hinder
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Netslide"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Netslide)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BNetslide%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ This is a sandbox/classic puzzle without generated content.
 - The recursive pattern: move n-1 disks, move largest, move n-1 back
 - For 3 disks: move smallest every other turn, alternating direction
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "TowerOfHanoi"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+TowerOfHanoi)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTowerOfHanoi%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

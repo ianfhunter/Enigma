@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Look at word lengths for clues
 - Common phrase patterns help narrow it down
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "PhraseGuess"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+PhraseGuess)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BPhraseGuess%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

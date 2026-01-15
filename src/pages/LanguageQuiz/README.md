@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Some languages span many countries
 - Note countries with multiple official languages
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "LanguageQuiz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+LanguageQuiz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BLanguageQuiz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

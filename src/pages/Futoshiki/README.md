@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Cells with multiple < pointing away must be high
 - Cells with multiple < pointing toward must be low
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Futoshiki"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Futoshiki)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BFutoshiki%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

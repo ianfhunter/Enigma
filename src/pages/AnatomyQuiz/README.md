@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Study major systems (skeletal, muscular, etc.)
 - Regional anatomy groups related structures
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "AnatomyQuiz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+AnatomyQuiz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BAnatomyQuiz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

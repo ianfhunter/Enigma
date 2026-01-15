@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Use walls to your advantage
 - Sometimes waiting lets the Minotaur pass
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "TheseusMinotaur"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+TheseusMinotaur)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTheseusMinotaur%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Self-referential statements are key
 - Test assumptions by checking all statements
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "KnightsAndKnaves"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+KnightsAndKnaves)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BKnightsAndKnaves%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

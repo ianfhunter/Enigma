@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Sometimes you need to create space by moving distant vehicles
 - Trucks often need the most room to maneuver
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Congestion"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Congestion)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCongestion%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

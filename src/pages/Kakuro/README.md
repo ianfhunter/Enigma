@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Intersecting runs create constraints
 - Start with runs that have few possible combinations
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Kakuro"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Kakuro)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BKakuro%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

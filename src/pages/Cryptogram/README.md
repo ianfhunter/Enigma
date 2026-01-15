@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Look for common patterns: THE, AND, -ING, -TION
 - Most frequent letters in English: E, T, A, O, I, N
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Cryptogram"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Cryptogram)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCryptogram%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

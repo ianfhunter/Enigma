@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - The GCD of capacities limits what's measurable
 - Work backwards from the target
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WaterPouring"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WaterPouring)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWaterPouring%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

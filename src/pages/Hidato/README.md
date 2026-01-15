@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Large gaps between givens constrain the path
 - Count cells to verify you have room for all numbers
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Hidato"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Hidato)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BHidato%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

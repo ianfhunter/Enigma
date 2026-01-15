@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Visibility depends on element heights/positions
 - Cross-reference row and column clues
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Range"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Range)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BRange%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

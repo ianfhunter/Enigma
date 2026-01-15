@@ -28,6 +28,12 @@ Puzzles combine algorithmic generation with curated data.
 - Look for common word endings (-ED, -ING, -ER)
 - Check for plural forms of words you've found
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Anagrams"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Anagrams)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BAnagrams%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

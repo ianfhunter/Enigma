@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - A circle with 2 is part of exactly one loop
 - Higher numbers mean junction points
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "HotaruBeam"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+HotaruBeam)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BHotaruBeam%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

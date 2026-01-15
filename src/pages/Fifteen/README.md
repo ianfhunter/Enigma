@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Last two rows solved together with a different technique
 - Keep completed sections intact while solving others
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Fifteen"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Fifteen)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BFifteen%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

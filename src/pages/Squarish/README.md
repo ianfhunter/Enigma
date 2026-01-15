@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Look for letters that could work in multiple words
 - Common short words help fill gaps
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Squarish"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Squarish)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSquarish%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

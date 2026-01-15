@@ -29,6 +29,12 @@ Puzzles are fetched from the backend puzzle API.
 - The no-four-corners rule limits arrangements
 - Count available cells to determine rectangle sizes
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Tatamibari"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Tatamibari)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTatamibari%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

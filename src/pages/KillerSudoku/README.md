@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Small and large sums have fewer possibilities
 - Overlapping constraints are powerful solving tools
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "KillerSudoku"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+KillerSudoku)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BKillerSudoku%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

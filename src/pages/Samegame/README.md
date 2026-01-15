@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Plan ahead to create large groups
 - Watch how tiles will fall before clicking
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Samegame"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Samegame)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSamegame%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

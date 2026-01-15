@@ -28,6 +28,12 @@ Puzzles combine algorithmic generation with curated data.
 - Then try frequent consonants: R, S, T, L, N
 - Use word length and revealed patterns to make educated guesses
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Hangman"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Hangman)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BHangman%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

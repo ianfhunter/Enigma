@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Maximum sandwich sum is 35 (2+3+4+5+6+7+8)
 - Low sums mean 1 and 9 are close together
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "SandwichSudoku"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+SandwichSudoku)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSandwichSudoku%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Eliminate obviously wrong options first
 - General knowledge builds over time
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Trivia"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Trivia)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTrivia%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Expand islands to their required size
 - Watch for 2×2 sea violations - they're easy to miss
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Nurikabe"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Nurikabe)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BNurikabe%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

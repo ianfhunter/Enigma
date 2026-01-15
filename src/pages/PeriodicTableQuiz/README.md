@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Note Latin-origin symbols (Fe, Au, Ag)
 - Group elements by category (noble gases, halogens, etc.)
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "PeriodicTableQuiz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+PeriodicTableQuiz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BPeriodicTableQuiz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

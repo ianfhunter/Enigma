@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Norse gods have distinctive characteristics
 - Domain associations vary by culture
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "GodsQuiz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+GodsQuiz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BGodsQuiz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

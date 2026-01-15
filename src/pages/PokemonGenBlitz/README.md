@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Work through evolution lines
 - Legendary Pokémon are often memorable
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "PokemonGenBlitz"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+PokemonGenBlitz)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BPokemonGenBlitz%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

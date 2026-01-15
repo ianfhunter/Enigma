@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Mark cells you know are empty with X
 - Overlap logic: if a group can't fit without filling certain cells, fill them
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Nonogram"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Nonogram)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BNonogram%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

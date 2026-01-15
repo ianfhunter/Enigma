@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Consider forcing moves that limit opponent options
 - Checkmate patterns are often tactical motifs
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "ChessPuzzle"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+ChessPuzzle)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BChessPuzzle%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

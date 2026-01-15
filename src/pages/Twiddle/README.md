@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Rotating affects 4 tiles - consider all their destinations
 - Sometimes you need to temporarily mess up solved areas
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Twiddle"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Twiddle)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTwiddle%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

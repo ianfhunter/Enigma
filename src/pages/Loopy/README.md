@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - 3 means three edges, which severely constrains the fourth
 - Look for cells where only one valid configuration exists
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Loopy"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Loopy)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BLoopy%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

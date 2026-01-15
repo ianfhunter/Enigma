@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Work on constrained pairs first
 - If a path must go a certain way initially, draw it
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Numberlink"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Numberlink)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BNumberlink%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

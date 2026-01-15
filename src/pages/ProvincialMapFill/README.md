@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Work geographically (west to east, etc.)
 - Some divisions have alternate spellings
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "ProvincialMapFill"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+ProvincialMapFill)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BProvincialMapFill%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

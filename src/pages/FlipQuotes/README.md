@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Quote structure helps - look for sentence patterns
 - Famous quote openings can give you a head start
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "FlipQuotes"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+FlipQuotes)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BFlipQuotes%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

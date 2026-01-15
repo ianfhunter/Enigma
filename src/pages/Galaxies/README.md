@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Centers on corners allow only 90° rotations
 - Start with galaxies whose shape is most constrained
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Galaxies"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Galaxies)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BGalaxies%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

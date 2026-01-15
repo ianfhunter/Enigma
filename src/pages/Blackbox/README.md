@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Deflections at 90° indicate an atom to the side
 - Double deflection (180°) means atoms on both sides
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Blackbox"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Blackbox)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BBlackbox%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

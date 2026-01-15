@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - No dot eliminates many possibilities
 - Black dots involving high numbers are very constraining
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Kropki"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Kropki)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BKropki%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

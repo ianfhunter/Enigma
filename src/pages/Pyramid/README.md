@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Each new word is an anagram of the previous plus one letter
 - Use the clues to guide your answers
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Pyramid"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Pyramid)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BPyramid%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

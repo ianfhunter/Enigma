@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Try to keep the path in the center of the board
 - Avoid creating paths that quickly exit
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Entanglement"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Entanglement)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BEntanglement%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

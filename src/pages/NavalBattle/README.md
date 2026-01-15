@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Large ships are most constrained
 - Use process of elimination for ship placement
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "NavalBattle"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+NavalBattle)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BNavalBattle%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

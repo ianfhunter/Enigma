@@ -28,6 +28,12 @@ Puzzles are loaded from a curated dataset.
 - Administrative vs. official capitals can differ
 - Focus on one continent at a time to learn
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "CapitalGuesser"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+CapitalGuesser)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCapitalGuesser%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

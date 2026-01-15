@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Use row/column counts to narrow possibilities
 - Corners and turns are often key solving points
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Tracks"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Tracks)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BTracks%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

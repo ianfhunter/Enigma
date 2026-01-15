@@ -28,6 +28,12 @@ Puzzles are fetched from the backend puzzle API.
 - Prime numbers make 1×N rectangles
 - Large numbers in corners are often easier to place
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Shikaku"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Shikaku)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BShikaku%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

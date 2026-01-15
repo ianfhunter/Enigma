@@ -28,6 +28,12 @@ This is a sandbox/classic puzzle without generated content.
 - Solve layer by layer
 - Focus on piece positions, not just colors
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Cube"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Cube)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BCube%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

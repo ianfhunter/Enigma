@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Work backwards from the end
 - Count steps between known numbers
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Signpost"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Signpost)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BSignpost%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

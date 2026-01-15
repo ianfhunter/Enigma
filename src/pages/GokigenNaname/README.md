@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - 4 at a vertex: all diagonals point toward it
 - Avoid creating closed loops as you solve
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "GokigenNaname"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+GokigenNaname)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BGokigenNaname%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

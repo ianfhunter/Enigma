@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Longer words score more points
 - Look for high-value letters and build words around them
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordShuffle"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordShuffle)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordShuffle%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

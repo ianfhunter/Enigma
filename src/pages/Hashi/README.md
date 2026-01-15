@@ -29,6 +29,12 @@ Puzzles are algorithmically generated on-the-fly.
 - High-value islands (7, 8) have very limited valid configurations
 - Ensure global connectivity as you solve
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "Hashi"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+Hashi)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BHashi%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*

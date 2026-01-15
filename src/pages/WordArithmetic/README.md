@@ -28,6 +28,12 @@ Puzzles are algorithmically generated on-the-fly.
 - Leading letters can't be 0
 - Work through carries systematically
 
+## Issues & Bugs
+
+🔍 [Search existing issues for "WordArithmetic"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+WordArithmetic)
+
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5BWordArithmetic%5D+)
+
 ---
 
 *Part of the [Enigma](https://github.com/ianfhunter/Enigma) puzzle collection*
