@@ -35,7 +35,7 @@ export default function GodsQuiz() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const mod = await import('../../data/gods.json');
+      const mod = await import('../../../datasets/gods.json');
       if (!mounted) return;
       setData(mod.default);
     })().catch((e) => {
