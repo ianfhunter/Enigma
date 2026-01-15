@@ -73,15 +73,8 @@ console.log(`Cookie secure mode: ${useSecureCookies} (FRONTEND_URL: ${FRONTEND_U
 // Initialize CSRF for all requests (creates secret in session if needed)
 app.use(initCsrf);
 
-// CSRF token endpoint (must be before verifyCsrfToken middleware)
-app.get('/api/csrf-token', (req, res) => {
-  res.json({ csrfToken: getCsrfToken(req) });
-});
-
-// Apply CSRF protection to all state-changing routes
-app.use(verifyCsrfToken);
-
-// Rate limiting for API routes to mitigate brute-force and DoS attacks
+// Rate limiting for API routes to mitigate brute-force and DoS attacks.
+// Apply this before CSRF verification so that authorization logic is also rate-limited.
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
@@ -89,6 +82,14 @@ const apiLimiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 app.use('/api/', apiLimiter);
+
+// CSRF token endpoint (must be before verifyCsrfToken middleware)
+app.get('/api/csrf-token', (req, res) => {
+  res.json({ csrfToken: getCsrfToken(req) });
+});
+
+// Apply CSRF protection to all state-changing routes
+app.use(verifyCsrfToken);
 
 // Routes
 app.use('/api/auth', authRoutes);
