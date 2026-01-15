@@ -2,6 +2,11 @@
 
 Fill the grid with consecutive numbers that connect through adjacent cells.
 
+## A.K.A.
+
+Also known as: Number Snake, Number Path
+
+
 ## Category
 
 Loop & Path

@@ -2,6 +2,11 @@
 
 Find words using letters from the wheel. Every word must include the center letter!
 
+## A.K.A.
+
+Also known as: 9 Letter Word, Center Letter
+
+
 ## Category
 
 Word Formation

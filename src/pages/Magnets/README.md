@@ -2,6 +2,11 @@
 
 Place magnets with + and − poles so rows/columns match counts.
 
+## A.K.A.
+
+Also known as: Plus and Minus, Magnetic Puzzle
+
+
 ## Category
 
 Classic Logic

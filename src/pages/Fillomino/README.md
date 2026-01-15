@@ -2,6 +2,11 @@
 
 Fill numbers so connected groups of the same number have that many cells.
 
+## A.K.A.
+
+Also known as: Polyominous
+
+
 ## Category
 
 Region Division

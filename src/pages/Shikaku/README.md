@@ -2,6 +2,11 @@
 
 Divide the grid into rectangles. Each rectangle contains exactly one number.
 
+## A.K.A.
+
+Also known as: Rectangles, Divide by Box
+
+
 ## Category
 
 Region Division

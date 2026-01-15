@@ -2,6 +2,11 @@
 
 Measure exact amounts by pouring water between jugs.
 
+## A.K.A.
+
+Also known as: Water Jug Problem, Decanting Problem
+
+
 ## Category
 
 Classic Logic

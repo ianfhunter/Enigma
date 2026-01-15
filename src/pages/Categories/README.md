@@ -2,6 +2,11 @@
 
 Find groups of four words that share a hidden connection. Four categories, four chances!
 
+## A.K.A.
+
+Also known as: Word Groups, Group Finder
+
+
 ## Category
 
 Word Grids

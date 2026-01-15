@@ -2,6 +2,11 @@
 
 Classic 15-puzzle: slide tiles to put them in order.
 
+## A.K.A.
+
+Also known as: 15 Puzzle, Gem Puzzle, Boss Puzzle, Game of Fifteen
+
+
 ## Category
 
 Tile & Spatial

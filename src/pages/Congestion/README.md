@@ -2,6 +2,11 @@
 
 Slide cars and trucks to free the red car from the traffic jam!
 
+## A.K.A.
+
+Also known as: Traffic Jam, Sliding Block Puzzle
+
+
 ## Category
 
 Tile & Spatial

@@ -2,6 +2,11 @@
 
 Fill the grid following inequalities. Like Sudoku with greater-than clues!
 
+## A.K.A.
+
+Also known as: More or Less, Hutosiki, Unequal
+
+
 ## Category
 
 Sudoku Family

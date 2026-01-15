@@ -2,6 +2,11 @@
 
 Draw a single loop around the grid, satisfying the numeric clues.
 
+## A.K.A.
+
+Also known as: Fences, Loop the Loop, Takegaki
+
+
 ## Category
 
 Loop & Path

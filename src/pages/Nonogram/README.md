@@ -2,6 +2,11 @@
 
 Fill in cells using number clues to reveal a hidden picture!
 
+## A.K.A.
+
+Also known as: Paint by Numbers, Hanjie, Japanese Crossword
+
+
 ## Category
 
 Grid Shading

@@ -2,6 +2,11 @@
 
 Crack the secret color code using logic and deduction.
 
+## A.K.A.
+
+Also known as: Bulls and Cows, Cows and Bulls
+
+
 ## Category
 
 Cipher & Decode

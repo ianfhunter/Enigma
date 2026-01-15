@@ -2,6 +2,11 @@
 
 Flip cards to find matching pairs. Test your memory!
 
+## A.K.A.
+
+Also known as: Concentration, Pairs, Pelmanism, Match Match
+
+
 ## Category
 
 Memory & Speed

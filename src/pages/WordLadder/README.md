@@ -2,6 +2,11 @@
 
 Transform one word into another by changing one letter at a time.
 
+## A.K.A.
+
+Also known as: Doublets, Word Golf, Laddergrams
+
+
 ## Category
 
 Word Formation

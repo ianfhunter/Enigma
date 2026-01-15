@@ -90,7 +90,7 @@ export function fuzzyMatch(query, text) {
 /**
  * Search games with fuzzy matching, sorted by relevance
  *
- * @param {Array} games - Array of game objects with title and description
+ * @param {Array} games - Array of game objects with title, description, and optional aliases
  * @param {string} query - The search query
  * @returns {Array} - Sorted array of matching games with scores
  */
@@ -104,17 +104,33 @@ export function fuzzySearchGames(games, query) {
       const titleMatch = fuzzyMatch(trimmedQuery, game.title);
       const descMatch = fuzzyMatch(trimmedQuery, game.description);
 
-      // Title matches are worth more than description matches
+      // Check aliases - find the best matching alias
+      let aliasMatch = null;
+      let matchedAlias = null;
+      if (game.aliases && Array.isArray(game.aliases)) {
+        for (const alias of game.aliases) {
+          const match = fuzzyMatch(trimmedQuery, alias);
+          if (match && (!aliasMatch || match.score > aliasMatch.score)) {
+            aliasMatch = match;
+            matchedAlias = alias;
+          }
+        }
+      }
+
+      // Title matches are worth more than alias matches, which are worth more than description matches
       const titleScore = titleMatch ? titleMatch.score * 2 : 0;
+      const aliasScore = aliasMatch ? aliasMatch.score * 1.5 : 0;
       const descScore = descMatch ? descMatch.score : 0;
 
       // Only include if at least one matches
-      if (!titleMatch && !descMatch) return null;
+      if (!titleMatch && !aliasMatch && !descMatch) return null;
 
       return {
         ...game,
-        _searchScore: titleScore + descScore,
+        _searchScore: titleScore + aliasScore + descScore,
         _titleMatch: titleMatch,
+        _aliasMatch: aliasMatch,
+        _matchedAlias: matchedAlias,
         _descMatch: descMatch
       };
     })

@@ -2,6 +2,11 @@
 
 Classic peg solitaire: jump pegs to leave as few as possible.
 
+## A.K.A.
+
+Also known as: Peg Solitaire, Solo Noble
+
+
 ## Category
 
 Chess & Movement

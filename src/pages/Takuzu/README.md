@@ -2,6 +2,11 @@
 
 Fill the grid with 0s and 1s. No more than two in a row, equal count per line!
 
+## A.K.A.
+
+Also known as: Binary Puzzle, Binero
+
+
 ## Category
 
 Grid Shading

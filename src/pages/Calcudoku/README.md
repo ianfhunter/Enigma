@@ -2,6 +2,11 @@
 
 Fill the grid using math clues. Like Sudoku meets arithmetic!
 
+## A.K.A.
+
+Also known as: Mathdoku, Square Wisdom
+
+
 ## Category
 
 Sudoku Family

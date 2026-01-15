@@ -2,6 +2,11 @@
 
 Place dominoes to cover the grid so each pair appears exactly once.
 
+## A.K.A.
+
+Also known as: Domino Hunt, Domino Puzzle
+
+
 ## Category
 
 Classic Logic

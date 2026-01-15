@@ -2,6 +2,11 @@
 
 Place lights so every cell is lit, without lights seeing each other.
 
+## A.K.A.
+
+Also known as: Light Placement, Bijutsukan
+
+
 ## Category
 
 Grid Shading

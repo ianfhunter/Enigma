@@ -2,6 +2,11 @@
 
 Use logical clues to deduce which items belong in each house.
 
+## A.K.A.
+
+Also known as: Zebra Puzzle, Logic Grid Puzzle
+
+
 ## Category
 
 Classic Logic

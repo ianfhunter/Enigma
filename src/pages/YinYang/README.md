@@ -2,6 +2,11 @@
 
 Fill cells black or white. Each color must connect. No 2×2 same color.
 
+## A.K.A.
+
+Also known as: Shiromaru-Kuromaru
+
+
 ## Category
 
 Grid Shading

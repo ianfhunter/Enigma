@@ -2,6 +2,11 @@
 
 Push boxes onto targets with classic Sokoban rules.
 
+## A.K.A.
+
+Also known as: Warehouse Keeper, Box Pusher
+
+
 ## Category
 
 Chess & Movement

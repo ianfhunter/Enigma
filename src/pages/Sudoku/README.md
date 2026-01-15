@@ -2,6 +2,11 @@
 
 Fill the 9×9 grid so each row, column, and box contains 1-9.
 
+## A.K.A.
+
+Also known as: Number Place, Su Doku
+
+
 ## Category
 
 Sudoku Family

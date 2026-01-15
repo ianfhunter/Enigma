@@ -2,6 +2,11 @@
 
 Word chain game! Each word starts with the last letter of the previous.
 
+## A.K.A.
+
+Also known as: Word Chain, Last Letter Game
+
+
 ## Category
 
 Word Formation

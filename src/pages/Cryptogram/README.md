@@ -2,6 +2,11 @@
 
 Decode the secret message by cracking the letter substitution cipher!
 
+## A.K.A.
+
+Also known as: Cipher Puzzle, Substitution Cipher
+
+
 ## Category
 
 Cipher & Decode

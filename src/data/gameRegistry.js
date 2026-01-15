@@ -31,6 +31,7 @@ export const categories = [
       {
         title: 'WordGuess',
         slug: 'wordguess',
+        aliases: ['Five Letter Word'],
         description: 'Guess the 5-letter word in 6 tries. Colors show how close you are!',
         icon: wordguessIcon,
         emojiIcon: '🟩', // Fallback for favicon
@@ -41,6 +42,7 @@ export const categories = [
       {
         title: 'Word Wheel',
         slug: 'word-wheel',
+        aliases: ['9 Letter Word', 'Center Letter'],
         description: 'Find words using letters from the wheel. Every word must include the center letter!',
         icon: '🎯',
         colors: { primary: '#ff6b6b', secondary: '#ee5a5a' },
@@ -50,6 +52,7 @@ export const categories = [
       {
         title: 'Word Ladder',
         slug: 'word-ladder',
+        aliases: ['Doublets', 'Word Golf', 'Laddergrams'],
         description: 'Transform one word into another by changing one letter at a time.',
         icon: '🪜',
         colors: { primary: '#4ecdc4', secondary: '#3dbdb5' },
@@ -122,6 +125,7 @@ export const categories = [
       {
         title: 'Shiritori',
         slug: 'shiritori',
+        aliases: ['Word Chain', 'Last Letter Game'],
         description: 'Word chain game! Each word starts with the last letter of the previous.',
         icon: '🔗',
         colors: { primary: '#dc2626', secondary: '#b91c1c' },
@@ -195,6 +199,7 @@ export const categories = [
       {
         title: 'Categories',
         slug: 'categories',
+        aliases: ['Word Groups', 'Group Finder'],
         description: 'Find groups of four words that share a hidden connection. Four categories, four chances!',
         icon: categoriesIcon,
         emojiIcon: '🔗',
@@ -221,6 +226,7 @@ export const categories = [
       {
         title: 'Cryptogram',
         slug: 'cryptogram',
+        aliases: ['Cipher Puzzle', 'Substitution Cipher'],
         description: 'Decode the secret message by cracking the letter substitution cipher!',
         icon: '🔐',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
@@ -239,6 +245,7 @@ export const categories = [
       {
         title: 'CodeBreaker',
         slug: 'code-breaker',
+        aliases: ['Bulls and Cows', 'Cows and Bulls'],
         description: 'Crack the secret color code using logic and deduction.',
         icon: '🧠',
         colors: { primary: '#e879f9', secondary: '#d946ef' },
@@ -282,6 +289,7 @@ export const categories = [
       {
         title: 'Sudoku',
         slug: 'sudoku',
+        aliases: ['Number Place', 'Su Doku'],
         description: 'Fill the 9×9 grid so each row, column, and box contains 1-9.',
         icon: sudokuIcon,
         emojiIcon: '🔢',
@@ -310,6 +318,7 @@ export const categories = [
       {
         title: 'Calcudoku',
         slug: 'calcudoku',
+        aliases: ['Mathdoku', 'Square Wisdom'],
         description: 'Fill the grid using math clues. Like Sudoku meets arithmetic!',
         icon: '➕',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
@@ -319,6 +328,7 @@ export const categories = [
       {
         title: 'Kakuro',
         slug: 'kakuro',
+        aliases: ['Cross Sums', 'Kakro'],
         description: 'Fill in numbers that add up to the clues. A crossword with math!',
         icon: '➗',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
@@ -328,6 +338,7 @@ export const categories = [
       {
         title: 'Futoshiki',
         slug: 'futoshiki',
+        aliases: ['More or Less', 'Hutosiki', 'Unequal'],
         description: 'Fill the grid following inequalities. Like Sudoku with greater-than clues!',
         icon: '⚖️',
         colors: { primary: '#fb7185', secondary: '#f43f5e' },
@@ -389,6 +400,7 @@ export const categories = [
       {
         title: 'Nonogram',
         slug: 'nonogram',
+        aliases: ['Paint by Numbers', 'Hanjie', 'Japanese Crossword'],
         description: 'Fill in cells using number clues to reveal a hidden picture!',
         icon: '🖼️',
         colors: { primary: '#f472b6', secondary: '#db2777' },
@@ -398,6 +410,7 @@ export const categories = [
       {
         title: 'Minesweeper',
         slug: 'minesweeper',
+        aliases: ['Mines', 'Mine Sweeper'],
         description: "Clear the minefield using number clues. Don't click a mine!",
         icon: '💣',
         colors: { primary: '#ef4444', secondary: '#dc2626' },
@@ -407,6 +420,7 @@ export const categories = [
       {
         title: 'Nurikabe',
         slug: 'nurikabe',
+        aliases: ['Cell Structure', 'Island Puzzle'],
         description: 'Shade cells to form one connected sea around numbered islands of the given sizes.',
         icon: '🌊',
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
@@ -416,6 +430,7 @@ export const categories = [
       {
         title: 'Hitori',
         slug: 'hitori',
+        aliases: ['Hitori ni Shite Kure', 'Leave Me Alone'],
         description: 'Shade cells to eliminate duplicates while keeping unshaded cells connected.',
         icon: '⬛',
         colors: { primary: '#71717a', secondary: '#52525b' },
@@ -425,6 +440,7 @@ export const categories = [
       {
         title: 'Aquarium',
         slug: 'aquarium',
+        aliases: ['Water Fun', 'Fill the Tanks'],
         description: 'Fill water in tanks to match row and column totals. Water settles to the bottom!',
         icon: '🐠',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
@@ -434,6 +450,7 @@ export const categories = [
       {
         title: 'Star Battle',
         slug: 'star-battle',
+        aliases: ['Two Not Touch', 'Sternenschlacht'],
         description: 'Place stars so each row, column, and region has exactly the right count. No touching!',
         icon: '⭐',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
@@ -452,6 +469,7 @@ export const categories = [
       {
         title: 'Takuzu',
         slug: 'takuzu',
+        aliases: ['Binary Puzzle', 'Binero'],
         description: 'Fill the grid with 0s and 1s. No more than two in a row, equal count per line!',
         icon: '🔘',
         colors: { primary: '#0ea5e9', secondary: '#0284c7' },
@@ -461,6 +479,7 @@ export const categories = [
       {
         title: 'Yin-Yang',
         slug: 'yin-yang',
+        aliases: ['Shiromaru-Kuromaru'],
         description: 'Fill cells black or white. Each color must connect. No 2×2 same color.',
         icon: '☯️',
         colors: { primary: '#1a1a1a', secondary: '#666666' },
@@ -488,6 +507,7 @@ export const categories = [
       {
         title: 'Thermometers',
         slug: 'thermometers',
+        aliases: ['Thermometer Puzzle', 'Mercury'],
         description: 'Fill thermometers from the bulb. Numbers show filled cells per row/column.',
         icon: '🌡️',
         colors: { primary: '#ef4444', secondary: '#f97316' },
@@ -497,6 +517,7 @@ export const categories = [
       {
         title: 'Lights Out',
         slug: 'lights-out',
+        aliases: ['Toggle Puzzle', 'XOR Puzzle'],
         description: 'Toggle lights to turn them all off. Each press affects neighbors!',
         icon: '💡',
         colors: { primary: '#facc15', secondary: '#eab308' },
@@ -506,6 +527,7 @@ export const categories = [
       {
         title: 'Light Up',
         slug: 'lightup',
+        aliases: ['Light Placement', 'Bijutsukan'],
         description: 'Place lights so every cell is lit, without lights seeing each other.',
         icon: '💡',
         colors: { primary: '#fde047', secondary: '#facc15' },
@@ -531,6 +553,7 @@ export const categories = [
       {
         title: 'Numberlink',
         slug: 'numberlink',
+        aliases: ['Number Link', 'Path Puzzle'],
         description: 'Connect matching number pairs without crossing paths.',
         icon: '🔗',
         colors: { primary: '#a78bfa', secondary: '#8b5cf6' },
@@ -540,6 +563,7 @@ export const categories = [
       {
         title: 'Hashi',
         slug: 'hashi',
+        aliases: ['Bridges', 'Bridge Building'],
         description: 'Connect islands with bridges. Each island shows how many bridges connect to it.',
         icon: '🌉',
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
@@ -549,6 +573,7 @@ export const categories = [
       {
         title: 'Loopy',
         slug: 'loopy',
+        aliases: ['Fences', 'Loop the Loop', 'Takegaki'],
         description: 'Draw a single loop around the grid, satisfying the numeric clues.',
         icon: '⭕',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
@@ -558,6 +583,7 @@ export const categories = [
       {
         title: 'Pearl',
         slug: 'pearl',
+        aliases: ['White Pearls Black Pearls'],
         description: 'Draw a single loop through all pearls. Black pearls are corners with straight exits; white pearls are straight with a turn nearby.',
         icon: '🫧',
         colors: { primary: '#7dd3fc', secondary: '#38bdf8' },
@@ -576,6 +602,7 @@ export const categories = [
       {
         title: 'Slant',
         slug: 'slant',
+        aliases: ['Diagonal'],
         description: 'Draw slashes in cells so the vertex counts match the clues.',
         icon: '／',
         colors: { primary: '#e879f9', secondary: '#d946ef' },
@@ -603,6 +630,7 @@ export const categories = [
       {
         title: 'Hidato',
         slug: 'hidato',
+        aliases: ['Number Snake', 'Number Path'],
         description: 'Fill the grid with consecutive numbers that connect horizontally, vertically, or diagonally.',
         icon: '🔢',
         colors: { primary: '#f59e0b', secondary: '#d97706' },
@@ -656,6 +684,7 @@ export const categories = [
       {
         title: 'Shikaku',
         slug: 'shikaku',
+        aliases: ['Rectangles', 'Divide by Box'],
         description: 'Divide the grid into rectangles. Each rectangle contains exactly one number showing its area.',
         icon: '▢',
         colors: { primary: '#f472b6', secondary: '#ec4899' },
@@ -665,6 +694,7 @@ export const categories = [
       {
         title: 'Fillomino',
         slug: 'fillomino',
+        aliases: ['Polyominous'],
         description: 'Fill numbers so connected groups of the same number have that many cells.',
         icon: '🔢',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
@@ -745,6 +775,7 @@ export const categories = [
       {
         title: "Knight's Tour",
         slug: 'knights-tour',
+        aliases: ['Knights Tour', 'Knight Tour Puzzle'],
         description: 'Move the knight to visit every square exactly once. A classic chess puzzle!',
         icon: '♞',
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
@@ -754,6 +785,7 @@ export const categories = [
       {
         title: 'N-Queens',
         slug: 'n-queens',
+        aliases: ['Eight Queens', 'Queens Problem', '8 Queens Puzzle'],
         description: 'Place queens so none can attack each other. A classic combinatorial puzzle!',
         icon: '👑',
         colors: { primary: '#ec4899', secondary: '#db2777' },
@@ -781,6 +813,7 @@ export const categories = [
       {
         title: 'Pegs',
         slug: 'pegs',
+        aliases: ['Peg Solitaire', 'Solo Noble'],
         description: 'Classic peg solitaire: jump pegs to leave as few as possible.',
         icon: pegsIcon,
         emojiIcon: '📍',
@@ -791,6 +824,7 @@ export const categories = [
       {
         title: 'Sokoban',
         slug: 'sokoban',
+        aliases: ['Warehouse Keeper', 'Box Pusher'],
         description: 'Push boxes onto targets with classic Sokoban rules. Includes Boxoban level packs.',
         icon: '📦',
         colors: { primary: '#22d3ee', secondary: '#0ea5e9' },
@@ -834,6 +868,7 @@ export const categories = [
       {
         title: 'Congestion',
         slug: 'congestion',
+        aliases: ['Traffic Jam', 'Sliding Block Puzzle'],
         description: 'Slide cars and trucks to free the red car from the traffic jam!',
         icon: '🚗',
         colors: { primary: '#ef4444', secondary: '#dc2626' },
@@ -871,6 +906,7 @@ export const categories = [
       {
         title: 'Flood It',
         slug: 'flood-it',
+        aliases: ['Color Flood', 'Floodfill'],
         description: 'Fill the board with one color in limited moves. Start from the corner!',
         icon: '🌊',
         colors: { primary: '#38bdf8', secondary: '#0ea5e9' },
@@ -908,6 +944,7 @@ export const categories = [
       {
         title: 'Tower of Hanoi',
         slug: 'tower-of-hanoi',
+        aliases: ['Tower of Brahma', 'Lucas Tower'],
         description: "Move the disk stack to another peg. Larger disks can't go on smaller ones!",
         icon: towerOfHanoiIcon,
         emojiIcon: '🗼',
@@ -918,6 +955,7 @@ export const categories = [
       {
         title: 'Fifteen',
         slug: 'fifteen',
+        aliases: ['15 Puzzle', 'Gem Puzzle', 'Boss Puzzle', 'Game of Fifteen'],
         description: 'Classic 15-puzzle: slide tiles to put them in order.',
         icon: '1️⃣',
         colors: { primary: '#22c55e', secondary: '#16a34a' },
@@ -1149,6 +1187,7 @@ export const categories = [
       {
         title: 'Sequence',
         slug: 'sequence',
+        aliases: ['Memory Sequence', 'Color Sequence'],
         description: 'Watch, remember, repeat! How long a sequence can you memorize?',
         icon: '🔴',
         colors: { primary: '#f43f5e', secondary: '#e11d48' },
@@ -1158,6 +1197,7 @@ export const categories = [
       {
         title: 'Memory Match',
         slug: 'memory-match',
+        aliases: ['Concentration', 'Pairs', 'Pelmanism', 'Match Match'],
         description: 'Flip cards to find matching pairs. Test your memory!',
         icon: '🃏',
         colors: { primary: '#fcd34d', secondary: '#fbbf24' },
@@ -1174,6 +1214,7 @@ export const categories = [
       {
         title: 'Einstein Puzzle',
         slug: 'einstein',
+        aliases: ['Zebra Puzzle', 'Logic Grid Puzzle'],
         description: 'Use logical clues to deduce which items belong in each house. A classic zebra puzzle!',
         icon: '🧠',
         colors: { primary: '#c084fc', secondary: '#818cf8' },
@@ -1183,6 +1224,7 @@ export const categories = [
       {
         title: 'Knights & Knaves',
         slug: 'knights-and-knaves',
+        aliases: ['Liars and Truth-Tellers', 'Truth and Lies'],
         description: 'Classic logic puzzles: decide who always tells the truth and who always lies.',
         icon: '🤥',
         colors: { primary: '#38bdf8', secondary: '#0284c7' },
@@ -1201,6 +1243,7 @@ export const categories = [
       {
         title: 'Water Pouring',
         slug: 'water-pouring',
+        aliases: ['Water Jug Problem', 'Decanting Problem'],
         description: 'Measure exact amounts by pouring water between jugs of different sizes.',
         icon: '💧',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
@@ -1228,6 +1271,7 @@ export const categories = [
       {
         title: 'Dominosa',
         slug: 'dominosa',
+        aliases: ['Domino Hunt', 'Domino Puzzle'],
         description: 'Place dominoes to cover the grid so each pair appears exactly once.',
         icon: dominosaIcon,
         emojiIcon: '🁢',
@@ -1238,6 +1282,7 @@ export const categories = [
       {
         title: 'Magnets',
         slug: 'magnets',
+        aliases: ['Plus and Minus', 'Magnetic Puzzle'],
         description: 'Place magnets with + and − poles so rows and columns match the counts.',
         icon: '🧲',
         colors: { primary: '#ef4444', secondary: '#b91c1c' },

@@ -2,6 +2,11 @@
 
 Draw slashes in cells so the vertex counts match the clues.
 
+## A.K.A.
+
+Also known as: Diagonal
+
+
 ## Category
 
 Loop & Path

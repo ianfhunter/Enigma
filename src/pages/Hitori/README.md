@@ -2,6 +2,11 @@
 
 Shade cells to eliminate duplicates while keeping unshaded cells connected.
 
+## A.K.A.
+
+Also known as: Hitori ni Shite Kure, Leave Me Alone
+
+
 ## Category
 
 Grid Shading

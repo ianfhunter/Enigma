@@ -2,6 +2,11 @@
 
 Draw a single loop through all pearls. Black = corner, white = straight with turn.
 
+## A.K.A.
+
+Also known as: White Pearls Black Pearls
+
+
 ## Category
 
 Loop & Path

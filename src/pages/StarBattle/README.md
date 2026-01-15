@@ -2,6 +2,11 @@
 
 Place stars so each row, column, and region has exactly the right count. No touching!
 
+## A.K.A.
+
+Also known as: Two Not Touch, Sternenschlacht
+
+
 ## Category
 
 Grid Shading

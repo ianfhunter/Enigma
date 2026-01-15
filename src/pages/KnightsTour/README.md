@@ -2,6 +2,11 @@
 
 Move the knight to visit every square exactly once.
 
+## A.K.A.
+
+Also known as: Knights Tour, Knight Tour Puzzle
+
+
 ## Category
 
 Chess & Movement

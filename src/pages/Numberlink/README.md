@@ -2,6 +2,11 @@
 
 Connect matching number pairs without crossing paths.
 
+## A.K.A.
+
+Also known as: Number Link, Path Puzzle
+
+
 ## Category
 
 Loop & Path

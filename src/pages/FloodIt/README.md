@@ -2,6 +2,11 @@
 
 Fill the board with one color in limited moves. Start from the corner!
 
+## A.K.A.
+
+Also known as: Color Flood, Floodfill
+
+
 ## Category
 
 Tile & Spatial

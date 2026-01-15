@@ -2,6 +2,11 @@
 
 Connect islands with bridges. Each island shows how many bridges connect to it.
 
+## A.K.A.
+
+Also known as: Bridges, Bridge Building
+
+
 ## Category
 
 Loop & Path

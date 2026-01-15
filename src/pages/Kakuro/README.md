@@ -2,6 +2,11 @@
 
 Fill in numbers that add up to the clues. A crossword with math!
 
+## A.K.A.
+
+Also known as: Cross Sums, Kakro
+
+
 ## Category
 
 Sudoku Family

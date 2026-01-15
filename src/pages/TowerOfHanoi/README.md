@@ -2,6 +2,11 @@
 
 Move the disk stack to another peg. Larger disks can't go on smaller ones!
 
+## A.K.A.
+
+Also known as: Tower of Brahma, Lucas Tower
+
+
 ## Category
 
 Tile & Spatial

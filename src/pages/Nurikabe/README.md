@@ -2,6 +2,11 @@
 
 Shade cells to form one connected sea around numbered islands.
 
+## A.K.A.
+
+Also known as: Cell Structure, Island Puzzle
+
+
 ## Category
 
 Grid Shading

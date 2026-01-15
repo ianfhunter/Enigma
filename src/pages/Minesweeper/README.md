@@ -2,6 +2,11 @@
 
 Clear the minefield using number clues. Don't click a mine!
 
+## A.K.A.
+
+Also known as: Mines, Mine Sweeper
+
+
 ## Category
 
 Grid Shading

@@ -2,6 +2,11 @@
 
 Fill thermometers from the bulb. Numbers show filled cells per row/column.
 
+## A.K.A.
+
+Also known as: Thermometer Puzzle, Mercury
+
+
 ## Category
 
 Grid Shading

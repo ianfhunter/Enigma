@@ -2,6 +2,11 @@
 
 Decide who always tells the truth and who always lies.
 
+## A.K.A.
+
+Also known as: Liars and Truth-Tellers, Truth and Lies
+
+
 ## Category
 
 Classic Logic

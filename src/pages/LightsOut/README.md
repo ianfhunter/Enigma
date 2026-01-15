@@ -2,6 +2,11 @@
 
 Toggle lights to turn them all off. Each press affects neighbors!
 
+## A.K.A.
+
+Also known as: Toggle Puzzle, XOR Puzzle
+
+
 ## Category
 
 Grid Shading

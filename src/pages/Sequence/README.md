@@ -2,6 +2,11 @@
 
 Watch, remember, repeat! How long a sequence can you memorize?
 
+## A.K.A.
+
+Also known as: Memory Sequence, Color Sequence
+
+
 ## Category
 
 Memory & Speed

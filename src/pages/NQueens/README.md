@@ -2,6 +2,10 @@
 
 Place queens so none can attack each other.
 
+## A.K.A.
+
+Also known as: Eight Queens, Queens Problem, 8 Queens Puzzle
+
 ## Category
 
 Chess & Movement
