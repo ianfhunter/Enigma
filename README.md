@@ -5,11 +5,9 @@
 **A self-hosted collection of classic word, number, and logic puzzles**
 
 [![Games](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ianfhunter/enigma/main/badge.json)](https://raw.githubusercontent.com/ianfhunter/enigma/main/badge.json)
-[![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/license-Custom-blue.svg)](LICENSE)
 
-<img width="1917" height="917" alt="image" src="https://github.com/user-attachments/assets/e6062132-728b-46fe-be7d-d6d2fb52f959" />
+<img width="1912" height="883" alt="image" src="https://github.com/user-attachments/assets/dae88e2f-673c-4294-b482-79967be085fc" />
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Contributing](#-contributing)
 
