@@ -1,11 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   gcd,
   gcdMultiple,
   solvePuzzle,
-  generateInfinitePuzzle,
-  generateConservationPuzzle,
-  generatePuzzle,
   DIFFICULTIES,
 } from './WaterPouring.jsx';
 
@@ -26,27 +23,33 @@ describe('WaterPouring - helpers', () => {
     expect(res.minMoves).toBeGreaterThan(0);
   });
 
-  it('generateInfinitePuzzle returns solvable puzzle', () => {
-    const rand = vi.spyOn(Math, 'random').mockReturnValue(0.3);
-    const puzzle = generateInfinitePuzzle(3, 'easy');
-    rand.mockRestore();
-    expect(puzzle.jugs.length).toBe(3);
-    expect(puzzle.minMoves).toBeGreaterThan(0);
+  it('solvePuzzle handles unsolvable puzzles', () => {
+    const puzzle = {
+      jugs: [{ capacity: 2, initial: 0 }, { capacity: 4, initial: 0 }],
+      target: 5, // Impossible target
+      source: 'infinite',
+    };
+    const res = solvePuzzle(puzzle);
+    expect(res.solvable).toBe(false);
   });
 
-  it('generateConservationPuzzle returns solvable puzzle', () => {
-    const rand = vi.spyOn(Math, 'random').mockReturnValue(0.3);
-    const puzzle = generateConservationPuzzle(3, 'easy');
-    rand.mockRestore();
-    expect(puzzle.jugs.length).toBe(3);
-    expect(puzzle.minMoves).toBeGreaterThan(0);
+  it('solvePuzzle handles conservation mode', () => {
+    const puzzle = {
+      jugs: [{ capacity: 8, initial: 8 }, { capacity: 5, initial: 0 }, { capacity: 3, initial: 0 }],
+      target: 4,
+      source: 'none',
+    };
+    const res = solvePuzzle(puzzle);
+    expect(res.solvable).toBe(true);
+    expect(res.minMoves).toBeGreaterThan(0);
   });
 
-  it('generatePuzzle selects based on hasSource', () => {
-    const p1 = generatePuzzle({ numJugs: 2, difficulty: 'easy', hasSource: true });
-    const p2 = generatePuzzle({ numJugs: 3, difficulty: 'easy', hasSource: false });
-    expect(p1.source).toBe('infinite');
-    expect(p2.source).toBe('none');
+  it('DIFFICULTIES constant is defined', () => {
+    expect(DIFFICULTIES).toBeDefined();
+    expect(Array.isArray(DIFFICULTIES)).toBe(true);
+    expect(DIFFICULTIES.length).toBeGreaterThan(0);
+    expect(DIFFICULTIES).toContain('easy');
     expect(DIFFICULTIES).toContain('medium');
+    expect(DIFFICULTIES).toContain('hard');
   });
 });

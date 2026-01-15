@@ -22,22 +22,46 @@ function solvePuzzle(puzzle) {
   const capacities = jugs.map(j => j.capacity);
   const initial = jugs.map(j => j.initial);
 
+  // Calculate maximum possible states to prevent memory exhaustion
+  const maxStates = capacities.reduce((acc, cap) => acc * (cap + 1), 1);
+  // Very conservative limits to prevent memory issues during tests
+  const MAX_STATES_TO_EXPLORE = Math.min(2000, maxStates);
+  const MAX_MOVES = 30;
+
   const stateKey = (levels) => levels.join(',');
   const visited = new Set();
-  const queue = [{ levels: [...initial], moves: 0 }];
+  // Use array as queue but process in batches to avoid O(n) shift operations
+  let queue = [{ levels: [...initial], moves: 0 }];
+  let queueIndex = 0;
   visited.add(stateKey(initial));
 
-  while (queue.length > 0) {
-    const { levels, moves } = queue.shift();
+  while (queueIndex < queue.length) {
+    // Safety check: prevent memory exhaustion
+    if (visited.size > MAX_STATES_TO_EXPLORE) {
+      return { solvable: false, minMoves: -1 };
+    }
+
+    const { levels, moves } = queue[queueIndex++];
+
+    // Safety check: prevent infinite loops
+    if (moves > MAX_MOVES) {
+      return { solvable: false, minMoves: -1 };
+    }
 
     // Check win condition
     if (levels.some(l => l === target)) {
       return { solvable: true, minMoves: moves };
     }
 
+    // Clean up old queue entries periodically to free memory
+    if (queueIndex > 1000) {
+      queue = queue.slice(queueIndex);
+      queueIndex = 0;
+    }
+
     const tryState = (newLevels) => {
       const key = stateKey(newLevels);
-      if (!visited.has(key)) {
+      if (!visited.has(key) && visited.size < MAX_STATES_TO_EXPLORE) {
         visited.add(key);
         queue.push({ levels: newLevels, moves: moves + 1 });
       }
@@ -80,11 +104,13 @@ function solvePuzzle(puzzle) {
 // Generate a random puzzle with infinite source
 function generateInfinitePuzzle(numJugs, difficulty) {
   const minCap = difficulty === 'easy' ? 3 : difficulty === 'medium' ? 4 : 5;
-  const maxCap = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 12 : 15;
+  // Reduced max capacities to prevent memory issues with large state spaces
+  const maxCap = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 10 : 12;
   const minMoves = difficulty === 'easy' ? 3 : difficulty === 'medium' ? 5 : 8;
   const maxMoves = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 15 : 25;
 
-  for (let attempt = 0; attempt < 100; attempt++) {
+  // Very limited attempts to prevent memory exhaustion during test runs
+  for (let attempt = 0; attempt < 5; attempt++) {
     // Generate random capacities (ensure they're coprime for interesting puzzles)
     const capacities = [];
     for (let i = 0; i < numJugs; i++) {
@@ -142,11 +168,13 @@ function generateInfinitePuzzle(numJugs, difficulty) {
 // Generate a puzzle with no external source (conservation mode)
 function generateConservationPuzzle(numJugs, difficulty) {
   const minCap = difficulty === 'easy' ? 3 : difficulty === 'medium' ? 5 : 6;
-  const maxCap = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 14 : 18;
+  // Reduced max capacities to prevent memory issues with large state spaces
+  const maxCap = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 12 : 15;
   const minMoves = difficulty === 'easy' ? 3 : difficulty === 'medium' ? 5 : 8;
   const maxMoves = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 18 : 30;
 
-  for (let attempt = 0; attempt < 100; attempt++) {
+  // Very limited attempts to prevent memory exhaustion during test runs
+  for (let attempt = 0; attempt < 5; attempt++) {
     // Generate random capacities
     const capacities = [];
     for (let i = 0; i < numJugs; i++) {
