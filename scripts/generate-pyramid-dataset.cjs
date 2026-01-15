@@ -2,9 +2,9 @@
 /**
  * Generate verified solvable puzzles for PyramidCards
  * Outputs a JSON dataset with full deck arrangements (not just seeds)
- * 
+ *
  * Run with: node scripts/generate-pyramid-dataset.js
- * 
+ *
  * Output: public/datasets/pyramidCardsPuzzles.json
  */
 
@@ -225,27 +225,45 @@ function isSolvable(deckCodes) {
 
 // Main generator
 async function main() {
-  const TARGET_COUNT = parseInt(process.argv[2]) || 50;
+  const TARGET_NEW = parseInt(process.argv[2]) || 50;
   const START_SEED = parseInt(process.argv[3]) || 1;
   const MAX_SEED = parseInt(process.argv[4]) || 100000;
 
-  console.log(`Generating ${TARGET_COUNT} solvable Pyramid puzzles...`);
+  // Output path
+  const outputPath = path.join(__dirname, '..', 'public', 'datasets', 'pyramidCardsPuzzles.json');
+
+  // Load existing puzzles to merge
+  let existingPuzzles = [];
+  let nextId = 1;
+
+  if (fs.existsSync(outputPath)) {
+    try {
+      const existing = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+      existingPuzzles = existing.puzzles || [];
+      nextId = existingPuzzles.length + 1;
+      console.log(`Loaded ${existingPuzzles.length} existing puzzles`);
+    } catch (e) {
+      console.log('Could not load existing puzzles, starting fresh');
+    }
+  }
+
+  console.log(`Finding ${TARGET_NEW} NEW solvable Pyramid puzzles...`);
   console.log(`Starting from seed ${START_SEED}, max ${MAX_SEED}`);
   console.log('');
 
-  const puzzles = [];
+  const newPuzzles = [];
   let seed = START_SEED;
   let tested = 0;
 
-  while (puzzles.length < TARGET_COUNT && seed < MAX_SEED) {
+  while (newPuzzles.length < TARGET_NEW && seed < MAX_SEED) {
     const deckCodes = generatePuzzleDeck(seed);
 
     if (isSolvable(deckCodes)) {
-      puzzles.push({
-        id: puzzles.length + 1,
+      newPuzzles.push({
+        id: nextId + newPuzzles.length,
         deck: deckCodes
       });
-      process.stdout.write(`\rFound ${puzzles.length}/${TARGET_COUNT} (tested ${tested}, seed ${seed})`);
+      process.stdout.write(`\rFound ${newPuzzles.length}/${TARGET_NEW} new (tested ${tested}, seed ${seed})`);
     }
 
     seed++;
@@ -259,24 +277,23 @@ async function main() {
 
   console.log('\n');
 
-  // Output path
-  const outputPath = path.join(__dirname, '..', 'public', 'datasets', 'pyramidCardsPuzzles.json');
+  // Merge puzzles
+  const allPuzzles = [...existingPuzzles, ...newPuzzles];
 
   // Write JSON
   const output = {
     name: 'Pyramid Cards Puzzles',
     description: 'Verified solvable Pyramid Solitaire puzzles',
     generated: new Date().toISOString(),
-    count: puzzles.length,
-    puzzles
+    count: allPuzzles.length,
+    puzzles: allPuzzles
   };
 
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
 
-  console.log(`Saved ${puzzles.length} puzzles to ${outputPath}`);
-  console.log(`Tested ${tested} seeds total`);
-  console.log(`Success rate: ${((puzzles.length / tested) * 100).toFixed(2)}%`);
+  console.log(`Added ${newPuzzles.length} new puzzles (total: ${allPuzzles.length})`);
+  console.log(`Tested ${tested} seeds (${START_SEED} to ${seed - 1})`);
+  console.log(`Success rate: ${((newPuzzles.length / tested) * 100).toFixed(2)}%`);
 }
 
 main().catch(console.error);
-

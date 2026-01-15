@@ -12,11 +12,12 @@ import {
   getFilteredCategories,
   getGamesForPackages,
 } from './packageRegistry';
+import { isManifestPack } from '../packs/registry';
 
 describe('packageRegistry', () => {
   describe('officialPacks', () => {
-    it('should have 9 packs defined', () => {
-      expect(officialPacks.length).toBe(9);
+    it('should have at least 9 packs defined', () => {
+      expect(officialPacks.length).toBeGreaterThanOrEqual(9);
     });
 
     it('should have all packs as default', () => {
@@ -31,28 +32,34 @@ describe('packageRegistry', () => {
       }
     });
 
-    it('should have a word-games pack', () => {
+    it('should have a word-games pack (manifest format)', () => {
       const wordGamesPack = officialPacks.find(p => p.id === 'word-games');
       expect(wordGamesPack).toBeDefined();
-      expect(wordGamesPack.categories).toContain('Word Formation');
+      expect(isManifestPack('word-games')).toBe(true);
     });
 
-    it('should have a sudoku-family pack', () => {
+    it('should have a sudoku-family pack (manifest format)', () => {
       const sudokuPack = officialPacks.find(p => p.id === 'sudoku-family');
       expect(sudokuPack).toBeDefined();
-      expect(sudokuPack.categories).toContain('Sudoku Family');
+      expect(isManifestPack('sudoku-family')).toBe(true);
     });
 
-    it('should have an international-words pack with includeGames', () => {
+    it('should have a trivia-knowledge pack (manifest format)', () => {
+      const triviaPack = officialPacks.find(p => p.id === 'trivia-knowledge');
+      expect(triviaPack).toBeDefined();
+      expect(isManifestPack('trivia-knowledge')).toBe(true);
+    });
+
+    it('should have an international-words pack (manifest format)', () => {
       const intlPack = officialPacks.find(p => p.id === 'international-words');
       expect(intlPack).toBeDefined();
-      expect(intlPack.includeGames).toContain('shiritori');
-      expect(intlPack.categories).toEqual([]);
+      expect(isManifestPack('international-words')).toBe(true);
     });
 
-    it('word-games pack should exclude shiritori', () => {
-      const wordPack = officialPacks.find(p => p.id === 'word-games');
-      expect(wordPack.excludeGames).toContain('shiritori');
+    it('word-games pack should NOT include shiritori', () => {
+      // In manifest format, we don't include shiritori rather than excluding it
+      const wordGames = getGamesForPackages(['word-games'], categories);
+      expect(wordGames.some(g => g.slug === 'shiritori')).toBe(false);
     });
 
     it('all packs should have required fields', () => {
@@ -61,8 +68,11 @@ describe('packageRegistry', () => {
         expect(pack.name).toBeDefined();
         expect(pack.description).toBeDefined();
         expect(pack.icon).toBeDefined();
-        expect(pack.categories).toBeDefined();
-        expect(Array.isArray(pack.categories)).toBe(true);
+        // categories is optional for manifest packs (they embed games directly)
+        if (!isManifestPack(pack.id)) {
+          expect(pack.categories).toBeDefined();
+          expect(Array.isArray(pack.categories)).toBe(true);
+        }
       }
     });
   });
@@ -96,6 +106,12 @@ describe('packageRegistry', () => {
       expect(pack.id).toBe('word-games');
     });
 
+    it('should find legacy pack by ID', () => {
+      const pack = getPackageById('sudoku-family');
+      expect(pack).toBeDefined();
+      expect(pack.id).toBe('sudoku-family');
+    });
+
     it('should return undefined for unknown ID', () => {
       const pack = getPackageById('nonexistent');
       expect(pack).toBeUndefined();
@@ -103,15 +119,25 @@ describe('packageRegistry', () => {
   });
 
   describe('getPackageCategories', () => {
-    it('should return categories for a valid pack', () => {
+    it('should return categories for manifest pack (word-games)', () => {
       const cats = getPackageCategories('word-games');
       expect(Array.isArray(cats)).toBe(true);
-      expect(cats.length).toBeGreaterThan(0);
+      expect(cats.length).toBe(3);
+      expect(cats).toContain('Word Formation');
+      expect(cats).toContain('Word Grids');
+      expect(cats).toContain('Cipher & Decode');
     });
 
-    it('should return empty array for pack with only includeGames', () => {
+    it('should return categories for legacy pack', () => {
+      const cats = getPackageCategories('sudoku-family');
+      expect(Array.isArray(cats)).toBe(true);
+      expect(cats).toContain('Sudoku Family');
+    });
+
+    it('should return categories for international-words manifest pack', () => {
       const cats = getPackageCategories('international-words');
-      expect(cats).toEqual([]);
+      expect(cats.length).toBe(1);
+      expect(cats[0]).toBe('International Word Games');
     });
 
     it('should return empty array for invalid pack', () => {
@@ -135,17 +161,17 @@ describe('packageRegistry', () => {
   });
 
   describe('countGamesInPack', () => {
-    it('should count games in the word-games pack', () => {
+    it('should count games in manifest pack (word-games)', () => {
       const count = countGamesInPack('word-games', categories);
-      expect(count).toBeGreaterThan(10);
+      expect(count).toBeGreaterThan(20);
     });
 
-    it('should count games in sudoku-family pack', () => {
+    it('should count games in legacy pack (sudoku-family)', () => {
       const count = countGamesInPack('sudoku-family', categories);
       expect(count).toBeGreaterThan(5);
     });
 
-    it('should count includeGames in international-words pack', () => {
+    it('should count games in international-words manifest pack', () => {
       const count = countGamesInPack('international-words', categories);
       expect(count).toBe(1); // Just shiritori
     });
@@ -154,28 +180,17 @@ describe('packageRegistry', () => {
       const count = countGamesInPack('nonexistent', categories);
       expect(count).toBe(0);
     });
-
-    it('should exclude games listed in excludeGames', () => {
-      // word-games excludes shiritori from Word Formation
-      const wordGamesCount = countGamesInPack('word-games', categories);
-
-      // Get total count of games in the categories without exclusions
-      const wordPack = getPackageById('word-games');
-      let totalWithoutExclusion = 0;
-      for (const cat of categories) {
-        if (wordPack.categories.includes(cat.name)) {
-          totalWithoutExclusion += cat.games.length;
-        }
-      }
-
-      // The count should be less because shiritori is excluded
-      expect(wordGamesCount).toBe(totalWithoutExclusion - 1);
-    });
   });
 
   describe('getPackagePreviewGames', () => {
-    it('should return preview games for a pack', () => {
+    it('should return preview games for manifest pack', () => {
       const games = getPackagePreviewGames('word-games', categories, 4);
+      expect(games.length).toBeLessThanOrEqual(4);
+      expect(games.length).toBeGreaterThan(0);
+    });
+
+    it('should return preview games for legacy pack', () => {
+      const games = getPackagePreviewGames('sudoku-family', categories, 4);
       expect(games.length).toBeLessThanOrEqual(4);
       expect(games.length).toBeGreaterThan(0);
     });
@@ -188,7 +203,7 @@ describe('packageRegistry', () => {
       }
     });
 
-    it('should return included games for international-words', () => {
+    it('should return games for international-words manifest pack', () => {
       const games = getPackagePreviewGames('international-words', categories, 4);
       expect(games.some(g => g.slug === 'shiritori')).toBe(true);
     });
@@ -200,7 +215,15 @@ describe('packageRegistry', () => {
   });
 
   describe('getFilteredCategories', () => {
-    it('should filter categories based on installed packages', () => {
+    it('should filter categories based on manifest pack', () => {
+      const filtered = getFilteredCategories(['word-games'], categories);
+      expect(filtered.length).toBe(3);
+      expect(filtered.some(c => c.name === 'Word Formation')).toBe(true);
+      expect(filtered.some(c => c.name === 'Word Grids')).toBe(true);
+      expect(filtered.some(c => c.name === 'Cipher & Decode')).toBe(true);
+    });
+
+    it('should filter categories based on legacy pack', () => {
       const filtered = getFilteredCategories(['sudoku-family'], categories);
       expect(filtered.length).toBe(1);
       expect(filtered[0].name).toBe('Sudoku Family');
@@ -211,27 +234,23 @@ describe('packageRegistry', () => {
       expect(filtered.length).toBe(0);
     });
 
-    it('should include games from includeGames', () => {
+    it('should include games from international-words manifest pack', () => {
       const filtered = getFilteredCategories(['international-words'], categories);
-      // Should have one category (Word Formation) with just shiritori
+      // Should have one category (International Word Games) with shiritori
       expect(filtered.length).toBe(1);
+      expect(filtered[0].name).toBe('International Word Games');
       expect(filtered[0].games.some(g => g.slug === 'shiritori')).toBe(true);
     });
 
-    it('should exclude games from excludeGames', () => {
+    it('should NOT include shiritori in word-games (manifest pack)', () => {
       const filtered = getFilteredCategories(['word-games'], categories);
       const wordFormation = filtered.find(c => c.name === 'Word Formation');
-      // shiritori should NOT be in the filtered Word Formation
+      // shiritori should NOT be in the filtered Word Formation (not in manifest)
       expect(wordFormation.games.some(g => g.slug === 'shiritori')).toBe(false);
     });
 
-    it('should handle both include and exclude correctly', () => {
-      // If both word-games and international-words are installed,
-      // shiritori should appear (included by international-words)
+    it('should have shiritori when international-words manifest pack is installed', () => {
       const filtered = getFilteredCategories(['word-games', 'international-words'], categories);
-      const wordFormation = filtered.find(c => c.name === 'Word Formation');
-      // shiritori is excluded by word-games BUT included by international-words
-      // Since includeGames adds it explicitly, it should appear
       const allGameSlugs = filtered.flatMap(c => c.games.map(g => g.slug));
       expect(allGameSlugs.includes('shiritori')).toBe(true);
     });
@@ -247,7 +266,14 @@ describe('packageRegistry', () => {
       expect(games.length).toBe(totalGames);
     });
 
-    it('should return games with categoryName attached', () => {
+    it('should return games from manifest pack with categoryName', () => {
+      const games = getGamesForPackages(['word-games'], categories);
+      for (const game of games) {
+        expect(game.categoryName).toBeDefined();
+      }
+    });
+
+    it('should return games from legacy pack with categoryName', () => {
       const games = getGamesForPackages(['sudoku-family'], categories);
       for (const game of games) {
         expect(game.categoryName).toBe('Sudoku Family');
@@ -256,24 +282,26 @@ describe('packageRegistry', () => {
   });
 
   describe('category mapping', () => {
-    it('all categories referenced in packs should exist in gameRegistry', () => {
+    it('all categories referenced in legacy packs should exist in gameRegistry', () => {
       const registryCategoryNames = categories.map(c => c.name);
 
       for (const pack of officialPacks) {
-        for (const catName of pack.categories) {
+        // Skip manifest packs - they don't reference categories by name
+        if (isManifestPack(pack.id)) continue;
+
+        for (const catName of pack.categories || []) {
           expect(registryCategoryNames).toContain(catName);
         }
       }
     });
 
     it('all categories in gameRegistry should be covered by some pack', () => {
-      const allPackCategories = new Set();
-      for (const pack of officialPacks) {
-        pack.categories.forEach(c => allPackCategories.add(c));
-      }
+      // Get categories from all packs (both manifest and legacy)
+      const allPackIds = officialPacks.map(p => p.id);
+      const allCoveredCategories = new Set(getCategoriesFromPackages(allPackIds));
 
       for (const category of categories) {
-        expect(allPackCategories.has(category.name)).toBe(true);
+        expect(allCoveredCategories.has(category.name)).toBe(true);
       }
     });
 
@@ -281,6 +309,9 @@ describe('packageRegistry', () => {
       const allGameSlugs = categories.flatMap(c => c.games.map(g => g.slug));
 
       for (const pack of officialPacks) {
+        // Skip manifest packs
+        if (isManifestPack(pack.id)) continue;
+
         for (const slug of pack.includeGames || []) {
           expect(allGameSlugs).toContain(slug);
         }
@@ -291,10 +322,37 @@ describe('packageRegistry', () => {
       const allGameSlugs = categories.flatMap(c => c.games.map(g => g.slug));
 
       for (const pack of officialPacks) {
+        // Skip manifest packs
+        if (isManifestPack(pack.id)) continue;
+
         for (const slug of pack.excludeGames || []) {
           expect(allGameSlugs).toContain(slug);
         }
       }
+    });
+  });
+
+  describe('manifest pack integration', () => {
+    it('word-games manifest pack should have correct game count', () => {
+      const count = countGamesInPack('word-games', categories);
+      // Word Formation (11) + Word Grids (7) + Cipher & Decode (6) = 24
+      // But shiritori is not included, so it should be less than total in those categories
+      expect(count).toBe(24);
+    });
+
+    it('word-games should include expected games', () => {
+      const games = getGamesForPackages(['word-games'], categories);
+      const slugs = games.map(g => g.slug);
+
+      // Check some expected games are present
+      expect(slugs).toContain('wordguess');
+      expect(slugs).toContain('crossword');
+      expect(slugs).toContain('cryptogram');
+      expect(slugs).toContain('hangman');
+      expect(slugs).toContain('word-wheel');
+
+      // shiritori should NOT be present
+      expect(slugs).not.toContain('shiritori');
     });
   });
 });
