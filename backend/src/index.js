@@ -1,6 +1,9 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 import SqliteStore from 'better-sqlite3-session-store';
 import rateLimit from 'express-rate-limit';
 import db from './db.js';
@@ -9,6 +12,9 @@ import usersRoutes from './routes/users.js';
 import gamesRoutes from './routes/games.js';
 import adminRoutes from './routes/admin.js';
 import { initCsrf, getCsrfToken, verifyCsrfToken } from './middleware/csrf.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -102,6 +108,27 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Static file serving for production Docker image
+// When SERVE_STATIC is enabled, serve the built frontend from STATIC_PATH
+const SERVE_STATIC = process.env.SERVE_STATIC === 'true';
+const STATIC_PATH = process.env.STATIC_PATH || path.join(__dirname, '../../public');
+
+if (SERVE_STATIC && existsSync(STATIC_PATH)) {
+  console.log(`Serving static files from: ${STATIC_PATH}`);
+
+  // Serve static files
+  app.use(express.static(STATIC_PATH));
+
+  // SPA fallback: serve index.html for any non-API routes
+  app.get('*', (req, res, next) => {
+    // Don't intercept API routes
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(STATIC_PATH, 'index.html'));
+  });
+}
+
 // Error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err);
@@ -110,4 +137,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Enigma backend running on port ${PORT}`);
+  if (SERVE_STATIC) {
+    console.log(`Frontend available at http://localhost:${PORT}`);
+  }
 });

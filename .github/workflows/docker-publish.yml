@@ -1,0 +1,81 @@
+# ==============================================================================
+# Docker Hub Publish Workflow
+# ==============================================================================
+# Builds and publishes the Enigma Docker image to Docker Hub
+#
+# Triggers:
+#   - On push of version tags (v*)
+#   - Manual dispatch for testing
+#
+# Required Secrets:
+#   - DOCKER_USERNAME: Your Docker Hub username
+#   - DOCKER_PASSWORD: Your Docker Hub access token (recommended over password)
+# ==============================================================================
+
+name: Publish Docker Image
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker image tag (leave empty for "dev")'
+        required: false
+        default: 'dev'
+
+env:
+  # Change this to your Docker Hub repository
+  DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/enigma
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            # For version tags: v1.2.3 -> 1.2.3, latest
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            # For manual dispatch
+            type=raw,value=${{ github.event.inputs.tag || 'dev' }},enable=${{ github.event_name == 'workflow_dispatch' }}
+            # Always tag as latest for version tags
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+      - name: Image digest
+        run: echo "Image pushed with digest ${{ steps.docker_build.outputs.digest }}"
