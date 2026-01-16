@@ -25,7 +25,8 @@ export function verifyCsrfToken(req, res, next) {
     return next();
   }
 
-  // Skip CSRF for pack plugin reload endpoint (public utility, no sensitive data)
+  // CSRF disabled: endpoint is unauthenticated and only triggers
+// in-memory reload of already-installed packs; no user data or secrets affected.
   if (req.path === '/api/packs/_reload') {
     return next();
   }
