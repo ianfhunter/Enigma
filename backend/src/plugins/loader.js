@@ -16,7 +16,7 @@
  */
 
 import { readdirSync, existsSync, mkdirSync, statSync } from 'fs';
-import { join, dirname } from 'path';
+import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { pathToFileURL } from 'url';
 import { Router } from 'express';

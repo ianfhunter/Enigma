@@ -87,6 +87,11 @@ router.post('/uninstall', async (req, res) => {
     return res.status(400).json({ error: 'packId is required' });
   }
 
+  // Validate packId format to avoid unexpected filesystem names
+  if (!/^[a-zA-Z0-9_-]+$/.test(packId)) {
+    return res.status(400).json({ error: 'Invalid packId format' });
+  }
+
   // Check if pack exists and is removable
   const pack = db.prepare('SELECT pack_id, pack_type FROM installed_packs WHERE pack_id = ?').get(packId);
 
