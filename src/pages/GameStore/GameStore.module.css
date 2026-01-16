@@ -1536,3 +1536,495 @@ a.previewGame:hover {
     justify-content: flex-end;
   }
 }
+
+/* ===================== */
+/* Community Sources     */
+/* ===================== */
+
+.communitySourcesSection {
+  margin-bottom: 2rem;
+}
+
+.addSourceForm {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.addSourceInput {
+  flex: 1;
+  min-width: 280px;
+  padding: 0.875rem 1rem;
+  font-size: 0.95rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.addSourceInput::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  font-family: inherit;
+}
+
+.addSourceInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.addSourceButton {
+  padding: 0.875rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.addSourceButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.addSourceButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Source Card */
+.sourceCard {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sourceCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--source-color, #6366f1);
+  opacity: 0.8;
+}
+
+.sourceCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary-border);
+  box-shadow: var(--shadow-card-hover);
+}
+
+:global([data-theme="dark"]) .sourceCard {
+  background: rgba(20, 0, 40, 0.6);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(139, 92, 246, 0.1);
+}
+
+:global([data-theme="dark"]) .sourceCard:hover {
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(139, 92, 246, 0.15),
+    inset 0 1px 0 rgba(139, 92, 246, 0.2);
+}
+
+.sourceCard.sourceInstalled {
+  border-color: var(--source-color, #22c55e);
+}
+
+.sourceCard.sourceInstalled::before {
+  opacity: 1;
+  background: #22c55e;
+}
+
+.sourceHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.sourceIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+}
+
+:global([data-theme="dark"]) .sourceIcon {
+  background: rgba(30, 0, 60, 0.5);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sourceInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.sourceName {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 0.25rem 0;
+}
+
+.sourceMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.versionBadge {
+  padding: 0.2rem 0.5rem;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+  font-weight: 600;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.installedBadge {
+  padding: 0.2rem 0.5rem;
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.updateBadge {
+  padding: 0.2rem 0.5rem;
+  background: rgba(251, 191, 36, 0.15);
+  color: #f59e0b;
+  border-radius: 6px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.backendBadge {
+  padding: 0.2rem 0.5rem;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--color-primary);
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.sourceDescription {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.sourceUrl {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: var(--color-bg-secondary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  word-break: break-all;
+  opacity: 0.8;
+}
+
+.sourceError {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #ef4444;
+}
+
+/* Source Actions */
+.sourceActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sourceActionButton {
+  padding: 0.625rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sourceActionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.installButton {
+  color: white;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  flex: 1;
+}
+
+.installButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.uninstallButton {
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.uninstallButton:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.updateButton {
+  color: white;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  flex: 1;
+}
+
+.updateButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.checkUpdateButton {
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.checkUpdateButton:hover:not(:disabled) {
+  background: var(--color-bg);
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+}
+
+.removeSourceButton {
+  color: var(--color-text-secondary);
+  background: transparent;
+  padding: 0.625rem 0.75rem;
+}
+
+.removeSourceButton:hover:not(:disabled) {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Check All Updates */
+.checkAllUpdatesSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.checkAllUpdatesButton {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkAllUpdatesButton:hover:not(:disabled) {
+  background: var(--color-bg);
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+}
+
+.checkAllUpdatesButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.updatesInfo {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.updatesAvailable {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* Git Status Warning */
+.gitWarning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.gitWarning .warningIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.gitWarning p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Loading Spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sources Empty State */
+.sourcesEmptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--color-bg-card);
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+}
+
+.sourcesEmptyState .emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.sourcesEmptyState h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.sourcesEmptyState p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Source Grid */
+.sourceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .addSourceForm {
+    flex-direction: column;
+  }
+
+  .addSourceInput {
+    min-width: 100%;
+  }
+
+  .addSourceButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sourceGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .sourceCard {
+    padding: 1.25rem;
+  }
+
+  .sourceIcon {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+  }
+
+  .sourceName {
+    font-size: 1rem;
+  }
+
+  .sourceActions {
+    flex-direction: column;
+  }
+
+  .sourceActionButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .checkAllUpdatesSection {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .checkAllUpdatesButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

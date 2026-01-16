@@ -9,6 +9,7 @@ import {
 import { communityPacks } from '../../packs/registry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
+import { useCommunitySources } from '../../hooks/useCommunitySources';
 import styles from './GameStore.module.css';
 
 /**
@@ -513,6 +514,144 @@ function GameModal({ packId, game, onClose, onSave, onUpdate }) {
 }
 
 /**
+ * CommunitySourceCard - Displays a community source with install/update options
+ */
+function CommunitySourceCard({
+  source,
+  onInstall,
+  onUninstall,
+  onUpdate,
+  onCheckUpdate,
+  onRemove,
+  isLoading,
+}) {
+  const [actionLoading, setActionLoading] = useState(null);
+
+  const handleAction = async (action, handler) => {
+    setActionLoading(action);
+    try {
+      await handler();
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const hasUpdate = source.available_version && source.is_installed;
+
+  return (
+    <div
+      className={`${styles.sourceCard} ${source.is_installed ? styles.sourceInstalled : ''}`}
+      style={{ '--source-color': source.color || '#6366f1' }}
+    >
+      <div className={styles.sourceHeader}>
+        <div className={styles.sourceIcon}>{source.icon || '📦'}</div>
+        <div className={styles.sourceInfo}>
+          <h3 className={styles.sourceName}>{source.name}</h3>
+          <div className={styles.sourceMeta}>
+            {source.latest_version && (
+              <span className={styles.versionBadge}>{source.latest_version}</span>
+            )}
+            {source.is_installed && (
+              <span className={styles.installedBadge}>
+                ✓ v{source.installed_version}
+              </span>
+            )}
+            {hasUpdate && (
+              <span className={styles.updateBadge}>
+                ⬆️ {source.available_version}
+              </span>
+            )}
+            {source.has_backend === 1 && (
+              <span className={styles.backendBadge}>⚙️ Backend</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {source.description && (
+        <p className={styles.sourceDescription}>{source.description}</p>
+      )}
+
+      <code className={styles.sourceUrl}>{source.url}</code>
+
+      {source.error_message && (
+        <div className={styles.sourceError}>
+          <span>⚠️</span>
+          {source.error_message}
+        </div>
+      )}
+
+      <div className={styles.sourceActions}>
+        {!source.is_installed ? (
+          <button
+            className={`${styles.sourceActionButton} ${styles.installButton}`}
+            onClick={() => handleAction('install', () => onInstall(source.id))}
+            disabled={isLoading || actionLoading}
+          >
+            {actionLoading === 'install' ? (
+              <><span className={styles.spinner} /> Installing...</>
+            ) : (
+              <>📥 Install</>
+            )}
+          </button>
+        ) : hasUpdate ? (
+          <button
+            className={`${styles.sourceActionButton} ${styles.updateButton}`}
+            onClick={() => handleAction('update', () => onUpdate(source.id))}
+            disabled={isLoading || actionLoading}
+          >
+            {actionLoading === 'update' ? (
+              <><span className={styles.spinner} /> Updating...</>
+            ) : (
+              <>⬆️ Update to {source.available_version}</>
+            )}
+          </button>
+        ) : (
+          <button
+            className={`${styles.sourceActionButton} ${styles.checkUpdateButton}`}
+            onClick={() => handleAction('check', () => onCheckUpdate(source.id))}
+            disabled={isLoading || actionLoading}
+          >
+            {actionLoading === 'check' ? (
+              <><span className={styles.spinner} /> Checking...</>
+            ) : (
+              <>🔄 Check Update</>
+            )}
+          </button>
+        )}
+
+        {source.is_installed && (
+          <button
+            className={`${styles.sourceActionButton} ${styles.uninstallButton}`}
+            onClick={() => handleAction('uninstall', () => onUninstall(source.id))}
+            disabled={isLoading || actionLoading}
+          >
+            {actionLoading === 'uninstall' ? (
+              <span className={styles.spinner} />
+            ) : (
+              '🗑️'
+            )}
+          </button>
+        )}
+
+        <button
+          className={`${styles.sourceActionButton} ${styles.removeSourceButton}`}
+          onClick={() => handleAction('remove', () => onRemove(source.id))}
+          disabled={isLoading || actionLoading}
+          title="Remove source"
+        >
+          {actionLoading === 'remove' ? (
+            <span className={styles.spinner} />
+          ) : (
+            '✕'
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
  * Modal to manage all games in a pack
  */
 function ManageGamesModal({ pack, onClose, onEditGame, onDeleteGame, onAddGame }) {
@@ -645,12 +784,34 @@ export default function GameStore() {
     removeGameFromPack,
   } = useCustomPacks();
 
+  // Community sources management
+  const {
+    sources: communitySources2,
+    isLoading: sourcesLoading,
+    error: sourcesError,
+    gitAvailable,
+    hasUpdates,
+    addSource,
+    removeSource,
+    installPack: installSourcePack,
+    uninstallPack: uninstallSourcePack,
+    updatePack: updateSourcePack,
+    checkSourceUpdate,
+    checkAllUpdates,
+  } = useCommunitySources();
+
   const [activeTab, setActiveTab] = useState('official');
   const [showPackModal, setShowPackModal] = useState(false);
   const [editingPack, setEditingPack] = useState(null);
   const [addingGameToPackId, setAddingGameToPackId] = useState(null);
   const [managingPack, setManagingPack] = useState(null);
   const [editingGame, setEditingGame] = useState(null); // { packId, game }
+
+  // Community source form state
+  const [newSourceUrl, setNewSourceUrl] = useState('');
+  const [addingSource, setAddingSource] = useState(false);
+  const [sourceError, setSourceError] = useState(null);
+  const [checkingAllUpdates, setCheckingAllUpdates] = useState(false);
 
   // Calculate game counts for each official pack
   const packData = useMemo(() => {
@@ -699,6 +860,62 @@ export default function GameStore() {
   const handleAddGameFromManage = (packId) => {
     setAddingGameToPackId(packId);
     setManagingPack(null); // Close manage modal while adding
+  };
+
+  // Community source handlers
+  const handleAddSource = async () => {
+    if (!newSourceUrl.trim()) return;
+
+    setAddingSource(true);
+    setSourceError(null);
+
+    const result = await addSource(newSourceUrl.trim());
+
+    if (result.success) {
+      setNewSourceUrl('');
+    } else {
+      setSourceError(result.error || 'Failed to add source');
+    }
+
+    setAddingSource(false);
+  };
+
+  const handleRemoveSource = async (sourceId) => {
+    const result = await removeSource(sourceId);
+    if (!result.success) {
+      setSourceError(result.error || 'Failed to remove source');
+    }
+  };
+
+  const handleInstallSource = async (sourceId) => {
+    const result = await installSourcePack(sourceId);
+    if (!result.success) {
+      setSourceError(result.error || 'Failed to install pack');
+    }
+  };
+
+  const handleUninstallSource = async (sourceId) => {
+    const result = await uninstallSourcePack(sourceId);
+    if (!result.success) {
+      setSourceError(result.error || 'Failed to uninstall pack');
+    }
+  };
+
+  const handleUpdateSource = async (sourceId) => {
+    const result = await updateSourcePack(sourceId);
+    if (!result.success) {
+      setSourceError(result.error || 'Failed to update pack');
+    }
+  };
+
+  const handleCheckSourceUpdate = async (sourceId) => {
+    await checkSourceUpdate(sourceId);
+  };
+
+  const handleCheckAllUpdates = async () => {
+    setCheckingAllUpdates(true);
+    await checkAllUpdates();
+    setCheckingAllUpdates(false);
   };
 
   return (
@@ -789,34 +1006,147 @@ export default function GameStore() {
         {activeTab === 'community' && (
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                <span className={styles.sectionIcon}>🌍</span>
-                Community Packs
-              </h2>
-              <p className={styles.sectionDescription}>
-                Puzzle packs created by the community
+              <div>
+                <h2 className={styles.sectionTitle}>
+                  <span className={styles.sectionIcon}>🌍</span>
+                  Community Sources
+                </h2>
+                <p className={styles.sectionDescription}>
+                  Add GitHub repositories to discover and install community puzzle packs
+                </p>
+              </div>
+            </div>
+
+            {/* Git availability warning */}
+            {gitAvailable === false && (
+              <div className={styles.gitWarning}>
+                <span className={styles.warningIcon}>⚠️</span>
+                <p>
+                  Git is not available on the server. Pack installation requires git to be installed.
+                  Contact your server administrator.
+                </p>
+              </div>
+            )}
+
+            {/* Backend warning */}
+            <div className={styles.communityWarning}>
+              <span className={styles.warningIcon}>⚠️</span>
+              <p>
+                Community packs may contain backend code that runs on your server.
+                Only add sources from repositories you trust.
               </p>
             </div>
-            {communityPacks.length === 0 ? (
+
+            {/* Add source form */}
+            <div className={styles.addSourceForm}>
+              <input
+                type="text"
+                className={styles.addSourceInput}
+                placeholder="git@github.com:owner/repo.git or https://github.com/owner/repo"
+                value={newSourceUrl}
+                onChange={(e) => {
+                  setNewSourceUrl(e.target.value);
+                  setSourceError(null);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newSourceUrl.trim()) {
+                    handleAddSource();
+                  }
+                }}
+                disabled={addingSource}
+              />
+              <button
+                className={styles.addSourceButton}
+                onClick={handleAddSource}
+                disabled={addingSource || !newSourceUrl.trim()}
+              >
+                {addingSource ? (
+                  <><span className={styles.spinner} /> Adding...</>
+                ) : (
+                  <>➕ Add Source</>
+                )}
+              </button>
+            </div>
+
+            {sourceError && (
+              <div className={styles.sourceError} style={{ marginBottom: '1rem' }}>
+                <span>⚠️</span>
+                {sourceError}
+              </div>
+            )}
+
+            {sourcesLoading ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyIcon}>🚧</div>
-                <h3>Coming Soon</h3>
+                <div className={styles.emptyIcon}>
+                  <span className={styles.spinner} style={{ width: 40, height: 40 }} />
+                </div>
+                <p>Loading community sources...</p>
+              </div>
+            ) : communitySources2.length === 0 ? (
+              <div className={styles.sourcesEmptyState}>
+                <div className={styles.emptyIcon}>📭</div>
+                <h4>No community sources added yet</h4>
                 <p>
-                  Community packs will allow puzzle creators to share their games with everyone.
-                  Stay tuned for updates!
+                  Add a GitHub repository URL above to discover community packs.
+                  Try: <code>git@github.com:ianfhunter/EnigmaSampleCommunityPack.git</code>
                 </p>
               </div>
             ) : (
               <>
-                {communityPacks.some(p => p.hasBackend) && (
-                  <div className={styles.communityWarning}>
-                    <span className={styles.warningIcon}>⚠️</span>
-                    <p>
-                      Community packs with backends run server-side code.
-                      Only install packs from sources you trust.
+                <div className={styles.sourceGrid}>
+                  {communitySources2.map((source) => (
+                    <CommunitySourceCard
+                      key={source.id}
+                      source={source}
+                      onInstall={handleInstallSource}
+                      onUninstall={handleUninstallSource}
+                      onUpdate={handleUpdateSource}
+                      onCheckUpdate={handleCheckSourceUpdate}
+                      onRemove={handleRemoveSource}
+                      isLoading={sourcesLoading}
+                    />
+                  ))}
+                </div>
+
+                <div className={styles.checkAllUpdatesSection}>
+                  <button
+                    className={styles.checkAllUpdatesButton}
+                    onClick={handleCheckAllUpdates}
+                    disabled={checkingAllUpdates}
+                  >
+                    {checkingAllUpdates ? (
+                      <><span className={styles.spinner} /> Checking...</>
+                    ) : (
+                      <>🔄 Check All for Updates</>
+                    )}
+                  </button>
+                  <span className={styles.updatesInfo}>
+                    {hasUpdates ? (
+                      <span className={styles.updatesAvailable}>
+                        ⬆️ Updates available
+                      </span>
+                    ) : (
+                      <>All packs up to date</>
+                    )}
+                  </span>
+                </div>
+              </>
+            )}
+
+            {/* Built-in community packs (legacy) */}
+            {communityPacks.length > 0 && (
+              <>
+                <div className={styles.sectionHeader} style={{ marginTop: '2rem' }}>
+                  <div>
+                    <h2 className={styles.sectionTitle}>
+                      <span className={styles.sectionIcon}>📦</span>
+                      Built-in Community Packs
+                    </h2>
+                    <p className={styles.sectionDescription}>
+                      Pre-installed community packs bundled with Enigma
                     </p>
                   </div>
-                )}
+                </div>
                 <div className={styles.packGrid}>
                   {communityPacks.map((pack) => (
                     <PackCard

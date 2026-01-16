@@ -33,6 +33,14 @@ const DOCKER_PACKS_DIR = '/app/packs';
 const DEV_PACKS_DIR = join(__dirname, '../../../src/packs');
 const PACKS_DIR = existsSync(DOCKER_PACKS_DIR) ? DOCKER_PACKS_DIR : DEV_PACKS_DIR;
 
+// Path to the plugins directory (community sources cloned from GitHub)
+// In Docker, plugins are mounted at /app/.plugins via docker-compose
+// In development, they're at ../../../.plugins relative to this file
+const DOCKER_PLUGINS_DIR = '/app/.plugins';
+const DEV_PLUGINS_DIR = join(__dirname, '../../../.plugins');
+const EXTERNAL_PLUGINS_DIR = process.env.PLUGINS_DIR ||
+  (existsSync(DOCKER_PLUGINS_DIR) ? DOCKER_PLUGINS_DIR : DEV_PLUGINS_DIR);
+
 // Plugin data directory for isolated databases
 const PLUGIN_DATA_DIR = process.env.PLUGIN_DATA_DIR || './data/plugins';
 
@@ -470,25 +478,42 @@ class PluginManager {
       }
     }
 
-    if (!existsSync(PACKS_DIR)) {
-      console.log('No packs directory found, skipping plugin loading');
+    // Collect pack directories from both built-in packs and external plugins
+    let packDirs = [];
+    const packSources = [];
+
+    if (existsSync(PACKS_DIR)) {
+      const builtInDirs = readdirSync(PACKS_DIR, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => ({ name: dirent.name, path: join(PACKS_DIR, dirent.name) }));
+      packDirs.push(...builtInDirs);
+      packSources.push(`built-in: ${PACKS_DIR}`);
+    }
+
+    if (existsSync(EXTERNAL_PLUGINS_DIR)) {
+      const externalDirs = readdirSync(EXTERNAL_PLUGINS_DIR, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => ({ name: dirent.name, path: join(EXTERNAL_PLUGINS_DIR, dirent.name) }));
+      packDirs.push(...externalDirs);
+      packSources.push(`external: ${EXTERNAL_PLUGINS_DIR}`);
+    }
+
+    if (packDirs.length === 0) {
+      console.log('No pack directories found, skipping plugin loading');
       this.pluginRouter = newRouter;
       this.loadedPlugins = newPlugins;
       return [];
     }
 
-    const packDirs = readdirSync(PACKS_DIR, { withFileTypes: true })
-      .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
-
     console.log(`\n🔌 Loading pack plugins...`);
+    console.log(`   Sources: ${packSources.join(', ')}`);
     console.log(`   Installed packs: ${installedPacks.size > 0 ? [...installedPacks].join(', ') : '(none)'}`);
     console.log(`   🔒 Database isolation: ENABLED`);
     console.log(`   🛡️  Rate limiting: ${PLUGIN_RATE_LIMIT_MAX} req/${PLUGIN_RATE_LIMIT_WINDOW / 1000}s per plugin`);
     console.log(`   📦 Max DB size: ${Math.round(MAX_PLUGIN_DB_SIZE / 1024 / 1024)}MB per plugin`);
 
-    for (const packName of packDirs) {
-      const pluginPath = join(PACKS_DIR, packName, 'backend', 'plugin.js');
+    for (const { name: packName, path: packPath } of packDirs) {
+      const pluginPath = join(packPath, 'backend', 'plugin.js');
 
       if (!existsSync(pluginPath)) {
         continue; // No backend for this pack

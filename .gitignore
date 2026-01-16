@@ -45,3 +45,6 @@ backend/data/
 
 # Docker
 docker-compose.yml
+
+# Plugin data
+.plugins/
