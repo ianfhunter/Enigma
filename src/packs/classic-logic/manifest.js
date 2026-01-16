@@ -13,6 +13,7 @@ import blackboxIcon from '../../assets/icons/blackbox.svg';
 import shinroIcon from '../../assets/icons/shinro.svg';
 import rangeIcon from '../../assets/icons/range.svg';
 import sequenceIcon from '../../assets/icons/sequence.svg';
+import magnetsIcon from '../../assets/icons/magnets.svg';
 
 /**
  * Pack metadata
@@ -99,6 +100,7 @@ export const categories = [
         slug: 'guess',
         description: 'Make guesses and use the clues to deduce the hidden answer.',
         icon: '❓',
+        emojiIcon: '❓',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         version: 'v1.0',
@@ -121,7 +123,8 @@ export const categories = [
         slug: 'magnets',
         aliases: ['Plus and Minus', 'Magnetic Puzzle'],
         description: 'Place magnets with + and − poles so rows and columns match the counts.',
-        icon: '🧲',
+        icon: magnetsIcon,
+        emojiIcon: '🧲',
         colors: { primary: '#ef4444', secondary: '#b91c1c' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
         version: 'v1.0',

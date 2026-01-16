@@ -1,7 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './WordSearch.module.css';
+
+// Parse seed from URL if present
+function getSeedFromUrl() {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedStr = params.get('seed');
+  if (seedStr) {
+    const parsed = parseInt(seedStr, 10);
+    return isNaN(parsed) ? stringToSeed(seedStr) : parsed;
+  }
+  return null;
+}
 
 const GRID_SIZE = 12;
 const WORD_COUNT = 8;
@@ -112,6 +125,7 @@ export { generatePuzzle };
 
 export default function WordSearch() {
   const [puzzle, setPuzzle] = useState(null);
+  const [seed, setSeed] = useState(null);
   const [foundWords, setFoundWords] = useState(new Set());
   const [selectedCells, setSelectedCells] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -119,13 +133,26 @@ export default function WordSearch() {
   const [gameState, setGameState] = useState('playing');
   const [puzzleIndex, setPuzzleIndex] = useState(0);
 
-  const initGame = useCallback((newPuzzle = false) => {
+  const initGame = useCallback((customSeed = null) => {
     const today = getTodayDateString();
-    const index = newPuzzle ? puzzleIndex + 1 : puzzleIndex;
-    if (newPuzzle) setPuzzleIndex(index);
-    const seed = stringToSeed(`wordsearch-${today}-${index}`);
-    const newPuzzleData = generatePuzzle(seed);
+    const urlSeed = getSeedFromUrl();
+    let gameSeed;
 
+    if (customSeed !== null) {
+      // Explicit seed provided (new game button)
+      gameSeed = customSeed;
+      setPuzzleIndex(prev => prev + 1);
+    } else if (urlSeed !== null) {
+      // Seed from URL
+      gameSeed = urlSeed;
+    } else {
+      // Default daily seed
+      gameSeed = stringToSeed(`wordsearch-${today}-${puzzleIndex}`);
+    }
+
+    const newPuzzleData = generatePuzzle(gameSeed);
+
+    setSeed(gameSeed);
     setPuzzle(newPuzzleData);
     setFoundWords(new Set());
     setSelectedCells([]);
@@ -252,6 +279,14 @@ export default function WordSearch() {
         <p className={styles.instructions}>
           Find all {puzzle.words.length} hidden words! Drag to select.
         </p>
+        {seed && (
+          <SeedDisplay
+            seed={seed}
+            variant="compact"
+            showNewButton
+            onNewSeed={() => initGame(Math.floor(Math.random() * 2147483647))}
+          />
+        )}
       </div>
 
       <div className={styles.gameArea}>

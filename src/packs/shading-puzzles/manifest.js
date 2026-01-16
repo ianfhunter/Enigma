@@ -14,6 +14,8 @@ import kurottoIcon from '../../assets/icons/kurotto.svg';
 import takuzuIcon from '../../assets/icons/takuzu.svg';
 import yinyangIcon from '../../assets/icons/yinyang.svg';
 import creekIcon from '../../assets/icons/creek.svg';
+import minesweeperIcon from '../../assets/icons/minesweeper.svg';
+import starbattleIcon from '../../assets/icons/starbattle.svg';
 
 /**
  * Pack metadata
@@ -56,7 +58,8 @@ export const categories = [
         slug: 'minesweeper',
         aliases: ['Mines', 'Mine Sweeper'],
         description: "Clear the minefield using number clues. Don't click a mine!",
-        icon: '💣',
+        icon: minesweeperIcon,
+        emojiIcon: '💣',
         colors: { primary: '#ef4444', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
         version: 'v1.0',
@@ -101,7 +104,8 @@ export const categories = [
         slug: 'star-battle',
         aliases: ['Two Not Touch', 'Sternenschlacht'],
         description: 'Place stars so each row, column, and region has exactly the right count. No touching!',
-        icon: '⭐',
+        icon: starbattleIcon,
+        emojiIcon: '⭐',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         version: 'v1.0',
@@ -122,7 +126,8 @@ export const categories = [
         slug: 'takuzu',
         aliases: ['Binary Puzzle', 'Binero'],
         description: 'Fill the grid with 0s and 1s. No more than two in a row, equal count per line!',
-        icon: '🔘',
+        icon: takuzuIcon,
+        emojiIcon: '🔘',
         colors: { primary: '#0ea5e9', secondary: '#0284c7' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
         version: 'v1.0',
@@ -133,7 +138,8 @@ export const categories = [
         slug: 'yin-yang',
         aliases: ['Shiromaru-Kuromaru'],
         description: 'Fill cells black or white. Each color must connect. No 2×2 same color.',
-        icon: '☯️',
+        icon: yinyangIcon,
+        emojiIcon: '☯️',
         colors: { primary: '#1a1a1a', secondary: '#666666' },
         gradient: 'linear-gradient(135deg, #1a1a1a 0%, #666666 100%)',
         version: 'v1.0',
@@ -143,7 +149,8 @@ export const categories = [
         title: 'Creek',
         slug: 'creek',
         description: 'Shade cells based on corner clues. Each number shows adjacent shaded cells.',
-        icon: '🏞️',
+        icon: creekIcon,
+        emojiIcon: '🏞️',
         colors: { primary: '#06b6d4', secondary: '#22d3ee' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)',
         version: 'v1.0',

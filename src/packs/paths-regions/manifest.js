@@ -17,6 +17,7 @@ import fillominoIcon from '../../assets/icons/fillomino.svg';
 import suguruIcon from '../../assets/icons/suguru.svg';
 import norinoriIcon from '../../assets/icons/norinori.svg';
 import inshinoheyaIcon from '../../assets/icons/inshinoheya.svg';
+import hotarubeamIcon from '../../assets/icons/hotarubeam.svg';
 
 /**
  * Pack metadata
@@ -124,7 +125,8 @@ export const categories = [
         title: 'Hotaru Beam',
         slug: 'hotaru-beam',
         description: 'Draw lines forming closed loops. Each numbered circle shows how many line segments touch it.',
-        icon: '✨',
+        icon: hotarubeamIcon,
+        emojiIcon: '✨',
         colors: { primary: '#22d3ee', secondary: '#06b6d4' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)',
         version: 'v1.0',

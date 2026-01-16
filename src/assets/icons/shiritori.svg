@@ -1,45 +1,20 @@
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Shiritori: Circular word chain -->
-  
+  <!-- Shiritori: Abstract - connected chain links -->
+
   <!-- Background -->
-  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef2f2"/>
-  
-  <!-- Circular chain path -->
-  <circle cx="12" cy="12" r="8" fill="none" stroke="#fecaca" stroke-width="3"/>
-  
-  <!-- Word bubbles on the circle -->
-  <!-- Top -->
-  <ellipse cx="12" cy="4" rx="4" ry="2.5" fill="#dc2626"/>
-  <text x="12" y="5" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">CAT</text>
-  
-  <!-- Right -->
-  <ellipse cx="19" cy="12" rx="3.5" ry="2.5" fill="#b91c1c"/>
-  <text x="19" y="13" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">TEA</text>
-  
-  <!-- Bottom -->
-  <ellipse cx="12" cy="20" rx="4" ry="2.5" fill="#dc2626"/>
-  <text x="12" y="21" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">ANT</text>
-  
-  <!-- Left -->
-  <ellipse cx="5" cy="12" rx="3.5" ry="2.5" fill="#b91c1c"/>
-  <text x="5" y="13" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">TOP</text>
-  
-  <!-- Connecting letter highlights -->
-  <circle cx="14.5" cy="6" r="1.5" fill="#fbbf24"/>
-  <text x="14.5" y="6.8" font-family="Arial" font-size="2" font-weight="bold" fill="#78350f" text-anchor="middle">T</text>
-  
-  <circle cx="17.5" cy="14.5" r="1.5" fill="#fbbf24"/>
-  <text x="17.5" y="15.3" font-family="Arial" font-size="2" font-weight="bold" fill="#78350f" text-anchor="middle">A</text>
-  
-  <circle cx="9.5" cy="18" r="1.5" fill="#fbbf24"/>
-  <text x="9.5" y="18.8" font-family="Arial" font-size="2" font-weight="bold" fill="#78350f" text-anchor="middle">T</text>
-  
-  <circle cx="6.5" cy="9.5" r="1.5" fill="#fbbf24"/>
-  <text x="6.5" y="10.3" font-family="Arial" font-size="2" font-weight="bold" fill="#78350f" text-anchor="middle">P</text>
-  
-  <!-- Arrows showing direction -->
-  <path d="M15 5 Q17 7, 18 9" stroke="#991b1b" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
-  <path d="M18 15 Q17 17, 15 19" stroke="#991b1b" stroke-width="1" fill="none"/>
-  <path d="M9 19 Q7 17, 6 15" stroke="#991b1b" stroke-width="1" fill="none"/>
-  <path d="M6 9 Q7 7, 9 5" stroke="#991b1b" stroke-width="1" fill="none"/>
+  <rect x="1" y="1" width="22" height="22" rx="3" fill="#fef2f2"/>
+
+  <!-- Chain links (abstract representation of word chain) -->
+  <ellipse cx="7" cy="8" rx="4" ry="3" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+  <ellipse cx="12" cy="12" rx="4" ry="3" fill="none" stroke="#b91c1c" stroke-width="2.5"/>
+  <ellipse cx="17" cy="16" rx="4" ry="3" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+
+  <!-- Connection points (representing last/first letters) -->
+  <circle cx="10" cy="9" r="1.5" fill="#fbbf24"/>
+  <circle cx="14" cy="11" r="1.5" fill="#fbbf24"/>
+  <circle cx="14" cy="14" r="1.5" fill="#fbbf24"/>
+  <circle cx="18" cy="14" r="1.5" fill="#fbbf24"/>
+
+  <!-- Flow arrow -->
+  <path d="M4 5 Q12 3, 20 7 Q22 12, 20 19" stroke="#fca5a5" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
 </svg>

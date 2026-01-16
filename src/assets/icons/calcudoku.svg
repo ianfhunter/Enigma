@@ -1,40 +1,18 @@
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Calcudoku: Math cages - cleaner approach -->
-  
+  <!-- Calcudoku: Abstract - math operation symbols in cage-like arrangement -->
+
   <!-- Background -->
-  <rect x="1" y="1" width="22" height="22" rx="2" fill="#ede9fe"/>
-  
-  <!-- Grid -->
-  <rect x="2" y="2" width="20" height="20" rx="1" fill="#faf5ff" stroke="#8b5cf6" stroke-width="1.5"/>
-  <line x1="9" y1="2" x2="9" y2="22" stroke="#c4b5fd" stroke-width="1"/>
-  <line x1="16" y1="2" x2="16" y2="22" stroke="#c4b5fd" stroke-width="1"/>
-  <line x1="2" y1="9" x2="22" y2="9" stroke="#c4b5fd" stroke-width="1"/>
-  <line x1="2" y1="16" x2="22" y2="16" stroke="#c4b5fd" stroke-width="1"/>
-  
-  <!-- Cage outlines (bold) -->
-  <!-- Top-left L-cage -->
-  <path d="M2 2 L9 2 L9 9 L2 9 Z" fill="none" stroke="#7c3aed" stroke-width="2"/>
-  <!-- Top-right cage -->
-  <path d="M9 2 L22 2 L22 9 L16 9 L16 9 L9 9 Z" fill="none" stroke="#7c3aed" stroke-width="2"/>
-  <!-- Bottom-left -->
-  <path d="M2 9 L9 9 L9 22 L2 22 Z" fill="none" stroke="#7c3aed" stroke-width="2"/>
-  <!-- Bottom-right -->
-  <path d="M9 9 L22 9 L22 22 L9 22 Z" fill="none" stroke="#7c3aed" stroke-width="2"/>
-  
-  <!-- Operation clues (small, top-left of cages) -->
-  <text x="3.5" y="5" font-family="Arial" font-size="3" font-weight="bold" fill="#7c3aed">6×</text>
-  <text x="10.5" y="5" font-family="Arial" font-size="3" font-weight="bold" fill="#7c3aed">11+</text>
-  <text x="3.5" y="12" font-family="Arial" font-size="3" font-weight="bold" fill="#7c3aed">2−</text>
-  <text x="10.5" y="12" font-family="Arial" font-size="3" font-weight="bold" fill="#7c3aed">12×</text>
-  
-  <!-- Numbers -->
-  <text x="5.5" y="7.5" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">2</text>
-  <text x="12.5" y="7.5" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">3</text>
-  <text x="19" y="7.5" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">1</text>
-  <text x="5.5" y="14.5" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">3</text>
-  <text x="12.5" y="14.5" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">1</text>
-  <text x="19" y="14.5" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">2</text>
-  <text x="5.5" y="20" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">1</text>
-  <text x="12.5" y="20" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">2</text>
-  <text x="19" y="20" font-family="Arial" font-size="4" font-weight="bold" fill="#5b21b6" text-anchor="middle">3</text>
+  <rect x="1" y="1" width="22" height="22" rx="3" fill="#ede9fe"/>
+
+  <!-- Abstract cage shapes -->
+  <path d="M4 4 L12 4 L12 12 L4 12 Z" fill="#c4b5fd" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M12 4 L20 4 L20 8 L16 8 L16 12 L12 12 Z" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M16 8 L20 8 L20 20 L12 20 L12 12 L16 12 Z" fill="#c4b5fd" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M4 12 L12 12 L12 20 L4 20 Z" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="2"/>
+
+  <!-- Operation symbols (large, abstract) -->
+  <text x="8" y="10" font-family="Arial" font-size="8" font-weight="bold" fill="#7c3aed" text-anchor="middle">×</text>
+  <text x="16" y="7" font-family="Arial" font-size="5" font-weight="bold" fill="#7c3aed" text-anchor="middle">+</text>
+  <text x="16" y="17" font-family="Arial" font-size="7" font-weight="bold" fill="#7c3aed" text-anchor="middle">−</text>
+  <text x="8" y="18" font-family="Arial" font-size="6" font-weight="bold" fill="#7c3aed" text-anchor="middle">÷</text>
 </svg>

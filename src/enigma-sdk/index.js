@@ -67,6 +67,26 @@ export { default as SizeSelector } from '../components/SizeSelector';
  */
 export { default as ModeSelector } from '../components/ModeSelector';
 
+/**
+ * SeedDisplay - Shows current puzzle seed with copy/share functionality
+ * @see src/components/SeedDisplay/SeedDisplay.jsx
+ *
+ * @example
+ * <SeedDisplay
+ *   seed={12345}
+ *   label="Puzzle #"
+ *   showNewButton
+ *   onNewSeed={() => generateNewPuzzle()}
+ * />
+ *
+ * // Compact variant for tight spaces
+ * <SeedDisplay seed={seed} variant="compact" />
+ *
+ * // Inline variant for text flow
+ * <SeedDisplay seed={seed} variant="inline" showShare={false} />
+ */
+export { default as SeedDisplay, useSeed } from '../components/SeedDisplay';
+
 // ============================================================================
 // HOOKS
 // ============================================================================
@@ -143,10 +163,15 @@ export {
   createSeededRNG,
   seededShuffle,
   seededChoice,
+  seededSample,
   seededInt,
   seededFloat,
+  seededBool,
+  seededGrid,
   getTodaysSeed,
+  getSeedForDate,
   parseSeedFromUrl,
+  setSeedInUrl,
   hashString,
   generateRandomSeed,
 } from './seeding';

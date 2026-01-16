@@ -5,6 +5,8 @@
  */
 
 import constellationsIcon from '../../assets/icons/constellations.svg';
+import pokemongenblitzIcon from '../../assets/icons/pokemongenblitz.svg';
+import currencyquizIcon from '../../assets/icons/currencyquiz.svg';
 
 const triviaKnowledgePack = {
   id: 'trivia-knowledge',
@@ -126,7 +128,7 @@ const triviaKnowledgePack = {
           slug: 'pokemon-gen-blitz',
           title: 'Pokémon Gen Blitz',
           description: 'Name as many Pokémon as you can from a chosen generation before time runs out.',
-          icon: '⌛',
+          icon: pokemongenblitzIcon,
           emojiIcon: '⌛',
           colors: { primary: '#3b82f6', secondary: '#2563eb' },
           gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
@@ -159,7 +161,7 @@ const triviaKnowledgePack = {
           slug: 'currency-quiz',
           title: 'Currency Quiz',
           description: 'Match countries to their official currencies. From Dollars to Dinars!',
-          icon: '💰',
+          icon: currencyquizIcon,
           emojiIcon: '💰',
           colors: { primary: '#22c55e', secondary: '#16a34a' },
           gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',

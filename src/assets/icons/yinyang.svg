@@ -1,9 +1,9 @@
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Yin-Yang: Black and white cells connected -->
-  
+
   <!-- Background -->
   <rect x="1" y="1" width="22" height="22" rx="2" fill="#e5e5e5"/>
-  
+
   <!-- Grid -->
   <rect x="2" y="2" width="20" height="20" rx="1" fill="#ffffff" stroke="#404040" stroke-width="1.5"/>
   <line x1="7" y1="2" x2="7" y2="22" stroke="#a3a3a3" stroke-width="0.5"/>
@@ -12,7 +12,7 @@
   <line x1="2" y1="7" x2="22" y2="7" stroke="#a3a3a3" stroke-width="0.5"/>
   <line x1="2" y1="12" x2="22" y2="12" stroke="#a3a3a3" stroke-width="0.5"/>
   <line x1="2" y1="17" x2="22" y2="17" stroke="#a3a3a3" stroke-width="0.5"/>
-  
+
   <!-- Black cells (forming connected region) -->
   <rect x="2" y="2" width="5" height="5" fill="#1a1a1a"/>
   <rect x="7" y="2" width="5" height="5" fill="#1a1a1a"/>
@@ -22,17 +22,16 @@
   <rect x="17" y="12" width="5" height="5" fill="#1a1a1a"/>
   <rect x="17" y="17" width="5" height="5" fill="#1a1a1a"/>
   <rect x="12" y="17" width="5" height="5" fill="#1a1a1a"/>
-  
+
   <!-- White cells with circles (given clues) -->
   <circle cx="14.5" cy="4.5" r="1.5" fill="none" stroke="#666666" stroke-width="1.5"/>
   <circle cx="4.5" cy="9.5" r="1.5" fill="none" stroke="#666666" stroke-width="1.5"/>
   <circle cx="19.5" cy="9.5" r="1.5" fill="none" stroke="#666666" stroke-width="1.5"/>
   <circle cx="4.5" cy="19.5" r="1.5" fill="none" stroke="#666666" stroke-width="1.5"/>
-  
+
   <!-- Black cells with filled circles (given clues) -->
   <circle cx="4.5" cy="4.5" r="1.5" fill="#666666"/>
   <circle cx="9.5" cy="9.5" r="1.5" fill="#666666"/>
   <circle cx="14.5" cy="14.5" r="1.5" fill="#666666"/>
   <circle cx="19.5" cy="19.5" r="1.5" fill="#666666"/>
 </svg>
-

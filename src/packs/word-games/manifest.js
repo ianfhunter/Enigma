@@ -28,6 +28,8 @@ import codebreakerIcon from '../../assets/icons/codebreaker.svg';
 import wordarithmeticIcon from '../../assets/icons/wordarithmetic.svg';
 import dropquotesIcon from '../../assets/icons/dropquotes.svg';
 import wordsnakeIcon from '../../assets/icons/wordsnake.svg';
+import wordsearchIcon from '../../assets/icons/wordsearch.svg';
+import threadsIcon from '../../assets/icons/threads.svg';
 
 /**
  * Pack metadata
@@ -221,7 +223,8 @@ export const categories = [
         title: 'Word Search',
         slug: 'word-search',
         description: 'Find hidden words in a grid of letters. Words can go any direction!',
-        icon: '🔍',
+        icon: wordsearchIcon,
+        emojiIcon: '🔍',
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         version: 'v1.0',
@@ -231,7 +234,8 @@ export const categories = [
         title: 'Threads',
         slug: 'threads',
         description: 'Find themed words by connecting adjacent letters. Discover the MegaThread that ties them all together!',
-        icon: '🧵',
+        icon: threadsIcon,
+        emojiIcon: '🧵',
         colors: { primary: '#a78bfa', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #6366f1 100%)',
         version: 'v1.0',

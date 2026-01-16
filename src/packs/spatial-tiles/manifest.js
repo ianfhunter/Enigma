@@ -18,6 +18,7 @@ import entanglementIcon from '../../assets/icons/entanglement.svg';
 import twiddleIcon from '../../assets/icons/twiddle.svg';
 import netgameIcon from '../../assets/icons/netgame.svg';
 import samegameIcon from '../../assets/icons/samegame.svg';
+import cubeIcon from '../../assets/icons/cube.svg';
 
 /**
  * Pack metadata
@@ -220,7 +221,8 @@ export const categories = [
         title: 'Cube',
         slug: 'cube',
         description: 'Solve a cube puzzle by rotating faces to restore order.',
-        icon: '🧊',
+        icon: cubeIcon,
+        emojiIcon: '🧊',
         colors: { primary: '#38bdf8', secondary: '#0ea5e9' },
         gradient: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
         version: 'v1.0',

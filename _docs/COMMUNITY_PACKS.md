@@ -126,6 +126,7 @@ import {
   GiveUpButton,     // Give up button with optional confirmation
   StatsPanel,       // Statistics display panel
   GameResult,       // Win/lose/gave-up result display
+  SeedDisplay,      // Shows puzzle seed with copy/share buttons
   DifficultySelector,
   SizeSelector,
   ModeSelector,
@@ -135,6 +136,7 @@ import {
   useGameStats,     // Game stats with localStorage persistence
   usePersistedState,// useState with localStorage
   useKeyboardInput, // Keyboard event handling
+  useSeed,          // Seed management with URL sync
 
   // Utilities
   renderIcon,       // Render emoji or SVG icon
@@ -145,10 +147,15 @@ import {
   createSeededRNG,  // Seeded random number generator
   seededShuffle,    // Shuffle array with seed
   seededChoice,     // Pick random element with seed
+  seededSample,     // Pick multiple random elements
   seededInt,        // Random integer with seed
+  seededFloat,      // Random float with seed
+  seededBool,       // Random boolean with seed
+  seededGrid,       // Generate 2D grid with seed
   getTodaysSeed,    // Get seed for today's date
   getSeedForDate,   // Get seed for any date
   parseSeedFromUrl, // Parse seed from URL params
+  setSeedInUrl,     // Set seed in URL params
   hashString,       // Hash string to seed value
   generateRandomSeed,
 } from '@enigma';
@@ -174,6 +181,48 @@ await api.put('/update', { ... });
 await api.delete('/item/123');
 ```
 
+### SeedDisplay Component
+
+Display the current puzzle seed with copy and share functionality:
+
+```jsx
+import { SeedDisplay, useSeed, generateRandomSeed } from '@enigma';
+
+function MyGame() {
+  const [seed, setSeed] = useState(() => getTodaysSeed('my-game'));
+
+  const handleNewPuzzle = () => {
+    setSeed(generateRandomSeed());
+  };
+
+  return (
+    <div>
+      {/* Default variant */}
+      <SeedDisplay
+        seed={seed}
+        showNewButton
+        onNewSeed={handleNewPuzzle}
+      />
+
+      {/* Compact variant for tight spaces */}
+      <SeedDisplay seed={seed} variant="compact" />
+
+      {/* Inline variant for text flow */}
+      <SeedDisplay seed={seed} variant="inline" showShare={false} />
+    </div>
+  );
+}
+```
+
+Props:
+- `seed`: The seed value (number or string)
+- `label`: Label text (default: "Seed")
+- `variant`: `"default"` | `"compact"` | `"inline"`
+- `showCopy`: Show copy button (default: true)
+- `showShare`: Show share button (default: true)
+- `showNewButton`: Show new puzzle button (default: false)
+- `onNewSeed`: Callback for new puzzle button
+
 ### Seeding for Reproducible Puzzles
 
 Games should be reproducible given a seed number:
@@ -191,6 +240,181 @@ const randomNum = Math.floor(rng() * 100);
 
 // Display seed so users can share specific puzzles
 console.log(`Puzzle #${seed}`);
+```
+
+---
+
+## CSS Theme Variables
+
+Enigma provides CSS custom properties that automatically adapt to light/dark themes. Use these variables in your game styles to ensure consistent theming.
+
+### Core Colors
+
+```css
+/* Background colors */
+--color-bg                  /* Main background (#050510 dark, #f8f7ff light) */
+--color-bg-secondary        /* Secondary panels */
+--color-bg-tertiary         /* Tertiary/subtle areas */
+--color-bg-card             /* Card backgrounds */
+--color-bg-input            /* Form inputs */
+--color-bg-hover            /* Hover states */
+
+/* Text colors */
+--color-text                /* Primary text */
+--color-text-secondary      /* Secondary/muted text */
+--color-text-tertiary       /* Tertiary/subtle text */
+--color-text-muted          /* Very muted text */
+
+/* Primary (accent) colors */
+--color-primary             /* Main brand color (purple) */
+--color-primary-light       /* Lighter variant */
+--color-primary-dark        /* Darker variant */
+--color-primary-bg          /* Subtle background tint */
+--color-primary-bg-hover    /* Hover state for primary bg */
+--color-primary-border      /* Primary border color */
+--color-primary-border-hover/* Hover state for primary border */
+
+/* Semantic colors */
+--color-success             /* Success states (green) */
+--color-success-bg          /* Success background */
+--color-success-border      /* Success border */
+--color-danger              /* Error/danger states (red) */
+--color-danger-bg           /* Danger background */
+--color-danger-border       /* Danger border */
+--color-warning             /* Warning states (yellow) */
+--color-warning-bg          /* Warning background */
+
+/* Borders */
+--color-border              /* Standard border */
+--color-border-light        /* Subtle border */
+```
+
+### Game-Specific Variables
+
+```css
+/* Panels and containers */
+--game-panel-bg             /* Game panel backgrounds */
+--game-panel-border         /* Game panel borders */
+
+/* Keyboard/input keys */
+--game-key-bg               /* Key background */
+--game-key-border           /* Key border */
+--game-key-text             /* Key text color */
+--game-key-hover-bg         /* Key hover state */
+
+/* Grid cells */
+--game-cell-bg              /* Cell background */
+--game-cell-border          /* Cell border */
+--game-cell-text            /* Cell text color */
+--game-cell-hover           /* Cell hover state */
+
+/* Accent colors for game states */
+--game-accent-red           /* Error/wrong states */
+--game-accent-red-dark
+--game-accent-red-bg
+--game-accent-red-border
+
+--game-accent-green         /* Correct/success states */
+--game-accent-green-dark
+--game-accent-green-bg
+--game-accent-green-border
+
+--game-accent-blue          /* Selected/highlighted states */
+--game-accent-blue-dark
+--game-accent-blue-bg
+--game-accent-blue-border
+
+--game-accent-yellow        /* Hint/warning states */
+--game-accent-yellow-dark
+--game-accent-yellow-bg
+--game-accent-yellow-border
+
+--game-accent-purple        /* Special states */
+--game-accent-purple-light
+--game-accent-purple-bg
+--game-accent-purple-border
+
+/* Misc game elements */
+--game-gallows              /* Hangman gallows color */
+--game-slot-blank           /* Blank slot color */
+```
+
+### Button Variables
+
+```css
+--btn-secondary-bg          /* Secondary button background */
+--btn-secondary-border      /* Secondary button border */
+--btn-secondary-text        /* Secondary button text */
+--btn-secondary-hover-bg    /* Secondary button hover */
+
+--panel-bg                  /* Generic panel background */
+--panel-border              /* Generic panel border */
+```
+
+### Effects
+
+```css
+--shadow-glow               /* Glowing shadow effect */
+--shadow-card               /* Card drop shadow */
+
+--gradient-bg-1             /* Background gradient color 1 */
+--gradient-bg-2             /* Background gradient color 2 */
+--gradient-bg-3             /* Background gradient color 3 */
+```
+
+### Example Usage
+
+```css
+/* MyGame.module.css */
+.container {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.cell {
+  background: var(--game-cell-bg);
+  border: 1px solid var(--game-cell-border);
+  color: var(--game-cell-text);
+  transition: all 0.2s ease;
+}
+
+.cell:hover {
+  background: var(--game-cell-hover);
+}
+
+.cell.correct {
+  background: var(--game-accent-green-bg);
+  border-color: var(--game-accent-green-border);
+  color: var(--game-accent-green);
+}
+
+.cell.wrong {
+  background: var(--game-accent-red-bg);
+  border-color: var(--game-accent-red-border);
+}
+
+.button {
+  background: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-border);
+  color: var(--color-primary);
+}
+
+.button:hover {
+  background: var(--color-primary-bg-hover);
+  border-color: var(--color-primary-border-hover);
+}
+```
+
+### Theme Detection
+
+The current theme is set via `data-theme` attribute on the root element:
+- Dark theme: `[data-theme="dark"]` or no attribute (default)
+- Light theme: `[data-theme="light"]`
+
+```javascript
+// Check current theme in JavaScript
+const isDark = document.documentElement.dataset.theme !== 'light';
 ```
 
 ---

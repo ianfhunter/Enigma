@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Categories.module.css';
 
 const GRID_SIZE = 4;
@@ -70,8 +71,21 @@ function generatePuzzle(seed) {
   };
 }
 
+// Parse seed from URL if present
+function getSeedFromUrl() {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedStr = params.get('seed');
+  if (seedStr) {
+    const parsed = parseInt(seedStr, 10);
+    return isNaN(parsed) ? stringToSeed(seedStr) : parsed;
+  }
+  return null;
+}
+
 export default function Categories() {
   const [puzzle, setPuzzle] = useState(null);
+  const [seed, setSeed] = useState(null);
   const [selectedWords, setSelectedWords] = useState([]);
   const [solvedCategories, setSolvedCategories] = useState([]);
   const [mistakes, setMistakes] = useState(0);
@@ -83,9 +97,11 @@ export default function Categories() {
 
   const initGame = useCallback((customSeed = null) => {
     const today = getTodayDateString();
-    const seed = customSeed || stringToSeed(`categories-${today}`);
-    const newPuzzle = generatePuzzle(seed);
+    const urlSeed = getSeedFromUrl();
+    const gameSeed = customSeed ?? urlSeed ?? stringToSeed(`categories-${today}`);
+    const newPuzzle = generatePuzzle(gameSeed);
 
+    setSeed(gameSeed);
     setPuzzle(newPuzzle);
     setSelectedWords([]);
     setSolvedCategories([]);
@@ -212,7 +228,7 @@ export default function Categories() {
   };
 
   const handleNewGame = () => {
-    const randomSeed = Date.now();
+    const randomSeed = Math.floor(Math.random() * 2147483647);
     initGame(randomSeed);
   };
 
@@ -232,6 +248,14 @@ export default function Categories() {
         <p className={styles.instructions}>
           Find groups of four words that share a connection
         </p>
+        {seed && (
+          <SeedDisplay
+            seed={seed}
+            variant="compact"
+            showNewButton
+            onNewSeed={handleNewGame}
+          />
+        )}
       </div>
 
       <div className={styles.gameArea}>
