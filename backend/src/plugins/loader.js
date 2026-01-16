@@ -12,24 +12,25 @@ import { readdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { pathToFileURL } from 'url';
+import { Router } from 'express';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Path to the packs directory (frontend packs with optional backends)
-const PACKS_DIR = join(__dirname, '../../../src/packs');
+// In Docker, packs are mounted at /app/packs via docker-compose
+// In development, they're at ../../../src/packs relative to this file
+const DOCKER_PACKS_DIR = '/app/packs';
+const DEV_PACKS_DIR = join(__dirname, '../../../src/packs');
+const PACKS_DIR = existsSync(DOCKER_PACKS_DIR) ? DOCKER_PACKS_DIR : DEV_PACKS_DIR;
 
 /**
  * Context passed to plugins for integration with Enigma
  */
 export function createPluginContext(app, db) {
   return {
-    // Express router for adding routes
-    // Plugins should use router.get(), router.post(), etc.
-    createRouter: () => {
-      const { Router } = require('express');
-      return Router();
-    },
+    // Note: Plugins receive a router from loadPackPlugins, not via createRouter
+    // This method is kept for backwards compatibility but should not be used
 
     // Database access (limited to plugin's own tables)
     db: {
@@ -130,7 +131,7 @@ export async function loadPackPlugins(app, db) {
 
       // Register plugin routes
       if (plugin.register && typeof plugin.register === 'function') {
-        const router = (await import('express')).Router();
+        const router = Router();
 
         // Call plugin's register function with router and context
         await plugin.register(router, context);
