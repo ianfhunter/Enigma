@@ -2,6 +2,7 @@ import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import db from '../db.js';
 import { requireAdmin } from '../middleware/auth.js';
+import { reloadPackPlugins, getPluginManager } from '../plugins/loader.js';
 
 const router = Router();
 const SALT_ROUNDS = 12;
@@ -331,6 +332,37 @@ router.put('/games/:slug', (req, res) => {
     enabled: Boolean(updated.enabled),
     settings: JSON.parse(updated.settings || '{}')
   });
+});
+
+// Get loaded plugins
+router.get('/plugins', (req, res) => {
+  const manager = getPluginManager();
+  const plugins = manager.getLoadedPlugins();
+
+  res.json({
+    plugins,
+    packsDir: process.env.NODE_ENV === 'development' ? 'development' : 'docker'
+  });
+});
+
+// Reload all plugins (hot reload without server restart)
+router.post('/plugins/reload', async (req, res) => {
+  try {
+    console.log('🔄 Admin requested plugin reload...');
+    const plugins = await reloadPackPlugins();
+
+    res.json({
+      success: true,
+      message: `Reloaded ${plugins.length} plugin(s)`,
+      plugins
+    });
+  } catch (error) {
+    console.error('Plugin reload failed:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
 export default router;

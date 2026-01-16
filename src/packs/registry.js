@@ -22,10 +22,6 @@ import triviaKnowledgePack from './trivia-knowledge/manifest';
 import internationalWordsPack from './international-words/manifest';
 import cardGamesPack from './card-games/manifest';
 
-// Import community pack manifests
-// ⚠️ Community packs have backend code - only install from trusted sources!
-import exampleCommunityPack from './example-community/manifest';
-
 /**
  * All official packs loaded from their manifest files
  */
@@ -45,9 +41,19 @@ export const officialPacks = [
 /**
  * Community packs with backend support
  * ⚠️ These packs run server-side code!
+ *
+ * To add a community pack:
+ * 1. Copy the pack folder to src/packs/
+ * 2. Import the manifest here
+ * 3. Add it to this array
+ *
+ * Example:
+ *   import myPack from './my-pack/manifest';
+ *   export const communityPacks = [myPack];
  */
 export const communityPacks = [
-  exampleCommunityPack,
+  // No community packs installed by default
+  // See EnigmaSampleCommunityPack for an example
 ];
 
 /**

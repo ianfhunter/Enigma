@@ -25,10 +25,15 @@ export function verifyCsrfToken(req, res, next) {
     return next();
   }
 
+  // Skip CSRF for pack plugin reload endpoint (public utility, no sensitive data)
+  if (req.path === '/api/packs/_reload') {
+    return next();
+  }
+
   // Skip CSRF for login and register (no authenticated session to hijack)
   // However, we'll still protect them for defense in depth
   const token = req.headers['x-csrf-token'] || req.body._csrf;
-  
+
   if (!token) {
     return res.status(403).json({ error: 'CSRF token missing' });
   }
@@ -43,4 +48,3 @@ export function verifyCsrfToken(req, res, next) {
 
   next();
 }
-

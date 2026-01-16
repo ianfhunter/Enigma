@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
 import gamesRoutes from './routes/games.js';
 import adminRoutes from './routes/admin.js';
+import packsRoutes from './routes/packs.js';
 import { initCsrf, getCsrfToken, verifyCsrfToken } from './middleware/csrf.js';
 import { loadPackPlugins } from './plugins/loader.js';
 
@@ -103,6 +104,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/games', gamesRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/packs', packsRoutes);
 
 // Load pack plugins (community packs with backends)
 // ⚠️ WARNING: Pack plugins run with full backend access.

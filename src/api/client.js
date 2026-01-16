@@ -53,10 +53,10 @@ class ApiError extends Error {
 async function request(endpoint, options = {}) {
   const url = `${API_URL}${endpoint}`;
   const method = options.method || 'GET';
-  
+
   // State-changing methods need CSRF token
   const needsCsrf = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method);
-  
+
   // Get CSRF token if needed
   let token = null;
   if (needsCsrf) {
@@ -97,7 +97,7 @@ async function request(endpoint, options = {}) {
     if (response.status === 403 && data?.error?.includes('CSRF')) {
       clearCsrfToken();
     }
-    
+
     throw new ApiError(
       data?.error || `Request failed with status ${response.status}`,
       response.status,
@@ -234,6 +234,51 @@ export const admin = {
       method: 'PUT',
       body: config
     }),
+};
+
+// Packs API
+export const packs = {
+  /**
+   * Get list of installed packs from backend
+   */
+  getInstalled: () =>
+    request('/api/packs/installed'),
+
+  /**
+   * Check if a specific pack is installed
+   */
+  isInstalled: (packId) =>
+    request(`/api/packs/installed/${encodeURIComponent(packId)}`),
+
+  /**
+   * Install a pack (enables backend plugin for community packs)
+   */
+  install: (packId, packType = 'community') =>
+    request('/api/packs/install', {
+      method: 'POST',
+      body: { packId, packType }
+    }),
+
+  /**
+   * Uninstall a pack (disables backend plugin for community packs)
+   */
+  uninstall: (packId) =>
+    request('/api/packs/uninstall', {
+      method: 'POST',
+      body: { packId }
+    }),
+
+  /**
+   * Get status of loaded plugins
+   */
+  getPluginStatus: () =>
+    request('/api/packs/plugins/status'),
+
+  /**
+   * Manually trigger plugin reload
+   */
+  reloadPlugins: () =>
+    request('/api/packs/plugins/reload', { method: 'POST' }),
 };
 
 export { ApiError };
