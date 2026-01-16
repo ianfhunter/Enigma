@@ -22,6 +22,10 @@ import triviaKnowledgePack from './trivia-knowledge/manifest';
 import internationalWordsPack from './international-words/manifest';
 import cardGamesPack from './card-games/manifest';
 
+// Import installed community packs (auto-generated)
+// Run `node scripts/generate-community-packs.js` to regenerate
+import { installedCommunityPacks } from './installedCommunityPacks';
+
 /**
  * All official packs loaded from their manifest files
  */
@@ -42,19 +46,18 @@ export const officialPacks = [
  * Community packs with backend support
  * ⚠️ These packs run server-side code!
  *
- * To add a community pack:
- * 1. Copy the pack folder to src/packs/
- * 2. Import the manifest here
- * 3. Add it to this array
+ * Community packs are automatically loaded from .plugins/ directory.
+ * They are registered by running: node scripts/generate-community-packs.js
  *
- * Example:
- *   import myPack from './my-pack/manifest';
- *   export const communityPacks = [myPack];
+ * The generation script is triggered automatically when:
+ * - A pack is installed via the Game Store
+ * - A pack is uninstalled
+ * - A pack is updated
  */
-export const communityPacks = [
-  // No community packs installed by default
-  // See EnigmaSampleCommunityPack for an example
-];
+export const communityPacks = installedCommunityPacks.map(pack => ({
+  ...pack,
+  type: 'community',
+}));
 
 /**
  * All available packs (official + community)

@@ -6,7 +6,6 @@ import {
   countGamesInPack,
   getPackagePreviewGames
 } from '../../data/packageRegistry';
-import { communityPacks } from '../../packs/registry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import { useCommunitySources } from '../../hooks/useCommunitySources';
@@ -1007,14 +1006,14 @@ export default function GameStore() {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <div>
-                <h2 className={styles.sectionTitle}>
-                  <span className={styles.sectionIcon}>🌍</span>
+              <h2 className={styles.sectionTitle}>
+                <span className={styles.sectionIcon}>🌍</span>
                   Community Sources
-                </h2>
-                <p className={styles.sectionDescription}>
+              </h2>
+              <p className={styles.sectionDescription}>
                   Add GitHub repositories to discover and install community puzzle packs
-                </p>
-              </div>
+              </p>
+            </div>
             </div>
 
             {/* Git availability warning */}
@@ -1029,13 +1028,13 @@ export default function GameStore() {
             )}
 
             {/* Backend warning */}
-            <div className={styles.communityWarning}>
-              <span className={styles.warningIcon}>⚠️</span>
-              <p>
+                  <div className={styles.communityWarning}>
+                    <span className={styles.warningIcon}>⚠️</span>
+                    <p>
                 Community packs may contain backend code that runs on your server.
                 Only add sources from repositories you trust.
-              </p>
-            </div>
+                    </p>
+                  </div>
 
             {/* Add source form */}
             <div className={styles.addSourceForm}>
@@ -1133,34 +1132,6 @@ export default function GameStore() {
               </>
             )}
 
-            {/* Built-in community packs (legacy) */}
-            {communityPacks.length > 0 && (
-              <>
-                <div className={styles.sectionHeader} style={{ marginTop: '2rem' }}>
-                  <div>
-                    <h2 className={styles.sectionTitle}>
-                      <span className={styles.sectionIcon}>📦</span>
-                      Built-in Community Packs
-                    </h2>
-                    <p className={styles.sectionDescription}>
-                      Pre-installed community packs bundled with Enigma
-                    </p>
-                  </div>
-                </div>
-                <div className={styles.packGrid}>
-                  {communityPacks.map((pack) => (
-                    <PackCard
-                      key={pack.id}
-                      pack={pack}
-                      isInstalled={isInstalled(pack.id)}
-                      onToggle={togglePackage}
-                      gameCount={pack.gameCount || pack.allGames?.length || 0}
-                      previewGames={pack.getPreviewGames?.() || pack.allGames?.slice(0, 5) || []}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
           </section>
         )}
 

@@ -48,3 +48,6 @@ docker-compose.yml
 
 # Plugin data
 .plugins/
+
+# Auto-generated community packs registry
+src/packs/installedCommunityPacks.js

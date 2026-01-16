@@ -201,7 +201,7 @@ function parseManifestJs(jsContent) {
 
 /**
  * Get all semver tags from a GitHub repository
- * Uses GitHub API (unauthenticated, rate limited to 60 req/hour)
+ * Uses git ls-remote to avoid GitHub API rate limits and bot detection
  *
  * @param {string} url - GitHub repository URL
  * @returns {Promise<string[]>} - Array of semver tags, sorted descending
@@ -212,35 +212,35 @@ export async function getSemverTags(url) {
     throw new Error('Invalid GitHub URL format');
   }
 
-  const { owner, repo } = parsed;
-  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/tags`;
+  try {
+    // Use git ls-remote to get tags without cloning
+    // This avoids GitHub API rate limits and bot detection
+    const { stdout } = await exec(`git ls-remote --tags "${parsed.httpsUrl}"`, {
+      timeout: 30000,
+    });
 
-  const response = await fetch(apiUrl, {
-    headers: {
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'Enigma-Pack-Manager',
-    },
-  });
+    // Parse output: each line is "sha\trefs/tags/tagname" or "sha\trefs/tags/tagname^{}"
+    const tags = stdout
+      .split('\n')
+      .filter(line => line.trim())
+      .map(line => {
+        // Extract tag name from refs/tags/tagname or refs/tags/tagname^{}
+        const match = line.match(/refs\/tags\/([^\^]+)/);
+        return match ? match[1] : null;
+      })
+      .filter((tag, index, arr) => {
+        // Remove duplicates (tags appear twice: once for the tag, once for the commit it points to)
+        return tag && arr.indexOf(tag) === index && isSemver(tag);
+      })
+      .sort((a, b) => compareSemver(b, a)); // Descending order
 
-  if (!response.ok) {
-    if (response.status === 404) {
+    return tags;
+  } catch (error) {
+    if (error.message.includes('not found') || error.message.includes('Could not read')) {
       throw new Error('Repository not found or is private');
     }
-    if (response.status === 403) {
-      throw new Error('GitHub API rate limit exceeded. Try again later.');
-    }
-    throw new Error(`GitHub API error: ${response.status}`);
+    throw new Error(`Failed to fetch tags: ${error.message}`);
   }
-
-  const tags = await response.json();
-
-  // Filter to semver tags and sort descending
-  const semverTags = tags
-    .map(t => t.name)
-    .filter(isSemver)
-    .sort((a, b) => compareSemver(b, a)); // Descending order
-
-  return semverTags;
 }
 
 /**

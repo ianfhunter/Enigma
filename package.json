@@ -4,15 +4,16 @@
   "version": "1.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npm run generate:community-packs && vite",
+    "build": "npm run generate:community-packs && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:ui:coverage": "vitest --ui --coverage"
+    "test:ui:coverage": "vitest --ui --coverage",
+    "generate:community-packs": "node scripts/generate-community-packs.js"
   },
   "dependencies": {
     "american-british-english-translator": "^0.2.1",

@@ -82,6 +82,9 @@ console.log(`Cookie secure mode: ${useSecureCookies} (FRONTEND_URL: ${FRONTEND_U
 // Initialize CSRF for all requests (creates secret in session if needed)
 app.use(initCsrf);
 
+// Check if rate limiting should be disabled (development mode)
+const isDevMode = process.env.DEV === '1' || process.env.DEV === 'true';
+
 // Rate limiting for API routes to mitigate brute-force and DoS attacks.
 // Apply this before CSRF verification so that authorization logic is also rate-limited.
 const apiLimiter = rateLimit({
@@ -89,8 +92,13 @@ const apiLimiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  skip: () => isDevMode,
 });
 app.use('/api/', apiLimiter);
+
+if (isDevMode) {
+  console.log('⚠️  DEV mode enabled: Rate limiting is disabled');
+}
 
 // CSRF token endpoint (must be before verifyCsrfToken middleware)
 app.get('/api/csrf-token', (req, res) => {

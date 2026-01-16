@@ -44,6 +44,9 @@ const EXTERNAL_PLUGINS_DIR = process.env.PLUGINS_DIR ||
 // Plugin data directory for isolated databases
 const PLUGIN_DATA_DIR = process.env.PLUGIN_DATA_DIR || './data/plugins';
 
+// Check if rate limiting should be disabled (development mode)
+const isDevMode = process.env.DEV === '1' || process.env.DEV === 'true';
+
 // Plugin limits
 const MAX_PLUGIN_DB_SIZE = parseInt(process.env.MAX_PLUGIN_DB_SIZE || '52428800', 10); // 50MB default
 const PLUGIN_RATE_LIMIT_WINDOW = parseInt(process.env.PLUGIN_RATE_LIMIT_WINDOW || '60000', 10); // 1 minute
@@ -141,7 +144,8 @@ class PluginManager {
       keyGenerator: (req) => {
         // Rate limit per user session or IP
         return req.session?.userId || req.ip;
-      }
+      },
+      skip: () => isDevMode,
     });
 
     this.pluginRateLimiters.set(packName, limiter);

@@ -6,6 +6,7 @@ import Profile from './pages/Profile';
 import Search from './pages/Search';
 import GameStore from './pages/GameStore';
 import IframeGame from './pages/IframeGame';
+import CommunityGame from './pages/CommunityGame';
 import NotFound from './pages/NotFound';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
@@ -405,6 +406,7 @@ function App() {
               <Route path="store" element={<GameStore />} />
               <Route path="profile" element={<Profile />} />
               <Route path="custom/:packId/:gameId" element={<IframeGame />} />
+              <Route path="community/:packId/:gameSlug" element={<CommunityGame />} />
               {generateGameRoutes()}
               <Route path="*" element={<NotFound />} />
             </Route>

@@ -7,9 +7,13 @@ import rateLimit from 'express-rate-limit';
 const router = Router();
 const SALT_ROUNDS = 12;
 
+// Check if rate limiting should be disabled (development mode)
+const isDevMode = process.env.DEV === '1' || process.env.DEV === 'true';
+
 const loginHistoryLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 30, // limit each IP to 30 login history requests per windowMs
+  skip: () => isDevMode,
 });
 
 // All routes require authentication

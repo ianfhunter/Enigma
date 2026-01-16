@@ -47,6 +47,7 @@ class ApiError extends Error {
     this.name = 'ApiError';
     this.status = status;
     this.data = data;
+    this.isRateLimit = status === 429 || data?.isRateLimit === true;
   }
 }
 

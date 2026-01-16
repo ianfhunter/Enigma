@@ -4,7 +4,7 @@ import GameCard from '../../components/GameCard';
 import { categories } from '../../data/gameRegistry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
-import { useCommunityPacks } from '../../hooks/useCommunityPacks';
+import { communityPacks } from '../../packs/registry';
 import { getFilteredCategories, officialPacks } from '../../data/packageRegistry';
 import styles from './Home.module.css';
 
@@ -56,7 +56,6 @@ function CommunityGameCard({ game, packId }) {
 export default function Home() {
   const { installedPackages } = useInstalledPackages();
   const { customPacks } = useCustomPacks();
-  const { communityPacks, getAllCategories: getCommunityCategories } = useCommunityPacks();
 
   // Filter categories and games based on installed packages
   // This handles includeGames/excludeGames for proper game filtering
@@ -64,10 +63,17 @@ export default function Home() {
     return getFilteredCategories(installedPackages, categories);
   }, [installedPackages]);
 
-  // Get community pack categories
+  // Get community pack categories from the registry (loaded at build time)
   const communityCategories = useMemo(() => {
-    return getCommunityCategories();
-  }, [getCommunityCategories]);
+    return communityPacks.flatMap(pack =>
+      (pack.categories || []).map(cat => ({
+        ...cat,
+        packId: pack.id,
+        packName: pack.name,
+        packIcon: pack.icon,
+      }))
+    );
+  }, []);
 
   // Check if there are more packs available to install
   const hasMorePacks = officialPacks.length > installedPackages.length;

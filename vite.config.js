@@ -1,17 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import communityPacksPlugin from './vite-plugins/community-packs-plugin.js'
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react(), communityPacksPlugin()],
     cacheDir: process.env.VITE_CACHE_DIR || 'node_modules/.vite',
+    // Allow importing from .plugins/ directory (community packs)
     optimizeDeps: {
-        include: ['killer-sudoku-generator']
+        include: ['killer-sudoku-generator'],
     },
     resolve: {
         alias: {
             '@datasets': path.resolve(__dirname, 'datasets'),
+            '@plugins': path.resolve(__dirname, '.plugins'),
         }
     },
     server: {
