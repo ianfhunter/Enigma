@@ -10,13 +10,13 @@
  * - Checking for updates
  */
 
-import { exec as execCallback } from 'child_process';
+import { execFile as execFileCallback } from 'child_process';
 import { promisify } from 'util';
 import { existsSync, mkdirSync, rmSync, readFileSync, symlinkSync, lstatSync } from 'fs';
 import { join, dirname, resolve, isAbsolute } from 'path';
 import { fileURLToPath } from 'url';
 
-const exec = promisify(execCallback);
+const execFile = promisify(execFileCallback);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -349,7 +349,7 @@ export async function getSemverTags(url) {
   try {
     // Use git ls-remote to get tags without cloning
     // This avoids GitHub API rate limits and bot detection
-    const { stdout } = await exec(`git ls-remote --tags "${parsed.httpsUrl}"`, {
+    const { stdout } = await execFile('git', ['ls-remote', '--tags', parsed.httpsUrl], {
       timeout: 30000,
     });
 
