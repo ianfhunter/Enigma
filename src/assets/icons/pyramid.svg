@@ -1,0 +1,24 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pyramid: Word pyramid with increasing letter rows -->
+
+  <!-- Row 1 - 1 tile (top) -->
+  <rect x="10" y="2" width="4" height="4" rx="1" fill="#c084fc"/>
+
+  <!-- Row 2 - 2 tiles -->
+  <rect x="7.5" y="7" width="4" height="4" rx="1" fill="#a855f7"/>
+  <rect x="12.5" y="7" width="4" height="4" rx="1" fill="#a855f7"/>
+
+  <!-- Row 3 - 3 tiles -->
+  <rect x="5" y="12" width="4" height="4" rx="1" fill="#9333ea"/>
+  <rect x="10" y="12" width="4" height="4" rx="1" fill="#9333ea"/>
+  <rect x="15" y="12" width="4" height="4" rx="1" fill="#9333ea"/>
+
+  <!-- Row 4 - 4 tiles (base) -->
+  <rect x="2.5" y="17" width="4" height="4" rx="1" fill="#7c3aed"/>
+  <rect x="7.5" y="17" width="4" height="4" rx="1" fill="#7c3aed"/>
+  <rect x="12.5" y="17" width="4" height="4" rx="1" fill="#7c3aed"/>
+  <rect x="17.5" y="17" width="4" height="4" rx="1" fill="#7c3aed"/>
+
+  <!-- Subtle glow/highlight on top -->
+  <rect x="10" y="2" width="4" height="4" rx="1" fill="none" stroke="#e9d5ff" stroke-width="0.5"/>
+</svg>

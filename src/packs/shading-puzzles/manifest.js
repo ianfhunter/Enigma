@@ -5,6 +5,16 @@
  * These puzzles involve shading or filling cells based on clues.
  */
 
+// Custom SVG icons
+import hitoriIcon from '../../assets/icons/hitori.svg';
+import nonogramIcon from '../../assets/icons/nonogram.svg';
+import mosaicIcon from '../../assets/icons/mosaic.svg';
+import lightsoutIcon from '../../assets/icons/lightsout.svg';
+import kurottoIcon from '../../assets/icons/kurotto.svg';
+import takuzuIcon from '../../assets/icons/takuzu.svg';
+import yinyangIcon from '../../assets/icons/yinyang.svg';
+import creekIcon from '../../assets/icons/creek.svg';
+
 /**
  * Pack metadata
  */
@@ -34,7 +44,8 @@ export const categories = [
         slug: 'nonogram',
         aliases: ['Paint by Numbers', 'Hanjie', 'Japanese Crossword'],
         description: 'Fill in cells using number clues to reveal a hidden picture!',
-        icon: '🖼️',
+        icon: nonogramIcon,
+        emojiIcon: '🖼️',
         colors: { primary: '#f472b6', secondary: '#db2777' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #db2777 100%)',
         version: 'v1.0',
@@ -67,7 +78,8 @@ export const categories = [
         slug: 'hitori',
         aliases: ['Hitori ni Shite Kure', 'Leave Me Alone'],
         description: 'Shade cells to eliminate duplicates while keeping unshaded cells connected.',
-        icon: '⬛',
+        icon: hitoriIcon,
+        emojiIcon: '⬛',
         colors: { primary: '#71717a', secondary: '#52525b' },
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
         version: 'v1.0',
@@ -141,7 +153,8 @@ export const categories = [
         title: 'Kurotto',
         slug: 'kurotto',
         description: 'Shade cells so circled numbers equal the sum of adjacent shaded group sizes.',
-        icon: '⭕',
+        icon: kurottoIcon,
+        emojiIcon: '⭕',
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         version: 'v1.0',
@@ -163,7 +176,8 @@ export const categories = [
         slug: 'lights-out',
         aliases: ['Toggle Puzzle', 'XOR Puzzle'],
         description: 'Toggle lights to turn them all off. Each press affects neighbors!',
-        icon: '💡',
+        icon: lightsoutIcon,
+        emojiIcon: '💡',
         colors: { primary: '#facc15', secondary: '#eab308' },
         gradient: 'linear-gradient(135deg, #facc15 0%, #eab308 100%)',
         version: 'v1.0',
@@ -184,7 +198,8 @@ export const categories = [
         title: 'Mosaic',
         slug: 'mosaic',
         description: 'Shade tiles to match the numeric clues.',
-        icon: '🧱',
+        icon: mosaicIcon,
+        emojiIcon: '🧱',
         colors: { primary: '#71717a', secondary: '#52525b' },
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
         version: 'v1.0',

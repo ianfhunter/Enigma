@@ -4,6 +4,9 @@
  * Classic solitaire and card-based puzzles.
  */
 
+// Custom SVG icons used by games in this pack
+import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
+
 const cardGamesPack = {
   id: 'card-games',
   type: 'official',
@@ -26,7 +29,7 @@ const cardGamesPack = {
           title: 'Pyramid Cards',
           aliases: ['Pyramid Solitaire', 'Tut\'s Tomb'],
           description: 'Remove pairs of cards that sum to 13 to clear the pyramid. Kings remove alone!',
-          icon: '🔺',
+          icon: pyramidcardsIcon,
           emojiIcon: '🔺',
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',

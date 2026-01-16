@@ -1,0 +1,55 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Takuzu: Binary puzzle with 0s and 1s -->
+  
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f0f9ff"/>
+  
+  <!-- Grid -->
+  <rect x="2" y="2" width="20" height="20" rx="1" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5"/>
+  <line x1="7.5" y1="2" x2="7.5" y2="22" stroke="#7dd3fc" stroke-width="0.5"/>
+  <line x1="13" y1="2" x2="13" y2="22" stroke="#7dd3fc" stroke-width="0.5"/>
+  <line x1="18.5" y1="2" x2="18.5" y2="22" stroke="#7dd3fc" stroke-width="0.5"/>
+  <line x1="2" y1="7.5" x2="22" y2="7.5" stroke="#7dd3fc" stroke-width="0.5"/>
+  <line x1="2" y1="13" x2="22" y2="13" stroke="#7dd3fc" stroke-width="0.5"/>
+  <line x1="2" y1="18.5" x2="22" y2="18.5" stroke="#7dd3fc" stroke-width="0.5"/>
+  
+  <!-- Binary digits as circles/filled circles -->
+  <!-- Row 1: 1 0 1 0 -->
+  <circle cx="4.75" cy="4.75" r="2" fill="#0284c7"/>
+  <text x="4.75" y="5.8" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  <circle cx="10.25" cy="4.75" r="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="10.25" y="5.8" font-family="Arial" font-size="3" font-weight="bold" fill="#0284c7" text-anchor="middle">0</text>
+  <circle cx="15.75" cy="4.75" r="2" fill="#0284c7"/>
+  <text x="15.75" y="5.8" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  <circle cx="20.25" cy="4.75" r="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="20.25" y="5.8" font-family="Arial" font-size="3" font-weight="bold" fill="#0284c7" text-anchor="middle">0</text>
+  
+  <!-- Row 2: 0 1 0 1 -->
+  <circle cx="4.75" cy="10.25" r="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="4.75" y="11.3" font-family="Arial" font-size="3" font-weight="bold" fill="#0284c7" text-anchor="middle">0</text>
+  <circle cx="10.25" cy="10.25" r="2" fill="#0284c7"/>
+  <text x="10.25" y="11.3" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  <circle cx="15.75" cy="10.25" r="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="15.75" y="11.3" font-family="Arial" font-size="3" font-weight="bold" fill="#0284c7" text-anchor="middle">0</text>
+  <circle cx="20.25" cy="10.25" r="2" fill="#0284c7"/>
+  <text x="20.25" y="11.3" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  
+  <!-- Row 3: 1 1 0 0 (showing constraint) -->
+  <circle cx="4.75" cy="15.75" r="2" fill="#0284c7"/>
+  <text x="4.75" y="16.8" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  <circle cx="10.25" cy="15.75" r="2" fill="#0284c7"/>
+  <text x="10.25" y="16.8" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  <circle cx="15.75" cy="15.75" r="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="15.75" y="16.8" font-family="Arial" font-size="3" font-weight="bold" fill="#0284c7" text-anchor="middle">0</text>
+  <circle cx="20.25" cy="15.75" r="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="20.25" y="16.8" font-family="Arial" font-size="3" font-weight="bold" fill="#0284c7" text-anchor="middle">0</text>
+  
+  <!-- Row 4 (partial - empty cells) -->
+  <circle cx="4.75" cy="20.25" r="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="4.75" y="21.3" font-family="Arial" font-size="3" font-weight="bold" fill="#0284c7" text-anchor="middle">0</text>
+  <circle cx="10.25" cy="20.25" r="2" fill="#bae6fd" stroke="#0284c7" stroke-width="1" stroke-dasharray="2,1"/>
+  <circle cx="15.75" cy="20.25" r="2" fill="#0284c7"/>
+  <text x="15.75" y="21.3" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  <circle cx="20.25" cy="20.25" r="2" fill="#bae6fd" stroke="#0284c7" stroke-width="1" stroke-dasharray="2,1"/>
+</svg>
+

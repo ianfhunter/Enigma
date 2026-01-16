@@ -7,6 +7,8 @@
 
 // Custom SVG icons used by games in this pack
 import pegsIcon from '../../assets/icons/pegs.svg';
+import sokobanIcon from '../../assets/icons/sokoban.svg';
+import inertiaIcon from '../../assets/icons/inertia.svg';
 
 /**
  * Pack metadata
@@ -101,7 +103,8 @@ export const categories = [
         slug: 'sokoban',
         aliases: ['Warehouse Keeper', 'Box Pusher'],
         description: 'Push boxes onto targets with classic Sokoban rules. Includes Boxoban level packs.',
-        icon: '📦',
+        icon: sokobanIcon,
+        emojiIcon: '📦',
         colors: { primary: '#22d3ee', secondary: '#0ea5e9' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #0ea5e9 100%)',
         version: 'v1.0',
@@ -111,7 +114,8 @@ export const categories = [
         title: 'Inertia',
         slug: 'inertia',
         description: 'Slide around an arena with momentum to reach the goal.',
-        icon: '🧲',
+        icon: inertiaIcon,
+        emojiIcon: '🧲',
         colors: { primary: '#0ea5e9', secondary: '#0284c7' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
         version: 'v1.0',

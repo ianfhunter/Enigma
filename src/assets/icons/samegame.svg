@@ -1,0 +1,39 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Samegame: Colored blocks that get removed in groups -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fff7ed"/>
+
+  <!-- Grid of colored blocks -->
+  <!-- Row 1 -->
+  <rect x="2" y="2" width="4" height="4" rx="0.5" fill="#f97316"/>
+  <rect x="6.5" y="2" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+  <rect x="11" y="2" width="4" height="4" rx="0.5" fill="#22c55e"/>
+  <rect x="15.5" y="2" width="4" height="4" rx="0.5" fill="#f97316"/>
+  <rect x="20" y="2" width="3" height="4" rx="0.5" fill="#3b82f6"/>
+
+  <!-- Row 2 -->
+  <rect x="2" y="6.5" width="4" height="4" rx="0.5" fill="#f97316"/>
+  <rect x="6.5" y="6.5" width="4" height="4" rx="0.5" fill="#f97316"/>
+  <rect x="11" y="6.5" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+  <rect x="15.5" y="6.5" width="4" height="4" rx="0.5" fill="#22c55e"/>
+  <rect x="20" y="6.5" width="3" height="4" rx="0.5" fill="#22c55e"/>
+
+  <!-- Row 3 - with highlighted group -->
+  <rect x="2" y="11" width="4" height="4" rx="0.5" fill="#ea580c" stroke="#c2410c" stroke-width="1.5"/>
+  <rect x="6.5" y="11" width="4" height="4" rx="0.5" fill="#ea580c" stroke="#c2410c" stroke-width="1.5"/>
+  <rect x="11" y="11" width="4" height="4" rx="0.5" fill="#ea580c" stroke="#c2410c" stroke-width="1.5"/>
+  <rect x="15.5" y="11" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+  <rect x="20" y="11" width="3" height="4" rx="0.5" fill="#f97316"/>
+
+  <!-- Row 4 -->
+  <rect x="2" y="15.5" width="4" height="4" rx="0.5" fill="#22c55e"/>
+  <rect x="6.5" y="15.5" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+  <rect x="11" y="15.5" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+  <rect x="15.5" y="15.5" width="4" height="4" rx="0.5" fill="#f97316"/>
+  <rect x="20" y="15.5" width="3" height="4" rx="0.5" fill="#22c55e"/>
+
+  <!-- Click/remove indicator on highlighted group -->
+  <circle cx="8.5" cy="13" r="3" fill="#ffffff" opacity="0.4"/>
+  <text x="8.5" y="14.5" font-family="Arial" font-size="4" font-weight="bold" fill="#9a3412" text-anchor="middle">×</text>
+</svg>

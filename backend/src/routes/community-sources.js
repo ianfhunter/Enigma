@@ -13,6 +13,11 @@ import db from '../db.js';
 import { reloadPackPlugins, deletePluginData } from '../plugins/loader.js';
 import {
   parseGitHubUrl,
+  isLocalPath,
+  normalizeLocalPath,
+  fetchManifestFromLocal,
+  linkLocalPack,
+  isPackSymlink,
   fetchManifestFromGitHub,
   getLatestSemverTag,
   getSemverTags,
@@ -170,7 +175,12 @@ router.get('/:id', (req, res) => {
 
 /**
  * Add a new community source
- * Fetches the manifest to validate and cache metadata
+ * Supports both GitHub URLs and local paths (for development)
+ *
+ * Local paths:
+ * - file:///path/to/pack
+ * - /absolute/path
+ * - ./relative/path
  */
 router.post('/', async (req, res) => {
   const { url } = req.body;
@@ -179,21 +189,26 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'URL is required' });
   }
 
-  // Validate URL format
-  const parsed = parseGitHubUrl(url);
-  if (!parsed) {
-    return res.status(400).json({
-      error: 'Invalid GitHub URL format',
-      hint: 'Use format: git@github.com:owner/repo.git or https://github.com/owner/repo',
-    });
-  }
-
   // Check for duplicates
   const existing = db.prepare('SELECT id FROM community_sources WHERE url = ?').get(url);
   if (existing) {
     return res.status(409).json({
-      error: 'This repository is already added',
+      error: 'This source is already added',
       sourceId: existing.id,
+    });
+  }
+
+  // Handle local paths (for development)
+  if (isLocalPath(url)) {
+    return handleLocalSource(req, res, url);
+  }
+
+  // Handle GitHub URLs
+  const parsed = parseGitHubUrl(url);
+  if (!parsed) {
+    return res.status(400).json({
+      error: 'Invalid source format',
+      hint: 'Use format: git@github.com:owner/repo.git, https://github.com/owner/repo, or a local path like /path/to/pack',
     });
   }
 
@@ -245,8 +260,8 @@ router.post('/', async (req, res) => {
     const result = db.prepare(`
       INSERT INTO community_sources (
         url, name, description, icon, color, pack_id, has_backend,
-        latest_version, last_checked_at, added_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?)
+        latest_version, last_checked_at, added_by, is_local
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, 0)
     `).run(
       url,
       manifest.name || manifest.id,
@@ -277,6 +292,71 @@ router.post('/', async (req, res) => {
     });
   }
 });
+
+/**
+ * Handle adding a local path as a source (for development)
+ */
+async function handleLocalSource(req, res, url) {
+  try {
+    const localPath = normalizeLocalPath(url);
+    console.log(`📁 Adding local source: ${localPath}`);
+
+    // Fetch manifest from local path
+    const manifest = await fetchManifestFromLocal(url);
+
+    if (!manifest || !manifest.id) {
+      return res.status(400).json({
+        error: 'Invalid manifest: missing pack id',
+        hint: 'The directory must have a manifest.js or manifest.json with an "id" field',
+      });
+    }
+
+    // Check if pack ID conflicts with existing source
+    const existingPack = db.prepare('SELECT id, url FROM community_sources WHERE pack_id = ?').get(manifest.id);
+    if (existingPack) {
+      return res.status(409).json({
+        error: `A source with pack ID "${manifest.id}" already exists`,
+        existingUrl: existingPack.url,
+      });
+    }
+
+    // Insert the source (marked as local, version is 'dev')
+    const userId = req.session?.userId || null;
+    const result = db.prepare(`
+      INSERT INTO community_sources (
+        url, name, description, icon, color, pack_id, has_backend,
+        latest_version, last_checked_at, added_by, is_local
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, 'dev', datetime('now'), ?, 1)
+    `).run(
+      url,
+      manifest.name || manifest.id,
+      manifest.description || null,
+      manifest.icon || '🛠️',  // Different icon for local/dev
+      manifest.color || '#f59e0b',  // Orange for dev
+      manifest.id,
+      manifest.hasBackend ? 1 : 0,
+      userId
+    );
+
+    const source = db.prepare('SELECT * FROM community_sources WHERE id = ?').get(result.lastInsertRowid);
+
+    console.log(`✅ Added local source: ${manifest.name} (${manifest.id}) from ${localPath}`);
+
+    res.status(201).json({
+      success: true,
+      message: `Added local pack "${manifest.name}" (development mode)`,
+      source,
+      isLocal: true,
+      localPath,
+    });
+  } catch (error) {
+    console.error('Failed to add local source:', error);
+    res.status(400).json({
+      error: 'Failed to read manifest from local path',
+      details: error.message,
+    });
+  }
+}
 
 /**
  * Delete a community source
@@ -481,7 +561,8 @@ router.get('/:id/versions', async (req, res) => {
 
 /**
  * Install a community pack from a source
- * Clones the repository at the specified (or latest) version
+ * - For GitHub sources: Clones the repository at the specified version
+ * - For local sources: Creates a symlink for hot-reload development
  */
 router.post('/:id/install', async (req, res) => {
   const { id } = req.params;
@@ -501,7 +582,12 @@ router.post('/:id/install', async (req, res) => {
     });
   }
 
-  // Check if git is available
+  // Handle local sources (symlink for development)
+  if (source.is_local || isLocalPath(source.url)) {
+    return handleLocalInstall(req, res, source, id);
+  }
+
+  // Check if git is available for GitHub sources
   const gitAvailable = await isGitAvailable();
   if (!gitAvailable) {
     return res.status(500).json({
@@ -557,6 +643,48 @@ router.post('/:id/install', async (req, res) => {
     });
   }
 });
+
+/**
+ * Handle installing a local source (creates symlink for hot-reload)
+ */
+async function handleLocalInstall(req, res, source, sourceId) {
+  try {
+    const localPath = normalizeLocalPath(source.url);
+    console.log(`🔗 Linking local pack: ${source.name} from ${localPath}`);
+
+    // Create symlink
+    await linkLocalPack(source.url, source.pack_id);
+
+    // Add to installed_packs
+    const userId = req.session?.userId || null;
+    db.prepare(`
+      INSERT INTO installed_packs (pack_id, pack_type, source_id, installed_version, installed_by)
+      VALUES (?, 'community', ?, 'dev', ?)
+    `).run(source.pack_id, sourceId, userId);
+
+    // Reload plugins to load the new pack's backend (if any)
+    if (source.has_backend) {
+      await reloadPackPlugins();
+    }
+
+    console.log(`✅ Linked local pack: ${source.name} (development mode)`);
+
+    res.json({
+      success: true,
+      message: `Linked ${source.name} (development mode - changes auto-reload!)`,
+      packId: source.pack_id,
+      version: 'dev',
+      isLocal: true,
+      localPath,
+    });
+  } catch (error) {
+    console.error('Failed to link local pack:', error);
+    res.status(500).json({
+      error: 'Failed to link local pack',
+      details: error.message,
+    });
+  }
+}
 
 /**
  * Uninstall a community pack

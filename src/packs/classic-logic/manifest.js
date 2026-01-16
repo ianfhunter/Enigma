@@ -7,6 +7,12 @@
 
 // Custom SVG icons used by games in this pack
 import dominosaIcon from '../../assets/icons/dominosa.svg';
+import countdownmathIcon from '../../assets/icons/countdownmath.svg';
+import waterpouringIcon from '../../assets/icons/waterpouring.svg';
+import blackboxIcon from '../../assets/icons/blackbox.svg';
+import shinroIcon from '../../assets/icons/shinro.svg';
+import rangeIcon from '../../assets/icons/range.svg';
+import sequenceIcon from '../../assets/icons/sequence.svg';
 
 /**
  * Pack metadata
@@ -58,7 +64,8 @@ export const categories = [
         title: 'Countdown Math',
         slug: 'countdown-math',
         description: 'Use six numbers and basic operations to reach the target number.',
-        icon: '🧮',
+        icon: countdownmathIcon,
+        emojiIcon: '🧮',
         colors: { primary: '#f59e0b', secondary: '#d97706' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         version: 'v1.0',
@@ -69,7 +76,8 @@ export const categories = [
         slug: 'water-pouring',
         aliases: ['Water Jug Problem', 'Decanting Problem'],
         description: 'Measure exact amounts by pouring water between jugs of different sizes.',
-        icon: '💧',
+        icon: waterpouringIcon,
+        emojiIcon: '💧',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         version: 'v1.0',
@@ -79,7 +87,8 @@ export const categories = [
         title: 'Black Box',
         slug: 'blackbox',
         description: 'Shoot rays into a box to deduce where the hidden atoms are.',
-        icon: '⬛',
+        icon: blackboxIcon,
+        emojiIcon: '⬛',
         colors: { primary: '#f59e0b', secondary: '#d97706' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         version: 'v1.0',
@@ -122,7 +131,8 @@ export const categories = [
         title: 'Range',
         slug: 'range',
         description: 'Use row/column clues to determine visibility and placement.',
-        icon: '📏',
+        icon: rangeIcon,
+        emojiIcon: '📏',
         colors: { primary: '#60a5fa', secondary: '#3b82f6' },
         gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
         version: 'v1.0',
@@ -142,7 +152,8 @@ export const categories = [
         title: 'Shinro',
         slug: 'shinro',
         description: 'Find hidden gems using arrow hints and row/column counts. A treasure hunt puzzle!',
-        icon: '💎',
+        icon: shinroIcon,
+        emojiIcon: '💎',
         colors: { primary: '#22d3ee', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #a855f7 100%)',
         version: 'v1.0',
@@ -170,7 +181,8 @@ export const categories = [
         slug: 'sequence',
         aliases: ['Memory Sequence', 'Color Sequence'],
         description: 'Watch, remember, repeat! How long a sequence can you memorize?',
-        icon: '🔴',
+        icon: sequenceIcon,
+        emojiIcon: '🔴',
         colors: { primary: '#f43f5e', secondary: '#e11d48' },
         gradient: 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)',
         version: 'v1.0',

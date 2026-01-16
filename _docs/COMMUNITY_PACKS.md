@@ -6,7 +6,9 @@ Enigma supports community-created puzzle packs that can include custom games, co
 
 - [Installing Community Packs](#installing-community-packs)
 - [Managing Sources](#managing-sources)
+- [Local Development](#local-development)
 - [Creating Your Own Pack](#creating-your-own-pack)
+- [Enigma SDK](#enigma-sdk)
 - [Pack Structure](#pack-structure)
 - [Manifest Reference](#manifest-reference)
 - [Backend Plugins](#backend-plugins)
@@ -67,6 +69,129 @@ When an update is available, the source card shows an orange "Update" badge:
 - Click **Update to vX.X.X** to upgrade
 - This performs a fresh clone of the new version
 - Your plugin data is preserved during updates
+
+---
+
+## Local Development
+
+For pack developers, Enigma supports local paths as sources for rapid iteration with hot-reload.
+
+### Adding a Local Source
+
+In the Game Store, you can add local paths instead of GitHub URLs:
+
+```
+file:///home/user/my-pack
+/absolute/path/to/my-pack
+./relative/path/to/my-pack
+```
+
+When you install a local source:
+- A **symlink** is created instead of cloning
+- Changes to your pack files trigger **hot-reload**
+- Version is marked as `dev`
+
+### Symlink Method (Alternative)
+
+You can also manually create a symlink:
+
+```bash
+# Create symlink to your development pack
+ln -s /path/to/my-pack-dev /path/to/Enigma/.plugins/my-pack-id
+
+# The Vite watcher will auto-detect changes!
+```
+
+### Development Workflow
+
+1. Create your pack directory with `manifest.js`
+2. Add as local source or create symlink
+3. Install via the Game Store
+4. Edit files → changes auto-reload
+5. When ready, push to GitHub and create a semver tag
+
+---
+
+## Enigma SDK
+
+Community packs can import shared components, hooks, and utilities from the `@enigma` SDK alias.
+
+### Available Exports
+
+```javascript
+import {
+  // Components
+  GameHeader,       // Standard game header with back button
+  Timer,            // Time display component
+  GiveUpButton,     // Give up button with optional confirmation
+  StatsPanel,       // Statistics display panel
+  GameResult,       // Win/lose/gave-up result display
+  DifficultySelector,
+  SizeSelector,
+  ModeSelector,
+
+  // Hooks
+  useTimer,         // Timer logic with start/stop/reset
+  useGameStats,     // Game stats with localStorage persistence
+  usePersistedState,// useState with localStorage
+  useKeyboardInput, // Keyboard event handling
+
+  // Utilities
+  renderIcon,       // Render emoji or SVG icon
+  fuzzySearch,      // Fuzzy string matching
+  createPackApi,    // API client for pack backend
+
+  // Seeding (for reproducible puzzles)
+  createSeededRNG,  // Seeded random number generator
+  seededShuffle,    // Shuffle array with seed
+  seededChoice,     // Pick random element with seed
+  seededInt,        // Random integer with seed
+  getTodaysSeed,    // Get seed for today's date
+  getSeedForDate,   // Get seed for any date
+  parseSeedFromUrl, // Parse seed from URL params
+  hashString,       // Hash string to seed value
+  generateRandomSeed,
+} from '@enigma';
+```
+
+### API Helper
+
+Use `createPackApi()` for easy backend communication with automatic CSRF handling:
+
+```javascript
+import { createPackApi } from '@enigma';
+
+const api = createPackApi('my-pack-id');
+
+// GET request
+const data = await api.get('/leaderboard');
+
+// POST request (handles CSRF automatically)
+await api.post('/submit-score', { score: 100, time: 42 });
+
+// Other methods
+await api.put('/update', { ... });
+await api.delete('/item/123');
+```
+
+### Seeding for Reproducible Puzzles
+
+Games should be reproducible given a seed number:
+
+```javascript
+import { createSeededRNG, seededShuffle, getTodaysSeed } from '@enigma';
+
+// Daily puzzle: same seed for everyone today
+const seed = getTodaysSeed('my-game');
+const rng = createSeededRNG(seed);
+
+// Use rng for all randomness
+const shuffled = seededShuffle(items, rng);
+const randomNum = Math.floor(rng() * 100);
+
+// Display seed so users can share specific puzzles
+console.log(`Puzzle #${seed}`);
+```
 
 ---
 
@@ -301,6 +426,22 @@ The `context` parameter provides:
 Read-only access to user info is available through `context.core.*` APIs.
 
 ### Calling Your API from Frontend
+
+Use the `createPackApi` helper from the SDK (recommended):
+
+```javascript
+import { createPackApi } from '@enigma';
+
+const api = createPackApi('my-pack-id');
+
+// GET request
+const data = await api.get('/data');
+
+// POST request (handles CSRF automatically)
+await api.post('/save', { data: 'value' });
+```
+
+Or manually:
 
 ```javascript
 // In your game component

@@ -12,6 +12,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { communityPacks, getPackageById, getGameBySlug } from '../../packs/registry';
+import { renderIcon } from '../../utils/renderIcon';
 import styles from './CommunityGame.module.css';
 
 export default function CommunityGame() {
@@ -78,11 +79,13 @@ export default function CommunityGame() {
             ← Back
           </Link>
           <div className={styles.gameInfo}>
-            <span className={styles.gameIcon}>{game.icon || game.emojiIcon || '🎮'}</span>
+            <span className={styles.gameIcon}>
+              {renderIcon(game.icon || game.emojiIcon, styles.svgIcon, '🎮')}
+            </span>
             <div>
               <h1 className={styles.title}>{game.title}</h1>
               <p className={styles.packName}>
-                {pack.icon} {pack.name}
+                {renderIcon(pack.icon, styles.packSvgIcon, '📦')} {pack.name}
                 <span className={styles.version}>v{pack.version}</span>
               </p>
             </div>

@@ -1,0 +1,33 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Water Pouring: Measuring jugs puzzle -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#ecfeff"/>
+
+  <!-- Large jug (left) -->
+  <path d="M3 8 L3 20 Q3 22, 5 22 L9 22 Q11 22, 11 20 L11 8 Q11 6, 7 6 Q3 6, 3 8 Z" fill="#cffafe" stroke="#06b6d4" stroke-width="1.5"/>
+  <!-- Water in large jug -->
+  <path d="M3.5 14 L10.5 14 L10.5 20 Q10.5 21.5, 9 21.5 L5 21.5 Q3.5 21.5, 3.5 20 Z" fill="#22d3ee"/>
+  <!-- Measurement lines -->
+  <line x1="4" y1="10" x2="5.5" y2="10" stroke="#0891b2" stroke-width="0.5"/>
+  <line x1="4" y1="14" x2="5.5" y2="14" stroke="#0891b2" stroke-width="0.5"/>
+  <line x1="4" y1="18" x2="5.5" y2="18" stroke="#0891b2" stroke-width="0.5"/>
+  <text x="2.5" y="15" font-family="Arial" font-size="2" fill="#0891b2">5L</text>
+
+  <!-- Small jug (right) -->
+  <path d="M14 12 L14 20 Q14 22, 16 22 L18 22 Q20 22, 20 20 L20 12 Q20 10, 17 10 Q14 10, 14 12 Z" fill="#cffafe" stroke="#06b6d4" stroke-width="1.5"/>
+  <!-- Water in small jug -->
+  <path d="M14.5 16 L19.5 16 L19.5 20 Q19.5 21.5, 18 21.5 L16 21.5 Q14.5 21.5, 14.5 20 Z" fill="#22d3ee"/>
+  <text x="21" y="17" font-family="Arial" font-size="2" fill="#0891b2">3L</text>
+
+  <!-- Pouring water arc -->
+  <path d="M10 8 Q12 4, 15 9" stroke="#06b6d4" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="2,2"/>
+
+  <!-- Water drops -->
+  <ellipse cx="12" cy="6" rx="1" ry="1.5" fill="#22d3ee"/>
+  <ellipse cx="13.5" cy="8" rx="0.8" ry="1.2" fill="#22d3ee" opacity="0.7"/>
+
+  <!-- Target indicator -->
+  <rect x="14" y="2" width="6" height="4" rx="1" fill="#0891b2"/>
+  <text x="17" y="4.8" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">4L</text>
+</svg>

@@ -4,54 +4,9 @@ import GameCard from '../../components/GameCard';
 import { categories } from '../../data/gameRegistry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
-import { communityPacks } from '../../packs/registry';
+import { communityPacks, isCommunityPack } from '../../packs/registry';
 import { getFilteredCategories, officialPacks } from '../../data/packageRegistry';
 import styles from './Home.module.css';
-
-/**
- * CustomGameCard - Card for iframe-based custom games
- */
-function CustomGameCard({ game, packId }) {
-  return (
-    <Link
-      to={`/custom/${packId}/${game.id}`}
-      className={styles.customGameCard}
-    >
-      <div className={styles.customGameIcon}>{game.icon || '🎮'}</div>
-      <div className={styles.customGameInfo}>
-        <h3 className={styles.customGameTitle}>{game.title}</h3>
-        {game.description && (
-          <p className={styles.customGameDesc}>{game.description}</p>
-        )}
-      </div>
-      <span className={styles.customGameBadge}>External</span>
-    </Link>
-  );
-}
-
-/**
- * CommunityGameCard - Card for community pack games
- */
-function CommunityGameCard({ game, packId }) {
-  return (
-    <Link
-      to={`/community/${packId}/${game.slug}`}
-      className={styles.customGameCard}
-      style={{
-        '--card-gradient': game.gradient || 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-      }}
-    >
-      <div className={styles.customGameIcon}>{game.icon || game.emojiIcon || '🎮'}</div>
-      <div className={styles.customGameInfo}>
-        <h3 className={styles.customGameTitle}>{game.title}</h3>
-        {game.description && (
-          <p className={styles.customGameDesc}>{game.description}</p>
-        )}
-      </div>
-      <span className={styles.communityTag}>Community</span>
-    </Link>
-  );
-}
 
 export default function Home() {
   const { installedPackages } = useInstalledPackages();
@@ -59,8 +14,10 @@ export default function Home() {
 
   // Filter categories and games based on installed packages
   // This handles includeGames/excludeGames for proper game filtering
+  // Exclude community packs - they're rendered separately via communityCategories
   const filteredCategories = useMemo(() => {
-    return getFilteredCategories(installedPackages, categories);
+    const officialPackageIds = installedPackages.filter(id => !isCommunityPack(id));
+    return getFilteredCategories(officialPackageIds, categories);
   }, [installedPackages]);
 
   // Get community pack categories from the registry (loaded at build time)
@@ -110,7 +67,7 @@ export default function Home() {
         );
       })}
 
-      {/* Custom Packs */}
+      {/* Custom Packs (iframe-based external games) */}
       {packsWithGames.map((pack) => (
         <section key={pack.id} className={styles.category}>
           <h2 className={styles.categoryTitle}>
@@ -121,7 +78,16 @@ export default function Home() {
           </h2>
           <div className={styles.grid}>
             {pack.games.map((game) => (
-              <CustomGameCard key={game.id} game={game} packId={pack.id} />
+              <GameCard
+                key={game.id}
+                title={game.title}
+                slug={game.id}
+                description={game.description}
+                linkTo={`/custom/${pack.id}/${game.id}`}
+                customIcon={game.icon || '🎮'}
+                customColors={{ primary: '#f59e0b', secondary: '#d97706' }}
+                typeBadge="External"
+              />
             ))}
           </div>
         </section>
@@ -141,7 +107,16 @@ export default function Home() {
             </h2>
             <div className={styles.grid}>
               {category.games.map((game) => (
-                <CommunityGameCard key={game.slug} game={game} packId={category.packId} />
+                <GameCard
+                  key={game.slug}
+                  title={game.title}
+                  slug={game.slug}
+                  description={game.description}
+                  linkTo={`/community/${category.packId}/${game.slug}`}
+                  customIcon={game.icon || game.emojiIcon || '🎮'}
+                  customColors={game.colors || { primary: '#8b5cf6', secondary: '#7c3aed' }}
+                  typeBadge="Community"
+                />
               ))}
             </div>
           </section>

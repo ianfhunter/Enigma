@@ -115,7 +115,7 @@ db.exec(`
     available_version TEXT
   );
 
-  -- Community sources: GitHub repos users can add to discover packs
+  -- Community sources: GitHub repos or local paths users can add to discover packs
   CREATE TABLE IF NOT EXISTS community_sources (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     url TEXT NOT NULL UNIQUE,
@@ -125,6 +125,7 @@ db.exec(`
     color TEXT,
     pack_id TEXT,
     has_backend INTEGER DEFAULT 0,
+    is_local INTEGER DEFAULT 0,
     latest_version TEXT,
     last_checked_at TEXT,
     error_message TEXT,
@@ -168,6 +169,13 @@ function runMigrations() {
   if (!packsCols.includes('available_version')) {
     console.log('Migration: Adding available_version column to installed_packs');
     db.exec('ALTER TABLE installed_packs ADD COLUMN available_version TEXT');
+  }
+
+  // Add is_local column to community_sources if missing
+  const sourceCols = db.prepare("PRAGMA table_info(community_sources)").all().map(c => c.name);
+  if (!sourceCols.includes('is_local')) {
+    console.log('Migration: Adding is_local column to community_sources');
+    db.exec('ALTER TABLE community_sources ADD COLUMN is_local INTEGER DEFAULT 0');
   }
 }
 

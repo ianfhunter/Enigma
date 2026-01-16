@@ -1,0 +1,40 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Threads: Connected letters forming themed words -->
+  
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f5f3ff"/>
+  
+  <!-- Letter grid background -->
+  <rect x="2" y="2" width="20" height="20" rx="1" fill="#ede9fe"/>
+  
+  <!-- Thread path (curved line connecting letters) -->
+  <path d="M5 5 Q8 3, 10 7 Q12 11, 15 9 Q18 7, 19 11 Q20 15, 16 17 Q12 19, 9 17 Q6 15, 5 11 Q4 7, 5 5" 
+        stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Letters on the thread -->
+  <circle cx="5" cy="5" r="2.5" fill="#8b5cf6"/>
+  <text x="5" y="6.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">T</text>
+  
+  <circle cx="10" cy="7" r="2.5" fill="#7c3aed"/>
+  <text x="10" y="8.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">H</text>
+  
+  <circle cx="15" cy="9" r="2.5" fill="#8b5cf6"/>
+  <text x="15" y="10.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">E</text>
+  
+  <circle cx="19" cy="11" r="2.5" fill="#7c3aed"/>
+  <text x="19" y="12.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">M</text>
+  
+  <circle cx="16" cy="17" r="2.5" fill="#8b5cf6"/>
+  <text x="16" y="18.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">E</text>
+  
+  <!-- Scattered other letters (not on thread) -->
+  <text x="4" y="13" font-family="Arial" font-size="3" fill="#c4b5fd">X</text>
+  <text x="8" y="19" font-family="Arial" font-size="3" fill="#c4b5fd">Q</text>
+  <text x="19" y="5" font-family="Arial" font-size="3" fill="#c4b5fd">Z</text>
+  <text x="13" cy="14" font-family="Arial" font-size="3" fill="#c4b5fd">K</text>
+  
+  <!-- MegaThread indicator -->
+  <rect x="2" y="20" width="8" height="2" rx="1" fill="#6366f1"/>
+  <text x="6" y="21.5" font-family="Arial" font-size="1.8" font-weight="bold" fill="#ffffff" text-anchor="middle">MEGA</text>
+</svg>
+

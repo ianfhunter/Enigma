@@ -1,0 +1,28 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Word Ladder: Vertical ladder with rungs showing letter transformation -->
+
+  <!-- Left rail of ladder -->
+  <rect x="2" y="1" width="2" height="22" rx="1" fill="#3dbdb5"/>
+
+  <!-- Right rail of ladder -->
+  <rect x="20" y="1" width="2" height="22" rx="1" fill="#3dbdb5"/>
+
+  <!-- Top rung - 3 letter boxes (start word) -->
+  <rect x="6" y="2" width="3.5" height="4" rx="1" fill="#4ecdc4"/>
+  <rect x="10.25" y="2" width="3.5" height="4" rx="1" fill="#4ecdc4"/>
+  <rect x="14.5" y="2" width="3.5" height="4" rx="1" fill="#4ecdc4"/>
+
+  <!-- Middle rung - one letter changed (highlighted) -->
+  <rect x="6" y="10" width="3.5" height="4" rx="1" fill="#4ecdc4"/>
+  <rect x="10.25" y="10" width="3.5" height="4" rx="1" fill="#ffffff" stroke="#3dbdb5" stroke-width="0.5"/>
+  <rect x="14.5" y="10" width="3.5" height="4" rx="1" fill="#4ecdc4"/>
+
+  <!-- Bottom rung - end word -->
+  <rect x="6" y="18" width="3.5" height="4" rx="1" fill="#2a9d8f"/>
+  <rect x="10.25" y="18" width="3.5" height="4" rx="1" fill="#2a9d8f"/>
+  <rect x="14.5" y="18" width="3.5" height="4" rx="1" fill="#2a9d8f"/>
+
+  <!-- Arrow/flow indicators between rungs -->
+  <path d="M12 7 L12 9" stroke="#3dbdb5" stroke-width="1" stroke-linecap="round"/>
+  <path d="M12 15 L12 17" stroke="#3dbdb5" stroke-width="1" stroke-linecap="round"/>
+</svg>

@@ -4,6 +4,9 @@
  * Word games from around the world featuring different languages and cultural variations.
  */
 
+// Custom SVG icons used by games in this pack
+import shiritoriIcon from '../../assets/icons/shiritori.svg';
+
 const internationalWordsPack = {
   id: 'international-words',
   type: 'official',
@@ -26,7 +29,7 @@ const internationalWordsPack = {
           title: 'しりとり',
           aliases: ['Word Chain', 'Last Letter Game'],
           description: 'Word chain game! Each word starts with the last letter of the previous.',
-          icon: '🔗',
+          icon: shiritoriIcon,
           emojiIcon: '🔗',
           colors: { primary: '#dc2626', secondary: '#b91c1c' },
           gradient: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',

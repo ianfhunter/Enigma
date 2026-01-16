@@ -1,0 +1,30 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gokigen Naname: Diagonal lines in cells with number clues at intersections -->
+
+  <!-- Grid background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fdf2f8" stroke="#ec4899" stroke-width="1"/>
+
+  <!-- Grid lines -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#fbcfe8" stroke-width="0.5"/>
+  <line x1="15" y1="1" x2="15" y2="23" stroke="#fbcfe8" stroke-width="0.5"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#fbcfe8" stroke-width="0.5"/>
+  <line x1="1" y1="15" x2="23" y2="15" stroke="#fbcfe8" stroke-width="0.5"/>
+
+  <!-- Diagonal lines in cells -->
+  <line x1="1" y1="1" x2="8" y2="8" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="8" y1="1" x2="15" y2="8" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="1" x2="15" y2="8" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="1" y1="8" x2="8" y2="15" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="15" y1="8" x2="8" y2="15" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="15" y1="8" x2="22" y2="15" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="8" y1="15" x2="1" y2="22" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="8" y1="15" x2="15" y2="22" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="15" x2="15" y2="22" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Number clues at grid intersections -->
+  <circle cx="8" cy="8" r="3" fill="#ffffff" stroke="#f472b6" stroke-width="1"/>
+  <text x="8" y="9.5" font-family="Arial" font-size="4" font-weight="bold" fill="#db2777" text-anchor="middle">4</text>
+
+  <circle cx="15" cy="15" r="3" fill="#ffffff" stroke="#f472b6" stroke-width="1"/>
+  <text x="15" y="16.5" font-family="Arial" font-size="4" font-weight="bold" fill="#db2777" text-anchor="middle">2</text>
+</svg>

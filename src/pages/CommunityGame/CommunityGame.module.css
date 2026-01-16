@@ -40,6 +40,19 @@
   filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3));
 }
 
+.svgIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+
+.packSvgIcon {
+  width: 1rem;
+  height: 1rem;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: 700;

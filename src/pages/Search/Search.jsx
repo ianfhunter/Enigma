@@ -6,27 +6,6 @@ import { communityPacks } from '../../packs/registry';
 import { fuzzySearchGames } from '../../utils/fuzzySearch';
 import styles from './Search.module.css';
 
-/**
- * CommunityGameCard - Card for community pack games in search results
- */
-function CommunityGameCard({ game, packId }) {
-  return (
-    <Link
-      to={`/community/${packId}/${game.slug}`}
-      className={styles.card}
-    >
-      <div className={styles.cardContent}>
-        <span className={styles.icon}>{game.icon || game.emojiIcon || '🎮'}</span>
-        <div className={styles.info}>
-          <h3 className={styles.title}>{game.title}</h3>
-          <p className={styles.description}>{game.description}</p>
-        </div>
-        <span className={styles.communityBadge}>Community</span>
-      </div>
-    </Link>
-  );
-}
-
 export default function Search() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
@@ -63,23 +42,19 @@ export default function Search() {
       {allMatches.length > 0 ? (
         <div className={styles.grid}>
           {allMatches.map((game) => (
-            game.isCommunity ? (
-              <CommunityGameCard
-                key={`community-${game.packId}-${game.slug}`}
-                game={game}
-                packId={game.packId}
-              />
-            ) : (
-              <GameCard
-                key={game.slug}
-                title={game.title}
-                slug={game.slug}
-                description={game.description}
-                disabled={game.disabled}
-                tag={game.tag}
-                version={game.version}
-              />
-            )
+            <GameCard
+              key={game.isCommunity ? `community-${game.packId}-${game.slug}` : game.slug}
+              title={game.title}
+              slug={game.slug}
+              description={game.description}
+              disabled={game.disabled}
+              tag={game.tag}
+              version={game.version}
+              linkTo={game.isCommunity ? `/community/${game.packId}/${game.slug}` : null}
+              customIcon={game.isCommunity ? (game.icon || game.emojiIcon || '🎮') : null}
+              customColors={game.isCommunity ? (game.colors || { primary: '#8b5cf6', secondary: '#7c3aed' }) : null}
+              typeBadge={game.isCommunity ? 'Community' : null}
+            />
           ))}
         </div>
       ) : (

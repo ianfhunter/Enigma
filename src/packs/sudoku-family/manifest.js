@@ -7,6 +7,13 @@
 
 // Custom SVG icons used by games in this pack
 import sudokuIcon from '../../assets/icons/sudoku.svg';
+import calcudokuIcon from '../../assets/icons/calcudoku.svg';
+import kakuroIcon from '../../assets/icons/kakuro.svg';
+import kropkiIcon from '../../assets/icons/kropki.svg';
+import str8tsIcon from '../../assets/icons/str8ts.svg';
+import sujikoIcon from '../../assets/icons/sujiko.svg';
+import futoshikiIcon from '../../assets/icons/futoshiki.svg';
+import abcendviewIcon from '../../assets/icons/abcendview.svg';
 
 /**
  * Pack metadata
@@ -69,7 +76,8 @@ export const categories = [
         slug: 'calcudoku',
         aliases: ['Mathdoku', 'Square Wisdom'],
         description: 'Fill the grid using math clues. Like Sudoku meets arithmetic!',
-        icon: '➕',
+        icon: calcudokuIcon,
+        emojiIcon: '➕',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
         version: 'v1.0',
@@ -80,7 +88,8 @@ export const categories = [
         slug: 'kakuro',
         aliases: ['Cross Sums', 'Kakro'],
         description: 'Fill in numbers that add up to the clues. A crossword with math!',
-        icon: '➗',
+        icon: kakuroIcon,
+        emojiIcon: '➗',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         version: 'v1.0',
@@ -91,7 +100,8 @@ export const categories = [
         slug: 'futoshiki',
         aliases: ['More or Less', 'Hutosiki', 'Unequal'],
         description: 'Fill the grid following inequalities. Like Sudoku with greater-than clues!',
-        icon: '⚖️',
+        icon: futoshikiIcon,
+        emojiIcon: '⚖️',
         colors: { primary: '#fb7185', secondary: '#f43f5e' },
         gradient: 'linear-gradient(135deg, #fb7185 0%, #f43f5e 100%)',
         version: 'v1.0',
@@ -101,7 +111,8 @@ export const categories = [
         title: 'Str8ts',
         slug: 'str8ts',
         description: 'Fill white cells with 1-9. Compartments must form consecutive sequences!',
-        icon: '🔢',
+        icon: str8tsIcon,
+        emojiIcon: '🔢',
         colors: { primary: '#60a5fa', secondary: '#3b82f6' },
         gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
         version: 'v1.0',
@@ -111,7 +122,8 @@ export const categories = [
         title: 'Kropki',
         slug: 'kropki',
         description: 'Fill the grid with numbers. White dots = consecutive, black dots = double.',
-        icon: '⚫',
+        icon: kropkiIcon,
+        emojiIcon: '⚫',
         colors: { primary: '#64748b', secondary: '#334155' },
         gradient: 'linear-gradient(135deg, #64748b 0%, #334155 100%)',
         version: 'v1.0',
@@ -121,7 +133,8 @@ export const categories = [
         title: 'Sujiko',
         slug: 'sujiko',
         description: 'Fill the 3×3 grid with 1-9. Circle clues show the sum of surrounding cells.',
-        icon: '⭕',
+        icon: sujikoIcon,
+        emojiIcon: '⭕',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         version: 'v1.0',
@@ -141,7 +154,8 @@ export const categories = [
         title: 'ABC End View',
         slug: 'abc-end-view',
         description: 'Place letters so clues show which letter is seen first from each edge.',
-        icon: '🔤',
+        icon: abcendviewIcon,
+        emojiIcon: '🔤',
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         version: 'v1.0',

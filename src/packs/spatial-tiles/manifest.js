@@ -10,6 +10,14 @@ import pipePuzzleIcon from '../../assets/icons/pipe-puzzle.svg';
 import stainedGlassIcon from '../../assets/icons/stained-glass.svg';
 import towerOfHanoiIcon from '../../assets/icons/tower-of-hanoi.svg';
 import CirkitzIcon from '../../pages/Cirkitz/CirkitzIcon';
+import untangleIcon from '../../assets/icons/untangle.svg';
+import slidingpuzzleIcon from '../../assets/icons/slidingpuzzle.svg';
+import tileswapIcon from '../../assets/icons/tileswap.svg';
+import colorcubeIcon from '../../assets/icons/colorcube.svg';
+import entanglementIcon from '../../assets/icons/entanglement.svg';
+import twiddleIcon from '../../assets/icons/twiddle.svg';
+import netgameIcon from '../../assets/icons/netgame.svg';
+import samegameIcon from '../../assets/icons/samegame.svg';
 
 /**
  * Pack metadata
@@ -49,7 +57,8 @@ export const categories = [
         title: 'Sliding Puzzle',
         slug: 'sliding-puzzle',
         description: 'Slide tiles to complete the image. A classic brain teaser!',
-        icon: '🔲',
+        icon: slidingpuzzleIcon,
+        emojiIcon: '🔲',
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
         version: 'v1.0',
@@ -70,7 +79,8 @@ export const categories = [
         title: 'Tile Swap',
         slug: 'tile-swap',
         description: 'Swap tiles to reassemble the scrambled image.',
-        icon: '🔄',
+        icon: tileswapIcon,
+        emojiIcon: '🔄',
         colors: { primary: '#818cf8', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #818cf8 0%, #6366f1 100%)',
         version: 'v1.0',
@@ -112,7 +122,8 @@ export const categories = [
         title: 'Color Cube 3×3×3',
         slug: 'color-cube',
         description: 'Scramble and solve a classic 3×3×3 color cube using standard moves (U/D/L/R/F/B).',
-        icon: '🧊',
+        icon: colorcubeIcon,
+        emojiIcon: '🧊',
         colors: { primary: '#22c55e', secondary: '#3b82f6' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #3b82f6 100%)',
         version: 'v1.0',
@@ -122,7 +133,8 @@ export const categories = [
         title: 'Entanglement',
         slug: 'entanglement',
         description: 'Place and rotate hex tiles to extend the path as far as possible without escaping the board.',
-        icon: '🕸️',
+        icon: entanglementIcon,
+        emojiIcon: '🕸️',
         colors: { primary: '#22d3ee', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #a855f7 100%)',
         version: 'v1.0',
@@ -176,7 +188,8 @@ export const categories = [
         title: 'Twiddle',
         slug: 'twiddle',
         description: 'Rotate tiles to match a target arrangement.',
-        icon: '🌀',
+        icon: twiddleIcon,
+        emojiIcon: '🌀',
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
         version: 'v1.0',
@@ -186,7 +199,8 @@ export const categories = [
         title: 'Netgame',
         slug: 'netgame',
         description: 'Rotate tiles to connect the entire network.',
-        icon: '🕸️',
+        icon: netgameIcon,
+        emojiIcon: '🕸️',
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         version: 'v1.0',
@@ -216,7 +230,8 @@ export const categories = [
         title: 'Untangle',
         slug: 'untangle',
         description: 'Move points so the lines stop crossing.',
-        icon: '🕸️',
+        icon: untangleIcon,
+        emojiIcon: '🕸️',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         version: 'v1.0',
@@ -226,7 +241,8 @@ export const categories = [
         title: 'Samegame',
         slug: 'samegame',
         description: 'Remove groups of adjacent tiles to clear the board efficiently.',
-        icon: '🧩',
+        icon: samegameIcon,
+        emojiIcon: '🧩',
         colors: { primary: '#f97316', secondary: '#ea580c' },
         gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
         version: 'v1.0',

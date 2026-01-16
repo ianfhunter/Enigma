@@ -1,0 +1,28 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Kurotto: Circled numbers with shaded groups -->
+
+  <!-- Grid background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1"/>
+
+  <!-- Grid lines -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#ddd6fe" stroke-width="0.5"/>
+  <line x1="16" y1="1" x2="16" y2="23" stroke="#ddd6fe" stroke-width="0.5"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#ddd6fe" stroke-width="0.5"/>
+  <line x1="1" y1="16" x2="23" y2="16" stroke="#ddd6fe" stroke-width="0.5"/>
+
+  <!-- Shaded cell groups -->
+  <rect x="1" y="1" width="7" height="7" fill="#8b5cf6"/>
+  <rect x="8" y="1" width="8" height="7" fill="#8b5cf6"/>
+  <rect x="16" y="8" width="7" height="8" fill="#6366f1"/>
+  <rect x="1" y="16" width="7" height="7" fill="#6366f1"/>
+
+  <!-- Circled number clues -->
+  <circle cx="19.5" cy="4.5" r="2.5" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="19.5" y="5.8" font-family="Arial" font-size="3.5" font-weight="bold" fill="#6366f1" text-anchor="middle">3</text>
+
+  <circle cx="4.5" cy="12" r="2.5" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="4.5" y="13.3" font-family="Arial" font-size="3.5" font-weight="bold" fill="#6366f1" text-anchor="middle">2</text>
+
+  <circle cx="12" cy="19.5" r="2.5" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="12" y="20.8" font-family="Arial" font-size="3.5" font-weight="bold" fill="#6366f1" text-anchor="middle">4</text>
+</svg>

@@ -3,6 +3,7 @@
  *
  * Handles:
  * - Git URL parsing (SSH and HTTPS formats)
+ * - Local path sources for development
  * - Fetching manifests from GitHub without full clone
  * - Getting semantic version tags
  * - Cloning specific tags
@@ -11,8 +12,8 @@
 
 import { exec as execCallback } from 'child_process';
 import { promisify } from 'util';
-import { existsSync, mkdirSync, rmSync } from 'fs';
-import { join, dirname } from 'path';
+import { existsSync, mkdirSync, rmSync, readFileSync, symlinkSync, lstatSync } from 'fs';
+import { join, dirname, resolve, isAbsolute } from 'path';
 import { fileURLToPath } from 'url';
 
 const exec = promisify(execCallback);
@@ -80,6 +81,139 @@ export function parseGitHubUrl(url) {
   }
 
   return null;
+}
+
+/**
+ * Check if a URL/path is a local file path (for development)
+ *
+ * Supports:
+ * - file:///path/to/pack
+ * - /absolute/path
+ * - ./relative/path
+ * - ../parent/path
+ * - C:\Windows\path (Windows)
+ *
+ * @param {string} url - URL or path to check
+ * @returns {boolean}
+ */
+export function isLocalPath(url) {
+  if (!url || typeof url !== 'string') return false;
+
+  const normalized = url.trim();
+
+  return (
+    normalized.startsWith('file://') ||
+    normalized.startsWith('/') ||
+    normalized.startsWith('./') ||
+    normalized.startsWith('../') ||
+    /^[a-zA-Z]:[\\/]/.test(normalized) // Windows absolute path
+  );
+}
+
+/**
+ * Normalize a local path (remove file:// prefix, resolve relative paths)
+ *
+ * @param {string} url - URL or path
+ * @returns {string} Normalized absolute path
+ */
+export function normalizeLocalPath(url) {
+  let normalized = url.trim();
+
+  // Remove file:// prefix
+  if (normalized.startsWith('file://')) {
+    normalized = normalized.slice(7);
+  }
+
+  // Resolve to absolute path
+  if (!isAbsolute(normalized)) {
+    normalized = resolve(process.cwd(), normalized);
+  }
+
+  return normalized;
+}
+
+/**
+ * Fetch manifest from a local path
+ *
+ * @param {string} localPath - Path to pack directory
+ * @returns {Promise<Object>} Parsed manifest object
+ */
+export async function fetchManifestFromLocal(localPath) {
+  const packDir = normalizeLocalPath(localPath);
+
+  if (!existsSync(packDir)) {
+    throw new Error(`Local path does not exist: ${packDir}`);
+  }
+
+  // Try manifest.js first, then manifest.json
+  const manifestJsPath = join(packDir, 'manifest.js');
+  const manifestJsonPath = join(packDir, 'manifest.json');
+
+  if (existsSync(manifestJsPath)) {
+    const content = readFileSync(manifestJsPath, 'utf8');
+    return parseManifestJs(content);
+  }
+
+  if (existsSync(manifestJsonPath)) {
+    const content = readFileSync(manifestJsonPath, 'utf8');
+    return JSON.parse(content);
+  }
+
+  throw new Error('Could not find manifest.js or manifest.json in local path');
+}
+
+/**
+ * Link a local pack for development (creates symlink)
+ *
+ * @param {string} localPath - Path to local pack directory
+ * @param {string} packId - Pack ID (used as directory name)
+ * @returns {Promise<string>} Path to the linked directory
+ */
+export async function linkLocalPack(localPath, packId) {
+  const sourcePath = normalizeLocalPath(localPath);
+
+  if (!existsSync(sourcePath)) {
+    throw new Error(`Local path does not exist: ${sourcePath}`);
+  }
+
+  // Ensure plugins directory exists
+  mkdirSync(PLUGINS_DIR, { recursive: true });
+
+  const packDir = join(PLUGINS_DIR, packId);
+
+  // Remove existing directory/symlink if present
+  if (existsSync(packDir)) {
+    rmSync(packDir, { recursive: true, force: true });
+  }
+
+  // Create symlink
+  try {
+    symlinkSync(sourcePath, packDir, 'dir');
+    console.log(`🔗 Linked local pack: ${packId} -> ${sourcePath}`);
+    return packDir;
+  } catch (error) {
+    throw new Error(`Failed to create symlink: ${error.message}`);
+  }
+}
+
+/**
+ * Check if a pack directory is a symlink (local development)
+ *
+ * @param {string} packId - Pack ID
+ * @returns {boolean}
+ */
+export function isPackSymlink(packId) {
+  const packDir = join(PLUGINS_DIR, packId);
+
+  if (!existsSync(packDir)) {
+    return false;
+  }
+
+  try {
+    return lstatSync(packDir).isSymbolicLink();
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -361,6 +495,11 @@ export async function isGitAvailable() {
 
 export default {
   parseGitHubUrl,
+  isLocalPath,
+  normalizeLocalPath,
+  fetchManifestFromLocal,
+  linkLocalPack,
+  isPackSymlink,
   isSemver,
   compareSemver,
   fetchManifestFromGitHub,

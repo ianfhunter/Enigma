@@ -1,0 +1,34 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Drop Quotes: Letters dropping into columns -->
+
+  <!-- Column guides -->
+  <line x1="4" y1="2" x2="4" y2="22" stroke="#c4b5fd" stroke-width="0.5" stroke-dasharray="2,2"/>
+  <line x1="8" y1="2" x2="8" y2="22" stroke="#c4b5fd" stroke-width="0.5" stroke-dasharray="2,2"/>
+  <line x1="12" y1="2" x2="12" y2="22" stroke="#c4b5fd" stroke-width="0.5" stroke-dasharray="2,2"/>
+  <line x1="16" y1="2" x2="16" y2="22" stroke="#c4b5fd" stroke-width="0.5" stroke-dasharray="2,2"/>
+  <line x1="20" y1="2" x2="20" y2="22" stroke="#c4b5fd" stroke-width="0.5" stroke-dasharray="2,2"/>
+
+  <!-- Floating letters (top - waiting to drop) -->
+  <rect x="2" y="2" width="4" height="4" rx="0.5" fill="#a78bfa"/>
+  <text x="4" y="5" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">T</text>
+
+  <rect x="6" y="4" width="4" height="4" rx="0.5" fill="#8b5cf6"/>
+  <text x="8" y="7" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">H</text>
+
+  <rect x="10" y="2" width="4" height="4" rx="0.5" fill="#a78bfa"/>
+  <text x="12" y="5" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">E</text>
+
+  <rect x="14" y="5" width="4" height="4" rx="0.5" fill="#8b5cf6"/>
+  <text x="16" y="8" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">Q</text>
+
+  <!-- Drop arrows -->
+  <path d="M4 8 L4 12" stroke="#7c3aed" stroke-width="1" stroke-linecap="round"/>
+  <path d="M3 11 L4 13 L5 11" stroke="#7c3aed" stroke-width="1" fill="none"/>
+
+  <!-- Landing zone (answer row) -->
+  <rect x="2" y="17" width="4" height="4" rx="0.5" fill="#ede9fe" stroke="#a78bfa" stroke-width="1"/>
+  <rect x="6" y="17" width="4" height="4" rx="0.5" fill="#ede9fe" stroke="#a78bfa" stroke-width="1"/>
+  <rect x="10" y="17" width="4" height="4" rx="0.5" fill="#ede9fe" stroke="#a78bfa" stroke-width="1"/>
+  <rect x="14" y="17" width="4" height="4" rx="0.5" fill="#ede9fe" stroke="#a78bfa" stroke-width="1"/>
+  <rect x="18" y="17" width="4" height="4" rx="0.5" fill="#ede9fe" stroke="#a78bfa" stroke-width="1"/>
+</svg>

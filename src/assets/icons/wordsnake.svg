@@ -1,0 +1,28 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Word Snake: Snake path through letter grid -->
+
+  <!-- Grid background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#dcfce7"/>
+
+  <!-- Grid lines -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#bbf7d0" stroke-width="0.5"/>
+  <line x1="16" y1="1" x2="16" y2="23" stroke="#bbf7d0" stroke-width="0.5"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#bbf7d0" stroke-width="0.5"/>
+  <line x1="1" y1="16" x2="23" y2="16" stroke="#bbf7d0" stroke-width="0.5"/>
+
+  <!-- Snake path (curved line through cells) -->
+  <path d="M4.5 4.5 Q8 4.5 12 4.5 Q16 4.5 19.5 4.5 Q22 7 19.5 12 Q16 16 12 12 Q8 8 4.5 12 Q2 16 4.5 19.5"
+        stroke="#22c55e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Snake head -->
+  <circle cx="4.5" cy="19.5" r="2.5" fill="#16a34a"/>
+  <circle cx="3.5" cy="18.5" r="0.8" fill="#ffffff"/>
+  <circle cx="5.5" cy="18.5" r="0.8" fill="#ffffff"/>
+
+  <!-- Letters along the path -->
+  <text x="4.5" y="6" font-family="Arial" font-size="3.5" font-weight="bold" fill="#166534" text-anchor="middle">S</text>
+  <text x="12" y="6" font-family="Arial" font-size="3.5" font-weight="bold" fill="#166534" text-anchor="middle">N</text>
+  <text x="19.5" y="6" font-family="Arial" font-size="3.5" font-weight="bold" fill="#166534" text-anchor="middle">A</text>
+  <text x="19.5" y="13.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#166534" text-anchor="middle">K</text>
+  <text x="12" y="13.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#166534" text-anchor="middle">E</text>
+</svg>

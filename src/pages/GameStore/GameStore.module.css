@@ -1603,26 +1603,113 @@ a.previewGame:hover {
   cursor: not-allowed;
 }
 
-/* Source Card */
+/* Source Card - Container for source header + pack(s) */
 .sourceCard {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 1rem;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
-.sourceCard::before {
+/* Source Header Bar - URL and Remove button */
+.sourceHeaderBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sourceUrlCompact {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.removeSourceButtonCompact {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.removeSourceButtonCompact:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.removeSourceButtonCompact:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Pack from Source - The actual pack card nested inside source */
+.packFromSource {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.packFromSource::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: var(--source-color, #6366f1);
-  opacity: 0.8;
+  opacity: 0.6;
+}
+
+.packFromSource.packInstalled {
+  border-color: var(--source-color, #22c55e);
+}
+
+.packFromSource.packInstalled::before {
+  opacity: 1;
+  background: #22c55e;
+}
+
+:global([data-theme="dark"]) .packFromSource {
+  background: rgba(15, 0, 30, 0.4);
+}
+
+/* Pack Actions - Buttons for individual pack */
+.packActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.sourceCard::before {
+  display: none; /* Remove the top bar from source card - it's on packFromSource now */
 }
 
 .sourceCard:hover {
@@ -1678,6 +1765,13 @@ a.previewGame:hover {
 :global([data-theme="dark"]) .sourceIcon {
   background: rgba(30, 0, 60, 0.5);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sourceSvgIcon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .sourceInfo {

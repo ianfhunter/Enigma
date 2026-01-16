@@ -8,6 +8,15 @@
 // Custom SVG icons used by games in this pack
 import mazeIcon from '../../assets/icons/maze.svg';
 import litsIcon from '../../assets/icons/lits.svg';
+import loopyIcon from '../../assets/icons/loopy.svg';
+import yajilinIcon from '../../assets/icons/yajilin.svg';
+import gokigennanameIcon from '../../assets/icons/gokigennaname.svg';
+import tatamibariIcon from '../../assets/icons/tatamibari.svg';
+import shikakuIcon from '../../assets/icons/shikaku.svg';
+import fillominoIcon from '../../assets/icons/fillomino.svg';
+import suguruIcon from '../../assets/icons/suguru.svg';
+import norinoriIcon from '../../assets/icons/norinori.svg';
+import inshinoheyaIcon from '../../assets/icons/inshinoheya.svg';
 
 /**
  * Pack metadata
@@ -60,7 +69,8 @@ export const categories = [
         slug: 'loopy',
         aliases: ['Fences', 'Loop the Loop', 'Takegaki'],
         description: 'Draw a single loop around the grid, satisfying the numeric clues.',
-        icon: '⭕',
+        icon: loopyIcon,
+        emojiIcon: '⭕',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
         version: 'v1.0',
@@ -81,7 +91,8 @@ export const categories = [
         title: 'Yajilin',
         slug: 'yajilin',
         description: 'Shade cells and draw a single closed loop. Arrow clues show shaded cells in that direction.',
-        icon: '↗️',
+        icon: yajilinIcon,
+        emojiIcon: '↗️',
         colors: { primary: '#a855f7', secondary: '#9333ea' },
         gradient: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)',
         version: 'v1.0',
@@ -102,7 +113,8 @@ export const categories = [
         title: 'Gokigen Naname',
         slug: 'gokigen-naname',
         description: 'Draw diagonals in cells. Numbers show how many lines meet at that point.',
-        icon: '／',
+        icon: gokigennanameIcon,
+        emojiIcon: '／',
         colors: { primary: '#ec4899', secondary: '#f472b6' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)',
         version: 'v1.0',
@@ -182,7 +194,8 @@ export const categories = [
         slug: 'shikaku',
         aliases: ['Rectangles', 'Divide by Box'],
         description: 'Divide the grid into rectangles. Each rectangle contains exactly one number showing its area.',
-        icon: '▢',
+        icon: shikakuIcon,
+        emojiIcon: '▢',
         colors: { primary: '#f472b6', secondary: '#ec4899' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
         version: 'v1.0',
@@ -193,7 +206,8 @@ export const categories = [
         slug: 'fillomino',
         aliases: ['Polyominous'],
         description: 'Fill numbers so connected groups of the same number have that many cells.',
-        icon: '🔢',
+        icon: fillominoIcon,
+        emojiIcon: '🔢',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
         version: 'v1.0',
@@ -213,7 +227,8 @@ export const categories = [
         title: 'Tatamibari',
         slug: 'tatamibari',
         description: 'Divide the grid into rectangles. Each contains one clue showing its shape.',
-        icon: '🔲',
+        icon: tatamibariIcon,
+        emojiIcon: '🔲',
         colors: { primary: '#14b8a6', secondary: '#06b6d4' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%)',
         version: 'v1.0',
@@ -234,7 +249,8 @@ export const categories = [
         title: 'Suguru',
         slug: 'suguru',
         description: 'Fill regions with 1-N (region size). Same numbers cannot touch, even diagonally.',
-        icon: '🔢',
+        icon: suguruIcon,
+        emojiIcon: '🔢',
         colors: { primary: '#f472b6', secondary: '#c084fc' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #c084fc 100%)',
         version: 'v1.0',
@@ -244,7 +260,8 @@ export const categories = [
         title: 'Norinori',
         slug: 'norinori',
         description: 'Shade cells to form dominoes. Each region must contain exactly 2 shaded cells.',
-        icon: '▪️',
+        icon: norinoriIcon,
+        emojiIcon: '▪️',
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         version: 'v1.0',
@@ -254,7 +271,8 @@ export const categories = [
         title: 'Inshi no Heya',
         slug: 'inshi-no-heya',
         description: 'Fill numbers so each row/column has 1-N once. Numbers in each room must multiply to the clue.',
-        icon: '✖️',
+        icon: inshinoheyaIcon,
+        emojiIcon: '✖️',
         colors: { primary: '#a78bfa', secondary: '#8b5cf6' },
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)',
         version: 'v1.0',

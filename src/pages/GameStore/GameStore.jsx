@@ -9,6 +9,7 @@ import {
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import { useCommunitySources } from '../../hooks/useCommunitySources';
+import { renderIcon } from '../../utils/renderIcon';
 import styles from './GameStore.module.css';
 
 /**
@@ -513,7 +514,11 @@ function GameModal({ packId, game, onClose, onSave, onUpdate }) {
 }
 
 /**
- * CommunitySourceCard - Displays a community source with install/update options
+ * CommunitySourceCard - Displays a community source with its packs
+ *
+ * Structure:
+ * - Source header (GitHub URL + Remove Source button)
+ * - Pack(s) inside the source (with Install/Uninstall/Update buttons)
  */
 function CommunitySourceCard({
   source,
@@ -538,103 +543,12 @@ function CommunitySourceCard({
   const hasUpdate = source.available_version && source.is_installed;
 
   return (
-    <div
-      className={`${styles.sourceCard} ${source.is_installed ? styles.sourceInstalled : ''}`}
-      style={{ '--source-color': source.color || '#6366f1' }}
-    >
-      <div className={styles.sourceHeader}>
-        <div className={styles.sourceIcon}>{source.icon || '📦'}</div>
-        <div className={styles.sourceInfo}>
-          <h3 className={styles.sourceName}>{source.name}</h3>
-          <div className={styles.sourceMeta}>
-            {source.latest_version && (
-              <span className={styles.versionBadge}>{source.latest_version}</span>
-            )}
-            {source.is_installed && (
-              <span className={styles.installedBadge}>
-                ✓ v{source.installed_version}
-              </span>
-            )}
-            {hasUpdate && (
-              <span className={styles.updateBadge}>
-                ⬆️ {source.available_version}
-              </span>
-            )}
-            {source.has_backend === 1 && (
-              <span className={styles.backendBadge}>⚙️ Backend</span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {source.description && (
-        <p className={styles.sourceDescription}>{source.description}</p>
-      )}
-
-      <code className={styles.sourceUrl}>{source.url}</code>
-
-      {source.error_message && (
-        <div className={styles.sourceError}>
-          <span>⚠️</span>
-          {source.error_message}
-        </div>
-      )}
-
-      <div className={styles.sourceActions}>
-        {!source.is_installed ? (
-          <button
-            className={`${styles.sourceActionButton} ${styles.installButton}`}
-            onClick={() => handleAction('install', () => onInstall(source.id))}
-            disabled={isLoading || actionLoading}
-          >
-            {actionLoading === 'install' ? (
-              <><span className={styles.spinner} /> Installing...</>
-            ) : (
-              <>📥 Install</>
-            )}
-          </button>
-        ) : hasUpdate ? (
-          <button
-            className={`${styles.sourceActionButton} ${styles.updateButton}`}
-            onClick={() => handleAction('update', () => onUpdate(source.id))}
-            disabled={isLoading || actionLoading}
-          >
-            {actionLoading === 'update' ? (
-              <><span className={styles.spinner} /> Updating...</>
-            ) : (
-              <>⬆️ Update to {source.available_version}</>
-            )}
-          </button>
-        ) : (
-          <button
-            className={`${styles.sourceActionButton} ${styles.checkUpdateButton}`}
-            onClick={() => handleAction('check', () => onCheckUpdate(source.id))}
-            disabled={isLoading || actionLoading}
-          >
-            {actionLoading === 'check' ? (
-              <><span className={styles.spinner} /> Checking...</>
-            ) : (
-              <>🔄 Check Update</>
-            )}
-          </button>
-        )}
-
-        {source.is_installed && (
-          <button
-            className={`${styles.sourceActionButton} ${styles.uninstallButton}`}
-            onClick={() => handleAction('uninstall', () => onUninstall(source.id))}
-            disabled={isLoading || actionLoading}
-          >
-            {actionLoading === 'uninstall' ? (
-              <span className={styles.spinner} />
-            ) : (
-              '🗑️'
-            )}
-          </button>
-        )}
-
+    <div className={styles.sourceCard}>
+      {/* Source Header - URL and Remove button */}
+      <div className={styles.sourceHeaderBar}>
+        <code className={styles.sourceUrlCompact}>{source.url}</code>
         <button
-          className={`${styles.sourceActionButton} ${styles.removeSourceButton}`}
+          className={styles.removeSourceButtonCompact}
           onClick={() => handleAction('remove', () => onRemove(source.id))}
           disabled={isLoading || actionLoading}
           title="Remove source"
@@ -642,9 +556,105 @@ function CommunitySourceCard({
           {actionLoading === 'remove' ? (
             <span className={styles.spinner} />
           ) : (
-            '✕'
+            '✕ Remove Source'
           )}
         </button>
+      </div>
+
+      {/* Pack Card - The actual pack from this source */}
+      <div
+        className={`${styles.packFromSource} ${source.is_installed ? styles.packInstalled : ''}`}
+        style={{ '--source-color': source.color || '#6366f1' }}
+      >
+        <div className={styles.sourceHeader}>
+          <div className={styles.sourceIcon}>{renderIcon(source.icon, styles.sourceSvgIcon, '📦')}</div>
+          <div className={styles.sourceInfo}>
+            <h3 className={styles.sourceName}>{source.name}</h3>
+            <div className={styles.sourceMeta}>
+              {source.latest_version && (
+                <span className={styles.versionBadge}>{source.latest_version}</span>
+              )}
+              {source.is_installed && (
+                <span className={styles.installedBadge}>
+                  ✓ Installed ({source.installed_version})
+                </span>
+              )}
+              {hasUpdate && (
+                <span className={styles.updateBadge}>
+                  ⬆️ Update available: {source.available_version}
+                </span>
+              )}
+              {source.has_backend === 1 && (
+                <span className={styles.backendBadge}>⚙️ Backend</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {source.description && (
+          <p className={styles.sourceDescription}>{source.description}</p>
+        )}
+
+        {source.error_message && (
+          <div className={styles.sourceError}>
+            <span>⚠️</span>
+            {source.error_message}
+          </div>
+        )}
+
+        <div className={styles.packActions}>
+          {!source.is_installed ? (
+            <button
+              className={`${styles.sourceActionButton} ${styles.installButton}`}
+              onClick={() => handleAction('install', () => onInstall(source.id))}
+              disabled={isLoading || actionLoading}
+            >
+              {actionLoading === 'install' ? (
+                <><span className={styles.spinner} /> Installing...</>
+              ) : (
+                <>📥 Install Pack</>
+              )}
+            </button>
+          ) : (
+            <>
+              {hasUpdate && (
+                <button
+                  className={`${styles.sourceActionButton} ${styles.updateButton}`}
+                  onClick={() => handleAction('update', () => onUpdate(source.id))}
+                  disabled={isLoading || actionLoading}
+                >
+                  {actionLoading === 'update' ? (
+                    <><span className={styles.spinner} /> Updating...</>
+                  ) : (
+                    <>⬆️ Update to {source.available_version}</>
+                  )}
+                </button>
+              )}
+              <button
+                className={`${styles.sourceActionButton} ${styles.checkUpdateButton}`}
+                onClick={() => handleAction('check', () => onCheckUpdate(source.id))}
+                disabled={isLoading || actionLoading}
+              >
+                {actionLoading === 'check' ? (
+                  <><span className={styles.spinner} /> Checking...</>
+                ) : (
+                  <>🔄 Check for Updates</>
+                )}
+              </button>
+              <button
+                className={`${styles.sourceActionButton} ${styles.uninstallButton}`}
+                onClick={() => handleAction('uninstall', () => onUninstall(source.id))}
+                disabled={isLoading || actionLoading}
+              >
+                {actionLoading === 'uninstall' ? (
+                  <><span className={styles.spinner} /> Uninstalling...</>
+                ) : (
+                  <>🗑️ Uninstall</>
+                )}
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -218,3 +218,31 @@
   letter-spacing: 0.02em;
   z-index: 1;
 }
+
+/* Type badge for Community/External games */
+.typeBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 0.2rem 0.5rem;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 6px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #a78bfa;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.card:hover .typeBadge {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(167, 139, 250, 0.5);
+}
+
+:global([data-theme="light"]) .typeBadge {
+  background: rgba(139, 92, 246, 0.1);
+  color: #7c3aed;
+}

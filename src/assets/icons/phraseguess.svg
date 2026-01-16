@@ -1,0 +1,34 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- PhraseGuess: Letter board with revealed and hidden letters -->
+
+  <!-- Board background -->
+  <rect x="1" y="4" width="22" height="16" rx="2" fill="#064e3b"/>
+
+  <!-- Letter tiles - top row (partial word revealed) -->
+  <rect x="3" y="6" width="4" height="5" rx="0.5" fill="#34d399"/>
+  <text x="5" y="10" font-family="Arial" font-size="4" font-weight="bold" fill="#ffffff" text-anchor="middle">H</text>
+
+  <rect x="8" y="6" width="4" height="5" rx="0.5" fill="#10b981"/>
+  <text x="10" y="10" font-family="Arial" font-size="4" font-weight="bold" fill="#ffffff" text-anchor="middle">E</text>
+
+  <rect x="13" y="6" width="4" height="5" rx="0.5" fill="#34d399"/>
+  <text x="15" y="10" font-family="Arial" font-size="4" font-weight="bold" fill="#ffffff" text-anchor="middle">L</text>
+
+  <rect x="18" y="6" width="4" height="5" rx="0.5" fill="#10b981"/>
+  <text x="20" y="10" font-family="Arial" font-size="4" font-weight="bold" fill="#ffffff" text-anchor="middle">L</text>
+
+  <!-- Bottom row - some hidden -->
+  <rect x="3" y="13" width="4" height="5" rx="0.5" fill="#059669"/>
+
+  <rect x="8" y="13" width="4" height="5" rx="0.5" fill="#34d399"/>
+  <text x="10" y="17" font-family="Arial" font-size="4" font-weight="bold" fill="#ffffff" text-anchor="middle">O</text>
+
+  <rect x="13" y="13" width="4" height="5" rx="0.5" fill="#059669"/>
+
+  <rect x="18" y="13" width="4" height="5" rx="0.5" fill="#059669"/>
+
+  <!-- Sparkle/reveal effect -->
+  <circle cx="5" cy="15.5" r="0.8" fill="#6ee7b7"/>
+  <circle cx="15" cy="15.5" r="0.8" fill="#6ee7b7"/>
+  <circle cx="20" cy="15.5" r="0.8" fill="#6ee7b7"/>
+</svg>

@@ -15,6 +15,7 @@ export default defineConfig({
         alias: {
             '@datasets': path.resolve(__dirname, 'datasets'),
             '@plugins': path.resolve(__dirname, '.plugins'),
+            '@enigma': path.resolve(__dirname, 'src/enigma-sdk'),
         }
     },
     server: {

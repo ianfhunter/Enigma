@@ -1,0 +1,26 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Inshi no Heya: Rooms with multiplication - cleaner approach -->
+
+  <!-- Background grid -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f5f3ff" stroke="#a78bfa" stroke-width="1"/>
+
+  <!-- Room 1 (top-left, 2 cells) -->
+  <rect x="1" y="1" width="11" height="7.5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="3" y="4" font-family="Arial" font-size="3" font-weight="bold" fill="#7c3aed">×6</text>
+  <text x="5" y="7" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">2</text>
+  <text x="9" y="7" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">3</text>
+
+  <!-- Room 2 (top-right, 2 cells) -->
+  <rect x="12" y="1" width="11" height="7.5" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="14" y="4" font-family="Arial" font-size="3" font-weight="bold" fill="#7c3aed">×2</text>
+  <text x="16" y="7" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">1</text>
+  <text x="20" y="7" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">2</text>
+
+  <!-- Room 3 (bottom, L-shape) -->
+  <path d="M1 8.5 L1 23 L23 23 L23 8.5 L12 8.5 L12 15 L1 15 Z" fill="#c4b5fd" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="3" y="12" font-family="Arial" font-size="3" font-weight="bold" fill="#7c3aed">×12</text>
+  <text x="5" y="20" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">3</text>
+  <text x="9" y="20" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">4</text>
+  <text x="16" y="13" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">1</text>
+  <text x="20" y="20" font-family="Arial" font-size="4" fill="#6d28d9" text-anchor="middle">1</text>
+</svg>

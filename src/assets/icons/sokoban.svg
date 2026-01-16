@@ -1,0 +1,49 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sokoban: Top-down warehouse view -->
+
+  <!-- Floor tiles -->
+  <rect x="1" y="1" width="22" height="22" rx="1" fill="#0e7490"/>
+  <rect x="2" y="2" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="7" y="2" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="12" y="2" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="17" y="2" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="2" y="7" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="7" y="7" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="12" y="7" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="17" y="7" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="2" y="12" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="7" y="12" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="12" y="12" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="17" y="12" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="2" y="17" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="7" y="17" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="12" y="17" width="5" height="5" fill="#155e75" stroke="#0e7490" stroke-width="0.3"/>
+  <rect x="17" y="17" width="5" height="5" fill="#164e63" stroke="#0e7490" stroke-width="0.3"/>
+
+  <!-- Target X marks -->
+  <g stroke="#22d3ee" stroke-width="1.5" opacity="0.7">
+    <line x1="14" y1="14" x2="16" y2="16"/>
+    <line x1="16" y1="14" x2="14" y2="16"/>
+  </g>
+  <g stroke="#22d3ee" stroke-width="1.5" opacity="0.7">
+    <line x1="19" y1="19" x2="21" y2="21"/>
+    <line x1="21" y1="19" x2="19" y2="21"/>
+  </g>
+
+  <!-- Box on target (gold with checkmark) -->
+  <rect x="13.5" y="13.5" width="4" height="4" rx="0.5" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  <path d="M14.5 15.5 L15.5 16.5 L17 14.5" stroke="#15803d" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Box being pushed (brown crate) -->
+  <rect x="8" y="8" width="4" height="4" rx="0.5" fill="#fcd34d" stroke="#b45309" stroke-width="1"/>
+  <line x1="8.5" y1="8.5" x2="11.5" y2="11.5" stroke="#b45309" stroke-width="0.6"/>
+  <line x1="11.5" y1="8.5" x2="8.5" y2="11.5" stroke="#b45309" stroke-width="0.6"/>
+
+  <!-- Player (top-down view) -->
+  <circle cx="5" cy="10" r="2.5" fill="#0ea5e9" stroke="#0284c7" stroke-width="1"/>
+  <circle cx="5" cy="9" r="1" fill="#bae6fd"/>
+
+  <!-- Push direction -->
+  <path d="M7 10 L8 10" stroke="#67e8f9" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M7.5 9.3 L8.3 10 L7.5 10.7" stroke="#67e8f9" stroke-width="1" fill="none"/>
+</svg>
