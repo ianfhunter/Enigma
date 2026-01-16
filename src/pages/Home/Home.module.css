@@ -624,6 +624,18 @@
   letter-spacing: 0.05em;
 }
 
+.communityTag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.15);
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .customGameCard {
   display: flex;
   flex-direction: column;

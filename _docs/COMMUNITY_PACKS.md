@@ -50,10 +50,12 @@ git@github.com:ianfhunter/EnigmaSampleCommunityPack.git
 ### Adding Sources
 
 When you add a GitHub repository URL, Enigma will:
-1. Fetch the `manifest.js` from the repository
-2. Cache the pack's metadata (name, description, icon, etc.)
-3. Check for available semantic version tags
+1. Check for available semantic version tags (e.g., `v1.0.0`)
+2. Fetch the `manifest.js` from the **latest tagged version** (not main/master)
+3. Cache the pack's metadata (name, description, icon, etc.)
 4. Display the pack in your Community Sources list
+
+> **Note**: Repositories without any semver tags cannot be added. This ensures the metadata shown matches what will actually be installed.
 
 ### Removing Sources
 

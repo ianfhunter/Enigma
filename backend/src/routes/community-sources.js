@@ -22,7 +22,10 @@ import {
   isPackCloned,
   isGitAvailable,
   compareSemver,
+  getPluginsDir,
 } from '../utils/git.js';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 
 const router = Router();
 
@@ -111,14 +114,36 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    // Fetch manifest metadata
-    console.log(`📦 Fetching manifest from ${url}...`);
-    const manifest = await fetchManifestFromGitHub(url);
+    // First, get the latest semver tag - we need this to fetch the correct manifest
+    console.log(`📦 Checking for semver tags in ${url}...`);
+    let latestVersion = null;
+    try {
+      latestVersion = await getLatestSemverTag(url);
+    } catch (e) {
+      console.warn('Could not fetch tags:', e.message);
+      return res.status(400).json({
+        error: 'Could not fetch repository tags',
+        details: e.message,
+        hint: 'Make sure the repository exists and is public',
+      });
+    }
+
+    if (!latestVersion) {
+      return res.status(400).json({
+        error: 'No semver tags found in repository',
+        hint: 'The repository needs at least one semantic version tag (e.g., v1.0.0). Create a tag with: git tag v1.0.0 && git push origin v1.0.0',
+      });
+    }
+
+    console.log(`📦 Found latest version: ${latestVersion}, fetching manifest...`);
+
+    // Fetch manifest from the tagged version (not main/master)
+    const manifest = await fetchManifestFromGitHub(url, latestVersion);
 
     if (!manifest || !manifest.id) {
       return res.status(400).json({
         error: 'Invalid manifest: missing pack id',
-        hint: 'The repository must have a manifest.js or manifest.json with an "id" field',
+        hint: `The repository must have a manifest.js or manifest.json with an "id" field at tag ${latestVersion}`,
       });
     }
 
@@ -129,14 +154,6 @@ router.post('/', async (req, res) => {
         error: `A source with pack ID "${manifest.id}" already exists`,
         existingUrl: existingPack.url,
       });
-    }
-
-    // Get latest semver tag
-    let latestVersion = null;
-    try {
-      latestVersion = await getLatestSemverTag(url);
-    } catch (e) {
-      console.warn('Could not fetch tags:', e.message);
     }
 
     // Insert the source
@@ -587,8 +604,17 @@ router.post('/:id/refresh-manifest', async (req, res) => {
   }
 
   try {
-    const manifest = await fetchManifestFromGitHub(source.url);
+    // Get latest tag first, then fetch manifest from that tag
     const latestVersion = await getLatestSemverTag(source.url);
+
+    if (!latestVersion) {
+      return res.status(400).json({
+        error: 'No semver tags found in repository',
+        hint: 'The repository needs at least one semantic version tag (e.g., v1.0.0)',
+      });
+    }
+
+    const manifest = await fetchManifestFromGitHub(source.url, latestVersion);
 
     // Update cached metadata
     db.prepare(`
@@ -626,5 +652,235 @@ router.post('/:id/refresh-manifest', async (req, res) => {
     });
   }
 });
+
+/**
+ * Get manifest data for all installed community packs
+ * This endpoint returns the full manifest (including games) for frontend use
+ */
+router.get('/installed-manifests', (req, res) => {
+  try {
+    // Get all installed community packs
+    const installedPacks = db.prepare(`
+      SELECT cs.*, ip.installed_version
+      FROM community_sources cs
+      INNER JOIN installed_packs ip ON ip.source_id = cs.id
+    `).all();
+
+    const pluginsDir = getPluginsDir();
+    const manifests = [];
+
+    for (const pack of installedPacks) {
+      const packDir = join(pluginsDir, pack.pack_id);
+
+      // Try to read manifest.js or manifest.json
+      let manifest = null;
+      const manifestJsPath = join(packDir, 'manifest.js');
+      const manifestJsonPath = join(packDir, 'manifest.json');
+
+      if (existsSync(manifestJsPath)) {
+        try {
+          // Read manifest.js and extract the object
+          // Since it's an ES module export, we need to parse it carefully
+          const content = readFileSync(manifestJsPath, 'utf8');
+          manifest = parseManifestJs(content, pack);
+        } catch (e) {
+          console.warn(`Failed to parse manifest.js for ${pack.pack_id}:`, e.message);
+        }
+      } else if (existsSync(manifestJsonPath)) {
+        try {
+          manifest = JSON.parse(readFileSync(manifestJsonPath, 'utf8'));
+        } catch (e) {
+          console.warn(`Failed to parse manifest.json for ${pack.pack_id}:`, e.message);
+        }
+      }
+
+      if (manifest) {
+        // Enhance manifest with installation info
+        manifests.push({
+          ...manifest,
+          id: manifest.id || pack.pack_id,
+          installedVersion: pack.installed_version,
+          sourceId: pack.id,
+          sourceUrl: pack.url,
+          // Mark as community type for frontend handling
+          type: 'community',
+          hasBackend: manifest.hasBackend ?? pack.has_backend,
+        });
+      } else {
+        // Fallback to basic info from database
+        manifests.push({
+          id: pack.pack_id,
+          name: pack.name || pack.pack_id,
+          description: pack.description,
+          icon: pack.icon || '📦',
+          color: pack.color || '#6366f1',
+          version: pack.installed_version,
+          installedVersion: pack.installed_version,
+          sourceId: pack.id,
+          sourceUrl: pack.url,
+          type: 'community',
+          hasBackend: pack.has_backend,
+          categories: [],
+          allGames: [],
+        });
+      }
+    }
+
+    res.json({ manifests });
+  } catch (error) {
+    console.error('Failed to get installed manifests:', error);
+    res.status(500).json({
+      error: 'Failed to get installed manifests',
+      details: error.message,
+    });
+  }
+});
+
+/**
+ * Parse a manifest.js file content and extract manifest data
+ * This handles the ES module export format used by community packs
+ */
+function parseManifestJs(content, packInfo) {
+  // Extract the object literal from the manifest
+  // Look for patterns like: const packName = { ... } or export default { ... }
+  
+  // Remove dynamic imports (component: () => import('./games/...'))
+  // These can't be used on the frontend anyway
+  const cleanedContent = content
+    .replace(/component:\s*\(\)\s*=>\s*import\([^)]+\)/g, 'component: null')
+    .replace(/component:\s*import\([^)]+\)/g, 'component: null');
+
+  // Try to extract JSON-like structure
+  // Find the main object (after = or export default)
+  const objectMatch = cleanedContent.match(/(?:const\s+\w+\s*=|export\s+default)\s*(\{[\s\S]*\});?\s*(?:export|$)/);
+
+  if (!objectMatch) {
+    // Fallback: try to find any large object
+    const fallbackMatch = cleanedContent.match(/\{[\s\S]*categories[\s\S]*\}/);
+    if (!fallbackMatch) {
+      return null;
+    }
+  }
+
+  // Parse the key fields we care about from the manifest
+  const manifest = {
+    id: extractField(content, 'id'),
+    name: extractField(content, 'name') || packInfo.name,
+    description: extractField(content, 'description') || packInfo.description,
+    icon: extractField(content, 'icon') || packInfo.icon,
+    color: extractField(content, 'color') || packInfo.color,
+    version: extractField(content, 'version') || packInfo.installed_version,
+    author: extractField(content, 'author'),
+    hasBackend: content.includes('hasBackend: true') || content.includes('hasBackend:true'),
+    type: 'community',
+    categories: extractCategories(content),
+  };
+
+  // Build allGames from categories
+  manifest.allGames = manifest.categories.flatMap(cat =>
+    cat.games.map(game => ({ ...game, categoryName: cat.name, packId: manifest.id }))
+  );
+
+  return manifest;
+}
+
+/**
+ * Extract a string field from manifest content
+ */
+function extractField(content, fieldName) {
+  // Match both quoted and unquoted values
+  const patterns = [
+    new RegExp(`${fieldName}:\\s*['"\`]([^'"\`]+)['"\`]`),
+    new RegExp(`${fieldName}:\\s*([^,\\n}]+)`),
+  ];
+
+  for (const pattern of patterns) {
+    const match = content.match(pattern);
+    if (match) {
+      return match[1].trim().replace(/['"]/g, '');
+    }
+  }
+  return null;
+}
+
+/**
+ * Extract categories array from manifest content
+ */
+function extractCategories(content) {
+  const categories = [];
+
+  // Find categories array
+  const categoriesMatch = content.match(/categories:\s*\[([\s\S]*?)\],?\s*(?:\/\*\*|get\s+allGames|getGameBySlug|$)/);
+  if (!categoriesMatch) {
+    return categories;
+  }
+
+  const categoriesContent = categoriesMatch[1];
+
+  // Extract individual category objects
+  const categoryPattern = /\{\s*name:\s*['"]([^'"]+)['"][^}]*icon:\s*['"]([^'"]+)['"][^}]*(?:description:\s*['"]([^'"]+)['"])?[^}]*games:\s*\[([\s\S]*?)\]\s*\}/g;
+  let match;
+
+  while ((match = categoryPattern.exec(categoriesContent)) !== null) {
+    const categoryName = match[1];
+    const categoryIcon = match[2];
+    const categoryDesc = match[3] || '';
+    const gamesContent = match[4];
+
+    const games = extractGames(gamesContent);
+
+    categories.push({
+      name: categoryName,
+      icon: categoryIcon,
+      description: categoryDesc,
+      games,
+    });
+  }
+
+  return categories;
+}
+
+/**
+ * Extract games array from category content
+ */
+function extractGames(gamesContent) {
+  const games = [];
+
+  // Extract individual game objects
+  const gamePattern = /\{\s*slug:\s*['"]([^'"]+)['"][^}]*title:\s*['"]([^'"]+)['"]([^}]*)\}/g;
+  let match;
+
+  while ((match = gamePattern.exec(gamesContent)) !== null) {
+    const gameSlug = match[1];
+    const gameTitle = match[2];
+    const restContent = match[3];
+
+    const game = {
+      slug: gameSlug,
+      title: gameTitle,
+      description: extractField(`desc${restContent}`, 'description') || '',
+      icon: extractField(`icon${restContent}`, 'icon') || extractField(`icon${restContent}`, 'emojiIcon') || '🎮',
+      emojiIcon: extractField(`emoji${restContent}`, 'emojiIcon') || extractField(`icon${restContent}`, 'icon') || '🎮',
+      // Don't include component - these need special handling for community packs
+      component: null,
+    };
+
+    // Try to extract colors
+    const colorsMatch = restContent.match(/colors:\s*\{\s*primary:\s*['"]([^'"]+)['"][^}]*secondary:\s*['"]([^'"]+)['"]/);
+    if (colorsMatch) {
+      game.colors = { primary: colorsMatch[1], secondary: colorsMatch[2] };
+    }
+
+    // Try to extract gradient
+    const gradientMatch = restContent.match(/gradient:\s*['"]([^'"]+)['"]/);
+    if (gradientMatch) {
+      game.gradient = gradientMatch[1];
+    }
+
+    games.push(game);
+  }
+
+  return games;
+}
 
 export default router;

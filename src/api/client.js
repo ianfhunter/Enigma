@@ -366,6 +366,13 @@ export const communitySources = {
    */
   checkGitStatus: () =>
     request('/api/community-sources/git-status'),
+
+  /**
+   * Get full manifests for all installed community packs
+   * This includes game data for displaying in the main interface
+   */
+  getInstalledManifests: () =>
+    request('/api/community-sources/installed-manifests'),
 };
 
 export { ApiError };

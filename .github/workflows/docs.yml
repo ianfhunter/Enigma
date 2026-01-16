@@ -39,20 +39,33 @@ jobs:
 
       - name: Generate index
         run: |
-          {
+            {
             echo "# Enigma Game Documentation"
             echo ""
             echo "Welcome to the Enigma puzzle collection documentation."
             echo ""
-            echo "## Available Games"
+            echo "## Guides"
             echo ""
-          } > docs/index.md
+            } > docs/index.md
 
-          find src/pages -name "README.md" -type f | sort | while read file; do
+            # Add _docs files to index
+            if [ -d "_docs" ]; then
+            for file in _docs/*.md; do
+                [ -f "$file" ] || continue
+                name=$(basename "$file" .md | tr '_' ' ' | tr '-' ' ')
+                echo "- [$name]($(basename "$file"))" >> docs/index.md
+            done
+            fi
+
+            echo "" >> docs/index.md
+            echo "## Available Games" >> docs/index.md
+            echo "" >> docs/index.md
+
+            find src/pages -name "README.md" -type f | sort | while read file; do
             game_dir=$(dirname "$file" | sed 's|src/pages/||')
             game_name=$(basename "$game_dir")
             echo "- [$game_name](games/$game_dir/README.md)" >> docs/index.md
-          done
+            done
 
       - name: Add Jekyll config
         run: |
