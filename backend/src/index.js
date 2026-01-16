@@ -12,6 +12,7 @@ import usersRoutes from './routes/users.js';
 import gamesRoutes from './routes/games.js';
 import adminRoutes from './routes/admin.js';
 import { initCsrf, getCsrfToken, verifyCsrfToken } from './middleware/csrf.js';
+import { loadPackPlugins } from './plugins/loader.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -102,6 +103,13 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/games', gamesRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Load pack plugins (community packs with backends)
+// ⚠️ WARNING: Pack plugins run with full backend access.
+// Only install plugins from trusted sources!
+loadPackPlugins(app, db).catch(err => {
+  console.error('Failed to load pack plugins:', err);
+});
 
 // Health check
 app.get('/api/health', (req, res) => {

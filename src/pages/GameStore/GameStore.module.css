@@ -302,6 +302,11 @@
   font-weight: 600;
 }
 
+.communityBadge {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
 .packDescription {
   color: var(--color-text-secondary);
   font-size: 0.9rem;
@@ -407,6 +412,35 @@
 }
 
 /* Empty State */
+/* Community Pack Warning */
+.communityWarning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.communityWarning .warningIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.communityWarning p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+:global([data-theme="light"]) .communityWarning {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
 .emptyState {
   text-align: center;
   padding: 4rem 2rem;

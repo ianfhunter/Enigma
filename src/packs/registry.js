@@ -22,6 +22,10 @@ import triviaKnowledgePack from './trivia-knowledge/manifest';
 import internationalWordsPack from './international-words/manifest';
 import cardGamesPack from './card-games/manifest';
 
+// Import community pack manifests
+// ⚠️ Community packs have backend code - only install from trusted sources!
+import exampleCommunityPack from './example-community/manifest';
+
 /**
  * All official packs loaded from their manifest files
  */
@@ -39,34 +43,65 @@ export const officialPacks = [
 ];
 
 /**
+ * Community packs with backend support
+ * ⚠️ These packs run server-side code!
+ */
+export const communityPacks = [
+  exampleCommunityPack,
+];
+
+/**
+ * All available packs (official + community)
+ */
+export const allPacks = [...officialPacks, ...communityPacks];
+
+/**
  * Get all official packs
  */
 export const getOfficialPacks = () => officialPacks;
 
 /**
+ * Get all community packs
+ */
+export const getCommunityPacks = () => communityPacks;
+
+/**
+ * Get all packs (official + community)
+ */
+export const getAllPacks = () => allPacks;
+
+/**
  * Get pack IDs that should be installed by default
  */
 export const getDefaultPackageIds = () =>
-  officialPacks.filter(p => p.default).map(p => p.id);
+  allPacks.filter(p => p.default).map(p => p.id);
 
 /**
  * Get a specific pack by ID
  */
 export const getPackageById = (id) =>
-  officialPacks.find(p => p.id === id);
+  allPacks.find(p => p.id === id);
 
 /**
- * Check if a pack exists (all packs are manifest packs now)
+ * Check if a pack exists
  */
 export const isManifestPack = (packId) => {
   return getPackageById(packId) !== undefined;
 };
 
 /**
+ * Check if a pack is a community pack (has backend)
+ */
+export const isCommunityPack = (packId) => {
+  const pack = getPackageById(packId);
+  return pack?.type === 'community' || pack?.hasBackend === true;
+};
+
+/**
  * Get games from a pack
  */
 export const getGamesFromPack = (packId) => {
-  const pack = officialPacks.find(p => p.id === packId);
+  const pack = allPacks.find(p => p.id === packId);
   return pack?.allGames || null;
 };
 
@@ -74,7 +109,7 @@ export const getGamesFromPack = (packId) => {
  * Get categories from a pack
  */
 export const getCategoriesFromPack = (packId) => {
-  const pack = officialPacks.find(p => p.id === packId);
+  const pack = allPacks.find(p => p.id === packId);
   return pack?.categories || null;
 };
 
@@ -82,14 +117,14 @@ export const getCategoriesFromPack = (packId) => {
  * Get all games from all packs
  */
 export const getAllGames = () => {
-  return officialPacks.flatMap(pack => pack.allGames || []);
+  return allPacks.flatMap(pack => pack.allGames || []);
 };
 
 /**
  * Get a game by slug from any pack
  */
 export const getGameBySlug = (slug) => {
-  for (const pack of officialPacks) {
+  for (const pack of allPacks) {
     const game = pack.getGameBySlug?.(slug);
     if (game) return { ...game, packId: pack.id };
   }
@@ -104,10 +139,15 @@ export const COMMUNITY_REGISTRY_URL =
 
 export default {
   officialPacks,
+  communityPacks,
+  allPacks,
   getOfficialPacks,
+  getCommunityPacks,
+  getAllPacks,
   getDefaultPackageIds,
   getPackageById,
   isManifestPack,
+  isCommunityPack,
   getGamesFromPack,
   getCategoriesFromPack,
   getAllGames,

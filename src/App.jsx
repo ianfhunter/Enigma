@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import { allGames } from './data/gameRegistry';
+import { getGameBySlug } from './packs/registry';
 const logo = '/branding/logo.svg';
 import './index.css';
 
@@ -155,18 +156,32 @@ const componentCache = {};
 
 /**
  * Get or create a lazy-loaded component for a game
+ *
+ * First checks the slugToFolder mapping for built-in pages,
+ * then falls back to pack manifest component loaders for community packs.
  */
 function getGameComponent(slug) {
-  const folder = slugToFolder[slug];
-  if (!folder) {
-    // Unknown game - return null (will show 404 via route handling)
-    return null;
+  // Check if we already have a cached component
+  if (componentCache[slug]) {
+    return componentCache[slug];
   }
 
-  if (!componentCache[slug]) {
+  // First, try the built-in slugToFolder mapping
+  const folder = slugToFolder[slug];
+  if (folder) {
     componentCache[slug] = lazy(() => import(`./pages/${folder}/index.js`));
+    return componentCache[slug];
   }
-  return componentCache[slug];
+
+  // Fall back to pack manifests (for community packs and packs with custom paths)
+  const game = getGameBySlug(slug);
+  if (game?.component) {
+    componentCache[slug] = lazy(() => game.component().then(m => ({ default: m.default })));
+    return componentCache[slug];
+  }
+
+  // Unknown game - return null (will show 404 via route handling)
+  return null;
 }
 
 // Fun loading phrases

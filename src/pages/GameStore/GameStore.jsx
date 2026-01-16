@@ -6,6 +6,7 @@ import {
   countGamesInPack,
   getPackagePreviewGames
 } from '../../data/packageRegistry';
+import { communityPacks } from '../../packs/registry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import styles from './GameStore.module.css';
@@ -128,6 +129,12 @@ function PackCard({ pack, isInstalled, onToggle, gameCount, previewGames }) {
             {gameCount} games
             {pack.type === 'official' && (
               <span className={styles.officialBadge}>✓ Official</span>
+            )}
+            {pack.type === 'community' && (
+              <span className={styles.communityBadge}>
+                🌍 Community
+                {pack.hasBackend && <span title="Has backend code"> ⚙️</span>}
+              </span>
             )}
           </span>
         </div>
@@ -790,14 +797,40 @@ export default function GameStore() {
                 Puzzle packs created by the community
               </p>
             </div>
-            <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>🚧</div>
-              <h3>Coming Soon</h3>
-              <p>
-                Community packs will allow puzzle creators to share their games with everyone.
-                Stay tuned for updates!
-              </p>
-            </div>
+            {communityPacks.length === 0 ? (
+              <div className={styles.emptyState}>
+                <div className={styles.emptyIcon}>🚧</div>
+                <h3>Coming Soon</h3>
+                <p>
+                  Community packs will allow puzzle creators to share their games with everyone.
+                  Stay tuned for updates!
+                </p>
+              </div>
+            ) : (
+              <>
+                {communityPacks.some(p => p.hasBackend) && (
+                  <div className={styles.communityWarning}>
+                    <span className={styles.warningIcon}>⚠️</span>
+                    <p>
+                      Community packs with backends run server-side code.
+                      Only install packs from sources you trust.
+                    </p>
+                  </div>
+                )}
+                <div className={styles.packGrid}>
+                  {communityPacks.map((pack) => (
+                    <PackCard
+                      key={pack.id}
+                      pack={pack}
+                      isInstalled={isInstalled(pack.id)}
+                      onToggle={togglePackage}
+                      gameCount={pack.gameCount || pack.allGames?.length || 0}
+                      previewGames={pack.getPreviewGames?.() || pack.allGames?.slice(0, 5) || []}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </section>
         )}
 
