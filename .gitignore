@@ -38,6 +38,7 @@ coverage/
 # Misc
 .cache/
 .temp/
+cookies.txt
 
 # Backend data
 backend/data/
@@ -50,4 +51,5 @@ docker-compose.yml
 .plugins/
 
 # Auto-generated community packs registry
+
 src/packs/installedCommunityPacks.js
