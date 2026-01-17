@@ -121,19 +121,7 @@
       "answer": "bottle"
     },
     {
-      "question": "As light as a feather, but you can’t hold it for ten minutes",
-      "answer": "breath"
-    },
-    {
-      "question": "Hard to catch, easy to hold. Can't be seen, unless it's cold",
-      "answer": "breath"
-    },
-    {
       "question": "I am free for the taking. Through all of your life, though given but once at birth. I am less than nothing in weight, but will fell the strongest of you if held",
-      "answer": "breath"
-    },
-    {
-      "question": "I'm light as a feather, yet the strongest man can't hold me for more than 5 minutes.",
       "answer": "breath"
     },
     {
@@ -203,10 +191,6 @@
     {
       "question": "I have legs but walk not, a strong back but work not. Two good arms but reach not. A seat but sit and tarry not",
       "answer": "chair"
-    },
-    {
-      "question": "What's black when you get it, red when you use it, and white when you're all through with it",
-      "answer": "charcoal"
     },
     {
       "question": "Not born, but from a Mother's body drawn. I hang until half of me is gone. I sleep in a cave until I grow old. Then valued for my hardened gold",
@@ -422,10 +406,6 @@
     },
     {
       "question": "As destructive as life, As healing as death; An institutioner of strife, Just as prone to bless. It is all that is good, Yet with an evil trend; As it was the beginning of things, It can also be the end",
-      "answer": "fire"
-    },
-    {
-      "question": "Feed me and I live, give me drink and I die.",
       "answer": "fire"
     },
     {
@@ -941,10 +921,6 @@
       "answer": "photo"
     },
     {
-      "question": "I am a box that holds keys without locks, yet they can unlock your soul.",
-      "answer": "piano"
-    },
-    {
       "question": "My first is twice in apple but not once in tart. My second is in liver but not in heart. My third is in giant and also in ghost. Whole I’m best when I am roast.",
       "answer": "pig"
     },
@@ -1245,10 +1221,6 @@
       "answer": "stairs"
     },
     {
-      "question": "What goes around the world and stays in a corner?",
-      "answer": "stamp"
-    },
-    {
       "question": "With pointed fangs it sits in wait. With piercing force it doles out fate, over bloodless victims proclaiming its might. Eternally joining in a single bite",
       "answer": "stapler"
     },
@@ -1543,6 +1515,178 @@
     {
       "question": "What must be in the oven yet can not be baked? Grows in the heat yet shuns the light of day? What sinks in water but rises with air? Looks like skin but is fine as hair?",
       "answer": "yeast"
+    },
+    {
+      "question": "What belongs to you but others use it more than you do?",
+      "answer": "Your name"
+    },
+    {
+      "question": "What has words but never speaks?",
+      "answer": "A book"
+    },
+    {
+      "question": "What is full of holes but still holds water?",
+      "answer": "A sponge"
+    },
+    {
+      "question": "The more you take, the more you leave behind. What am I?",
+      "answer": "Footsteps"
+    },
+    {
+      "question": "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?",
+      "answer": "A map"
+    },
+    {
+      "question": "What has keys but no locks, space but no room, and you can enter but not go inside?",
+      "answer": "A keyboard"
+    },
+    {
+      "question": "What runs but never walks?",
+      "answer": "A river"
+    },
+    {
+      "question": "What has hands but cannot clap?",
+      "answer": "A clock"
+    },
+    {
+      "question": "What has one eye but cannot see?",
+      "answer": "A needle"
+    },
+    {
+      "question": "What is always in front of you but can never be seen?",
+      "answer": "The future"
+    },
+    {
+      "question": "What has a heart that doesn't beat?",
+      "answer": "An artichoke"
+    },
+    {
+      "question": "What goes through towns and over hills but never moves?",
+      "answer": "A road"
+    },
+    {
+      "question": "What is always coming but never arrives?",
+      "answer": "Tomorrow"
+    },
+    {
+      "question": "What has a thumb and four fingers but is not alive?",
+      "answer": "A glove"
+    },
+    {
+      "question": "What gets bigger the more you take away?",
+      "answer": "A hole"
+    },
+    {
+      "question": "What can you hold without ever touching?",
+      "answer": "A conversation"
+    },
+    {
+      "question": "What has legs but cannot walk?",
+      "answer": "A chair"
+    },
+    {
+      "question": "What has a face but cannot smile?",
+      "answer": "A clock"
+    },
+    {
+      "question": "What is always old and sometimes new, never sad, sometimes blue?",
+      "answer": "The moon"
+    },
+    {
+      "question": "What has a tongue but cannot talk?",
+      "answer": "A shoe"
+    },
+    {
+      "question": "What has no beginning, end, or middle?",
+      "answer": "A doughnut"
+    },
+    {
+      "question": "What is it that no one wants, but no one wants to lose?",
+      "answer": "A lawsuit"
+    },
+    {
+      "question": "What has four legs in the morning, two legs at noon, and three legs in the evening?",
+      "answer": "A man"
+    },
+    {
+      "question": "What is it that when you take away the whole, you still have some left?",
+      "answer": "Wholesome"
+    },
+    {
+      "question": "What has teeth but cannot eat?",
+      "answer": "A comb"
+    },
+    {
+      "question": "What has roots that nobody sees, is taller than trees, up, up it goes, and yet never grows?",
+      "answer": "A mountain"
+    },
+    {
+      "question": "What is it that you can break even if you never pick it up or touch it?",
+      "answer": "A promise"
+    },
+    {
+      "question": "What is always in bed but never sleeps?",
+      "answer": "A river"
+    },
+    {
+      "question": "What is it that you must give before you can keep it?",
+      "answer": "Your word"
+    },
+    {
+      "question": "What is it that you can see in water but never get wet?",
+      "answer": "A reflection"
+    },
+    {
+      "question": "What is it that has a head and a tail but no body?",
+      "answer": "A coin"
+    },
+    {
+      "question": "What is it that you can catch but not throw?",
+      "answer": "A cold"
+    },
+    {
+      "question": "What is it that has no life but can grow?",
+      "answer": "Fire"
+    },
+    {
+      "question": "What is it that is black when you buy it, red when you use it, and gray when you throw it away?",
+      "answer": "Charcoal"
+    },
+    {
+      "question": "What is it that is lighter than air but cannot be lifted?",
+      "answer": "A bubble"
+    },
+    {
+      "question": "What is it that you can hold in your right hand but never in your left?",
+      "answer": "Your left elbow"
+    },
+    {
+      "question": "What is it that has a mouth but cannot speak?",
+      "answer": "A river"
+    },
+    {
+      "question": "What is it that is the beginning of eternity, the end of time and space, the beginning of every end, and the end of every race?",
+      "answer": "The letter E"
+    },
+    {
+      "question": "What is it that is tall when young and short when old?",
+      "answer": "A candle"
+    },
+    {
+      "question": "What is it that goes around the world but stays in a corner?",
+      "answer": "A stamp"
+    },
+    {
+      "question": "What is it that has many keys but cannot open any doors?",
+      "answer": "A piano"
+    },
+    {
+      "question": "What is it that is lighter than a feather but even the strongest man cannot hold it for more than a few minutes?",
+      "answer": "Your breath"
+    },
+    {
+      "question": "What is it that has a head and a tail, is brown, and has no legs?",
+      "answer": "A penny"
     }
   ]
 }

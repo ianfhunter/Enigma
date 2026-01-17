@@ -275,6 +275,8 @@ If you believe that content in this project infringes on your copyright, please 
 
 Please see our separate file [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
+**Note**: Some riddles in the dataset were manually added by the Enigma project contributors to expand the collection.
+
 ---
 
 ## 🔗 Links
