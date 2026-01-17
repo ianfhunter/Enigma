@@ -16,7 +16,7 @@
  */
 
 import { readdirSync, existsSync, mkdirSync, statSync } from 'fs';
-import { join, dirname, resolve } from 'path';
+import { join, dirname, resolve, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { pathToFileURL } from 'url';
 import { Router } from 'express';
@@ -153,13 +153,48 @@ class PluginManager {
   }
 
   /**
+   * Safely construct and validate a plugin database path
+   * Prevents path traversal attacks by ensuring the path stays within PLUGIN_DATA_DIR
+   * @param {string} packName - The pack ID
+   * @returns {string} - Validated absolute path to the database file
+   * @throws {Error} If path validation fails (path traversal detected)
+   */
+  getPluginDatabasePath(packName) {
+    // Sanitize pack name to only allow safe characters
+    const safeName = packName.replace(/[^a-z0-9-_]/gi, '_');
+    
+    // Construct the path
+    const dbPath = join(PLUGIN_DATA_DIR, `${safeName}.db`);
+    
+    // Resolve to absolute path and normalize
+    const resolvedPath = resolve(dbPath);
+    const resolvedDataDir = resolve(PLUGIN_DATA_DIR);
+    
+    // Validate that the resolved path is within PLUGIN_DATA_DIR
+    // This prevents path traversal attacks (e.g., ../../../etc/passwd)
+    // Using relative() is cross-platform and handles edge cases
+    const relativePath = relative(resolvedDataDir, resolvedPath);
+    // If the path is outside the directory, relative() will:
+    // - Start with '..' (path is outside)
+    // - Be an absolute path (different drive/root on Windows/Unix)
+    // - Contain '..' anywhere (nested traversal attempts)
+    if (relativePath.startsWith('..') || 
+        relativePath.startsWith('/') || 
+        (process.platform === 'win32' && /^[A-Z]:\\/i.test(relativePath)) ||
+        relativePath.includes('..')) {
+      throw new Error(`Invalid plugin database path: path traversal detected for pack ${packName}`);
+    }
+    
+    return resolvedPath;
+  }
+
+  /**
    * Check plugin database size and throw if over limit
    * @param {string} packName - The pack ID
    * @throws {Error} If database exceeds size limit
    */
   checkDatabaseSize(packName) {
-    const safeName = packName.replace(/[^a-z0-9-_]/gi, '_');
-    const dbPath = join(PLUGIN_DATA_DIR, `${safeName}.db`);
+    const dbPath = this.getPluginDatabasePath(packName);
 
     if (!existsSync(dbPath)) {
       return 0;
@@ -181,8 +216,7 @@ class PluginManager {
    * @returns {number} - Size in bytes
    */
   getPluginDatabaseSize(packName) {
-    const safeName = packName.replace(/[^a-z0-9-_]/gi, '_');
-    const dbPath = join(PLUGIN_DATA_DIR, `${safeName}.db`);
+    const dbPath = this.getPluginDatabasePath(packName);
 
     if (!existsSync(dbPath)) {
       return 0;
@@ -201,14 +235,11 @@ class PluginManager {
    * @returns {Database} - Isolated SQLite database instance
    */
   getPluginDatabase(packName) {
-    // Sanitize pack name for filesystem safety
-    const safeName = packName.replace(/[^a-z0-9-_]/gi, '_');
-
     if (this.pluginDatabases.has(packName)) {
       return this.pluginDatabases.get(packName);
     }
 
-    const dbPath = join(PLUGIN_DATA_DIR, `${safeName}.db`);
+    const dbPath = this.getPluginDatabasePath(packName);
     console.log(`      🗄️  Creating isolated database: ${dbPath}`);
 
     const pluginDb = new Database(dbPath);
@@ -661,8 +692,7 @@ class PluginManager {
     this.closePluginDatabase(packName);
     this.pluginRateLimiters.delete(packName);
 
-    const safeName = packName.replace(/[^a-z0-9-_]/gi, '_');
-    const dbPath = join(PLUGIN_DATA_DIR, `${safeName}.db`);
+    const dbPath = this.getPluginDatabasePath(packName);
 
     const { unlink } = await import('fs/promises');
     try {
