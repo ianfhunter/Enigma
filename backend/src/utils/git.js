@@ -23,6 +23,8 @@ const __dirname = dirname(__filename);
 
 // Plugins directory - where community packs are cloned
 const PLUGINS_DIR = process.env.PLUGINS_DIR || join(__dirname, '../../../.plugins');
+// Root directory for local (development) sources to prevent arbitrary filesystem access
+const LOCAL_SOURCES_ROOT = join(PLUGINS_DIR, 'local-sources');
 
 /**
  * Validate a GitHub owner or repository name.
@@ -158,8 +160,11 @@ export function isLocalPath(url) {
 /**
  * Normalize a local path (remove file:// prefix, resolve relative paths)
  *
+ * All local development sources are constrained to LOCAL_SOURCES_ROOT to
+ * avoid arbitrary filesystem access from user-controlled input.
+ *
  * @param {string} url - URL or path
- * @returns {string} Normalized absolute path
+ * @returns {string} Normalized absolute path within LOCAL_SOURCES_ROOT
  */
 export function normalizeLocalPath(url) {
   let normalized = typeof url === 'string' ? url.trim() : '';
@@ -173,12 +178,24 @@ export function normalizeLocalPath(url) {
     normalized = normalized.slice(7);
   }
 
-  // Resolve to absolute path
+  // If the path is not absolute, resolve it relative to the local sources root
+  let candidatePath;
   if (!isAbsolute(normalized)) {
-    normalized = resolve(process.cwd(), normalized);
+    candidatePath = resolve(LOCAL_SOURCES_ROOT, normalized);
+  } else {
+    // For absolute paths, normalize them as-is
+    candidatePath = resolve(normalized);
   }
 
-  return normalized;
+  // Enforce that the final path is within the LOCAL_SOURCES_ROOT directory
+  const rootWithSep = LOCAL_SOURCES_ROOT.endsWith('/') || LOCAL_SOURCES_ROOT.endsWith('\\')
+    ? LOCAL_SOURCES_ROOT
+    : LOCAL_SOURCES_ROOT + require('path').sep;
+  if (!candidatePath.startsWith(rootWithSep)) {
+    throw new Error('Local path must be within the allowed local sources directory');
+  }
+
+  return candidatePath;
 }
 
 /**
