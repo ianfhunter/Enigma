@@ -33,6 +33,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-v8": "^4.0.17",
     "@vitest/ui": "^4.0.16",
+    "better-sqlite3": "^11.7.0",
     "esbuild": "^0.27.2",
     "eslint": "^9.39.1",
     "eslint-plugin-react": "^7.37.5",
