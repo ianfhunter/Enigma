@@ -9,7 +9,7 @@
 
 <img width="1912" height="883" alt="image" src="https://github.com/user-attachments/assets/dae88e2f-673c-4294-b482-79967be085fc" />
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Contributing](#-contributing)
+[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Documentation](https://www.ianhunter.ie/Enigma) • [Contributing](#-contributing)
 
 </div>
 
@@ -281,6 +281,7 @@ Please see our separate file [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
 ## 🔗 Links
 
+- [📚 Documentation](https://www.ianhunter.ie/Enigma) - Game guides and development documentation
 - [Report a Bug](https://github.com/ianfhunter/enigma/issues)
 - [Request a Feature](https://github.com/ianfhunter/enigma/issues)
 - [Discussions](https://github.com/ianfhunter/enigma/discussions)
