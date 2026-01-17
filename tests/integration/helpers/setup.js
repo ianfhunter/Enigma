@@ -79,7 +79,19 @@ export async function createTestServer(options = {}) {
 
   // Middleware
   app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, direct API calls in tests)
+      if (!origin) return callback(null, true);
+
+      // In test environment, allow localhost variants and .local domains
+      // This is more restrictive than origin: true but still allows test scenarios
+      if (origin.match(/^http:\/\/(localhost|127\.0\.0\.1|[\w-]+\.local)(:\d+)?$/)) {
+        return callback(null, true);
+      }
+
+      // Block other origins for security
+      return callback(new Error('Not allowed by CORS'), false);
+    },
     credentials: true
   }));
   app.use(express.json());
