@@ -25,6 +25,24 @@ const __dirname = dirname(__filename);
 const PLUGINS_DIR = process.env.PLUGINS_DIR || join(__dirname, '../../../.plugins');
 
 /**
+ * Validate a GitHub owner or repository name.
+ * GitHub allows alphanumeric characters, dashes, underscores and dots.
+ * We also reject names containing ".." to avoid path-traversal-like patterns.
+ *
+ * @param {string} value
+ * @returns {boolean}
+ */
+function isValidGitHubIdentifier(value) {
+  if (typeof value !== 'string' || value.length === 0) {
+    return false;
+  }
+  if (value.includes('..')) {
+    return false;
+  }
+  return /^[A-Za-z0-9._-]+$/.test(value);
+}
+
+/**
  * Parse a GitHub URL (SSH or HTTPS) and extract owner/repo
  *
  * Supports:
@@ -60,38 +78,50 @@ export function parseGitHubUrl(url) {
   }
 
   // SSH format: git@github.com:owner/repo.git
-  const sshMatch = normalized.match(/^git@github\.com:([^/]+)\/([^/]+?)(\.git)?$/);
+  const sshMatch = normalized.match(/^git@github\.com:([A-Za-z0-9._-]+)\/([A-Za-z0-9._-]+?)(\.git)?$/);
   if (sshMatch) {
     const [, owner, repo] = sshMatch;
+    if (!isValidGitHubIdentifier(owner) || !isValidGitHubIdentifier(repo)) {
+      return null;
+    }
+    const cleanRepo = repo.replace(/\.git$/, '');
     return {
       owner,
-      repo: repo.replace(/\.git$/, ''),
-      httpsUrl: `https://github.com/${owner}/${repo.replace(/\.git$/, '')}.git`,
-      sshUrl: `git@github.com:${owner}/${repo.replace(/\.git$/, '')}.git`,
+      repo: cleanRepo,
+      httpsUrl: `https://github.com/${owner}/${cleanRepo}.git`,
+      sshUrl: `git@github.com:${owner}/${cleanRepo}.git`,
     };
   }
 
   // HTTPS format: https://github.com/owner/repo.git or https://github.com/owner/repo
-  const httpsMatch = normalized.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+?)(\.git)?$/);
+  const httpsMatch = normalized.match(/^https?:\/\/github\.com\/([A-Za-z0-9._-]+)\/([A-Za-z0-9._-]+?)(\.git)?$/);
   if (httpsMatch) {
     const [, owner, repo] = httpsMatch;
+    if (!isValidGitHubIdentifier(owner) || !isValidGitHubIdentifier(repo)) {
+      return null;
+    }
+    const cleanRepo = repo.replace(/\.git$/, '');
     return {
       owner,
-      repo: repo.replace(/\.git$/, ''),
-      httpsUrl: `https://github.com/${owner}/${repo.replace(/\.git$/, '')}.git`,
-      sshUrl: `git@github.com:${owner}/${repo.replace(/\.git$/, '')}.git`,
+      repo: cleanRepo,
+      httpsUrl: `https://github.com/${owner}/${cleanRepo}.git`,
+      sshUrl: `git@github.com:${owner}/${cleanRepo}.git`,
     };
   }
 
   // Bare format: github.com/owner/repo
-  const bareMatch = normalized.match(/^github\.com\/([^/]+)\/([^/]+?)(\.git)?$/);
+  const bareMatch = normalized.match(/^github\.com\/([A-Za-z0-9._-]+)\/([A-Za-z0-9._-]+?)(\.git)?$/);
   if (bareMatch) {
     const [, owner, repo] = bareMatch;
+    if (!isValidGitHubIdentifier(owner) || !isValidGitHubIdentifier(repo)) {
+      return null;
+    }
+    const cleanRepo = repo.replace(/\.git$/, '');
     return {
       owner,
-      repo: repo.replace(/\.git$/, ''),
-      httpsUrl: `https://github.com/${owner}/${repo.replace(/\.git$/, '')}.git`,
-      sshUrl: `git@github.com:${owner}/${repo.replace(/\.git$/, '')}.git`,
+      repo: cleanRepo,
+      httpsUrl: `https://github.com/${owner}/${cleanRepo}.git`,
+      sshUrl: `git@github.com:${owner}/${cleanRepo}.git`,
     };
   }
 
@@ -258,6 +288,8 @@ export function compareSemver(a, b) {
 
   for (let i = 0; i < 3; i++) {
     if (partsA[i] > partsB[i]) return 1;
+  const safeOwner = encodeURIComponent(owner);
+  const safeRepo = encodeURIComponent(repo);
     if (partsA[i] < partsB[i]) return -1;
   }
   return 0;
@@ -285,7 +317,7 @@ export async function fetchManifestFromGitHub(url, ref = 'main') {
 
   for (const branch of branches) {
     for (const file of manifestFiles) {
-      const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${file}`;
+      const rawUrl = `https://raw.githubusercontent.com/${safeOwner}/${safeRepo}/${branch}/${file}`;
 
       try {
         const response = await fetch(rawUrl);
