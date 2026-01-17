@@ -9,13 +9,15 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 let Database;
 let dbAvailable = false;
 try {
-  Database = (await import('better-sqlite3')).default;
+  const betterSqlite3Module = await import('better-sqlite3');
+  Database = betterSqlite3Module.default;
   // Test that we can actually create a database
   const testDb = new Database(':memory:');
   testDb.close();
   dbAvailable = true;
 } catch (e) {
   console.warn('Skipping loader tests: better-sqlite3 not available in this environment');
+  console.warn('Error details:', e.message);
 }
 
 const describeFn = dbAvailable ? describe : describe.skip;
