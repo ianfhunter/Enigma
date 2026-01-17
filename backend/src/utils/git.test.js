@@ -10,7 +10,6 @@ import { tmpdir } from 'os';
 import {
   parseGitHubUrl,
   isLocalPath,
-  normalizeLocalPath,
   isSemver,
   compareSemver,
 } from './git.js';
@@ -115,25 +114,75 @@ describe('Git Utilities', () => {
   });
 
   describe('normalizeLocalPath', () => {
-    it('should remove file:// prefix', () => {
-      const result = normalizeLocalPath('file:///home/user/pack');
-      expect(result).toBe('/home/user/pack');
+    let originalPluginsDir;
+    let testPluginsDir;
+    let testLocalSourcesRoot;
+
+    beforeEach(() => {
+      // Set up test environment
+      testPluginsDir = join(tmpdir(), `enigma-git-normalize-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+      testLocalSourcesRoot = join(testPluginsDir, 'local-sources');
+      mkdirSync(testLocalSourcesRoot, { recursive: true });
+
+      // Save and set PLUGINS_DIR
+      originalPluginsDir = process.env.PLUGINS_DIR;
+      process.env.PLUGINS_DIR = testPluginsDir;
+
+      // Clear module cache to pick up new env var
+      vi.resetModules();
     });
 
-    it('should preserve absolute paths', () => {
-      const result = normalizeLocalPath('/absolute/path');
-      expect(result).toBe('/absolute/path');
+    afterEach(() => {
+      if (originalPluginsDir) {
+        process.env.PLUGINS_DIR = originalPluginsDir;
+      } else {
+        delete process.env.PLUGINS_DIR;
+      }
+      if (existsSync(testPluginsDir)) {
+        rmSync(testPluginsDir, { recursive: true, force: true });
+      }
+      vi.resetModules();
     });
 
-    it('should resolve relative paths to absolute', () => {
+    it('should remove file:// prefix', async () => {
+      const testPath = join(testLocalSourcesRoot, 'pack');
+      mkdirSync(testPath, { recursive: true });
+      
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
+      const { normalizeLocalPath } = await import('./git.js');
+      const result = normalizeLocalPath(`file://${testPath}`);
+      expect(result).toBe(testPath);
+    });
+
+    it('should preserve absolute paths', async () => {
+      const testPath = join(testLocalSourcesRoot, 'absolute', 'path');
+      mkdirSync(testPath, { recursive: true });
+      
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
+      const { normalizeLocalPath } = await import('./git.js');
+      const result = normalizeLocalPath(testPath);
+      expect(result).toBe(testPath);
+    });
+
+    it('should resolve relative paths to absolute', async () => {
+      const testPath = join(testLocalSourcesRoot, 'relative', 'path');
+      mkdirSync(testPath, { recursive: true });
+      
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
+      const { normalizeLocalPath } = await import('./git.js');
       const result = normalizeLocalPath('./relative/path');
-      expect(result.startsWith('/')).toBe(true);
+      expect(result.startsWith(testLocalSourcesRoot)).toBe(true);
       expect(result.endsWith('relative/path')).toBe(true);
     });
 
-    it('should trim whitespace', () => {
-      const result = normalizeLocalPath('  /path/to/pack  ');
-      expect(result).toBe('/path/to/pack');
+    it('should trim whitespace', async () => {
+      const testPath = join(testLocalSourcesRoot, 'path', 'to', 'pack');
+      mkdirSync(testPath, { recursive: true });
+      
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
+      const { normalizeLocalPath } = await import('./git.js');
+      const result = normalizeLocalPath(`  ${testPath}  `);
+      expect(result).toBe(testPath);
     });
   });
 
@@ -202,15 +251,21 @@ describe('Git Utilities', () => {
 describe('Local Path Integration', () => {
   let testDir;
   let pluginsDir;
+  let localSourcesRoot;
   let originalPluginsDir;
 
   beforeEach(() => {
     testDir = join(tmpdir(), `enigma-git-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
     pluginsDir = join(testDir, '.plugins');
-    mkdirSync(pluginsDir, { recursive: true });
+    localSourcesRoot = join(pluginsDir, 'local-sources');
+    mkdirSync(localSourcesRoot, { recursive: true });
 
     // Save original env
     originalPluginsDir = process.env.PLUGINS_DIR;
+    process.env.PLUGINS_DIR = pluginsDir;
+    
+    // Clear module cache to pick up new env var
+    vi.resetModules();
   });
 
   afterEach(() => {
@@ -224,13 +279,17 @@ describe('Local Path Integration', () => {
     if (existsSync(testDir)) {
       rmSync(testDir, { recursive: true, force: true });
     }
+    
+    vi.resetModules();
   });
 
   describe('fetchManifestFromLocal', () => {
     it('should read manifest.js from local path', async () => {
-      // Create a mock pack directory
-      const packDir = join(testDir, 'my-pack');
+      // Create a mock pack directory within local-sources
+      const packDir = join(localSourcesRoot, 'my-pack');
       mkdirSync(packDir);
+      
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
 
       const manifestContent = `
         const pack = {
@@ -254,7 +313,7 @@ describe('Local Path Integration', () => {
     });
 
     it('should read manifest.json from local path', async () => {
-      const packDir = join(testDir, 'json-pack');
+      const packDir = join(localSourcesRoot, 'json-pack');
       mkdirSync(packDir);
 
       const manifest = {
@@ -273,7 +332,7 @@ describe('Local Path Integration', () => {
     });
 
     it('should prefer manifest.js over manifest.json', async () => {
-      const packDir = join(testDir, 'both-pack');
+      const packDir = join(localSourcesRoot, 'both-pack');
       mkdirSync(packDir);
 
       // Create both files
@@ -286,6 +345,7 @@ describe('Local Path Integration', () => {
         name: 'JSON Pack'
       }));
 
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
       const { fetchManifestFromLocal } = await import('./git.js');
 
       const result = await fetchManifestFromLocal(packDir);
@@ -293,16 +353,18 @@ describe('Local Path Integration', () => {
     });
 
     it('should throw for non-existent path', async () => {
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
       const { fetchManifestFromLocal } = await import('./git.js');
 
-      await expect(fetchManifestFromLocal('/nonexistent/path/that/does/not/exist'))
+      await expect(fetchManifestFromLocal(join(localSourcesRoot, 'nonexistent', 'path', 'that', 'does', 'not', 'exist')))
         .rejects.toThrow(/does not exist/);
     });
 
     it('should throw when no manifest found', async () => {
-      const packDir = join(testDir, 'empty-pack');
+      const packDir = join(localSourcesRoot, 'empty-pack');
       mkdirSync(packDir);
 
+      vi.resetModules(); // Clear module cache to pick up new PLUGINS_DIR
       const { fetchManifestFromLocal } = await import('./git.js');
 
       await expect(fetchManifestFromLocal(packDir))
