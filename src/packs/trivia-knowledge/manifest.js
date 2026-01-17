@@ -191,6 +191,17 @@ const triviaKnowledgePack = {
           component: () => import('../../pages/ClassicalMusicQuiz'),
         },
         {
+          slug: 'riddles',
+          title: 'Riddles',
+          description: 'Solve classic riddles! Read the question and try to figure out the answer before revealing it.',
+          icon: '🤔',
+          emojiIcon: '🤔',
+          colors: { primary: '#f59e0b', secondary: '#d97706' },
+          gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+          version: 'v1.0',
+          component: () => import('../../pages/Riddles'),
+        },
+        {
           slug: 'map',
           title: 'Map',
           description: 'Color regions on a map so adjacent regions have different colors.',

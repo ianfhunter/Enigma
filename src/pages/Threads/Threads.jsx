@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Threads.module.css';
 
 const GRID_ROWS = 8;
@@ -563,11 +564,14 @@ export default function Threads() {
   const [messageType, setMessageType] = useState('');
   const [gameWon, setGameWon] = useState(false);
   const [gaveUp, setGaveUp] = useState(false);
+  const [seed, setSeed] = useState(null);
   const gridRef = useRef(null);
 
   const initGame = useCallback(() => {
     const today = getTodayDateString();
+    const gameSeed = stringToSeed(`threads-${today}`);
     const newPuzzle = getPuzzleForDate(today);
+    setSeed(gameSeed);
     setPuzzle(newPuzzle);
     setSelectedCells([]);
     setFoundWords(new Set());
@@ -864,6 +868,15 @@ export default function Threads() {
           Find the themed words by connecting adjacent letters
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         {/* Theme hint */}

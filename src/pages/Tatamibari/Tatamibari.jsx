@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Tatamibari.module.css';
 
 // Tatamibari rules:
@@ -470,6 +471,15 @@ export default function Tatamibari() {
         </p>
       </div>
 
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
+
       <div className={styles.settings}>
         <div className={styles.sizeSelector}>
           {Object.keys(GRID_SIZES).map((key) => (
@@ -578,8 +588,6 @@ export default function Tatamibari() {
             New Puzzle
           </button>
         </div>
-
-        <div className={styles.seedDisplay}>Seed: {seed}</div>
 
         <div className={styles.legend}>
           <div className={styles.legendItem}>

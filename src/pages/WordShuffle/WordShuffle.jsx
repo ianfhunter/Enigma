@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, shuffleArray, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './WordShuffle.module.css';
 
 const DICE_4X4 = [
@@ -152,6 +153,7 @@ export default function WordShuffle() {
   const [isDragging, setIsDragging] = useState(false);
   const [showAllWords, setShowAllWords] = useState(false);
   const [puzzleIndex, setPuzzleIndex] = useState(0);
+  const [seed, setSeed] = useState(null);
 
   const timerRef = useRef(null);
 
@@ -159,9 +161,10 @@ export default function WordShuffle() {
     const today = getTodayDateString();
     const index = newPuzzle ? puzzleIndex + 1 : puzzleIndex;
     if (newPuzzle) setPuzzleIndex(index);
-    const seed = stringToSeed(`wordshuffle-${today}-${newSize}-${index}`);
-    const newBoard = generateBoard(newSize, seed);
+    const gameSeed = stringToSeed(`wordshuffle-${today}-${newSize}-${index}`);
+    const newBoard = generateBoard(newSize, gameSeed);
 
+    setSeed(gameSeed);
     setBoard(newBoard);
     setSize(newSize);
     setFoundWords(new Set());
@@ -298,6 +301,15 @@ export default function WordShuffle() {
           Connect adjacent letters to form words. Drag to select!
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.sizeSelector}>
         {[4, 5].map((s) => (

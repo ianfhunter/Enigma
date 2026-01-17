@@ -248,15 +248,16 @@ export default function Categories() {
         <p className={styles.instructions}>
           Find groups of four words that share a connection
         </p>
-        {seed && (
-          <SeedDisplay
-            seed={seed}
-            variant="compact"
-            showNewButton
-            onNewSeed={handleNewGame}
-          />
-        )}
       </div>
+
+      {seed && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         {/* Solved categories */}

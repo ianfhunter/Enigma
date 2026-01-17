@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './TriPeaks.module.css';
 
 // Card values: A=1, 2-10, J=11, Q=12, K=13
@@ -178,22 +180,6 @@ function areAllPeaksCleared(peaks) {
   return peaks.every(peak => 
     peak.every(row => row.every(card => card.removed))
   );
-}
-
-// Convert date string to seed
-function getTodayDateString() {
-  const today = new Date();
-  return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-}
-
-function stringToSeed(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  return Math.abs(hash);
 }
 
 // Export for testing
@@ -403,8 +389,16 @@ export default function TriPeaks() {
         instructions="Remove cards from the peaks that are one rank higher or lower than the waste card. Clear all three peaks to win!"
       />
 
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
+
       <div className={styles.gameInfo}>
-        <span className={styles.seed}>Seed: {seed}</span>
         <span className={styles.moves}>Moves: {moves}</span>
         <span className={styles.remaining}>Remaining: {remainingPeakCards}</span>
       </div>

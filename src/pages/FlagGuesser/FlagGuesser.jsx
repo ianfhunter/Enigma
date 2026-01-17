@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getRandomCountry, getRandomOptions, getDailyCountry, getTodayString } from '@datasets/countries';
+import { getRandomCountry, getRandomOptions } from '@datasets/countries';
 import styles from './FlagGuesser.module.css';
 
 const TOTAL_ROUNDS = 10;
 
 export default function FlagGuesser() {
-  const [mode, setMode] = useState(null); // 'daily', 'endless', 'challenge'
+  const [mode, setMode] = useState(null); // 'endless', 'challenge'
   const [currentCountry, setCurrentCountry] = useState(null);
   const [options, setOptions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -23,24 +23,6 @@ export default function FlagGuesser() {
     const saved = localStorage.getItem('flag-guesser-stats');
     return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0 };
   });
-  const [dailyCompleted, setDailyCompleted] = useState(() => {
-    const saved = localStorage.getItem('flag-guesser-daily');
-    if (saved) {
-      const { date } = JSON.parse(saved);
-      return date === getTodayString();
-    }
-    return false;
-  });
-  const [dailyResult, setDailyResult] = useState(() => {
-    const saved = localStorage.getItem('flag-guesser-daily');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.date === getTodayString()) {
-        return parsed.correct;
-      }
-    }
-    return null;
-  });
 
   // Save stats to localStorage
   useEffect(() => {
@@ -53,18 +35,12 @@ export default function FlagGuesser() {
   }, [bestStreak]);
 
   const setupRound = useCallback(() => {
-    if (mode === 'daily') {
-      const country = getDailyCountry(getTodayString());
-      setCurrentCountry(country);
-      setOptions(getRandomOptions(country, 3));
-    } else {
-      const country = getRandomCountry();
-      setCurrentCountry(country);
-      setOptions(getRandomOptions(country, 3));
-    }
+    const country = getRandomCountry();
+    setCurrentCountry(country);
+    setOptions(getRandomOptions(country, 3));
     setSelectedAnswer(null);
     setIsCorrect(null);
-  }, [mode]);
+  }, []);
 
   const startGame = (selectedMode) => {
     setMode(selectedMode);
@@ -103,16 +79,6 @@ export default function FlagGuesser() {
       setStreak(0);
     }
 
-    if (mode === 'daily') {
-      // Daily mode is single question
-      setDailyCompleted(true);
-      setDailyResult(correct);
-      localStorage.setItem('flag-guesser-daily', JSON.stringify({
-        date: getTodayString(),
-        correct
-      }));
-      setStats(prev => ({ ...prev, played: prev.played + 1, won: correct ? prev.won + 1 : prev.won }));
-    }
   };
 
   const nextRound = () => {
@@ -152,20 +118,6 @@ export default function FlagGuesser() {
 
         <div className={styles.menuArea}>
           <div className={styles.modeCards}>
-            <button
-              className={`${styles.modeCard} ${dailyCompleted ? styles.completed : ''}`}
-              onClick={() => !dailyCompleted && startGame('daily')}
-              disabled={dailyCompleted}
-            >
-              <span className={styles.modeIcon}>📅</span>
-              <span className={styles.modeTitle}>Daily Flag</span>
-              <span className={styles.modeDesc}>
-                {dailyCompleted
-                  ? dailyResult ? '✓ Completed!' : '✗ Try tomorrow!'
-                  : 'One flag per day'}
-              </span>
-            </button>
-
             <button
               className={styles.modeCard}
               onClick={() => startGame('challenge')}
@@ -256,7 +208,6 @@ export default function FlagGuesser() {
         <h1 className={styles.title}>Flag Guesser</h1>
 
         <div className={styles.gameInfo}>
-          {mode === 'daily' && <span className={styles.modeBadge}>Daily</span>}
           {mode === 'challenge' && (
             <>
               <span className={styles.modeBadge}>Challenge</span>
@@ -322,17 +273,9 @@ export default function FlagGuesser() {
                 {isCorrect ? '🎉 Correct!' : `❌ Wrong! It was ${currentCountry.name}`}
               </div>
 
-              {mode !== 'daily' && (
-                <button className={styles.nextBtn} onClick={nextRound}>
-                  {mode === 'challenge' && round >= TOTAL_ROUNDS ? 'See Results' : 'Next Flag →'}
-                </button>
-              )}
-
-              {mode === 'daily' && (
-                <button className={styles.menuBtn} onClick={backToMenu}>
-                  Back to Menu
-                </button>
-              )}
+              <button className={styles.nextBtn} onClick={nextRound}>
+                {mode === 'challenge' && round >= TOTAL_ROUNDS ? 'See Results' : 'Next Flag →'}
+              </button>
             </div>
           )}
         </div>

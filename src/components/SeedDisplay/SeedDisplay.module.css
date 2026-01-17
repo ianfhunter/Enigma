@@ -1,5 +1,12 @@
 /* SeedDisplay Component Styles */
 
+.wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  width: 100%;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -11,6 +18,7 @@
   border-radius: 8px;
   padding: 0.4rem 0.6rem;
   transition: all 0.2s ease;
+  width: fit-content;
 }
 
 .container:hover {

@@ -10,14 +10,8 @@ export function renderIcon(icon, className = '', fallback = '🎮') {
   if (!icon) return fallback;
 
   if (typeof icon === 'string') {
-    // Check if it's raw SVG XML content (starts with <svg or contains SVG markup)
-    if (icon.trim().startsWith('<svg') || (icon.includes('<svg') && icon.includes('</svg>'))) {
-      // Convert SVG XML to data URL for display
-      const encodedSvg = encodeURIComponent(icon);
-      return <img src={`data:image/svg+xml,${encodedSvg}`} alt="" className={className} />;
-    }
-    
-    // Check if it's an SVG URL/path (including /api/ paths for community packs)
+    // Check if it's an SVG URL/path first (including /api/ paths for community packs)
+    // This needs to be checked before raw SVG detection to avoid encoding data: URLs
     if (
       icon.includes('.svg') ||
       icon.startsWith('/assets/') ||
@@ -28,6 +22,14 @@ export function renderIcon(icon, className = '', fallback = '🎮') {
     ) {
       return <img src={icon} alt="" className={className} />;
     }
+    
+    // Check if it's raw SVG XML content (starts with <svg or contains SVG markup)
+    if (icon.trim().startsWith('<svg') || (icon.includes('<svg') && icon.includes('</svg>'))) {
+      // Convert SVG XML to data URL for display
+      const encodedSvg = encodeURIComponent(icon);
+      return <img src={`data:image/svg+xml,${encodedSvg}`} alt="" className={className} />;
+    }
+    
     // Otherwise treat as emoji
     return icon;
   }

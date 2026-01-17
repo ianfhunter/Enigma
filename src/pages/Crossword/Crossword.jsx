@@ -29,8 +29,6 @@ import GameHeader from '../../components/GameHeader';
 import {
   parseCluesData,
   generateCrossword,
-  getDailySeed,
-  getTodayDateString,
   isPuzzleComplete,
   getEmptyCells,
 } from '../../data/crosswordUtils';
@@ -82,7 +80,6 @@ export const getLastTypedLetter = (value = '') => {
 };
 
 export default function Crossword() {
-  const [mode, setMode] = useState('daily'); // 'daily' or 'practice'
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzle, setPuzzle] = useState(null);
   const [userGrid, setUserGrid] = useState([]);
@@ -107,24 +104,13 @@ export default function Crossword() {
     totalTime: 0,
   });
 
-  const [dailyState, setDailyState] = usePersistedState('crossword-daily', {
-    date: null,
-    userGrid: [],
-    timer: 0,
-    completed: false,
-  });
 
   // Generate puzzle
-  const generatePuzzle = useCallback((gameMode, diff, seed, forceNewSeed = false) => {
-    // Use daily seed only for daily mode when not forcing a new puzzle
-    const actualSeed = (gameMode === 'daily' && !forceNewSeed)
-      ? getDailySeed(getTodayDateString())
-      : seed;
-
+  const generatePuzzle = useCallback((diff, seed) => {
     const newPuzzle = generateCrossword(CLUES_DATA, {
       gridSize: 20,
       targetWords: diff === 'easy' ? 10 : diff === 'hard' ? 18 : 14,
-      seed: actualSeed,
+      seed: seed,
       difficulty: diff,
     });
 
@@ -132,8 +118,7 @@ export default function Crossword() {
   }, []);
 
   // Initialize game
-  const initGame = useCallback((gameMode, diff = difficulty, forceNew = false) => {
-    setMode(gameMode);
+  const initGame = useCallback((diff = difficulty) => {
     setDifficulty(diff);
     setGameState('playing');
     setShowErrors(false);
@@ -141,32 +126,9 @@ export default function Crossword() {
 
     // Generate a new seed for new puzzles
     const newSeed = Date.now() + Math.floor(Math.random() * 1000000);
-
-    // Check for saved daily progress
-    if (gameMode === 'daily' && !forceNew) {
-      const today = getTodayDateString();
-      if (dailyState.date === today && dailyState.userGrid && dailyState.userGrid.length > 0) {
-        const newPuzzle = generatePuzzle('daily', diff, newSeed, false);
-        // Validate that saved grid matches puzzle dimensions
-        if (newPuzzle.grid &&
-            dailyState.userGrid.length === newPuzzle.grid.length &&
-            dailyState.userGrid[0]?.length === newPuzzle.grid[0]?.length) {
-          setPuzzle(newPuzzle);
-          setUserGrid(dailyState.userGrid);
-          setTimer(dailyState.timer || 0);
-          setIsTimerRunning(!dailyState.completed);
-          if (dailyState.completed) {
-            setGameState('won');
-          }
-          return;
-        }
-        // If grid dimensions don't match, fall through to generate fresh
-      }
-    }
-
     setPuzzleSeed(newSeed);
 
-    const newPuzzle = generatePuzzle(gameMode, diff, newSeed, forceNew);
+    const newPuzzle = generatePuzzle(diff, newSeed);
     setPuzzle(newPuzzle);
 
     // Initialize empty user grid
@@ -178,10 +140,10 @@ export default function Crossword() {
     setDirection('across');
     setTimer(0);
     setIsTimerRunning(true);
-  }, [difficulty, dailyState, generatePuzzle]);
+  }, [difficulty, generatePuzzle]);
 
   useEffect(() => {
-    initGame('daily');
+    initGame();
   }, []);
 
   // Timer
@@ -195,17 +157,6 @@ export default function Crossword() {
     return () => clearInterval(interval);
   }, [isTimerRunning, gameState]);
 
-  // Save daily progress
-  useEffect(() => {
-    if (mode === 'daily' && puzzle && userGrid.length > 0) {
-      setDailyState({
-        date: getTodayDateString(),
-        userGrid,
-        timer,
-        completed: gameState === 'won',
-      });
-    }
-  }, [mode, puzzle, userGrid, timer, gameState, setDailyState]);
 
   // Keep hidden input focused when using native keyboard on mobile
   useEffect(() => {
@@ -580,27 +531,12 @@ export default function Crossword() {
       />
 
       <div className={styles.controls}>
-        <div className={styles.modeSelector}>
-          <button
-            className={`${styles.modeBtn} ${mode === 'daily' ? styles.active : ''}`}
-            onClick={() => initGame('daily', difficulty)}
-          >
-            Daily {dailyState.completed && dailyState.date === getTodayDateString() && '✓'}
-          </button>
-          <button
-            className={`${styles.modeBtn} ${mode === 'practice' ? styles.active : ''}`}
-            onClick={() => initGame('practice', difficulty)}
-          >
-            Practice
-          </button>
-        </div>
-
         <div className={styles.difficultySelector}>
           {['easy', 'medium', 'hard'].map(d => (
             <button
               key={d}
               className={`${styles.diffBtn} ${difficulty === d ? styles.active : ''}`}
-              onClick={() => initGame(mode, d)}
+              onClick={() => initGame(d)}
             >
               {d.charAt(0).toUpperCase() + d.slice(1)}
             </button>
@@ -617,7 +553,7 @@ export default function Crossword() {
 
           <button
             className={styles.newPuzzleBtn}
-            onClick={() => initGame(mode, difficulty, true)}
+            onClick={() => initGame(difficulty)}
           >
             🔄 New Puzzle
           </button>
@@ -673,7 +609,7 @@ export default function Crossword() {
                 <div className={styles.winSubtitle}>Completed in {formatTime(timer)}</div>
                 <button
                   className={styles.playAgainBtn}
-                  onClick={() => initGame(mode, difficulty, true)}
+                  onClick={() => initGame(difficulty)}
                 >
                   New Puzzle
                 </button>
@@ -704,7 +640,7 @@ export default function Crossword() {
                 )}
                 <button
                   className={styles.playAgainBtn}
-                  onClick={() => initGame(mode, difficulty, true)}
+                  onClick={() => initGame(difficulty)}
                 >
                   New Puzzle
                 </button>

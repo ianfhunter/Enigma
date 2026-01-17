@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './FlipQuotes.module.css';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -23,13 +24,14 @@ export default function FlipQuotes() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [flipCount, setFlipCount] = useState(0);
+  const [seed, setSeed] = useState(null);
 
   const initGame = useCallback((useDailySeed = true) => {
     const today = getTodayDateString();
-    const seed = useDailySeed
+    const gameSeed = useDailySeed
       ? stringToSeed(`flipquotes-${today}`)
       : stringToSeed(`flipquotes-${Date.now()}`);
-    const random = createSeededRandom(seed);
+    const random = createSeededRandom(gameSeed);
 
     // Pick a random quote
     const quoteIndex = Math.floor(random() * cryptogramQuotes.length);
@@ -69,6 +71,7 @@ export default function FlipQuotes() {
     setFlipDirection({});
     setHintsUsed(0);
     setGameState('playing');
+    setSeed(gameSeed);
     setStartTime(Date.now());
     setEndTime(null);
     setFlipCount(0);
@@ -282,6 +285,15 @@ export default function FlipQuotes() {
           Flip each tile to toggle between two letters and reveal the hidden quote!
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.puzzleContainer}>

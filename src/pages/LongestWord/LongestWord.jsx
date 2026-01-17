@@ -149,19 +149,20 @@ export default function LongestWord() {
         </p>
       </div>
 
+      {seedNum !== null && (
+        <SeedDisplay
+          seed={seedNum}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
+
       <div className={styles.gameArea}>
         <div className={styles.starterDisplay}>
           <span className={styles.seedLabel}>Today's Starter</span>
           <span className={styles.seed}>{seed}</span>
         </div>
-        {seedNum !== null && (
-          <SeedDisplay
-            seed={seedNum}
-            variant="compact"
-            showNewButton
-            onNewSeed={() => initGame(true)}
-          />
-        )}
 
         <div className={styles.statsBar}>
           <div className={styles.stat}>

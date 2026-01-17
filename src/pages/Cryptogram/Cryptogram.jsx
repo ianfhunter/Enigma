@@ -336,15 +336,16 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
         <p className={styles.instructions}>
           Each letter has been replaced with another. Click a letter and type to decode the quote!
         </p>
-        {seed && (
-          <SeedDisplay
-            seed={seed}
-            variant="compact"
-            showNewButton
-            onNewSeed={() => initGame(Math.floor(Math.random() * 2147483647))}
-          />
-        )}
       </div>
+
+      {seed && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.puzzleContainer}>

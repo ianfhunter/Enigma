@@ -43,17 +43,6 @@
   gap: 1.25rem;
 }
 
-.seedDisplay {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1.5rem 3rem;
-  background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(249, 115, 22, 0.2));
-  border: 2px solid rgba(251, 146, 60, 0.4);
-  border-radius: 16px;
-}
-
 .seedLabel {
   font-size: 0.85rem;
   color: var(--color-text-secondary);

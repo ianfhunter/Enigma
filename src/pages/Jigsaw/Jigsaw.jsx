@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import sampleImage from '../../assets/sample_image.png';
 import styles from './Jigsaw.module.css';
 
@@ -225,6 +226,7 @@ export default function Jigsaw() {
   const [gameState, setGameState] = useState('playing');
   const [showPreview, setShowPreview] = useState(false);
   const [placedCount, setPlacedCount] = useState(0);
+  const [seed, setSeed] = useState(null);
 
   const containerRef = useRef(null);
   const imageRef = useRef(null);
@@ -239,12 +241,13 @@ export default function Jigsaw() {
   const initGame = useCallback((newDifficulty = difficulty) => {
     const { cols: newCols, rows: newRows } = DIFFICULTY[newDifficulty];
     const today = getTodayDateString();
-    const seed = stringToSeed(`jigsaw-${today}-${newCols}x${newRows}`);
-    const random = createSeededRandom(seed);
+    const gameSeed = stringToSeed(`jigsaw-${today}-${newCols}x${newRows}`);
+    const random = createSeededRandom(gameSeed);
 
     const newPieces = createPieces(newCols, newRows, pieceWidth, pieceHeight, random);
     const shuffled = shufflePieces(newPieces, newCols * pieceWidth, newRows * pieceHeight, pieceWidth, pieceHeight, random);
 
+    setSeed(gameSeed);
     setPieces(shuffled);
     setDifficulty(newDifficulty);
     setGameState('playing');
@@ -515,6 +518,15 @@ export default function Jigsaw() {
           Drag pieces to the board. They'll snap into place when close enough!
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.controls}>
         <div className={styles.difficultySelector}>

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { phraseGuessQuotes } from '@datasets/quotes';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './PhraseGuess.module.css';
 
 const VOWELS = new Set(['A', 'E', 'I', 'O', 'U']);
@@ -33,18 +34,20 @@ export default function PhraseGuess() {
   const [showSolveModal, setShowSolveModal] = useState(false);
   const [solveAttempt, setSolveAttempt] = useState('');
   const [solveBonus, setSolveBonus] = useState(0);
+  const [seed, setSeed] = useState(null);
 
   const initGame = useCallback((useDailySeed = true) => {
     const today = getTodayDateString();
-    const seed = useDailySeed
+    const gameSeed = useDailySeed
       ? stringToSeed(`phraseguess-${today}`)
       : stringToSeed(`phraseguess-${Date.now()}`);
-    const random = createSeededRandom(seed);
+    const random = createSeededRandom(gameSeed);
 
     // Pick a random quote
     const quoteIndex = Math.floor(random() * phraseGuessQuotes.length);
     const selectedQuote = phraseGuessQuotes[quoteIndex];
 
+    setSeed(gameSeed);
     setQuote(selectedQuote);
     setGuessedLetters(new Set());
     setWrongGuesses(0);
@@ -261,6 +264,15 @@ export default function PhraseGuess() {
           Guess letters to reveal the hidden phrase! Vowels are highlighted.
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>

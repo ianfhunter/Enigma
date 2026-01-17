@@ -1,24 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getRandomCountry, getDailyCountry, getTodayString } from '@datasets/countries';
+import { getRandomCountry } from '@datasets/countries';
 import { getCapital, getRandomCapitalOptions } from '@datasets/capitals';
 import styles from './CapitalGuesser.module.css';
 
 const TOTAL_ROUNDS = 10;
 
 const defaultDeps = {
-  getDailyCountry,
   getRandomCountry,
   getCapital,
   getRandomCapitalOptions,
 };
 
-export function buildRound(mode, today = getTodayString(), deps = defaultDeps) {
-  const { getDailyCountry: daily, getRandomCountry: randomCountry, getCapital: capitalLookup, getRandomCapitalOptions: optionsLookup } = deps;
+export function buildRound(deps = defaultDeps) {
+  const { getRandomCountry: randomCountry, getCapital: capitalLookup, getRandomCapitalOptions: optionsLookup } = deps;
 
-  const country = mode === 'daily'
-    ? daily(`${today}-capital`)
-    : randomCountry();
+  const country = randomCountry();
 
   const capital = capitalLookup(country.code);
   const options = optionsLookup(capital, 3);
@@ -30,7 +27,7 @@ export function buildRound(mode, today = getTodayString(), deps = defaultDeps) {
 }
 
 export default function CapitalGuesser() {
-  const [mode, setMode] = useState(null); // 'daily', 'endless', 'challenge'
+  const [mode, setMode] = useState(null); // 'endless', 'challenge'
   const [currentCountry, setCurrentCountry] = useState(null);
   const [options, setOptions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -47,24 +44,6 @@ export default function CapitalGuesser() {
     const saved = localStorage.getItem('capital-guesser-stats');
     return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0 };
   });
-  const [dailyCompleted, setDailyCompleted] = useState(() => {
-    const saved = localStorage.getItem('capital-guesser-daily');
-    if (saved) {
-      const { date } = JSON.parse(saved);
-      return date === getTodayString();
-    }
-    return false;
-  });
-  const [dailyResult, setDailyResult] = useState(() => {
-    const saved = localStorage.getItem('capital-guesser-daily');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.date === getTodayString()) {
-        return parsed.correct;
-      }
-    }
-    return null;
-  });
 
   // Save stats to localStorage
   useEffect(() => {
@@ -77,12 +56,12 @@ export default function CapitalGuesser() {
   }, [bestStreak]);
 
   const setupRound = useCallback(() => {
-    const { country, options } = buildRound(mode);
+    const { country, options } = buildRound();
     setCurrentCountry(country);
     setOptions(options);
     setSelectedAnswer(null);
     setIsCorrect(null);
-  }, [mode]);
+  }, []);
 
   const startGame = (selectedMode) => {
     setMode(selectedMode);
@@ -121,15 +100,6 @@ export default function CapitalGuesser() {
       setStreak(0);
     }
 
-    if (mode === 'daily') {
-      setDailyCompleted(true);
-      setDailyResult(correct);
-      localStorage.setItem('capital-guesser-daily', JSON.stringify({
-        date: getTodayString(),
-        correct
-      }));
-      setStats(prev => ({ ...prev, played: prev.played + 1, won: correct ? prev.won + 1 : prev.won }));
-    }
   };
 
   const nextRound = () => {
@@ -169,19 +139,6 @@ export default function CapitalGuesser() {
 
         <div className={styles.menuArea}>
           <div className={styles.modeCards}>
-            <button
-              className={`${styles.modeCard} ${dailyCompleted ? styles.completed : ''}`}
-              onClick={() => !dailyCompleted && startGame('daily')}
-              disabled={dailyCompleted}
-            >
-              <span className={styles.modeIcon}>📅</span>
-              <span className={styles.modeTitle}>Daily Capital</span>
-              <span className={styles.modeDesc}>
-                {dailyCompleted
-                  ? dailyResult ? '✓ Completed!' : '✗ Try tomorrow!'
-                  : 'One country per day'}
-              </span>
-            </button>
 
             <button
               className={styles.modeCard}
@@ -273,7 +230,6 @@ export default function CapitalGuesser() {
         <h1 className={styles.title}>Capital Guesser</h1>
 
         <div className={styles.gameInfo}>
-          {mode === 'daily' && <span className={styles.modeBadge}>Daily</span>}
           {mode === 'challenge' && (
             <>
               <span className={styles.modeBadge}>Challenge</span>
@@ -346,11 +302,6 @@ export default function CapitalGuesser() {
                 </button>
               )}
 
-              {mode === 'daily' && (
-                <button className={styles.menuBtn} onClick={backToMenu}>
-                  Back to Menu
-                </button>
-              )}
             </div>
           )}
         </div>
