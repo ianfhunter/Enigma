@@ -17,7 +17,10 @@ try {
   dbAvailable = true;
 } catch (e) {
   console.warn('Skipping loader tests: better-sqlite3 not available in this environment');
-  console.warn('Error details:', e.message);
+  if (process.env.DEBUG) {
+    console.warn('Error details:', e.message);
+    console.warn('Stack:', e.stack);
+  }
 }
 
 const describeFn = dbAvailable ? describe : describe.skip;

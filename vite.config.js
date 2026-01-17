@@ -16,6 +16,8 @@ export default defineConfig({
             '@datasets': path.resolve(__dirname, 'datasets'),
             '@plugins': path.resolve(__dirname, '.plugins'),
             '@enigma': path.resolve(__dirname, 'src/enigma-sdk'),
+            // Force vitest to use root node_modules better-sqlite3 (glibc) instead of backend's (musl)
+            'better-sqlite3': path.resolve(__dirname, 'node_modules/better-sqlite3'),
         }
     },
     server: {
