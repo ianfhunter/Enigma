@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, findLongestWordWithSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './LongestWord.module.css';
 
 const MAX_WORDS = 5;
@@ -36,6 +37,7 @@ export {
 
 export default function LongestWord() {
   const [seed, setSeed] = useState('');
+  const [seedNum, setSeedNum] = useState(null);
   const [words, setWords] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
   const [message, setMessage] = useState('');
@@ -49,22 +51,23 @@ export default function LongestWord() {
   const inputRef = useRef(null);
 
   const initGame = useCallback((useRandomSeed = false) => {
-    let seedNum;
+    let newSeedNum;
     if (useRandomSeed) {
       // Use current timestamp for a truly random puzzle
-      seedNum = stringToSeed(`longestword-${Date.now()}-${Math.random()}`);
+      newSeedNum = stringToSeed(`longestword-${Date.now()}-${Math.random()}`);
     } else {
       // Use daily seed for consistent daily puzzle
       const today = getTodayDateString();
-      seedNum = stringToSeed(`longestword-${today}`);
+      newSeedNum = stringToSeed(`longestword-${today}`);
     }
-    const random = createSeededRandom(seedNum);
+    const random = createSeededRandom(newSeedNum);
     const newSeed = generateSeed(random);
 
     // Find the longest possible word for this seed
     const longest = findLongestWordWithSeed(newSeed);
 
     setSeed(newSeed);
+    setSeedNum(newSeedNum);
     setWords([]);
     setCurrentWord('');
     setMessage('');
@@ -147,10 +150,18 @@ export default function LongestWord() {
       </div>
 
       <div className={styles.gameArea}>
-        <div className={styles.seedDisplay}>
+        <div className={styles.starterDisplay}>
           <span className={styles.seedLabel}>Today's Starter</span>
           <span className={styles.seed}>{seed}</span>
         </div>
+        {seedNum !== null && (
+          <SeedDisplay
+            seed={seedNum}
+            variant="compact"
+            showNewButton
+            onNewSeed={() => initGame(true)}
+          />
+        )}
 
         <div className={styles.statsBar}>
           <div className={styles.stat}>
