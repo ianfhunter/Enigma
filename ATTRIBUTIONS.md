@@ -74,6 +74,15 @@ Additional curated Suguru puzzles sourced from:
 - **License**: Creative Commons 3.0 BY-NC-SA (Attribution-NonCommercial-ShareAlike)
 - **Sizes**: 6×6, 7×7, 8×8, 9×9, 10×10 (50 puzzles)
 
+### Riddles Dataset
+
+Riddles used in the Riddles game:
+
+- **Source**: Collection of classic riddles
+- **License**: Public Domain (traditional riddles)
+- **Count**: 20 riddles
+- **Note**: Classic riddles that are part of the public domain. The dataset may be expanded in the future.
+
 ### Crossword Clues Dataset
 
 Crossword puzzle clues generated from:
@@ -202,3 +211,9 @@ If you believe your work has been used without proper attribution, please contac
 ---
 
 **Last Updated**: January 2026
+
+### Knights and Knaves Puzzles
+
+- **Source**: [K-and-K/knights-and-knaves](https://huggingface.co/datasets/K-and-K/knights-and-knaves) on Hugging Face
+- **License**: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0)
+- **Usage**: Logic puzzles featuring Knights (truth-tellers) and Knaves (liars)
