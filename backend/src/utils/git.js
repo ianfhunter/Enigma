@@ -162,7 +162,11 @@ export function isLocalPath(url) {
  * @returns {string} Normalized absolute path
  */
 export function normalizeLocalPath(url) {
-  let normalized = url.trim();
+  let normalized = typeof url === 'string' ? url.trim() : '';
+
+  if (!normalized) {
+    throw new Error('Local path is required');
+  }
 
   // Remove file:// prefix
   if (normalized.startsWith('file://')) {

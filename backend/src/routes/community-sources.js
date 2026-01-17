@@ -29,7 +29,7 @@ import {
   compareSemver,
   getPluginsDir,
 } from '../utils/git.js';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, lstatSync } from 'fs';
 import { join } from 'path';
 
 const router = Router();
@@ -301,8 +301,23 @@ async function handleLocalSource(req, res, url) {
     const localPath = normalizeLocalPath(url);
     console.log(`📁 Adding local source: ${localPath}`);
 
+    if (!existsSync(localPath)) {
+      return res.status(400).json({
+        error: 'Local path does not exist',
+        details: localPath,
+      });
+    }
+
+    const stat = lstatSync(localPath);
+    if (!stat.isDirectory()) {
+      return res.status(400).json({
+        error: 'Local path must be a directory',
+        details: localPath,
+      });
+    }
+
     // Fetch manifest from local path
-    const manifest = await fetchManifestFromLocal(url);
+    const manifest = await fetchManifestFromLocal(localPath);
 
     if (!manifest || !manifest.id) {
       return res.status(400).json({
