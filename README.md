@@ -9,7 +9,7 @@
 
 <img width="1912" height="883" alt="image" src="https://github.com/user-attachments/assets/dae88e2f-673c-4294-b482-79967be085fc" />
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Contributing](#-contributing)
+[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Documentation](https://www.ianhunter.ie/Enigma) • [Contributing](#-contributing)
 
 </div>
 
@@ -97,21 +97,83 @@ npm run preview
 npx serve dist
 ```
 
-### Docker Deployment (Optional)
+### Docker Deployment
 
-```dockerfile
-# Example Dockerfile
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
+Enigma is available as a pre-built Docker image that includes both the frontend and backend in a single container.
 
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+#### Using the Published Docker Image
+
+**Quick Start:**
+```bash
+# Pull and run the latest image
+docker run -d \
+  --name enigma \
+  -p 3000:3000 \
+  -v enigma-data:/app/data \
+  -e SESSION_SECRET=$(openssl rand -hex 32) \
+  -e FRONTEND_URL=http://localhost:3000 \
+  ianfhunter/enigma:latest
+```
+
+**With docker-compose:**
+```yaml
+version: '3.8'
+
+services:
+  enigma:
+    image: ianfhunter/enigma:latest
+    container_name: enigma
+    ports:
+      - "3000:3000"
+    volumes:
+      - enigma-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - SESSION_SECRET=your-secret-here-change-in-production
+      - FRONTEND_URL=http://localhost:3000
+    restart: unless-stopped
+
+volumes:
+  enigma-data:
+```
+
+Save this as `docker-compose.yml` and run:
+```bash
+docker-compose up -d
+```
+
+**Available Image Tags:**
+- `latest` - Latest stable release
+- `dev` - Development builds (manual workflow dispatch)
+- Version tags like `1.0.1`, `1.0`, `1` - Specific versions
+
+**Environment Variables:**
+- `SESSION_SECRET` (required) - Secret for session cookies. Generate with `openssl rand -hex 32`
+- `FRONTEND_URL` (optional) - Frontend URL for CORS. Defaults to `http://localhost:5173`
+- `DB_PATH` (optional) - Database path. Defaults to `/app/data/enigma.db`
+- `PORT` (optional) - Server port. Defaults to `3000`
+
+**Data Persistence:**
+The container stores data in `/app/data`. Use a Docker volume (as shown above) to persist your database and user data between container restarts.
+
+**Health Check:**
+The image includes a health check. Monitor with:
+```bash
+docker ps  # Check STATUS column
+```
+
+Or test manually:
+```bash
+curl http://localhost:3000/api/health
+```
+
+#### Building Your Own Image
+
+If you prefer to build the image yourself:
+
+```bash
+docker build -t enigma .
+docker run -p 3000:3000 -v enigma-data:/app/data enigma
 ```
 
 ---
@@ -167,13 +229,29 @@ enigma/
 - `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint
 
-### Testing (Docker)
+### Testing
+
+#### Unit and Integration Tests
 
 Run tests inside Docker to match CI:
 
 ```bash
 docker run --rm -v "$PWD":/workspace -w /workspace node:22-bookworm bash -lc "npm ci && npm run test:run"
 ```
+
+#### Docker Image Tests
+
+Test the published Docker image to ensure it works correctly:
+
+```bash
+# Test the latest published image
+./tests/docker/docker-image.test.sh
+
+# Test a specific version
+./tests/docker/docker-image.test.sh ianfhunter/enigma:1.0.1
+```
+
+See [tests/docker/README.md](tests/docker/README.md) for more details.
 
 ---
 
@@ -281,6 +359,7 @@ Please see our separate file [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
 ## 🔗 Links
 
+- [📚 Documentation](https://www.ianhunter.ie/Enigma) - Game guides and development documentation
 - [Report a Bug](https://github.com/ianfhunter/enigma/issues)
 - [Request a Feature](https://github.com/ianfhunter/enigma/issues)
 - [Discussions](https://github.com/ianfhunter/enigma/discussions)
