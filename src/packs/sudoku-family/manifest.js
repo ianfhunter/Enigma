@@ -14,6 +14,9 @@ import str8tsIcon from '../../assets/icons/str8ts.svg';
 import sujikoIcon from '../../assets/icons/sujiko.svg';
 import futoshikiIcon from '../../assets/icons/futoshiki.svg';
 import abcendviewIcon from '../../assets/icons/abcendview.svg';
+import arrowSudokuIcon from '../../assets/icons/arrow-sudoku.svg';
+import jigsawSudokuIcon from '../../assets/icons/jigsaw-sudoku.svg';
+import thermoSudokuIcon from '../../assets/icons/thermo-sudoku.svg';
 
 /**
  * Pack metadata
@@ -160,6 +163,39 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         version: 'v1.0',
         component: () => import('../../pages/ABCEndView'),
+      },
+      {
+        title: 'Arrow Sudoku',
+        slug: 'arrow-sudoku',
+        description: 'Sudoku with arrow constraints. Digits along arrows must sum to the digit in the circle.',
+        icon: arrowSudokuIcon,
+        emojiIcon: '🎯',
+        colors: { primary: '#f59e0b', secondary: '#ec4899' },
+        gradient: 'linear-gradient(135deg, #f59e0b 0%, #ec4899 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/ArrowSudoku'),
+      },
+      {
+        title: 'Jigsaw Sudoku',
+        slug: 'jigsaw-sudoku',
+        description: 'Sudoku with irregular regions instead of standard 3×3 boxes. Each region must contain 1-9.',
+        icon: jigsawSudokuIcon,
+        emojiIcon: '🧩',
+        colors: { primary: '#8b5cf6', secondary: '#ec4899' },
+        gradient: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/JigsawSudoku'),
+      },
+      {
+        title: 'Thermo Sudoku',
+        slug: 'thermo-sudoku',
+        description: 'Sudoku with thermometer constraints. Digits along thermometers must strictly increase from bulb to tip.',
+        icon: thermoSudokuIcon,
+        emojiIcon: '🌡️',
+        colors: { primary: '#06b6d4', secondary: '#3b82f6' },
+        gradient: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/ThermoSudoku'),
       },
     ],
   },

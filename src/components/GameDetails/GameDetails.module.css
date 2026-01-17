@@ -1,0 +1,40 @@
+.gameDetails {
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid;
+}
+
+.gameDetails a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.gameDetails a:hover {
+  opacity: 0.8;
+}
+
+/* Info variant (default) */
+.gameDetails.info {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #bfdbfe;
+}
+
+/* Warning variant */
+.gameDetails.warning {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: #fef3c7;
+}
+
+/* Notice variant */
+.gameDetails.notice {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #e9d5ff;
+}

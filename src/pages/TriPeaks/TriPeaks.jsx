@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import GameDetails from '../../components/GameDetails';
 import { getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import SeedDisplay from '../../components/SeedDisplay';
 import styles from './TriPeaks.module.css';
@@ -388,6 +389,10 @@ export default function TriPeaks() {
         title="Tri-Peaks"
         instructions="Remove cards from the peaks that are one rank higher or lower than the waste card. Clear all three peaks to win!"
       />
+
+      <GameDetails type="warning">
+        <strong>Developer Note:</strong> There is an <a href="https://github.com/ianfhunter/enigma/issues/86" target="_blank" rel="noopener noreferrer">open issue (#86)</a> that means games are not guaranteed to be solvable - but we expect most games will be.
+      </GameDetails>
 
       {seed !== null && (
         <SeedDisplay

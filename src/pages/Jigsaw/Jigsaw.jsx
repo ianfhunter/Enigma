@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -64,10 +64,37 @@ function playSnapSound() {
 }
 
 const DIFFICULTY = {
-  'Easy (3×2)': { cols: 3, rows: 2 },
-  'Medium (4×3)': { cols: 4, rows: 3 },
-  'Hard (5×4)': { cols: 5, rows: 4 },
+  'Easy (5×4)': { cols: 5, rows: 4 },
+  'Medium (6×5)': { cols: 6, rows: 5 },
+  'Hard (7×6)': { cols: 7, rows: 6 },
+  'Very Hard (8×7)': { cols: 8, rows: 7 },
 };
+
+const STORAGE_KEY = 'jigsaw-game-state';
+
+// Load game state from localStorage
+function loadGameState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.error('Failed to load game state:', e);
+  }
+  return null;
+}
+
+// Save game state to localStorage
+function saveGameState(state) {
+  try {
+    if (state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch (e) {
+    console.error('Failed to save game state:', e);
+  }
+}
 
 // Generate the jigsaw piece path with tabs and blanks
 function generatePiecePath(col, row, cols, rows, pieceWidth, pieceHeight, edges, tabSize) {
@@ -218,32 +245,116 @@ function getExpectedRelativePosition(piece1, piece2, pieceWidth, pieceHeight) {
 export { DIFFICULTY, createPieces, shufflePieces, areAdjacent, getExpectedRelativePosition };
 
 export default function Jigsaw() {
-  const [difficulty, setDifficulty] = useState('Easy (3×2)');
+  const [difficulty, setDifficulty] = useState('Easy (5×4)');
   const [pieces, setPieces] = useState([]);
   const [draggedPiece, setDraggedPiece] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [imageLoaded, setImageLoaded] = useState(false);
   const [gameState, setGameState] = useState('playing');
   const [showPreview, setShowPreview] = useState(false);
-  const [placedCount, setPlacedCount] = useState(0);
   const [seed, setSeed] = useState(null);
 
   const containerRef = useRef(null);
+  const svgRef = useRef(null);
   const imageRef = useRef(null);
+  const svgPointRef = useRef(null);
+  const rafRef = useRef(null);
 
-  const { cols, rows } = DIFFICULTY[difficulty];
-  const pieceWidth = 100;
-  const pieceHeight = 100;
-  const boardWidth = cols * pieceWidth;
-  const boardHeight = rows * pieceHeight;
+  // Memoize board dimensions
+  const boardDimensions = useMemo(() => {
+    const { cols, rows } = DIFFICULTY[difficulty];
+    const pieceWidth = 100;
+    const pieceHeight = 100;
+    const boardWidth = cols * pieceWidth;
+    const boardHeight = rows * pieceHeight;
+    
+    // Fixed coordinate system with extra space for placing pieces anywhere
+    // The SVG will scale to fit screen width via CSS
+    const viewBoxWidth = boardWidth + 1000; // Board + extra space on sides
+    const viewBoxHeight = boardHeight + 800; // Board + extra space above/below
+    
+    return {
+      cols,
+      rows,
+      pieceWidth,
+      pieceHeight,
+      boardWidth,
+      boardHeight,
+      viewBoxWidth,
+      viewBoxHeight,
+    };
+  }, [difficulty]);
+
+  const { cols, rows, pieceWidth, pieceHeight, boardWidth, boardHeight, viewBoxWidth, viewBoxHeight } = boardDimensions;
   const snapThreshold = 25;
 
-  const initGame = useCallback((newDifficulty = difficulty) => {
+  // Memoize placed count calculation
+  const placedCount = useMemo(() => {
+    return pieces.filter(p => p.isPlaced).length;
+  }, [pieces]);
+
+  // Memoize sorted pieces for rendering
+  const sortedPieces = useMemo(() => {
+    return [...pieces].sort((a, b) => {
+      if (a.isPlaced && !b.isPlaced) return -1;
+      if (!a.isPlaced && b.isPlaced) return 1;
+      return 0;
+    });
+  }, [pieces]);
+
+  // Memoize grid lines
+  const gridLines = useMemo(() => {
+    const vertical = Array.from({ length: cols - 1 }, (_, i) => (
+      <line
+        key={`v${i}`}
+        x1={100 + (i + 1) * pieceWidth}
+        y1={50}
+        x2={100 + (i + 1) * pieceWidth}
+        y2={50 + boardHeight}
+        stroke="rgba(255,255,255,0.08)"
+        strokeWidth="1"
+      />
+    ));
+    const horizontal = Array.from({ length: rows - 1 }, (_, i) => (
+      <line
+        key={`h${i}`}
+        x1={100}
+        y1={50 + (i + 1) * pieceHeight}
+        x2={100 + boardWidth}
+        y2={50 + (i + 1) * pieceHeight}
+        stroke="rgba(255,255,255,0.08)"
+        strokeWidth="1"
+      />
+    ));
+    return { vertical, horizontal };
+  }, [cols, rows, pieceWidth, pieceHeight, boardWidth, boardHeight]);
+
+  const initGame = useCallback((newDifficulty = difficulty, reset = false) => {
     const { cols: newCols, rows: newRows } = DIFFICULTY[newDifficulty];
     const today = getTodayDateString();
     const gameSeed = stringToSeed(`jigsaw-${today}-${newCols}x${newRows}`);
+    
+    // If reset is true, clear saved state
+    if (reset) {
+      saveGameState(null);
+    }
+    
+    // Check for saved state if not resetting
+    if (!reset) {
+      const saved = loadGameState();
+      if (saved && saved.seed === gameSeed && saved.difficulty === newDifficulty && saved.pieces) {
+        // Restore saved state
+        setSeed(saved.seed);
+        setPieces(saved.pieces);
+        setDifficulty(saved.difficulty);
+        setGameState(saved.gameState || 'playing');
+        setShowPreview(false);
+        return;
+      }
+    }
+    
+    // Generate new puzzle
     const random = createSeededRandom(gameSeed);
-
     const newPieces = createPieces(newCols, newRows, pieceWidth, pieceHeight, random);
     const shuffled = shufflePieces(newPieces, newCols * pieceWidth, newRows * pieceHeight, pieceWidth, pieceHeight, random);
 
@@ -251,38 +362,97 @@ export default function Jigsaw() {
     setPieces(shuffled);
     setDifficulty(newDifficulty);
     setGameState('playing');
-    setPlacedCount(0);
     setShowPreview(false);
-  }, [difficulty]);
+  }, [difficulty, pieceWidth, pieceHeight]);
 
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
       imageRef.current = img;
       setImageLoaded(true);
+      
+      // Try to load saved state first
+      const saved = loadGameState();
+      if (saved && saved.seed && saved.pieces) {
+        const today = getTodayDateString();
+        const { cols: savedCols, rows: savedRows } = DIFFICULTY[saved.difficulty] || { cols: 3, rows: 2 };
+        const currentSeed = stringToSeed(`jigsaw-${today}-${savedCols}x${savedRows}`);
+        
+        // Only restore if seed matches (same day and difficulty)
+        if (saved.seed === currentSeed) {
+          setSeed(saved.seed);
+          setPieces(saved.pieces);
+          setDifficulty(saved.difficulty || 'Easy (5×4)');
+          setGameState(saved.gameState || 'playing');
+          return;
+        }
+      }
+      
+      // Otherwise, init new game
       initGame();
     };
     img.src = sampleImage;
-  }, []);
+  }, [initGame]);
 
+  // Update game state when all pieces are placed
   useEffect(() => {
-    const placed = pieces.filter(p => p.isPlaced).length;
-    setPlacedCount(placed);
-    if (pieces.length > 0 && placed === pieces.length) {
+    if (pieces.length > 0 && placedCount === pieces.length) {
       setGameState('won');
     }
-  }, [pieces]);
+  }, [pieces.length, placedCount]);
 
-  const handleMouseDown = (e, piece) => {
-    if (gameState === 'won' || piece.isPlaced) return;
+  // Save game state to localStorage whenever it changes
+  useEffect(() => {
+    if (seed && pieces.length > 0) {
+      const stateToSave = {
+        seed,
+        difficulty,
+        pieces: pieces.map(p => ({
+          id: p.id,
+          col: p.col,
+          row: p.row,
+          currentX: p.currentX,
+          currentY: p.currentY,
+          path: p.path,
+          edges: p.edges,
+          tabSize: p.tabSize,
+          isPlaced: p.isPlaced,
+          groupId: p.groupId,
+          correctX: p.correctX,
+          correctY: p.correctY,
+        })),
+        gameState,
+        placedCount,
+      };
+      saveGameState(stateToSave);
+    }
+  }, [seed, difficulty, pieces, gameState, placedCount]);
 
-    const rect = containerRef.current.getBoundingClientRect();
+  const handleMouseDown = useCallback((e, piece) => {
+    if (gameState === 'won') return;
+
+    if (!svgRef.current) return;
+    
+    const svg = svgRef.current;
+    if (!svgPointRef.current) {
+      svgPointRef.current = svg.createSVGPoint();
+    }
+    const svgPoint = svgPointRef.current;
+    
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    svgPoint.x = clientX;
+    svgPoint.y = clientY;
+    
+    const screenCTM = svg.getScreenCTM();
+    if (!screenCTM) return;
+    
+    const svgCoords = svgPoint.matrixTransform(screenCTM.inverse());
 
     setDragOffset({
-      x: clientX - rect.left - piece.currentX,
-      y: clientY - rect.top - piece.currentY,
+      x: svgCoords.x - piece.currentX,
+      y: svgCoords.y - piece.currentY,
     });
     setDraggedPiece(piece.id);
 
@@ -293,32 +463,54 @@ export default function Jigsaw() {
       const otherPieces = prev.filter(p => p.groupId !== groupId);
       return [...otherPieces, ...groupPieces];
     });
-  };
+  }, [gameState]);
 
   const handleMouseMove = useCallback((e) => {
-    if (draggedPiece === null) return;
+    if (draggedPiece === null || !svgRef.current) return;
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    // Cancel previous animation frame
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
 
-    const newX = clientX - rect.left - dragOffset.x;
-    const newY = clientY - rect.top - dragOffset.y;
+    rafRef.current = requestAnimationFrame(() => {
+      if (!svgRef.current || draggedPiece === null) return;
+      
+      const svg = svgRef.current;
+      if (!svgPointRef.current) {
+        svgPointRef.current = svg.createSVGPoint();
+      }
+      const svgPoint = svgPointRef.current;
+      
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      svgPoint.x = clientX;
+      svgPoint.y = clientY;
+      
+      const screenCTM = svg.getScreenCTM();
+      if (!screenCTM) return;
+      
+      const svgCoords = svgPoint.matrixTransform(screenCTM.inverse());
 
-    setPieces(prev => {
-      const draggedPieceData = prev.find(p => p.id === draggedPiece);
-      if (!draggedPieceData) return prev;
+      const newX = svgCoords.x - dragOffset.x;
+      const newY = svgCoords.y - dragOffset.y;
 
-      const deltaX = newX - draggedPieceData.currentX;
-      const deltaY = newY - draggedPieceData.currentY;
-      const groupId = draggedPieceData.groupId;
+      setPieces(prev => {
+        const draggedPieceData = prev.find(p => p.id === draggedPiece);
+        if (!draggedPieceData) return prev;
 
-      // Move all pieces in the same group
-      return prev.map(p =>
-        p.groupId === groupId
-          ? { ...p, currentX: p.currentX + deltaX, currentY: p.currentY + deltaY }
-          : p
-      );
+        const deltaX = newX - draggedPieceData.currentX;
+        const deltaY = newY - draggedPieceData.currentY;
+        const groupId = draggedPieceData.groupId;
+
+        // Move all pieces in the same group
+        return prev.map(p =>
+          p.groupId === groupId
+            ? { ...p, currentX: p.currentX + deltaX, currentY: p.currentY + deltaY }
+            : p
+        );
+      });
     });
   }, [draggedPiece, dragOffset]);
 
@@ -426,6 +618,9 @@ export default function Jigsaw() {
         }
       }
 
+      // If no snap occurred, pieces stay in their current position (they can be anywhere on screen)
+      // The pieces remain draggable unless they were placed via snapping above
+
       return newPieces;
     });
 
@@ -459,8 +654,8 @@ export default function Jigsaw() {
     };
   }, [draggedPiece, handleMouseMove, handleMouseUp]);
 
-  const renderPiece = (piece) => {
-    const { cols: currentCols, rows: currentRows } = DIFFICULTY[difficulty];
+  const renderPiece = useCallback((piece) => {
+    const { cols: currentCols, rows: currentRows } = boardDimensions;
     const clipId = `piece-${piece.id}`;
     const extraSpace = piece.tabSize * 2;
 
@@ -497,7 +692,7 @@ export default function Jigsaw() {
         />
       </g>
     );
-  };
+  }, [boardDimensions, pieceWidth, pieceHeight, draggedPiece, handleMouseDown]);
 
   if (!imageLoaded) {
     return (
@@ -507,7 +702,6 @@ export default function Jigsaw() {
     );
   }
 
-  const { cols: currentCols, rows: currentRows } = DIFFICULTY[difficulty];
 
   return (
     <div className={styles.container}>
@@ -570,10 +764,12 @@ export default function Jigsaw() {
         )}
 
         <svg
+          ref={svgRef}
           className={styles.puzzleBoard}
-          width={boardWidth + 300}
-          height={boardHeight + 250}
-          viewBox={`0 0 ${boardWidth + 300} ${boardHeight + 250}`}
+          width="100%"
+          viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+          preserveAspectRatio="xMidYMin meet"
+          style={{ maxWidth: '100vw', height: 'auto' }}
         >
           {/* Board outline */}
           <rect
@@ -589,36 +785,11 @@ export default function Jigsaw() {
           />
 
           {/* Grid lines hint */}
-          {Array.from({ length: currentCols - 1 }).map((_, i) => (
-            <line
-              key={`v${i}`}
-              x1={100 + (i + 1) * pieceWidth}
-              y1={50}
-              x2={100 + (i + 1) * pieceWidth}
-              y2={50 + boardHeight}
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="1"
-            />
-          ))}
-          {Array.from({ length: currentRows - 1 }).map((_, i) => (
-            <line
-              key={`h${i}`}
-              x1={100}
-              y1={50 + (i + 1) * pieceHeight}
-              x2={100 + boardWidth}
-              y2={50 + (i + 1) * pieceHeight}
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="1"
-            />
-          ))}
+          {gridLines.vertical}
+          {gridLines.horizontal}
 
           {/* Render pieces - placed pieces first (underneath), unplaced pieces on top */}
-          {[...pieces].sort((a, b) => {
-            // Placed pieces should be rendered first (lower z-order)
-            if (a.isPlaced && !b.isPlaced) return -1;
-            if (!a.isPlaced && b.isPlaced) return 1;
-            return 0;
-          }).map(renderPiece)}
+          {sortedPieces.map(renderPiece)}
         </svg>
 
         {gameState === 'won' && (
@@ -628,7 +799,7 @@ export default function Jigsaw() {
         )}
       </div>
 
-      <button className={styles.newGameBtn} onClick={() => initGame(difficulty)}>
+      <button className={styles.newGameBtn} onClick={() => initGame(difficulty, true)}>
         Shuffle Pieces
       </button>
     </div>

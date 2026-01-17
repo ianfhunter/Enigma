@@ -217,3 +217,20 @@ If you believe your work has been used without proper attribution, please contac
 - **Source**: [K-and-K/knights-and-knaves](https://huggingface.co/datasets/K-and-K/knights-and-knaves) on Hugging Face
 - **License**: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0)
 - **Usage**: Logic puzzles featuring Knights (truth-tellers) and Knaves (liars)
+
+### Sudoku-Bench Dataset (SakanaAI)
+
+Sudoku variants (Arrow Sudoku, Jigsaw Sudoku, Thermo Sudoku) are designed to use the Sudoku-Bench dataset:
+
+- **Dataset**: [SakanaAI/Sudoku-Bench](https://huggingface.co/datasets/SakanaAI/Sudoku-Bench) on Hugging Face
+- **Repository**: [SakanaAI/Sudoku-Bench](https://github.com/SakanaAI/Sudoku-Bench)
+- **License**: MIT
+- **Subsets**: 
+  - `challenge_100`: 100 creative Sudoku variants (4×4, 6×6, 9×9)
+  - `nikoli_100`: 100 standard Sudoku puzzles from Nikoli
+  - `ctc`: 2,565 Sudoku variants from Cracking The Cryptic
+- **Usage**: Provides Arrow Sudoku, Jigsaw Sudoku (Irregular Regions), Thermo Sudoku, and other variant puzzles
+
+**Current Status**: All three games are configured to load puzzles from dataset files (`public/datasets/arrowSudokuPuzzles.json`, `jigsawSudokuPuzzles.json`, `thermoSudokuPuzzles.json`). When these files are empty, the games automatically fall back to algorithmic generation.
+
+**To populate with real Sudoku-Bench data**: Download the dataset using the Hugging Face `datasets` library, filter puzzles by variant type, convert to the internal format (see game files for structure), and save to the respective JSON files. The games will automatically use the dataset puzzles once populated.

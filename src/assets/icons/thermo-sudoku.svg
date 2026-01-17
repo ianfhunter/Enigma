@@ -1,0 +1,33 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Thermo Sudoku: Grid with thermometer -->
+  
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f8fafc"/>
+  
+  <!-- Border -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="none" stroke="#06b6d4" stroke-width="1.5"/>
+  
+  <!-- Grid lines -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#64748b" stroke-width="0.75"/>
+  <line x1="16" y1="1" x2="16" y2="23" stroke="#64748b" stroke-width="0.75"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#64748b" stroke-width="0.75"/>
+  <line x1="1" y1="16" x2="23" y2="16" stroke="#64748b" stroke-width="0.75"/>
+  
+  <!-- Thermometer: Bulb at (12, 20), tube going up to (12, 8) -->
+  <!-- Bulb (circular) -->
+  <circle cx="12" cy="20" r="3" fill="#06b6d4" opacity="0.2" stroke="#06b6d4" stroke-width="1.5"/>
+  <!-- Tube (rectangular) -->
+  <rect x="10.5" y="8" width="3" height="9" fill="#06b6d4" opacity="0.15" stroke="#06b6d4" stroke-width="1.5" rx="1.5"/>
+  <!-- Connecting line -->
+  <line x1="12" y1="17" x2="12" y2="20" stroke="#06b6d4" stroke-width="1.5"/>
+  
+  <!-- Mercury indicator showing increasing values -->
+  <rect x="10.5" y="16" width="3" height="1" fill="#3b82f6" opacity="0.6"/>
+  <rect x="10.5" y="13" width="3" height="1" fill="#3b82f6" opacity="0.7"/>
+  <rect x="10.5" y="10" width="3" height="1" fill="#3b82f6" opacity="0.8"/>
+  
+  <!-- Sample numbers -->
+  <text x="12" y="21.5" font-family="Arial, sans-serif" font-size="3" font-weight="bold" fill="#06b6d4" text-anchor="middle">1</text>
+  <text x="4.5" y="6.5" font-family="Arial, sans-serif" font-size="4" fill="#94a3b8" text-anchor="middle">4</text>
+  <text x="19.5" y="6.5" font-family="Arial, sans-serif" font-size="4" fill="#94a3b8" text-anchor="middle">7</text>
+</svg>

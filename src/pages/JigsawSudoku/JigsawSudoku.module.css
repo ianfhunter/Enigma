@@ -1,0 +1,274 @@
+.container {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 20px;
+  color: var(--color-text);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: var(--color-text);
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.timerDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  color: var(--color-text);
+  background: var(--btn-secondary-bg);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.timerIcon {
+  font-size: 1rem;
+}
+
+.boardWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.board {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.cell:hover {
+  background: var(--panel-bg) !important;
+}
+
+.cell.given {
+  cursor: default;
+}
+
+.cell.given .cellValue {
+  color: #8b5cf6;
+}
+
+.cell.selected {
+  box-shadow: inset 0 0 0 2px #8b5cf6;
+}
+
+.cell.error {
+  background: rgba(239, 68, 68, 0.3) !important;
+}
+
+.cellValue {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-text);
+  position: relative;
+  z-index: 2;
+}
+
+.numberPad {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.numBtn {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 8px;
+  background: var(--btn-secondary-bg);
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.numBtn:hover {
+  background: rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+.winMessage {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 20px 40px;
+  text-align: center;
+}
+
+.winEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.winMessage h3 {
+  margin: 0 0 5px 0;
+  color: #8b5cf6;
+}
+
+.winMessage p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.gaveUpMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.gaveUpIcon {
+  font-size: 18px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  width: 44px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.toggleSlider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+.toggle input:checked + .toggleSlider::before {
+  transform: translateX(20px);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.resetBtn,
+.giveUpBtn,
+.newBtn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: var(--btn-secondary-bg);
+  color: var(--color-text);
+}
+
+.resetBtn:hover {
+  background: var(--panel-bg);
+}
+
+.giveUpBtn {
+  background: rgba(239, 68, 68, 0.3);
+  color: var(--color-text);
+}
+
+.giveUpBtn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.5);
+}
+
+.giveUpBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.newBtn {
+  background: rgba(139, 92, 246, 0.3);
+  color: var(--color-text);
+}
+
+.newBtn:hover {
+  background: rgba(139, 92, 246, 0.5);
+}

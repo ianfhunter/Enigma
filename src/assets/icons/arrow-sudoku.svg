@@ -1,0 +1,31 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Arrow Sudoku: Grid with arrow constraint -->
+  
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f8fafc"/>
+  
+  <!-- Border -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+  
+  <!-- Grid lines -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#64748b" stroke-width="0.75"/>
+  <line x1="16" y1="1" x2="16" y2="23" stroke="#64748b" stroke-width="0.75"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#64748b" stroke-width="0.75"/>
+  <line x1="1" y1="16" x2="23" y2="16" stroke="#64748b" stroke-width="0.75"/>
+  
+  <!-- Arrow: Circle at (8, 12), arrow pointing to (16, 8) -->
+  <circle cx="8" cy="12" r="2.5" fill="#f59e0b" stroke="#ec4899" stroke-width="1"/>
+  <line x1="8" y1="12" x2="16" y2="8" stroke="#ec4899" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#ec4899"/>
+    </marker>
+  </defs>
+  
+  <!-- Sample numbers -->
+  <text x="8" y="13.5" font-family="Arial, sans-serif" font-size="3.5" font-weight="bold" fill="#ffffff" text-anchor="middle">5</text>
+  <text x="4.5" y="6.5" font-family="Arial, sans-serif" font-size="4" fill="#94a3b8" text-anchor="middle">2</text>
+  <text x="12" y="6.5" font-family="Arial, sans-serif" font-size="4" fill="#94a3b8" text-anchor="middle">1</text>
+</svg>
