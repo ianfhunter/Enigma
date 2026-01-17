@@ -292,8 +292,6 @@ export function compareSemver(a, b) {
 
   for (let i = 0; i < 3; i++) {
     if (partsA[i] > partsB[i]) return 1;
-  const safeOwner = encodeURIComponent(owner);
-  const safeRepo = encodeURIComponent(repo);
     if (partsA[i] < partsB[i]) return -1;
   }
   return 0;
@@ -314,6 +312,10 @@ export async function fetchManifestFromGitHub(url, ref = 'main') {
   }
 
   const { owner, repo } = parsed;
+
+  // Encode owner and repo for URL safety
+  const safeOwner = encodeURIComponent(owner);
+  const safeRepo = encodeURIComponent(repo);
 
   // Try manifest.js first, then manifest.json
   const manifestFiles = ['manifest.js', 'manifest.json'];

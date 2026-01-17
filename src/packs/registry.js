@@ -24,7 +24,16 @@ import cardGamesPack from './card-games/manifest';
 
 // Import installed community packs (auto-generated)
 // Run `node scripts/generate-community-packs.js` to regenerate
-import { installedCommunityPacks } from './installedCommunityPacks';
+// Use dynamic import with fallback to handle missing file in test environments
+let installedCommunityPacks = [];
+try {
+  const communityPacksModule = await import('./installedCommunityPacks.js');
+  installedCommunityPacks = communityPacksModule.installedCommunityPacks || [];
+} catch (error) {
+  // File doesn't exist yet (e.g., in test environments)
+  // This is expected and handled gracefully
+  console.warn('installedCommunityPacks.js not found, using empty array');
+}
 
 /**
  * All official packs loaded from their manifest files
