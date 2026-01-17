@@ -44,6 +44,21 @@ export function parseGitHubUrl(url) {
   // Normalize the URL
   let normalized = url.trim();
 
+  // Basic sanitization to prevent passing git options like --upload-pack as the "URL"
+  // Reject any value that:
+  // - starts with a dash (could be interpreted as an option)
+  // - contains newline or null bytes
+  // - contains the string "--upload-pack" (classic git injection vector)
+  if (
+    normalized.startsWith('-') ||
+    normalized.includes('\n') ||
+    normalized.includes('\r') ||
+    normalized.includes('\0') ||
+    normalized.includes('--upload-pack')
+  ) {
+    return null;
+  }
+
   // SSH format: git@github.com:owner/repo.git
   const sshMatch = normalized.match(/^git@github\.com:([^/]+)\/([^/]+?)(\.git)?$/);
   if (sshMatch) {
