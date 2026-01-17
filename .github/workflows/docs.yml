@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "src/pages/**/README.md"
+      - "_docs/**/*.md"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
@@ -36,6 +37,11 @@ jobs:
             mkdir -p "docs/games/$game_dir"
             cp "$file" "docs/games/$game_dir/README.md"
           done
+          
+          # Copy _docs files to docs directory
+          if [ -d "_docs" ]; then
+            cp _docs/*.md docs/ 2>/dev/null || true
+          fi
 
       - name: Generate index
         run: |
