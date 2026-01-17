@@ -10,14 +10,50 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { createTestServer, createTestClient } from './helpers/setup.js';
 
-describe('Authentication Integration Tests', () => {
+// Check if bcrypt can be loaded (required for auth tests)
+// This must be done before importing setup.js which imports routes that use bcrypt
+let bcryptAvailable = false;
+try {
+  // Try to import from backend node_modules first, then root
+  let bcrypt;
+  try {
+    const { fileURLToPath } = await import('url');
+    const { dirname, join } = await import('path');
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const backendBcryptPath = join(__dirname, '../../backend/node_modules/bcrypt');
+    bcrypt = await import(`file://${backendBcryptPath}/index.js`);
+  } catch {
+    // Fall back to regular import
+    bcrypt = await import('bcrypt');
+  }
+  // Try to use it to ensure it's actually working
+  await bcrypt.default.hash('test', 1);
+  bcryptAvailable = true;
+} catch (e) {
+  if (e.message && (e.message.includes('libc.musl') || e.message.includes('shared object') || e.message.includes('Cannot find package'))) {
+    console.warn('Skipping auth integration tests: bcrypt not available');
+  } else {
+    // Re-throw if it's a different error
+    throw e;
+  }
+}
+
+// Only import setup if bcrypt is available (to avoid import errors)
+const { createTestServer, createTestClient } = bcryptAvailable 
+  ? await import('./helpers/setup.js')
+  : { createTestServer: null, createTestClient: null };
+
+describe.skipIf(!bcryptAvailable || !createTestServer)('Authentication Integration Tests', () => {
   let server;
   let client;
   let baseUrl;
 
   beforeEach(async () => {
+    if (!createTestServer) {
+      throw new Error('createTestServer not available (bcrypt not loaded)');
+    }
     server = await createTestServer({ port: 0 });
     baseUrl = server.baseUrl;
     client = createTestClient(baseUrl);

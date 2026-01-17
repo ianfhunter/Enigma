@@ -360,13 +360,6 @@
   color: var(--color-text);
 }
 
-.seedDisplay {
-  text-align: center;
-  color: var(--color-text-secondary);
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-}
-
 /* Responsive */
 @media (max-width: 450px) {
   .grid {

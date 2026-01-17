@@ -116,7 +116,8 @@ export default function SeedDisplay({
   ].filter(Boolean).join(' ');
 
   return (
-    <div className={containerClass}>
+    <div className={styles.wrapper}>
+      <div className={containerClass}>
       {variant !== 'inline' && label && (
         <span className={styles.label}>{label}:</span>
       )}
@@ -169,6 +170,7 @@ export default function SeedDisplay({
             🎲
           </button>
         )}
+      </div>
       </div>
     </div>
   );

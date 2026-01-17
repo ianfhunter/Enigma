@@ -13,7 +13,7 @@
   flex-wrap: wrap;
 }
 
-.seed, .moves, .remaining {
+.moves, .remaining {
   font-size: 0.9rem;
   color: var(--color-text-secondary);
   background: var(--color-bg-secondary);

@@ -279,15 +279,16 @@ export default function WordSearch() {
         <p className={styles.instructions}>
           Find all {puzzle.words.length} hidden words! Drag to select.
         </p>
-        {seed && (
-          <SeedDisplay
-            seed={seed}
-            variant="compact"
-            showNewButton
-            onNewSeed={() => initGame(Math.floor(Math.random() * 2147483647))}
-          />
-        )}
       </div>
+
+      {seed && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>

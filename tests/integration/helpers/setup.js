@@ -8,7 +8,11 @@
 import { existsSync, rmSync, mkdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Create a test server instance
@@ -54,8 +58,13 @@ export async function createTestServer(options = {}) {
   // Note: In Node.js ESM, we can't easily clear cache, so we use env vars instead
   
   // Import server initialization (it will use the env vars we just set)
-  // Path: tests/integration/helpers/ -> backend/src/ = ../../backend/src/
-  const { default: db } = await import('../../backend/src/db.js');
+  // Path: tests/integration/helpers/ -> project root = ../../../
+  // Then project root -> backend/src/db.js = backend/src/db.js
+  // Resolve the absolute path to the backend db module
+  const projectRoot = join(__dirname, '../../..');
+  const dbModulePath = join(projectRoot, 'backend/src/db.js');
+  const dbModuleUrl = `file://${dbModulePath}`;
+  const { default: db } = await import(dbModuleUrl);
   
   // Now import and create the Express app from index.js
   // We need to manually create the app since index.js starts the server
@@ -79,7 +88,19 @@ export async function createTestServer(options = {}) {
 
   // Middleware
   app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, direct API calls in tests)
+      if (!origin) return callback(null, true);
+
+      // In test environment, allow localhost variants and .local domains
+      // This is more restrictive than origin: true but still allows test scenarios
+      if (origin.match(/^http:\/\/(localhost|127\.0\.0\.1|[\w-]+\.local)(:\d+)?$/)) {
+        return callback(null, true);
+      }
+
+      // Block other origins for security
+      return callback(new Error('Not allowed by CORS'), false);
+    },
     credentials: true
   }));
   app.use(express.json());
@@ -99,22 +120,59 @@ export async function createTestServer(options = {}) {
   }));
 
   // CSRF middleware
-  const { initCsrf, getCsrfToken, verifyCsrfToken } = await import('../../backend/src/middleware/csrf.js');
+  const csrfModulePath = join(projectRoot, 'backend/src/middleware/csrf.js');
+  const { initCsrf, getCsrfToken, verifyCsrfToken } = await import(`file://${csrfModulePath}`);
   app.use(initCsrf);
   app.get('/api/csrf-token', (req, res) => {
     res.json({ csrfToken: getCsrfToken(req) });
   });
   app.use(verifyCsrfToken);
 
-  // Import routes
-  const { default: authRoutes } = await import('../../backend/src/routes/auth.js');
-  const { default: communitySourcesRoutes } = await import('../../backend/src/routes/community-sources.js');
+  // Check if bcrypt can be loaded before importing routes that depend on it
+  let bcryptAvailable = true;
+  try {
+    const bcrypt = await import('bcrypt');
+    // Try to use it to ensure it's actually working
+    await bcrypt.default.hash('test', 1);
+  } catch (e) {
+    if (e.message && (e.message.includes('libc.musl') || e.message.includes('shared object'))) {
+      bcryptAvailable = false;
+    } else {
+      // Re-throw if it's a different error
+      throw e;
+    }
+  }
+
+  // Import routes (these will fail if bcrypt is not available, but we check above)
+  const authRoutesModulePath = join(projectRoot, 'backend/src/routes/auth.js');
+  let authRoutes;
+  let communitySourcesRoutes;
+  
+  if (bcryptAvailable) {
+    const authRoutesModule = await import(`file://${authRoutesModulePath}`);
+    authRoutes = authRoutesModule.default;
+    const communitySourcesRoutesModulePath = join(projectRoot, 'backend/src/routes/community-sources.js');
+    const communitySourcesRoutesModule = await import(`file://${communitySourcesRoutesModulePath}`);
+    communitySourcesRoutes = communitySourcesRoutesModule.default;
+  } else {
+    // Create mock routes that return errors
+    const Router = (await import('express')).Router;
+    authRoutes = Router();
+    authRoutes.all('*', (req, res) => {
+      res.status(503).json({ error: 'bcrypt not available (musl/glibc mismatch)' });
+    });
+    communitySourcesRoutes = Router();
+    communitySourcesRoutes.all('*', (req, res) => {
+      res.status(503).json({ error: 'bcrypt not available (musl/glibc mismatch)' });
+    });
+  }
 
   app.use('/api/auth', authRoutes);
   app.use('/api/community-sources', communitySourcesRoutes);
 
   // Load plugins
-  const { loadPackPlugins } = await import('../../backend/src/plugins/loader.js');
+  const loaderModulePath = join(projectRoot, 'backend/src/plugins/loader.js');
+  const { loadPackPlugins } = await import(`file://${loaderModulePath}`);
   await loadPackPlugins(app, db).catch(err => {
     console.warn('Failed to load pack plugins in test:', err.message);
   });

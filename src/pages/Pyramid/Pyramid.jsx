@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, isCommonWord, getZipfScore, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray, getAllWords } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Pyramid.module.css';
 
 // Calculate word weight score (higher = more common/recognizable)
@@ -285,6 +286,7 @@ export default function Pyramid() {
   const [showSolution, setShowSolution] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [puzzleNumber, setPuzzleNumber] = useState(0);
+  const [seed, setSeed] = useState(null);
 
   const boardRef = useRef(null);
   const currentPathRef = useRef([]); // Ref to track path during drag (avoids stale closure)
@@ -292,9 +294,10 @@ export default function Pyramid() {
   const initGame = useCallback((newPuzzle = false) => {
     const today = getTodayDateString();
     const nextPuzzleNum = newPuzzle ? puzzleNumber + 1 : puzzleNumber;
-    const seed = stringToSeed(`pyramid-${today}-${nextPuzzleNum}`);
-    const puzzle = generateSolvablePuzzle(seed);
+    const gameSeed = stringToSeed(`pyramid-${today}-${nextPuzzleNum}`);
+    const puzzle = generateSolvablePuzzle(gameSeed);
 
+    setSeed(gameSeed);
     setLetters(puzzle.letters);
     setAllValidWords(puzzle.validWords);
     setWordPathsMap(puzzle.wordPaths);
@@ -610,6 +613,15 @@ export default function Pyramid() {
           Connect adjacent letters to form words. Use all {TOTAL_CELLS} letters to win!
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.progressBar}>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './LetterWeb.module.css';
 
 const VOWELS = 'AEIOU';
@@ -328,6 +329,7 @@ export default function LetterWeb() {
     return saved ? JSON.parse(saved) : { gamesWon: 0, bestWords: null };
   });
   const [puzzleNumber, setPuzzleNumber] = useState(0);
+  const [seed, setSeed] = useState(null);
 
   const initGame = useCallback((isNewPuzzle = false) => {
     const today = getTodayDateString();
@@ -335,9 +337,10 @@ export default function LetterWeb() {
     if (isNewPuzzle) {
       setPuzzleNumber(puzzleOffset);
     }
-    const seed = stringToSeed(`letterweb-${today}-${puzzleOffset}`);
-    const result = generateLetters(seed);
+    const gameSeed = stringToSeed(`letterweb-${today}-${puzzleOffset}`);
+    const result = generateLetters(gameSeed);
 
+    setSeed(gameSeed);
     setSides(result.sides);
     setSolution(result.solution);
     setWords([]);
@@ -510,6 +513,15 @@ export default function LetterWeb() {
           Can't use consecutive letters from the same side.
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>

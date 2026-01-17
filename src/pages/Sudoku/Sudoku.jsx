@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { formatTime, createSeededRandom, seededShuffleArray, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Sudoku.module.css';
 
 const STORAGE_KEY = 'sudoku-game-state';
@@ -627,6 +628,8 @@ export default function Sudoku() {
   const progress = grid.flat().filter(v => v !== 0).length;
   const total = 81;
   const puzzleNumber = currentPuzzle?.puzzleNumber || 1;
+  const today = getTodayDateString();
+  const seed = currentPuzzle ? stringToSeed(`${currentPuzzle.date || today}-${difficulty}-${puzzleNumber}`) : null;
 
   return (
     <div className={styles.container}>
@@ -639,9 +642,18 @@ export default function Sudoku() {
           Fill the grid so each row, column, and 3×3 box contains the numbers <strong>1-9</strong>.
         </p>
         <p className={styles.dailyInfo}>
-          Daily Puzzle #{puzzleNumber} • {getTodayDateString()}
+          Daily Puzzle #{puzzleNumber} • {today}
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.boardSection}>

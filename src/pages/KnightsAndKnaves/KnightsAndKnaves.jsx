@@ -1,20 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
-import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './KnightsAndKnaves.module.css';
 
 function buildPuzzleIndex(puzzles) {
   const byId = new Map();
   for (const p of puzzles) byId.set(p.id, p);
   return byId;
-}
-
-function pickDailyPuzzleId(dateStr, puzzles) {
-  const seed = stringToSeed(`knights-and-knaves-${dateStr}`);
-  const random = createSeededRandom(seed);
-  const idx = Math.floor(random() * puzzles.length);
-  return puzzles[idx]?.id ?? null;
 }
 
 function pickPracticePuzzleId(puzzles, peopleCount) {
@@ -24,17 +16,26 @@ function pickPracticePuzzleId(puzzles, peopleCount) {
   return filtered[idx].id;
 }
 
+function pickDailyPuzzleId(dateString, puzzles) {
+  if (!puzzles || puzzles.length === 0) return null;
+  // Generate deterministic hash from date string
+  const hash = dateString.split('').reduce((acc, char) => {
+    return ((acc << 5) - acc) + char.charCodeAt(0);
+  }, 0);
+  const index = Math.abs(hash) % puzzles.length;
+  return puzzles[index].id;
+}
+
 // Export helpers for testing
 export {
   buildPuzzleIndex,
-  pickDailyPuzzleId,
   pickPracticePuzzleId,
+  pickDailyPuzzleId,
 };
 
 export default function KnightsAndKnaves() {
   const [puzzles, setPuzzles] = useState(null); // null while loading
   const [puzzleId, setPuzzleId] = useState(null);
-  const [mode, setMode] = useState('daily'); // 'daily' | 'practice'
   const [practicePeopleCount, setPracticePeopleCount] = useState(3);
 
   const [assignments, setAssignments] = useState([]); // (boolean|null)[]
@@ -49,17 +50,6 @@ export default function KnightsAndKnaves() {
     won: 0,
     streak: 0,
     maxStreak: 0,
-  });
-
-  const [dailyCompleted, setDailyCompleted] = useState(() => {
-    const saved = localStorage.getItem('knk-daily');
-    if (!saved) return false;
-    try {
-      const data = JSON.parse(saved);
-      return data.date === getTodayDateString() && data.completed === true;
-    } catch {
-      return false;
-    }
   });
 
   const puzzleIndex = useMemo(() => (puzzles ? buildPuzzleIndex(puzzles) : null), [puzzles]);
@@ -84,34 +74,8 @@ export default function KnightsAndKnaves() {
     setCountedThisPuzzle(false);
   }, []);
 
-  const initGame = useCallback((gameMode) => {
+  const initGame = useCallback(() => {
     if (!puzzles || puzzles.length === 0) return;
-    setMode(gameMode);
-
-    if (gameMode === 'daily') {
-      const today = getTodayDateString();
-      const saved = localStorage.getItem('knk-daily');
-
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          if (data.date === today && typeof data.puzzleId === 'string') {
-            resetForPuzzle(data.puzzleId, data);
-            setDailyCompleted(data.completed === true);
-            return;
-          }
-        } catch {
-          // ignore
-        }
-      }
-
-      const dailyId = pickDailyPuzzleId(today, puzzles);
-      resetForPuzzle(dailyId);
-      setDailyCompleted(false);
-      return;
-    }
-
-    // practice mode
     const practiceId = pickPracticePuzzleId(puzzles, practicePeopleCount);
     resetForPuzzle(practiceId);
   }, [puzzles, practicePeopleCount, resetForPuzzle]);
@@ -142,7 +106,7 @@ export default function KnightsAndKnaves() {
   // Initialize once puzzles are ready
   useEffect(() => {
     if (!puzzles) return;
-    initGame('daily');
+    initGame();
   }, [puzzles, initGame]);
 
   // Ensure assignments length matches puzzle size
@@ -154,26 +118,6 @@ export default function KnightsAndKnaves() {
     });
   }, [puzzleId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Save daily progress
-  useEffect(() => {
-    if (mode !== 'daily' || !puzzleId) return;
-    const payload = {
-      date: getTodayDateString(),
-      puzzleId,
-      assignments,
-      attempts,
-      status,
-      message,
-      revealed,
-      countedThisPuzzle,
-      completed: status === 'correct',
-    };
-    try {
-      localStorage.setItem('knk-daily', JSON.stringify(payload));
-    } catch {
-      // ignore
-    }
-  }, [mode, puzzleId, assignments, attempts, status, message, revealed, countedThisPuzzle]);
 
   const setPerson = (idx, isKnight) => {
     if (status === 'correct') return;
@@ -198,7 +142,6 @@ export default function KnightsAndKnaves() {
     if (correct) {
       setStatus('correct');
       setMessage('Correct!');
-      if (mode === 'daily') setDailyCompleted(true);
       if (!countedThisPuzzle) {
         setCountedThisPuzzle(true);
         setStats(prev => ({
@@ -215,7 +158,6 @@ export default function KnightsAndKnaves() {
 
   const newPracticePuzzle = () => {
     if (!puzzles) return;
-    setMode('practice');
     const id = pickPracticePuzzleId(puzzles, practicePeopleCount);
     resetForPuzzle(id);
   };
@@ -242,36 +184,29 @@ export default function KnightsAndKnaves() {
       />
 
       <div className={styles.controls}>
-        <div className={styles.modeSelector}>
-          <button
-            className={`${styles.modeBtn} ${mode === 'daily' ? styles.active : ''}`}
-            onClick={() => initGame('daily')}
-          >
-            Daily {dailyCompleted && '✓'}
-          </button>
-          <button
-            className={`${styles.modeBtn} ${mode === 'practice' ? styles.active : ''}`}
-            onClick={() => initGame('practice')}
-          >
-            Practice
-          </button>
-        </div>
-
         <div className={styles.practiceControls}>
           <label className={styles.label}>
             People
             <select
               className={styles.select}
               value={practicePeopleCount}
-              onChange={(e) => setPracticePeopleCount(Number(e.target.value))}
-              disabled={mode !== 'practice'}
+              onChange={(e) => {
+                setPracticePeopleCount(Number(e.target.value));
+                // Generate new puzzle when people count changes
+                setTimeout(() => {
+                  if (puzzles) {
+                    const id = pickPracticePuzzleId(puzzles, Number(e.target.value));
+                    resetForPuzzle(id);
+                  }
+                }, 0);
+              }}
             >
               {[2, 3, 4, 5, 6, 7, 8].map(n => (
                 <option key={n} value={n}>{n}</option>
               ))}
             </select>
           </label>
-          <button className={styles.secondaryBtn} onClick={newPracticePuzzle} disabled={!puzzles || mode !== 'practice'}>
+          <button className={styles.secondaryBtn} onClick={newPracticePuzzle} disabled={!puzzles}>
             New Puzzle
           </button>
         </div>

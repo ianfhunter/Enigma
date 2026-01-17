@@ -48,7 +48,7 @@ describe('PackLoader', () => {
 
     it('should return games from manifest pack (trivia-knowledge)', () => {
       const games = getGamesForPack('trivia-knowledge');
-      expect(games.length).toBe(16);
+      expect(games.length).toBe(17);
       expect(games.some(g => g.slug === 'flag-guesser')).toBe(true);
       expect(games.some(g => g.slug === 'trivia')).toBe(true);
     });
@@ -763,9 +763,9 @@ describe('PackLoader', () => {
       expect(triviaKnowledgePack.categories[0].name).toBe('Trivia & Knowledge');
     });
 
-    it('should have 16 games', () => {
-      expect(triviaKnowledgePack.gameCount).toBe(16);
-      expect(triviaKnowledgePack.allGames.length).toBe(16);
+    it('should have 17 games', () => {
+      expect(triviaKnowledgePack.gameCount).toBe(17);
+      expect(triviaKnowledgePack.allGames.length).toBe(17);
     });
 
     it('should have expected games', () => {
@@ -803,7 +803,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('trivia-knowledge');
-      expect(games.length).toBe(16);
+      expect(games.length).toBe(17);
       expect(games.some(g => g.slug === 'flag-guesser')).toBe(true);
       expect(games.some(g => g.slug === 'trivia')).toBe(true);
     });
@@ -901,14 +901,15 @@ describe('PackLoader', () => {
       expect(cardGamesPack.categories[0].name).toBe('Card Games');
     });
 
-    it('should have 1 game (pyramid-cards)', () => {
-      expect(cardGamesPack.gameCount).toBe(1);
-      expect(cardGamesPack.allGames.length).toBe(1);
+    it('should have 2 games (pyramid-cards and tri-peaks)', () => {
+      expect(cardGamesPack.gameCount).toBe(2);
+      expect(cardGamesPack.allGames.length).toBe(2);
     });
 
-    it('should have pyramid-cards game', () => {
+    it('should have pyramid-cards and tri-peaks games', () => {
       const slugs = cardGamesPack.allGames.map(g => g.slug);
       expect(slugs).toContain('pyramid-cards');
+      expect(slugs).toContain('tri-peaks');
     });
 
     it('should have getGameBySlug function', () => {
@@ -932,8 +933,9 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('card-games');
-      expect(games.length).toBe(1);
+      expect(games.length).toBe(2);
       expect(games.some(g => g.slug === 'pyramid-cards')).toBe(true);
+      expect(games.some(g => g.slug === 'tri-peaks')).toBe(true);
     });
 
     it('should return component loaders', () => {

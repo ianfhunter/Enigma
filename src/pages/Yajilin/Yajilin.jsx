@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { createSeededRandom } from '../../data/wordUtils';
+import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Yajilin.module.css';
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
@@ -319,7 +320,7 @@ export default function Yajilin() {
   const [showErrors, setShowErrors] = useState(true);
   const [showSolution, setShowSolution] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [seed, setSeed] = useState(() => Date.now());
+  const [seed, setSeed] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [lastDragCell, setLastDragCell] = useState(null);
   const datasetRef = useRef(null);
@@ -337,14 +338,15 @@ export default function Yajilin() {
     return () => { mounted = false; };
   }, []);
 
-  const initGame = useCallback((newSeed) => {
+  const initGame = useCallback((newDifficulty = difficulty, newSeed = null) => {
     const puzzles = datasetRef.current;
     if (!puzzles || puzzles.length === 0) return;
 
-    const actualSeed = newSeed ?? Date.now();
+    const today = getTodayDateString();
+    const actualSeed = newSeed ?? stringToSeed(`yajilin-${today}-${newDifficulty}`);
     setSeed(actualSeed);
 
-    const puzzle = selectPuzzle(puzzles, difficulty, actualSeed);
+    const puzzle = selectPuzzle(puzzles, newDifficulty, actualSeed);
     if (!puzzle) return;
 
     const data = datasetToGameFormat(puzzle);
@@ -584,6 +586,15 @@ export default function Yajilin() {
         </p>
       </div>
 
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
+
       <div className={styles.difficultySelector}>
         {DIFFICULTIES.map((d) => (
           <button
@@ -595,8 +606,6 @@ export default function Yajilin() {
           </button>
         ))}
       </div>
-
-      <div className={styles.seedDisplay}>Seed: {seed}</div>
 
       <div className={styles.gameArea}>
         <div

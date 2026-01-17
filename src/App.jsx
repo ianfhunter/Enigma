@@ -101,6 +101,7 @@ const slugToFolder = {
   'provincial-map-fill': 'ProvincialMapFill',
   'pyramid': 'Pyramid',
   'pyramid-cards': 'PyramidCards',
+  'riddles': 'Riddles',
   'range': 'Range',
   'samegame': 'Samegame',
   'sandwich-sudoku': 'SandwichSudoku',

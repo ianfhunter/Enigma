@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Squarish.module.css';
 
 const CONFIGS = {
@@ -164,6 +165,7 @@ export default function Squarish() {
   const [swapsLeft, setSwapsLeft] = useState(CONFIGS[5].maxSwaps);
   const [correctCells, setCorrectCells] = useState(new Set());
   const [gameState, setGameState] = useState('playing');
+  const [seed, setSeed] = useState(null);
 
   const initGame = useCallback((gameSize) => {
     const config = CONFIGS[gameSize];
@@ -171,9 +173,10 @@ export default function Squarish() {
 
     // Try multiple seeds if generation fails
     let newPuzzle = null;
+    let gameSeed = null;
     for (let attempt = 0; attempt < 10 && !newPuzzle; attempt++) {
-      const seed = stringToSeed(`squarish${gameSize}-${today}-${attempt}`);
-      newPuzzle = generateWaffle(seed, gameSize);
+      gameSeed = stringToSeed(`squarish${gameSize}-${today}-${attempt}`);
+      newPuzzle = generateWaffle(gameSeed, gameSize);
     }
 
     if (!newPuzzle) {
@@ -181,6 +184,7 @@ export default function Squarish() {
       return;
     }
 
+    setSeed(gameSeed);
     setPuzzle(newPuzzle);
     setGrid(newPuzzle.scrambled.map(row => [...row]));
     setSelectedCell(null);
@@ -316,6 +320,15 @@ export default function Squarish() {
           Swap letters to form {config.wordCount} valid words. Green = correct, yellow = wrong spot.
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>

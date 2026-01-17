@@ -219,15 +219,16 @@ export default function TileSwap() {
         <p className={styles.instructions}>
           Click two pieces to swap them. Arrange the image correctly!
         </p>
-        {seed && (
-          <SeedDisplay
-            seed={seed}
-            variant="compact"
-            showNewButton
-            onNewSeed={() => initGame(size, Math.floor(Math.random() * 2147483647))}
-          />
-        )}
       </div>
+
+      {seed && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.sizeSelector}>
         {Object.entries(GRID_SIZES).map(([label, value]) => (

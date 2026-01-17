@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { formatTime, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Kakuro.module.css';
 
 const STORAGE_KEY = 'kakuro-game-state';
@@ -82,6 +83,7 @@ export default function Kakuro() {
   const [showErrors, setShowErrors] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(null);
+  const [seed, setSeed] = useState(null);
 
   const timerRef = useRef(null);
 
@@ -98,6 +100,13 @@ export default function Kakuro() {
       setGameState(saved.gameState || 'playing');
       setDifficulty(newDifficulty);
       setIsLoaded(true);
+      // Restore seed from saved state or compute it
+      if (saved.seed) {
+        setSeed(saved.seed);
+      } else {
+        const seedString = `kakuro-${today}-${newDifficulty}`;
+        setSeed(stringToSeed(seedString));
+      }
       return;
     }
 
@@ -109,9 +118,10 @@ export default function Kakuro() {
     }
 
     const seedString = `kakuro-${today}-${newDifficulty}${forceNew ? '-' + Date.now() : ''}`;
-    const seed = stringToSeed(seedString);
-    const selected = selectPuzzle(dataset.puzzles, newDifficulty, seed);
+    const gameSeed = stringToSeed(seedString);
+    const selected = selectPuzzle(dataset.puzzles, newDifficulty, gameSeed);
 
+    setSeed(gameSeed);
     setPuzzle(selected);
     setPlayerValues({});
     setNotes({});
@@ -344,6 +354,15 @@ export default function Kakuro() {
           <small>Top-left number = sum down ↓ | Bottom-right number = sum across →</small>
         </p>
       </div>
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+        />
+      )}
 
       <div className={styles.difficultySelector}>
         {['easy', 'medium', 'hard'].map((d) => (
