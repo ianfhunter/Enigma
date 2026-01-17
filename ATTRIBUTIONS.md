@@ -78,10 +78,10 @@ Additional curated Suguru puzzles sourced from:
 
 Riddles used in the Riddles game:
 
-- **Source**: Collection of classic riddles
-- **License**: Public Domain (traditional riddles)
-- **Count**: 20 riddles
-- **Note**: Classic riddles that are part of the public domain. The dataset may be expanded in the future.
+- **Repository**: [crawsome/riddles](https://github.com/crawsome/riddles)
+- **Source**: CSV dataset from GitHub
+- **Count**: 386 riddles
+- **Format**: Question and answer pairs
 
 ### Crossword Clues Dataset
 
