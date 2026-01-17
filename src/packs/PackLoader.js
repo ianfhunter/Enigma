@@ -4,7 +4,7 @@
  * Handles:
  * - Official packs: Manifest-based packs with embedded component loaders
  * - Community packs: Remote packs loaded from URLs (future)
- * - Custom packs: User-created iframe-based packs
+ * - External packs: User-created iframe-based packs
  */
 
 import {

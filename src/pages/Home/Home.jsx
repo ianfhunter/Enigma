@@ -35,7 +35,7 @@ export default function Home() {
   // Check if there are more packs available to install
   const hasMorePacks = officialPacks.length > installedPackages.length;
 
-  // Filter custom packs that have at least one game
+  // Filter external packs that have at least one game
   const packsWithGames = customPacks.filter(pack => pack.games.length > 0);
 
   return (
@@ -67,7 +67,7 @@ export default function Home() {
         );
       })}
 
-      {/* Custom Packs (iframe-based external games) */}
+      {/* External Packs (iframe-based external games) */}
       {packsWithGames.map((pack) => (
         <section key={pack.id} className={styles.category}>
           <h2 className={styles.categoryTitle}>

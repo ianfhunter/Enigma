@@ -6,6 +6,7 @@
 
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
+import tripeaksIcon from '../../assets/icons/tripeaks.svg';
 
 const cardGamesPack = {
   id: 'card-games',
@@ -35,6 +36,18 @@ const cardGamesPack = {
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           version: 'v1.0',
           component: () => import('../../pages/PyramidCards'),
+        },
+        {
+          slug: 'tri-peaks',
+          title: 'Tri-Peaks',
+          aliases: ['Tri Peaks', 'Three Peaks'],
+          description: 'Clear three peaks by removing cards adjacent to the waste card. Cards are adjacent if they differ by 1 rank (wrapping A-2-K).',
+          icon: tripeaksIcon,
+          emojiIcon: '⛰️',
+          colors: { primary: '#16a34a', secondary: '#15803d' },
+          gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+          version: 'v1.0',
+          component: () => import('../../pages/TriPeaks'),
         },
       ],
     },

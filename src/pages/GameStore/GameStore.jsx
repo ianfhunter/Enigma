@@ -147,9 +147,7 @@ function PackCard({ pack, isInstalled, onToggle, gameCount, previewGames }) {
         <div className={styles.previewGames}>
           {previewGames.map((game) => (
             <span key={game.slug} className={styles.previewGame} title={game.title}>
-              {typeof game.icon === 'string' && !game.icon.endsWith('.svg')
-                ? game.icon
-                : game.emojiIcon || '🎮'}
+              {renderIcon(game.icon || game.emojiIcon || '🎮', '', '🎮')}
             </span>
           ))}
           {gameCount > previewGames.length && (
@@ -179,7 +177,7 @@ function PackCard({ pack, isInstalled, onToggle, gameCount, previewGames }) {
 }
 
 /**
- * CustomPackCard - Displays a user-created custom pack
+ * CustomPackCard - Displays a user-created external pack
  */
 function CustomPackCard({ pack, onAddGame, onDelete, onEdit, onManageGames }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -300,7 +298,7 @@ function PackModal({ pack, onClose, onSave }) {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
-        <h2>{isEditing ? 'Edit Pack' : 'Create Custom Pack'}</h2>
+        <h2>{isEditing ? 'Edit Pack' : 'Create External Pack'}</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="pack-name">Pack Name</label>
@@ -567,7 +565,15 @@ function CommunitySourceCard({
         style={{ '--source-color': source.color || '#6366f1' }}
       >
         <div className={styles.sourceHeader}>
-          <div className={styles.sourceIcon}>{renderIcon(source.icon, styles.sourceSvgIcon, '📦')}</div>
+          <div className={styles.sourceIcon}>
+            {renderIcon(
+              source.icon && source.pack_id && source.icon.includes('.svg') && !source.icon.startsWith('/') && !source.icon.startsWith('http') && !source.icon.startsWith('data:') && !source.icon.startsWith('<')
+                ? `/api/packs/${source.pack_id}/${source.icon}`
+                : source.icon,
+              styles.sourceSvgIcon,
+              '📦'
+            )}
+          </div>
           <div className={styles.sourceInfo}>
             <h3 className={styles.sourceName}>{source.name}</h3>
             <div className={styles.sourceMeta}>
@@ -977,7 +983,7 @@ export default function GameStore() {
           onClick={() => setActiveTab('custom')}
         >
           <span className={styles.tabIcon}>🛠️</span>
-          My Custom Packs
+          My External Packs
           {customPacks.length > 0 && (
             <span className={styles.tabBadge}>{customPacks.length}</span>
           )}
@@ -1151,7 +1157,7 @@ export default function GameStore() {
               <div>
                 <h2 className={styles.sectionTitle}>
                   <span className={styles.sectionIcon}>🛠️</span>
-                  My Custom Packs
+                  My External Packs
                 </h2>
                 <p className={styles.sectionDescription}>
                   Create your own packs with games from anywhere on the web
@@ -1171,7 +1177,7 @@ export default function GameStore() {
             {customPacks.length === 0 ? (
               <div className={styles.emptyState}>
                 <div className={styles.emptyIcon}>📦</div>
-                <h3>No custom packs yet</h3>
+                <h3>No external packs yet</h3>
                 <p>
                   Create a pack to add your favorite web-based puzzle games.
                   You can embed any game that runs in a browser!

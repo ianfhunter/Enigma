@@ -335,6 +335,12 @@
   transition: transform 0.2s ease;
 }
 
+.previewGame img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
 .previewGame:hover {
   transform: scale(1.1);
 }
@@ -543,7 +549,7 @@
 }
 
 /* ===================== */
-/* Custom Packs Styles   */
+/* External Packs Styles   */
 /* ===================== */
 
 /* Tab Badge */
@@ -557,7 +563,7 @@
   margin-left: 0.25rem;
 }
 
-/* Custom Pack Badge */
+/* External Pack Badge */
 .customBadge {
   color: var(--color-primary);
   font-weight: 600;
@@ -611,7 +617,7 @@
   box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
 }
 
-/* Custom Pack Card */
+/* External Pack Card */
 .customPack .packHeader {
   position: relative;
 }
@@ -684,7 +690,7 @@
   color: #ef4444;
 }
 
-/* Custom Pack Actions */
+/* External Pack Actions */
 .customPackActions {
   display: flex;
   gap: 0.75rem;
@@ -1456,7 +1462,7 @@ a.previewGame:hover {
   color: var(--color-primary);
 }
 
-/* Mobile Adjustments for Custom Packs */
+/* Mobile Adjustments for External Packs */
 @media (max-width: 640px) {
   .modal {
     padding: 1.5rem;

@@ -37,7 +37,7 @@ export function useCustomPacks() {
   }, []);
 
   /**
-   * Create a new custom pack
+   * Create a new external pack
    */
   const createPack = useCallback((packData) => {
     const newPack = {

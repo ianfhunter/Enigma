@@ -1,6 +1,9 @@
 import { Router } from 'express';
+import { existsSync, statSync } from 'fs';
+import { join, resolve, extname, normalize } from 'path';
 import db from '../db.js';
 import { reloadPackPlugins, getPluginManager, deletePluginData } from '../plugins/loader.js';
+import { getPluginsDir } from '../utils/git.js';
 
 const router = Router();
 
@@ -166,6 +169,97 @@ router.post('/plugins/reload', async (req, res) => {
       error: error.message
     });
   }
+});
+
+/**
+ * Serve static files from installed community packs
+ * Example: /api/packs/my-pack/logo.svg
+ * NOTE: This route must be last to avoid catching other routes like /plugins/status
+ */
+router.get('/:packId/*', (req, res) => {
+  const { packId } = req.params;
+  const filePath = req.params[0]; // Everything after /:packId/
+
+  // Exclude reserved paths
+  const reservedPaths = ['plugins', 'installed'];
+  if (reservedPaths.includes(packId)) {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
+  // Validate packId format (prevent path traversal)
+  if (!/^[a-zA-Z0-9_-]+$/.test(packId)) {
+    return res.status(400).json({ error: 'Invalid packId format' });
+  }
+
+  // Check if pack is installed
+  const pack = db.prepare('SELECT pack_id FROM installed_packs WHERE pack_id = ?').get(packId);
+  if (!pack) {
+    return res.status(404).json({ error: 'Pack not found or not installed' });
+  }
+
+  // Validate file extension (only allow safe static file types)
+  const allowedExtensions = ['.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.json', '.css', '.js'];
+  const ext = extname(filePath).toLowerCase();
+  if (!allowedExtensions.includes(ext)) {
+    return res.status(400).json({ error: 'File type not allowed' });
+  }
+
+  // Build the full path to the file
+  const pluginsDir = getPluginsDir();
+  const packDir = join(pluginsDir, packId);
+  const requestedPath = join(packDir, filePath);
+  
+  // Normalize the path to prevent directory traversal
+  const normalizedPath = normalize(requestedPath);
+  
+  // Ensure the resolved path is within the pack directory
+  const resolvedPath = resolve(normalizedPath);
+  const resolvedPackDir = resolve(packDir);
+  
+  if (!resolvedPath.startsWith(resolvedPackDir)) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
+  // Check if file exists
+  if (!existsSync(resolvedPath)) {
+    return res.status(404).json({ error: 'File not found' });
+  }
+
+  // Check if it's a file (not a directory)
+  const stats = statSync(resolvedPath);
+  if (!stats.isFile()) {
+    return res.status(400).json({ error: 'Not a file' });
+  }
+
+  // Set appropriate content type
+  const contentTypes = {
+    '.svg': 'image/svg+xml',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.webp': 'image/webp',
+    '.ico': 'image/x-icon',
+    '.json': 'application/json',
+    '.css': 'text/css',
+    '.js': 'application/javascript',
+  };
+
+  const contentType = contentTypes[ext] || 'application/octet-stream';
+
+  // Send the file with explicit content type
+  return res.sendFile(resolvedPath, {
+    headers: {
+      'Content-Type': contentType
+    }
+  }, (err) => {
+    if (err) {
+      console.error('Error serving pack file:', err);
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'Failed to serve file' });
+      }
+    }
+  });
 });
 
 export default router;

@@ -5,7 +5,7 @@ import styles from './IframeGame.module.css';
 
 /**
  * IframeGame - Renders an external game inside a sandboxed iframe
- * Used for custom pack games that users add via URL
+ * Used for external pack games that users add via URL
  */
 export default function IframeGame() {
   const { packId, gameId } = useParams();

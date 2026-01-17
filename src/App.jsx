@@ -132,6 +132,7 @@ const slugToFolder = {
   'tile-swap': 'TileSwap',
   'tower-of-hanoi': 'TowerOfHanoi',
   'tracks': 'Tracks',
+  'tri-peaks': 'TriPeaks',
   'trivia': 'Trivia',
   'twiddle': 'Twiddle',
   'undead': 'Undead',
