@@ -1,0 +1,22 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Takuzu: Abstract - binary 0s and 1s pattern -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="3" fill="#f0f9ff"/>
+
+  <!-- Large abstract binary pattern -->
+  <!-- Row 1 -->
+  <circle cx="6" cy="6" r="3" fill="#0284c7"/>
+  <circle cx="12" cy="6" r="3" fill="none" stroke="#0284c7" stroke-width="2"/>
+  <circle cx="18" cy="6" r="3" fill="#0284c7"/>
+
+  <!-- Row 2 -->
+  <circle cx="6" cy="12" r="3" fill="none" stroke="#0284c7" stroke-width="2"/>
+  <circle cx="12" cy="12" r="3" fill="#0284c7"/>
+  <circle cx="18" cy="12" r="3" fill="none" stroke="#0284c7" stroke-width="2"/>
+
+  <!-- Row 3 -->
+  <circle cx="6" cy="18" r="3" fill="#0284c7"/>
+  <circle cx="12" cy="18" r="3" fill="none" stroke="#0284c7" stroke-width="2"/>
+  <circle cx="18" cy="18" r="3" fill="#0284c7"/>
+</svg>

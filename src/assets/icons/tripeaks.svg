@@ -1,0 +1,69 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tri-Peaks: Three pyramid peaks of cards -->
+
+  <!-- Background (felt table) -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#14532d"/>
+
+  <!-- Left Peak -->
+  <!-- Row 1 (top) -->
+  <rect x="2.5" y="6" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <text x="3.5" y="8" font-family="Arial" font-size="2" font-weight="bold" fill="#dc2626" text-anchor="middle">7</text>
+  
+  <!-- Row 2 -->
+  <rect x="2" y="9.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="5" y="9.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  
+  <!-- Row 3 -->
+  <rect x="1.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="4.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="7.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  
+  <!-- Row 4 (bottom) -->
+  <rect x="1" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <text x="2" y="18.5" font-family="Arial" font-size="2" font-weight="bold" fill="#1f2937" text-anchor="middle">K</text>
+  <rect x="4" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="7" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="10" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+
+  <!-- Middle Peak -->
+  <!-- Row 1 (top) -->
+  <rect x="10.5" y="6" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <text x="11.5" y="8" font-family="Arial" font-size="2" font-weight="bold" fill="#1f2937" text-anchor="middle">Q</text>
+  
+  <!-- Row 2 -->
+  <rect x="10" y="9.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="13" y="9.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  
+  <!-- Row 3 -->
+  <rect x="9.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="12.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="15.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  
+  <!-- Row 4 (bottom) -->
+  <rect x="9" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="12" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <text x="13" y="18.5" font-family="Arial" font-size="2" font-weight="bold" fill="#dc2626" text-anchor="middle">A</text>
+  <rect x="15" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="18" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+
+  <!-- Right Peak -->
+  <!-- Row 1 (top) -->
+  <rect x="18.5" y="6" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <text x="19.5" y="8" font-family="Arial" font-size="2" font-weight="bold" fill="#dc2626" text-anchor="middle">9</text>
+  
+  <!-- Row 2 -->
+  <rect x="18" y="9.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="21" y="9.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  
+  <!-- Row 3 -->
+  <rect x="17.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="20.5" y="13" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  
+  <!-- Row 4 (bottom) - only 3 visible cards to fit -->
+  <rect x="17" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+  <rect x="20" y="16.5" width="2.5" height="3.5" rx="0.4" fill="#ffffff" stroke="#d1d5db" stroke-width="0.3"/>
+
+  <!-- Adjacent indicator (showing cards are adjacent) -->
+  <circle cx="21.5" cy="3.5" r="1.8" fill="#16a34a"/>
+  <text x="21.5" y="4.3" font-family="Arial" font-size="1.8" font-weight="bold" fill="#ffffff" text-anchor="middle">±1</text>
+</svg>

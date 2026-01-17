@@ -1,0 +1,35 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sequence: Simon-says style memory game -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#1f2937"/>
+
+  <!-- Four color pads (Simon style) -->
+  <!-- Top-left: Red -->
+  <path d="M4 4 Q4 2, 6 2 L11 2 L11 11 L2 11 L2 6 Q2 4, 4 4 Z" fill="#ef4444"/>
+  <path d="M5 5 Q5 3.5, 6.5 3.5 L9.5 3.5 L9.5 9.5 L3.5 9.5 L3.5 6.5 Q3.5 5, 5 5 Z" fill="#f87171" opacity="0.5"/>
+
+  <!-- Top-right: Blue -->
+  <path d="M13 2 L18 2 Q20 2, 20 4 L20 6 Q22 4, 22 6 L22 11 L13 11 Z" fill="#3b82f6"/>
+  <path d="M14.5 3.5 L17.5 3.5 Q19 3.5, 19 5 L19 6 L20.5 9.5 L14.5 9.5 Z" fill="#60a5fa" opacity="0.5"/>
+
+  <!-- Bottom-left: Green -->
+  <path d="M2 13 L11 13 L11 22 L6 22 Q4 22, 4 20 L4 18 Q2 20, 2 18 Z" fill="#22c55e"/>
+  <path d="M3.5 14.5 L9.5 14.5 L9.5 20.5 L6.5 20.5 Q5 20.5, 5 19 L5 17.5 L3.5 17.5 Z" fill="#4ade80" opacity="0.5"/>
+
+  <!-- Bottom-right: Yellow (currently lit/active) -->
+  <path d="M13 13 L22 13 L22 18 Q22 20, 20 20 L18 20 Q20 22, 18 22 L13 22 Z" fill="#fbbf24"/>
+  <path d="M14.5 14.5 L20.5 14.5 L20.5 17.5 Q20.5 19, 19 19 L17.5 19 L17.5 20.5 L14.5 20.5 Z" fill="#fde047"/>
+
+  <!-- Active indicator (glow effect on yellow) -->
+  <circle cx="17.5" cy="17.5" r="3" fill="#fef08a" opacity="0.6"/>
+  <circle cx="17.5" cy="17.5" r="2" fill="#ffffff" opacity="0.4"/>
+
+  <!-- Center circle -->
+  <circle cx="12" cy="12" r="3" fill="#374151" stroke="#4b5563" stroke-width="1"/>
+
+  <!-- Sequence indicator dots -->
+  <circle cx="10" cy="12" r="0.8" fill="#f43f5e"/>
+  <circle cx="12" cy="12" r="0.8" fill="#3b82f6"/>
+  <circle cx="14" cy="12" r="0.8" fill="#fbbf24"/>
+</svg>

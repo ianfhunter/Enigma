@@ -7,12 +7,25 @@ import rateLimit from 'express-rate-limit';
 const router = Router();
 const SALT_ROUNDS = 12;
 
+// Check if rate limiting should be disabled (development mode)
+const isDevMode = process.env.DEV === '1' || process.env.DEV === 'true';
+
 const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 5, // limit each IP to 5 registration requests per windowMs
-  message: { error: 'Too many registration attempts, please try again later' },
+  message: { error: 'Too many registration attempts, please try again later', isRateLimit: true },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => isDevMode,
+});
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 login attempts per windowMs
+  message: { error: 'Too many login attempts, please try again in a few minutes', isRateLimit: true },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => isDevMode,
 });
 
 // Check if this is the first user (will become admin)
@@ -105,7 +118,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 });
 
 // Login
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   try {
     const { username, password } = req.body;
 

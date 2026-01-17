@@ -1,0 +1,28 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Twiddle: Rotating tiles puzzle -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f0fdfa"/>
+
+  <!-- 2x2 tile group being rotated -->
+  <g transform="rotate(15, 12, 12)">
+    <rect x="5" y="5" width="7" height="7" rx="1" fill="#14b8a6"/>
+    <text x="8.5" y="10" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+
+    <rect x="12" y="5" width="7" height="7" rx="1" fill="#0d9488"/>
+    <text x="15.5" y="10" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
+
+    <rect x="5" y="12" width="7" height="7" rx="1" fill="#0d9488"/>
+    <text x="8.5" y="17" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">3</text>
+
+    <rect x="12" y="12" width="7" height="7" rx="1" fill="#14b8a6"/>
+    <text x="15.5" y="17" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">4</text>
+  </g>
+
+  <!-- Rotation arrow (circular) -->
+  <path d="M20 6 C22 8, 22 10, 20 12" stroke="#0f766e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M19 11 L20.5 13 L21 10.5" stroke="#0f766e" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <path d="M4 18 C2 16, 2 14, 4 12" stroke="#0f766e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M5 13 L3.5 11 L3 13.5" stroke="#0f766e" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,26 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Countdown Letters: Timer with letter tiles -->
+
+  <!-- Clock/timer circle -->
+  <circle cx="12" cy="12" r="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Timer hand pointing to show urgency -->
+  <line x1="12" y1="12" x2="12" y2="5" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+  <line x1="12" y1="12" x2="16" y2="14" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Center dot -->
+  <circle cx="12" cy="12" r="1.5" fill="#2563eb"/>
+
+  <!-- Letter tiles around the clock suggesting vowels/consonants -->
+  <rect x="1" y="1" width="5" height="5" rx="1" fill="#3b82f6"/>
+  <text x="3.5" y="4.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#ffffff" text-anchor="middle">V</text>
+
+  <rect x="18" y="1" width="5" height="5" rx="1" fill="#2563eb"/>
+  <text x="20.5" y="4.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#ffffff" text-anchor="middle">C</text>
+
+  <rect x="1" y="18" width="5" height="5" rx="1" fill="#2563eb"/>
+  <text x="3.5" y="21.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#ffffff" text-anchor="middle">C</text>
+
+  <rect x="18" y="18" width="5" height="5" rx="1" fill="#3b82f6"/>
+  <text x="20.5" y="21.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#ffffff" text-anchor="middle">V</text>
+</svg>

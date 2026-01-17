@@ -1,0 +1,20 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shiritori: Abstract - connected chain links -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="3" fill="#fef2f2"/>
+
+  <!-- Chain links (abstract representation of word chain) -->
+  <ellipse cx="7" cy="8" rx="4" ry="3" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+  <ellipse cx="12" cy="12" rx="4" ry="3" fill="none" stroke="#b91c1c" stroke-width="2.5"/>
+  <ellipse cx="17" cy="16" rx="4" ry="3" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+
+  <!-- Connection points (representing last/first letters) -->
+  <circle cx="10" cy="9" r="1.5" fill="#fbbf24"/>
+  <circle cx="14" cy="11" r="1.5" fill="#fbbf24"/>
+  <circle cx="14" cy="14" r="1.5" fill="#fbbf24"/>
+  <circle cx="18" cy="14" r="1.5" fill="#fbbf24"/>
+
+  <!-- Flow arrow -->
+  <path d="M4 5 Q12 3, 20 7 Q22 12, 20 19" stroke="#fca5a5" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+</svg>

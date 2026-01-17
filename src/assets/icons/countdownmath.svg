@@ -1,0 +1,39 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Countdown Math: Numbers and operations to reach target -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef3c7"/>
+
+  <!-- Target number (top, prominent) -->
+  <rect x="6" y="2" width="12" height="6" rx="2" fill="#f59e0b"/>
+  <text x="12" y="6.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">537</text>
+
+  <!-- Available numbers (tiles) -->
+  <rect x="2" y="10" width="4" height="4" rx="1" fill="#fbbf24"/>
+  <text x="4" y="13" font-family="Arial" font-size="3" font-weight="bold" fill="#78350f" text-anchor="middle">25</text>
+
+  <rect x="7" y="10" width="4" height="4" rx="1" fill="#fcd34d"/>
+  <text x="9" y="13" font-family="Arial" font-size="3" font-weight="bold" fill="#78350f" text-anchor="middle">6</text>
+
+  <rect x="12" y="10" width="4" height="4" rx="1" fill="#fbbf24"/>
+  <text x="14" y="13" font-family="Arial" font-size="3" font-weight="bold" fill="#78350f" text-anchor="middle">3</text>
+
+  <rect x="17" y="10" width="4" height="4" rx="1" fill="#fcd34d"/>
+  <text x="19" y="13" font-family="Arial" font-size="3" font-weight="bold" fill="#78350f" text-anchor="middle">7</text>
+
+  <!-- Operation symbols -->
+  <circle cx="4" cy="18" r="2" fill="#d97706"/>
+  <text x="4" y="19.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">+</text>
+
+  <circle cx="9" cy="18" r="2" fill="#d97706"/>
+  <text x="9" y="19.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">−</text>
+
+  <circle cx="14" cy="18" r="2" fill="#d97706"/>
+  <text x="14" y="19.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">×</text>
+
+  <circle cx="19" cy="18" r="2" fill="#d97706"/>
+  <text x="19" y="19.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">÷</text>
+
+  <!-- Equals hint -->
+  <text x="21" y="6" font-family="Arial" font-size="4" font-weight="bold" fill="#92400e">=</text>
+</svg>

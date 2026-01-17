@@ -2,9 +2,34 @@ import { Link } from 'react-router-dom';
 import { getGameIcon, getGameColors } from '../../data/gameRegistry';
 import styles from './GameCard.module.css';
 
-export default function GameCard({ title, slug, description, disabled = false, tag = null, version = null }) {
-  const icon = getGameIcon(slug);
-  const colors = getGameColors(slug);
+/**
+ * GameCard - Unified card component for all game types
+ *
+ * @param {string} title - Game title
+ * @param {string} slug - Game slug (used for routing and icon lookup)
+ * @param {string} description - Game description
+ * @param {boolean} disabled - Whether the game is disabled
+ * @param {string} tag - Optional tag (e.g., "EN-GB")
+ * @param {string} version - Optional version tag
+ * @param {string} linkTo - Custom link path (overrides default /${slug})
+ * @param {string|function} customIcon - Custom icon (emoji string or component)
+ * @param {object} customColors - Custom colors { primary, secondary }
+ * @param {string} typeBadge - Optional type badge (e.g., "Community", "External")
+ */
+export default function GameCard({
+  title,
+  slug,
+  description,
+  disabled = false,
+  tag = null,
+  version = null,
+  linkTo = null,
+  customIcon = null,
+  customColors = null,
+  typeBadge = null,
+}) {
+  const icon = customIcon || getGameIcon(slug);
+  const colors = customColors || getGameColors(slug);
   const hasTag = !!tag;
 
   // Render icon - supports emoji strings, SVG URLs, or React components
@@ -28,7 +53,7 @@ export default function GameCard({ title, slug, description, disabled = false, t
 
   const cardContent = (
     <div
-      className={`${styles.card} ${disabled ? styles.disabled : ''} ${hasTag ? styles.tagged : ''}`}
+      className={`${styles.card} ${disabled ? styles.disabled : ''} ${hasTag ? styles.tagged : ''} ${typeBadge ? styles.hasTypeBadge : ''}`}
       style={{
         '--card-primary': colors.primary,
         '--card-secondary': colors.secondary,
@@ -36,6 +61,7 @@ export default function GameCard({ title, slug, description, disabled = false, t
     >
       {hasTag && <span className={styles.languageTag}>{tag}</span>}
       {version && <span className={styles.versionTag}>{version}</span>}
+      {typeBadge && <span className={styles.typeBadge}>{typeBadge}</span>}
       <div className={styles.iconWrapper}>
         <span className={styles.icon}>{renderIcon()}</span>
       </div>
@@ -54,8 +80,10 @@ export default function GameCard({ title, slug, description, disabled = false, t
     return cardContent;
   }
 
+  const href = linkTo || `/${slug}`;
+
   return (
-    <Link to={`/${slug}`} className={styles.link}>
+    <Link to={href} className={styles.link}>
       {cardContent}
     </Link>
   );

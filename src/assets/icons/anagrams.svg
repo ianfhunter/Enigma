@@ -1,0 +1,35 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Anagrams: Letters being shuffled/rearranged -->
+
+  <!-- Letter tiles in scattered/shuffled positions -->
+  <!-- Top left tile (tilted) -->
+  <g transform="rotate(-15 5 5)">
+    <rect x="1" y="1" width="6" height="7" rx="1.5" fill="#ec4899"/>
+  </g>
+
+  <!-- Top right tile (tilted other way) -->
+  <g transform="rotate(12 18 5)">
+    <rect x="15" y="1" width="6" height="7" rx="1.5" fill="#db2777"/>
+  </g>
+
+  <!-- Middle tile (straight, highlighted as the "found" arrangement) -->
+  <rect x="9" y="8.5" width="6" height="7" rx="1.5" fill="#fce7f3" stroke="#ec4899" stroke-width="1"/>
+
+  <!-- Bottom left tile (tilted) -->
+  <g transform="rotate(10 5 19)">
+    <rect x="1" y="16" width="6" height="7" rx="1.5" fill="#db2777"/>
+  </g>
+
+  <!-- Bottom right tile (tilted) -->
+  <g transform="rotate(-12 19 19)">
+    <rect x="16" y="16" width="6" height="7" rx="1.5" fill="#ec4899"/>
+  </g>
+
+  <!-- Shuffle arrows in center suggesting rearrangement -->
+  <path d="M7 12 C8 10, 10 10, 9 12" stroke="#db2777" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <path d="M15 12 C16 14, 14 14, 15 12" stroke="#db2777" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+  <!-- Small curved arrows suggesting movement -->
+  <path d="M6 8 Q 8 6, 10 8" stroke="#f9a8d4" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <path d="M14 16 Q 16 18, 18 16" stroke="#f9a8d4" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Star Battle: Grid with regions and stars -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fefce8"/>
+
+  <!-- Grid outline -->
+  <rect x="2" y="2" width="20" height="20" rx="1" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+
+  <!-- Region dividers (thick irregular lines) -->
+  <path d="M2 9 L9 9 L9 2" stroke="#f59e0b" stroke-width="2"/>
+  <path d="M9 9 L9 16 L16 16 L16 9 L22 9" stroke="#f59e0b" stroke-width="2"/>
+  <path d="M9 16 L9 22" stroke="#f59e0b" stroke-width="2"/>
+  <path d="M16 16 L16 22" stroke="#f59e0b" stroke-width="2"/>
+  <path d="M16 2 L16 9" stroke="#f59e0b" stroke-width="2"/>
+
+  <!-- Stars (placed correctly - not touching) -->
+  <polygon points="5,6 6,8 8,8 6.5,9.5 7,12 5,10.5 3,12 3.5,9.5 2,8 4,8" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"/>
+  <polygon points="19,6 20,8 22,8 20.5,9.5 21,12 19,10.5 17,12 17.5,9.5 16,8 18,8" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"/>
+  <polygon points="12,13 13,15 15,15 13.5,16.5 14,19 12,17.5 10,19 10.5,16.5 9,15 11,15" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"/>
+  <polygon points="5,17 6,19 8,19 6.5,20.5 7,23 5,21.5 3,23 3.5,20.5 2,19 4,19" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"/>
+  <polygon points="19,17 20,19 22,19 20.5,20.5 21,23 19,21.5 17,23 17.5,20.5 16,19 18,19" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"/>
+</svg>

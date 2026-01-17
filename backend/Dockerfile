@@ -1,7 +1,7 @@
 FROM node:22-alpine
 
-# Install build dependencies for better-sqlite3
-RUN apk add --no-cache python3 make g++
+# Install build dependencies for better-sqlite3 and git for community packs
+RUN apk add --no-cache python3 make g++ git
 
 WORKDIR /app
 

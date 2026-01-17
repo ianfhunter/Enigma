@@ -1,0 +1,195 @@
+/* SeedDisplay Component Styles */
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  transition: all 0.2s ease;
+}
+
+.container:hover {
+  border-color: var(--color-border);
+  background: var(--color-bg-hover);
+}
+
+/* Variants */
+.compact {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  gap: 0.35rem;
+  border-radius: 6px;
+}
+
+.inline {
+  display: inline-flex;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
+  gap: 0.3rem;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+}
+
+.inline:hover {
+  background: var(--color-bg-hover);
+}
+
+/* Label */
+.label {
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  letter-spacing: 0.05em;
+}
+
+.inlineLabel {
+  color: var(--color-text-tertiary);
+  font-weight: 400;
+}
+
+/* Seed value */
+.seed {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.seedValue {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  font-size: 1em;
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.compact .seedValue {
+  padding: 0.1rem 0.25rem;
+}
+
+.inline .seedValue {
+  background: none;
+  padding: 0;
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.actionButton:hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+}
+
+.actionButton:active {
+  transform: scale(0.95);
+}
+
+.compact .actionButton {
+  width: 20px;
+  height: 20px;
+}
+
+.compact .actionButton svg {
+  width: 12px;
+  height: 12px;
+}
+
+.inline .actionButton {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+}
+
+.inline .actionButton svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* New puzzle button */
+.newButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+}
+
+.newButton:hover {
+  background: var(--color-primary-bg-hover);
+  border-color: var(--color-primary-border-hover);
+  transform: rotate(15deg);
+}
+
+.newButton:active {
+  transform: scale(0.95) rotate(30deg);
+}
+
+.compact .newButton {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+}
+
+/* Success state */
+.actionButton svg polyline,
+.actionButton svg path {
+  transition: stroke 0.15s ease;
+}
+
+.actionButton:has(polyline[points="20 6 9 17 4 12"]) {
+  color: var(--color-success);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .actionButton {
+    width: 22px;
+    height: 22px;
+  }
+
+  .label {
+    display: none;
+  }
+}

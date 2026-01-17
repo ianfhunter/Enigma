@@ -11,7 +11,10 @@ import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
 import gamesRoutes from './routes/games.js';
 import adminRoutes from './routes/admin.js';
+import packsRoutes from './routes/packs.js';
+import communitySourcesRoutes from './routes/community-sources.js';
 import { initCsrf, getCsrfToken, verifyCsrfToken } from './middleware/csrf.js';
+import { loadPackPlugins } from './plugins/loader.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -85,6 +88,9 @@ console.log(`Cookie secure mode: ${useSecureCookies} (FRONTEND_URL: ${FRONTEND_U
 // Initialize CSRF for all requests (creates secret in session if needed)
 app.use(initCsrf);
 
+// Check if rate limiting should be disabled (development mode)
+const isDevMode = process.env.DEV === '1' || process.env.DEV === 'true';
+
 // Rate limiting for API routes to mitigate brute-force and DoS attacks.
 // Apply this before CSRF verification so that authorization logic is also rate-limited.
 const apiLimiter = rateLimit({
@@ -92,8 +98,13 @@ const apiLimiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  skip: () => isDevMode,
 });
 app.use('/api/', apiLimiter);
+
+if (isDevMode) {
+  console.log('⚠️  DEV mode enabled: Rate limiting is disabled');
+}
 
 // CSRF token endpoint (must be before verifyCsrfToken middleware)
 app.get('/api/csrf-token', (req, res) => {
@@ -108,6 +119,15 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/games', gamesRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/packs', packsRoutes);
+app.use('/api/community-sources', communitySourcesRoutes);
+
+// Load pack plugins (community packs with backends)
+// ⚠️ WARNING: Pack plugins run with full backend access.
+// Only install plugins from trusted sources!
+loadPackPlugins(app, db).catch(err => {
+  console.error('Failed to load pack plugins:', err);
+});
 
 // Health check
 app.get('/api/health', (req, res) => {

@@ -1,0 +1,42 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Minesweeper: Grid with mine and number clues -->
+
+  <!-- Background grid -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef2f2"/>
+
+  <!-- Grid cells -->
+  <rect x="2" y="2" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="7" y="2" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="12" y="2" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="17" y="2" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="2" y="7" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="7" y="7" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="12" y="7" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="17" y="7" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="2" y="12" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="7" y="12" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="12" y="12" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="17" y="12" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="2" y="17" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="7" y="17" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="12" y="17" width="5" height="5" fill="#fee2e2" stroke="#ef4444" stroke-width="0.5"/>
+  <rect x="17" y="17" width="5" height="5" fill="#fecaca" stroke="#ef4444" stroke-width="0.5"/>
+
+  <!-- Mine -->
+  <circle cx="9.5" cy="9.5" r="2.5" fill="#1f2937"/>
+  <line x1="9.5" y1="6" x2="9.5" y2="13" stroke="#1f2937" stroke-width="1.5"/>
+  <line x1="6" y1="9.5" x2="13" y2="9.5" stroke="#1f2937" stroke-width="1.5"/>
+  <line x1="7" y1="7" x2="12" y2="12" stroke="#1f2937" stroke-width="1.5"/>
+  <line x1="12" y1="7" x2="7" y2="12" stroke="#1f2937" stroke-width="1.5"/>
+
+  <!-- Number clues -->
+  <text x="4.5" y="6" font-family="Arial" font-size="4" font-weight="bold" fill="#2563eb" text-anchor="middle">1</text>
+  <text x="14.5" y="6" font-family="Arial" font-size="4" font-weight="bold" fill="#16a34a" text-anchor="middle">2</text>
+  <text x="4.5" y="11" font-family="Arial" font-size="4" font-weight="bold" fill="#16a34a" text-anchor="middle">2</text>
+  <text x="19.5" y="11" font-family="Arial" font-size="4" font-weight="bold" fill="#2563eb" text-anchor="middle">1</text>
+  <text x="14.5" y="16" font-family="Arial" font-size="4" font-weight="bold" fill="#dc2626" text-anchor="middle">3</text>
+
+  <!-- Flag -->
+  <rect x="18.5" y="18" width="0.8" height="3" fill="#1f2937"/>
+  <path d="M19.3 18 L21.5 19 L19.3 20 Z" fill="#dc2626"/>
+</svg>

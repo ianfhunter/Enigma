@@ -1,0 +1,38 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sliding Puzzle: 3x3 grid with one empty space -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#0d9488"/>
+
+  <!-- Tiles -->
+  <rect x="2" y="2" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="5" y="6.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+
+  <rect x="9" y="2" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="12" y="6.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
+
+  <rect x="16" y="2" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="19" y="6.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">3</text>
+
+  <rect x="2" y="9" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="5" y="13.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">4</text>
+
+  <!-- Empty space (tile 5 position) -->
+  <rect x="9" y="9" width="6" height="6" rx="1" fill="#115e59" stroke="#14b8a6" stroke-width="1" stroke-dasharray="2,2"/>
+
+  <rect x="16" y="9" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="19" y="13.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">6</text>
+
+  <rect x="2" y="16" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="5" y="20.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">7</text>
+
+  <rect x="9" y="16" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="12" y="20.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">5</text>
+
+  <rect x="16" y="16" width="6" height="6" rx="1" fill="#14b8a6"/>
+  <text x="19" y="20.5" font-family="Arial" font-size="5" font-weight="bold" fill="#ffffff" text-anchor="middle">8</text>
+
+  <!-- Slide arrow -->
+  <path d="M12 11 L12 8" stroke="#5eead4" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M11 9 L12 7.5 L13 9" stroke="#5eead4" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>

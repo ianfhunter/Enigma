@@ -1,0 +1,44 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- ABC End View: Letters visible from edges -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f0fdf4"/>
+
+  <!-- Main grid -->
+  <rect x="5" y="5" width="14" height="14" rx="1" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="9.67" y1="5" x2="9.67" y2="19" stroke="#86efac" stroke-width="0.5"/>
+  <line x1="14.33" y1="5" x2="14.33" y2="19" stroke="#86efac" stroke-width="0.5"/>
+  <line x1="5" y1="9.67" x2="19" y2="9.67" stroke="#86efac" stroke-width="0.5"/>
+  <line x1="5" y1="14.33" x2="19" y2="14.33" stroke="#86efac" stroke-width="0.5"/>
+
+  <!-- Edge clues (what you see first from that direction) -->
+  <!-- Top clues -->
+  <text x="7.33" y="4" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">A</text>
+  <text x="12" y="4" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">C</text>
+  <text x="16.67" y="4" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">B</text>
+
+  <!-- Bottom clues -->
+  <text x="7.33" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">B</text>
+  <text x="16.67" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">A</text>
+
+  <!-- Left clues -->
+  <text x="3" y="8" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">A</text>
+  <text x="3" y="12.5" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">B</text>
+  <text x="3" y="17" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">C</text>
+
+  <!-- Right clues -->
+  <text x="21" y="8" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">B</text>
+  <text x="21" y="17" font-family="Arial" font-size="3" font-weight="bold" fill="#16a34a" text-anchor="middle">A</text>
+
+  <!-- Letters in grid -->
+  <text x="7.33" y="8.5" font-family="Arial" font-size="4" font-weight="bold" fill="#15803d" text-anchor="middle">A</text>
+  <text x="16.67" y="8.5" font-family="Arial" font-size="4" font-weight="bold" fill="#15803d" text-anchor="middle">B</text>
+  <text x="7.33" y="13" font-family="Arial" font-size="4" font-weight="bold" fill="#15803d" text-anchor="middle">B</text>
+  <text x="12" y="13" font-family="Arial" font-size="4" font-weight="bold" fill="#15803d" text-anchor="middle">A</text>
+  <text x="7.33" y="17.5" font-family="Arial" font-size="4" font-weight="bold" fill="#15803d" text-anchor="middle">C</text>
+  <text x="16.67" y="17.5" font-family="Arial" font-size="4" font-weight="bold" fill="#15803d" text-anchor="middle">A</text>
+
+  <!-- View arrows -->
+  <path d="M7.33 2 L7.33 3.5" stroke="#22c55e" stroke-width="1" stroke-linecap="round"/>
+  <path d="M6.8 3 L7.33 4 L7.86 3" stroke="#22c55e" stroke-width="0.8" fill="none"/>
+</svg>

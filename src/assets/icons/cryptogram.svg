@@ -1,0 +1,18 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cryptogram: Cipher/substitution puzzle -->
+
+  <!-- Lock shape background -->
+  <rect x="4" y="10" width="16" height="12" rx="2" fill="#fbbf24"/>
+  <rect x="5" y="11" width="14" height="10" rx="1.5" fill="#fef3c7"/>
+
+  <!-- Lock shackle -->
+  <path d="M8 10 V7 C8 4.5 10 3 12 3 C14 3 16 4.5 16 7 V10" stroke="#f59e0b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Letter substitution: A→X -->
+  <text x="8" y="17.5" font-family="Arial" font-size="5" font-weight="bold" fill="#92400e" text-anchor="middle">A</text>
+  <text x="12" y="17.5" font-family="Arial" font-size="4" fill="#d97706" text-anchor="middle">→</text>
+  <text x="16" y="17.5" font-family="Arial" font-size="5" font-weight="bold" fill="#b45309" text-anchor="middle">X</text>
+
+  <!-- Keyhole accent -->
+  <circle cx="12" cy="14" r="1" fill="#f59e0b"/>
+</svg>

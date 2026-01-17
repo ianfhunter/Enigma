@@ -1,0 +1,18 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Calcudoku: Abstract - math operation symbols in cage-like arrangement -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="3" fill="#ede9fe"/>
+
+  <!-- Abstract cage shapes -->
+  <path d="M4 4 L12 4 L12 12 L4 12 Z" fill="#c4b5fd" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M12 4 L20 4 L20 8 L16 8 L16 12 L12 12 Z" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M16 8 L20 8 L20 20 L12 20 L12 12 L16 12 Z" fill="#c4b5fd" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M4 12 L12 12 L12 20 L4 20 Z" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="2"/>
+
+  <!-- Operation symbols (large, abstract) -->
+  <text x="8" y="10" font-family="Arial" font-size="8" font-weight="bold" fill="#7c3aed" text-anchor="middle">×</text>
+  <text x="16" y="7" font-family="Arial" font-size="5" font-weight="bold" fill="#7c3aed" text-anchor="middle">+</text>
+  <text x="16" y="17" font-family="Arial" font-size="7" font-weight="bold" fill="#7c3aed" text-anchor="middle">−</text>
+  <text x="8" y="18" font-family="Arial" font-size="6" font-weight="bold" fill="#7c3aed" text-anchor="middle">÷</text>
+</svg>

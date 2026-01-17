@@ -1,25 +1,37 @@
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pipe Puzzle: Clean network of pipes -->
+
   <!-- Background -->
-  <rect x="1" y="1" width="22" height="22" rx="2" fill="#134e4a"/>
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#ccfbf1"/>
 
-  <!-- Pipe segments -->
-  <!-- Horizontal pipe top -->
-  <rect x="2" y="5" width="8" height="4" rx="1" fill="#2dd4bf"/>
-  <rect x="3" y="6" width="6" height="2" fill="#0d9488"/>
+  <!-- Grid hint -->
+  <rect x="2" y="2" width="20" height="20" rx="1" stroke="#99f6e4" stroke-width="0.5" fill="none"/>
 
-  <!-- Vertical pipe connecting -->
-  <rect x="8" y="5" width="4" height="10" rx="1" fill="#2dd4bf"/>
-  <rect x="9" y="6" width="2" height="8" fill="#0d9488"/>
+  <!-- Pipe network -->
+  <!-- Source (left) -->
+  <circle cx="4" cy="12" r="2.5" fill="#0d9488"/>
+  <circle cx="4" cy="12" r="1.5" fill="#2dd4bf"/>
 
-  <!-- Corner pipe -->
-  <path d="M8 13 L8 17 Q8 19 10 19 L16 19" stroke="#2dd4bf" stroke-width="4" stroke-linecap="round" fill="none"/>
-  <path d="M9 13 L9 17 Q9 18 10 18 L15 18" stroke="#0d9488" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Main horizontal pipe -->
+  <rect x="6" y="10.5" width="6" height="3" rx="1" fill="#14b8a6"/>
 
-  <!-- End pipe -->
-  <rect x="14" y="15" width="8" height="4" rx="1" fill="#2dd4bf"/>
-  <rect x="15" y="16" width="6" height="2" fill="#0d9488"/>
+  <!-- T-junction down -->
+  <rect x="10.5" y="10.5" width="3" height="8" rx="1" fill="#14b8a6"/>
 
-  <!-- Flow indicator -->
-  <circle cx="4" cy="7" r="1.2" fill="#5eead4"/>
-  <circle cx="20" cy="17" r="1.2" fill="#5eead4"/>
+  <!-- Corner piece (L-shape) going right -->
+  <path d="M12 13.5 L12 17 Q12 18.5, 13.5 18.5 L20 18.5 L20 15.5 L14.5 15.5 Q13.5 15.5, 13.5 14.5 L13.5 13.5 Z" fill="#14b8a6"/>
+
+  <!-- Top branch -->
+  <rect x="10.5" y="4" width="3" height="6.5" rx="1" fill="#14b8a6"/>
+  <rect x="13.5" y="4" width="6.5" height="3" rx="1" fill="#14b8a6"/>
+
+  <!-- Destination (right) -->
+  <circle cx="20" cy="17" r="2.5" fill="#0d9488"/>
+  <circle cx="20" cy="17" r="1.5" fill="#5eead4"/>
+
+  <!-- Water flow indicators -->
+  <circle cx="8" cy="12" r="0.8" fill="#06b6d4"/>
+  <circle cx="12" cy="8" r="0.8" fill="#06b6d4" opacity="0.7"/>
+  <circle cx="12" cy="15" r="0.8" fill="#06b6d4" opacity="0.7"/>
+  <circle cx="17" cy="17" r="0.8" fill="#06b6d4"/>
 </svg>

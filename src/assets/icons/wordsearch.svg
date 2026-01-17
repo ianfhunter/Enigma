@@ -1,0 +1,57 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Word Search: Grid of letters with found words highlighted -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#ecfdf5"/>
+
+  <!-- Letter grid -->
+  <rect x="2" y="2" width="20" height="20" rx="1" fill="#d1fae5" stroke="#10b981" stroke-width="1"/>
+
+  <!-- Grid of letters -->
+  <!-- Row 1 -->
+  <text x="4.5" y="5.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">C</text>
+  <text x="8.5" y="5.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">A</text>
+  <text x="12.5" y="5.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">T</text>
+  <text x="16.5" y="5.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">S</text>
+  <text x="20.5" y="5.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">P</text>
+
+  <!-- Row 2 -->
+  <text x="4.5" y="9.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">O</text>
+  <text x="8.5" y="9.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">R</text>
+  <text x="12.5" y="9.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">E</text>
+  <text x="16.5" y="9.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">U</text>
+  <text x="20.5" y="9.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">N</text>
+
+  <!-- Row 3 -->
+  <text x="4.5" y="13.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">D</text>
+  <text x="8.5" y="13.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">E</text>
+  <text x="12.5" y="13.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">E</text>
+  <text x="16.5" y="13.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">N</text>
+  <text x="20.5" y="13.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">S</text>
+
+  <!-- Row 4 -->
+  <text x="4.5" y="17.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">E</text>
+  <text x="8.5" y="17.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">G</text>
+  <text x="12.5" y="17.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">A</text>
+  <text x="16.5" y="17.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">M</text>
+  <text x="20.5" y="17.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">E</text>
+
+  <!-- Row 5 -->
+  <text x="4.5" y="21.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">X</text>
+  <text x="8.5" y="21.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">L</text>
+  <text x="12.5" y="21.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">F</text>
+  <text x="16.5" y="21.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">K</text>
+  <text x="20.5" y="21.5" font-family="Arial" font-size="3" fill="#065f46" text-anchor="middle">Z</text>
+
+  <!-- Highlighted words -->
+  <!-- "CAT" horizontal -->
+  <rect x="3" y="3.5" width="11" height="3" rx="1.5" fill="#10b981" opacity="0.3"/>
+  <line x1="4.5" y1="5" x2="14.5" y2="5" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- "CODE" diagonal -->
+  <line x1="4.5" y1="5" x2="16.5" y2="17" stroke="#059669" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- "GAME" horizontal -->
+  <rect x="7" y="15.5" width="15" height="3" rx="1.5" fill="#10b981" opacity="0.3"/>
+  <line x1="8.5" y1="17" x2="20.5" y2="17" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+</svg>

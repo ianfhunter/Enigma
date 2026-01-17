@@ -47,16 +47,17 @@ class ApiError extends Error {
     this.name = 'ApiError';
     this.status = status;
     this.data = data;
+    this.isRateLimit = status === 429 || data?.isRateLimit === true;
   }
 }
 
 async function request(endpoint, options = {}) {
   const url = `${API_URL}${endpoint}`;
   const method = options.method || 'GET';
-  
+
   // State-changing methods need CSRF token
   const needsCsrf = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method);
-  
+
   // Get CSRF token if needed
   let token = null;
   if (needsCsrf) {
@@ -97,7 +98,7 @@ async function request(endpoint, options = {}) {
     if (response.status === 403 && data?.error?.includes('CSRF')) {
       clearCsrfToken();
     }
-    
+
     throw new ApiError(
       data?.error || `Request failed with status ${response.status}`,
       response.status,
@@ -234,6 +235,145 @@ export const admin = {
       method: 'PUT',
       body: config
     }),
+};
+
+// Packs API
+export const packs = {
+  /**
+   * Get list of installed packs from backend
+   */
+  getInstalled: () =>
+    request('/api/packs/installed'),
+
+  /**
+   * Check if a specific pack is installed
+   */
+  isInstalled: (packId) =>
+    request(`/api/packs/installed/${encodeURIComponent(packId)}`),
+
+  /**
+   * Install a pack (enables backend plugin for community packs)
+   */
+  install: (packId, packType = 'community') =>
+    request('/api/packs/install', {
+      method: 'POST',
+      body: { packId, packType }
+    }),
+
+  /**
+   * Uninstall a pack (disables backend plugin for community packs)
+   */
+  uninstall: (packId) =>
+    request('/api/packs/uninstall', {
+      method: 'POST',
+      body: { packId }
+    }),
+
+  /**
+   * Get status of loaded plugins
+   */
+  getPluginStatus: () =>
+    request('/api/packs/plugins/status'),
+
+  /**
+   * Manually trigger plugin reload
+   */
+  reloadPlugins: () =>
+    request('/api/packs/plugins/reload', { method: 'POST' }),
+};
+
+// Community Sources API
+export const communitySources = {
+  /**
+   * Get all community sources
+   */
+  getAll: () =>
+    request('/api/community-sources'),
+
+  /**
+   * Get a single community source
+   */
+  get: (id) =>
+    request(`/api/community-sources/${id}`),
+
+  /**
+   * Add a new community source (GitHub repository URL)
+   */
+  add: (url) =>
+    request('/api/community-sources', {
+      method: 'POST',
+      body: { url }
+    }),
+
+  /**
+   * Remove a community source (also uninstalls if installed)
+   */
+  remove: (id) =>
+    request(`/api/community-sources/${id}`, { method: 'DELETE' }),
+
+  /**
+   * Check a source for updates
+   */
+  checkUpdate: (id) =>
+    request(`/api/community-sources/${id}/check-update`, { method: 'POST' }),
+
+  /**
+   * Check all sources for updates
+   */
+  checkAllUpdates: () =>
+    request('/api/community-sources/check-all-updates', { method: 'POST' }),
+
+  /**
+   * Get available versions for a source
+   */
+  getVersions: (id) =>
+    request(`/api/community-sources/${id}/versions`),
+
+  /**
+   * Install a pack from a community source
+   */
+  install: (id, version = null) =>
+    request(`/api/community-sources/${id}/install`, {
+      method: 'POST',
+      body: version ? { version } : {}
+    }),
+
+  /**
+   * Uninstall a pack from a community source
+   */
+  uninstall: (id, deleteData = true) =>
+    request(`/api/community-sources/${id}/uninstall`, {
+      method: 'POST',
+      body: { deleteData }
+    }),
+
+  /**
+   * Update an installed pack to a newer version
+   */
+  update: (id, version = null) =>
+    request(`/api/community-sources/${id}/update`, {
+      method: 'POST',
+      body: version ? { version } : {}
+    }),
+
+  /**
+   * Refresh manifest metadata for a source
+   */
+  refreshManifest: (id) =>
+    request(`/api/community-sources/${id}/refresh-manifest`, { method: 'POST' }),
+
+  /**
+   * Check if git is available on the server
+   */
+  checkGitStatus: () =>
+    request('/api/community-sources/git-status'),
+
+  /**
+   * Get full manifests for all installed community packs
+   * This includes game data for displaying in the main interface
+   */
+  getInstalledManifests: () =>
+    request('/api/community-sources/installed-manifests'),
 };
 
 export { ApiError };

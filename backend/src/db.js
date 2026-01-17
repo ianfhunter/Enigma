@@ -101,6 +101,39 @@ db.exec(`
   -- Create index for login history
   CREATE INDEX IF NOT EXISTS idx_login_history_user ON login_history(user_id);
   CREATE INDEX IF NOT EXISTS idx_login_history_created ON login_history(created_at);
+
+  -- Installed packs: tracks which community packs are installed
+  -- Official packs (type='official') are always available
+  -- Community packs must be explicitly installed
+  CREATE TABLE IF NOT EXISTS installed_packs (
+    pack_id TEXT PRIMARY KEY,
+    pack_type TEXT NOT NULL CHECK(pack_type IN ('official', 'community', 'custom')),
+    installed_at TEXT DEFAULT (datetime('now')),
+    installed_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    source_id INTEGER REFERENCES community_sources(id) ON DELETE SET NULL,
+    installed_version TEXT,
+    available_version TEXT
+  );
+
+  -- Community sources: GitHub repos or local paths users can add to discover packs
+  CREATE TABLE IF NOT EXISTS community_sources (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url TEXT NOT NULL UNIQUE,
+    name TEXT,
+    description TEXT,
+    icon TEXT,
+    color TEXT,
+    pack_id TEXT,
+    has_backend INTEGER DEFAULT 0,
+    is_local INTEGER DEFAULT 0,
+    latest_version TEXT,
+    last_checked_at TEXT,
+    error_message TEXT,
+    added_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    added_at TEXT DEFAULT (datetime('now'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_community_sources_pack_id ON community_sources(pack_id);
 `);
 
 // Migrations for existing databases
@@ -121,6 +154,28 @@ function runMigrations() {
   if (!settingsCols.includes('sound_enabled')) {
     console.log('Migration: Adding sound_enabled column to user_settings');
     db.exec('ALTER TABLE user_settings ADD COLUMN sound_enabled INTEGER DEFAULT 1');
+  }
+
+  // Add community source columns to installed_packs if missing
+  const packsCols = db.prepare("PRAGMA table_info(installed_packs)").all().map(c => c.name);
+  if (!packsCols.includes('source_id')) {
+    console.log('Migration: Adding source_id column to installed_packs');
+    db.exec('ALTER TABLE installed_packs ADD COLUMN source_id INTEGER REFERENCES community_sources(id) ON DELETE SET NULL');
+  }
+  if (!packsCols.includes('installed_version')) {
+    console.log('Migration: Adding installed_version column to installed_packs');
+    db.exec('ALTER TABLE installed_packs ADD COLUMN installed_version TEXT');
+  }
+  if (!packsCols.includes('available_version')) {
+    console.log('Migration: Adding available_version column to installed_packs');
+    db.exec('ALTER TABLE installed_packs ADD COLUMN available_version TEXT');
+  }
+
+  // Add is_local column to community_sources if missing
+  const sourceCols = db.prepare("PRAGMA table_info(community_sources)").all().map(c => c.name);
+  if (!sourceCols.includes('is_local')) {
+    console.log('Migration: Adding is_local column to community_sources');
+    db.exec('ALTER TABLE community_sources ADD COLUMN is_local INTEGER DEFAULT 0');
   }
 }
 

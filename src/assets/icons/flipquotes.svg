@@ -1,0 +1,29 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- FlipQuotes: Single dramatic tile flip reveal -->
+
+  <!-- Background glow -->
+  <ellipse cx="12" cy="12" rx="10" ry="8" fill="#fdf4ff" opacity="0.5"/>
+
+  <!-- Back of tile (hidden side) - darker, smaller due to perspective -->
+  <g transform="translate(2, 3)">
+    <path d="M3 2 L10 0 L10 14 L3 16 Z" fill="#7c3aed" opacity="0.6"/>
+  </g>
+
+  <!-- Front of tile (revealed side) - flipping into view -->
+  <g transform="skewY(-3)">
+    <rect x="10" y="4" width="11" height="15" rx="1.5" fill="#f472b6"/>
+    <rect x="11" y="5" width="9" height="13" rx="1" fill="#fdf4ff"/>
+    <text x="15.5" y="13" font-family="Georgia" font-size="8" font-weight="bold" fill="#a855f7" text-anchor="middle">A</text>
+  </g>
+
+  <!-- Flip motion arc -->
+  <path d="M6 10 C4 6, 8 2, 14 4" stroke="#d946ef" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="2,2"/>
+
+  <!-- Sparkle effects for reveal -->
+  <circle cx="22" cy="6" r="1" fill="#f472b6"/>
+  <circle cx="20" cy="3" r="0.7" fill="#a855f7"/>
+  <circle cx="23" cy="10" r="0.5" fill="#d946ef"/>
+
+  <!-- Quote mark accent -->
+  <text x="3" y="22" font-family="Georgia" font-size="8" font-weight="bold" fill="#f9a8d4">"</text>
+</svg>

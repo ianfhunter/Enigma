@@ -1,0 +1,30 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Color Cube 3x3x3: Rubik's cube style -->
+
+  <!-- Top face (white/yellow) -->
+  <path d="M12 2 L22 7 L12 12 L2 7 Z" fill="#fef08a"/>
+  <line x1="7" y1="4.5" x2="17" y2="9.5" stroke="#eab308" stroke-width="0.5"/>
+  <line x1="7" y1="7" x2="17" y2="12" stroke="#eab308" stroke-width="0.5" opacity="0"/>
+  <line x1="5.3" y1="6" x2="12" y2="2.5" stroke="#eab308" stroke-width="0.5"/>
+  <line x1="9" y1="8" x2="12" y2="6.5" stroke="#eab308" stroke-width="0.5"/>
+
+  <!-- Left face (green) -->
+  <path d="M2 7 L12 12 L12 22 L2 17 Z" fill="#22c55e"/>
+  <line x1="2" y1="12" x2="12" y2="17" stroke="#15803d" stroke-width="0.5"/>
+  <line x1="7" y1="9.5" x2="7" y2="19.5" stroke="#15803d" stroke-width="0.5"/>
+
+  <!-- Right face (blue) -->
+  <path d="M12 12 L22 7 L22 17 L12 22 Z" fill="#3b82f6"/>
+  <line x1="12" y1="17" x2="22" y2="12" stroke="#1d4ed8" stroke-width="0.5"/>
+  <line x1="17" y1="9.5" x2="17" y2="19.5" stroke="#1d4ed8" stroke-width="0.5"/>
+
+  <!-- Cube edges -->
+  <path d="M12 2 L22 7 L22 17 L12 22 L2 17 L2 7 Z" stroke="#1f2937" stroke-width="1.5" fill="none"/>
+  <line x1="12" y1="12" x2="12" y2="22" stroke="#1f2937" stroke-width="1"/>
+  <line x1="2" y1="7" x2="12" y2="12" stroke="#1f2937" stroke-width="1"/>
+  <line x1="12" y1="12" x2="22" y2="7" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- Rotation arrow -->
+  <path d="M19 3 C22 4, 23 6, 22 8" stroke="#ef4444" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M21 7 L22.5 8.5 L22 6" stroke="#ef4444" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>

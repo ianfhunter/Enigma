@@ -3,8 +3,8 @@ name: Update game badge
 on:
   push:
     paths:
-      - "src/data/gameRegistry.js"
-      - "src/data/**"
+      - "src/packs/**/manifest.js"
+      - "src/packs/registry.js"
       - "datasets/**"
       - ".github/workflows/game-badge.yml"
   schedule:
@@ -23,26 +23,19 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate community packs
+        run: npm run generate:community-packs
+
       - name: Compute game count
-        run: |
-          node - <<'EOF'
-          import fs from 'fs';
-
-          const registryPath = 'src/data/gameRegistry.js';
-          const content = fs.readFileSync(registryPath, 'utf8');
-          const slugMatches = [...content.matchAll(/slug:\s*['"]([^'"]+)['"]/g)];
-          const count = slugMatches.length;
-
-          const badge = {
-            schemaVersion: 1,
-            label: 'games',
-            message: String(count),
-            color: 'blue'
-          };
-
-          fs.writeFileSync('badge.json', JSON.stringify(badge, null, 2) + '\n');
-          console.log(`Found ${count} games`);
-          EOF
+        run: node scripts/count-games.js
 
       - name: Commit badge
         run: |

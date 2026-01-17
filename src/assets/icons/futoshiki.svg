@@ -1,0 +1,17 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Futoshiki: Abstract - large inequality signs -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="3" fill="#fff1f2"/>
+
+  <!-- Large abstract inequality pattern -->
+  <path d="M5 6 L11 12 L5 18" stroke="#f43f5e" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 6 L13 12 L19 18" stroke="#fb7185" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Small decorative inequalities -->
+  <path d="M8 3 L10 4 L8 5" stroke="#fda4af" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M16 19 L14 20 L16 21" stroke="#fda4af" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Center dot -->
+  <circle cx="12" cy="12" r="2" fill="#be123c"/>
+</svg>

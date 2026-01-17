@@ -1,5 +1,8 @@
 import rateLimit from 'express-rate-limit';
 
+// Check if rate limiting should be disabled (development mode)
+const isDevMode = process.env.DEV === '1' || process.env.DEV === 'true';
+
 // General rate limiter for database operations
 // Allows 100 requests per 15 minutes per IP
 export const dbRateLimit = rateLimit({
@@ -8,6 +11,7 @@ export const dbRateLimit = rateLimit({
   message: { error: 'Too many requests, please try again later.' },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  skip: () => isDevMode,
 });
 
 // Stricter rate limiter for expensive operations (export, import)
@@ -18,5 +22,5 @@ export const strictRateLimit = rateLimit({
   message: { error: 'Too many requests for this operation, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => isDevMode,
 });
-

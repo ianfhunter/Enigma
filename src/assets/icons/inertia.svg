@@ -1,0 +1,37 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Inertia: Sliding momentum puzzle -->
+
+  <!-- Background arena -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#0c4a6e"/>
+
+  <!-- Grid pattern -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#0369a1" stroke-width="0.5"/>
+  <line x1="16" y1="1" x2="16" y2="23" stroke="#0369a1" stroke-width="0.5"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#0369a1" stroke-width="0.5"/>
+  <line x1="1" y1="16" x2="23" y2="16" stroke="#0369a1" stroke-width="0.5"/>
+
+  <!-- Obstacles/walls -->
+  <rect x="14" y="5" width="4" height="4" rx="0.5" fill="#475569"/>
+  <rect x="5" y="14" width="4" height="4" rx="0.5" fill="#475569"/>
+
+  <!-- Goal -->
+  <circle cx="19" cy="19" r="2.5" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+  <text x="19" y="20.5" font-family="Arial" font-size="4" font-weight="bold" fill="#ffffff" text-anchor="middle">★</text>
+
+  <!-- Sliding ball with motion trail -->
+  <circle cx="11" cy="11" r="0.8" fill="#7dd3fc" opacity="0.3"/>
+  <circle cx="9" cy="11" r="1" fill="#7dd3fc" opacity="0.5"/>
+  <circle cx="6" cy="11" r="1.2" fill="#38bdf8" opacity="0.7"/>
+  <circle cx="4" cy="11" r="2" fill="#0ea5e9" stroke="#0284c7" stroke-width="1"/>
+
+  <!-- Direction arrows (showing possible moves) -->
+  <path d="M4 8 L4 5" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M3 6 L4 4.5 L5 6" stroke="#38bdf8" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+  <path d="M7 11 L10 11" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M9 10 L10.5 11 L9 12" stroke="#38bdf8" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+  <!-- Gems to collect -->
+  <polygon points="12,5 13,6.5 12,8 11,6.5" fill="#fbbf24"/>
+  <polygon points="19,10 20,11.5 19,13 18,11.5" fill="#fbbf24"/>
+</svg>

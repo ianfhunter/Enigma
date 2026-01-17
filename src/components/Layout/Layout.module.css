@@ -858,6 +858,49 @@
   75% { transform: rotate(10deg); }
 }
 
+/* Store button in header */
+.storeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.storeButton:hover {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+:global([data-theme="dark"]) .storeButton {
+  background: rgba(30, 0, 60, 0.4);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+:global([data-theme="dark"]) .storeButton:hover {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.storeIcon {
+  font-size: 1.1rem;
+}
+
+.storeText {
+  display: inline;
+}
+
 /* Profile button in header */
 .profileButton {
   display: inline-flex;
@@ -1088,6 +1131,26 @@
   }
 
   .surpriseIcon {
+    font-size: 1rem;
+  }
+
+  /* Store button on mobile */
+  .storeButton {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .storeText {
+    display: none;
+  }
+
+  /* Hide store button when search is active on mobile */
+  .homeHeader.searchActive .storeButton {
+    display: none;
+  }
+
+  .storeIcon {
     font-size: 1rem;
   }
 

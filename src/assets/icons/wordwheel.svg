@@ -1,0 +1,38 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Word Wheel: Circle of letters with highlighted center -->
+
+  <!-- Outer ring background -->
+  <circle cx="12" cy="12" r="11" fill="none" stroke="#ee5a5a" stroke-width="1.5"/>
+
+  <!-- Center letter tile (highlighted, must be used in every word) -->
+  <circle cx="12" cy="12" r="4" fill="#ff6b6b"/>
+  <circle cx="12" cy="12" r="3" fill="#ffffff"/>
+
+  <!-- Outer letter tiles positioned in a circle (8 positions for classic mode) -->
+  <!-- Top -->
+  <circle cx="12" cy="2.5" r="2" fill="#ff6b6b"/>
+  <!-- Top-right -->
+  <circle cx="18.7" cy="5.3" r="2" fill="#ee5a5a"/>
+  <!-- Right -->
+  <circle cx="21.5" cy="12" r="2" fill="#ff6b6b"/>
+  <!-- Bottom-right -->
+  <circle cx="18.7" cy="18.7" r="2" fill="#ee5a5a"/>
+  <!-- Bottom -->
+  <circle cx="12" cy="21.5" r="2" fill="#ff6b6b"/>
+  <!-- Bottom-left -->
+  <circle cx="5.3" cy="18.7" r="2" fill="#ee5a5a"/>
+  <!-- Left -->
+  <circle cx="2.5" cy="12" r="2" fill="#ff6b6b"/>
+  <!-- Top-left -->
+  <circle cx="5.3" cy="5.3" r="2" fill="#ee5a5a"/>
+
+  <!-- Spokes connecting center to outer letters -->
+  <line x1="12" y1="8" x2="12" y2="4.5" stroke="#fecaca" stroke-width="0.5"/>
+  <line x1="14.8" y1="9.2" x2="17" y2="7" stroke="#fecaca" stroke-width="0.5"/>
+  <line x1="16" y1="12" x2="19.5" y2="12" stroke="#fecaca" stroke-width="0.5"/>
+  <line x1="14.8" y1="14.8" x2="17" y2="17" stroke="#fecaca" stroke-width="0.5"/>
+  <line x1="12" y1="16" x2="12" y2="19.5" stroke="#fecaca" stroke-width="0.5"/>
+  <line x1="9.2" y1="14.8" x2="7" y2="17" stroke="#fecaca" stroke-width="0.5"/>
+  <line x1="8" y1="12" x2="4.5" y2="12" stroke="#fecaca" stroke-width="0.5"/>
+  <line x1="9.2" y1="9.2" x2="7" y2="7" stroke="#fecaca" stroke-width="0.5"/>
+</svg>

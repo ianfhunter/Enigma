@@ -10,6 +10,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [localError, setLocalError] = useState('');
+  const [isRateLimited, setIsRateLimited] = useState(false);
   const [loading, setLoading] = useState(false);
   const modalRef = useRef(null);
 
@@ -20,6 +21,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
     setConfirmPassword('');
     setDisplayName('');
     setLocalError('');
+    setIsRateLimited(false);
     clearError();
   }, [mode, clearError]);
 
@@ -51,6 +53,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLocalError('');
+    setIsRateLimited(false);
     clearError();
 
     // Validation
@@ -85,6 +88,9 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
       }
       onClose?.();
     } catch (err) {
+      if (err.isRateLimit) {
+        setIsRateLimited(true);
+      }
       setLocalError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
@@ -133,9 +139,14 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           {displayError && (
-            <div className={styles.error}>
-              <span className={styles.errorIcon}>⚠️</span>
-              {displayError}
+            <div className={`${styles.error} ${isRateLimited ? styles.rateLimitError : ''}`}>
+              <span className={styles.errorIcon}>{isRateLimited ? '🛑' : '⚠️'}</span>
+              <div className={styles.errorContent}>
+                {displayError}
+                {isRateLimited && (
+                  <span className={styles.rateLimitHint}>Please wait before trying again</span>
+                )}
+              </div>
             </div>
           )}
 

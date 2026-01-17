@@ -1,7 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './TileSwap.module.css';
+
+// Parse seed from URL if present
+function getSeedFromUrl() {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedStr = params.get('seed');
+  if (seedStr) {
+    const parsed = parseInt(seedStr, 10);
+    return isNaN(parsed) ? stringToSeed(seedStr) : parsed;
+  }
+  return null;
+}
 
 const GRID_SIZES = {
   '3×3': 3,
@@ -132,20 +145,23 @@ export default function TileSwap() {
   const [moves, setMoves] = useState(0);
   const [gameState, setGameState] = useState('playing');
   const [showPreview, setShowPreview] = useState(false);
+  const [seed, setSeed] = useState(null);
 
   const cellSize = 80;
 
-  const initGame = useCallback((newSize = size) => {
+  const initGame = useCallback((newSize = size, customSeed = null) => {
     const today = getTodayDateString();
-    const seed = stringToSeed(`tileswap-${today}-${newSize}`);
-    const random = createSeededRandom(seed);
+    const urlSeed = getSeedFromUrl();
+    const gameSeed = customSeed ?? urlSeed ?? stringToSeed(`tileswap-${today}-${newSize}`);
+    const random = createSeededRandom(gameSeed);
 
-    const url = generatePatternImage(newSize, seed, cellSize);
+    const url = generatePatternImage(newSize, gameSeed, cellSize);
     setImageUrl(url);
 
     const newPieces = createPieces(newSize);
     const shuffled = shufflePieces(newPieces, random);
 
+    setSeed(gameSeed);
     setPieces(shuffled);
     setSize(newSize);
     setSelectedPiece(null);
@@ -203,6 +219,14 @@ export default function TileSwap() {
         <p className={styles.instructions}>
           Click two pieces to swap them. Arrange the image correctly!
         </p>
+        {seed && (
+          <SeedDisplay
+            seed={seed}
+            variant="compact"
+            showNewButton
+            onNewSeed={() => initGame(size, Math.floor(Math.random() * 2147483647))}
+          />
+        )}
       </div>
 
       <div className={styles.sizeSelector}>

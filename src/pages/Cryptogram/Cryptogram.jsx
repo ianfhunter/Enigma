@@ -2,7 +2,20 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Cryptogram.module.css';
+
+// Parse seed from URL if present
+function getSeedFromUrl() {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedStr = params.get('seed');
+  if (seedStr) {
+    const parsed = parseInt(seedStr, 10);
+    return isNaN(parsed) ? stringToSeed(seedStr) : parsed;
+  }
+  return null;
+}
 
 // Create a random letter substitution cipher
 function createCipher(random) {
@@ -70,14 +83,15 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
   const [gameState, setGameState] = useState('playing');
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+  const [seed, setSeed] = useState(null);
 
   const inputRef = useRef(null);
 
-  const initGame = useCallback((useDailySeed = true) => {
+  const initGame = useCallback((customSeed = null) => {
     const today = getTodayDateString();
-    const seed = useDailySeed
-      ? stringToSeed(`cryptogram-${today}`)
-      : stringToSeed(`cryptogram-${Date.now()}`);
+    const urlSeed = getSeedFromUrl();
+    const seed = customSeed ?? urlSeed ?? stringToSeed(`cryptogram-${today}`);
+    setSeed(seed);
     const random = createSeededRandom(seed);
 
     // Pick a random quote
@@ -322,6 +336,14 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
         <p className={styles.instructions}>
           Each letter has been replaced with another. Click a letter and type to decode the quote!
         </p>
+        {seed && (
+          <SeedDisplay
+            seed={seed}
+            variant="compact"
+            showNewButton
+            onNewSeed={() => initGame(Math.floor(Math.random() * 2147483647))}
+          />
+        )}
       </div>
 
       <div className={styles.gameArea}>
@@ -387,10 +409,10 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
           >
             Give Up
           </button>
-          <button className={styles.newGameBtn} onClick={() => initGame(false)}>
+          <button className={styles.newGameBtn} onClick={() => initGame(Math.floor(Math.random() * 2147483647))}>
             New Random Puzzle
           </button>
-          <button className={styles.dailyBtn} onClick={() => initGame(true)}>
+          <button className={styles.dailyBtn} onClick={() => initGame(null)}>
             Today's Puzzle
           </button>
         </div>

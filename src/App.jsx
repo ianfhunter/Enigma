@@ -4,10 +4,14 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Search from './pages/Search';
+import GameStore from './pages/GameStore';
+import IframeGame from './pages/IframeGame';
+import CommunityGame from './pages/CommunityGame';
 import NotFound from './pages/NotFound';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import { allGames } from './data/gameRegistry';
+import { getGameBySlug } from './packs/registry';
 const logo = '/branding/logo.svg';
 import './index.css';
 
@@ -96,6 +100,7 @@ const slugToFolder = {
   'pokemon-quiz': 'PokemonQuiz',
   'provincial-map-fill': 'ProvincialMapFill',
   'pyramid': 'Pyramid',
+  'pyramid-cards': 'PyramidCards',
   'range': 'Range',
   'samegame': 'Samegame',
   'sandwich-sudoku': 'SandwichSudoku',
@@ -127,6 +132,7 @@ const slugToFolder = {
   'tile-swap': 'TileSwap',
   'tower-of-hanoi': 'TowerOfHanoi',
   'tracks': 'Tracks',
+  'tri-peaks': 'TriPeaks',
   'trivia': 'Trivia',
   'twiddle': 'Twiddle',
   'undead': 'Undead',
@@ -152,18 +158,32 @@ const componentCache = {};
 
 /**
  * Get or create a lazy-loaded component for a game
+ *
+ * First checks the slugToFolder mapping for built-in pages,
+ * then falls back to pack manifest component loaders for community packs.
  */
 function getGameComponent(slug) {
-  const folder = slugToFolder[slug];
-  if (!folder) {
-    // Unknown game - return null (will show 404 via route handling)
-    return null;
+  // Check if we already have a cached component
+  if (componentCache[slug]) {
+    return componentCache[slug];
   }
 
-  if (!componentCache[slug]) {
+  // First, try the built-in slugToFolder mapping
+  const folder = slugToFolder[slug];
+  if (folder) {
     componentCache[slug] = lazy(() => import(`./pages/${folder}/index.js`));
+    return componentCache[slug];
   }
-  return componentCache[slug];
+
+  // Fall back to pack manifests (for community packs and packs with custom paths)
+  const game = getGameBySlug(slug);
+  if (game?.component) {
+    componentCache[slug] = lazy(() => game.component().then(m => ({ default: m.default })));
+    return componentCache[slug];
+  }
+
+  // Unknown game - return null (will show 404 via route handling)
+  return null;
 }
 
 // Fun loading phrases
@@ -384,7 +404,10 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="search" element={<Search />} />
+              <Route path="store" element={<GameStore />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="custom/:packId/:gameId" element={<IframeGame />} />
+              <Route path="community/:packId/:gameSlug" element={<CommunityGame />} />
               {generateGameRoutes()}
               <Route path="*" element={<NotFound />} />
             </Route>

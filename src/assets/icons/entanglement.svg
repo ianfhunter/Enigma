@@ -1,0 +1,25 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Entanglement: Hexagonal tiles with paths -->
+
+  <!-- Central hexagon -->
+  <polygon points="12,3 19,7 19,15 12,19 5,15 5,7" fill="#ecfeff" stroke="#22d3ee" stroke-width="1.5"/>
+
+  <!-- Path lines through hexagon -->
+  <path d="M8 5 Q12 10, 16 5" stroke="#a855f7" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M5 11 Q12 12, 19 11" stroke="#22d3ee" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M8 17 Q12 12, 16 17" stroke="#a855f7" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Entry/exit points -->
+  <circle cx="8" cy="5" r="1.5" fill="#22d3ee"/>
+  <circle cx="16" cy="5" r="1.5" fill="#a855f7"/>
+  <circle cx="5" cy="11" r="1.5" fill="#22d3ee"/>
+  <circle cx="19" cy="11" r="1.5" fill="#a855f7"/>
+  <circle cx="8" cy="17" r="1.5" fill="#a855f7"/>
+  <circle cx="16" cy="17" r="1.5" fill="#22d3ee"/>
+
+  <!-- Surrounding partial hexagons suggesting board -->
+  <path d="M2 4 L5 2 L8 3" stroke="#67e8f9" stroke-width="1" fill="none"/>
+  <path d="M16 3 L19 2 L22 4" stroke="#67e8f9" stroke-width="1" fill="none"/>
+  <path d="M2 18 L5 20 L8 19" stroke="#c4b5fd" stroke-width="1" fill="none"/>
+  <path d="M16 19 L19 20 L22 18" stroke="#c4b5fd" stroke-width="1" fill="none"/>
+</svg>

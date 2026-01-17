@@ -1,0 +1,24 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Word Arithmetic: SEND+MORE=MONEY style -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef3c7"/>
+
+  <!-- Equation layout -->
+  <!-- SEND -->
+  <text x="17" y="7" font-family="monospace" font-size="4" font-weight="bold" fill="#92400e" text-anchor="end">SEND</text>
+
+  <!-- + MORE -->
+  <text x="4" y="12" font-family="monospace" font-size="4" font-weight="bold" fill="#b45309" text-anchor="start">+</text>
+  <text x="17" y="12" font-family="monospace" font-size="4" font-weight="bold" fill="#92400e" text-anchor="end">MORE</text>
+
+  <!-- Equals line -->
+  <line x1="4" y1="14.5" x2="20" y2="14.5" stroke="#d97706" stroke-width="1.5"/>
+
+  <!-- MONEY -->
+  <text x="17" y="20" font-family="monospace" font-size="4" font-weight="bold" fill="#78350f" text-anchor="end">MONEY</text>
+
+  <!-- Letter-to-digit hints -->
+  <circle cx="4" cy="5" r="2.5" fill="#f59e0b"/>
+  <text x="4" y="6.2" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">S=9</text>
+</svg>
