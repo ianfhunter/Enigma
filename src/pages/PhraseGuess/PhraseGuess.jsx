@@ -36,11 +36,11 @@ export default function PhraseGuess() {
   const [solveBonus, setSolveBonus] = useState(0);
   const [seed, setSeed] = useState(null);
 
-  const initGame = useCallback((useDailySeed = true) => {
+  const initGame = useCallback((useDailySeed = true, customSeed = null) => {
     const today = getTodayDateString();
-    const gameSeed = useDailySeed
+    const gameSeed = customSeed ?? (useDailySeed
       ? stringToSeed(`phraseguess-${today}`)
-      : stringToSeed(`phraseguess-${Date.now()}`);
+      : stringToSeed(`phraseguess-${Date.now()}`));
     const random = createSeededRandom(gameSeed);
 
     // Pick a random quote
@@ -271,6 +271,13 @@ export default function PhraseGuess() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(true, seedNum);
+          }}
         />
       )}
 

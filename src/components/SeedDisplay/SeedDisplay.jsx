@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import styles from './SeedDisplay.module.css';
 
 /**
@@ -16,6 +16,8 @@ import styles from './SeedDisplay.module.css';
  * @param {'compact' | 'default' | 'inline'} [props.variant] - Display variant
  * @param {function} [props.onNewSeed] - Callback when "New" button is clicked
  * @param {boolean} [props.showNewButton] - Show "New Puzzle" button (default: false)
+ * @param {function} [props.onSeedChange] - Callback when seed is changed (receives new seed value)
+ * @param {boolean} [props.editable] - Allow editing the seed (default: true if onSeedChange is provided)
  */
 export default function SeedDisplay({
   seed,
@@ -29,11 +31,83 @@ export default function SeedDisplay({
   variant = 'default',
   onNewSeed,
   showNewButton = false,
+  onSeedChange,
+  editable,
 }) {
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState('');
+  const inputRef = useRef(null);
+  
+  const isEditable = editable !== undefined ? editable : !!onSeedChange;
 
   const seedString = String(seed);
+
+  // Focus input when entering edit mode
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  // Handle seed change from props
+  useEffect(() => {
+    if (!isEditing) {
+      setEditValue(seedString);
+    }
+  }, [seed, seedString, isEditing]);
+
+  // Start editing
+  const handleStartEdit = useCallback(() => {
+    if (isEditable) {
+      setEditValue(seedString);
+      setIsEditing(true);
+    }
+  }, [isEditable, seedString]);
+
+  // Cancel editing
+  const handleCancelEdit = useCallback(() => {
+    setEditValue(seedString);
+    setIsEditing(false);
+  }, [seedString]);
+
+  // Submit edited seed
+  const handleSubmitEdit = useCallback(() => {
+    if (!onSeedChange) {
+      setIsEditing(false);
+      return;
+    }
+
+    const trimmed = editValue.trim();
+    if (!trimmed) {
+      handleCancelEdit();
+      return;
+    }
+
+    // Try to parse as number
+    const parsed = parseInt(trimmed, 10);
+    if (!isNaN(parsed)) {
+      onSeedChange(parsed);
+      setIsEditing(false);
+    } else {
+      // If not a number, try to use it as-is (might be a string seed)
+      onSeedChange(trimmed);
+      setIsEditing(false);
+    }
+  }, [editValue, onSeedChange, handleCancelEdit]);
+
+  // Handle input key events
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmitEdit();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCancelEdit();
+    }
+  }, [handleSubmitEdit, handleCancelEdit]);
 
   // Get the shareable URL
   const getShareUrl = useCallback(() => {
@@ -126,7 +200,27 @@ export default function SeedDisplay({
         {variant === 'inline' && label && (
           <span className={styles.inlineLabel}>{label}: </span>
         )}
-        <code className={styles.seedValue}>{seedString}</code>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            className={styles.seedInput}
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={handleSubmitEdit}
+            onKeyDown={handleKeyDown}
+            onClick={(e) => e.stopPropagation()}
+            aria-label="Enter seed value"
+          />
+        ) : (
+          <code
+            className={`${styles.seedValue} ${isEditable ? styles.editable : ''}`}
+            onClick={handleStartEdit}
+            title={isEditable ? 'Click to edit seed' : `Seed: ${seedString}`}
+          >
+            {seedString}
+          </code>
+        )}
       </span>
 
       <div className={styles.actions}>

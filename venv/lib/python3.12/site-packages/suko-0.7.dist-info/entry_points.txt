@@ -1,0 +1,3 @@
+[console_scripts]
+suko=suko.__init__:__init__
+

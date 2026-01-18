@@ -50,9 +50,14 @@ export default function LongestWord() {
 
   const inputRef = useRef(null);
 
-  const initGame = useCallback((useRandomSeed = false) => {
+  const initGame = useCallback((useRandomSeed = false, customSeedNum = null) => {
     let newSeedNum;
-    if (useRandomSeed) {
+    if (customSeedNum !== null) {
+      // Use provided custom seed
+      newSeedNum = typeof customSeedNum === 'string'
+        ? (isNaN(parseInt(customSeedNum, 10)) ? stringToSeed(customSeedNum) : parseInt(customSeedNum, 10))
+        : customSeedNum;
+    } else if (useRandomSeed) {
       // Use current timestamp for a truly random puzzle
       newSeedNum = stringToSeed(`longestword-${Date.now()}-${Math.random()}`);
     } else {
@@ -155,6 +160,13 @@ export default function LongestWord() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(false, seedNum);
+          }}
         />
       )}
 

@@ -567,9 +567,9 @@ export default function Threads() {
   const [seed, setSeed] = useState(null);
   const gridRef = useRef(null);
 
-  const initGame = useCallback(() => {
+  const initGame = useCallback((customSeed = null) => {
     const today = getTodayDateString();
-    const gameSeed = stringToSeed(`threads-${today}`);
+    const gameSeed = customSeed ?? stringToSeed(`threads-${today}`);
     const newPuzzle = getPuzzleForDate(today);
     setSeed(gameSeed);
     setPuzzle(newPuzzle);
@@ -875,6 +875,13 @@ export default function Threads() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(seedNum);
+          }}
         />
       )}
 

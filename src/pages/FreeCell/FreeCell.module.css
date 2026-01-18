@@ -1,0 +1,232 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.backLink {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.backLink:hover {
+  color: #000;
+}
+
+.gameInfo {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.gameBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.foundations {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.foundation {
+  width: 80px;
+  height: 112px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  position: relative;
+}
+
+.foundation.selectable {
+  border-color: #4CAF50;
+  background: #f0f8f0;
+  cursor: pointer;
+}
+
+.emptyFoundation {
+  font-size: 32px;
+  opacity: 0.3;
+}
+
+.freecells {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.freecell {
+  width: 80px;
+  height: 112px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  position: relative;
+  cursor: pointer;
+}
+
+.freecell.selectable {
+  border-color: #2196F3;
+  background: #e3f2fd;
+}
+
+.emptyCell {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #ddd;
+  border-radius: 6px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  min-height: 400px;
+}
+
+.column {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emptyColumn {
+  width: 80px;
+  height: 112px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.cardContainer {
+  position: absolute;
+  width: 80px;
+  height: 112px;
+  cursor: pointer;
+}
+
+.cardContainer.topCard {
+  z-index: 10;
+}
+
+.cardContainer.selected {
+  outline: 3px solid #FF9800;
+  outline-offset: 2px;
+  z-index: 11;
+}
+
+.cardContainer.inSequence {
+  outline: 2px solid #FFB74D;
+  outline-offset: 1px;
+}
+
+.card {
+  width: 80px;
+  height: 112px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  user-select: none;
+}
+
+.card.black {
+  color: #000;
+}
+
+.card.red {
+  color: #d32f2f;
+}
+
+.rank {
+  font-size: 20px;
+  font-weight: bold;
+  position: absolute;
+  top: 4px;
+  left: 6px;
+}
+
+.suit {
+  font-size: 32px;
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.controls button {
+  padding: 10px 20px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.controls button:hover {
+  background: #1976D2;
+}
+
+.won {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+@media (max-width: 1024px) {
+  .columns {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .card {
+    width: 60px;
+    height: 84px;
+  }
+  
+  .cardContainer {
+    width: 60px;
+    height: 84px;
+  }
+  
+  .foundation,
+  .freecell,
+  .emptyColumn {
+    width: 60px;
+    height: 84px;
+  }
+}

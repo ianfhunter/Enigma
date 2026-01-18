@@ -331,13 +331,13 @@ export default function LetterWeb() {
   const [puzzleNumber, setPuzzleNumber] = useState(0);
   const [seed, setSeed] = useState(null);
 
-  const initGame = useCallback((isNewPuzzle = false) => {
+  const initGame = useCallback((isNewPuzzle = false, customSeed = null) => {
     const today = getTodayDateString();
     const puzzleOffset = isNewPuzzle ? puzzleNumber + 1 : puzzleNumber;
     if (isNewPuzzle) {
       setPuzzleNumber(puzzleOffset);
     }
-    const gameSeed = stringToSeed(`letterweb-${today}-${puzzleOffset}`);
+    const gameSeed = customSeed ?? stringToSeed(`letterweb-${today}-${puzzleOffset}`);
     const result = generateLetters(gameSeed);
 
     setSeed(gameSeed);
@@ -520,6 +520,13 @@ export default function LetterWeb() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(false, seedNum);
+          }}
         />
       )}
 

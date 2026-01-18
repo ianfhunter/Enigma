@@ -344,6 +344,13 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(seedNum);
+          }}
         />
       )}
 

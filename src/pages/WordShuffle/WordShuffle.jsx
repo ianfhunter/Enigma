@@ -157,11 +157,11 @@ export default function WordShuffle() {
 
   const timerRef = useRef(null);
 
-  const initGame = useCallback((newSize = size, newPuzzle = false) => {
+  const initGame = useCallback((newSize = size, newPuzzle = false, customSeed = null) => {
     const today = getTodayDateString();
     const index = newPuzzle ? puzzleIndex + 1 : puzzleIndex;
     if (newPuzzle) setPuzzleIndex(index);
-    const gameSeed = stringToSeed(`wordshuffle-${today}-${newSize}-${index}`);
+    const gameSeed = customSeed ?? stringToSeed(`wordshuffle-${today}-${newSize}-${index}`);
     const newBoard = generateBoard(newSize, gameSeed);
 
     setSeed(gameSeed);
@@ -308,6 +308,13 @@ export default function WordShuffle() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(size, false, seedNum);
+          }}
         />
       )}
 

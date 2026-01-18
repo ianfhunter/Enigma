@@ -12,6 +12,7 @@ import kakuroIcon from '../../assets/icons/kakuro.svg';
 import kropkiIcon from '../../assets/icons/kropki.svg';
 import str8tsIcon from '../../assets/icons/str8ts.svg';
 import sujikoIcon from '../../assets/icons/sujiko.svg';
+import sukoIcon from '../../assets/icons/suko.svg';
 import futoshikiIcon from '../../assets/icons/futoshiki.svg';
 import abcendviewIcon from '../../assets/icons/abcendview.svg';
 
@@ -141,6 +142,17 @@ export const categories = [
         component: () => import('../../pages/Sujiko'),
       },
       {
+        title: 'Suko',
+        slug: 'suko',
+        description: 'Fill the 3×3 grid with 1-9. Circle clues show sums, and colored cells must sum to targets.',
+        icon: sukoIcon,
+        emojiIcon: '🎨',
+        colors: { primary: '#fbbf24', secondary: '#f59e0b' },
+        gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/Suko'),
+      },
+      {
         title: 'Skyscraper',
         slug: 'skyscraper',
         description: 'Fill the grid with building heights. Edge clues show how many buildings are visible.',
@@ -160,6 +172,28 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         version: 'v1.0',
         component: () => import('../../pages/ABCEndView'),
+      },
+      {
+        title: 'Eulero',
+        slug: 'eulero',
+        aliases: ['Graeco-Latin Square', 'Euler Square'],
+        description: 'Fill each cell with a number and letter. Each row and column must have all numbers and letters once, with no repeated pairs.',
+        icon: '🔷',
+        colors: { primary: '#8b5cf6', secondary: '#6366f1' },
+        gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/Eulero'),
+      },
+      {
+        title: 'Japanese Sums',
+        slug: 'japanese-sums',
+        aliases: ['Sum Cross', 'Number Cross'],
+        description: 'Fill cells with numbers so rows and columns have unique numbers. Outside clues show sums of consecutive filled groups.',
+        icon: '🔢',
+        colors: { primary: '#ec4899', secondary: '#f472b6' },
+        gradient: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/JapaneseSums'),
       },
     ],
   },

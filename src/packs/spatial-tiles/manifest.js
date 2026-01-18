@@ -250,6 +250,16 @@ export const categories = [
         version: 'v1.0',
         component: () => import('../../pages/Samegame'),
       },
+      {
+        title: 'Pentomino',
+        slug: 'pentomino',
+        description: 'Fill the 8×8 board using all 12 pentomino pieces. The center 2×2 cells form a hole.',
+        icon: '🧩',
+        colors: { primary: '#8b5cf6', secondary: '#6366f1' },
+        gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/Pentomino'),
+      },
     ],
   },
 ];

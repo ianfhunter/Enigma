@@ -1,0 +1,444 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #fbbf24;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.puzzleContainer {
+  position: relative;
+  width: 240px;
+  height: 240px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  background: rgba(30, 30, 50, 0.8);
+  padding: 4px;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 26, 0.95);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.cell:hover {
+  background: rgba(251, 191, 36, 0.15);
+}
+
+/* Color zone borders */
+.cell.green {
+  border-color: rgba(34, 197, 94, 0.8);
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.cell.orange {
+  border-color: rgba(251, 146, 60, 0.8);
+  background: rgba(251, 146, 60, 0.2);
+}
+
+.cell.yellow {
+  border-color: rgba(234, 179, 8, 0.8);
+  background: rgba(234, 179, 8, 0.2);
+}
+
+.cell.selected {
+  background: rgba(251, 191, 36, 0.25) !important;
+  box-shadow: inset 0 0 0 2px #fbbf24;
+  border-color: #fbbf24 !important;
+}
+
+.cell.error {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+.cell.error .number {
+  color: #ef4444;
+}
+
+.number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.sumCircles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sumCircle {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 30, 50, 0.95);
+  border: 3px solid rgba(251, 191, 36, 0.6);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.sumCircle.correct {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #22c55e;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+}
+
+.colorSums {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.colorSum {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.colorSum:first-child {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.6);
+}
+
+.colorSum:first-child .colorLabel {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.colorSum:nth-child(2) {
+  background: rgba(251, 146, 60, 0.15);
+  border-color: rgba(251, 146, 60, 0.6);
+}
+
+.colorSum:nth-child(2) .colorLabel {
+  color: #fb923c;
+  font-weight: 700;
+}
+
+.colorSum:nth-child(3) {
+  background: rgba(234, 179, 8, 0.15);
+  border-color: rgba(234, 179, 8, 0.6);
+}
+
+.colorSum:nth-child(3) .colorLabel {
+  color: #eab308;
+  font-weight: 700;
+}
+
+.colorSum.correct {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: #22c55e;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+}
+
+.colorLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.colorSum.correct .colorLabel {
+  color: #22c55e;
+}
+
+.colorValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.colorSum.correct .colorValue {
+  color: #22c55e;
+}
+
+.numberPad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 280px;
+}
+
+.numBtn {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.numBtn:hover:not(:disabled) {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.numBtn.used {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.winMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.winEmoji {
+  font-size: 3rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.winMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0;
+}
+
+.winMessage p {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 22px;
+  background: var(--panel-bg);
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s ease;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #fbbf24;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(18px);
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.resetBtn {
+  padding: 0.75rem 1.5rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.gaveUpMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.gaveUpIcon {
+  font-size: 2rem;
+}
+
+.giveUpBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  color: #fbbf24;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.giveUpBtn:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: rgba(245, 158, 11, 0.6);
+}
+
+.giveUpBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.newGameBtn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .puzzleContainer {
+    width: 200px;
+    height: 200px;
+  }
+
+  .number {
+    font-size: 1.5rem;
+  }
+
+  .sumCircle {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+}
