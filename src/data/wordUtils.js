@@ -16,7 +16,7 @@ const WORD_SET = new Set(
 // Cache of 9-letter words for puzzle generation
 const NINE_LETTER_WORDS = Array.from(WORD_SET).filter(word => word.length === 9);
 
-// Cache of 7-letter words for Spelling Bee mode
+// Cache of 7-letter words for Hex mode
 const SEVEN_LETTER_WORDS = Array.from(WORD_SET).filter(word => word.length === 7);
 
 // Pre-filter common words by length for target selection
