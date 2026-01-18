@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSearch.module.css';
 
 // Parse seed from URL if present
@@ -341,12 +342,11 @@ export default function WordSearch() {
           <h3>Words to Find</h3>
           <div className={styles.words}>
             {puzzle.words.map(word => (
-              <span
+              <WordWithDefinition
                 key={word}
+                word={word}
                 className={`${styles.word} ${foundWords.has(word) ? styles.found : ''}`}
-              >
-                {word}
-              </span>
+              />
             ))}
           </div>
         </div>

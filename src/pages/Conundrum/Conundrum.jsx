@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, generateConundrum, shuffleArray } from '../../data/wordUtils';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Conundrum.module.css';
 
 const GAME_TIME = 30; // seconds
@@ -239,21 +240,25 @@ export default function Conundrum() {
               {gameState === 'won' && (
                 <div className={styles.answerReveal}>
                   <div className={styles.answerLabel}>Answer</div>
-                  <div className={styles.answerWord}>
-                    {puzzle.word.split('').map((letter, i) => (
-                      <span key={i} className={styles.answerLetter}>{letter}</span>
-                    ))}
-                  </div>
+                  <WordWithDefinition word={puzzle.word} className={styles.answerWordWrapper}>
+                    <div className={styles.answerWord}>
+                      {puzzle.word.split('').map((letter, i) => (
+                        <span key={i} className={styles.answerLetter}>{letter}</span>
+                      ))}
+                    </div>
+                  </WordWithDefinition>
                 </div>
               )}
               {gameState === 'lost' && (
                 <div className={styles.answerReveal}>
                   <div className={styles.answerLabel}>The answer was</div>
-                  <div className={`${styles.answerWord} ${styles.missed}`}>
-                    {puzzle.word.split('').map((letter, i) => (
-                      <span key={i} className={styles.answerLetter}>{letter}</span>
-                    ))}
-                  </div>
+                  <WordWithDefinition word={puzzle.word} className={styles.answerWordWrapper}>
+                    <div className={`${styles.answerWord} ${styles.missed}`}>
+                      {puzzle.word.split('').map((letter, i) => (
+                        <span key={i} className={styles.answerLetter}>{letter}</span>
+                      ))}
+                    </div>
+                  </WordWithDefinition>
                 </div>
               )}
 

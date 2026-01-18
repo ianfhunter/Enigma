@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { getCommonWordsByLength } from '../../data/wordUtils';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSnake.module.css';
 
 // Get common words of good lengths for snake puzzles (6-10 letters)
@@ -271,14 +272,16 @@ export default function WordSnake() {
           <div className={styles.winMessage}>
             <div className={styles.winEmoji}>🐍</div>
             <h3>Word Found!</h3>
-            <p className={styles.foundWord}>{puzzleData.word}</p>
+            <p className={styles.foundWord}>
+              <WordWithDefinition word={puzzleData.word} />
+            </p>
           </div>
         )}
 
         {gameState === 'gaveUp' && (
           <div className={styles.gaveUpMessage}>
             <span className={styles.gaveUpIcon}>📖</span>
-            <span>The word was: {puzzleData.word}</span>
+            <span>The word was: <WordWithDefinition word={puzzleData.word} /></span>
           </div>
         )}
 

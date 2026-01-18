@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LetterWeb.module.css';
 
 const VOWELS = 'AEIOU';
@@ -623,7 +624,7 @@ export default function LetterWeb() {
           <div className={styles.words}>
             {words.map((word, i) => (
               <span key={i} className={styles.word}>
-                {word}
+                <WordWithDefinition word={word} />
                 {i < words.length - 1 && <span className={styles.chain}>→</span>}
               </span>
             ))}

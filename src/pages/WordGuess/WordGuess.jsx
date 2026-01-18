@@ -8,6 +8,7 @@ import {
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import GameHeader from '../../components/GameHeader';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordGuess.module.css';
 
 const KEYBOARD_ROWS = [
@@ -252,7 +253,7 @@ export default function WordGuess() {
               </div>
             ) : (
               <div className={styles.loseMessage}>
-                The word was <strong>{targetWord}</strong>
+                The word was <WordWithDefinition word={targetWord} className={styles.targetWord} />
               </div>
             )}
             <button className={styles.playAgainBtn} onClick={initGame}>

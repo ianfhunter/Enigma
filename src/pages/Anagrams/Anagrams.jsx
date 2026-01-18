@@ -8,6 +8,7 @@ import {
   canUseLetter,
   appendLetterIfAvailable,
 } from '../../data/wordUtils';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Anagrams.module.css';
 
 const GAME_TIME = 90; // 90 seconds per puzzle
@@ -305,12 +306,11 @@ export default function Anagrams() {
               <h4>All Anagrams ({puzzle.anagrams.length})</h4>
               <div className={styles.wordList}>
                 {puzzle.anagrams.map((word) => (
-                  <span
+                  <WordWithDefinition
                     key={word}
+                    word={word}
                     className={`${styles.word} ${foundWords.includes(word) ? styles.found : styles.missed}`}
-                  >
-                    {word}
-                  </span>
+                  />
                 ))}
               </div>
             </div>

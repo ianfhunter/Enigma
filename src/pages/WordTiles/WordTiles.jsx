@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord } from '../../data/wordUtils';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordTiles.module.css';
 
 // Tile distribution and values
@@ -606,7 +607,7 @@ export default function WordTiles() {
             <div className={styles.wordsList}>
               {wordsPlayed.map((w, i) => (
                 <div key={i} className={styles.playedWord}>
-                  <span className={styles.playedWordText}>{w.word}</span>
+                  <WordWithDefinition word={w.word} className={styles.playedWordText} />
                   <span className={`${styles.playedWordScore} ${w.double ? styles.double : ''}`}>
                     +{w.score}{w.double && ' 2×'}
                   </span>

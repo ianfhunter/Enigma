@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, shuffleArray, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordShuffle.module.css';
 
 const DICE_4X4 = [
@@ -418,12 +419,11 @@ export default function WordShuffle() {
             <h3>All Words ({allValidWords.length})</h3>
             <div className={styles.words}>
               {allValidWords.map(word => (
-                <span
+                <WordWithDefinition
                   key={word}
+                  word={word}
                   className={`${styles.word} ${foundWords.has(word) ? styles.found : styles.missed}`}
-                >
-                  {word}
-                </span>
+                />
               ))}
             </div>
           </div>

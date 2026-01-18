@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, findAllWords, generatePuzzle, shuffleArray } from '../../data/wordUtils';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordWheel.module.css';
 
 const STORAGE_KEY = 'wordwheel_puzzle';
@@ -363,12 +364,11 @@ export default function WordWheel() {
               <h4>All Possible Words ({possibleWords.length})</h4>
               <div className={styles.wordList}>
                 {possibleWords.map((word) => (
-                  <span
+                  <WordWithDefinition
                     key={word}
+                    word={word}
                     className={`${styles.word} ${foundWords.includes(word) ? styles.found : styles.missed} ${word.length === modeConfig.letters ? styles.pangramWord : ''}`}
-                  >
-                    {word}
-                  </span>
+                  />
                 ))}
               </div>
             </div>

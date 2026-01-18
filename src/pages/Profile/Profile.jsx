@@ -400,6 +400,55 @@ function SettingsTab() {
           </button>
         </div>
       </section>
+
+      <section className={styles.card}>
+        <h3 className={styles.cardTitle}>🔍 Dictionary Search</h3>
+        <p className={styles.cardDescription}>
+          Choose which search engine to use when looking up word definitions.
+        </p>
+        <div className={styles.variantSelector}>
+          <button
+            className={`${styles.variantOption} ${settings?.searchEngine === 'google' ? styles.active : ''}`}
+            onClick={() => handleSettingChange('searchEngine', 'google')}
+            disabled={saving}
+          >
+            <span className={styles.flagIcon}>🔍</span>
+            <span className={styles.variantLabel}>Google</span>
+          </button>
+          <button
+            className={`${styles.variantOption} ${settings?.searchEngine === 'bing' ? styles.active : ''}`}
+            onClick={() => handleSettingChange('searchEngine', 'bing')}
+            disabled={saving}
+          >
+            <span className={styles.flagIcon}>🔍</span>
+            <span className={styles.variantLabel}>Bing</span>
+          </button>
+          <button
+            className={`${styles.variantOption} ${settings?.searchEngine === 'duckduckgo' ? styles.active : ''}`}
+            onClick={() => handleSettingChange('searchEngine', 'duckduckgo')}
+            disabled={saving}
+          >
+            <span className={styles.flagIcon}>🦆</span>
+            <span className={styles.variantLabel}>DuckDuckGo</span>
+          </button>
+          <button
+            className={`${styles.variantOption} ${settings?.searchEngine === 'yahoo' ? styles.active : ''}`}
+            onClick={() => handleSettingChange('searchEngine', 'yahoo')}
+            disabled={saving}
+          >
+            <span className={styles.flagIcon}>🔍</span>
+            <span className={styles.variantLabel}>Yahoo</span>
+          </button>
+          <button
+            className={`${styles.variantOption} ${settings?.searchEngine === 'brave' ? styles.active : ''}`}
+            onClick={() => handleSettingChange('searchEngine', 'brave')}
+            disabled={saving}
+          >
+            <span className={styles.flagIcon}>🦁</span>
+            <span className={styles.variantLabel}>Brave Search</span>
+          </button>
+        </div>
+      </section>
     </div>
   );
 }

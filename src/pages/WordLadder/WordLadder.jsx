@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, generateWordLadderPuzzle, differsByOneLetter } from '../../data/wordUtils';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordLadder.module.css';
 
 // Word ladder puzzles use 4-letter words; keep length centralized
@@ -299,7 +300,7 @@ export default function WordLadder() {
               <div className={styles.solutionPath}>
                 {puzzle.solution.map((word, i) => (
                   <span key={i} className={styles.solutionWord}>
-                    {word}
+                    <WordWithDefinition word={word} />
                     {i < puzzle.solution.length - 1 && (
                       <span className={styles.arrow}>→</span>
                     )}
