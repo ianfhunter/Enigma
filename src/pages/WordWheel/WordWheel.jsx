@@ -9,7 +9,7 @@ const MODE_KEY = 'wordwheel_mode';
 // Game modes
 const MODES = {
   CLASSIC: { letters: 9, outer: 8, name: 'Classic', description: '9 letters' },
-  SPELLING_BEE: { letters: 7, outer: 6, name: 'Spelling Bee', description: '7 letters' },
+  HEX: { letters: 7, outer: 6, name: 'Hex', description: '7 letters' },
 };
 
 // Export helpers for testing
@@ -18,7 +18,7 @@ export { MODES };
 export default function WordWheel() {
   const [mode, setMode] = useState(() => {
     const saved = localStorage.getItem(MODE_KEY);
-    return saved === 'SPELLING_BEE' ? 'SPELLING_BEE' : 'CLASSIC';
+    return saved === 'HEX' ? 'HEX' : 'CLASSIC';
   });
   const [puzzle, setPuzzle] = useState(null);
   const [outerLetters, setOuterLetters] = useState([]);
