@@ -335,9 +335,9 @@ describe('packageRegistry', () => {
   describe('manifest pack integration', () => {
     it('word-games manifest pack should have correct game count', () => {
       const count = countGamesInPack('word-games', categories);
-      // Word Formation (11) + Word Grids (7) + Cipher & Decode (6) = 24
+      // Word Formation (11) + Word Grids (7) + Cipher & Decode (6) + Categories (1) = 25
       // But shiritori is not included, so it should be less than total in those categories
-      expect(count).toBe(24);
+      expect(count).toBe(25);
     });
 
     it('word-games should include expected games', () => {

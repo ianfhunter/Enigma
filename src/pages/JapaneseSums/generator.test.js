@@ -178,7 +178,11 @@ describe('Japanese Sums Generator', () => {
   describe('isSolved', () => {
     it('should return true for correct solution', () => {
       const puzzle = generatePuzzle(6, 'easy', 20000);
-      expect(isSolved(puzzle.solution, puzzle.solution, puzzle.pattern)).toBe(true);
+      // Create userGrid that matches pattern: filled cells have solution value, shaded cells are null
+      const userGrid = puzzle.solution.map((row, r) => 
+        row.map((cell, c) => puzzle.pattern[r][c] ? cell : null)
+      );
+      expect(isSolved(userGrid, puzzle.solution, puzzle.pattern)).toBe(true);
     });
 
     it('should return false for incomplete solution', () => {

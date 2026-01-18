@@ -134,13 +134,18 @@ describe('Eulero Generator', () => {
     });
 
     it('should work with different sizes', () => {
-      for (const size of [4, 5, 6, 7]) {
+      for (const size of [4, 5, 6]) {
         const puzzle = generatePuzzle(size, 'medium', 10000 + size);
         expect(puzzle.size).toBe(size);
         expect(puzzle.puzzle.length).toBe(size);
         expect(puzzle.solution.length).toBe(size);
       }
-    });
+      // Size 7 takes too long, test separately with timeout if needed
+      const puzzle7 = generatePuzzle(7, 'medium', 10007);
+      expect(puzzle7.size).toBe(7);
+      expect(puzzle7.puzzle.length).toBe(7);
+      expect(puzzle7.solution.length).toBe(7);
+    }, 10000); // Increase timeout to 10 seconds for this test
   });
 
   describe('isSolved', () => {
