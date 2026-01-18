@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import { 
   isValidWord, 
   findAllWordsFromLetters,
@@ -448,7 +449,7 @@ export default function LetterOrbit() {
                     key={idx} 
                     className={`${styles.word} ${isFound ? styles.found : ''} ${styles.spanning}`}
                   >
-                    {word} <span className={styles.direction}>{direction}</span>
+                    <WordWithDefinition word={word} /> <span className={styles.direction}>{direction}</span>
                   </div>
                 );
               })}

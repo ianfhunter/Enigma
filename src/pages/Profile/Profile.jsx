@@ -439,6 +439,14 @@ function SettingsTab() {
             <span className={styles.flagIcon}>🔍</span>
             <span className={styles.variantLabel}>Yahoo</span>
           </button>
+          <button
+            className={`${styles.variantOption} ${settings?.searchEngine === 'brave' ? styles.active : ''}`}
+            onClick={() => handleSettingChange('searchEngine', 'brave')}
+            disabled={saving}
+          >
+            <span className={styles.flagIcon}>🦁</span>
+            <span className={styles.variantLabel}>Brave Search</span>
+          </button>
         </div>
       </section>
     </div>

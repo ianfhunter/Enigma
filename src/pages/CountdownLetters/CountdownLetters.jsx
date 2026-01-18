@@ -6,6 +6,7 @@ import {
   getLongestWordsFromLetters,
   findAllWordsFromLetters
 } from '../../data/wordUtils';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './CountdownLetters.module.css';
 
 // Letter distributions (based on Scrabble/Countdown)
@@ -458,14 +459,13 @@ export default function CountdownLetters() {
                         <h5>{length} letters ({words.length})</h5>
                         <div className={styles.wordList}>
                           {words.slice(0, 20).map(word => (
-                            <span
+                            <WordWithDefinition
                               key={word}
+                              word={word}
                               className={`${styles.wordItem} ${
                                 submittedWord === word ? styles.matched : ''
                               }`}
-                            >
-                              {word}
-                            </span>
+                            />
                           ))}
                           {words.length > 20 && (
                             <span className={styles.moreWords}>+{words.length - 20} more</span>

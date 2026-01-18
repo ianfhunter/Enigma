@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, findLongestWordWithSeed } from '../../data/wordUtils';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LongestWord.module.css';
 
 const MAX_WORDS = 5;
@@ -257,20 +258,22 @@ export default function LongestWord() {
             {longestPossibleWord && (
               <div className={styles.longestReveal}>
                 <span className={styles.longestLabel}>Longest possible word:</span>
-                <span className={styles.longestWord}>
-                  {longestPossibleWord.word.split('').map((letter, j) => {
-                    const seedStart = longestPossibleWord.word.indexOf(seed);
-                    const isInSeed = j >= seedStart && j < seedStart + seed.length;
-                    return (
-                      <span
-                        key={j}
-                        className={isInSeed ? styles.seedLetter : ''}
-                      >
-                        {letter}
-                      </span>
-                    );
-                  })}
-                </span>
+                <WordWithDefinition word={longestPossibleWord.word} className={styles.longestWordWrapper}>
+                  <span className={styles.longestWord}>
+                    {longestPossibleWord.word.split('').map((letter, j) => {
+                      const seedStart = longestPossibleWord.word.indexOf(seed);
+                      const isInSeed = j >= seedStart && j < seedStart + seed.length;
+                      return (
+                        <span
+                          key={j}
+                          className={isInSeed ? styles.seedLetter : ''}
+                        >
+                          {letter}
+                        </span>
+                      );
+                    })}
+                  </span>
+                </WordWithDefinition>
                 <span className={styles.longestLength}>({longestPossibleWord.length} letters)</span>
               </div>
             )}

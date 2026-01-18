@@ -4,6 +4,7 @@ import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import GameHeader from '../../components/GameHeader';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Hangman.module.css';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -147,11 +148,11 @@ export default function Hangman() {
               ) : gameState === 'gaveUp' ? (
                 <div className={styles.gaveUpMessage}>
                   <span className={styles.gaveUpIcon}>📖</span>
-                  <span>The word was <strong>{word}</strong></span>
+                  <span>The word was <WordWithDefinition word={word} className={styles.wordDef} /></span>
                 </div>
               ) : (
                 <div className={styles.loseMessage}>
-                  The word was <strong>{word}</strong>
+                  The word was <WordWithDefinition word={word} className={styles.wordDef} />
                 </div>
               )}
 

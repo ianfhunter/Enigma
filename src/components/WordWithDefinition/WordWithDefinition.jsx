@@ -4,13 +4,14 @@ import styles from './WordWithDefinition.module.css';
 /**
  * Get search URL for a word based on search engine preference
  */
-function getSearchUrl(word, searchEngine) {
+export function getSearchUrl(word, searchEngine) {
   const searchQuery = `define:${word}`;
   const engines = {
     google: `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`,
     bing: `https://www.bing.com/search?q=${encodeURIComponent(searchQuery)}`,
     duckduckgo: `https://duckduckgo.com/?q=${encodeURIComponent(searchQuery)}`,
     yahoo: `https://search.yahoo.com/search?p=${encodeURIComponent(searchQuery)}`,
+    brave: `https://search.brave.com/search?q=${encodeURIComponent(searchQuery)}`,
   };
   return engines[searchEngine] || engines.google;
 }

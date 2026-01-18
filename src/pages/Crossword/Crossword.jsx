@@ -26,6 +26,7 @@ import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import GameHeader from '../../components/GameHeader';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import {
   parseCluesData,
   generateCrossword,
@@ -631,7 +632,7 @@ export default function Crossword() {
                           <span className={styles.missedWordNumber}>
                             {word.number} {word.direction.charAt(0).toUpperCase()}
                           </span>
-                          <span className={styles.missedWordAnswer}>{word.answer}</span>
+                          <WordWithDefinition word={word.answer} className={styles.missedWordAnswer} />
                           <span className={styles.missedWordClue}>{word.clue}</span>
                         </div>
                       ))}

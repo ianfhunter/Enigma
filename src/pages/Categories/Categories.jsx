@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Categories.module.css';
 
 const GRID_SIZE = 4;
@@ -280,7 +281,12 @@ export default function Categories() {
             >
               <div className={styles.categoryName}>{category.name}</div>
               <div className={styles.categoryWords}>
-                {category.words.join(', ')}
+                {category.words.map((word, index) => (
+                  <span key={word}>
+                    <WordWithDefinition word={word} />
+                    {index < category.words.length - 1 && ', '}
+                  </span>
+                ))}
               </div>
             </div>
           ))}

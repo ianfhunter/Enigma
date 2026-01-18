@@ -235,7 +235,7 @@ router.put('/settings', (req, res) => {
   }
 
   if (searchEngine !== undefined) {
-    if (!['google', 'bing', 'duckduckgo', 'yahoo'].includes(searchEngine)) {
+    if (!['google', 'bing', 'duckduckgo', 'yahoo', 'brave'].includes(searchEngine)) {
       return res.status(400).json({ error: 'Invalid search engine' });
     }
     updates.push('search_engine = ?');

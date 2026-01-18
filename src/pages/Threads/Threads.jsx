@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Threads.module.css';
 
 const GRID_ROWS = 8;
@@ -978,7 +979,11 @@ export default function Threads() {
                 key={index}
                 className={`${styles.word} ${(foundWords.has(word) || gaveUp) ? styles.found : ''} ${gaveUp && !foundWords.has(word) ? styles.revealed : ''}`}
               >
-                {(foundWords.has(word) || gaveUp) ? word : '?'.repeat(word.length)}
+                {(foundWords.has(word) || gaveUp) ? (
+                  <WordWithDefinition word={word} />
+                ) : (
+                  '?'.repeat(word.length)
+                )}
               </span>
             ))}
           </div>
