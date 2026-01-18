@@ -162,7 +162,7 @@ router.delete('/account', async (req, res) => {
 // Get user settings
 router.get('/settings', (req, res) => {
   const settings = db.prepare(`
-    SELECT english_variant, theme, sound_enabled, disabled_games, game_preferences
+    SELECT english_variant, theme, sound_enabled, disabled_games, game_preferences, search_engine
     FROM user_settings WHERE user_id = ?
   `).get(req.session.userId);
 
@@ -174,7 +174,8 @@ router.get('/settings', (req, res) => {
       theme: 'dark',
       soundEnabled: true,
       disabledGames: [],
-      gamePreferences: {}
+      gamePreferences: {},
+      searchEngine: 'google'
     });
   }
 
@@ -183,13 +184,14 @@ router.get('/settings', (req, res) => {
     theme: settings.theme || 'dark',
     soundEnabled: Boolean(settings.sound_enabled),
     disabledGames: JSON.parse(settings.disabled_games || '[]'),
-    gamePreferences: JSON.parse(settings.game_preferences || '{}')
+    gamePreferences: JSON.parse(settings.game_preferences || '{}'),
+    searchEngine: settings.search_engine || 'google'
   });
 });
 
 // Update user settings
 router.put('/settings', (req, res) => {
-  const { englishVariant, theme, soundEnabled, disabledGames, gamePreferences } = req.body;
+  const { englishVariant, theme, soundEnabled, disabledGames, gamePreferences, searchEngine } = req.body;
 
   // Build update query dynamically based on what's provided
   const updates = [];
@@ -230,6 +232,14 @@ router.put('/settings', (req, res) => {
     }
     updates.push('game_preferences = ?');
     values.push(JSON.stringify(gamePreferences));
+  }
+
+  if (searchEngine !== undefined) {
+    if (!['google', 'bing', 'duckduckgo', 'yahoo'].includes(searchEngine)) {
+      return res.status(400).json({ error: 'Invalid search engine' });
+    }
+    updates.push('search_engine = ?');
+    values.push(searchEngine);
   }
 
   if (updates.length === 0) {

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, isCommonWord, getZipfScore, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray, getAllWords } from '../../data/wordUtils';
 import SeedDisplay from '../../components/SeedDisplay';
+import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Pyramid.module.css';
 
 // Calculate word weight score (higher = more common/recognizable)
@@ -770,12 +771,11 @@ export default function Pyramid() {
             <h3>All Possible Words ({allValidWords.length})</h3>
             <div className={styles.words}>
               {allValidWords.slice(0, 100).map(word => (
-                <span
+                <WordWithDefinition
                   key={word}
+                  word={word}
                   className={`${styles.word} ${foundWords.has(word) ? styles.found : styles.missed}`}
-                >
-                  {word}
-                </span>
+                />
               ))}
               {allValidWords.length > 100 && (
                 <span className={styles.moreWords}>...and {allValidWords.length - 100} more</span>

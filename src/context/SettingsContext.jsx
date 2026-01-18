@@ -10,6 +10,7 @@ const defaultSettings = {
   soundEnabled: true,
   disabledGames: [],
   gamePreferences: {},
+  searchEngine: 'google',
 };
 
 export function SettingsProvider({ children }) {

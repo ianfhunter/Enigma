@@ -177,6 +177,12 @@ function runMigrations() {
     console.log('Migration: Adding is_local column to community_sources');
     db.exec('ALTER TABLE community_sources ADD COLUMN is_local INTEGER DEFAULT 0');
   }
+
+  // Add search_engine column to user_settings if missing
+  if (!settingsCols.includes('search_engine')) {
+    console.log('Migration: Adding search_engine column to user_settings');
+    db.exec("ALTER TABLE user_settings ADD COLUMN search_engine TEXT DEFAULT 'google'");
+  }
 }
 
 runMigrations();
