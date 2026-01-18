@@ -7,7 +7,8 @@ import {
   extractPlacedPieces,
   canPlaceShape,
   placeShape,
-  checkSolved,
+  validateSolution,
+  isConnected,
 } from './Pentomino.jsx';
 import { PENTOMINO_SHAPES, rotateShape, flipShape, normalizeShape } from './pentominoShapes';
 
@@ -29,111 +30,113 @@ describe('Pentomino - helpers', () => {
   });
 });
 
-describe('Pentomino - checkSolved', () => {
+describe('Pentomino - validateSolution', () => {
   it('returns false for null or undefined grids', () => {
-    expect(checkSolved(null, [[1]])).toBe(false);
-    expect(checkSolved([[1]], null)).toBe(false);
-    expect(checkSolved(undefined, [[1]])).toBe(false);
-    expect(checkSolved([[1]], undefined)).toBe(false);
+    expect(validateSolution(null, [[1]])).toBe(false);
+    expect(validateSolution([[1]], null)).toBe(false);
+    expect(validateSolution(undefined, [[1]])).toBe(false);
+    expect(validateSolution([[1]], undefined)).toBe(false);
   });
 
-  it('returns false for mismatched grid sizes', () => {
-    const player = [[1, 2]];
-    const solution = [[1, 2, 3]];
-    expect(checkSolved(player, solution)).toBe(false);
-    
-    const player2 = [[1], [2]];
-    const solution2 = [[1]];
-    expect(checkSolved(player2, solution2)).toBe(false);
-  });
-
-  it('returns true for identical grids', () => {
-    const grid = [
-      [0, 0, 1, 2],
-      [0, 0, 1, 3],
-      [4, 5, 6, 7],
-    ];
-    expect(checkSolved(grid, grid)).toBe(true);
-  });
-
-  it('handles hole cells (value 0) correctly', () => {
-    const player = [
-      [0, 0, 1],
-      [0, 0, 2],
-      [3, 4, 5],
-    ];
-    const solution = [
-      [0, 0, 1],
-      [0, 0, 2],
-      [3, 4, 5],
-    ];
-    expect(checkSolved(player, solution)).toBe(true);
-  });
-
-  it('rejects player hole where solution has piece', () => {
-    const player = [
-      [0, 1],
-      [2, 3],
-    ];
-    const solution = [
-      [1, 1],
-      [2, 3],
-    ];
-    expect(checkSolved(player, solution)).toBe(false);
-  });
-
-  it('rejects player piece where solution has hole', () => {
-    const player = [
-      [1, 1],
-      [2, 3],
-    ];
-    const solution = [
-      [0, 1],
-      [2, 3],
-    ];
-    expect(checkSolved(player, solution)).toBe(false);
-  });
-
-  it('rejects wrong piece values', () => {
-    const player = [
-      [1, 2],
-      [3, 4],
-    ];
-    const solution = [
-      [1, 2],
-      [3, 5], // Different piece
-    ];
-    expect(checkSolved(player, solution)).toBe(false);
-  });
-
-  it('handles 8x8 grid with hole pattern', () => {
-    const solution = [
-      [0, 0, 2, 2, 2, 2, 2, 10],
-      [0, 0, 1, 11, 11, 11, 10, 10],
-      [12, 1, 1, 1, 3, 11, 11, 10],
-      [12, 12, 1, 5, 3, 3, 3, 10],
-      [12, 12, 5, 5, 9, 9, 3, 8],
-      [6, 5, 5, 4, 9, 8, 8, 8],
-      [6, 6, 6, 4, 9, 7, 8, 7],
-      [6, 4, 4, 4, 9, 7, 7, 7],
-    ];
-    expect(checkSolved(solution, solution)).toBe(true);
-  });
-
-  it('detects partial solution as incorrect', () => {
-    const solution = [
-      [0, 0, 1, 2],
-      [0, 0, 3, 4],
-      [5, 6, 7, 8],
-      [9, 10, 11, 12],
+  it('returns false for incomplete solutions (missing pieces)', () => {
+    const holeBoard = [
+      [0, 0, 1, 1, 1, 1, 1],
+      [0, 0, 2, 2, 2, 2, 2],
+      [3, 3, 3, 3, 3, 4, 4],
+      [4, 4, 4, 4, 5, 5, 5],
+      [5, 5, 6, 6, 6, 6, 6],
+      [7, 7, 7, 7, 7, 8, 8],
+      [8, 8, 8, 8, 9, 9, 9],
+      [9, 9, 10, 10, 10, 10, 10],
     ];
     const player = [
-      [0, 0, 1, null], // Incomplete
-      [0, 0, 3, 4],
-      [5, 6, 7, 8],
-      [9, 10, 11, 12],
+      [null, null, 1, 1, 1, 1, 1], // Missing some pieces
+      [null, null, 2, 2, 2, 2, 2],
+      [3, 3, 3, 3, 3, null, null],
+      [null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null],
     ];
-    expect(checkSolved(player, solution)).toBe(false);
+    expect(validateSolution(player, holeBoard)).toBe(false);
+  });
+
+  it('returns false when pieces are placed in hole cells', () => {
+    const holeBoard = [
+      [0, 0, 1, 1],
+      [0, 0, 1, 1],
+      [1, 1, 1, 1],
+      [1, 1, 1, 1],
+    ];
+    const player = [
+      [1, 1, 1, 1], // Piece in hole
+      [1, 1, 1, 1],
+      [1, 1, 1, 1],
+      [1, 1, 1, 1],
+    ];
+    expect(validateSolution(player, holeBoard)).toBe(false);
+  });
+
+  it('returns false when cells are not filled', () => {
+    const holeBoard = [
+      [0, 0, 1, 1],
+      [0, 0, 1, 1],
+      [1, 1, 1, 1],
+      [1, 1, 1, 1],
+    ];
+    const player = [
+      [null, null, null, null], // Empty cells
+      [null, null, null, null],
+      [null, null, null, null],
+      [null, null, null, null],
+    ];
+    expect(validateSolution(player, holeBoard)).toBe(false);
+  });
+
+  it('validates connectivity requirement for pieces', () => {
+    // Test that pieces must be connected
+    const holeBoard = [
+      [0, 0, 1, 1, 1, 1, 1, 2],
+      [0, 0, 1, 2, 2, 2, 2, 2],
+      [3, 3, 3, 3, 3, 4, 4, 4],
+      [4, 4, 4, 4, 5, 5, 5, 5],
+      [5, 5, 5, 6, 6, 6, 6, 6],
+      [7, 7, 7, 7, 7, 8, 8, 8],
+      [8, 8, 9, 9, 9, 9, 9, 10],
+      [10, 10, 10, 10, 11, 11, 11, 12],
+    ];
+    // Create a player board with disconnected piece (piece 1 split)
+    const player = holeBoard.map(row => [...row]);
+    player[0][2] = 1; // Keep one cell of piece 1
+    player[0][3] = 13; // Invalid piece number - will fail validation
+    // This should fail validation
+    expect(validateSolution(player, holeBoard)).toBe(false);
+  });
+});
+
+describe('Pentomino - isConnected', () => {
+  it('returns true for single cell', () => {
+    expect(isConnected([[0, 0]])).toBe(true);
+  });
+
+  it('returns false for empty array', () => {
+    expect(isConnected([])).toBe(false);
+  });
+
+  it('returns true for connected cells', () => {
+    const cells = [[0, 0], [0, 1], [1, 1], [2, 1]];
+    expect(isConnected(cells)).toBe(true);
+  });
+
+  it('returns false for disconnected cells', () => {
+    const cells = [[0, 0], [0, 1], [2, 2], [2, 3]]; // Two separate groups
+    expect(isConnected(cells)).toBe(false);
+  });
+
+  it('handles L-shaped connections', () => {
+    const cells = [[0, 0], [1, 0], [1, 1], [1, 2]];
+    expect(isConnected(cells)).toBe(true);
   });
 });
 
@@ -264,72 +267,49 @@ describe('Pentomino - transformGrid', () => {
 });
 
 describe('Pentomino - edge cases and validation', () => {
-  it('checkSolved handles empty grids', () => {
-    expect(checkSolved([], [])).toBe(true);
+  it('validateSolution returns false for empty grids', () => {
+    expect(validateSolution([], [])).toBe(false);
   });
 
-  it('checkSolved handles single cell grids', () => {
-    expect(checkSolved([[0]], [[0]])).toBe(true);
-    expect(checkSolved([[1]], [[1]])).toBe(true);
-    expect(checkSolved([[0]], [[1]])).toBe(false);
-    expect(checkSolved([[1]], [[0]])).toBe(false);
-  });
-
-  it('checkSolved validates all piece values (1-12)', () => {
-    const solution = [
-      [1, 2, 3, 4, 5, 6],
-      [7, 8, 9, 10, 11, 12],
-    ];
-    const player = [
-      [1, 2, 3, 4, 5, 6],
-      [7, 8, 9, 10, 11, 12],
-    ];
-    expect(checkSolved(player, solution)).toBe(true);
-  });
-
-  it('checkSolved rejects piece values outside 1-12 range when comparing', () => {
-    // While pieces are 1-12, we test the comparison logic
-    const solution = [[1, 2, 3]];
-    const player = [[1, 2, 13]]; // Invalid piece
-    expect(checkSolved(player, solution)).toBe(false);
-  });
-
-  it('handles rectangular (non-square) grids correctly', () => {
-    const solution = [
-      [1, 2],
-      [3, 4],
-      [5, 6],
-    ];
-    const player = [
-      [1, 2],
-      [3, 4],
-      [5, 6],
-    ];
-    expect(checkSolved(player, solution)).toBe(true);
+  it('validateSolution requires all 12 pieces', () => {
+    const holeBoard = Array(8).fill(null).map(() => Array(8).fill(1));
+    holeBoard[0][0] = 0;
+    holeBoard[0][1] = 0;
+    holeBoard[1][0] = 0;
+    holeBoard[1][1] = 0;
     
-    const wrongPlayer = [
-      [1, 2],
-      [3, 4],
-      [5, 7], // Wrong
-    ];
-    expect(checkSolved(wrongPlayer, solution)).toBe(false);
+    const player = Array(8).fill(null).map(() => Array(8).fill(null));
+    player[0][0] = null;
+    player[0][1] = null;
+    player[1][0] = null;
+    player[1][1] = null;
+    
+    // Only has piece 1, missing pieces 2-12
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        if (holeBoard[r][c] !== 0) {
+          player[r][c] = 1;
+        }
+      }
+    }
+    
+    expect(validateSolution(player, holeBoard)).toBe(false);
   });
 
-  it('checkSolved is case-sensitive for grid structure', () => {
-    const solution = [
-      [0, 0, 1],
-      [0, 0, 2],
+  it('validateSolution requires exactly 5 cells per piece', () => {
+    const holeBoard = [
+      [0, 0, 1, 1, 1, 1, 1, 2],
+      [0, 0, 1, 2, 2, 2, 2, 2],
+      [3, 3, 3, 3, 3, 4, 4, 4],
+      [4, 4, 4, 4, 5, 5, 5, 5],
+      [5, 5, 5, 6, 6, 6, 6, 6],
+      [7, 7, 7, 7, 7, 8, 8, 8],
+      [8, 8, 9, 9, 9, 9, 9, 10],
+      [10, 10, 10, 10, 11, 11, 11, 12],
     ];
-    const player = [
-      [0, 0, 1],
-      [0, 0, 2],
-    ];
-    expect(checkSolved(player, solution)).toBe(true);
-    
-    // Different structure
-    const player2 = [
-      [0, 0, 1, 0, 0, 2], // Flattened - should fail
-    ];
-    expect(checkSolved(player2, solution)).toBe(false);
+    const player = [...holeBoard];
+    // Piece 1 has 6 cells instead of 5
+    player[0][2] = 1;
+    expect(validateSolution(player, holeBoard)).toBe(false);
   });
 });

@@ -4,7 +4,7 @@
  * A classic polyomino puzzle where players fill an 8×8 board (with a 2×2 hole)
  * using all 12 pentomino pieces. Each pentomino is made of 5 connected squares.
  * 
- * Dataset: Uses 16,146 pre-computed solutions from MIT-licensed mlepage/pentomino-solver
+ * Dataset: Uses compact dataset with one solution per canonical hole position
  * Source: https://github.com/mlepage/pentomino-solver
  * License: MIT
  * 
@@ -29,12 +29,12 @@ const PIECE_NUMBER_TO_SHAPE = PENTOMINO_SHAPES.map((pent, idx) => ({
   ...pent
 }));
 
-// Load puzzles from dataset
+// Load puzzles from compact dataset
 let puzzleDataset = null;
 async function loadPuzzleDataset() {
   if (puzzleDataset) return puzzleDataset;
   try {
-    const response = await fetch('/datasets/pentominoPuzzles.json');
+    const response = await fetch('/datasets/pentominoPuzzles_compact.json');
     puzzleDataset = await response.json();
     return puzzleDataset;
   } catch (e) {
@@ -167,24 +167,119 @@ function placeShape(shape, pieceNum, boardR, boardC, board) {
   return newBoard;
 }
 
-// Check if puzzle is solved
-function checkSolved(playerBoard, solutionBoard) {
-  if (!solutionBoard || !playerBoard) return false;
-  if (solutionBoard.length !== playerBoard.length) return false;
+// Validate that a solution is correct
+// Checks: all 12 pieces placed, all cells filled except hole, no overlaps
+function validateSolution(playerBoard, holeBoard) {
+  if (!playerBoard || !holeBoard) return false;
+  const gridSize = playerBoard.length;
   
-  for (let r = 0; r < solutionBoard.length; r++) {
-    if (solutionBoard[r].length !== playerBoard[r].length) return false;
-    for (let c = 0; c < solutionBoard[r].length; c++) {
-      const playerVal = playerBoard[r][c];
-      const solutionVal = solutionBoard[r][c];
+  // Track which pieces are placed and their cells
+  const pieceCells = new Map(); // pieceNum -> Set of cell positions
+  const allCells = new Set();
+  let holeCount = 0;
+  
+  // Extract pieces and check for overlaps
+  for (let r = 0; r < gridSize; r++) {
+    for (let c = 0; c < gridSize; c++) {
+      const cellKey = `${r},${c}`;
+      const isHole = holeBoard[r][c] === 0;
       
-      if (playerVal === 0 && solutionVal === 0) continue; // Both hole - OK
-      if (playerVal === 0 && solutionVal !== 0) return false;
-      if (playerVal !== 0 && solutionVal === 0) return false;
-      if (playerVal !== solutionVal) return false;
+      if (isHole) {
+        holeCount++;
+        // Hole cells should be empty or 0 in player board
+        if (playerBoard[r][c] !== null && playerBoard[r][c] !== 0) {
+          return false; // Piece placed in hole
+        }
+        continue;
+      }
+      
+      const pieceNum = playerBoard[r][c];
+      if (pieceNum === null || pieceNum === 0) {
+        return false; // Cell not filled
+      }
+      
+      if (pieceNum < 1 || pieceNum > 12) {
+        return false; // Invalid piece number
+      }
+      
+      // Check for overlaps
+      if (allCells.has(cellKey)) {
+        return false; // Overlap detected
+      }
+      allCells.add(cellKey);
+      
+      if (!pieceCells.has(pieceNum)) {
+        pieceCells.set(pieceNum, new Set());
+      }
+      pieceCells.get(pieceNum).add(cellKey);
     }
   }
+  
+  // Check that all 12 pieces are placed
+  if (pieceCells.size !== 12) {
+    return false;
+  }
+  
+  // Check that each piece has exactly 5 cells (pentomino requirement)
+  for (let pieceNum = 1; pieceNum <= 12; pieceNum++) {
+    if (!pieceCells.has(pieceNum)) {
+      return false;
+    }
+    const cells = pieceCells.get(pieceNum);
+    if (cells.size !== 5) {
+      return false; // Piece must have exactly 5 cells
+    }
+    
+    // Check that cells form a connected shape
+    const cellArray = Array.from(cells).map(key => {
+      const [r, c] = key.split(',').map(Number);
+      return [r, c];
+    });
+    
+    if (!isConnected(cellArray)) {
+      return false; // Piece cells must be connected
+    }
+  }
+  
+  // Check that hole is exactly 2x2 (4 cells)
+  if (holeCount !== 4) {
+    return false;
+  }
+  
+  // Check that all non-hole cells are filled (should be 64 - 4 = 60 cells)
+  if (allCells.size !== 60) {
+    return false;
+  }
+  
   return true;
+}
+
+// Check if cells form a connected shape (using BFS)
+function isConnected(cells) {
+  if (cells.length === 0) return false;
+  if (cells.length === 1) return true;
+  
+  const cellSet = new Set(cells.map(([r, c]) => `${r},${c}`));
+  const visited = new Set();
+  const queue = [cells[0]];
+  visited.add(`${cells[0][0]},${cells[0][1]}`);
+  
+  while (queue.length > 0) {
+    const [r, c] = queue.shift();
+    const neighbors = [
+      [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]
+    ];
+    
+    for (const [nr, nc] of neighbors) {
+      const key = `${nr},${nc}`;
+      if (cellSet.has(key) && !visited.has(key)) {
+        visited.add(key);
+        queue.push([nr, nc]);
+      }
+    }
+  }
+  
+  return visited.size === cells.length;
 }
 
 // Export helpers for testing
@@ -196,7 +291,8 @@ export {
   extractPlacedPieces,
   canPlaceShape,
   placeShape,
-  checkSolved,
+  validateSolution,
+  isConnected,
 };
 
 export default function Pentomino() {
@@ -275,7 +371,7 @@ export default function Pentomino() {
   // Check win condition
   useEffect(() => {
     if (!puzzleData || gameState !== 'playing') return;
-    if (checkSolved(playerBoard, puzzleData.grid)) {
+    if (validateSolution(playerBoard, puzzleData.grid)) {
       setGameState('won');
     }
   }, [playerBoard, puzzleData, gameState]);
@@ -687,7 +783,7 @@ export default function Pentomino() {
 
         {giveUp && (
           <div className={styles.giveUpMessage}>
-            Here's the solution. Try another puzzle!
+            Here's a possible solution. Try another puzzle!
           </div>
         )}
       </div>
