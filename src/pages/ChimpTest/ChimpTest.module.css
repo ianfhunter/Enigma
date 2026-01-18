@@ -1,0 +1,338 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: var(--color-primary);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.difficultySelector {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--game-panel-bg);
+  padding: 0.35rem;
+  border-radius: 12px;
+}
+
+.difficultyBtn {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficultyBtn:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--game-key-bg);
+}
+
+.difficultyBtn.active {
+  color: var(--color-text);
+  background: var(--color-primary-bg);
+}
+
+.difficultyBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.statsBar {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem 1.5rem;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+  border-radius: 12px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.statValue {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.hint {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 0.5rem 1rem;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+  border-radius: 8px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+  border-radius: 16px;
+  min-height: 300px;
+  max-width: 600px;
+}
+
+.box {
+  width: 70px;
+  height: 70px;
+  background: var(--game-cell-bg);
+  border: 2px solid var(--game-cell-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.box:hover:not(:disabled) {
+  background: var(--game-cell-bg-hover);
+  border-color: var(--color-primary-border);
+  transform: scale(1.05);
+}
+
+.box:disabled {
+  cursor: not-allowed;
+}
+
+.box.clicked {
+  background: var(--game-accent-green-bg);
+  border-color: var(--game-accent-green-border);
+  animation: clickPulse 0.3s ease;
+}
+
+.box.next {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 10px var(--color-primary);
+  animation: nextPulse 1s ease infinite;
+}
+
+.number {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+@keyframes clickPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes nextPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--color-primary); }
+  50% { box-shadow: 0 0 20px var(--color-primary); }
+}
+
+.gameOver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gameOverEmoji {
+  font-size: 3rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.gameOver h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.gameOver p {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.newBest {
+  color: #ffd700 !important;
+  font-weight: 600;
+}
+
+.newGameBtn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  border: none;
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.startScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+  border-radius: 16px;
+  min-height: 300px;
+  justify-content: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.startText {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  text-align: center;
+}
+
+.startBtn {
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  border: none;
+  border-radius: 12px;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.startBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-glow);
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 400px;
+  }
+
+  .box {
+    width: 60px;
+    height: 60px;
+  }
+
+  .number {
+    font-size: 1.5rem;
+  }
+
+  .statsBar {
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 300px;
+  }
+
+  .box {
+    width: 50px;
+    height: 50px;
+  }
+
+  .number {
+    font-size: 1.2rem;
+  }
+}

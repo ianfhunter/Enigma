@@ -81,18 +81,36 @@ function buildPuzzleFromEquation(equation, lettersPool = LETTERS, randomFn = Mat
 }
 
 export function generatePuzzle(randomFn = Math.random) {
-  const MAX_TRIES = 8;
+  const MAX_TRIES = 20;
   for (let attempt = 0; attempt < MAX_TRIES; attempt++) {
     const equation = UNIQUE_EQUATIONS[Math.floor(randomFn() * UNIQUE_EQUATIONS.length)];
     const puzzle = buildPuzzleFromEquation(equation, LETTERS, randomFn);
 
     // Ensure the generated puzzle really has exactly one solution.
-    if (checkSolution(puzzle, puzzle.solution) && findAllSolutions(puzzle, 2).length === 1) {
-      return puzzle;
+    // Check with maxSolutions=3 to be more thorough
+    if (checkSolution(puzzle, puzzle.solution)) {
+      const solutions = findAllSolutions(puzzle, 3);
+      if (solutions.length === 1) {
+        return puzzle;
+      }
     }
   }
 
-  // Fallback: deterministic, known-unique puzzle
+  // Fallback: use a random equation with randomized letter assignment
+  // Keep trying until we find one with unique solution
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const fallbackIndex = Math.floor(randomFn() * UNIQUE_EQUATIONS.length);
+    const fallback = UNIQUE_EQUATIONS[fallbackIndex];
+    const puzzle = buildPuzzleFromEquation(fallback, LETTERS, randomFn);
+    if (checkSolution(puzzle, puzzle.solution)) {
+      const solutions = findAllSolutions(puzzle, 3);
+      if (solutions.length === 1) {
+        return puzzle;
+      }
+    }
+  }
+
+  // Last resort: use first equation with deterministic mapping (known to work)
   const fallback = UNIQUE_EQUATIONS[0];
   const [operands, result] = fallback;
   const allDigits = [...operands, result].join('').split('').map(Number);

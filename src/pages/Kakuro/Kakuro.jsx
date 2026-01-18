@@ -87,7 +87,7 @@ export default function Kakuro() {
 
   const timerRef = useRef(null);
 
-  const initPuzzle = useCallback(async (newDifficulty = difficulty, forceNew = false) => {
+  const initPuzzle = useCallback(async (newDifficulty = difficulty, forceNew = false, customSeed = null) => {
     const today = getTodayDateString();
     const saved = loadGameState();
 
@@ -117,8 +117,16 @@ export default function Kakuro() {
       return;
     }
 
-    const seedString = `kakuro-${today}-${newDifficulty}${forceNew ? '-' + Date.now() : ''}`;
-    const gameSeed = stringToSeed(seedString);
+    let gameSeed;
+    if (customSeed !== null) {
+      // Convert custom seed to number if needed
+      gameSeed = typeof customSeed === 'string' 
+        ? (isNaN(parseInt(customSeed, 10)) ? stringToSeed(customSeed) : parseInt(customSeed, 10))
+        : customSeed;
+    } else {
+      const seedString = `kakuro-${today}-${newDifficulty}${forceNew ? '-' + Date.now() : ''}`;
+      gameSeed = stringToSeed(seedString);
+    }
     const selected = selectPuzzle(dataset.puzzles, newDifficulty, gameSeed);
 
     setSeed(gameSeed);
@@ -361,6 +369,13 @@ export default function Kakuro() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initPuzzle(difficulty, false, seedNum);
+          }}
         />
       )}
 

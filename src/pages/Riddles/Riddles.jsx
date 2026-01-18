@@ -65,13 +65,13 @@ export default function Riddles() {
     return () => { mounted = false; };
   }, []);
 
-  const initRiddle = useCallback(() => {
+  const initRiddle = useCallback((customSeed = null) => {
     if (!riddles || riddles.length === 0) return;
     setRevealed(false);
     setShowHint(false);
 
-    // Generate a unique seed using timestamp + random to ensure it's always different
-    const uniqueSeed = Date.now() + Math.random() * 1000000;
+    // Use custom seed or generate a unique seed using timestamp + random
+    const uniqueSeed = customSeed ?? (Date.now() + Math.random() * 1000000);
     setSeed(uniqueSeed);
     const riddle = selectRiddle(riddles, uniqueSeed);
     setCurrentRiddle(riddle);
@@ -134,6 +134,13 @@ export default function Riddles() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? parseInt(newSeed, 10) : Date.now())
+              : newSeed;
+            initRiddle(seedNum);
+          }}
         />
       )}
 

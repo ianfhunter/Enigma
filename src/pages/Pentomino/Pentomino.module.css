@@ -1,0 +1,351 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #f472b6;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-secondary);
+}
+
+.gameArea {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Pieces Tray */
+.piecesTray {
+  flex: 0 0 auto;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+.trayTitle {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.piecesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.pieceTrayItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.pieceTrayItem:hover:not(.piecePlaced) {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pieceTrayItem.piecePlaced {
+  opacity: 0.5;
+}
+
+.pieceTrayItem.pieceDragging {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+.piecePreview {
+  display: grid;
+  grid-template-columns: repeat(5, 12px);
+  grid-template-rows: repeat(5, 12px);
+  gap: 1px;
+  cursor: grab;
+  user-select: none;
+  position: relative;
+}
+
+.piecePreview:active {
+  cursor: grabbing;
+}
+
+.pieceSquare {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.pieceLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.rotateBtn, .removeBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: white;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.rotateBtn:hover, .removeBtn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+/* Board */
+.boardWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  display: grid;
+  gap: 2px;
+  background: #111827;
+  border: 2px solid #374151;
+  border-radius: 8px;
+  padding: 2px;
+  position: relative;
+}
+
+.cell {
+  width: 35px;
+  height: 35px;
+  background: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.cell.hole {
+  background: #0f172a !important;
+  cursor: not-allowed;
+  border-color: #475569;
+  border-width: 2px;
+  position: relative;
+}
+
+.cell.hole::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px dashed rgba(148, 163, 184, 0.3);
+  pointer-events: none;
+}
+
+.cell.hole:hover {
+  transform: none;
+  border-color: #64748b;
+}
+
+.cell.cellHover {
+  border-color: rgba(139, 92, 246, 0.6);
+  border-width: 2px;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}
+
+.cell .pieceLabel {
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Ghost preview */
+.ghostPreview {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.ghostSquare {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnDanger {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.btnDanger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+.winMessage {
+  padding: 1rem 1.5rem;
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 8px;
+  color: #22c55e;
+  font-weight: 600;
+  text-align: center;
+}
+
+.giveUpMessage {
+  padding: 1rem 1.5rem;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  color: #ef4444;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .gameArea {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .piecesTray {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .piecesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cell {
+    width: 32px;
+    height: 32px;
+  }
+
+  .pieceLabel {
+    font-size: 0.75rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

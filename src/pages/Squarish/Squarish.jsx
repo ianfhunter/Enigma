@@ -167,16 +167,23 @@ export default function Squarish() {
   const [gameState, setGameState] = useState('playing');
   const [seed, setSeed] = useState(null);
 
-  const initGame = useCallback((gameSize) => {
+  const initGame = useCallback((gameSize, customSeed = null) => {
     const config = CONFIGS[gameSize];
     const today = getTodayDateString();
 
     // Try multiple seeds if generation fails
     let newPuzzle = null;
     let gameSeed = null;
-    for (let attempt = 0; attempt < 10 && !newPuzzle; attempt++) {
-      gameSeed = stringToSeed(`squarish${gameSize}-${today}-${attempt}`);
+    if (customSeed !== null) {
+      gameSeed = typeof customSeed === 'string'
+        ? (isNaN(parseInt(customSeed, 10)) ? stringToSeed(customSeed) : parseInt(customSeed, 10))
+        : customSeed;
       newPuzzle = generateWaffle(gameSeed, gameSize);
+    } else {
+      for (let attempt = 0; attempt < 10 && !newPuzzle; attempt++) {
+        gameSeed = stringToSeed(`squarish${gameSize}-${today}-${attempt}`);
+        newPuzzle = generateWaffle(gameSeed, gameSize);
+      }
     }
 
     if (!newPuzzle) {
@@ -327,6 +334,13 @@ export default function Squarish() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(size, seedNum);
+          }}
         />
       )}
 

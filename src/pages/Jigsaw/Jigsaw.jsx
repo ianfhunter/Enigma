@@ -238,10 +238,10 @@ export default function Jigsaw() {
   const boardHeight = rows * pieceHeight;
   const snapThreshold = 25;
 
-  const initGame = useCallback((newDifficulty = difficulty) => {
+  const initGame = useCallback((newDifficulty = difficulty, customSeed = null) => {
     const { cols: newCols, rows: newRows } = DIFFICULTY[newDifficulty];
     const today = getTodayDateString();
-    const gameSeed = stringToSeed(`jigsaw-${today}-${newCols}x${newRows}`);
+    const gameSeed = customSeed ?? stringToSeed(`jigsaw-${today}-${newCols}x${newRows}`);
     const random = createSeededRandom(gameSeed);
 
     const newPieces = createPieces(newCols, newRows, pieceWidth, pieceHeight, random);
@@ -525,6 +525,13 @@ export default function Jigsaw() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(difficulty, seedNum);
+          }}
         />
       )}
 

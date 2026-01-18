@@ -220,6 +220,17 @@ export const categories = [
         component: () => import('../../pages/LetterWeb'),
       },
       {
+        title: 'Letter Orbit',
+        slug: 'letter-orbit',
+        description: 'Form words using letters from 4 concentric orbit rings. Find words that span all orbits for bonus points!',
+        icon: letterwebIcon,
+        emojiIcon: '🌀',
+        colors: { primary: '#667eea', secondary: '#764ba2' },
+        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/LetterOrbit'),
+      },
+      {
         title: 'Word Search',
         slug: 'word-search',
         description: 'Find hidden words in a grid of letters. Words can go any direction!',

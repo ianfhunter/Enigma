@@ -182,14 +182,15 @@ export default function Sudoku() {
   ) : new Set();
 
   // Generate or load puzzle for a difficulty
-  const ensurePuzzleExists = useCallback((diff, forceNew = false, savedPuzzles = {}) => {
+  const ensurePuzzleExists = useCallback((diff, forceNew = false, savedPuzzles = {}, customSeed = null) => {
     const today = getTodayDateString();
     const existingPuzzle = savedPuzzles[diff] || puzzles[diff];
 
     // Check if we need a new puzzle
     const needsNewPuzzle = forceNew ||
       !existingPuzzle ||
-      existingPuzzle.date !== today;
+      existingPuzzle.date !== today ||
+      customSeed !== null;
 
     if (needsNewPuzzle) {
       // Calculate puzzle number - if forcing new on same day, increment
@@ -198,9 +199,16 @@ export default function Sudoku() {
         puzzleNumber = (existingPuzzle.puzzleNumber || 1) + 1;
       }
 
-      // Create seed from date + difficulty + puzzle number
-      const seedString = `${today}-${diff}-${puzzleNumber}`;
-      const seed = stringToSeed(seedString);
+      // Use custom seed or create seed from date + difficulty + puzzle number
+      let seed;
+      if (customSeed !== null) {
+        seed = typeof customSeed === 'string' 
+          ? (isNaN(parseInt(customSeed, 10)) ? stringToSeed(customSeed) : parseInt(customSeed, 10))
+          : customSeed;
+      } else {
+        const seedString = `${today}-${diff}-${puzzleNumber}`;
+        seed = stringToSeed(seedString);
+      }
 
       const { puzzle, solution } = generatePuzzle(diff, seed);
 
@@ -652,6 +660,20 @@ export default function Sudoku() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            // Regenerate puzzle with custom seed
+            const newPuzzle = ensurePuzzleExists(difficulty, false, {}, seedNum);
+            if (newPuzzle) {
+              setPuzzles(prev => ({ ...prev, [difficulty]: newPuzzle }));
+              const newPlayerState = initializePlayerState(newPuzzle);
+              setPlayerState(prev => ({ ...prev, [difficulty]: newPlayerState }));
+              setHistory([]);
+            }
+          }}
         />
       )}
 

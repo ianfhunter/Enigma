@@ -471,9 +471,9 @@ describe('PackLoader', () => {
       expect(spatialTilesPack.categories[0].name).toBe('Tile & Spatial');
     });
 
-    it('should have 19 games', () => {
-      expect(spatialTilesPack.gameCount).toBe(19);
-      expect(spatialTilesPack.allGames.length).toBe(19);
+    it('should have 20 games', () => {
+      expect(spatialTilesPack.gameCount).toBe(20);
+      expect(spatialTilesPack.allGames.length).toBe(20);
     });
 
     it('should have expected games', () => {
@@ -510,7 +510,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('spatial-tiles');
-      expect(games.length).toBe(19);
+      expect(games.length).toBe(20);
       expect(games.some(g => g.slug === 'jigsaw')).toBe(true);
       expect(games.some(g => g.slug === 'pipe-puzzle')).toBe(true);
     });
@@ -616,9 +616,9 @@ describe('PackLoader', () => {
       expect(classicLogicPack.categories[1].name).toBe('Memory & Speed');
     });
 
-    it('should have 14 games total (12 + 2)', () => {
-      expect(classicLogicPack.gameCount).toBe(14);
-      expect(classicLogicPack.allGames.length).toBe(14);
+    it('should have 16 games total (12 + 4)', () => {
+      expect(classicLogicPack.gameCount).toBe(16);
+      expect(classicLogicPack.allGames.length).toBe(16);
     });
 
     it('should have expected Classic Logic games', () => {
@@ -658,7 +658,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('classic-logic');
-      expect(games.length).toBe(14);
+      expect(games.length).toBe(16);
       expect(games.some(g => g.slug === 'einstein')).toBe(true);
       expect(games.some(g => g.slug === 'memory-match')).toBe(true);
     });
@@ -692,9 +692,9 @@ describe('PackLoader', () => {
       expect(sudokuFamilyPack.categories[0].name).toBe('Sudoku Family');
     });
 
-    it('should have 11 games', () => {
-      expect(sudokuFamilyPack.gameCount).toBe(11);
-      expect(sudokuFamilyPack.allGames.length).toBe(11);
+    it('should have 14 games', () => {
+      expect(sudokuFamilyPack.gameCount).toBe(14);
+      expect(sudokuFamilyPack.allGames.length).toBe(14);
     });
 
     it('should have expected games', () => {
@@ -729,7 +729,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('sudoku-family');
-      expect(games.length).toBe(11);
+      expect(games.length).toBe(14);
       expect(games.some(g => g.slug === 'sudoku')).toBe(true);
       expect(games.some(g => g.slug === 'killer-sudoku')).toBe(true);
     });

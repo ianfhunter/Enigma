@@ -80,6 +80,16 @@
   letter-spacing: 0.02em;
 }
 
+.seedValue.editable {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.seedValue.editable:hover {
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border);
+}
+
 .compact .seedValue {
   padding: 0.1rem 0.25rem;
 }
@@ -87,6 +97,38 @@
 .inline .seedValue {
   background: none;
   padding: 0;
+}
+
+/* Seed input field */
+.seedInput {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  font-size: 1em;
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-primary-border);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  min-width: 80px;
+  outline: none;
+}
+
+.seedInput:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg);
+  box-shadow: 0 0 0 2px var(--color-primary-bg);
+}
+
+.compact .seedInput {
+  padding: 0.1rem 0.25rem;
+  min-width: 60px;
+  font-size: 0.9em;
+}
+
+.inline .seedInput {
+  background: var(--color-bg);
+  min-width: 60px;
 }
 
 /* Action buttons */

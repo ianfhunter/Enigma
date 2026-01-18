@@ -477,6 +477,13 @@ export default function Tatamibari() {
           variant="compact"
           showNewButton={false}
           showShare={false}
+          onSeedChange={(newSeed) => {
+            // Convert string seeds to numbers if needed
+            const seedNum = typeof newSeed === 'string' 
+              ? (isNaN(parseInt(newSeed, 10)) ? parseInt(newSeed, 10) : Date.now())
+              : newSeed;
+            initGame(seedNum);
+          }}
         />
       )}
 
