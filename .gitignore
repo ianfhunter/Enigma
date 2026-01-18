@@ -53,3 +53,8 @@ docker-compose.yml
 # Auto-generated community packs registry
 
 src/packs/installedCommunityPacks.js
+
+
+venv/
+__pycache__/
+*.pyc
