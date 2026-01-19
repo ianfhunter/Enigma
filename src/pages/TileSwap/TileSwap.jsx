@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
 import SeedDisplay from '../../components/SeedDisplay';
+import GameResult from '../../components/GameResult';
+import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './TileSwap.module.css';
 
 // Parse seed from URL if present
@@ -213,13 +215,10 @@ export default function TileSwap() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Tile Swap</h1>
-        <p className={styles.instructions}>
-          Click two pieces to swap them. Arrange the image correctly!
-        </p>
-      </div>
+      <GameHeader
+        title="Tile Swap"
+        instructions="Click two pieces to swap them. Arrange the image correctly!"
+      />
 
       {seed && (
         <SeedDisplay
@@ -229,7 +228,7 @@ export default function TileSwap() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(size, seedNum);
@@ -237,17 +236,11 @@ export default function TileSwap() {
         />
       )}
 
-      <div className={styles.sizeSelector}>
-        {Object.entries(GRID_SIZES).map(([label, value]) => (
-          <button
-            key={label}
-            className={`${styles.sizeBtn} ${size === value ? styles.active : ''}`}
-            onClick={() => initGame(value)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selectedSize={Object.keys(GRID_SIZES).find(k => GRID_SIZES[k] === size)}
+        onSelectSize={(key) => initGame(GRID_SIZES[key])}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -301,11 +294,12 @@ export default function TileSwap() {
           </div>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Puzzle complete in {moves} moves!
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={() => initGame(size)}
+          winTitle="Puzzle Complete!"
+          winMessage={`Completed in ${moves} moves!`}
+        />
 
         <button className={styles.newGameBtn} onClick={() => initGame(size)}>
           New Puzzle

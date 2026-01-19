@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import StatsPanel from '../../components/StatsPanel';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Cirkitz.module.css';
 
 // Cirkitz - hexagonal tile puzzle with colored wedges
@@ -411,34 +415,24 @@ export default function Cirkitz() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Cirkitz</h1>
-        <p className={styles.instructions}>
-          Rotate the tiles so all adjacent wedges match colors.
-          Click to rotate clockwise, Shift+click for counter-clockwise.
-        </p>
-      </div>
+      <GameHeader
+        title="Cirkitz"
+        instructions="Rotate the tiles so all adjacent wedges match colors. Click to rotate clockwise, Shift+click for counter-clockwise."
+      />
 
-      <div className={styles.sizeSelector}>
-        {[3, 4, 5].map((size) => (
-          <button
-            key={size}
-            className={`${styles.sizeBtn} ${puzzleSize === size ? styles.active : ''}`}
-            onClick={() => setPuzzleSize(size)}
-          >
-            {size}×{size}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={[3, 4, 5]}
+        currentSize={puzzleSize}
+        onSizeChange={setPuzzleSize}
+      />
 
       <div className={styles.gameArea}>
-        <div className={styles.stats}>
-          <span className={styles.matchCount}>
-            <span className={styles.boltIcon}>⚡</span>
-            Connections: {matchInfo.matches} / {matchInfo.total}
-          </span>
-        </div>
+        <StatsPanel
+          stats={[
+            { label: '⚡ Connections', value: `${matchInfo.matches} / ${matchInfo.total}` }
+          ]}
+          layout="row"
+        />
 
         <svg
           className={styles.board}
@@ -563,18 +557,23 @@ export default function Cirkitz() {
         </svg>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>⚡</div>
-            <h3>Circuit Complete!</h3>
-            <p>All connections are live!</p>
-          </div>
+          <GameResult
+            status="won"
+            title="⚡ Circuit Complete!"
+            message="All connections are live!"
+            onNewGame={initGame}
+            newGameLabel="New Puzzle"
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <h3>Solution Revealed</h3>
-            <p>Here's how it connects!</p>
-          </div>
+          <GameResult
+            status="gaveUp"
+            title="Solution Revealed"
+            message="Here's how it connects!"
+            onNewGame={initGame}
+            newGameLabel="New Puzzle"
+          />
         )}
 
         <div className={styles.buttons}>
@@ -582,9 +581,7 @@ export default function Cirkitz() {
             New Puzzle
           </button>
           {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
+            <GiveUpButton onGiveUp={handleGiveUp} />
           )}
         </div>
 

@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { formatTime } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import Timer from '../../components/Timer';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './ABCEndView.module.css';
 import puzzleDataset from '../../../public/datasets/abcendviewPuzzles.json';
 
@@ -254,7 +257,7 @@ export default function ABCEndView() {
   const initGame = useCallback(() => {
     // Always resize grid to match current size first
     setGrid(Array(size).fill(null).map(() => Array(size).fill('')));
-    
+
     // Filter puzzles by size
     const candidates = puzzleDataset.puzzles.filter(p =>
       p.rows === size && !usedPuzzleIdsRef.current.has(p.id)
@@ -387,32 +390,19 @@ export default function ABCEndView() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>ABC End View</h1>
-        <p className={styles.instructions}>
-          Place letters {letterOptions.join(', ')} in the grid. Each row and column contains each letter exactly once
-          (rest are empty). Clues around the edge show which letter is seen first from that direction.
-        </p>
-      </div>
+      <GameHeader
+        title="ABC End View"
+        instructions={`Place letters ${letterOptions.join(', ')} in the grid. Each row and column contains each letter exactly once (rest are empty). Clues around the edge show which letter is seen first from that direction.`}
+      />
 
-      <div className={styles.sizeSelector}>
-        {AVAILABLE_SIZES.map((s) => (
-          <button
-            key={s}
-            className={`${styles.sizeBtn} ${size === s ? styles.active : ''}`}
-            onClick={() => setSize(s)}
-          >
-            {s}×{s}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={AVAILABLE_SIZES}
+        selectedSize={size}
+        onSizeChange={setSize}
+      />
 
       <div className={styles.gameArea}>
-        <div className={styles.timerDisplay}>
-          <span className={styles.timerIcon}>⏱</span>
-          <span>{formatTime(timer)}</span>
-        </div>
+        <Timer time={timer} />
 
         <div className={styles.boardWrapper}>
           {/* Top clues */}
@@ -490,20 +480,11 @@ export default function ABCEndView() {
           <button className={styles.letterBtn} onClick={handleClear}>✕</button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Completed in {formatTime(timer)}</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onPlayAgain={initGame}
+          stats={gameState === 'won' ? [{ label: 'Time', value: timer, format: 'time' }] : undefined}
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -526,13 +507,10 @@ export default function ABCEndView() {
           }}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

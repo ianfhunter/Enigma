@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './YinYang.module.css';
 import yinyangPuzzles from '../../../public/datasets/yinyangPuzzles.json';
 
@@ -258,38 +262,24 @@ export default function YinYang() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Yin-Yang</h1>
-        <p className={styles.instructions}>
-          Fill cells black or white. Each color must be connected. No 2×2 squares of the same color allowed.
-          Tap for black, use white mode for white.
-        </p>
-      </div>
+      <GameHeader
+        title="Yin-Yang"
+        instructions="Fill cells black or white. Each color must be connected. No 2×2 squares of the same color allowed. Tap for black, use white mode for white."
+      />
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        options={DIFFICULTIES}
+        value={difficulty}
+        onChange={setDifficulty}
+        className={styles.difficultySelector}
+      />
 
-      <div className={styles.sizeSelector}>
-        {availableSizes.map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        options={availableSizes}
+        value={sizeKey}
+        onChange={setSizeKey}
+        className={styles.sizeSelector}
+      />
 
       <div className={styles.gameArea}>
         {/* Mobile White Toggle */}
@@ -331,19 +321,20 @@ export default function YinYang() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>☯️</div>
-            <h3>Balance Achieved!</h3>
-            <p>Yin and Yang in harmony!</p>
-          </div>
+          <GameResult
+            state="won"
+            title="☯️ Balance Achieved!"
+            message="Yin and Yang in harmony!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
+          <GameResult
+            state="gaveup"
+            message="Better luck next time!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.controls}>
@@ -362,13 +353,10 @@ export default function YinYang() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

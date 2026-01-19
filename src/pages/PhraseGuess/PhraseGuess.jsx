@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { phraseGuessQuotes } from '@datasets/quotes';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import StatsPanel from '../../components/StatsPanel';
+import GameResult from '../../components/GameResult';
 import styles from './PhraseGuess.module.css';
 
 const VOWELS = new Set(['A', 'E', 'I', 'O', 'U']);
@@ -257,13 +259,10 @@ export default function PhraseGuess() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>PhraseGuess</h1>
-        <p className={styles.instructions}>
-          Guess letters to reveal the hidden phrase! Vowels are highlighted.
-        </p>
-      </div>
+      <GameHeader
+        title="PhraseGuess"
+        instructions="Guess letters to reveal the hidden phrase! Vowels are highlighted."
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -273,7 +272,7 @@ export default function PhraseGuess() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(true, seedNum);
@@ -282,16 +281,13 @@ export default function PhraseGuess() {
       )}
 
       <div className={styles.gameArea}>
-        <div className={styles.statsBar}>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Score</span>
-            <span className={styles.statValue}>{score}</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Streak</span>
-            <span className={styles.statValue}>{streak} 🔥</span>
-          </div>
-        </div>
+        <StatsPanel
+          stats={[
+            { label: 'Score', value: score },
+            { label: 'Streak', value: `${streak} 🔥` }
+          ]}
+          layout="row"
+        />
 
         {renderWrongGuessIndicator()}
 
@@ -306,16 +302,19 @@ export default function PhraseGuess() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 You got it! +{(MAX_WRONG_GUESSES - wrongGuesses) * 100} points
-            {solveBonus > 0 && <span className={styles.bonusPoints}> (+{solveBonus} solve bonus!)</span>}
-          </div>
+          <GameResult
+            status="won"
+            title="🎉 You got it!"
+            message={`+${(MAX_WRONG_GUESSES - wrongGuesses) * 100} points${solveBonus > 0 ? ` (+${solveBonus} solve bonus!)` : ''}`}
+          />
         )}
 
         {gameState === 'lost' && (
-          <div className={styles.loseMessage}>
-            😔 {wrongGuesses >= MAX_WRONG_GUESSES ? 'Out of guesses!' : 'Wrong solve attempt!'} The phrase was revealed above.
-          </div>
+          <GameResult
+            status="lost"
+            title={wrongGuesses >= MAX_WRONG_GUESSES ? '😔 Out of guesses!' : '😔 Wrong solve attempt!'}
+            message="The phrase was revealed above."
+          />
         )}
 
         {gameState === 'playing' && (

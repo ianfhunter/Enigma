@@ -1,13 +1,13 @@
 /**
  * Pentomino Game Component
- * 
+ *
  * A classic polyomino puzzle where players fill an 8×8 board (with a 2×2 hole)
  * using all 12 pentomino pieces. Each pentomino is made of 5 connected squares.
- * 
+ *
  * Dataset: Uses compact dataset with one solution per canonical hole position
  * Source: https://github.com/mlepage/pentomino-solver
  * License: MIT
- * 
+ *
  * Gameplay:
  * - Drag pentomino pieces from the tray onto the board
  * - Rotate/flip pieces before placing
@@ -16,9 +16,11 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { PENTOMINO_SHAPES, rotateShape, flipShape, normalizeShape } from './pentominoShapes';
 import styles from './Pentomino.module.css';
 
@@ -47,7 +49,7 @@ async function loadPuzzleDataset() {
 function transformGrid(grid, transformType) {
   const size = grid.length;
   const newGrid = Array(size).fill(null).map(() => Array(size).fill(0));
-  
+
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       let newR, newC;
@@ -93,14 +95,14 @@ function transformGrid(grid, transformType) {
 // Select a puzzle based on seed and apply random transformation
 function selectPuzzle(puzzles, seed) {
   if (!puzzles || puzzles.length === 0) return undefined;
-  
+
   const random = createSeededRandom(seed);
   const puzzle = puzzles[Math.floor(random() * puzzles.length)];
-  
+
   // Apply random transformation (0-7) to vary hole position
   const transformType = Math.floor(random() * 8);
   const transformedGrid = transformGrid(puzzle.grid, transformType);
-  
+
   return {
     ...puzzle,
     grid: transformedGrid,
@@ -111,7 +113,7 @@ function selectPuzzle(puzzles, seed) {
 // Extract placed pieces from grid
 function extractPlacedPieces(grid) {
   const pieces = new Map(); // pieceNumber -> Set of cell positions
-  
+
   for (let r = 0; r < grid.length; r++) {
     for (let c = 0; c < grid[r].length; c++) {
       const pieceNum = grid[r][c];
@@ -123,47 +125,47 @@ function extractPlacedPieces(grid) {
       }
     }
   }
-  
+
   return pieces;
 }
 
 // Check if a shape can be placed at a position
 function canPlaceShape(shape, boardR, boardC, board, placedPieces) {
   const gridSize = board.length;
-  
+
   for (const [relR, relC] of shape) {
     const r = boardR + relR;
     const c = boardC + relC;
-    
+
     // Check bounds
     if (r < 0 || r >= gridSize || c < 0 || c >= gridSize) {
       return false;
     }
-    
+
     // Check if cell is a hole
     if (board[r][c] === 0) {
       return false;
     }
-    
+
     // Check if cell is already occupied
     if (placedPieces.has(`${r},${c}`)) {
       return false;
     }
   }
-  
+
   return true;
 }
 
 // Place a shape on the board
 function placeShape(shape, pieceNum, boardR, boardC, board) {
   const newBoard = board.map(row => [...row]);
-  
+
   for (const [relR, relC] of shape) {
     const r = boardR + relR;
     const c = boardC + relC;
     newBoard[r][c] = pieceNum;
   }
-  
+
   return newBoard;
 }
 
@@ -172,18 +174,18 @@ function placeShape(shape, pieceNum, boardR, boardC, board) {
 function validateSolution(playerBoard, holeBoard) {
   if (!playerBoard || !holeBoard) return false;
   const gridSize = playerBoard.length;
-  
+
   // Track which pieces are placed and their cells
   const pieceCells = new Map(); // pieceNum -> Set of cell positions
   const allCells = new Set();
   let holeCount = 0;
-  
+
   // Extract pieces and check for overlaps
   for (let r = 0; r < gridSize; r++) {
     for (let c = 0; c < gridSize; c++) {
       const cellKey = `${r},${c}`;
       const isHole = holeBoard[r][c] === 0;
-      
+
       if (isHole) {
         holeCount++;
         // Hole cells should be empty or 0 in player board
@@ -192,34 +194,34 @@ function validateSolution(playerBoard, holeBoard) {
         }
         continue;
       }
-      
+
       const pieceNum = playerBoard[r][c];
       if (pieceNum === null || pieceNum === 0) {
         return false; // Cell not filled
       }
-      
+
       if (pieceNum < 1 || pieceNum > 12) {
         return false; // Invalid piece number
       }
-      
+
       // Check for overlaps
       if (allCells.has(cellKey)) {
         return false; // Overlap detected
       }
       allCells.add(cellKey);
-      
+
       if (!pieceCells.has(pieceNum)) {
         pieceCells.set(pieceNum, new Set());
       }
       pieceCells.get(pieceNum).add(cellKey);
     }
   }
-  
+
   // Check that all 12 pieces are placed
   if (pieceCells.size !== 12) {
     return false;
   }
-  
+
   // Check that each piece has exactly 5 cells (pentomino requirement)
   for (let pieceNum = 1; pieceNum <= 12; pieceNum++) {
     if (!pieceCells.has(pieceNum)) {
@@ -229,28 +231,28 @@ function validateSolution(playerBoard, holeBoard) {
     if (cells.size !== 5) {
       return false; // Piece must have exactly 5 cells
     }
-    
+
     // Check that cells form a connected shape
     const cellArray = Array.from(cells).map(key => {
       const [r, c] = key.split(',').map(Number);
       return [r, c];
     });
-    
+
     if (!isConnected(cellArray)) {
       return false; // Piece cells must be connected
     }
   }
-  
+
   // Check that hole is exactly 2x2 (4 cells)
   if (holeCount !== 4) {
     return false;
   }
-  
+
   // Check that all non-hole cells are filled (should be 64 - 4 = 60 cells)
   if (allCells.size !== 60) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -258,18 +260,18 @@ function validateSolution(playerBoard, holeBoard) {
 function isConnected(cells) {
   if (cells.length === 0) return false;
   if (cells.length === 1) return true;
-  
+
   const cellSet = new Set(cells.map(([r, c]) => `${r},${c}`));
   const visited = new Set();
   const queue = [cells[0]];
   visited.add(`${cells[0][0]},${cells[0][1]}`);
-  
+
   while (queue.length > 0) {
     const [r, c] = queue.shift();
     const neighbors = [
       [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]
     ];
-    
+
     for (const [nr, nc] of neighbors) {
       const key = `${nr},${nc}`;
       if (cellSet.has(key) && !visited.has(key)) {
@@ -278,7 +280,7 @@ function isConnected(cells) {
       }
     }
   }
-  
+
   return visited.size === cells.length;
 }
 
@@ -303,13 +305,13 @@ export default function Pentomino() {
   const [loading, setLoading] = useState(true);
   const [seed, setSeed] = useState(null);
   const [giveUp, setGiveUp] = useState(false);
-  
+
   // Drag state
   const [draggedPiece, setDraggedPiece] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [draggedOrientation, setDraggedOrientation] = useState(0); // 0-7: rotations/flips
   const [hoverCell, setHoverCell] = useState(null); // {r, c} where piece would be placed
-  
+
   const datasetRef = useRef(null);
   const boardRef = useRef(null);
   const cellSize = 35;
@@ -340,16 +342,16 @@ export default function Pentomino() {
     } else {
       gameSeed = stringToSeed(`pentomino-${today}`);
     }
-    
+
     setSeed(gameSeed);
-    
+
     const puzzle = selectPuzzle(puzzles, gameSeed);
     if (!puzzle) return;
 
     setPuzzleData(puzzle);
-    
+
     // Initialize player board - start with empty (null) cells except hole (0)
-    const initialBoard = puzzle.grid.map(row => 
+    const initialBoard = puzzle.grid.map(row =>
       row.map(val => val === 0 ? 0 : null)
     );
     setPlayerBoard(initialBoard);
@@ -393,18 +395,18 @@ export default function Pentomino() {
   // Handle piece drag start
   const handlePieceMouseDown = (e, pieceNum) => {
     if (gameState !== 'playing' || isPiecePlaced(pieceNum)) return;
-    
+
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Use the orientation from the tray
     const orientation = pieceOrientations[pieceNum] || 0;
     setDraggedPiece(pieceNum);
     setDraggedOrientation(orientation);
-    
+
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
+
     setDragOffset({ x: clientX, y: clientY });
   };
 
@@ -414,15 +416,15 @@ export default function Pentomino() {
 
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
+
     const rect = boardRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
     const y = clientY - rect.top;
-    
+
     // Convert to grid coordinates (account for padding)
     const c = Math.floor((x - 2) / (cellSize + 2));
     const r = Math.floor((y - 2) / (cellSize + 2));
-    
+
     if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
       setHoverCell({ r, c });
     } else {
@@ -433,11 +435,11 @@ export default function Pentomino() {
   // Handle mouse up - place piece
   const handleMouseUp = useCallback(() => {
     if (draggedPiece === null) return;
-    
+
     if (hoverCell && puzzleData) {
       const pieceInfo = PIECE_NUMBER_TO_SHAPE[draggedPiece - 1];
       let shape = [...pieceInfo.shape];
-      
+
       // Apply orientation transformations
       // 0-3: rotations, 4-7: flip then rotations
       if (draggedOrientation >= 4) {
@@ -450,22 +452,22 @@ export default function Pentomino() {
           shape = rotateShape(shape);
         }
       }
-      
+
       const normalizedShape = normalizeShape(shape);
-      
+
       // Check if placement is valid
       if (canPlaceShape(normalizedShape, hoverCell.r, hoverCell.c, puzzleData.grid, placedPieces.current)) {
         // Remove any existing placement of this piece first
-        let newBoard = playerBoard.map(row => 
+        let newBoard = playerBoard.map(row =>
           row.map(val => val === draggedPiece ? null : val)
         );
-        
+
         // Place the piece
         newBoard = placeShape(normalizedShape, draggedPiece, hoverCell.r, hoverCell.c, newBoard);
         setPlayerBoard(newBoard);
       }
     }
-    
+
     setDraggedPiece(null);
     setHoverCell(null);
     setDraggedOrientation(0);
@@ -490,7 +492,7 @@ export default function Pentomino() {
 
   // Rotate piece in tray (before dragging)
   const [pieceOrientations, setPieceOrientations] = useState({});
-  
+
   const handleRotatePiece = (e, pieceNum) => {
     e.stopPropagation();
     e.preventDefault();
@@ -499,7 +501,7 @@ export default function Pentomino() {
       [pieceNum]: ((prev[pieceNum] || 0) + 1) % 8
     }));
   };
-  
+
   // Get current orientation for a piece
   const getPieceOrientation = (pieceNum) => {
     if (draggedPiece === pieceNum) {
@@ -510,7 +512,7 @@ export default function Pentomino() {
 
   // Remove piece from board
   const handleRemovePiece = (pieceNum) => {
-    const newBoard = playerBoard.map(row => 
+    const newBoard = playerBoard.map(row =>
       row.map(val => val === pieceNum ? null : val)
     );
     setPlayerBoard(newBoard);
@@ -546,7 +548,7 @@ export default function Pentomino() {
   const getCurrentShape = (pieceNum, orientation) => {
     const pieceInfo = PIECE_NUMBER_TO_SHAPE[pieceNum - 1];
     let shape = [...pieceInfo.shape];
-    
+
     // Apply orientation transformations
     // 0-3: rotations, 4-7: flip then rotations
     if (orientation >= 4) {
@@ -574,15 +576,10 @@ export default function Pentomino() {
 
   return (
     <div className={styles.container}>
-      <Link to="/" className={styles.backLink}>← Back to Home</Link>
-      
-      <div className={styles.header}>
-        <h1 className={styles.title}>Pentomino</h1>
-        <p className={styles.instructions}>
-          Drag pentomino pieces from the tray onto the board. Each pentomino is a 5-square piece.
-          The 2×2 hole cells are marked in dark gray. Click the rotate button on a piece to change its orientation.
-        </p>
-      </div>
+      <GameHeader
+        title="Pentomino"
+        instructions="Drag pentomino pieces from the tray onto the board. Each pentomino is a 5-square piece. The 2×2 hole cells are marked in dark gray. Click the rotate button on a piece to change its orientation."
+      />
 
       {seed !== null && <SeedDisplay seed={seed} />}
 
@@ -596,14 +593,14 @@ export default function Pentomino() {
               const placed = isPiecePlaced(pieceNum);
               const orientation = getPieceOrientation(pieceNum);
               const shape = getCurrentShape(pieceNum, orientation);
-              
+
               // Find bounding box for grid sizing
               let maxR = 0, maxC = 0;
               for (const [r, c] of shape) {
                 maxR = Math.max(maxR, r);
                 maxC = Math.max(maxC, c);
               }
-              
+
               return (
                 <div
                   key={pieceNum}
@@ -611,7 +608,7 @@ export default function Pentomino() {
                 >
                   <div
                     className={styles.piecePreview}
-                    style={{ 
+                    style={{
                       opacity: placed ? 0.4 : 1,
                       gridTemplateColumns: `repeat(${maxC + 1}, 12px)`,
                       gridTemplateRows: `repeat(${maxR + 1}, 12px)`,
@@ -658,10 +655,10 @@ export default function Pentomino() {
 
         {/* Game board */}
         <div className={styles.boardWrapper}>
-          <div 
+          <div
             ref={boardRef}
             className={styles.board}
-            style={{ 
+            style={{
               gridTemplateColumns: `repeat(${gridSize}, ${cellSize}px)`,
               width: `${gridSize * cellSize}px`,
               height: `${gridSize * cellSize}px`
@@ -674,16 +671,16 @@ export default function Pentomino() {
                 const showAnswer = showSolution || giveUp;
                 const playerPieceInfo = playerVal ? PIECE_NUMBER_TO_SHAPE[playerVal - 1] : null;
                 const solutionPieceInfo = showAnswer && solutionVal > 0 ? PIECE_NUMBER_TO_SHAPE[solutionVal - 1] : null;
-                
+
                 // Check if this cell is in hover preview
                 let isHoverPreview = false;
                 if (hoverCell && draggedPiece) {
                   const shape = getCurrentShape(draggedPiece, draggedOrientation);
-                  isHoverPreview = shape.some(([relR, relC]) => 
+                  isHoverPreview = shape.some(([relR, relC]) =>
                     hoverCell.r + relR === r && hoverCell.c + relC === c
                   );
                 }
-                
+
                 return (
                   <div
                     key={`${r}-${c}`}
@@ -693,8 +690,8 @@ export default function Pentomino() {
                       isHoverPreview ? styles.cellHover : ''
                     }`}
                     style={{
-                      backgroundColor: isHole 
-                        ? '#0f172a' 
+                      backgroundColor: isHole
+                        ? '#0f172a'
                         : showAnswer && solutionVal > 0
                           ? solutionPieceInfo.color
                           : playerVal && playerPieceInfo
@@ -715,7 +712,7 @@ export default function Pentomino() {
 
           {/* Ghost preview of dragged piece */}
           {draggedPiece && hoverCell && (
-            <div 
+            <div
               className={styles.ghostPreview}
               style={{
                 left: `${hoverCell.c * (cellSize + 2) + 2}px`,
@@ -752,40 +749,34 @@ export default function Pentomino() {
 
       <div className={styles.controls}>
         <div className={styles.buttonGroup}>
-          <button 
-            className={styles.btn} 
+          <button
+            className={styles.btn}
             onClick={handleNewPuzzle}
             disabled={loading}
           >
             New Puzzle
           </button>
-          <button 
-            className={styles.btn} 
+          <button
+            className={styles.btn}
             onClick={() => setShowSolution(!showSolution)}
             disabled={gameState === 'won'}
           >
             {showSolution ? 'Hide' : 'Show'} Solution
           </button>
-          <button 
-            className={`${styles.btn} ${styles.btnDanger}`}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState === 'won' || giveUp}
-          >
-            Give Up
-          </button>
+          />
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Congratulations! You solved the pentomino puzzle!
-          </div>
-        )}
-
-        {giveUp && (
-          <div className={styles.giveUpMessage}>
-            Here's a possible solution. Try another puzzle!
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={handleNewPuzzle}
+          winTitle="Congratulations!"
+          winMessage="You solved the pentomino puzzle!"
+          gaveUpTitle="Solution Shown"
+          gaveUpMessage="Here's a possible solution. Try another puzzle!"
+        />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Sokoban.module.css';
 
 const GRID_SIZE = 10;
@@ -134,12 +135,9 @@ export {
 export default function Sokoban() {
   const boardRef = useRef(null);
 
-  const [packId, setPackId] = useState(() => localStorage.getItem('sokoban.packId') || PACKS[0].id);
+  const [packId, setPackId] = usePersistedState('sokoban.packId', PACKS[0].id);
   const [levels, setLevels] = useState([]);
-  const [levelIndex, setLevelIndex] = useState(() => {
-    const n = Number(localStorage.getItem('sokoban.levelIndex') || 0);
-    return Number.isFinite(n) ? n : 0;
-  });
+  const [levelIndex, setLevelIndex] = usePersistedState('sokoban.levelIndex', 0);
 
   const [status, setStatus] = useState({ type: 'idle' }); // idle | loading | ready | error
   const [history, setHistory] = useState([]);
@@ -164,7 +162,6 @@ export default function Sokoban() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('sokoban.packId', packId);
     loadPack(pack);
   }, [packId, pack, loadPack]);
 
@@ -179,7 +176,6 @@ export default function Sokoban() {
 
   useEffect(() => {
     if (!levels.length) return;
-    localStorage.setItem('sokoban.levelIndex', String(levelIndex));
     const lvl = levels[levelIndex];
     setHistory([]);
     setState(buildLevelState(lvl.grid));

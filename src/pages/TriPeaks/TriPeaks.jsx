@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import SeedDisplay from '../../components/SeedDisplay';
 import styles from './TriPeaks.module.css';
 
@@ -177,7 +178,7 @@ function revealCardAbove(peaks, peakIndex, row, col) {
 
 // Check if all peaks are cleared
 function areAllPeaksCleared(peaks) {
-  return peaks.every(peak => 
+  return peaks.every(peak =>
     peak.every(row => row.every(card => card.removed))
   );
 }
@@ -198,12 +199,8 @@ export default function TriPeaks() {
   const [peaks, setPeaks] = useState([]);
   const [drawPile, setDrawPile] = useState([]);
   const [wastePile, setWastePile] = useState([]);
-  const [seed, setSeed] = useState(() => {
-    const saved = localStorage.getItem('tri-peaks-seed');
-    if (saved) return parseInt(saved, 10);
-    const today = getTodayDateString();
-    return stringToSeed(`tri-peaks-${today}`);
-  });
+  const getDefaultSeed = () => stringToSeed(`tri-peaks-${getTodayDateString()}`);
+  const [seed, setSeed] = usePersistedState('tri-peaks-seed', getDefaultSeed());
   const [moves, setMoves] = useState(0);
   const [gameState, setGameState] = useState('ready'); // ready, playing, won, lost
   const [message, setMessage] = useState('');
@@ -222,7 +219,6 @@ export default function TriPeaks() {
     setMessage('');
     setHistory([]);
     setSeed(gameSeed);
-    localStorage.setItem('tri-peaks-seed', String(gameSeed));
   }, [seed]);
 
   useEffect(() => {
@@ -397,7 +393,7 @@ export default function TriPeaks() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(seedNum);

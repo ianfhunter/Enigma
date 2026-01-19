@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Nonogram.module.css';
 
 // Import all images from each folder
@@ -340,14 +343,10 @@ export default function Nonogram() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Nonogram</h1>
-        <p className={styles.instructions}>
-          Fill in cells to reveal the hidden picture! Numbers show consecutive filled cells.
-          Tap to fill, use mark mode to mark X.
-        </p>
-      </div>
+      <GameHeader
+        title="Nonogram"
+        instructions="Fill in cells to reveal the hidden picture! Numbers show consecutive filled cells. Tap to fill, use mark mode to mark X."
+      />
 
       <div className={styles.gameArea}>
         {/* Mobile Mark Toggle */}
@@ -426,36 +425,39 @@ export default function Nonogram() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎨</div>
-            <h3>Puzzle Complete!</h3>
-            <p>You revealed: {currentImage?.name}</p>
+          <GameResult
+            state="won"
+            title="🎨 Puzzle Complete!"
+            message={<>You revealed: {currentImage?.name}</>}
+            actions={[{ label: 'New Puzzle', onClick: loadRandomPuzzle, primary: true }]}
+          >
             <div className={styles.revealedImage}>
               <img src={currentImage?.url} alt={currentImage?.name} />
             </div>
-          </div>
+          </GameResult>
         )}
 
         {gameState === 'gave_up' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.winEmoji}>🖼️</div>
-            <h3>Solution Revealed</h3>
-            <p>It was: {currentImage?.name}</p>
+          <GameResult
+            state="gaveup"
+            title="🖼️ Solution Revealed"
+            message={<>It was: {currentImage?.name}</>}
+            actions={[{ label: 'New Puzzle', onClick: loadRandomPuzzle, primary: true }]}
+          >
             <div className={styles.revealedImage}>
               <img src={currentImage?.url} alt={currentImage?.name} />
             </div>
-          </div>
+          </GameResult>
         )}
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={loadRandomPuzzle}>
             New Puzzle
           </button>

@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Fillomino.module.css';
 
 const GRID_SIZES = {
@@ -258,10 +262,7 @@ export default function Fillomino() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Fillomino</h1>
-        </div>
+        <GameHeader title="Fillomino" />
         <div className={styles.loading}>Loading puzzles...</div>
       </div>
     );
@@ -273,47 +274,24 @@ export default function Fillomino() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Fillomino</h1>
-        <div className={styles.instructions}>
-          <p className={styles.instructionMain}>
-            Fill every cell with a number. Each number tells you the size of its group.
-          </p>
-          <ul className={styles.instructionList}>
-            <li><strong>Rule 1:</strong> A group of connected cells with the same number must contain exactly that many cells.
-              <em>Example: A "3" must be part of a group of exactly 3 connected "3"s.</em></li>
-            <li><strong>Rule 2:</strong> Two different groups of the same number cannot touch orthogonally (up/down/left/right).
-              <em>Example: Two separate groups of "2"s cannot share an edge.</em></li>
-            <li><strong>Tip:</strong> Purple cells are given hints. Use them to deduce the rest!</li>
-            <li><strong>Controls:</strong> Click a cell, then type 1-9 or use the number pad. Arrow keys to move, Backspace to clear.</li>
-          </ul>
-        </div>
-      </div>
+      <GameHeader
+        title="Fillomino"
+        instructions="Fill every cell with a number. Each number tells you the size of its group. A group of connected cells with the same number must contain exactly that many cells."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        options={Object.keys(GRID_SIZES)}
+        value={sizeKey}
+        onChange={setSizeKey}
+        className={styles.sizeSelector}
+      />
 
-      <div className={styles.difficultySelector}>
-        {['easy', 'medium', 'hard'].map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        options={['easy', 'medium', 'hard']}
+        value={difficulty}
+        onChange={setDifficulty}
+        className={styles.difficultySelector}
+      />
 
       <div className={styles.gameArea}>
         <div
@@ -349,11 +327,20 @@ export default function Fillomino() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All regions complete!</p>
-          </div>
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message="All regions complete!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
+        )}
+
+        {gameState === 'gave_up' && (
+          <GameResult
+            state="gaveup"
+            message="Better luck next time!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.numberPad}>
@@ -396,11 +383,10 @@ export default function Fillomino() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

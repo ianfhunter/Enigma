@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { isValidWord, shuffleArray, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
 import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import { isValidWord, shuffleArray, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordShuffle.module.css';
 
@@ -295,13 +297,10 @@ export default function WordShuffle() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>WordShuffle</h1>
-        <p className={styles.instructions}>
-          Connect adjacent letters to form words. Drag to select!
-        </p>
-      </div>
+      <GameHeader
+        title="WordShuffle"
+        instructions="Connect adjacent letters to form words. Drag to select!"
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -311,7 +310,7 @@ export default function WordShuffle() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(size, false, seedNum);
@@ -319,17 +318,12 @@ export default function WordShuffle() {
         />
       )}
 
-      <div className={styles.sizeSelector}>
-        {[4, 5].map((s) => (
-          <button
-            key={s}
-            className={`${styles.sizeBtn} ${size === s ? styles.active : ''}`}
-            onClick={() => initGame(s)}
-          >
-            {s}×{s}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={[4, 5]}
+        selected={size}
+        onSelect={(s) => initGame(s)}
+        formatLabel={(s) => `${s}×${s}`}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -381,16 +375,13 @@ export default function WordShuffle() {
         </div>
 
         {gameState === 'playing' && (
-          <button
-            className={`${styles.btn} ${styles.giveUpBtn}`}
-            onClick={() => {
+          <GiveUpButton
+            onGiveUp={() => {
               if (timerRef.current) clearInterval(timerRef.current);
               setGameState('ended');
               setShowAllWords(true);
             }}
-          >
-            Give Up
-          </button>
+          />
         )}
 
         {currentWord && (

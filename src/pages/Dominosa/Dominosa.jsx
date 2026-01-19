@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Dominosa.module.css';
 
 function shuffled(arr) {
@@ -232,18 +234,27 @@ export default function Dominosa() {
           </select>
         </label>
         <button className={styles.button} onClick={() => newGame(maxN)}>New</button>
+        <GiveUpButton
+          onGiveUp={giveUp}
+          disabled={solved || gaveUp}
+        />
+        <GameResult
+          show={gaveUp}
+          type="gaveUp"
+          title="Solution shown"
+          inline
+        />
+        <GameResult
+          show={solved && !gaveUp}
+          type="won"
+          title="Solved!"
+          inline
+        />
         {!solved && !gaveUp && (
-          <button className={`${styles.button} ${styles.giveUpBtn}`} onClick={giveUp}>Give Up</button>
-        )}
-        <div className={styles.status}>
-          {gaveUp ? (
-            <span className={styles.gaveUp}>Solution shown</span>
-          ) : solved ? (
-            <span className={styles.win}>Solved!</span>
-          ) : (
+          <div className={styles.status}>
             <span>Placed: {usedPairs.length}/{requiredCount}</span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div

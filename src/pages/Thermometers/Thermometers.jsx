@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Thermometers.module.css';
 import { ThermometerBulb, ThermometerTube } from './ThermometerSVG';
 
@@ -95,12 +98,26 @@ function tryGeneratePuzzle(size) {
   // Generate a solution - randomly fill thermometers
   const solution = Array(size).fill(null).map(() => Array(size).fill(false));
 
+  // Track total filled to ensure puzzle isn't trivially empty
+  let totalFilled = 0;
   for (const thermo of thermometers) {
     // Random fill level (0 to length)
     const fillLevel = Math.floor(Math.random() * (thermo.cells.length + 1));
     for (let i = 0; i < fillLevel; i++) {
       const [r, c] = thermo.cells[i];
       solution[r][c] = true;
+      totalFilled++;
+    }
+  }
+
+  // Ensure at least some cells are filled (avoid trivial empty puzzle)
+  if (totalFilled < Math.ceil(thermometers.length / 2)) {
+    // Fill at least one cell in each of the first few thermometers
+    for (let i = 0; i < Math.min(3, thermometers.length); i++) {
+      const [r, c] = thermometers[i].cells[0];
+      if (!solution[r][c]) {
+        solution[r][c] = true;
+      }
     }
   }
 
@@ -210,7 +227,26 @@ function checkValidity(filled, thermometers, rowClues, colClues, size) {
   return errors;
 }
 
-function checkSolved(filled, solution, size) {
+function checkSolved(filled, solution, rowClues, colClues, size) {
+  // First verify row clues are satisfied
+  for (let r = 0; r < size; r++) {
+    let count = 0;
+    for (let c = 0; c < size; c++) {
+      if (filled[r][c]) count++;
+    }
+    if (count !== rowClues[r]) return false;
+  }
+
+  // Verify column clues are satisfied
+  for (let c = 0; c < size; c++) {
+    let count = 0;
+    for (let r = 0; r < size; r++) {
+      if (filled[r][c]) count++;
+    }
+    if (count !== colClues[c]) return false;
+  }
+
+  // Finally check if filled matches solution exactly
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       if (filled[r][c] !== solution[r][c]) return false;
@@ -260,7 +296,7 @@ export default function Thermometers() {
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(filled, puzzleData.solution, size)) {
+    if (checkSolved(filled, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues, size)) {
       setGameState('won');
     }
   }, [filled, puzzleData, showErrors, size]);
@@ -308,26 +344,16 @@ export default function Thermometers() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Thermometers</h1>
-        <p className={styles.instructions}>
-          Fill thermometers from the bulb (round end) upward. Mercury must be continuous from the bulb.
-          Numbers show how many filled cells in each row/column.
-        </p>
-      </div>
+      <GameHeader
+        title="Thermometers"
+        instructions="Fill thermometers from the bulb (round end) upward. Mercury must be continuous from the bulb. Numbers show how many filled cells in each row/column."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.gridWrapper}>
@@ -395,19 +421,21 @@ export default function Thermometers() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🌡️</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All thermometers correctly filled!</p>
-          </div>
+          <GameResult
+            state="won"
+            title="🌡️ Puzzle Solved!"
+            message="All thermometers correctly filled!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Better luck next time!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.controls}>
@@ -426,13 +454,10 @@ export default function Thermometers() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

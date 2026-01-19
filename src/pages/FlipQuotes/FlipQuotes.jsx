@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import StatsPanel from '../../components/StatsPanel';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './FlipQuotes.module.css';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -278,13 +281,10 @@ export default function FlipQuotes() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>FlipQuotes</h1>
-        <p className={styles.instructions}>
-          Flip each tile to toggle between two letters and reveal the hidden quote!
-        </p>
-      </div>
+      <GameHeader
+        title="FlipQuotes"
+        instructions="Flip each tile to toggle between two letters and reveal the hidden quote!"
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -294,7 +294,7 @@ export default function FlipQuotes() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(true, seedNum);
@@ -314,48 +314,51 @@ export default function FlipQuotes() {
         </div>
 
         <div className={styles.controls}>
-          <div className={styles.statsRow}>
-            <div className={styles.stat}>
-              <span className={styles.statLabel}>Flips</span>
-              <span className={styles.statValue}>{flipCount}</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statLabel}>Hints</span>
-              <span className={styles.statValue}>{hintsUsed}</span>
-            </div>
-
-            {gameState === 'playing' && (
-              <button className={styles.hintBtn} onClick={getHint}>
-                💡 Get Hint
-              </button>
-            )}
-          </div>
+          <StatsPanel
+            stats={[
+              { label: 'Flips', value: flipCount },
+              { label: 'Hints', value: hintsUsed }
+            ]}
+            layout="row"
+            size="small"
+          />
+          {gameState === 'playing' && (
+            <button className={styles.hintBtn} onClick={getHint}>
+              💡 Get Hint
+            </button>
+          )}
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winTitle}>🎉 Puzzle Solved!</div>
-            <div className={styles.winStats}>
-              Time: {formatTime(timeTaken)} • Flips: {flipCount} • Hints: {hintsUsed}
-            </div>
-          </div>
+          <GameResult
+            status="won"
+            title="🎉 Puzzle Solved!"
+            stats={[
+              { label: 'Time', value: formatTime(timeTaken) },
+              { label: 'Flips', value: flipCount },
+              { label: 'Hints', value: hintsUsed }
+            ]}
+            onNewGame={() => initGame(false)}
+            newGameLabel="New Random Puzzle"
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
+          <GameResult
+            status="gaveUp"
+            title="Solution Revealed"
+            onNewGame={() => initGame(false)}
+            newGameLabel="New Random Puzzle"
+          />
         )}
 
         <div className={styles.buttonRow}>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
-            disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          {gameState === 'playing' && (
+            <GiveUpButton
+              onGiveUp={handleGiveUp}
+              disabled={gameState !== 'playing'}
+            />
+          )}
           <button className={styles.newGameBtn} onClick={() => initGame(false)}>
             New Random Puzzle
           </button>

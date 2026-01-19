@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
-import SeedDisplay from '../../components/SeedDisplay';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Categories.module.css';
 
@@ -243,13 +245,10 @@ export default function Categories() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Categories</h1>
-        <p className={styles.instructions}>
-          Find groups of four words that share a connection
-        </p>
-      </div>
+      <GameHeader
+        title="Categories"
+        instructions="Find groups of four words that share a connection"
+      />
 
       {seed && (
         <SeedDisplay
@@ -259,7 +258,7 @@ export default function Categories() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(seedNum);
@@ -356,12 +355,7 @@ export default function Categories() {
               >
                 Submit
               </button>
-              <button
-                className={`${styles.controlBtn} ${styles.giveUpBtn}`}
-                onClick={handleGiveUp}
-              >
-                Give Up
-              </button>
+              <GiveUpButton onGiveUp={handleGiveUp} />
             </>
           ) : (
             <button
@@ -374,17 +368,16 @@ export default function Categories() {
         </div>
 
         {/* Results section for end of game */}
-        {gameState !== 'playing' && (
-          <div className={styles.results}>
-            <div className={styles.resultsTitle}>
-              {gameState === 'won' ? '🎉 Congratulations!' : gameState === 'gaveUp' ? '📖 Solution Revealed' : '😔 Game Over'}
-            </div>
-            <div className={styles.resultsStats}>
-              <span>Mistakes: {mistakes}/{MAX_MISTAKES}</span>
-              <span>Categories found: {solvedCategories.length}/4</span>
-            </div>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'lost' ? 'lost' : gameState}
+          onNewGame={handleNewGame}
+          winTitle="Congratulations!"
+          winMessage={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
+          lostTitle="Game Over"
+          lostMessage={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
+          gaveUpTitle="Solution Revealed"
+          gaveUpMessage={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
+        />
       </div>
     </div>
   );

@@ -327,3 +327,26 @@
   color: var(--color-text-secondary);
   font-size: 13px;
 }
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-text-secondary);
+}
+
+.attribution {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+.attribution a {
+  color: #22d3ee;
+  text-decoration: none;
+}
+
+.attribution a:hover {
+  text-decoration: underline;
+}

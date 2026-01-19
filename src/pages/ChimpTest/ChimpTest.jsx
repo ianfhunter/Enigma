@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import GameResult from '../../components/GameResult';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './ChimpTest.module.css';
 
 const DIFFICULTIES = {
@@ -13,7 +16,7 @@ function generateSequence(length, seed) {
   const random = createSeededRandom(seed);
   const positions = Array.from({ length }, (_, i) => i);
   const shuffled = [...positions].sort(() => random() - 0.5);
-  
+
   return shuffled.map((pos, idx) => ({
     number: idx + 1,
     index: pos,
@@ -27,10 +30,7 @@ export default function ChimpTest() {
   const [sequence, setSequence] = useState([]);
   const [clickedNumbers, setClickedNumbers] = useState([]);
   const [score, setScore] = useState(0);
-  const [bestScore, setBestScore] = useState(() => {
-    const saved = localStorage.getItem('chimp-test-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestScore, setBestScore] = usePersistedState('chimp-test-best', {});
   const showTimeoutRef = useRef(null);
 
   const { startLength, increment, label } = DIFFICULTIES[difficulty];
@@ -58,7 +58,7 @@ export default function ChimpTest() {
     if (showTimeoutRef.current) {
       clearTimeout(showTimeoutRef.current);
     }
-    
+
     showTimeoutRef.current = setTimeout(() => {
       setGameState('playing');
     }, 2000);
@@ -86,16 +86,12 @@ export default function ChimpTest() {
     };
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('chimp-test-best', JSON.stringify(bestScore));
-  }, [bestScore]);
-
   const handleBoxClick = (number) => {
     if (gameState !== 'playing') return;
     if (clickedNumbers.includes(number)) return;
 
     const expectedNumber = clickedNumbers.length + 1;
-    
+
     if (number === expectedNumber) {
       const newClicked = [...clickedNumbers, number];
       setClickedNumbers(newClicked);
@@ -133,31 +129,23 @@ export default function ChimpTest() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Chimp Test</h1>
-        <p className={styles.instructions}>
-          Click the boxes in order (1, 2, 3...). The sequence gets longer each round!
-        </p>
-      </div>
+      <GameHeader
+        title="Chimp Test"
+        instructions="Click the boxes in order (1, 2, 3...). The sequence gets longer each round!"
+      />
 
-      <div className={styles.controls}>
-        <div className={styles.difficultySelector}>
-          {Object.entries(DIFFICULTIES).map(([key, { label: diffLabel }]) => (
-            <button
-              key={key}
-              className={`${styles.difficultyBtn} ${difficulty === key ? styles.active : ''}`}
-              onClick={() => {
-                setDifficulty(key);
-                initGame();
-              }}
-              disabled={gameState === 'playing' || gameState === 'showing'}
-            >
-              {diffLabel}
-            </button>
-          ))}
-        </div>
-      </div>
+      <DifficultySelector
+        difficulties={Object.keys(DIFFICULTIES).map(key => ({
+          id: key,
+          label: DIFFICULTIES[key].label,
+        }))}
+        selectedDifficulty={difficulty}
+        onSelectDifficulty={(key) => {
+          setDifficulty(key);
+          initGame();
+        }}
+        disabled={gameState === 'playing' || gameState === 'showing'}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -217,19 +205,12 @@ export default function ChimpTest() {
           </div>
         )}
 
-        {gameState === 'lost' && (
-          <div className={styles.gameOver}>
-            <div className={styles.gameOverEmoji}>🦍</div>
-            <h3>Game Over!</h3>
-            <p>You reached round {currentRound + 1} with a score of {score}</p>
-            {score === currentBest && score > 0 && (
-              <p className={styles.newBest}>🏆 New Best Score!</p>
-            )}
-            <button className={styles.newGameBtn} onClick={initGame}>
-              Play Again
-            </button>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'lost' ? 'lost' : 'playing'}
+          onNewGame={initGame}
+          lostTitle="Game Over!"
+          lostMessage={`You reached round ${currentRound + 1} with a score of ${score}${score === currentBest && score > 0 ? ' • 🏆 New Best Score!' : ''}`}
+        />
 
         {gameState !== 'lost' && gameState !== 'showing' && gameState !== 'playing' && (
           <button className={styles.newGameBtn} onClick={initGame}>

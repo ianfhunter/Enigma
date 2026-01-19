@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
-import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Cryptogram.module.css';
 
 // Parse seed from URL if present
@@ -330,13 +332,10 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Cryptogram</h1>
-        <p className={styles.instructions}>
-          Each letter has been replaced with another. Click a letter and type to decode the quote!
-        </p>
-      </div>
+      <GameHeader
+        title="Cryptogram"
+        instructions="Each letter has been replaced with another. Click a letter and type to decode the quote!"
+      />
 
       {seed && (
         <SeedDisplay
@@ -346,7 +345,7 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(seedNum);
@@ -393,30 +392,19 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
           autoComplete="off"
         />
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winTitle}>🎉 Puzzle Solved!</div>
-            <div className={styles.winStats}>
-              Time: {formatTime(timeTaken)} • Hints used: {hintsUsed}
-            </div>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={() => initGame(Math.floor(Math.random() * 2147483647))}
+          winTitle="Puzzle Solved!"
+          winMessage={`Time: ${formatTime(timeTaken)} • Hints used: ${hintsUsed}`}
+          gaveUpTitle="Solution Revealed"
+        />
 
         <div className={styles.buttonRow}>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={() => initGame(Math.floor(Math.random() * 2147483647))}>
             New Random Puzzle
           </button>

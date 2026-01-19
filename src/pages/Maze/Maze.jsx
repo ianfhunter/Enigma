@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Maze.module.css';
 
 const GRID_SIZES = {
@@ -94,10 +98,7 @@ export default function Maze() {
   const [gameState, setGameState] = useState('playing');
   const [showSolution, setShowSolution] = useState(false);
   const [solution, setSolution] = useState([]);
-  const [bestTimes, setBestTimes] = useState(() => {
-    const saved = localStorage.getItem('maze-best-times');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestTimes, setBestTimes] = usePersistedState('maze-best-times', {});
 
   const timerRef = useRef(null);
   const gameAreaRef = useRef(null);
@@ -133,10 +134,6 @@ export default function Maze() {
       }
     };
   }, [isRunning]);
-
-  useEffect(() => {
-    localStorage.setItem('maze-best-times', JSON.stringify(bestTimes));
-  }, [bestTimes]);
 
   const movePlayer = useCallback((dx, dy) => {
     if (gameState !== 'playing' || !mazeData) return;
@@ -294,25 +291,16 @@ export default function Maze() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Maze</h1>
-        <p className={styles.instructions}>
-          Navigate from start to finish! Use arrow keys or WASD to move.
-        </p>
-      </div>
+      <GameHeader
+        title="Maze"
+        instructions="Navigate from start to finish! Use arrow keys or WASD to move."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selectedSize={sizeKey}
+        onSelectSize={setSizeKey}
+      />
 
       <div className={styles.gameArea} ref={gameAreaRef} tabIndex={0}>
         <div className={styles.statsBar}>
@@ -385,24 +373,20 @@ export default function Maze() {
           <button className={styles.controlBtn} onClick={() => movePlayer(0, 1)}>↓</button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Maze Complete!</h3>
-            <p>Time: {formatTime(timer)} • Moves: {moves}</p>
-            {moves === solution.length - 1 && (
-              <p className={styles.perfect}>🏆 Perfect Path!</p>
-            )}
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Maze Complete!"
+          winMessage={`Time: ${formatTime(timer)} • Moves: ${moves}${moves === solution.length - 1 ? ' • 🏆 Perfect Path!' : ''}`}
+        />
 
         <div className={styles.buttons}>
-          <button
-            className={styles.hintBtn}
-            onClick={() => setShowSolution(!showSolution)}
-          >
-            {showSolution ? 'Hide Solution' : 'Show Solution'}
-          </button>
+          <GiveUpButton
+            onGiveUp={() => setShowSolution(!showSolution)}
+            disabled={gameState === 'won'}
+            buttonText={showSolution ? 'Hide Solution' : 'Show Solution'}
+            requireConfirmation={false}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             {gameState === 'won' ? 'Play Again' : 'New Maze'}
           </button>

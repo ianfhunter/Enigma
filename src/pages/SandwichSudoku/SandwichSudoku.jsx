@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { formatTime } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import Timer from '../../components/Timer';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './SandwichSudoku.module.css';
 
 // Generate a valid solved Sudoku grid
@@ -426,21 +428,13 @@ export default function SandwichSudoku() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Sandwich Sudoku</h1>
-        <p className={styles.instructions}>
-          Standard Sudoku rules apply. Clues outside the grid show the sum of digits
-          sandwiched between 1 and 9 in that row/column. A clue of 0 means the 1 and 9
-          are adjacent.
-        </p>
-      </div>
+      <GameHeader
+        title="Sandwich Sudoku"
+        instructions="Standard Sudoku rules apply. Clues outside the grid show the sum of digits sandwiched between 1 and 9 in that row/column. A clue of 0 means the 1 and 9 are adjacent."
+      />
 
       <div className={styles.gameArea}>
-        <div className={styles.timerDisplay}>
-          <span className={styles.timerIcon}>⏱</span>
-          <span>{formatTime(timer)}</span>
-        </div>
+        <Timer time={timer} />
 
         <div className={styles.boardWrapper}>
           {/* Top clues */}
@@ -504,20 +498,14 @@ export default function SandwichSudoku() {
           <button className={styles.numBtn} onClick={handleClear}>✕</button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🥪</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Completed in {formatTime(timer)}</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Puzzle Solved!"
+          winMessage={`Completed in ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
+          winEmoji="🥪"
+          gaveUpTitle="Solution Revealed"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -540,13 +528,10 @@ export default function SandwichSudoku() {
           }}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

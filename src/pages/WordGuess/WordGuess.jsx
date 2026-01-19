@@ -8,6 +8,9 @@ import {
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import StatsPanel from '../../components/StatsPanel';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordGuess.module.css';
 
@@ -240,26 +243,19 @@ export default function WordGuess() {
         )}
 
         {gameState === 'playing' && guesses.length > 0 && (
-          <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-            Give Up
-          </button>
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
         )}
 
         {gameState !== 'playing' && (
-          <div className={styles.result}>
-            {gameState === 'won' ? (
-              <div className={styles.winMessage}>
-                🎉 {guesses.length === 1 ? 'Genius!' : guesses.length <= 3 ? 'Impressive!' : 'Well done!'}
-              </div>
-            ) : (
-              <div className={styles.loseMessage}>
-                The word was <WordWithDefinition word={targetWord} className={styles.targetWord} />
-              </div>
-            )}
-            <button className={styles.playAgainBtn} onClick={initGame}>
-              Play Again
-            </button>
-          </div>
+          <GameResult
+            state={gameState === 'won' ? 'won' : gameState === 'gaveup' ? 'gaveup' : 'lost'}
+            title={gameState === 'won' ? `🎉 ${guesses.length === 1 ? 'Genius!' : guesses.length <= 3 ? 'Impressive!' : 'Well done!'}` : undefined}
+            message={gameState !== 'won' && <span>The word was <WordWithDefinition word={targetWord} className={styles.targetWord} /></span>}
+            actions={[{ label: 'Play Again', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.keyboard}>
@@ -278,26 +274,15 @@ export default function WordGuess() {
           ))}
         </div>
 
-        <div className={styles.statsPanel}>
-          <div className={styles.stat}>
-            <span className={styles.statValue}>{stats.played}</span>
-            <span className={styles.statLabel}>Played</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statValue}>
-              {stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%
-            </span>
-            <span className={styles.statLabel}>Win %</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statValue}>{stats.streak}</span>
-            <span className={styles.statLabel}>Streak</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statValue}>{stats.maxStreak}</span>
-            <span className={styles.statLabel}>Max</span>
-          </div>
-        </div>
+        <StatsPanel
+          stats={[
+            { label: 'Played', value: stats.played },
+            { label: 'Win %', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+            { label: 'Streak', value: stats.streak },
+            { label: 'Max', value: stats.maxStreak },
+          ]}
+          className={styles.statsPanel}
+        />
       </div>
     </div>
   );

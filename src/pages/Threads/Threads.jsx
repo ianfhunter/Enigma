@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
-import SeedDisplay from '../../components/SeedDisplay';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Threads.module.css';
 
@@ -862,13 +864,10 @@ export default function Threads() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Threads</h1>
-        <p className={styles.instructions}>
-          Find the themed words by connecting adjacent letters
-        </p>
-      </div>
+      <GameHeader
+        title="Threads"
+        instructions="Find the themed words by connecting adjacent letters"
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -878,7 +877,7 @@ export default function Threads() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(seedNum);
@@ -989,29 +988,19 @@ export default function Threads() {
           </div>
         </div>
 
-        {/* Win message */}
-        {gameWon && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <div className={styles.winText}>You completed today&apos;s Threads!</div>
-            <div className={styles.winTheme}>Theme: {puzzle.theme}</div>
-          </div>
-        )}
-
-        {/* Give up message */}
-        {gaveUp && !gameWon && (
-          <div className={styles.giveUpMessage}>
-            <div className={styles.giveUpEmoji}>😔</div>
-            <div className={styles.giveUpText}>Solution Revealed</div>
-            <div className={styles.giveUpTheme}>Theme: {puzzle.theme}</div>
-          </div>
-        )}
+        {/* Win/Give up messages */}
+        <GameResult
+          gameState={gameWon ? 'won' : gaveUp ? 'gaveUp' : 'playing'}
+          onNewGame={initGame}
+          winTitle="You completed today's Threads!"
+          winMessage={`Theme: ${puzzle.theme}`}
+          gaveUpTitle="Solution Revealed"
+          gaveUpMessage={`Theme: ${puzzle.theme}`}
+        />
 
         <div className={styles.buttonRow}>
           {!gameWon && !gaveUp && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
+            <GiveUpButton onGiveUp={handleGiveUp} />
           )}
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { isValidWord, isCommonWord, getZipfScore, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray, getAllWords } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { isValidWord, isCommonWord, getZipfScore, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray, getAllWords } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Pyramid.module.css';
 
@@ -607,13 +609,10 @@ export default function Pyramid() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Pyramid</h1>
-        <p className={styles.instructions}>
-          Connect adjacent letters to form words. Use all {TOTAL_CELLS} letters to win!
-        </p>
-      </div>
+      <GameHeader
+        title="Pyramid"
+        instructions={`Connect adjacent letters to form words. Use all ${TOTAL_CELLS} letters to win!`}
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -623,7 +622,7 @@ export default function Pyramid() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(false, seedNum);
@@ -704,21 +703,19 @@ export default function Pyramid() {
           </div>
         )}
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 All letters used! You win!
-            {hintsUsed > 0 && <div className={styles.winSubtext}>with {hintsUsed} hint{hintsUsed > 1 ? 's' : ''}</div>}
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={() => initGame(true)}
+          winTitle="All letters used! You win!"
+          winMessage={hintsUsed > 0 ? `with ${hintsUsed} hint${hintsUsed > 1 ? 's' : ''}` : ''}
+        />
 
         {gameState === 'playing' && (
           <div className={styles.actionButtons}>
             <button className={styles.hintBtn} onClick={getHint}>
               💡 Hint
             </button>
-            <button className={styles.giveUpBtn} onClick={giveUp}>
-              Give Up
-            </button>
+            <GiveUpButton onGiveUp={giveUp} />
           </div>
         )}
 

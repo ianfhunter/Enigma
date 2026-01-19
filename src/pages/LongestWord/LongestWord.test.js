@@ -224,4 +224,32 @@ describe('LongestWord - Guess Validation', () => {
 
     expect(result.valid).toBe(true);
   });
+
+  it('should strip leading and trailing whitespace before validation', () => {
+    const validateGuessWithTrim = (guess, seed) => {
+      const upperGuess = guess.trim().toUpperCase();
+      const upperSeed = seed.toUpperCase();
+
+      if (!upperGuess.includes(upperSeed)) {
+        return { valid: false, error: 'Word must contain the seed letters' };
+      }
+
+      if (upperGuess.length < 4) {
+        return { valid: false, error: 'Word must be at least 4 letters' };
+      }
+
+      if (!isValidWord(upperGuess)) {
+        return { valid: false, error: 'Not a valid word' };
+      }
+
+      return { valid: true };
+    };
+
+    // Leading whitespace
+    expect(validateGuessWithTrim('  SINGING', 'ING').valid).toBe(true);
+    // Trailing whitespace
+    expect(validateGuessWithTrim('SINGING  ', 'ING').valid).toBe(true);
+    // Both
+    expect(validateGuessWithTrim('  SINGING  ', 'ING').valid).toBe(true);
+  });
 });

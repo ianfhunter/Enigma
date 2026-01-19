@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Sequence.module.css';
 import { COLORS, FREQUENCIES, SPEEDS } from './Sequence.constants';
 
@@ -31,18 +33,11 @@ export default function Sequence() {
   const [gameState, setGameState] = useState('idle'); // 'idle', 'showing', 'playing', 'gameOver'
   const [activeColor, setActiveColor] = useState(null);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(() => {
-    const saved = localStorage.getItem('sequence-high-score');
-    return saved ? parseInt(saved, 10) : 0;
-  });
+  const [highScore, setHighScore] = usePersistedState('sequence-high-score', 0);
   const [speed, setSpeed] = useState('normal'); // 'slow', 'normal', 'fast'
 
   const timeoutRef = useRef(null);
   const isShowingRef = useRef(false);
-
-  useEffect(() => {
-    localStorage.setItem('sequence-high-score', highScore.toString());
-  }, [highScore]);
 
   useEffect(() => {
     return () => {
@@ -138,13 +133,10 @@ export default function Sequence() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Sequence</h1>
-        <p className={styles.instructions}>
-          Watch, remember, repeat! How long a sequence can you memorize?
-        </p>
-      </div>
+      <GameHeader
+        title="Sequence"
+        instructions="Watch, remember, repeat! How long a sequence can you memorize?"
+      />
 
       <div className={styles.speedSelector}>
         {['slow', 'normal', 'fast'].map((s) => (
@@ -200,11 +192,12 @@ export default function Sequence() {
           </div>
         </div>
 
-        {gameState === 'gameOver' && (
-          <div className={styles.gameOverMessage}>
-            Game Over! You scored {score} {score === 1 ? 'point' : 'points'}
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'gameOver' ? 'lost' : 'playing'}
+          onNewGame={startGame}
+          lostTitle="Game Over!"
+          lostMessage={`You scored ${score} ${score === 1 ? 'point' : 'points'}`}
+        />
       </div>
     </div>
   );

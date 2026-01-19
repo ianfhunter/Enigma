@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Numberlink.module.css';
 import puzzleDataset from '../../../public/datasets/numberlinkPuzzles.json';
 
@@ -413,38 +417,22 @@ export default function Numberlink() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Numberlink</h1>
-        <p className={styles.instructions}>
-          Connect matching numbers with a continuous line. Lines cannot cross or share cells.
-          Click and drag to draw paths.
-        </p>
-      </div>
+      <GameHeader
+        title="Numberlink"
+        instructions="Connect matching numbers with a continuous line. Lines cannot cross or share cells. Click and drag to draw paths."
+      />
 
-      <div className={styles.difficultySelector}>
-        {difficulties.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={difficulties}
+        selected={difficulty}
+        onSelect={setDifficulty}
+      />
 
-      <div className={styles.sizeSelector}>
-        {(sizesByDifficulty[difficulty] || []).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={sizesByDifficulty[difficulty] || []}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.progress}>
@@ -502,33 +490,28 @@ export default function Numberlink() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>All Connected!</h3>
-            <p>Puzzle solved perfectly</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 All Connected!"
+          message="Puzzle solved perfectly"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Better luck next time!"
+        />
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             {gameState === 'won' || gameState === 'gaveUp' ? 'Play Again' : 'New Puzzle'}
           </button>

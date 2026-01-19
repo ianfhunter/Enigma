@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import StatsPanel from '../../components/StatsPanel';
+import GiveUpButton from '../../components/GiveUpButton';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { REGION_CONFIGS, buildLookup, getRegionCode } from '@datasets/provincialMapData';
 import styles from './ProvincialMapFill.module.css';
 
@@ -24,10 +27,7 @@ export default function ProvincialMapFill() {
   const [showGuessedList, setShowGuessedList] = useState(false);
   const [geoData, setGeoData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('provincial-map-fill-stats');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [stats, setStats] = usePersistedState('provincial-map-fill-stats', {});
   const inputRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -72,11 +72,6 @@ export default function ProvincialMapFill() {
     }
     return () => clearInterval(timerRef.current);
   }, [gameStarted, isComplete]);
-
-  // Save stats
-  useEffect(() => {
-    localStorage.setItem('provincial-map-fill-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -201,13 +196,10 @@ export default function ProvincialMapFill() {
   if (!selectedRegion) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Provincial Map Fill</h1>
-          <p className={styles.instructions}>
-            Choose a region to start filling in the map!
-          </p>
-        </div>
+        <GameHeader
+          title="Provincial Map Fill"
+          instructions="Choose a region to start filling in the map!"
+        />
 
         <div className={styles.regionGrid}>
           {REGION_OPTIONS.map(region => (
@@ -252,20 +244,13 @@ export default function ProvincialMapFill() {
             Start Game
           </button>
 
-          <div className={styles.statsPanel}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{currentStats.gamesPlayed}</span>
-              <span className={styles.statLabel}>Games</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{currentStats.bestScore}</span>
-              <span className={styles.statLabel}>Best Score</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{currentStats.bestTime ? formatTime(currentStats.bestTime) : '--'}</span>
-              <span className={styles.statLabel}>Best Time</span>
-            </div>
-          </div>
+          <StatsPanel
+            stats={[
+              { label: 'Games', value: currentStats.gamesPlayed },
+              { label: 'Best Score', value: currentStats.bestScore },
+              { label: 'Best Time', value: currentStats.bestTime ? formatTime(currentStats.bestTime) : '--' },
+            ]}
+          />
         </div>
       </div>
     );

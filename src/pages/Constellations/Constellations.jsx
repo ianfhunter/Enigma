@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import ModeSelector from '../../components/ModeSelector';
+import StatsPanel from '../../components/StatsPanel';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Constellations.module.css';
 
 const TOTAL_ROUNDS = 12;
@@ -244,10 +247,7 @@ export default function Constellations() {
   const [gameOver, setGameOver] = useState(false);
   const [usedConstellations, setUsedConstellations] = useState([]);
   const [streak, setStreak] = useState(0);
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('constellations-stats');
-    return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 };
-  });
+  const [stats, setStats] = usePersistedState('constellations-stats', { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 });
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -267,10 +267,6 @@ export default function Constellations() {
     })();
     return () => { mounted = false; };
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('constellations-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const setupRound = useCallback(() => {
     const available = constellations.filter(c => !usedConstellations.includes(c.id));
@@ -360,11 +356,10 @@ export default function Constellations() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Constellations</h1>
-          <p className={styles.instructions}>Loading constellations…</p>
-        </div>
+        <GameHeader
+          title="Constellations"
+          instructions="Loading constellations…"
+        />
       </div>
     );
   }
@@ -372,11 +367,10 @@ export default function Constellations() {
   if (!totalConstellations) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Constellations</h1>
-          <p className={styles.instructions}>No constellations available.</p>
-        </div>
+        <GameHeader
+          title="Constellations"
+          instructions="No constellations available."
+        />
       </div>
     );
   }
@@ -385,49 +379,28 @@ export default function Constellations() {
   if (!mode) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Constellations</h1>
-          <p className={styles.instructions}>
-            Learn the 88 IAU constellations! Identify star patterns and test your astronomy knowledge.
-          </p>
-        </div>
+        <GameHeader
+          title="Constellations"
+          instructions="Learn the 88 IAU constellations! Identify star patterns and test your astronomy knowledge."
+        />
 
         <div className={styles.menuArea}>
-          <div className={styles.modeCards}>
-            <button className={styles.modeCard} onClick={() => startGame('challenge')}>
-              <span className={styles.modeIcon}>🏆</span>
-              <span className={styles.modeTitle}>Challenge</span>
-              <span className={styles.modeDesc}>{TOTAL_ROUNDS} constellations to identify</span>
-            </button>
+          <ModeSelector
+            modes={[
+              { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} constellations to identify` },
+              { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep stargazing!' },
+            ]}
+            onSelectMode={startGame}
+          />
 
-            <button className={styles.modeCard} onClick={() => startGame('endless')}>
-              <span className={styles.modeIcon}>∞</span>
-              <span className={styles.modeTitle}>Endless</span>
-              <span className={styles.modeDesc}>Keep stargazing!</span>
-            </button>
-          </div>
-
-          <div className={styles.statsPanel}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.totalCorrect}</span>
-              <span className={styles.statLabel}>Correct</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.bestStreak}</span>
-              <span className={styles.statLabel}>Best Streak</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%
-              </span>
-              <span className={styles.statLabel}>Win Rate</span>
-            </div>
-          </div>
+          <StatsPanel
+            stats={[
+              { label: 'Played', value: stats.played },
+              { label: 'Correct', value: stats.totalCorrect },
+              { label: 'Best Streak', value: stats.bestStreak },
+              { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+            ]}
+          />
 
           <div className={styles.dataInfo}>
             <span>⭐ {totalConstellations} official IAU constellations</span>

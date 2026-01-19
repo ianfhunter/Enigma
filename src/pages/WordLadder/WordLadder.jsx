@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { isValidWord, generateWordLadderPuzzle, differsByOneLetter } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordLadder.module.css';
@@ -131,16 +133,10 @@ export default function WordLadder() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>
-          ← Back to Games
-        </Link>
-        <h1 className={styles.title}>Word Ladder</h1>
-        <p className={styles.instructions}>
-          Transform <strong>{puzzle.startWord}</strong> into <strong>{puzzle.endWord}</strong> by changing one letter at a time.
-          Each step must be a valid word.
-        </p>
-      </div>
+      <GameHeader
+        title="Word Ladder"
+        instructions={`Transform ${puzzle.startWord} into ${puzzle.endWord} by changing one letter at a time. Each step must be a valid word.`}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.ladderSection}>
@@ -283,12 +279,11 @@ export default function WordLadder() {
           </div>
 
           <div className={styles.actions}>
-            <button
-              className={styles.solutionBtn}
-              onClick={() => setShowSolution(!showSolution)}
-            >
-              {showSolution ? 'Hide Solution' : 'Show Solution'}
-            </button>
+            <GiveUpButton
+              onGiveUp={() => setShowSolution(true)}
+              disabled={showSolution || gameWon}
+              buttonText="Show Solution"
+            />
             <button className={styles.newGameBtn} onClick={initializePuzzle}>
               New Puzzle
             </button>

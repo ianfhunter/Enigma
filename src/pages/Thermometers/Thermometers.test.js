@@ -32,8 +32,12 @@ describe('Thermometers - helpers', () => {
     expect(errors.size).toBeGreaterThanOrEqual(0);
   });
 
-  it('checkSolved compares to solution', () => {
+  it('checkSolved compares to solution and verifies clues', () => {
     const puz = generatePuzzle(5);
-    expect(checkSolved(puz.solution, puz.solution, 5)).toBe(true);
+    // Correct solution should pass
+    expect(checkSolved(puz.solution, puz.solution, puz.rowClues, puz.colClues, 5)).toBe(true);
+    // Empty grid should fail (clues won't match)
+    const emptyFilled = Array(5).fill(null).map(() => Array(5).fill(false));
+    expect(checkSolved(emptyFilled, puz.solution, puz.rowClues, puz.colClues, 5)).toBe(false);
   });
 });

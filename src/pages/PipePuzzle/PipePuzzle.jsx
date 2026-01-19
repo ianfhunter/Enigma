@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PipePuzzle.module.css';
 
 // Pipe types: each pipe has openings in certain directions
@@ -165,10 +168,7 @@ export default function PipePuzzle() {
   const [moves, setMoves] = useState(0);
   const [gameState, setGameState] = useState('playing');
   const [connectedCells, setConnectedCells] = useState(new Set());
-  const [bestScores, setBestScores] = useState(() => {
-    const saved = localStorage.getItem('pipe-puzzle-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestScores, setBestScores] = usePersistedState('pipe-puzzle-best', {});
 
   const size = GRID_SIZES[gridSizeKey];
 
@@ -183,10 +183,6 @@ export default function PipePuzzle() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('pipe-puzzle-best', JSON.stringify(bestScores));
-  }, [bestScores]);
 
   const handleCellClick = (row, col) => {
     if (gameState === 'won') return;
@@ -232,26 +228,17 @@ export default function PipePuzzle() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Pipe Puzzle</h1>
-        <p className={styles.instructions}>
-          Connect all pipes to the water source 💧 in the top-left corner.<br />
-          Click any pipe to rotate it 90°.
-        </p>
-      </div>
+      <GameHeader
+        title="Pipe Puzzle"
+        instructions="Connect all pipes to the water source 💧 in the top-left corner. Click any pipe to rotate it 90°."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((sizeKey) => (
-          <button
-            key={sizeKey}
-            className={`${styles.sizeBtn} ${gridSizeKey === sizeKey ? styles.active : ''}`}
-            onClick={() => setGridSizeKey(sizeKey)}
-          >
-            {sizeKey}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selectedSize={gridSizeKey}
+        onSizeChange={setGridSizeKey}
+        getLabel={(key) => key}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -300,13 +287,12 @@ export default function PipePuzzle() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>All Connected!</h3>
-            <p>Solved in {moves} moves</p>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="All Connected!"
+          winMessage={`Solved in ${moves} moves`}
+        />
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'New Puzzle'}

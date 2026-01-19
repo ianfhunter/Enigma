@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './WordArithmetic.module.css';
 import {
   generatePuzzle,
@@ -117,14 +119,10 @@ export default function WordArithmetic() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Word Arithmetic</h1>
-        <p className={styles.instructions}>
-          Assign a unique digit (0-9) to each letter so the equation is correct.
-          Leading letters cannot be zero.
-        </p>
-      </div>
+      <GameHeader
+        title="Word Arithmetic"
+        instructions="Assign a unique digit (0-9) to each letter so the equation is correct. Leading letters cannot be zero."
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.equation}>
@@ -220,28 +218,23 @@ export default function WordArithmetic() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🧮</div>
-            <h3>Correct!</h3>
-            <p>You cracked the code!</p>
-            <div className={styles.solution}>
-              {puzzleData.words.map((word, i) => (
-                <span key={i}>
-                  {i > 0 && ' + '}
-                  {evaluateWord(word, letterMap)}
-                </span>
-              ))}
-              {' = '}
-              {evaluateWord(puzzleData.result, letterMap)}
-            </div>
-          </div>
+          <GameResult
+            status="won"
+            title="🧮 Correct!"
+            message="You cracked the code!"
+            revealedAnswer={`${puzzleData.words.map((word, i) => `${i > 0 ? ' + ' : ''}${evaluateWord(word, letterMap)}`).join('')} = ${evaluateWord(puzzleData.result, letterMap)}`}
+            onNewGame={initGame}
+            newGameLabel="New Puzzle"
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
+          <GameResult
+            status="gaveUp"
+            title="Solution Revealed"
+            onNewGame={initGame}
+            newGameLabel="New Puzzle"
+          />
         )}
 
         <div className={styles.controls}>
@@ -263,13 +256,10 @@ export default function WordArithmetic() {
           }}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>
