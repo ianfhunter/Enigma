@@ -67,10 +67,27 @@ jobs:
             echo "## Available Games" >> docs/index.md
             echo "" >> docs/index.md
 
-            find src/pages -name "README.md" -type f | sort | while read file; do
-            game_dir=$(dirname "$file" | sed 's|src/pages/||')
-            game_name=$(basename "$game_dir")
-            echo "- [$game_name](games/$game_dir/README.md)" >> docs/index.md
+            find src/packs/ -name "manifest.js" | sort | while read file; do
+            # Extract clean game pack names
+            gamepack=$(dirname "$file" | sed 's|src/packs/||' | tr '-' ' ' | sed 's/\b\(.\)/\u\1/g') 
+            gamepack="$gamepack Pack"
+            echo "### $gamepack" >> docs/index.md
+            echo "" >> docs/index.md
+            
+             # Collect games under the game pack
+             while read slug; do
+               # If slug contains '-', split and capitalize each part, then it will join without spaces
+               if [[ "$slug" == *"-"* ]]; then
+                 cleangamename=$(echo "$slug" | tr '-' ' ' | sed 's/\b\(.\)/\u\1/g' | tr -d ' ')
+               else
+                 # No dash → it will capitalize first letter
+                 cleangamename=$(echo "$slug" | sed 's/^\(.\)/\u\1/')
+               fi
+               echo "- [$cleangamename](games/$cleangamename/README.md)" >> docs/index.md
+             
+             # It will fetch slug entries only from the manifest files
+             done < <(grep "slug:" "$file" | sed -n "s/.*slug: '\([^']*\)'.*/\1/p" | sort)
+             echo "" >> docs/index.md
             done
 
       - name: Add Jekyll config
