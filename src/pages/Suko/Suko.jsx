@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './Suko.module.css';
 
 // Suko is a 3x3 grid where each cell contains 1-9 (each used once)
@@ -59,11 +62,11 @@ function calculateSums(grid) {
 function calculateColorSums(grid, colorPattern, colors) {
   const flat = gridToFlat(grid);
   const sortingNumber = colorPattern.map(String).join('');
-  
+
   const greenSum = sumPositions(flat, sortingNumber, 0, colors.green);
   const orangeSum = sumPositions(flat, sortingNumber, colors.green, colors.green + colors.orange);
   const yellowSum = sumPositions(flat, sortingNumber, colors.green + colors.orange, 9);
-  
+
   return [greenSum, orangeSum, yellowSum];
 }
 
@@ -80,30 +83,12 @@ function sumPositions(flat, sortingNumber, start, end) {
 function getCellColor(position, colorPattern, colors) {
   const sortingNumber = colorPattern.map(String).join('');
   const index = sortingNumber.indexOf(String(position + 1));
-  
+
   if (index < colors.green) return 'green';
   if (index < colors.green + colors.orange) return 'orange';
   return 'yellow';
 }
 
-// Load/save game state
-function loadGameState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch (e) {
-    console.error('Failed to load game state:', e);
-  }
-  return null;
-}
-
-function saveGameState(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.error('Failed to save game state:', e);
-  }
-}
 
 // Check if the current grid is valid (no duplicate numbers)
 function checkValidity(grid, solution) {
@@ -163,6 +148,7 @@ export {
 };
 
 export default function Suko() {
+  const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
@@ -176,17 +162,16 @@ export default function Suko() {
 
   const initGame = useCallback(async (forceNew = false, customSeed = null) => {
     const today = getTodayDateString();
-    const saved = loadGameState();
 
     // Try to restore saved state
-    if (!forceNew && saved && saved.date === today && saved.puzzleId) {
-      setPuzzleData(saved.puzzleData);
-      setGrid(saved.grid.map(row => [...row]));
+    if (!forceNew && savedState && savedState.date === today && savedState.puzzleId) {
+      setPuzzleData(savedState.puzzleData);
+      setGrid(savedState.grid.map(row => [...row]));
       setSelectedCell(null);
-      setGameState(saved.gameState || 'playing');
+      setGameState(savedState.gameState || 'playing');
       setErrors(new Set());
-      setSumStatus(saved.sumStatus || [false, false, false, false]);
-      setColorSumStatus(saved.colorSumStatus || [false, false, false]);
+      setSumStatus(savedState.sumStatus || [false, false, false, false]);
+      setColorSumStatus(savedState.colorSumStatus || [false, false, false]);
       setSeed(saved.seed);
       setIsLoaded(true);
       return;
@@ -200,7 +185,7 @@ export default function Suko() {
       return;
     }
 
-    const seedString = customSeed === null 
+    const seedString = customSeed === null
       ? `suko-${today}${forceNew ? '-' + Date.now() : ''}`
       : String(customSeed);
     const gameSeed = typeof seedString === 'number' ? seedString : stringToSeed(seedString);
@@ -236,7 +221,7 @@ export default function Suko() {
     setIsLoaded(true);
 
     // Save state
-    saveGameState({
+    setSavedState({
       date: today,
       puzzleId: selected.id,
       puzzleData: puzzleGameData,
@@ -246,7 +231,7 @@ export default function Suko() {
       colorSumStatus: [false, false, false],
       seed: gameSeed,
     });
-  }, []);
+  }, [setSavedState]);
 
   useEffect(() => {
     initGame();
@@ -282,7 +267,7 @@ export default function Suko() {
 
     if (allFilled && allCorrect) {
       setGameState('won');
-      saveGameState({
+      setSavedState({
         date: getTodayDateString(),
         puzzleId: puzzleData.id,
         puzzleData,
@@ -294,7 +279,7 @@ export default function Suko() {
       });
     } else {
       // Save current state
-      saveGameState({
+      setSavedState({
         date: getTodayDateString(),
         puzzleId: puzzleData.id,
         puzzleData,
@@ -389,16 +374,11 @@ export default function Suko() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Suko</h1>
-        <p className={styles.instructions}>
-          Fill the 3×3 grid with numbers 1-9 (each used once). The circles show the
-          sum of their four surrounding cells. Additionally, colored cells must sum to
-          their target values (green, orange, yellow).
-        </p>
-        {seed !== null && <SeedDisplay seed={seed} />}
-      </div>
+      <GameHeader
+        title="Suko"
+        instructions="Fill the 3×3 grid with numbers 1-9 (each used once). The circles show the sum of their four surrounding cells. Additionally, colored cells must sum to their target values (green, orange, yellow)."
+      />
+      {seed !== null && <SeedDisplay seed={seed} />}
 
       <div className={styles.gameArea}>
         <div className={styles.puzzleContainer}>
@@ -479,20 +459,12 @@ export default function Suko() {
           </button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Perfect!</h3>
-            <p>All sums are correct!</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onPlayAgain={() => initGame(true)}
+          winTitle="Perfect!"
+          winMessage="All sums are correct!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -510,13 +482,10 @@ export default function Suko() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={() => initGame(true)}>
             New Puzzle
           </button>

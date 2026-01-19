@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import puzzleDataset from '@datasets/galaxiesPuzzles_bundled.json';
 import styles from './Galaxies.module.css';
 
@@ -234,38 +238,26 @@ export default function Galaxies() {
       />
 
       <div className={styles.toolbar}>
-        <div className={styles.group}>
-          <label>Size:</label>
-          {SIZES.map((s) => (
-            <button
-              key={s}
-              className={`${styles.button} ${size === s ? styles.active : ''}`}
-              onClick={() => setSize(s)}
-            >
-              {s}×{s}
-            </button>
-          ))}
-        </div>
-        <div className={styles.group}>
-          <label>Difficulty:</label>
-          {DIFFICULTIES.map((d) => (
-            <button
-              key={d.code}
-              className={`${styles.button} ${difficulty === d.code ? styles.active : ''}`}
-              onClick={() => setDifficulty(d.code)}
-            >
-              {d.label}
-            </button>
-          ))}
-        </div>
+        <SizeSelector
+          sizes={SIZES}
+          selected={size}
+          onSelect={setSize}
+        />
+        <DifficultySelector
+          difficulties={DIFFICULTIES.map(d => d.code)}
+          selected={difficulty}
+          onSelect={setDifficulty}
+          labels={Object.fromEntries(DIFFICULTIES.map(d => [d.code, d.label]))}
+        />
         <div className={styles.group}>
           <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
           {puz && gameState === 'playing' && (
             <button className={styles.button} onClick={() => setAssign(new Array(puz.w * puz.h).fill(-1))}>Clear</button>
           )}
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>Give Up</button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
         </div>
         {puz && gameState === 'playing' && (
           <div className={styles.group}>
@@ -286,17 +278,27 @@ export default function Galaxies() {
             </div>
           </div>
         )}
-        <div className={styles.status}>
-          {gameState === 'solved' ? (
-            <span className={styles.win}>🎉 Solved!</span>
-          ) : gameState === 'gaveUp' ? (
-            <span className={styles.gaveUp}>Solution revealed</span>
-          ) : bad.size > 0 ? (
-            <span className={styles.bad}>Regions don't match solution</span>
-          ) : (
-            <span>OK</span>
-          )}
-        </div>
+        <GameResult
+          show={gameState === 'solved'}
+          type="won"
+          title="🎉 Solved!"
+          inline
+        />
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution revealed"
+          inline
+        />
+        {gameState === 'playing' && (
+          <div className={styles.status}>
+            {bad.size > 0 ? (
+              <span className={styles.bad}>Regions don't match solution</span>
+            ) : (
+              <span>OK</span>
+            )}
+          </div>
+        )}
       </div>
 
       {puz && (

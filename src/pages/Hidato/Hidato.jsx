@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Hidato.module.css';
 import hidokuPuzzles from '../../../public/datasets/hidokuPuzzles.json';
 
@@ -321,38 +325,22 @@ export default function Hidato() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Hidato</h1>
-        <p className={styles.instructions}>
-          Fill in the grid with consecutive numbers (1 to {puzzleData.maxNum}).
-          Each number must be adjacent to the next (including diagonals).
-        </p>
-      </div>
+      <GameHeader
+        title="Hidato"
+        instructions={`Fill in the grid with consecutive numbers (1 to ${puzzleData.maxNum}). Each number must be adjacent to the next (including diagonals).`}
+      />
 
       <div className={styles.selectors}>
-        <div className={styles.difficultySelector}>
-          {DIFFICULTIES.map((d) => (
-            <button
-              key={d}
-              className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-              onClick={() => setDifficulty(d)}
-            >
-              {d.charAt(0).toUpperCase() + d.slice(1)}
-            </button>
-          ))}
-        </div>
-        <div className={styles.sizeSelector}>
-          {availableSizes.map((key) => (
-            <button
-              key={key}
-              className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-              onClick={() => setSizeKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
+        <DifficultySelector
+          difficulties={DIFFICULTIES}
+          selected={difficulty}
+          onSelect={setDifficulty}
+        />
+        <SizeSelector
+          sizes={availableSizes}
+          selected={sizeKey}
+          onSelect={setSizeKey}
+        />
       </div>
 
       <div className={styles.gameArea}>
@@ -391,21 +379,19 @@ export default function Hidato() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Path complete from 1 to {puzzleData.maxNum}</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message={`Path complete from 1 to ${puzzleData.maxNum}`}
+        />
 
-        {gameState === 'revealed' && (
-          <div className={styles.revealedMessage}>
-            <div className={styles.revealedEmoji}>🔍</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'revealed'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Better luck next time!"
+        />
 
         <div className={styles.numberPad}>
           {Array.from({ length: puzzleData.maxNum }, (_, i) => i + 1).map(num => {
@@ -445,13 +431,10 @@ export default function Hidato() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

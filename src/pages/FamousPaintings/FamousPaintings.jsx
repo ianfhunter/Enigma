@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import ModeSelector from '../../components/ModeSelector';
+import StatsPanel from '../../components/StatsPanel';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './FamousPaintings.module.css';
 
 // Import all local painting images using Vite's glob import
@@ -105,14 +108,7 @@ export default function FamousPaintings() {
   const [streak, setStreak] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('famous-paintings-stats');
-    return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 };
-  });
-
-  useEffect(() => {
-    localStorage.setItem('famous-paintings-stats', JSON.stringify(stats));
-  }, [stats]);
+  const [stats, setStats] = usePersistedState('famous-paintings-stats', { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 });
 
   // Load dataset
   useEffect(() => {
@@ -220,11 +216,10 @@ export default function FamousPaintings() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Famous Paintings</h1>
-          <p className={styles.instructions}>Loading paintings…</p>
-        </div>
+        <GameHeader
+          title="Famous Paintings"
+          instructions="Loading paintings…"
+        />
       </div>
     );
   }
@@ -232,11 +227,10 @@ export default function FamousPaintings() {
   if (!totalPaintings) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Famous Paintings</h1>
-          <p className={styles.instructions}>No paintings available.</p>
-        </div>
+        <GameHeader
+          title="Famous Paintings"
+          instructions="No paintings available."
+        />
       </div>
     );
   }
@@ -245,49 +239,28 @@ export default function FamousPaintings() {
   if (!mode) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Famous Paintings</h1>
-          <p className={styles.instructions}>
-            Test your art history knowledge! Identify masterpieces, artists, and art movements.
-          </p>
-        </div>
+        <GameHeader
+          title="Famous Paintings"
+          instructions="Test your art history knowledge! Identify masterpieces, artists, and art movements."
+        />
 
         <div className={styles.menuArea}>
-          <div className={styles.modeCards}>
-            <button className={styles.modeCard} onClick={() => startGame('challenge')}>
-              <span className={styles.modeIcon}>🏆</span>
-              <span className={styles.modeTitle}>Challenge</span>
-              <span className={styles.modeDesc}>{TOTAL_ROUNDS} questions, test your knowledge!</span>
-            </button>
+          <ModeSelector
+            modes={[
+              { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} questions, test your knowledge!` },
+              { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep playing until you want to stop' },
+            ]}
+            onSelectMode={startGame}
+          />
 
-            <button className={styles.modeCard} onClick={() => startGame('endless')}>
-              <span className={styles.modeIcon}>∞</span>
-              <span className={styles.modeTitle}>Endless</span>
-              <span className={styles.modeDesc}>Keep playing until you want to stop</span>
-            </button>
-          </div>
-
-          <div className={styles.statsPanel}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.totalCorrect}</span>
-              <span className={styles.statLabel}>Correct</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.bestStreak}</span>
-              <span className={styles.statLabel}>Best Streak</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%
-              </span>
-              <span className={styles.statLabel}>Win Rate</span>
-            </div>
-          </div>
+          <StatsPanel
+            stats={[
+              { label: 'Played', value: stats.played },
+              { label: 'Correct', value: stats.totalCorrect },
+              { label: 'Best Streak', value: stats.bestStreak },
+              { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+            ]}
+          />
 
           <div className={styles.dataInfo}>
             <span>🖼️ {totalPaintings} masterpieces from {uniqueArtists} artists</span>

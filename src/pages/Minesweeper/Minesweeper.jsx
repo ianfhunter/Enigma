@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import Timer, { formatTime } from '../../components/Timer/Timer';
+import GameResult from '../../components/GameResult';
 import styles from './Minesweeper.module.css';
 
 const DIFFICULTIES = {
@@ -204,31 +207,19 @@ export default function Minesweeper() {
     return classes.join(' ');
   };
 
-  const formatTime = (seconds) => {
-    return String(Math.min(seconds, 999)).padStart(3, '0');
-  };
-
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Minesweeper</h1>
-        <p className={styles.instructions}>
-          Clear the minefield! Tap to reveal, use flag mode or long-press to flag.
-        </p>
-      </div>
+      <GameHeader
+        title="Minesweeper"
+        instructions="Clear the minefield! Tap to reveal, use flag mode or long-press to flag."
+      />
 
-      <div className={styles.difficultySelector}>
-        {Object.keys(DIFFICULTIES).map((level) => (
-          <button
-            key={level}
-            className={`${styles.difficultyBtn} ${difficulty === level ? styles.active : ''}`}
-            onClick={() => setDifficulty(level)}
-          >
-            {level.charAt(0).toUpperCase() + level.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        options={Object.keys(DIFFICULTIES)}
+        value={difficulty}
+        onChange={setDifficulty}
+        className={styles.difficultySelector}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statusBar}>
@@ -236,7 +227,7 @@ export default function Minesweeper() {
           <button className={styles.resetBtn} onClick={initGame}>
             {gameState === 'won' ? '😎' : gameState === 'lost' ? '😵' : '🙂'}
           </button>
-          <div className={styles.timer}>⏱️ {formatTime(time)}</div>
+          <Timer seconds={time} size="compact" running={gameState === 'playing'} />
         </div>
 
         {/* Mobile Flag Toggle */}
@@ -269,15 +260,21 @@ export default function Minesweeper() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.resultMessage}>
-            🎉 You cleared the minefield in {time} seconds!
-          </div>
+          <GameResult
+            state="won"
+            title="🎉 Minefield Cleared!"
+            message={`Completed in ${time} seconds!`}
+            actions={[{ label: 'Play Again', onClick: initGame, primary: true }]}
+          />
         )}
 
         {gameState === 'lost' && (
-          <div className={styles.resultMessage}>
-            💥 Game Over! Click the face to try again.
-          </div>
+          <GameResult
+            state="lost"
+            title="💥 Game Over!"
+            message="Click the face to try again."
+            actions={[{ label: 'Try Again', onClick: initGame, primary: true }]}
+          />
         )}
       </div>
     </div>

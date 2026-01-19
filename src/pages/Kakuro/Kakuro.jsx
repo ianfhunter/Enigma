@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { formatTime, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import Timer from '../../components/Timer';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Kakuro.module.css';
 
@@ -52,25 +57,9 @@ export {
   notesFromJSON,
 };
 
-function loadGameState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch (e) {
-    console.error('Failed to load game state:', e);
-  }
-  return null;
-}
-
-function saveGameState(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.error('Failed to save game state:', e);
-  }
-}
 
 export default function Kakuro() {
+  const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzle, setPuzzle] = useState(null);
   const [playerValues, setPlayerValues] = useState({});
@@ -89,15 +78,14 @@ export default function Kakuro() {
 
   const initPuzzle = useCallback(async (newDifficulty = difficulty, forceNew = false, customSeed = null) => {
     const today = getTodayDateString();
-    const saved = loadGameState();
 
     // Try to restore saved state
-    if (!forceNew && saved && saved.date === today && saved.difficulty === newDifficulty && saved.puzzleId) {
-      setPuzzle(saved.puzzle);
-      setPlayerValues(saved.playerValues || {});
-      setNotes(notesFromJSON(saved.notes));
-      setTimer(saved.timer || 0);
-      setGameState(saved.gameState || 'playing');
+    if (!forceNew && savedState && savedState.date === today && savedState.difficulty === newDifficulty && savedState.puzzleId) {
+      setPuzzle(savedState.puzzle);
+      setPlayerValues(savedState.playerValues || {});
+      setNotes(notesFromJSON(savedState.notes));
+      setTimer(savedState.timer || 0);
+      setGameState(savedState.gameState || 'playing');
       setDifficulty(newDifficulty);
       setIsLoaded(true);
       // Restore seed from saved state or compute it
@@ -120,7 +108,7 @@ export default function Kakuro() {
     let gameSeed;
     if (customSeed !== null) {
       // Convert custom seed to number if needed
-      gameSeed = typeof customSeed === 'string' 
+      gameSeed = typeof customSeed === 'string'
         ? (isNaN(parseInt(customSeed, 10)) ? stringToSeed(customSeed) : parseInt(customSeed, 10))
         : customSeed;
     } else {
@@ -149,7 +137,7 @@ export default function Kakuro() {
     if (!isLoaded || !puzzle) return;
 
     const today = getTodayDateString();
-    saveGameState({
+    setSavedState({
       date: today,
       difficulty,
       puzzleId: puzzle.id,
@@ -159,7 +147,7 @@ export default function Kakuro() {
       timer,
       gameState,
     });
-  }, [puzzle, playerValues, notes, timer, gameState, difficulty, isLoaded]);
+  }, [puzzle, playerValues, notes, timer, gameState, difficulty, isLoaded, setSavedState]);
 
   // Timer
   useEffect(() => {
@@ -353,15 +341,10 @@ export default function Kakuro() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Kakuro</h1>
-        <p className={styles.instructions}>
-          Fill white cells with 1-9. Numbers in a run must be unique and sum to the clue.
-          <br />
-          <small>Top-left number = sum down ↓ | Bottom-right number = sum across →</small>
-        </p>
-      </div>
+      <GameHeader
+        title="Kakuro"
+        instructions="Fill white cells with 1-9. Numbers in a run must be unique and sum to the clue. Top-left number = sum down ↓ | Bottom-right number = sum across →"
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -371,7 +354,7 @@ export default function Kakuro() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initPuzzle(difficulty, false, seedNum);
@@ -379,24 +362,15 @@ export default function Kakuro() {
         />
       )}
 
-      <div className={styles.difficultySelector}>
-        {['easy', 'medium', 'hard'].map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => initPuzzle(d, true)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={['easy', 'medium', 'hard']}
+        selected={difficulty}
+        onSelect={(d) => initPuzzle(d, true)}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Time</span>
-            <span className={styles.statValue}>{formatTime(timer)}</span>
-          </div>
+          <Timer time={timer} />
           <div className={styles.stat}>
             <span className={styles.statLabel}>Size</span>
             <span className={styles.statValue}>{rows}×{cols}</span>
@@ -503,27 +477,24 @@ export default function Kakuro() {
           </button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Solved in {formatTime(timer)}!
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message={`Completed in ${formatTime(timer)}`}
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+        />
 
         <div className={styles.buttonRow}>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button
             className={styles.newGameBtn}
             onClick={() => initPuzzle(difficulty, true)}

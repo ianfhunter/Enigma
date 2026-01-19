@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './SlidingPuzzle.module.css';
 import sampleImage from '../../assets/sample_image.png';
 
@@ -35,10 +38,7 @@ export default function SlidingPuzzle() {
   const [time, setTime] = useState(0);
   const [gameState, setGameState] = useState('ready'); // 'ready', 'playing', 'won'
   const [showPreview, setShowPreview] = useState(false);
-  const [bestTimes, setBestTimes] = useState(() => {
-    const saved = localStorage.getItem('sliding-puzzle-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestTimes, setBestTimes] = usePersistedState('sliding-puzzle-best', {});
   const timerRef = useRef(null);
 
   const createSolvedPuzzle = useCallback(() => {
@@ -108,10 +108,6 @@ export default function SlidingPuzzle() {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [gameState]);
-
-  useEffect(() => {
-    localStorage.setItem('sliding-puzzle-best', JSON.stringify(bestTimes));
-  }, [bestTimes]);
 
   const isSolved = useCallback(() => {
     const solved = createSolvedPuzzle();
@@ -183,25 +179,16 @@ export default function SlidingPuzzle() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Sliding Puzzle</h1>
-        <p className={styles.instructions}>
-          Slide tiles to complete the image. Use clicks or arrow keys!
-        </p>
-      </div>
+      <GameHeader
+        title="Sliding Puzzle"
+        instructions="Slide tiles to complete the image. Use clicks or arrow keys!"
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.entries(SIZES).map(([label, value]) => (
-          <button
-            key={label}
-            className={`${styles.sizeBtn} ${size === value ? styles.active : ''}`}
-            onClick={() => setSize(value)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(SIZES)}
+        selectedSize={Object.keys(SIZES).find(k => SIZES[k] === size)}
+        onSelectSize={(key) => setSize(SIZES[key])}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -269,11 +256,12 @@ export default function SlidingPuzzle() {
           </div>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Solved in {moves} moves and {formatTime(time)}!
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Puzzle Solved!"
+          winMessage={`🎉 Solved in ${moves} moves and ${formatTime(time)}!`}
+        />
 
         <button className={styles.shuffleBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'Shuffle'}

@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './FloodIt.module.css';
 
 const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6'];
@@ -97,10 +100,7 @@ export default function FloodIt() {
   const [board, setBoard] = useState([]);
   const [moves, setMoves] = useState(0);
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
-  const [bestScores, setBestScores] = useState(() => {
-    const saved = localStorage.getItem('flood-it-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestScores, setBestScores] = usePersistedState('flood-it-best', {});
 
   const { size, maxMoves } = SIZES[sizeKey];
 
@@ -113,10 +113,6 @@ export default function FloodIt() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('flood-it-best', JSON.stringify(bestScores));
-  }, [bestScores]);
 
   const handleColorClick = (colorIndex) => {
     if (gameState !== 'playing') return;
@@ -144,27 +140,18 @@ export default function FloodIt() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Flood It</h1>
-        <p className={styles.instructions}>
-          Fill the board with one color! Start from the top-left corner.
-        </p>
-      </div>
+      <GameHeader
+        title="Flood It"
+        instructions="Fill the board with one color! Start from the top-left corner."
+      />
 
       <div className={styles.settings}>
-        <div className={styles.settingGroup}>
-          <span className={styles.settingLabel}>Size:</span>
-          {Object.keys(SIZES).map((key) => (
-            <button
-              key={key}
-              className={`${styles.settingBtn} ${sizeKey === key ? styles.active : ''}`}
-              onClick={() => setSizeKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
+        <SizeSelector
+          sizes={Object.keys(SIZES)}
+          selectedSize={sizeKey}
+          onSizeChange={setSizeKey}
+          getLabel={(key) => key}
+        />
         <div className={styles.settingGroup}>
           <span className={styles.settingLabel}>Colors:</span>
           {[4, 5, 6].map((count) => (
@@ -229,17 +216,14 @@ export default function FloodIt() {
           ))}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 You flooded the board in {moves} moves!
-          </div>
-        )}
-
-        {gameState === 'lost' && (
-          <div className={styles.loseMessage}>
-            Out of moves! You reached {percentage}% coverage.
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Board Flooded!"
+          winMessage={`You flooded the board in ${moves} moves!`}
+          lostTitle="Out of moves!"
+          lostMessage={`You reached ${percentage}% coverage.`}
+        />
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'playing' ? 'New Game' : 'Play Again'}

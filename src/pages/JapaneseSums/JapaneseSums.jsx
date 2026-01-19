@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { generatePuzzle, isSolved } from './generator';
 import { stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './JapaneseSums.module.css';
@@ -19,10 +23,10 @@ export default function JapaneseSums() {
 
   const initGame = useCallback((newSize = size, newDifficulty = difficulty, customSeed = null) => {
     const today = getTodayDateString();
-    const actualSeed = customSeed !== null 
+    const actualSeed = customSeed !== null
       ? (typeof customSeed === 'string' ? stringToSeed(customSeed) : customSeed)
       : stringToSeed(`japanese-sums-${today}-${newDifficulty}-${newSize}`);
-    
+
     const data = generatePuzzle(newSize, newDifficulty, actualSeed);
     setPuzzleData(data);
     // Initialize grid with nulls, but show prefilled hints
@@ -39,7 +43,7 @@ export default function JapaneseSums() {
   // Check for win
   useEffect(() => {
     if (!puzzleData || gameState !== 'playing' || showSolution) return;
-    
+
     if (isSolved(grid, puzzleData.solution, puzzleData.pattern)) {
       setGameState('won');
     }
@@ -48,10 +52,10 @@ export default function JapaneseSums() {
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || showSolution) return;
     if (!puzzleData.pattern[r][c]) return; // Can't fill shaded cells
-    
+
     setGrid(prev => {
       const newGrid = prev.map(row => [...row]);
-      
+
       // Cycle through numbers 1..n
       if (newGrid[r][c] === null || newGrid[r][c] === 0) {
         newGrid[r][c] = 1;
@@ -60,7 +64,7 @@ export default function JapaneseSums() {
       } else {
         newGrid[r][c] = null;
       }
-      
+
       return newGrid;
     });
   };
@@ -69,10 +73,10 @@ export default function JapaneseSums() {
     e.preventDefault();
     if (gameState !== 'playing' || showSolution) return;
     if (!puzzleData.pattern[r][c]) return;
-    
+
     setGrid(prev => {
       const newGrid = prev.map(row => [...row]);
-      
+
       // Cycle backwards
       if (newGrid[r][c] === null || newGrid[r][c] === 0) {
         newGrid[r][c] = size;
@@ -81,17 +85,17 @@ export default function JapaneseSums() {
       } else {
         newGrid[r][c] = null;
       }
-      
+
       return newGrid;
     });
   };
 
   const handleNumberInput = (num) => {
     if (gameState !== 'playing' || showSolution) return;
-    
+
     setGrid(prev => {
       const newGrid = prev.map(row => [...row]);
-      
+
       // Find first empty cell that should be filled
       for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
@@ -101,7 +105,7 @@ export default function JapaneseSums() {
           }
         }
       }
-      
+
       return newGrid;
     });
   };
@@ -127,8 +131,8 @@ export default function JapaneseSums() {
     initGame(size, difficulty, parsed);
   };
 
-  const currentGrid = showSolution && puzzleData 
-    ? puzzleData.solution 
+  const currentGrid = showSolution && puzzleData
+    ? puzzleData.solution
     : grid;
 
   return (
@@ -139,52 +143,30 @@ export default function JapaneseSums() {
       />
 
       <div className={styles.toolbar}>
-        <label className={styles.label}>
-          Size:
-          <select
-            className={styles.select}
-            value={size}
-            onChange={(e) => setSize(parseInt(e.target.value))}
-          >
-            {SIZES.map(s => (
-              <option key={s} value={s}>{s}×{s}</option>
-            ))}
-          </select>
-        </label>
+        <SizeSelector
+          sizes={SIZES}
+          selectedSize={size}
+          onSizeChange={setSize}
+        />
 
-        <label className={styles.label}>
-          Difficulty:
-          <select
-            className={styles.select}
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-          >
-            {DIFFICULTIES.map(d => (
-              <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>
-            ))}
-          </select>
-        </label>
+        <DifficultySelector
+          difficulties={DIFFICULTIES}
+          selectedDifficulty={difficulty}
+          onDifficultyChange={setDifficulty}
+        />
 
         <button className={styles.button} onClick={handleNewPuzzle}>New</button>
         <button className={styles.button} onClick={handleClear}>Clear</button>
-        <button
-          className={`${styles.button} ${styles.giveUpButton}`}
-          onClick={handleGiveUp}
+        <GiveUpButton
+          onGiveUp={handleGiveUp}
           disabled={gameState !== 'playing' || showSolution}
-        >
-          Give Up
-        </button>
-
-        <div className={styles.status}>
-          {showSolution ? (
-            <span className={styles.gaveUp}>Solution revealed</span>
-          ) : gameState === 'won' ? (
-            <span className={styles.win}>Solved!</span>
-          ) : (
-            <span>Playing...</span>
-          )}
-        </div>
+        />
       </div>
+
+      <GameResult
+        gameState={gameState}
+        onPlayAgain={handleNewPuzzle}
+      />
 
       {seed && (
         <div className={styles.seedContainer}>
@@ -197,7 +179,7 @@ export default function JapaneseSums() {
       )}
 
       <div className={styles.boardWrap}>
-        <div 
+        <div
           className={styles.gridContainer}
           style={{ '--grid-size': size }}
         >
@@ -249,7 +231,7 @@ export default function JapaneseSums() {
                   const isShaded = !puzzleData.pattern[r][c];
                   const isInitial = puzzleData.puzzle[r][c] !== null;
                   const isSolution = showSolution;
-                  
+
                   return (
                     <div
                       key={`${r}-${c}`}

@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Kurotto.module.css';
 import kurottoPuzzles from '../../../public/datasets/kurottoPuzzles.json';
 
@@ -218,38 +222,22 @@ export default function Kurotto() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Kurotto</h1>
-        <p className={styles.instructions}>
-          Shade cells so each circled number equals the total size of all shaded groups
-          orthogonally adjacent to that circle. Circled cells cannot be shaded.
-        </p>
-      </div>
+      <GameHeader
+        title="Kurotto"
+        instructions="Shade cells so each circled number equals the total size of all shaded groups orthogonally adjacent to that circle. Circled cells cannot be shaded."
+      />
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={DIFFICULTIES}
+        selected={difficulty}
+        onSelect={setDifficulty}
+      />
 
-      <div className={styles.sizeSelector}>
-        {availableSizes.map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={availableSizes}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
       <div className={styles.gameArea}>
         {/* Mobile White Toggle */}
@@ -293,20 +281,18 @@ export default function Kurotto() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>⭕</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All clues satisfied!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="⭕ Puzzle Solved!"
+          message="All clues satisfied!"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -324,13 +310,10 @@ export default function Kurotto() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
 import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Yajilin.module.css';
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
@@ -559,10 +562,10 @@ export default function Yajilin() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Yajilin</h1>
-        </div>
+        <GameHeader
+          title="Yajilin"
+          instructions="Loading puzzles..."
+        />
         <div className={styles.loading}>Loading puzzles...</div>
       </div>
     );
@@ -577,14 +580,10 @@ export default function Yajilin() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Yajilin</h1>
-        <p className={styles.instructions}>
-          Shade cells and draw a loop. Arrow clues show shaded cell counts in that direction.
-          Click to shade, drag to draw path. The loop must pass through all non-shaded cells.
-        </p>
-      </div>
+      <GameHeader
+        title="Yajilin"
+        instructions="Shade cells and draw a loop. Arrow clues show shaded cell counts in that direction. Click to shade, drag to draw path. The loop must pass through all non-shaded cells."
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -594,7 +593,7 @@ export default function Yajilin() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(difficulty, seedNum);
@@ -602,17 +601,11 @@ export default function Yajilin() {
         />
       )}
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={DIFFICULTIES}
+        selected={difficulty}
+        onSelect={setDifficulty}
+      />
 
       <div className={styles.gameArea}>
         <div
@@ -685,21 +678,19 @@ export default function Yajilin() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Loop complete!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message="Loop complete!"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>The correct shading and loop are shown.</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="The correct shading and loop are shown."
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -717,11 +708,10 @@ export default function Yajilin() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={handleNewPuzzle}>
             New Puzzle
           </button>

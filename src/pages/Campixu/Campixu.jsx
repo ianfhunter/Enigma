@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Campixu.module.css';
 
 const GRID_SIZES = {
@@ -315,26 +318,17 @@ export default function Campixu() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Campixu</h1>
-        <p className={styles.instructions}>
-          Place tents (⛺) using nonogram clues. Numbers show runs of consecutive tents.
-          Tents must be adjacent to a tree and cannot touch each other (even diagonally).
-        </p>
-      </div>
+      <GameHeader
+        title="Campixu"
+        instructions="Place tents (⛺) using nonogram clues. Numbers show runs of consecutive tents. Tents must be adjacent to a tree and cannot touch each other (even diagonally)."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selectedSize={sizeKey}
+        onSizeChange={setSizeKey}
+        getLabel={(key) => key}
+      />
 
       <div className={styles.gameArea}>
         {/* Mobile Grass Toggle */}
@@ -418,20 +412,12 @@ export default function Campixu() {
           </div>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🏕️</div>
-            <h3>Camp Complete!</h3>
-            <p>All tents perfectly placed!</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onPlayAgain={initGame}
+          winTitle="Camp Complete!"
+          winMessage="All tents perfectly placed!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -449,13 +435,10 @@ export default function Campixu() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

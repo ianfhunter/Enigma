@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './DropQuotes.module.css';
 
 const QUOTES = [
@@ -205,14 +207,10 @@ export default function DropQuotes() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Drop Quotes</h1>
-        <p className={styles.instructions}>
-          Letters drop down from each column to form a quote. Click a cell, then click a letter from
-          that column to place it. Each letter can only be used once.
-        </p>
-      </div>
+      <GameHeader
+        title="Drop Quotes"
+        instructions="Letters drop down from each column to form a quote. Click a cell, then click a letter from that column to place it. Each letter can only be used once."
+      />
 
       <div className={styles.gameArea}>
         {/* Columns of available letters */}
@@ -268,21 +266,14 @@ export default function DropQuotes() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>📜</div>
-            <h3>Quote Revealed!</h3>
-            <p className={styles.revealedQuote}>"{puzzleData.quote}"</p>
-            <p className={styles.author}>— {puzzleData.author}</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Quote Revealed!"
+          winMessage={`"${puzzleData.quote}" — ${puzzleData.author}`}
+          gaveUpTitle="Solution Revealed"
+          gaveUpMessage="Here's the quote."
+        />
 
         <div className={styles.buttons}>
           <button className={styles.clearBtn} onClick={handleClear}>
@@ -291,13 +282,10 @@ export default function DropQuotes() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

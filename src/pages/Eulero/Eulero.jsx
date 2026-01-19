@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { generatePuzzle, isSolved } from './generator';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Eulero.module.css';
@@ -19,10 +23,10 @@ export default function Eulero() {
 
   const initGame = useCallback((newSize = size, newDifficulty = difficulty, customSeed = null) => {
     const today = getTodayDateString();
-    const actualSeed = customSeed !== null 
+    const actualSeed = customSeed !== null
       ? (typeof customSeed === 'string' ? stringToSeed(customSeed) : customSeed)
       : stringToSeed(`eulero-${today}-${newDifficulty}-${newSize}`);
-    
+
     const data = generatePuzzle(newSize, newDifficulty, actualSeed);
     setPuzzleData(data);
     setGrid(data.puzzle.map(row => row.map(cell => cell ? { ...cell } : null)));
@@ -38,7 +42,7 @@ export default function Eulero() {
   // Check for win
   useEffect(() => {
     if (!puzzleData || gameState !== 'playing' || showSolution) return;
-    
+
     // Check if all cells are filled and correct
     let allFilled = true;
     for (let r = 0; r < size; r++) {
@@ -50,7 +54,7 @@ export default function Eulero() {
       }
       if (!allFilled) break;
     }
-    
+
     if (allFilled && isSolved(grid, puzzleData.solution)) {
       setGameState('won');
     }
@@ -58,10 +62,10 @@ export default function Eulero() {
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || showSolution) return;
-    
+
     setGrid(prev => {
       const newGrid = prev.map(row => row.map(cell => cell ? { ...cell } : null));
-      
+
       if (!newGrid[r][c]) {
         newGrid[r][c] = { number: 1, letter: 'A' };
       } else {
@@ -78,7 +82,7 @@ export default function Eulero() {
           newGrid[r][c] = null;
         }
       }
-      
+
       return newGrid;
     });
   };
@@ -86,10 +90,10 @@ export default function Eulero() {
   const handleCellRightClick = (e, r, c) => {
     e.preventDefault();
     if (gameState !== 'playing' || showSolution) return;
-    
+
     setGrid(prev => {
       const newGrid = prev.map(row => row.map(cell => cell ? { ...cell } : null));
-      
+
       if (!newGrid[r][c]) {
         newGrid[r][c] = { number: null, letter: 'A' };
       } else {
@@ -99,25 +103,25 @@ export default function Eulero() {
           const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.slice(0, size).split('');
           const currentIdx = letters.indexOf(current.letter);
           const nextIdx = (currentIdx + 1) % letters.length;
-          newGrid[r][c] = { 
-            number: current.number || null, 
-            letter: letters[nextIdx] 
+          newGrid[r][c] = {
+            number: current.number || null,
+            letter: letters[nextIdx]
           };
         }
       }
-      
+
       return newGrid;
     });
   };
 
   const handleNumberInput = (num) => {
     if (gameState !== 'playing' || showSolution) return;
-    
+
     // Find selected cell (simplified - use last clicked)
     // In a more complete implementation, you'd track selected cell
     setGrid(prev => {
       const newGrid = prev.map(row => row.map(cell => cell ? { ...cell } : null));
-      
+
       // Find first empty or partially filled cell
       for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
@@ -131,7 +135,7 @@ export default function Eulero() {
           }
         }
       }
-      
+
       return newGrid;
     });
   };
@@ -157,8 +161,8 @@ export default function Eulero() {
     initGame(size, difficulty, parsed);
   };
 
-  const currentGrid = showSolution && puzzleData 
-    ? puzzleData.solution 
+  const currentGrid = showSolution && puzzleData
+    ? puzzleData.solution
     : grid;
 
   return (
@@ -169,52 +173,34 @@ export default function Eulero() {
       />
 
       <div className={styles.toolbar}>
-        <label className={styles.label}>
-          Size:
-          <select
-            className={styles.select}
-            value={size}
-            onChange={(e) => setSize(parseInt(e.target.value))}
-          >
-            {SIZES.map(s => (
-              <option key={s} value={s}>{s}×{s}</option>
-            ))}
-          </select>
-        </label>
+        <SizeSelector
+          sizes={SIZES}
+          selectedSize={size}
+          onSizeChange={setSize}
+        />
 
-        <label className={styles.label}>
-          Difficulty:
-          <select
-            className={styles.select}
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-          >
-            {DIFFICULTIES.map(d => (
-              <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>
-            ))}
-          </select>
-        </label>
+        <DifficultySelector
+          difficulties={DIFFICULTIES}
+          selectedDifficulty={difficulty}
+          onDifficultyChange={setDifficulty}
+        />
 
         <button className={styles.button} onClick={handleNewPuzzle}>New</button>
         <button className={styles.button} onClick={handleClear}>Clear</button>
-        <button
-          className={`${styles.button} ${styles.giveUpButton}`}
-          onClick={handleGiveUp}
+        <GiveUpButton
+          onGiveUp={handleGiveUp}
           disabled={gameState !== 'playing' || showSolution}
-        >
-          Give Up
-        </button>
-
-        <div className={styles.status}>
-          {showSolution ? (
-            <span className={styles.gaveUp}>Solution revealed</span>
-          ) : gameState === 'won' ? (
-            <span className={styles.win}>Solved!</span>
-          ) : (
-            <span>Playing...</span>
-          )}
-        </div>
+          requireConfirmation={false}
+        />
       </div>
+
+      <GameResult
+        gameState={gameState}
+        onNewGame={handleNewPuzzle}
+        winTitle="Solved!"
+        winMessage="All pairs are unique!"
+        gaveUpTitle="Solution Revealed"
+      />
 
       {seed && (
         <div className={styles.seedContainer}>
@@ -234,7 +220,7 @@ export default function Eulero() {
           {currentGrid.map((row, r) =>
             row.map((cell, c) => {
               const isShown = showSolution || (puzzleData && puzzleData.puzzle[r][c]);
-              
+
               return (
                 <div
                   key={`${r}-${c}`}

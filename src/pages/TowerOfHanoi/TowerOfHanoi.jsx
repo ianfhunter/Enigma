@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './TowerOfHanoi.module.css';
 
 const DISK_COUNTS = [3, 4, 5, 6, 7];
@@ -22,10 +24,7 @@ export default function TowerOfHanoi() {
   const [selectedTower, setSelectedTower] = useState(null);
   const [moves, setMoves] = useState(0);
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won'
-  const [bestMoves, setBestMoves] = useState(() => {
-    const saved = localStorage.getItem('tower-hanoi-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestMoves, setBestMoves] = usePersistedState('tower-hanoi-best', {});
 
   const minMoves = Math.pow(2, diskCount) - 1;
 
@@ -41,10 +40,6 @@ export default function TowerOfHanoi() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('tower-hanoi-best', JSON.stringify(bestMoves));
-  }, [bestMoves]);
 
   const checkWin = useCallback((newTowers) => {
     // Win if all disks are on the third tower
@@ -105,13 +100,10 @@ export default function TowerOfHanoi() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Tower of Hanoi</h1>
-        <p className={styles.instructions}>
-          Move all disks to the rightmost peg. Larger disks can't go on smaller ones!
-        </p>
-      </div>
+      <GameHeader
+        title="Tower of Hanoi"
+        instructions="Move all disks to the rightmost peg. Larger disks can't go on smaller ones!"
+      />
 
       <div className={styles.diskSelector}>
         {DISK_COUNTS.map((count) => (
@@ -173,12 +165,12 @@ export default function TowerOfHanoi() {
           ))}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Solved in {moves} moves!
-            {moves === minMoves && <span className={styles.perfect}> Perfect!</span>}
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Tower Complete!"
+          winMessage={`Solved in ${moves} moves!${moves === minMoves ? ' Perfect!' : ''}`}
+        />
 
         <button className={styles.resetBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'Reset'}

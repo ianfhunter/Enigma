@@ -153,7 +153,7 @@ export const categories = [
         emojiIcon: '🏞️',
         colors: { primary: '#06b6d4', secondary: '#22d3ee' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)',
-        version: 'v1.0',
+        version: 'v1.1',
         component: () => import('../../pages/Creek'),
       },
       {

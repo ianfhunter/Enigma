@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './NavalBattle.module.css';
 
 // Load puzzles from dataset
@@ -416,39 +420,22 @@ export default function NavalBattle() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Naval Battle</h1>
-        <p className={styles.instructions}>
-          Place ships on the grid using the row and column counts.
-          Ships cannot touch each other, even diagonally.
-          Click to place ship parts, right-click to mark water.
-        </p>
-      </div>
+      <GameHeader
+        title="Naval Battle"
+        instructions="Place ships on the grid using the row and column counts. Ships cannot touch each other, even diagonally. Click to place ship parts, right-click to mark water."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((diff) => (
-          <button
-            key={diff}
-            className={`${styles.difficultyBtn} ${difficulty === diff ? styles.active : ''}`}
-            onClick={() => setDifficulty(diff)}
-          >
-            {diff}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={DIFFICULTIES}
+        selected={difficulty}
+        onSelect={setDifficulty}
+      />
 
       <div className={styles.gameArea}>
         <button
@@ -520,21 +507,19 @@ export default function NavalBattle() {
           </div>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🚢</div>
-            <h3>Fleet Located!</h3>
-            <p>All ships correctly placed!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🚢 Fleet Located!"
+          message="All ships correctly placed!"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>⚓</div>
-            <h3>Solution Revealed</h3>
-            <p>Here's how it should be solved.</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Here's how it should be solved."
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -552,11 +537,10 @@ export default function NavalBattle() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import ModeSelector from '../../components/ModeSelector';
+import StatsPanel from '../../components/StatsPanel';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './ClassicalMusicQuiz.module.css';
 
 const TOTAL_ROUNDS = 10;
@@ -41,14 +44,7 @@ export default function ClassicalMusicQuiz() {
   const [showHint, setShowHint] = useState(false);
   const audioRef = useRef(null);
 
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('classical-music-quiz-stats');
-    return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 };
-  });
-
-  useEffect(() => {
-    localStorage.setItem('classical-music-quiz-stats', JSON.stringify(stats));
-  }, [stats]);
+  const [stats, setStats] = usePersistedState('classical-music-quiz-stats', { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 });
 
   // Load dataset
   useEffect(() => {
@@ -208,11 +204,10 @@ export default function ClassicalMusicQuiz() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>🎼 Classical Music Quiz</h1>
-          <p className={styles.instructions}>Loading pieces…</p>
-        </div>
+        <GameHeader
+          title="🎼 Classical Music Quiz"
+          instructions="Loading pieces…"
+        />
       </div>
     );
   }
@@ -220,11 +215,10 @@ export default function ClassicalMusicQuiz() {
   if (!pieces.length) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>🎼 Classical Music Quiz</h1>
-          <p className={styles.instructions}>No pieces available.</p>
-        </div>
+        <GameHeader
+          title="🎼 Classical Music Quiz"
+          instructions="No pieces available."
+        />
       </div>
     );
   }
@@ -233,49 +227,28 @@ export default function ClassicalMusicQuiz() {
   if (!mode) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>🎼 Classical Music Quiz</h1>
-          <p className={styles.instructions}>
-            Listen to classical masterpieces and guess the composer!
-          </p>
-        </div>
+        <GameHeader
+          title="🎼 Classical Music Quiz"
+          instructions="Listen to classical masterpieces and guess the composer!"
+        />
 
         <div className={styles.menuArea}>
-          <div className={styles.modeCards}>
-            <button className={styles.modeCard} onClick={() => startGame('challenge')}>
-              <span className={styles.modeIcon}>🏆</span>
-              <span className={styles.modeTitle}>Challenge</span>
-              <span className={styles.modeDesc}>{TOTAL_ROUNDS} pieces, test your musical knowledge!</span>
-            </button>
+          <ModeSelector
+            modes={[
+              { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} pieces, test your musical knowledge!` },
+              { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep playing until you want to stop' },
+            ]}
+            onSelectMode={startGame}
+          />
 
-            <button className={styles.modeCard} onClick={() => startGame('endless')}>
-              <span className={styles.modeIcon}>∞</span>
-              <span className={styles.modeTitle}>Endless</span>
-              <span className={styles.modeDesc}>Keep playing until you want to stop</span>
-            </button>
-          </div>
-
-          <div className={styles.statsPanel}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.totalCorrect}</span>
-              <span className={styles.statLabel}>Correct</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.bestStreak}</span>
-              <span className={styles.statLabel}>Best Streak</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%
-              </span>
-              <span className={styles.statLabel}>Win Rate</span>
-            </div>
-          </div>
+          <StatsPanel
+            stats={[
+              { label: 'Played', value: stats.played },
+              { label: 'Correct', value: stats.totalCorrect },
+              { label: 'Best Streak', value: stats.bestStreak },
+              { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+            ]}
+          />
 
           <div className={styles.dataInfo}>
             <span>🎵 {pieces.length} pieces from {uniqueComposers} legendary composers</span>

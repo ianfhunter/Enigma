@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Congestion.module.css';
 
 const GRID_SIZE = 6;
@@ -300,13 +301,8 @@ export default function Congestion() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [difficulty, setDifficulty] = useState(() =>
-    localStorage.getItem('congestion.difficulty') || 'beginner'
-  );
-  const [levelIndex, setLevelIndex] = useState(() => {
-    const saved = localStorage.getItem('congestion.levelIndex');
-    return saved ? parseInt(saved, 10) : 0;
-  });
+  const [difficulty, setDifficulty] = usePersistedState('congestion.difficulty', 'beginner');
+  const [levelIndex, setLevelIndex] = usePersistedState('congestion.levelIndex', 0);
 
   const [vehicles, setVehicles] = useState({});
   const [history, setHistory] = useState([]);
@@ -359,15 +355,6 @@ export default function Congestion() {
       initLevel(puzzlesForDifficulty, levelIndex);
     }
   }, [puzzlesForDifficulty, initLevel]); // Don't include levelIndex to avoid loops
-
-  // Save progress
-  useEffect(() => {
-    localStorage.setItem('congestion.difficulty', difficulty);
-  }, [difficulty]);
-
-  useEffect(() => {
-    localStorage.setItem('congestion.levelIndex', String(levelIndex));
-  }, [levelIndex]);
 
   // Check win condition
   useEffect(() => {

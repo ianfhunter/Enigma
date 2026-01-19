@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import ModeSelector from '../../components/ModeSelector';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { isValidWord, findAllWords, generatePuzzle, shuffleArray } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordWheel.module.css';
@@ -17,10 +19,8 @@ const MODES = {
 export { MODES };
 
 export default function WordWheel() {
-  const [mode, setMode] = useState(() => {
-    const saved = localStorage.getItem(MODE_KEY);
-    return saved === 'HEX' ? 'HEX' : 'CLASSIC';
-  });
+  const [mode, setMode] = usePersistedState(MODE_KEY, 'CLASSIC');
+  const [savedGameState, setSavedGameState] = usePersistedState(STORAGE_KEY, null);
   const [puzzle, setPuzzle] = useState(null);
   const [outerLetters, setOuterLetters] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
@@ -30,24 +30,18 @@ export default function WordWheel() {
   const [possibleWords, setPossibleWords] = useState([]);
   const [showAllWords, setShowAllWords] = useState(false);
 
-  // Save mode to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem(MODE_KEY, mode);
-  }, [mode]);
-
-  // Save game state to localStorage whenever it changes
+  // Save game state whenever it changes
   useEffect(() => {
     if (puzzle) {
-      const gameState = {
+      setSavedGameState({
         puzzle,
         outerLetters,
         foundWords,
         possibleWords,
         mode,
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+      });
     }
-  }, [puzzle, outerLetters, foundWords, possibleWords, mode]);
+  }, [puzzle, outerLetters, foundWords, possibleWords, mode, setSavedGameState]);
 
   const createNewPuzzle = useCallback((newMode = mode) => {
     const modeConfig = MODES[newMode];
@@ -82,17 +76,15 @@ export default function WordWheel() {
 
   // Load saved puzzle on mount, or create new one if none exists
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
+    if (savedGameState) {
       try {
-        const gameState = JSON.parse(saved);
         // Check if saved puzzle matches current mode
-        const savedMode = gameState.mode || 'CLASSIC';
+        const savedMode = savedGameState.mode || 'CLASSIC';
         if (savedMode === mode) {
-          setPuzzle(gameState.puzzle);
-          setOuterLetters(gameState.outerLetters);
-          setFoundWords(gameState.foundWords || []);
-          setPossibleWords(gameState.possibleWords || []);
+          setPuzzle(savedGameState.puzzle);
+          setOuterLetters(savedGameState.outerLetters);
+          setFoundWords(savedGameState.foundWords || []);
+          setPossibleWords(savedGameState.possibleWords || []);
         } else {
           // Mode changed, create new puzzle
           createNewPuzzle();
@@ -247,30 +239,24 @@ export default function WordWheel() {
 
   const modeConfig = MODES[mode];
 
+  const modeOptions = Object.entries(MODES).map(([key, config]) => ({
+    id: key,
+    label: config.name,
+    description: config.description,
+  }));
+
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>
-          ← Back to Games
-        </Link>
-        <h1 className={styles.title}>Word Wheel</h1>
-        <p className={styles.instructions}>
-          Find words using the letters. Every word must include the center letter <strong>{puzzle.center}</strong>.
-          Each letter can only be used once per word.
-        </p>
-        <div className={styles.modeSelector}>
-          {Object.entries(MODES).map(([key, config]) => (
-            <button
-              key={key}
-              className={`${styles.modeBtn} ${mode === key ? styles.active : ''}`}
-              onClick={() => handleModeChange(key)}
-            >
-              {config.name}
-              <span className={styles.modeDesc}>{config.description}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+      <GameHeader
+        title="Word Wheel"
+        instructions={`Find words using the letters. Every word must include the center letter ${puzzle.center}. Each letter can only be used once per word.`}
+      />
+
+      <ModeSelector
+        modes={modeOptions}
+        selectedMode={mode}
+        onSelectMode={handleModeChange}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.wheelSection}>

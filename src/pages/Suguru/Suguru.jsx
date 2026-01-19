@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { formatTime } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import Timer from '../../components/Timer';
 import puzzleDataset from '@datasets/suguruPuzzles_bundled.json';
 import styles from './Suguru.module.css';
 
@@ -175,7 +179,7 @@ export default function Suguru() {
 
   useEffect(() => {
     if (!puzzleData) return;
-    
+
     // Prevent validation when grid size doesn't match current size (during size transitions)
     if (grid.length !== size || puzzleData.regionGrid.length !== size) return;
 
@@ -241,7 +245,7 @@ export default function Suguru() {
   }, [selectedCell, gameState]);
 
   if (!puzzleData) return null;
-  
+
   // Prevent rendering when grid size doesn't match current size (during size transitions)
   if (grid.length !== size || puzzleData.regionGrid.length !== size) return null;
 
@@ -261,40 +265,23 @@ export default function Suguru() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Suguru</h1>
-        <p className={styles.instructions}>
-          Fill each region with numbers 1 to N (where N = region size).
-          Same numbers cannot touch, even diagonally.
-        </p>
-      </div>
+      <GameHeader
+        title="Suguru"
+        instructions="Fill each region with numbers 1 to N (where N = region size). Same numbers cannot touch, even diagonally."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.entries(GRID_SIZES).map(([key, s]) => {
-          const count = puzzleCounts[s] || 0;
-          const noDataset = count === 0;
-          return (
-            <button
-              key={key}
-              className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''} ${noDataset ? styles.disabled : ''}`}
-              onClick={() => !noDataset && setSizeKey(key)}
-              disabled={noDataset}
-              title={`${count} puzzles available`}
-            >
-              {key}
-              {count > 0 && <span className={styles.puzzleCount}>{count}</span>}
-            </button>
-          );
-        })}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selected={sizeKey}
+        onSelect={(key) => {
+          const count = puzzleCounts[GRID_SIZES[key]] || 0;
+          if (count > 0) setSizeKey(key);
+        }}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statusBar}>
-          <div className={styles.timerDisplay}>
-            <span className={styles.timerIcon}>⏱</span>
-            <span>{formatTime(timer)}</span>
-          </div>
+          <Timer time={timer} />
           {puzzleData?.source && (
             <div className={styles.attribution}>
               Puzzle from {puzzleData.source}
@@ -351,21 +338,19 @@ export default function Suguru() {
           <button className={styles.numBtn} onClick={handleClear}>✕</button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Completed in {formatTime(timer)}</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message={`Completed in ${formatTime(timer)}`}
+        />
 
-        {gameState === 'gave_up' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>💡</div>
-            <h3>Solution Revealed</h3>
-            <p>Try another puzzle!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gave_up'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Try another puzzle!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -388,15 +373,14 @@ export default function Suguru() {
           }}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={() => {
+          <GiveUpButton
+            onGiveUp={() => {
               setGrid(puzzleData.solution);
               setGameState('gave_up');
               setIsRunning(false);
-            }}>
-              Give Up
-            </button>
-          )}
+            }}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

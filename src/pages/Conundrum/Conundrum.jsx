@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { isValidWord, generateConundrum, shuffleArray } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Conundrum.module.css';
@@ -164,15 +166,10 @@ export default function Conundrum() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>
-          ← Back to Games
-        </Link>
-        <h1 className={styles.title}>Conundrum</h1>
-        <p className={styles.instructions}>
-          Unscramble the nine letters to find the hidden word. You have {GAME_TIME} seconds!
-        </p>
-      </div>
+      <GameHeader
+        title="Conundrum"
+        instructions={`Unscramble the nine letters to find the hidden word. You have ${GAME_TIME} seconds!`}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.puzzleSection}>
@@ -222,9 +219,7 @@ export default function Conundrum() {
                 <button className={`${styles.btn} ${styles.submitBtn}`} onClick={submitGuess}>
                   Submit
                 </button>
-                <button className={`${styles.btn} ${styles.giveUpBtn}`} onClick={giveUp}>
-                  Give Up
-                </button>
+                <GiveUpButton onGiveUp={giveUp} />
               </div>
             </div>
           )}

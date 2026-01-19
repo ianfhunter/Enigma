@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Einstein.module.css';
 import { generatePuzzle, formatClue } from './generator';
 import { THEME_SETS, THEME_SETS_4, DIFFICULTIES, getRandomTheme } from './puzzleData';
@@ -269,28 +272,20 @@ export default function Einstein() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Einstein Puzzle</h1>
-        <p className={styles.instructions}>
-          <strong>Left click</strong> = ✓ match &nbsp;|&nbsp; <strong>Right click</strong> = ✕ no match
-        </p>
-      </div>
+      <GameHeader
+        title="Einstein Puzzle"
+        instructions={<><strong>Left click</strong> = ✓ match &nbsp;|&nbsp; <strong>Right click</strong> = ✕ no match</>}
+      />
 
       <div className={styles.settings}>
         <div className={styles.settingGroup}>
           <label>Size:</label>
-          <div className={styles.buttonGroup}>
-            {Object.keys(GRID_SIZES).map(key => (
-              <button
-                key={key}
-                className={`${styles.settingBtn} ${sizeKey === key ? styles.active : ''}`}
-                onClick={() => { setSizeKey(key); setThemeId(null); }}
-              >
-                {key}
-              </button>
-            ))}
-          </div>
+          <SizeSelector
+            sizes={Object.keys(GRID_SIZES)}
+            selectedSize={sizeKey}
+            onSizeChange={(key) => { setSizeKey(key); setThemeId(null); }}
+            getLabel={(key) => key}
+          />
         </div>
 
         <div className={styles.settingGroup}>
@@ -431,27 +426,16 @@ export default function Einstein() {
         </div>
       </div>
 
-      {gameState === 'won' && (
-        <div className={styles.winOverlay}>
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🧠</div>
-            <h2>Puzzle Solved!</h2>
-            <p>You cracked the Einstein puzzle!</p>
-            <button className={styles.newGameBtn} onClick={initGame}>New Puzzle</button>
-          </div>
-        </div>
-      )}
-
-      {gameState === 'gaveUp' && (
-        <div className={styles.winOverlay}>
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h2>Solution Revealed</h2>
-            <p>Better luck next time!</p>
-            <button className={styles.newGameBtn} onClick={initGame}>Try Again</button>
-          </div>
-        </div>
-      )}
+      <GameResult
+        gameState={gameState}
+        onNewGame={initGame}
+        winTitle="Puzzle Solved!"
+        winMessage="You cracked the Einstein puzzle!"
+        winEmoji="🧠"
+        gaveUpTitle="Solution Revealed"
+        gaveUpMessage="Better luck next time!"
+        overlay={true}
+      />
 
       <div className={styles.controls}>
         <div className={styles.toggleGroup}>
@@ -470,7 +454,12 @@ export default function Einstein() {
 
         <div className={styles.buttons}>
           <button className={styles.hintBtn} onClick={getHint} disabled={gameState !== 'playing'}>💡 Hint</button>
-          <button className={styles.giveUpBtn} onClick={handleGiveUp} disabled={gameState !== 'playing'}>🏳️ Give Up</button>
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+            label="🏳️ Give Up"
+            requireConfirmation={false}
+          />
           <button className={styles.resetBtn} onClick={handleReset}>🔄 Reset</button>
           <button className={styles.newGameBtn} onClick={initGame}>✨ New Puzzle</button>
         </div>

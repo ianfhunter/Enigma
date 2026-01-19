@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Slant.module.css';
 
 function vIdx(r, c, w) {
@@ -384,18 +386,16 @@ export default function Slant() {
           </select>
         </label>
         <button className={styles.button} onClick={() => newGame(w, h)}>New</button>
-        <button
-          className={`${styles.button} ${styles.giveUpButton}`}
-          onClick={handleGiveUp}
+        <GiveUpButton
+          onGiveUp={handleGiveUp}
           disabled={showSolution || a.exact}
-        >
-          Give Up
-        </button>
+          variant="compact"
+        />
         <div className={styles.status}>
           {showSolution ? (
-            <span className={styles.gaveUp}>Solution revealed</span>
+            <GameResult state="gaveup" variant="inline" />
           ) : a.exact ? (
-            <span className={styles.win}>Solved!</span>
+            <GameResult state="won" title="Solved!" variant="inline" actions={[]} />
           ) : a.hasLoop ? (
             <span className={styles.bad}>Loop detected</span>
           ) : (

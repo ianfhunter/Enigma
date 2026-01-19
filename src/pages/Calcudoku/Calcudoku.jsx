@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { formatTime } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Calcudoku.module.css';
 import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
 
@@ -138,25 +143,9 @@ function notesFromJSON(json) {
   return result;
 }
 
-function loadGameState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch (e) {
-    console.error('Failed to load game state:', e);
-  }
-  return null;
-}
-
-function saveGameState(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.error('Failed to save game state:', e);
-  }
-}
 
 export default function Calcudoku() {
+  const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [difficulty, setDifficulty] = useState('easy');
   const [size, setSize] = useState(4);
   const [puzzle, setPuzzle] = useState(null);
@@ -183,14 +172,12 @@ export default function Calcudoku() {
   }, [size, availableSizes]);
 
   const initPuzzle = useCallback((newSize = size, newDifficulty = difficulty, forceNew = false) => {
-    const saved = loadGameState();
-
-    if (!forceNew && saved && saved.size === newSize && saved.difficulty === newDifficulty && saved.puzzle) {
-      setPuzzle(saved.puzzle);
-      setPlayerGrid(saved.playerGrid);
-      setNotes(notesFromJSON(saved.notes));
-      setTimer(saved.timer || 0);
-      setGameState(saved.gameState || 'playing');
+    if (!forceNew && savedState && savedState.size === newSize && savedState.difficulty === newDifficulty && savedState.puzzle) {
+      setPuzzle(savedState.puzzle);
+      setPlayerGrid(savedState.playerGrid);
+      setNotes(notesFromJSON(savedState.notes));
+      setTimer(savedState.timer || 0);
+      setGameState(savedState.gameState || 'playing');
       setSize(newSize);
       setDifficulty(newDifficulty);
       setIsLoaded(true);
@@ -240,7 +227,7 @@ export default function Calcudoku() {
   useEffect(() => {
     if (!isLoaded || !puzzle) return;
 
-    saveGameState({
+    setSavedState({
       size,
       difficulty,
       puzzle,
@@ -249,7 +236,7 @@ export default function Calcudoku() {
       timer,
       gameState,
     });
-  }, [puzzle, playerGrid, notes, timer, gameState, size, difficulty, isLoaded]);
+  }, [puzzle, playerGrid, notes, timer, gameState, size, difficulty, isLoaded, setSavedState]);
 
   useEffect(() => {
     if (isRunning && gameState === 'playing') {
@@ -439,37 +426,22 @@ export default function Calcudoku() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Calcudoku</h1>
-        <p className={styles.instructions}>
-          Fill each row and column with 1-{size}. Cage numbers must equal the target using the operation.
-        </p>
-      </div>
+      <GameHeader
+        title="Calcudoku"
+        instructions={`Fill each row and column with 1-${size}. Cage numbers must equal the target using the operation.`}
+      />
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => handleDifficultyChange(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={DIFFICULTIES}
+        selected={difficulty}
+        onSelect={handleDifficultyChange}
+      />
 
-      <div className={styles.sizeSelector}>
-        {availableSizes.map((s) => (
-          <button
-            key={s}
-            className={`${styles.sizeBtn} ${size === s ? styles.active : ''}`}
-            onClick={() => handleSizeChange(s)}
-          >
-            {s}×{s}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={availableSizes}
+        selected={size}
+        onSelect={handleSizeChange}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -560,28 +532,25 @@ export default function Calcudoku() {
           </button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Solved in {formatTime(timer)}!
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message={`Completed in ${formatTime(timer)}`}
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Better luck next time!"
+        />
 
         <div className={styles.buttons}>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button
             className={styles.newGameBtn}
             onClick={() => initPuzzle(size, difficulty, true)}

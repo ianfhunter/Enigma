@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './MemorizeItems.module.css';
 
 const ITEM_POOL = [
@@ -41,10 +43,7 @@ export default function MemorizeItems() {
   const [allItems, setAllItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [score, setScore] = useState(0);
-  const [bestScore, setBestScore] = useState(() => {
-    const saved = localStorage.getItem('memorize-items-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestScore, setBestScore] = usePersistedState('memorize-items-best', {});
   const [timeLeft, setTimeLeft] = useState(0);
   const timerRef = useRef(null);
 
@@ -64,7 +63,7 @@ export default function MemorizeItems() {
     const seed = stringToSeed(`${getTodayDateString()}-${difficulty}-${round}`);
     const items = generateItems(itemCount, seed, ITEM_POOL);
     const distractors = generateDistractors(items, itemCount, seed, ITEM_POOL);
-    const shuffled = [...items, ...distractors].sort(() => 
+    const shuffled = [...items, ...distractors].sort(() =>
       createSeededRandom(seed + 2000)() - 0.5
     );
 
@@ -115,10 +114,6 @@ export default function MemorizeItems() {
       }
     };
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('memorize-items-best', JSON.stringify(bestScore));
-  }, [bestScore]);
 
   const handleItemToggle = (item) => {
     if (gameState !== 'recall') return;
@@ -180,31 +175,23 @@ export default function MemorizeItems() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Memorize Items</h1>
-        <p className={styles.instructions}>
-          Study the items shown, then select all the items you remember!
-        </p>
-      </div>
+      <GameHeader
+        title="Memorize Items"
+        instructions="Study the items shown, then select all the items you remember!"
+      />
 
-      <div className={styles.controls}>
-        <div className={styles.difficultySelector}>
-          {Object.entries(DIFFICULTIES).map(([key, { label: diffLabel }]) => (
-            <button
-              key={key}
-              className={`${styles.difficultyBtn} ${difficulty === key ? styles.active : ''}`}
-              onClick={() => {
-                setDifficulty(key);
-                initGame();
-              }}
-              disabled={gameState === 'showing' || gameState === 'recall'}
-            >
-              {diffLabel}
-            </button>
-          ))}
-        </div>
-      </div>
+      <DifficultySelector
+        difficulties={Object.keys(DIFFICULTIES).map(key => ({
+          id: key,
+          label: DIFFICULTIES[key].label,
+        }))}
+        selectedDifficulty={difficulty}
+        onSelectDifficulty={(key) => {
+          setDifficulty(key);
+          initGame();
+        }}
+        disabled={gameState === 'showing' || gameState === 'recall'}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -299,8 +286,8 @@ export default function MemorizeItems() {
         {gameState === 'results' && (
           <div className={styles.results}>
             <div className={styles.resultsEmoji}>
-              {selectedItems.size === correctItems.length && 
-               Array.from(selectedItems).every(item => correctItems.includes(item)) 
+              {selectedItems.size === correctItems.length &&
+               Array.from(selectedItems).every(item => correctItems.includes(item))
                 ? '🎉' : '📝'}
             </div>
             <h3>Round Complete!</h3>

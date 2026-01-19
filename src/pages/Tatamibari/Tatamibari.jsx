@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Tatamibari.module.css';
 
 // Tatamibari rules:
@@ -58,12 +61,12 @@ async function loadDataset() {
 // Convert dataset puzzle to game format
 function datasetToGameFormat(puzzle) {
   const size = puzzle.rows;
-  
+
   // Convert solution: normalize region IDs to 0-based sequential indices
   const solution = puzzle.solution.map(row => [...row]);
   const regionIdMap = new Map();
   let nextId = 0;
-  
+
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       const originalId = solution[r][c];
@@ -77,7 +80,7 @@ function datasetToGameFormat(puzzle) {
   // Derive clues from solution by analyzing each region
   const clueGrid = Array(size).fill(null).map(() => Array(size).fill(null));
   const regionCells = new Map();
-  
+
   // Group cells by region
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
@@ -88,11 +91,11 @@ function datasetToGameFormat(puzzle) {
       regionCells.get(regionId).push([r, c]);
     }
   }
-  
+
   // For each region, calculate dimensions and place clue
   for (const [regionId, cells] of regionCells) {
     if (cells.length === 0) continue;
-    
+
     // Find bounding box
     let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
     for (const [r, c] of cells) {
@@ -101,10 +104,10 @@ function datasetToGameFormat(puzzle) {
       minC = Math.min(minC, c);
       maxC = Math.max(maxC, c);
     }
-    
+
     const height = maxR - minR + 1;
     const width = maxC - minC + 1;
-    
+
     // Determine clue symbol
     let clue = null;
     if (width === height) {
@@ -114,7 +117,7 @@ function datasetToGameFormat(puzzle) {
     } else {
       clue = CLUES.VERTICAL; // |
     }
-    
+
     // Place clue at the first cell of the region (top-left)
     const [clueR, clueC] = cells[0];
     clueGrid[clueR][clueC] = clue;
@@ -344,14 +347,14 @@ export default function Tatamibari() {
       const puzzles = await loadDataset();
       const actualSeed = newSeed ?? Date.now();
       setSeed(actualSeed);
-      
+
       const selectedPuzzle = selectPuzzle(puzzles, size, actualSeed);
       if (!selectedPuzzle) {
         console.error(`No puzzles found for size ${size}`);
         setLoading(false);
         return;
       }
-      
+
       const data = datasetToGameFormat(selectedPuzzle);
       setPuzzleData(data);
       setPlayerGrid(Array(size).fill(null).map(() => Array(size).fill(-1)));
@@ -429,10 +432,10 @@ export default function Tatamibari() {
   if (loading || !puzzleData) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Tatamibari</h1>
-        </div>
+        <GameHeader
+          title="Tatamibari"
+          instructions="Loading puzzle..."
+        />
         <div style={{ textAlign: 'center', padding: '2rem' }}>Loading puzzle...</div>
       </div>
     );
@@ -461,15 +464,10 @@ export default function Tatamibari() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Tatamibari</h1>
-        <p className={styles.instructions}>
-          Divide the grid into rectangles. Each rectangle has exactly one symbol:
-          <strong> +</strong> (square), <strong>−</strong> (wider), <strong>|</strong> (taller).
-          No four rectangles can meet at a corner.
-        </p>
-      </div>
+      <GameHeader
+        title="Tatamibari"
+        instructions="Divide the grid into rectangles. Each rectangle has exactly one symbol: + (square), − (wider), | (taller). No four rectangles can meet at a corner."
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -478,8 +476,7 @@ export default function Tatamibari() {
           showNewButton={false}
           showShare={false}
           onSeedChange={(newSeed) => {
-            // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? parseInt(newSeed, 10) : Date.now())
               : newSeed;
             initGame(seedNum);
@@ -488,17 +485,12 @@ export default function Tatamibari() {
       )}
 
       <div className={styles.settings}>
-        <div className={styles.sizeSelector}>
-          {Object.keys(GRID_SIZES).map((key) => (
-            <button
-              key={key}
-              className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-              onClick={() => setSizeKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
+        <SizeSelector
+          sizes={Object.keys(GRID_SIZES)}
+          selectedSize={sizeKey}
+          onSizeChange={setSizeKey}
+          getLabel={(key) => key}
+        />
       </div>
 
       <div className={styles.gameArea}>
@@ -553,20 +545,12 @@ export default function Tatamibari() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Perfect!</h3>
-            <p>All regions are valid!</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onPlayAgain={() => initGame()}
+          winTitle="Perfect!"
+          winMessage="All regions are valid!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -584,13 +568,10 @@ export default function Tatamibari() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={() => initGame()}>
             New Puzzle
           </button>

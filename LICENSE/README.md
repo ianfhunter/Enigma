@@ -23,6 +23,11 @@ Third-party datasets and libraries include their own license files:
 - **Boxoban Dataset**: `public/datasets/boxoban/LICENSE.txt` (Apache 2.0)
   - Copyright DeepMind Technologies Limited
 
+- **Janko.at Puzzle Datasets** (via puzzlekit-dataset, MIT):
+  - Creek puzzles: `public/datasets/creekPuzzles.json`
+  - See https://github.com/SmilingWayne/puzzlekit-dataset
+  - Original puzzles from https://www.janko.at/Raetsel/
+
 - **Other dependencies**: See [ATTRIBUTIONS.md](../ATTRIBUTIONS.md) for full list of third-party assets and their licenses
 
 ## Quick Reference
@@ -34,4 +39,3 @@ Third-party datasets and libraries include their own license files:
 ## Questions?
 
 If you have questions about licensing or need clarification on which license applies to specific components, please contact: ianfhunter@gmail.com
-

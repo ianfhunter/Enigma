@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LetterWeb.module.css';
 
@@ -325,10 +328,7 @@ export default function LetterWeb() {
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [message, setMessage] = useState('');
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'revealed'
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('letterweb-stats');
-    return saved ? JSON.parse(saved) : { gamesWon: 0, bestWords: null };
-  });
+  const [stats, setStats] = usePersistedState('letterweb-stats', { gamesWon: 0, bestWords: null });
   const [puzzleNumber, setPuzzleNumber] = useState(0);
   const [seed, setSeed] = useState(null);
 
@@ -361,10 +361,6 @@ export default function LetterWeb() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('letterweb-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const lastLetter = words.length > 0 ? words[words.length - 1].slice(-1) : null;
 
@@ -506,14 +502,10 @@ export default function LetterWeb() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Letter Web</h1>
-        <p className={styles.instructions}>
-          Use all 12 letters! Words must chain (last letter = first letter of next).
-          Can't use consecutive letters from the same side.
-        </p>
-      </div>
+      <GameHeader
+        title="Letter Web"
+        instructions="Use all 12 letters! Words must chain (last letter = first letter of next). Can't use consecutive letters from the same side."
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -523,7 +515,7 @@ export default function LetterWeb() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(false, seedNum);
@@ -636,23 +628,18 @@ export default function LetterWeb() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Congratulations! Solved in {words.length} words!
-          </div>
-        )}
-
-        {gameState === 'revealed' && (
-          <div className={styles.revealedMessage}>
-            Solution revealed ({solution.length} words)
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'revealed' ? 'gaveUp' : gameState}
+          onNewGame={() => initGame(true)}
+          winTitle="Congratulations!"
+          winMessage={`Solved in ${words.length} words!`}
+          gaveUpTitle="Solution Revealed"
+          gaveUpMessage={`The solution used ${solution.length} words.`}
+        />
 
         <div className={styles.bottomButtons}>
           {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
+            <GiveUpButton onGiveUp={handleGiveUp} />
           )}
           <button className={styles.newGameBtn} onClick={() => initGame(true)}>
             New Puzzle
