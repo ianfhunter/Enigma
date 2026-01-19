@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './LightsOut.module.css';
 
 const SIZES = {
@@ -59,10 +62,7 @@ export default function LightsOut() {
   const [grid, setGrid] = useState([]);
   const [moves, setMoves] = useState(0);
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won'
-  const [bestScores, setBestScores] = useState(() => {
-    const saved = localStorage.getItem('lights-out-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestScores, setBestScores] = usePersistedState('lights-out-best', {});
 
   const initGame = useCallback(() => {
     setGrid(generatePuzzle(size));
@@ -73,10 +73,6 @@ export default function LightsOut() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('lights-out-best', JSON.stringify(bestScores));
-  }, [bestScores]);
 
   const handleCellClick = (row, col) => {
     if (gameState === 'won') return;
@@ -100,25 +96,17 @@ export default function LightsOut() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Lights Out</h1>
-        <p className={styles.instructions}>
-          Toggle lights to turn them all off. Each click affects neighboring lights!
-        </p>
-      </div>
+      <GameHeader
+        title="Lights Out"
+        instructions="Toggle lights to turn them all off. Each click affects neighboring lights!"
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.entries(SIZES).map(([label, value]) => (
-          <button
-            key={label}
-            className={`${styles.sizeBtn} ${size === value ? styles.active : ''}`}
-            onClick={() => setSize(value)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(SIZES)}
+        selectedSize={Object.keys(SIZES).find(k => SIZES[k] === size)}
+        onSizeChange={(key) => setSize(SIZES[key])}
+        getLabel={(key) => key}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -157,11 +145,12 @@ export default function LightsOut() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 All lights out in {moves} moves!
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="All Lights Out!"
+          winMessage={`Solved in ${moves} moves!`}
+        />
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'New Puzzle'}

@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Str8ts.module.css';
 
 const GRID_SIZE = 9;
@@ -614,10 +617,10 @@ export default function Str8ts() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Str8ts</h1>
-        </div>
+        <GameHeader
+          title="Str8ts"
+          instructions="Loading puzzles..."
+        />
         <div className={styles.loading}>Loading puzzles...</div>
       </div>
     );
@@ -627,26 +630,16 @@ export default function Str8ts() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Str8ts</h1>
-        <p className={styles.instructions}>
-          Fill white cells with 1-9. No repeats in rows/columns. Each white compartment
-          must form a consecutive sequence (e.g., 3,4,5). Black cells with numbers block those digits.
-        </p>
-      </div>
+      <GameHeader
+        title="Str8ts"
+        instructions="Fill white cells with 1-9. No repeats in rows/columns. Each white compartment must form a consecutive sequence (e.g., 3,4,5). Black cells with numbers block those digits."
+      />
 
-      <div className={styles.difficultySelector}>
-        {['easy', 'medium', 'hard'].map((diff) => (
-          <button
-            key={diff}
-            className={`${styles.diffBtn} ${difficulty === diff ? styles.active : ''}`}
-            onClick={() => setDifficulty(diff)}
-          >
-            {diff.charAt(0).toUpperCase() + diff.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={['easy', 'medium', 'hard']}
+        selected={difficulty}
+        onSelect={setDifficulty}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.grid}>
@@ -693,21 +686,19 @@ export default function Str8ts() {
           </button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Excellent!</h3>
-            <p>You solved the Str8ts puzzle!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Excellent!"
+          message="You solved the Str8ts puzzle!"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Better luck next time!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -725,13 +716,10 @@ export default function Str8ts() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

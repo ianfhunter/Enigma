@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import SeedDisplay from '../../components/SeedDisplay';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LetterWeb.module.css';
@@ -325,10 +326,7 @@ export default function LetterWeb() {
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [message, setMessage] = useState('');
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'revealed'
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('letterweb-stats');
-    return saved ? JSON.parse(saved) : { gamesWon: 0, bestWords: null };
-  });
+  const [stats, setStats] = usePersistedState('letterweb-stats', { gamesWon: 0, bestWords: null });
   const [puzzleNumber, setPuzzleNumber] = useState(0);
   const [seed, setSeed] = useState(null);
 
@@ -361,10 +359,6 @@ export default function LetterWeb() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('letterweb-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const lastLetter = words.length > 0 ? words[words.length - 1].slice(-1) : null;
 
@@ -523,7 +517,7 @@ export default function LetterWeb() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(false, seedNum);

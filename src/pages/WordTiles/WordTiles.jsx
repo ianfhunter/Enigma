@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { isValidWord } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordTiles.module.css';
@@ -147,10 +148,7 @@ export default function WordTiles() {
   const [gameState, setGameState] = useState('playing');
   const [message, setMessage] = useState('');
   const [finalPenalty, setFinalPenalty] = useState(0);
-  const [highScore, setHighScore] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? parseInt(saved, 10) : 0;
-  });
+  const [highScore, setHighScore] = usePersistedState(STORAGE_KEY, 0);
   const [isNewHighScore, setIsNewHighScore] = useState(false);
 
   const initGame = useCallback(() => {
@@ -177,7 +175,6 @@ export default function WordTiles() {
     if (gameState === 'finished' && score > highScore) {
       setHighScore(score);
       setIsNewHighScore(true);
-      localStorage.setItem(STORAGE_KEY, score.toString());
     }
   }, [gameState, score, highScore]);
 

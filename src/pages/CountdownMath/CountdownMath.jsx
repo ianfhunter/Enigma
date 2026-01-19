@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
 import { shuffleArray, randomInt, pickRandom } from '../../data/wordUtils';
 import styles from './CountdownMath.module.css';
 
@@ -635,16 +635,10 @@ export default function CountdownMath() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>
-          ← Back to Games
-        </Link>
-        <h1 className={styles.title}>Countdown Math</h1>
-        <p className={styles.instructions}>
-          Use the six numbers to reach the target <strong>{target}</strong>.
-          Each number can only be used once. Use +, −, ×, ÷ and brackets.
-        </p>
-      </div>
+      <GameHeader
+        title="Countdown Math"
+        instructions={`Use the six numbers to reach the target ${target}. Each number can only be used once. Use +, −, ×, ÷ and brackets.`}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.mainSection}>

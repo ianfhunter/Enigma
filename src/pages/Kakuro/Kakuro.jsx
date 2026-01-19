@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { formatTime, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import Timer from '../../components/Timer';
@@ -56,25 +57,9 @@ export {
   notesFromJSON,
 };
 
-function loadGameState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch (e) {
-    console.error('Failed to load game state:', e);
-  }
-  return null;
-}
-
-function saveGameState(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.error('Failed to save game state:', e);
-  }
-}
 
 export default function Kakuro() {
+  const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzle, setPuzzle] = useState(null);
   const [playerValues, setPlayerValues] = useState({});
@@ -93,15 +78,14 @@ export default function Kakuro() {
 
   const initPuzzle = useCallback(async (newDifficulty = difficulty, forceNew = false, customSeed = null) => {
     const today = getTodayDateString();
-    const saved = loadGameState();
 
     // Try to restore saved state
-    if (!forceNew && saved && saved.date === today && saved.difficulty === newDifficulty && saved.puzzleId) {
-      setPuzzle(saved.puzzle);
-      setPlayerValues(saved.playerValues || {});
-      setNotes(notesFromJSON(saved.notes));
-      setTimer(saved.timer || 0);
-      setGameState(saved.gameState || 'playing');
+    if (!forceNew && savedState && savedState.date === today && savedState.difficulty === newDifficulty && savedState.puzzleId) {
+      setPuzzle(savedState.puzzle);
+      setPlayerValues(savedState.playerValues || {});
+      setNotes(notesFromJSON(savedState.notes));
+      setTimer(savedState.timer || 0);
+      setGameState(savedState.gameState || 'playing');
       setDifficulty(newDifficulty);
       setIsLoaded(true);
       // Restore seed from saved state or compute it
@@ -124,7 +108,7 @@ export default function Kakuro() {
     let gameSeed;
     if (customSeed !== null) {
       // Convert custom seed to number if needed
-      gameSeed = typeof customSeed === 'string' 
+      gameSeed = typeof customSeed === 'string'
         ? (isNaN(parseInt(customSeed, 10)) ? stringToSeed(customSeed) : parseInt(customSeed, 10))
         : customSeed;
     } else {
@@ -153,7 +137,7 @@ export default function Kakuro() {
     if (!isLoaded || !puzzle) return;
 
     const today = getTodayDateString();
-    saveGameState({
+    setSavedState({
       date: today,
       difficulty,
       puzzleId: puzzle.id,
@@ -163,7 +147,7 @@ export default function Kakuro() {
       timer,
       gameState,
     });
-  }, [puzzle, playerValues, notes, timer, gameState, difficulty, isLoaded]);
+  }, [puzzle, playerValues, notes, timer, gameState, difficulty, isLoaded, setSavedState]);
 
   // Timer
   useEffect(() => {
@@ -370,7 +354,7 @@ export default function Kakuro() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initPuzzle(difficulty, false, seedNum);

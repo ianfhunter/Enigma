@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import ModeSelector from '../../components/ModeSelector';
+import StatsPanel from '../../components/StatsPanel';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { getRandomCountry, getRandomOptions } from '@datasets/countries';
 import styles from './FlagGuesser.module.css';
 
@@ -15,24 +18,8 @@ export default function FlagGuesser() {
   const [round, setRound] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [bestStreak, setBestStreak] = useState(() => {
-    const saved = localStorage.getItem('flag-guesser-best-streak');
-    return saved ? parseInt(saved, 10) : 0;
-  });
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('flag-guesser-stats');
-    return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0 };
-  });
-
-  // Save stats to localStorage
-  useEffect(() => {
-    localStorage.setItem('flag-guesser-stats', JSON.stringify(stats));
-  }, [stats]);
-
-  // Save best streak
-  useEffect(() => {
-    localStorage.setItem('flag-guesser-best-streak', bestStreak.toString());
-  }, [bestStreak]);
+  const [bestStreak, setBestStreak] = usePersistedState('flag-guesser-best-streak', 0);
+  const [stats, setStats] = usePersistedState('flag-guesser-stats', { played: 0, won: 0, totalCorrect: 0 });
 
   const setupRound = useCallback(() => {
     const country = getRandomCountry();
@@ -108,55 +95,29 @@ export default function FlagGuesser() {
   if (!mode) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Flag Guesser</h1>
-          <p className={styles.instructions}>
-            Test your knowledge of world flags! Can you identify countries by their flags?
-          </p>
-        </div>
+        <GameHeader
+          title="Flag Guesser"
+          instructions="Test your knowledge of world flags! Can you identify countries by their flags?"
+        />
 
         <div className={styles.menuArea}>
-          <div className={styles.modeCards}>
-            <button
-              className={styles.modeCard}
-              onClick={() => startGame('challenge')}
-            >
-              <span className={styles.modeIcon}>🏆</span>
-              <span className={styles.modeTitle}>Challenge</span>
-              <span className={styles.modeDesc}>{TOTAL_ROUNDS} flags, score as high as you can!</span>
-            </button>
+          <ModeSelector
+            modes={[
+              { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} flags, score as high as you can!` },
+              { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep playing until you want to stop' },
+            ]}
+            selectedMode={null}
+            onSelectMode={startGame}
+          />
 
-            <button
-              className={styles.modeCard}
-              onClick={() => startGame('endless')}
-            >
-              <span className={styles.modeIcon}>∞</span>
-              <span className={styles.modeTitle}>Endless</span>
-              <span className={styles.modeDesc}>Keep playing until you want to stop</span>
-            </button>
-          </div>
-
-          <div className={styles.statsPanel}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.totalCorrect}</span>
-              <span className={styles.statLabel}>Correct</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{bestStreak}</span>
-              <span className={styles.statLabel}>Best Streak</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%
-              </span>
-              <span className={styles.statLabel}>Win Rate</span>
-            </div>
-          </div>
+          <StatsPanel
+            stats={[
+              { label: 'Played', value: stats.played },
+              { label: 'Correct', value: stats.totalCorrect },
+              { label: 'Best Streak', value: bestStreak },
+              { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+            ]}
+          />
         </div>
       </div>
     );

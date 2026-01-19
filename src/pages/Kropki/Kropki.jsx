@@ -305,33 +305,19 @@ export default function Kropki() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Kropki</h1>
-        <p className={styles.instructions}>
-          Fill the grid with 1-{size}. Each row and column contains each number once.
-          <strong> White dots</strong> = consecutive numbers. <strong>Black dots</strong> = one is double the other.
-          <strong> No dot</strong> = neither relationship.
-        </p>
-      </div>
+      <GameHeader
+        title="Kropki"
+        instructions={`Fill the grid with 1-${size}. Each row and column contains each number once. White dots = consecutive numbers. Black dots = one is double the other. No dot = neither relationship.`}
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
       <div className={styles.gameArea}>
-        <div className={styles.timerDisplay}>
-          <span className={styles.timerIcon}>⏱</span>
-          <span>{formatTime(timer)}</span>
-        </div>
+        <Timer time={timer} />
 
         <div className={styles.boardWrapper}>
           <div className={styles.board} style={{ '--grid-size': size }}>
@@ -383,20 +369,18 @@ export default function Kropki() {
           <button className={styles.numBtn} onClick={handleClear}>✕</button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Completed in {formatTime(timer)}</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message={`Completed in ${formatTime(timer)}`}
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -430,13 +414,10 @@ export default function Kropki() {
           }}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

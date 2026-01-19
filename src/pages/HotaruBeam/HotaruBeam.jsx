@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './HotaruBeam.module.css';
 
 const GRID_SIZES = {
@@ -624,38 +628,23 @@ export default function HotaruBeam() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Hotaru Beam</h1>
-        <p className={styles.instructions}>
-          Draw lines to form closed loops. Each numbered circle must have exactly that many line segments touching it.
-          Click between cells to draw/remove lines.
-        </p>
-      </div>
+      <GameHeader
+        title="Hotaru Beam"
+        instructions="Draw lines to form closed loops. Each numbered circle must have exactly that many line segments touching it. Click between cells to draw/remove lines."
+      />
 
       <div className={styles.selectors}>
-        <div className={styles.sizeSelector}>
-          {Object.keys(GRID_SIZES).map((key) => (
-            <button
-              key={key}
-              className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-              onClick={() => setSizeKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
-        <div className={styles.difficultySelector}>
-          {Object.keys(DIFFICULTY).map((key) => (
-            <button
-              key={key}
-              className={`${styles.difficultyBtn} ${difficultyKey === key ? styles.active : ''}`}
-              onClick={() => setDifficultyKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
+        <SizeSelector
+          sizes={Object.keys(GRID_SIZES)}
+          selectedSize={sizeKey}
+          onSizeChange={setSizeKey}
+          getLabel={(key) => key}
+        />
+        <DifficultySelector
+          difficulties={Object.keys(DIFFICULTY)}
+          selectedDifficulty={difficultyKey}
+          onDifficultyChange={setDifficultyKey}
+        />
       </div>
 
       <div className={styles.gameArea}>
@@ -753,21 +742,11 @@ export default function HotaruBeam() {
           </svg>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All loops complete!</p>
-          </div>
-        )}
-
-        {gameState === 'revealed' && (
-          <div className={styles.revealedMessage}>
-            <div className={styles.revealedEmoji}>💡</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'revealed' ? 'gaveUp' : gameState}
+          onPlayAgain={initGame}
+          winMessage="All loops complete!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -785,11 +764,10 @@ export default function HotaruBeam() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

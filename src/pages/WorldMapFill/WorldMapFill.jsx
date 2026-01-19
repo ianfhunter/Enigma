@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { countries } from '@datasets/countries';
 import styles from './WorldMapFill.module.css';
 
@@ -111,10 +112,7 @@ export default function WorldMapFill() {
   const [showGuessedList, setShowGuessedList] = useState(false);
   const [geoData, setGeoData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('world-map-fill-stats');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [stats, setStats] = usePersistedState('world-map-fill-stats', {});
   const inputRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -228,11 +226,6 @@ export default function WorldMapFill() {
     }
     return () => clearInterval(timerRef.current);
   }, [gameStarted, isComplete]);
-
-  // Save stats
-  useEffect(() => {
-    localStorage.setItem('world-map-fill-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);

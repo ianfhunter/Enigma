@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GameResult from '../../components/GameResult';
 import styles from './WaterPouring.module.css';
 
 // GCD using Euclidean algorithm
@@ -438,15 +439,10 @@ export default function WaterPouring() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Water Pouring</h1>
-        <p className={styles.instructions}>
-          {puzzle.targetDescription || `Measure exactly ${puzzle.target} liters using the jugs.`}
-          {' '}Click a jug to select it, then click another to pour.
-          {puzzle.source === 'infinite' && ' You have unlimited water supply.'}
-        </p>
-      </div>
+      <GameHeader
+        title="Water Pouring"
+        instructions={`${puzzle.targetDescription || `Measure exactly ${puzzle.target} liters using the jugs.`} Click a jug to select it, then click another to pour.${puzzle.source === 'infinite' ? ' You have unlimited water supply.' : ''}`}
+      />
 
       <div className={styles.puzzleSelector}>
         <div className={styles.settingGroup}>
@@ -518,13 +514,12 @@ export default function WaterPouring() {
             </div>
           )}
 
-          {gameState === 'won' && (
-            <div className={styles.winMessage}>
-              <div className={styles.winEmoji}>💧</div>
-              <h3>Measured!</h3>
-              <p>Completed in {moves} moves!{puzzle.minMoves && moves === puzzle.minMoves && ' (Perfect!)'}</p>
-            </div>
-          )}
+          <GameResult
+            gameState={gameState}
+            onNewGame={generateNew}
+            winTitle="Measured!"
+            winMessage={`Completed in ${moves} moves!${puzzle.minMoves && moves === puzzle.minMoves ? ' (Perfect!)' : ''}`}
+          />
 
           <div className={styles.buttons}>
             <button

@@ -1,63 +1,75 @@
 import { useState, useEffect, useCallback } from 'react';
+import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
-import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Creek.module.css';
 
-const GRID_SIZES = {
-  '5×5': 5,
-  '7×7': 7,
-  '9×9': 9,
-};
+const DIFFICULTIES = ['easy', 'medium', 'hard'];
+const STORAGE_KEY = 'creek-game-state';
 
-// Generate a valid Creek solution
-function generateSolution(size) {
-  const solution = Array(size).fill(null).map(() => Array(size).fill(false));
-
-  // Randomly shade cells, ensuring white cells stay connected
-  const numShaded = Math.floor(size * size * 0.4);
-  const positions = [];
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      positions.push([r, c]);
-    }
+// Load puzzles from dataset
+let puzzleDataset = null;
+async function loadPuzzleDataset() {
+  if (puzzleDataset) return puzzleDataset;
+  try {
+    const response = await fetch('/datasets/creekPuzzles.json');
+    puzzleDataset = await response.json();
+    return puzzleDataset;
+  } catch (e) {
+    console.error('Failed to load Creek puzzles:', e);
+    return null;
   }
-
-  // Shuffle positions
-  for (let i = positions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [positions[i], positions[j]] = [positions[j], positions[i]];
-  }
-
-  let shaded = 0;
-  for (const [r, c] of positions) {
-    if (shaded >= numShaded) break;
-
-    // Try shading this cell
-    solution[r][c] = true;
-
-    // Check if white cells are still connected
-    if (!areWhiteCellsConnected(solution, size)) {
-      solution[r][c] = false;
-    } else {
-      shaded++;
-    }
-  }
-
-  return solution;
 }
 
-function areWhiteCellsConnected(grid, size) {
-  // Find first white cell
+// Select a puzzle based on difficulty and seed
+function selectPuzzle(puzzles, difficulty, seed) {
+  const random = createSeededRandom(seed);
+  const filtered = puzzles.filter(p => p.difficulty === difficulty);
+  if (filtered.length === 0) return puzzles[Math.floor(random() * puzzles.length)];
+  return filtered[Math.floor(random() * filtered.length)];
+}
+
+// Convert dataset puzzle to game format
+function convertPuzzle(datasetPuzzle) {
+  const rows = datasetPuzzle.rows;
+  const cols = datasetPuzzle.cols;
+
+  // Dataset solution uses "x" for shaded, null for white
+  // Convert to boolean: true = shaded, false = white
+  const solution = datasetPuzzle.solution.map(row =>
+    row.map(cell => cell === 'x')
+  );
+
+  // Clues are already in the right format (null or number)
+  // Dataset clues are (rows+1) x (cols+1) for vertices
+  const clues = datasetPuzzle.clues;
+
+  return {
+    solution,
+    clues,
+    size: rows, // Assuming square puzzles, or we can use rows/cols separately
+    rows,
+    cols,
+    id: datasetPuzzle.id,
+    difficulty: datasetPuzzle.difficulty,
+  };
+}
+
+
+function areWhiteCellsConnected(grid, rows, cols) {
+  // Find first white cell (false)
   let start = null;
-  for (let r = 0; r < size && !start; r++) {
-    for (let c = 0; c < size && !start; c++) {
-      if (!grid[r][c]) start = [r, c];
+  for (let r = 0; r < rows && !start; r++) {
+    for (let c = 0; c < cols && !start; c++) {
+      if (grid[r][c] === false) start = [r, c];
     }
   }
 
-  if (!start) return true; // All shaded is technically valid
+  if (!start) return true; // No white cells marked yet
 
   // BFS to count connected white cells
   const visited = new Set();
@@ -68,11 +80,12 @@ function areWhiteCellsConnected(grid, size) {
     const [r, c] = queue.shift();
 
     for (const [nr, nc] of [[r-1, c], [r+1, c], [r, c-1], [r, c+1]]) {
-      if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
+      if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
         const key = `${nr},${nc}`;
-        if (!visited.has(key) && !grid[nr][nc]) {
+        // Can traverse through unmarked cells (null) to reach other white cells
+        if (!visited.has(key) && (grid[nr][nc] === false || grid[nr][nc] === null)) {
           visited.add(key);
-          queue.push([nr, nc]);
+          if (grid[nr][nc] === false) queue.push([nr, nc]);
         }
       }
     }
@@ -80,63 +93,22 @@ function areWhiteCellsConnected(grid, size) {
 
   // Count total white cells
   let totalWhite = 0;
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (!grid[r][c]) totalWhite++;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === false) totalWhite++;
     }
   }
 
-  return visited.size === totalWhite;
+  return visited.size >= totalWhite;
 }
 
-// Generate clues at vertices (corners between 4 cells)
-function generateClues(solution, size) {
-  // Clues are at vertices, which are at positions (r, c) where r, c in [0, size]
-  // Each vertex touches up to 4 cells: (r-1,c-1), (r-1,c), (r,c-1), (r,c)
-  const clues = Array(size + 1).fill(null).map(() => Array(size + 1).fill(null));
-
-  for (let r = 0; r <= size; r++) {
-    for (let c = 0; c <= size; c++) {
-      // Count shaded cells around this vertex
-      let count = 0;
-      const cells = [
-        [r - 1, c - 1],
-        [r - 1, c],
-        [r, c - 1],
-        [r, c],
-      ];
-
-      for (const [cr, cc] of cells) {
-        if (cr >= 0 && cr < size && cc >= 0 && cc < size && solution[cr][cc]) {
-          count++;
-        }
-      }
-
-      // Only show some clues (enough to make puzzle solvable)
-      // Show clues with 50% probability or at corners/edges
-      if (Math.random() < 0.5 || r === 0 || r === size || c === 0 || c === size) {
-        clues[r][c] = count;
-      }
-    }
-  }
-
-  return clues;
-}
-
-function generatePuzzle(size) {
-  const solution = generateSolution(size);
-  const clues = generateClues(solution, size);
-
-  return { solution, clues, size };
-}
-
-function checkValidity(grid, clues, size) {
+function checkValidity(grid, clues, rows, cols) {
   const errors = new Set();
 
   // Check each clue
-  for (let r = 0; r <= size; r++) {
-    for (let c = 0; c <= size; c++) {
-      if (clues[r][c] === null) continue;
+  for (let r = 0; r <= rows; r++) {
+    for (let c = 0; c <= cols; c++) {
+      if (clues[r]?.[c] === null || clues[r]?.[c] === undefined) continue;
 
       let count = 0;
       const cells = [
@@ -147,8 +119,8 @@ function checkValidity(grid, clues, size) {
       ];
 
       for (const [cr, cc] of cells) {
-        if (cr >= 0 && cr < size && cc >= 0 && cc < size) {
-          if (grid[cr][cc]) {
+        if (cr >= 0 && cr < rows && cc >= 0 && cc < cols) {
+          if (grid[cr][cc] === true) {
             count++;
           }
         }
@@ -157,7 +129,7 @@ function checkValidity(grid, clues, size) {
       // Only show error if count exceeds clue
       if (count > clues[r][c]) {
         for (const [cr, cc] of cells) {
-          if (cr >= 0 && cr < size && cc >= 0 && cc < size && grid[cr][cc]) {
+          if (cr >= 0 && cr < rows && cc >= 0 && cc < cols && grid[cr][cc] === true) {
             errors.add(`${cr},${cc}`);
           }
         }
@@ -167,16 +139,16 @@ function checkValidity(grid, clues, size) {
 
   // Check white cells are connected
   let hasAnyWhite = false;
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
       if (grid[r][c] === false) hasAnyWhite = true;
     }
   }
 
-  if (hasAnyWhite && !areWhiteCellsConnectedPartial(grid, size)) {
-    // Mark some white cells as errors
-    for (let r = 0; r < size; r++) {
-      for (let c = 0; c < size; c++) {
+  if (hasAnyWhite && !areWhiteCellsConnected(grid, rows, cols)) {
+    // Mark disconnected white cells as errors
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
         if (grid[r][c] === false) {
           errors.add(`${r},${c}`);
         }
@@ -187,49 +159,12 @@ function checkValidity(grid, clues, size) {
   return errors;
 }
 
-function areWhiteCellsConnectedPartial(grid, size) {
-  // Find first white cell
-  let start = null;
-  for (let r = 0; r < size && !start; r++) {
-    for (let c = 0; c < size && !start; c++) {
-      if (grid[r][c] === false) start = [r, c];
-    }
-  }
-
-  if (!start) return true;
-
-  const visited = new Set();
-  const queue = [start];
-  visited.add(`${start[0]},${start[1]}`);
-
-  while (queue.length > 0) {
-    const [r, c] = queue.shift();
-
-    for (const [nr, nc] of [[r-1, c], [r+1, c], [r, c-1], [r, c+1]]) {
-      if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-        const key = `${nr},${nc}`;
-        if (!visited.has(key) && (grid[nr][nc] === false || grid[nr][nc] === null)) {
-          visited.add(key);
-          if (grid[nr][nc] === false) queue.push([nr, nc]);
-        }
-      }
-    }
-  }
-
-  let totalWhite = 0;
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (grid[r][c] === false) totalWhite++;
-    }
-  }
-
-  return visited.size >= totalWhite;
-}
-
-function checkSolved(grid, solution, size) {
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (grid[r][c] !== solution[r][c]) return false;
+function checkSolved(grid, solution, rows, cols) {
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const playerCell = grid[r][c] === true;
+      const solutionCell = solution[r][c];
+      if (playerCell !== solutionCell) return false;
     }
   }
   return true;
@@ -237,51 +172,103 @@ function checkSolved(grid, solution, size) {
 
 // Export helpers for testing
 export {
-  GRID_SIZES,
-  generateSolution,
-  generateClues,
-  generatePuzzle,
+  DIFFICULTIES,
+  selectPuzzle,
+  convertPuzzle,
   areWhiteCellsConnected,
-  areWhiteCellsConnectedPartial,
   checkValidity,
   checkSolved,
 };
 
 export default function Creek() {
-  const [sizeKey, setSizeKey] = useState('5×5');
+  const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
+  const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const [gameState, setGameState] = useState('loading');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [whiteMode, setWhiteMode] = useState(false); // Mobile white mode
+  const [seed, setSeed] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const size = GRID_SIZES[sizeKey];
+  const initGame = useCallback(async (newDifficulty = difficulty, forceNew = false, customSeed = null) => {
+    const today = getTodayDateString();
 
-  const initGame = useCallback(() => {
-    const data = generatePuzzle(size);
-    setPuzzleData(data);
-    setGrid(Array(size).fill(null).map(() => Array(size).fill(null)));
+    // Try to restore saved state
+    if (!forceNew && savedState && savedState.date === today && savedState.difficulty === newDifficulty && savedState.puzzleId) {
+      setPuzzleData(savedState.puzzleData);
+      setGrid(savedState.grid.map(row => [...row]));
+      setGameState(savedState.gameState || 'playing');
+      setDifficulty(newDifficulty);
+      setSeed(savedState.seed);
+      setIsLoaded(true);
+      return;
+    }
+
+    // Load dataset and select new puzzle
+    const dataset = await loadPuzzleDataset();
+    if (!dataset || !dataset.puzzles) {
+      console.error('Failed to load Creek dataset');
+      setGameState('error');
+      setIsLoaded(true);
+      return;
+    }
+
+    let gameSeed;
+    if (customSeed !== null) {
+      gameSeed = typeof customSeed === 'string'
+        ? (isNaN(parseInt(customSeed, 10)) ? stringToSeed(customSeed) : parseInt(customSeed, 10))
+        : customSeed;
+    } else {
+      const seedString = `creek-${today}-${newDifficulty}${forceNew ? '-' + Date.now() : ''}`;
+      gameSeed = stringToSeed(seedString);
+    }
+
+    const selected = selectPuzzle(dataset.puzzles, newDifficulty, gameSeed);
+    const converted = convertPuzzle(selected);
+
+    setSeed(gameSeed);
+    setPuzzleData(converted);
+    setGrid(Array(converted.rows).fill(null).map(() => Array(converted.cols).fill(null)));
     setGameState('playing');
+    setDifficulty(newDifficulty);
     setErrors(new Set());
-  }, [size]);
+    setIsLoaded(true);
+  }, [difficulty]);
 
   useEffect(() => {
     initGame();
-  }, [initGame]);
+  }, []);
 
+  // Save state when it changes
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!isLoaded || !puzzleData || gameState === 'loading' || gameState === 'error') return;
+
+    setSavedState({
+      date: getTodayDateString(),
+      difficulty,
+      puzzleId: puzzleData.id,
+      puzzleData,
+      grid,
+      gameState,
+      seed,
+    });
+  }, [grid, gameState, puzzleData, difficulty, seed, isLoaded, setSavedState]);
+
+  // Check validity and solved state
+  useEffect(() => {
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
-      ? checkValidity(grid, puzzleData.clues, size)
+      ? checkValidity(grid, puzzleData.clues, puzzleData.rows, puzzleData.cols)
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.solution, size)) {
+    if (checkSolved(grid, puzzleData.solution, puzzleData.rows, puzzleData.cols)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors, size]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing') return;
@@ -307,7 +294,8 @@ export default function Creek() {
   };
 
   const handleReset = () => {
-    setGrid(Array(size).fill(null).map(() => Array(size).fill(null)));
+    if (!puzzleData) return;
+    setGrid(Array(puzzleData.rows).fill(null).map(() => Array(puzzleData.cols).fill(null)));
     setGameState('playing');
   };
 
@@ -317,7 +305,38 @@ export default function Creek() {
     setGameState('gaveUp');
   };
 
-  if (!puzzleData) return null;
+  const handleDifficultyChange = (newDiff) => {
+    initGame(newDiff, true);
+  };
+
+  const handleSeedChange = (newSeed) => {
+    initGame(difficulty, true, newSeed);
+  };
+
+  if (gameState === 'loading' || !puzzleData) {
+    return (
+      <div className={styles.container}>
+        <GameHeader
+          title="Creek"
+          instructions="Loading puzzles..."
+        />
+        <div className={styles.loading}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (gameState === 'error') {
+    return (
+      <div className={styles.container}>
+        <GameHeader
+          title="Creek"
+          instructions="Failed to load puzzles. Please refresh the page."
+        />
+      </div>
+    );
+  }
+
+  const { rows, cols, clues } = puzzleData;
 
   return (
     <div className={styles.container}>
@@ -326,12 +345,13 @@ export default function Creek() {
         instructions="Shade cells based on corner clues. Each number shows how many of the 4 adjacent cells are shaded. All white cells must be connected orthogonally."
       />
 
-      <SizeSelector
-        options={Object.keys(GRID_SIZES)}
-        value={sizeKey}
-        onChange={setSizeKey}
-        className={styles.sizeSelector}
+      <DifficultySelector
+        options={DIFFICULTIES}
+        value={difficulty}
+        onChange={handleDifficultyChange}
       />
+
+      <SeedDisplay seed={seed} onSeedChange={handleSeedChange} />
 
       <div className={styles.gameArea}>
         {/* Mobile White Toggle */}
@@ -345,32 +365,32 @@ export default function Creek() {
         <div className={styles.gridWrapper}>
           {/* Grid with clues at vertices */}
           <div className={styles.board} style={{
-            gridTemplateColumns: Array(size * 2 + 1).fill(null).map((_, i) => 
+            gridTemplateColumns: Array(cols * 2 + 1).fill(null).map((_, i) =>
               i % 2 === 0 ? 'min-content' : '1fr'
             ).join(' '),
-            gridTemplateRows: Array(size * 2 + 1).fill(null).map((_, i) => 
+            gridTemplateRows: Array(rows * 2 + 1).fill(null).map((_, i) =>
               i % 2 === 0 ? 'min-content' : '1fr'
             ).join(' ')
           }}>
-            {Array(size * 2 + 1).fill(null).map((_, row) =>
-              Array(size * 2 + 1).fill(null).map((_, col) => {
+            {Array(rows * 2 + 1).fill(null).map((_, row) =>
+              Array(cols * 2 + 1).fill(null).map((_, col) => {
                 const isVertex = row % 2 === 0 && col % 2 === 0;
                 const isCell = row % 2 === 1 && col % 2 === 1;
 
                 if (isVertex) {
                   const vr = row / 2;
                   const vc = col / 2;
-                  const clue = puzzleData.clues[vr][vc];
+                  const clue = clues[vr]?.[vc];
 
                   return (
                     <div key={`${row}-${col}`} className={styles.vertex}>
-                      {clue !== null && <span className={styles.clue}>{clue}</span>}
+                      {clue !== null && clue !== undefined && <span className={styles.clue}>{clue}</span>}
                     </div>
                   );
                 } else if (isCell) {
                   const cr = (row - 1) / 2;
                   const cc = (col - 1) / 2;
-                  const value = grid[cr][cc];
+                  const value = grid[cr]?.[cc];
                   const hasError = errors.has(`${cr},${cc}`);
 
                   return (
@@ -399,7 +419,7 @@ export default function Creek() {
             state="won"
             title="🏞️ Puzzle Solved!"
             message="Creek perfectly mapped!"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            actions={[{ label: 'New Puzzle', onClick: () => initGame(difficulty, true), primary: true }]}
           />
         )}
 
@@ -407,7 +427,7 @@ export default function Creek() {
           <GameResult
             state="gaveup"
             message="Better luck next time!"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            actions={[{ label: 'New Puzzle', onClick: () => initGame(difficulty, true), primary: true }]}
           />
         )}
 
@@ -431,7 +451,7 @@ export default function Creek() {
             onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
           />
-          <button className={styles.newGameBtn} onClick={initGame}>
+          <button className={styles.newGameBtn} onClick={() => initGame(difficulty, true)}>
             New Puzzle
           </button>
         </div>
@@ -439,6 +459,11 @@ export default function Creek() {
         <div className={styles.legend}>
           <span>Click: Shade cell</span>
           <span>Right-click: Mark white</span>
+        </div>
+
+        <div className={styles.attribution}>
+          Puzzles from <a href="https://www.janko.at/Raetsel/" target="_blank" rel="noopener noreferrer">janko.at</a> via{' '}
+          <a href="https://github.com/SmilingWayne/puzzlekit-dataset" target="_blank" rel="noopener noreferrer">puzzlekit-dataset</a> (MIT)
         </div>
       </div>
     </div>

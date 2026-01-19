@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './FamousPaintings.module.css';
 
 // Import all local painting images using Vite's glob import
@@ -105,14 +106,7 @@ export default function FamousPaintings() {
   const [streak, setStreak] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('famous-paintings-stats');
-    return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 };
-  });
-
-  useEffect(() => {
-    localStorage.setItem('famous-paintings-stats', JSON.stringify(stats));
-  }, [stats]);
+  const [stats, setStats] = usePersistedState('famous-paintings-stats', { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 });
 
   // Load dataset
   useEffect(() => {

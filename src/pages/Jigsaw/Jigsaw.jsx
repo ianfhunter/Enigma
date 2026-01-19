@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import GameResult from '../../components/GameResult';
+import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import sampleImage from '../../assets/sample_image.png';
 import styles from './Jigsaw.module.css';
 
@@ -511,13 +512,10 @@ export default function Jigsaw() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Jigsaw</h1>
-        <p className={styles.instructions}>
-          Drag pieces to the board. They'll snap into place when close enough!
-        </p>
-      </div>
+      <GameHeader
+        title="Jigsaw"
+        instructions="Drag pieces to the board. They'll snap into place when close enough!"
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -527,7 +525,7 @@ export default function Jigsaw() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(difficulty, seedNum);
@@ -628,11 +626,12 @@ export default function Jigsaw() {
           }).map(renderPiece)}
         </svg>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🧩 Puzzle Complete! Well done!
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={() => initGame(difficulty)}
+          winTitle="Puzzle Complete!"
+          winMessage="Well done!"
+        />
       </div>
 
       <button className={styles.newGameBtn} onClick={() => initGame(difficulty)}>

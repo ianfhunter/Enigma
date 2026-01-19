@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { REGION_CONFIGS, buildLookup, getRegionCode } from '@datasets/provincialMapData';
 import styles from './ProvincialMapFill.module.css';
 
@@ -24,10 +25,7 @@ export default function ProvincialMapFill() {
   const [showGuessedList, setShowGuessedList] = useState(false);
   const [geoData, setGeoData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('provincial-map-fill-stats');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [stats, setStats] = usePersistedState('provincial-map-fill-stats', {});
   const inputRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -72,11 +70,6 @@ export default function ProvincialMapFill() {
     }
     return () => clearInterval(timerRef.current);
   }, [gameStarted, isComplete]);
-
-  // Save stats
-  useEffect(() => {
-    localStorage.setItem('provincial-map-fill-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);

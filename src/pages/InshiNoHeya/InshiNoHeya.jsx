@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './InshiNoHeya.module.css';
 
 const GRID_SIZES = {
@@ -416,38 +420,23 @@ export default function InshiNoHeya() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Inshi no Heya</h1>
-        <p className={styles.instructions}>
-          Fill in numbers 1-{puzzleSize} so each row and column has each number once.
-          Numbers in each room must multiply to the shown product.
-        </p>
-      </div>
+      <GameHeader
+        title="Inshi no Heya"
+        instructions={`Fill in numbers 1-${puzzleSize} so each row and column has each number once. Numbers in each room must multiply to the shown product.`}
+      />
 
       <div className={styles.selectors}>
-        <div className={styles.sizeSelector}>
-          {Object.keys(GRID_SIZES).map((key) => (
-            <button
-              key={key}
-              className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-              onClick={() => setSizeKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
-        <div className={styles.difficultySelector}>
-          {Object.keys(DIFFICULTY).map((key) => (
-            <button
-              key={key}
-              className={`${styles.difficultyBtn} ${difficultyKey === key ? styles.active : ''}`}
-              onClick={() => setDifficultyKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
+        <SizeSelector
+          sizes={Object.keys(GRID_SIZES)}
+          selectedSize={sizeKey}
+          onSizeChange={setSizeKey}
+          getLabel={(key) => key}
+        />
+        <DifficultySelector
+          difficulties={Object.keys(DIFFICULTY)}
+          selectedDifficulty={difficultyKey}
+          onDifficultyChange={setDifficultyKey}
+        />
       </div>
 
       <div className={styles.gameArea}>
@@ -490,20 +479,11 @@ export default function InshiNoHeya() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All products correct!</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onPlayAgain={initGame}
+          winMessage="All products correct!"
+        />
 
         <div className={styles.numberPad}>
           {Array.from({ length: puzzleSize }, (_, i) => i + 1).map(num => (
@@ -539,13 +519,10 @@ export default function InshiNoHeya() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

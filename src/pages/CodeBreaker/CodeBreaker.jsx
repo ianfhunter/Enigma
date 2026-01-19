@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './CodeBreaker.module.css';
 
 const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6'];
@@ -55,10 +59,7 @@ export default function CodeBreaker() {
   const [currentGuess, setCurrentGuess] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(0);
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('codebreaker-stats');
-    return saved ? JSON.parse(saved) : { wins: 0, losses: 0 };
-  });
+  const [stats, setStats] = usePersistedState('codebreaker-stats', { wins: 0, losses: 0 });
 
   const { codeLength, colorCount, maxGuesses } = DIFFICULTIES[difficulty];
 
@@ -73,10 +74,6 @@ export default function CodeBreaker() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('codebreaker-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const handleColorSelect = (colorIndex) => {
     if (gameState !== 'playing') return;
@@ -165,25 +162,16 @@ export default function CodeBreaker() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>CodeBreaker</h1>
-        <p className={styles.instructions}>
-          Crack the secret code! Check the feedback pegs after each guess.
-        </p>
-      </div>
+      <GameHeader
+        title="CodeBreaker"
+        instructions="Crack the secret code! Check the feedback pegs after each guess."
+      />
 
-      <div className={styles.difficultySelector}>
-        {Object.keys(DIFFICULTIES).map((level) => (
-          <button
-            key={level}
-            className={`${styles.difficultyBtn} ${difficulty === level ? styles.active : ''}`}
-            onClick={() => setDifficulty(level)}
-          >
-            {level.charAt(0).toUpperCase() + level.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={Object.keys(DIFFICULTIES)}
+        selectedDifficulty={difficulty}
+        onDifficultyChange={setDifficulty}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -286,34 +274,21 @@ export default function CodeBreaker() {
           </div>
         )}
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 You cracked the code in {guesses.length} guesses!
-          </div>
-        )}
-
-        {gameState === 'lost' && (
-          <div className={styles.loseMessage}>
-            Game Over! The code was revealed above.
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Code Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Code Cracked!"
+          winMessage={`You cracked the code in ${guesses.length} guesses!`}
+          lostTitle="Game Over!"
+          lostMessage="The code was revealed above."
+          gaveUpTitle="Code Revealed"
+        />
 
         <div className={styles.buttons}>
-          {gameState === 'playing' && (
-            <button
-              className={styles.giveUpBtn}
-              onClick={handleGiveUp}
-            >
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             {gameState === 'playing' ? 'New Game' : 'Play Again'}
           </button>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PyramidCards.module.css';
 
 // Card values: A=1, 2-10, J=11, Q=12, K=13
@@ -311,10 +312,7 @@ export default function PyramidCards() {
   const boardRef = useRef(null);
 
   const [puzzles, setPuzzles] = useState([]);
-  const [puzzleId, setPuzzleId] = useState(() => {
-    const saved = localStorage.getItem('pyramid-cards-puzzle-id');
-    return saved ? parseInt(saved, 10) : null;
-  });
+  const [puzzleId, setPuzzleId] = usePersistedState('pyramid-cards-puzzle-id', null);
   const [pyramid, setPyramid] = useState([]);
   const [drawPile, setDrawPile] = useState([]);
   const [wasteIndex, setWasteIndex] = useState(0);
@@ -364,8 +362,6 @@ export default function PyramidCards() {
     setMessage('');
     setHistory([]);
     setShowGiveUp(false);
-
-    localStorage.setItem('pyramid-cards-puzzle-id', String(puzzle.id));
   }, [puzzles]);
 
   // Initialize when puzzles are loaded

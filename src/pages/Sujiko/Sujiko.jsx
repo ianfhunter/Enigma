@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Sujiko.module.css';
 
 // Sujiko is a 3x3 grid where each cell contains 1-9 (each used once)
@@ -242,26 +245,16 @@ export default function Sujiko() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Sujiko</h1>
-        <p className={styles.instructions}>
-          Fill the 3×3 grid with numbers 1-9 (each used once). The circles show the
-          sum of their four surrounding cells.
-        </p>
-      </div>
+      <GameHeader
+        title="Sujiko"
+        instructions="Fill the 3×3 grid with numbers 1-9 (each used once). The circles show the sum of their four surrounding cells."
+      />
 
-      <div className={styles.difficultySelector}>
-        {['easy', 'medium', 'hard'].map((diff) => (
-          <button
-            key={diff}
-            className={`${styles.diffBtn} ${difficulty === diff ? styles.active : ''}`}
-            onClick={() => setDifficulty(diff)}
-          >
-            {diff.charAt(0).toUpperCase() + diff.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={['easy', 'medium', 'hard']}
+        selectedDifficulty={difficulty}
+        onDifficultyChange={setDifficulty}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.puzzleContainer}>
@@ -325,20 +318,12 @@ export default function Sujiko() {
           </button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Perfect!</h3>
-            <p>All sums are correct!</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onPlayAgain={initGame}
+          winTitle="Perfect!"
+          winMessage="All sums are correct!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -356,13 +341,10 @@ export default function Sujiko() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

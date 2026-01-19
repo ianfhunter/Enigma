@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import {
   getLastKana,
   endsInN,
@@ -113,18 +116,15 @@ export default function Shiritori() {
   const [gameState, setGameState] = useState('playing'); // 'playing', 'playerWin', 'aiWin', 'nLose'
   const [usedWords, setUsedWords] = useState(new Set());
   const [isAIThinking, setIsAIThinking] = useState(false);
-  const [lang, setLang] = useState(() => {
-    const saved = localStorage.getItem('shiritori-lang');
-    return saved || 'beginner';
-  });
-  const [stats, setStats] = useState(() => loadStats(localStorage.getItem('shiritori-stats')));
+  const [lang, setLang] = usePersistedState('shiritori-lang', 'beginner');
+  const [stats, setStats] = usePersistedState('shiritori-stats', { longestChain: 0, totalGames: 0, wins: 0 });
   const [suggestions, setSuggestions] = useState([]);
-  const [commonOnly, setCommonOnly] = useState(() => {
-    const saved = localStorage.getItem('shiritori-common-only');
-    const initial = saved === 'true';
-    setCommonOnlyFilter(initial);
-    return initial;
-  });
+  const [commonOnly, setCommonOnly] = usePersistedState('shiritori-common-only', false);
+
+  // Sync commonOnlyFilter with persisted state
+  useEffect(() => {
+    setCommonOnlyFilter(commonOnly);
+  }, [commonOnly]);
 
   const inputRef = useRef(null);
   const chainRef = useRef(null);
@@ -145,14 +145,6 @@ export default function Shiritori() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('shiritori-stats', JSON.stringify(stats));
-  }, [stats]);
-
-  useEffect(() => {
-    localStorage.setItem('shiritori-lang', lang);
-  }, [lang]);
 
   useEffect(() => {
     if (inputRef.current && !isAIThinking && gameState === 'playing') {
@@ -178,14 +170,9 @@ export default function Shiritori() {
   };
 
   const toggleCommonOnly = () => {
-    setCommonOnly(prev => {
-      const newValue = !prev;
-      setCommonOnlyFilter(newValue);
-      localStorage.setItem('shiritori-common-only', newValue.toString());
-      // Restart game with new word set
-      initGame();
-      return newValue;
-    });
+    setCommonOnly(prev => !prev);
+    // Restart game with new word set
+    initGame();
   };
 
   const handleSubmit = (e) => {
@@ -283,9 +270,12 @@ export default function Shiritori() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>{t.title}</h1>
+      <GameHeader
+        title={t.title}
+        instructions={`${t.instructions} ${t.warning}`}
+      />
+
+      <div className={styles.headerExtras}>
         <p className={styles.subtitle}>{t.subtitle}</p>
 
         <div className={styles.toggleGroup}>
@@ -310,12 +300,6 @@ export default function Shiritori() {
 
         <p className={styles.wordCountInfo}>
           {t.wordCount(wordStats.current)}
-        </p>
-
-        <p className={styles.instructions}>
-          {t.instructions}
-          <br />
-          <span className={styles.warning}>{t.warning}</span>
         </p>
       </div>
 
@@ -395,9 +379,11 @@ export default function Shiritori() {
               {t.hint}
             </p>
 
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              {t.giveUp}
-            </button>
+            <GiveUpButton
+              onGiveUp={handleGiveUp}
+              disabled={gameState !== 'playing' || isAIThinking}
+              buttonText={t.giveUp}
+            />
           </>
         )}
 
@@ -405,23 +391,12 @@ export default function Shiritori() {
           <div className={styles.message}>{message}</div>
         )}
 
-        {gameState === 'playerWin' && (
-          <div className={styles.winMessage}>
-            {t.playerWin(chain.length)}
-          </div>
-        )}
-
-        {gameState === 'nLose' && (
-          <div className={styles.loseMessage}>
-            {t.nLose(chain.length)}
-          </div>
-        )}
-
-        {gameState === 'aiWin' && (
-          <div className={styles.loseMessage}>
-            {t.gameOver(chain.length)}
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'playerWin' ? 'won' : (gameState === 'nLose' || gameState === 'aiWin') ? 'lost' : gameState}
+          onNewGame={initGame}
+          winTitle={t.playerWin(chain.length)}
+          lostTitle={gameState === 'nLose' ? t.nLose(chain.length) : t.gameOver(chain.length)}
+        />
 
         {gameState === 'aiWin' && suggestions.length > 0 && (
           <div className={styles.suggestions}>

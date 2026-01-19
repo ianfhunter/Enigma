@@ -179,7 +179,7 @@ export default function Suguru() {
 
   useEffect(() => {
     if (!puzzleData) return;
-    
+
     // Prevent validation when grid size doesn't match current size (during size transitions)
     if (grid.length !== size || puzzleData.regionGrid.length !== size) return;
 
@@ -245,7 +245,7 @@ export default function Suguru() {
   }, [selectedCell, gameState]);
 
   if (!puzzleData) return null;
-  
+
   // Prevent rendering when grid size doesn't match current size (during size transitions)
   if (grid.length !== size || puzzleData.regionGrid.length !== size) return null;
 

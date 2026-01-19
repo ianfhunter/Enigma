@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './ClassicalMusicQuiz.module.css';
 
 const TOTAL_ROUNDS = 10;
@@ -41,14 +42,7 @@ export default function ClassicalMusicQuiz() {
   const [showHint, setShowHint] = useState(false);
   const audioRef = useRef(null);
 
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('classical-music-quiz-stats');
-    return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 };
-  });
-
-  useEffect(() => {
-    localStorage.setItem('classical-music-quiz-stats', JSON.stringify(stats));
-  }, [stats]);
+  const [stats, setStats] = usePersistedState('classical-music-quiz-stats', { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 });
 
   // Load dataset
   useEffect(() => {

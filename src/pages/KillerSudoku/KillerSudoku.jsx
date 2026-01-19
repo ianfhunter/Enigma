@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { formatTime } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import Timer from '../../components/Timer';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './KillerSudoku.module.css';
 
 const GRID_SIZE = 9;
@@ -22,32 +25,32 @@ function stringToGrid(str, gridSize) {
 // Convert generator format to our component format
 function convertGeneratorData(generatorData, gridSize) {
   const { puzzle, solution, areas } = generatorData;
-  
+
   // Convert string puzzle/solution to 2D arrays
   const puzzleGrid = stringToGrid(puzzle, gridSize);
   const solutionGrid = stringToGrid(solution, gridSize);
-  
+
   // Create cage grid: each cell gets its cage ID
   const processedGrid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null));
   const cages = [];
-  
+
   // Process areas (cages) from generator
   areas.forEach((area, index) => {
     const cageId = index;
     const cells = area.cells.map(([r, c]) => [r, c]);
-    
+
     // Mark all cells in this cage
     cells.forEach(([r, c]) => {
       processedGrid[r][c] = cageId;
     });
-    
+
     cages.push({
       id: cageId,
       cells,
       sum: area.sum
     });
   });
-  
+
   return {
     cages,
     processedCageGrid: processedGrid,
@@ -189,24 +192,24 @@ export default function KillerSudoku() {
 
   const initGame = useCallback(async () => {
     setLoading(true);
-    
+
     try {
       // Dynamic import for CommonJS package
       const killerSudokuModule = await import('killer-sudoku-generator');
       // The package exports generateKillerSudoku as a named export
       const generateKillerSudoku = killerSudokuModule.generateKillerSudoku || killerSudokuModule.default?.generateKillerSudoku;
-      
+
       if (!generateKillerSudoku || typeof generateKillerSudoku !== 'function') {
         console.error('Module structure:', killerSudokuModule);
         throw new Error('Could not find generateKillerSudoku function in package');
       }
-      
+
       // Generate puzzle using the package
       const generatorData = generateKillerSudoku(difficulty);
-      
+
       // Convert to our format
       const { cages, processedCageGrid, puzzleGrid, solutionGrid } = convertGeneratorData(generatorData, GRID_SIZE);
-      
+
       setPuzzleData({
         solution: solutionGrid,
         cages,
@@ -332,7 +335,7 @@ export default function KillerSudoku() {
   const handleReset = () => {
     if (!puzzleData) return;
     // Reset to initial puzzle state (with pre-filled cells)
-    const initialGrid = puzzleData.initialPuzzle 
+    const initialGrid = puzzleData.initialPuzzle
       ? puzzleData.initialPuzzle.map(row => [...row])
       : Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
     setGrid(initialGrid);
@@ -345,7 +348,7 @@ export default function KillerSudoku() {
 
   const handleGiveUp = () => {
     if (!puzzleData || gameState !== 'playing') return;
-    
+
     // Deep copy the solution
     const solution = puzzleData.solution.map(row => [...row]);
     setGrid(solution);
@@ -357,10 +360,10 @@ export default function KillerSudoku() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Killer Sudoku</h1>
-        </div>
+        <GameHeader
+          title="Killer Sudoku"
+          instructions="Loading puzzle..."
+        />
         <div className={styles.loading}>Generating puzzle...</div>
       </div>
     );
@@ -374,10 +377,10 @@ export default function KillerSudoku() {
   const getCageSum = (r, c) => {
     const cageId = puzzleData.cageGrid[r][c];
     if (cageId === null || cageId === undefined) return null;
-    
+
     const cage = puzzleData.cages.find(c => c.id === cageId);
     if (!cage) return null;
-    
+
     // Show sum at the first (top-left) cell of the cage
     const [firstR, firstC] = cage.cells[0];
     if (r === firstR && c === firstC) {
@@ -388,28 +391,18 @@ export default function KillerSudoku() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Killer Sudoku</h1>
-        <p className={styles.instructions}>
-          Fill each cell with 1-9. Standard Sudoku rules apply, plus each
-          dotted cage must sum to its target and contain no duplicates.
-        </p>
-      </div>
+      <GameHeader
+        title="Killer Sudoku"
+        instructions="Fill each cell with 1-9. Standard Sudoku rules apply, plus each dotted cage must sum to its target and contain no duplicates."
+      />
 
-      <div className={styles.difficultySelector}>
-        {['easy', 'medium', 'hard'].map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={['easy', 'medium', 'hard']}
+        selectedDifficulty={difficulty}
+        onDifficultyChange={setDifficulty}
+      />
 
-      <div className={styles.timer}>{formatTime(timer)}</div>
+      <Timer time={timer} />
 
       <div className={styles.gameArea}>
         <div
@@ -455,13 +448,13 @@ export default function KillerSudoku() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Time: {formatTime(timer)}</p>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'gave_up' ? 'gaveUp' : gameState}
+          onNewGame={initGame}
+          winTitle="Puzzle Solved!"
+          winMessage={`Time: ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
+          gaveUpTitle="Solution Revealed"
+        />
 
         <div className={styles.controls}>
           <button
@@ -509,11 +502,10 @@ export default function KillerSudoku() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

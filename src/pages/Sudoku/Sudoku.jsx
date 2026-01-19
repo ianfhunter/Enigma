@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { createSeededRandom, seededShuffleArray, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import Timer, { formatTime } from '../../components/Timer/Timer';
@@ -135,29 +136,9 @@ function notesFromJSON(json) {
   return result;
 }
 
-// Load game state from localStorage
-function loadGameState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      return JSON.parse(saved);
-    }
-  } catch (e) {
-    console.error('Failed to load game state:', e);
-  }
-  return null;
-}
-
-// Save game state to localStorage
-function saveGameState(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.error('Failed to save game state:', e);
-  }
-}
 
 export default function Sudoku() {
+  const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [puzzles, setPuzzles] = useState({}); // { difficulty: { puzzle, solution, date, puzzleNumber } }
   const [playerState, setPlayerState] = useState({}); // { difficulty: { grid, notes, timer, isComplete } }
   const [difficulty, setDifficulty] = useState('medium');
@@ -206,7 +187,7 @@ export default function Sudoku() {
       // Use custom seed or create seed from date + difficulty + puzzle number
       let seed;
       if (customSeed !== null) {
-        seed = typeof customSeed === 'string' 
+        seed = typeof customSeed === 'string'
           ? (isNaN(parseInt(customSeed, 10)) ? stringToSeed(customSeed) : parseInt(customSeed, 10))
           : customSeed;
       } else {
@@ -240,17 +221,16 @@ export default function Sudoku() {
 
   // Load saved state on mount
   useEffect(() => {
-    const saved = loadGameState();
     const today = getTodayDateString();
 
-    if (saved) {
+    if (savedState) {
       const loadedPuzzles = {};
       const loadedPlayerState = {};
 
       // Check each difficulty
       for (const diff of ['easy', 'medium', 'hard', 'expert']) {
-        const savedPuzzle = saved.puzzles?.[diff];
-        const savedPlayer = saved.playerState?.[diff];
+        const savedPuzzle = savedState.puzzles?.[diff];
+        const savedPlayer = savedState.playerState?.[diff];
 
         if (savedPuzzle && savedPuzzle.date === today) {
           // Same day - restore puzzle and player state
@@ -273,7 +253,7 @@ export default function Sudoku() {
 
       setPuzzles(loadedPuzzles);
       setPlayerState(loadedPlayerState);
-      setDifficulty(saved.currentDifficulty || 'medium');
+      setDifficulty(savedState.currentDifficulty || 'medium');
     } else {
       // First time - generate all puzzles
       const newPuzzles = {};
@@ -305,12 +285,12 @@ export default function Sudoku() {
       };
     }
 
-    saveGameState({
+    setSavedState({
       puzzles,
       playerState: serializablePlayerState,
       currentDifficulty: difficulty
     });
-  }, [puzzles, playerState, difficulty, isLoaded]);
+  }, [puzzles, playerState, difficulty, isLoaded, setSavedState]);
 
   // Timer effect
   useEffect(() => {
@@ -662,7 +642,7 @@ export default function Sudoku() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             // Regenerate puzzle with custom seed

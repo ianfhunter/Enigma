@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
 import {
   shuffleArray,
   isValidCountdownWord,
@@ -240,16 +241,13 @@ export default function CountdownLetters() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Countdown Letters</h1>
-        <p className={styles.instructions}>
-          {gameState === 'selecting'
-            ? `Pick ${TOTAL_LETTERS} letters (at least ${MIN_VOWELS} vowels and ${MIN_CONSONANTS} consonants)`
-            : 'Find the longest word using the available letters!'
-          }
-        </p>
-      </div>
+      <GameHeader
+        title="Countdown Letters"
+        instructions={gameState === 'selecting'
+          ? `Pick ${TOTAL_LETTERS} letters (at least ${MIN_VOWELS} vowels and ${MIN_CONSONANTS} consonants)`
+          : 'Find the longest word using the available letters!'
+        }
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.mainSection}>
@@ -337,12 +335,7 @@ export default function CountdownLetters() {
                 >
                   Lock In
                 </button>
-                <button
-                  className={`${styles.btn} ${styles.giveUpBtn}`}
-                  onClick={() => finishGame()}
-                >
-                  Give Up
-                </button>
+                <GiveUpButton onGiveUp={finishGame} />
               </div>
 
               {submittedWord && (

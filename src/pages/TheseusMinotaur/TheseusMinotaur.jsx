@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './TheseusMinotaur.module.css';
 
 // Difficulty presets
@@ -289,10 +290,7 @@ export default function TheseusMinotaur() {
   const [gameState, setGameState] = useState('playing');
   const [history, setHistory] = useState([]);
   const [showHint, setShowHint] = useState(false);
-  const [gamesWon, setGamesWon] = useState(() => {
-    const saved = localStorage.getItem('theseus-minotaur-wins');
-    return saved ? parseInt(saved, 10) : 0;
-  });
+  const [gamesWon, setGamesWon] = usePersistedState('theseus-minotaur-wins', 0);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const gameAreaRef = useRef(null);
@@ -316,10 +314,6 @@ export default function TheseusMinotaur() {
   useEffect(() => {
     generateNewPuzzle(difficulty);
   }, [difficulty, generateNewPuzzle]);
-
-  useEffect(() => {
-    localStorage.setItem('theseus-minotaur-wins', gamesWon.toString());
-  }, [gamesWon]);
 
   const moveTheseus = useCallback((dx, dy) => {
     if (gameState !== 'playing' || !puzzle) return;

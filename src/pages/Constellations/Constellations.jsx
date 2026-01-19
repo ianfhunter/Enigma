@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Constellations.module.css';
 
 const TOTAL_ROUNDS = 12;
@@ -244,10 +245,7 @@ export default function Constellations() {
   const [gameOver, setGameOver] = useState(false);
   const [usedConstellations, setUsedConstellations] = useState([]);
   const [streak, setStreak] = useState(0);
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('constellations-stats');
-    return saved ? JSON.parse(saved) : { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 };
-  });
+  const [stats, setStats] = usePersistedState('constellations-stats', { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 });
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -267,10 +265,6 @@ export default function Constellations() {
     })();
     return () => { mounted = false; };
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('constellations-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const setupRound = useCallback(() => {
     const available = constellations.filter(c => !usedConstellations.includes(c.id));

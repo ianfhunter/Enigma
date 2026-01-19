@@ -98,12 +98,26 @@ function tryGeneratePuzzle(size) {
   // Generate a solution - randomly fill thermometers
   const solution = Array(size).fill(null).map(() => Array(size).fill(false));
 
+  // Track total filled to ensure puzzle isn't trivially empty
+  let totalFilled = 0;
   for (const thermo of thermometers) {
     // Random fill level (0 to length)
     const fillLevel = Math.floor(Math.random() * (thermo.cells.length + 1));
     for (let i = 0; i < fillLevel; i++) {
       const [r, c] = thermo.cells[i];
       solution[r][c] = true;
+      totalFilled++;
+    }
+  }
+
+  // Ensure at least some cells are filled (avoid trivial empty puzzle)
+  if (totalFilled < Math.ceil(thermometers.length / 2)) {
+    // Fill at least one cell in each of the first few thermometers
+    for (let i = 0; i < Math.min(3, thermometers.length); i++) {
+      const [r, c] = thermometers[i].cells[0];
+      if (!solution[r][c]) {
+        solution[r][c] = true;
+      }
     }
   }
 
@@ -213,7 +227,26 @@ function checkValidity(filled, thermometers, rowClues, colClues, size) {
   return errors;
 }
 
-function checkSolved(filled, solution, size) {
+function checkSolved(filled, solution, rowClues, colClues, size) {
+  // First verify row clues are satisfied
+  for (let r = 0; r < size; r++) {
+    let count = 0;
+    for (let c = 0; c < size; c++) {
+      if (filled[r][c]) count++;
+    }
+    if (count !== rowClues[r]) return false;
+  }
+
+  // Verify column clues are satisfied
+  for (let c = 0; c < size; c++) {
+    let count = 0;
+    for (let r = 0; r < size; r++) {
+      if (filled[r][c]) count++;
+    }
+    if (count !== colClues[c]) return false;
+  }
+
+  // Finally check if filled matches solution exactly
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       if (filled[r][c] !== solution[r][c]) return false;
@@ -263,7 +296,7 @@ export default function Thermometers() {
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(filled, puzzleData.solution, size)) {
+    if (checkSolved(filled, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues, size)) {
       setGameState('won');
     }
   }, [filled, puzzleData, showErrors, size]);
@@ -387,19 +420,23 @@ export default function Thermometers() {
           </div>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🌡️ Puzzle Solved!"
-          message="All thermometers correctly filled!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🌡️ Puzzle Solved!"
+            message="All thermometers correctly filled!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Better luck next time!"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Better luck next time!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

@@ -217,38 +217,22 @@ export default function GokigenNaname() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Gokigen Naname</h1>
-        <p className={styles.instructions}>
-          Draw diagonal lines in each cell. Numbers at intersections show how many
-          lines meet at that point. Click cells to cycle between / and \.
-        </p>
-      </div>
+      <GameHeader
+        title="Gokigen Naname"
+        instructions="Draw diagonal lines in each cell. Numbers at intersections show how many lines meet at that point. Click cells to cycle between / and \."
+      />
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={DIFFICULTIES}
+        selected={difficulty}
+        onSelect={setDifficulty}
+      />
 
-      <div className={styles.sizeSelector}>
-        {availableSizes.map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key.replace('x', '×')}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={availableSizes}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.gridWrapper}>
@@ -303,20 +287,18 @@ export default function GokigenNaname() {
           </div>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>／＼</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All slashes in place!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="／＼ Puzzle Solved!"
+          message="All slashes in place!"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -334,13 +316,10 @@ export default function GokigenNaname() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, findLongestWordWithSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, findLongestWordWithSeed } from '../../data/wordUtils';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LongestWord.module.css';
 
@@ -44,10 +47,7 @@ export default function LongestWord() {
   const [message, setMessage] = useState('');
   const [longestPossibleWord, setLongestPossibleWord] = useState(null);
   const [gameState, setGameState] = useState('playing');
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('longestword-stats');
-    return saved ? JSON.parse(saved) : { bestLength: 0, gamesPlayed: 0 };
-  });
+  const [stats, setStats] = usePersistedState('longestword-stats', { bestLength: 0, gamesPlayed: 0 });
 
   const inputRef = useRef(null);
 
@@ -84,10 +84,6 @@ export default function LongestWord() {
   useEffect(() => {
     initGame();
   }, [initGame]);
-
-  useEffect(() => {
-    localStorage.setItem('longestword-stats', JSON.stringify(stats));
-  }, [stats]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -147,13 +143,10 @@ export default function LongestWord() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Longest Word</h1>
-        <p className={styles.instructions}>
-          Find the longest words containing the starter letters!
-        </p>
-      </div>
+      <GameHeader
+        title="Longest Word"
+        instructions="Find the longest words containing the starter letters!"
+      />
 
       {seedNum !== null && (
         <SeedDisplay
@@ -243,11 +236,10 @@ export default function LongestWord() {
           </div>
         </div>
 
-        {gameState === 'playing' && (
-          <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-            Give Up
-          </button>
-        )}
+        <GiveUpButton
+          onGiveUp={handleGiveUp}
+          disabled={gameState !== 'playing'}
+        />
 
         {gameState === 'finished' && (
           <div className={styles.summary}>

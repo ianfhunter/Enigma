@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import GameResult from '../../components/GameResult';
+import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSearch.module.css';
 
@@ -274,13 +275,10 @@ export default function WordSearch() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Word Search</h1>
-        <p className={styles.instructions}>
-          Find all {puzzle.words.length} hidden words! Drag to select.
-        </p>
-      </div>
+      <GameHeader
+        title="Word Search"
+        instructions={`Find all ${puzzle.words.length} hidden words! Drag to select.`}
+      />
 
       {seed && (
         <SeedDisplay
@@ -290,7 +288,7 @@ export default function WordSearch() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(seedNum);
@@ -351,11 +349,12 @@ export default function WordSearch() {
           </div>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 You found all the words!
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={() => initGame(true)}
+          winTitle="All Words Found!"
+          winMessage="🎉 You found all the words!"
+        />
 
         <button className={styles.newGameBtn} onClick={() => initGame(true)}>
           New Puzzle

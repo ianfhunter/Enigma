@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import {
   generateAnagramsPuzzle,
   isValidAnagramGuess,
@@ -174,13 +176,10 @@ export default function Anagrams() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Anagrams</h1>
-        <p className={styles.instructions}>
-          Rearrange the letters to find all {puzzle.anagrams.length} valid words that use ALL {puzzle.wordLength} letters!
-        </p>
-      </div>
+      <GameHeader
+        title="Anagrams"
+        instructions={`Rearrange the letters to find all ${puzzle.anagrams.length} valid words that use ALL ${puzzle.wordLength} letters!`}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.puzzleSection}>
@@ -234,9 +233,9 @@ export default function Anagrams() {
                 <button className={`${styles.btn} ${styles.submitBtn}`} onClick={submitWord}>
                   Submit
                 </button>
-                <button className={`${styles.btn} ${styles.giveUpBtn}`} onClick={() => setGameState('finished')}>
-                  Give Up
-                </button>
+                <GiveUpButton
+                  onGiveUp={() => setGameState('finished')}
+                />
               </div>
             </div>
           )}

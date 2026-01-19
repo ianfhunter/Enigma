@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GameResult from '../../components/GameResult';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './MemoryMatch.module.css';
 
 const CARD_SYMBOLS = [
@@ -46,10 +49,7 @@ export default function MemoryMatch() {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [gameState, setGameState] = useState('ready'); // 'ready', 'playing', 'won'
-  const [bestScores, setBestScores] = useState(() => {
-    const saved = localStorage.getItem('memory-match-best');
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [bestScores, setBestScores] = usePersistedState('memory-match-best', {});
   const [isLocked, setIsLocked] = useState(false);
 
   const timerRef = useRef(null);
@@ -82,10 +82,6 @@ export default function MemoryMatch() {
       }
     };
   }, [isRunning]);
-
-  useEffect(() => {
-    localStorage.setItem('memory-match-best', JSON.stringify(bestScores));
-  }, [bestScores]);
 
   const handleCardClick = (index) => {
     if (isLocked) return;
@@ -151,27 +147,16 @@ export default function MemoryMatch() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Memory Match</h1>
-        <p className={styles.instructions}>
-          Find all matching pairs! Click cards to flip them and match symbols.
-        </p>
-      </div>
+      <GameHeader
+        title="Memory Match"
+        instructions="Find all matching pairs! Click cards to flip them and match symbols."
+      />
 
-      <div className={styles.controls}>
-        <div className={styles.sizeSelector}>
-          {Object.keys(GRID_SIZES).map((size) => (
-            <button
-              key={size}
-              className={`${styles.sizeBtn} ${gridSize === size ? styles.active : ''}`}
-              onClick={() => setGridSize(size)}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selectedSize={gridSize}
+        onSelectSize={setGridSize}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -222,16 +207,12 @@ export default function MemoryMatch() {
           })}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Congratulations!</h3>
-            <p>Completed in {moves} moves and {formatTime(timer)}</p>
-            {currentBest && moves === currentBest.moves && timer <= currentBest.time && (
-              <p className={styles.newBest}>🏆 New Best Score!</p>
-            )}
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Congratulations!"
+          winMessage={`Completed in ${moves} moves and ${formatTime(timer)}${currentBest && moves === currentBest.moves && timer <= currentBest.time ? ' • 🏆 New Best Score!' : ''}`}
+        />
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'New Game'}
@@ -240,4 +221,3 @@ export default function MemoryMatch() {
     </div>
   );
 }
-

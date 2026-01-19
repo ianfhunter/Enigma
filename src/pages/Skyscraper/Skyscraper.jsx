@@ -356,7 +356,7 @@ export default function Skyscraper() {
                     onClick={() => handleCellClick(r, c)}
                   >
                     {cell !== 0 && (
-                      <div 
+                      <div
                         className={styles.building}
                         style={{ height: `${(cell / gridSize) * 100}%` }}
                       >

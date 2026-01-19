@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './StainedGlass.module.css';
 
 const GRID_SIZES = {
@@ -212,7 +215,7 @@ function generatePuzzle(size, numColors) {
 // Find errors in current coloring
 function findErrors(regionGrid, coloring, size) {
   const errors = new Set();
-  
+
   // Safety check: ensure regionGrid matches expected size
   if (!regionGrid || regionGrid.length !== size) {
     return errors;
@@ -222,7 +225,7 @@ function findErrors(regionGrid, coloring, size) {
     if (!regionGrid[r] || regionGrid[r].length !== size) {
       continue;
     }
-    
+
     for (let c = 0; c < size; c++) {
       const regionId = regionGrid[r][c];
       const color = coloring[regionId];
@@ -291,7 +294,7 @@ export default function StainedGlass() {
 
   useEffect(() => {
     if (!puzzleData) return;
-    
+
     // Ensure puzzleData matches current size to prevent errors
     if (puzzleData.regionGrid.length !== size || puzzleData.regionGrid[0]?.length !== size) {
       return;
@@ -311,7 +314,7 @@ export default function StainedGlass() {
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || !puzzleData) return;
-    
+
     // Safety check: ensure puzzleData matches current size
     if (puzzleData.regionGrid.length !== size || !puzzleData.regionGrid[r] || puzzleData.regionGrid[r][c] === undefined) {
       return;
@@ -346,7 +349,7 @@ export default function StainedGlass() {
   };
 
   if (!puzzleData) return null;
-  
+
   // Ensure puzzleData matches current size to prevent rendering issues
   if (puzzleData.regionGrid.length !== size || puzzleData.regionGrid[0]?.length !== size) {
     return null;
@@ -357,7 +360,7 @@ export default function StainedGlass() {
     if (!puzzleData.regionGrid[r] || puzzleData.regionGrid[r][c] === undefined) {
       return {};
     }
-    
+
     const regionId = puzzleData.regionGrid[r][c];
     const borders = {};
 
@@ -379,27 +382,17 @@ export default function StainedGlass() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Stained Glass</h1>
-        <p className={styles.instructions}>
-          Color each region so that no two adjacent regions share the same color.
-          Click a region to fill it with the selected color.
-        </p>
-      </div>
+      <GameHeader
+        title="Stained Glass"
+        instructions="Color each region so that no two adjacent regions share the same color. Click a region to fill it with the selected color."
+      />
 
       <div className={styles.settings}>
-        <div className={styles.sizeSelector}>
-          {Object.keys(GRID_SIZES).map((key) => (
-            <button
-              key={key}
-              className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-              onClick={() => setSizeKey(key)}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
+        <SizeSelector
+          sizes={Object.keys(GRID_SIZES)}
+          selectedSize={sizeKey}
+          onSelectSize={setSizeKey}
+        />
 
         <div className={styles.colorCountSelector}>
           <span className={styles.label}>Colors:</span>
@@ -465,20 +458,14 @@ export default function StainedGlass() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎨</div>
-            <h3>Beautiful!</h3>
-            <p>Your stained glass is complete!</p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Beautiful!"
+          winMessage="Your stained glass is complete!"
+          gaveUpTitle="Solution Revealed"
+          gaveUpMessage="Here's the solution."
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -496,13 +483,10 @@ export default function StainedGlass() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>
