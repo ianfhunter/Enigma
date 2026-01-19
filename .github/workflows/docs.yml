@@ -71,8 +71,8 @@ jobs:
             # Extract clean game pack names
             gamepack=$(dirname "$file" | sed 's|src/packs/||' | tr '-' ' ' | sed 's/\b\(.\)/\u\1/g') 
             gamepack="$gamepack Pack"
-            echo "### $gamepack" >> index.md
-            echo "" >> index.md
+            echo "### $gamepack" >> docs/index.md
+            echo "" >> docs/index.md
             
              # Collect games under the game pack
              while read slug; do
@@ -83,11 +83,11 @@ jobs:
                  # No dash → it will capitalize first letter
                  cleangamename=$(echo "$slug" | sed 's/^\(.\)/\u\1/')
                fi
-               echo "- [$cleangamename](games/$cleangamename/README.md)" >> index1.md
+               echo "- [$cleangamename](games/$cleangamename/README.md)" >> docs/index.md
              
              # It will fetch slug entries only from the manifest files
              done < <(grep "slug:" "$file" | sed -n "s/.*slug: '\([^']*\)'.*/\1/p" | sort)
-             echo "" >> index.md
+             echo "" >> docs/index.md
             done
 
       - name: Add Jekyll config
