@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { getCommonWordsByLength } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSnake.module.css';
@@ -213,14 +215,10 @@ export default function WordSnake() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Word Snake</h1>
-        <p className={styles.instructions}>
-          Find the hidden word by tracing a continuous path through adjacent cells.
-          Click and drag to select letters.
-        </p>
-      </div>
+      <GameHeader
+        title="Word Snake"
+        instructions="Find the hidden word by tracing a continuous path through adjacent cells. Click and drag to select letters."
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.clue}>
@@ -268,34 +266,23 @@ export default function WordSnake() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🐍</div>
-            <h3>Word Found!</h3>
-            <p className={styles.foundWord}>
-              <WordWithDefinition word={puzzleData.word} />
-            </p>
-          </div>
-        )}
-
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>The word was: <WordWithDefinition word={puzzleData.word} /></span>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={initGame}
+          winTitle="Word Found!"
+          winMessage={puzzleData.word}
+          gaveUpTitle="Solution Revealed"
+          gaveUpMessage={`The word was: ${puzzleData.word}`}
+        />
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
             Clear Path
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

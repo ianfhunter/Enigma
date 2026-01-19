@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
-import SeedDisplay from '../../components/SeedDisplay';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LetterWeb.module.css';
 
@@ -500,14 +502,10 @@ export default function LetterWeb() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Letter Web</h1>
-        <p className={styles.instructions}>
-          Use all 12 letters! Words must chain (last letter = first letter of next).
-          Can't use consecutive letters from the same side.
-        </p>
-      </div>
+      <GameHeader
+        title="Letter Web"
+        instructions="Use all 12 letters! Words must chain (last letter = first letter of next). Can't use consecutive letters from the same side."
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -630,23 +628,18 @@ export default function LetterWeb() {
           )}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Congratulations! Solved in {words.length} words!
-          </div>
-        )}
-
-        {gameState === 'revealed' && (
-          <div className={styles.revealedMessage}>
-            Solution revealed ({solution.length} words)
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'revealed' ? 'gaveUp' : gameState}
+          onNewGame={() => initGame(true)}
+          winTitle="Congratulations!"
+          winMessage={`Solved in ${words.length} words!`}
+          gaveUpTitle="Solution Revealed"
+          gaveUpMessage={`The solution used ${solution.length} words.`}
+        />
 
         <div className={styles.bottomButtons}>
           {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
+            <GiveUpButton onGiveUp={handleGiveUp} />
           )}
           <button className={styles.newGameBtn} onClick={() => initGame(true)}>
             New Puzzle

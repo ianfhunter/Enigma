@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { countries } from '@datasets/countries';
 import styles from './WorldMapFill.module.css';
@@ -359,13 +360,10 @@ export default function WorldMapFill() {
   if (!gameStarted) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>World Map Fill</h1>
-          <p className={styles.instructions}>
-            Choose a region and name all the countries to fill in the map!
-          </p>
-        </div>
+        <GameHeader
+          title="World Map Fill"
+          instructions="Choose a region and name all the countries to fill in the map!"
+        />
 
         <div className={styles.regionGrid}>
           {Object.entries(REGIONS).map(([key, region]) => {

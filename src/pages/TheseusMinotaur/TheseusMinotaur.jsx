@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './TheseusMinotaur.module.css';
 
@@ -461,10 +463,10 @@ export default function TheseusMinotaur() {
   if (!puzzle || isGenerating) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Theseus & the Minotaur</h1>
-        </div>
+        <GameHeader
+          title="Theseus & the Minotaur"
+          instructions="Loading..."
+        />
         <div className={styles.loading}>
           <div className={styles.spinner}></div>
           <p>Generating puzzle...</p>
@@ -503,25 +505,16 @@ export default function TheseusMinotaur() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Theseus & the Minotaur</h1>
-        <p className={styles.instructions}>
-          Guide Theseus 🦸 to the exit 🚪! The Minotaur 🐂 moves twice after each move (horizontal first).
-        </p>
-      </div>
+      <GameHeader
+        title="Theseus & the Minotaur"
+        instructions="Guide Theseus 🦸 to the exit 🚪! The Minotaur 🐂 moves twice after each move (horizontal first)."
+      />
 
-      <div className={styles.difficultySelector}>
-        {Object.keys(DIFFICULTIES).map((diff) => (
-          <button
-            key={diff}
-            className={`${styles.diffBtn} ${difficulty === diff ? styles.active : ''}`}
-            onClick={() => setDifficulty(diff)}
-          >
-            {diff}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={Object.keys(DIFFICULTIES)}
+        selected={difficulty}
+        onSelect={setDifficulty}
+      />
 
       <div className={styles.gameArea} ref={gameAreaRef} tabIndex={0}>
         <div className={styles.statsBar}>
@@ -594,35 +587,14 @@ export default function TheseusMinotaur() {
           <button className={styles.controlBtn} onClick={() => moveTheseus(0, 1)}>↓</button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Escape Successful!</h3>
-            <p>Completed in {moves} moves (optimal: {puzzle.minMoves})</p>
-            {moves === puzzle.minMoves && (
-              <p className={styles.perfect}>🏆 Perfect Solution!</p>
-            )}
-            <button className={styles.nextBtn} onClick={() => generateNewPuzzle(difficulty)}>
-              New Puzzle →
-            </button>
-          </div>
-        )}
-
-        {gameState === 'lost' && (
-          <div className={styles.loseMessage}>
-            <div className={styles.loseEmoji}>💀</div>
-            <h3>Caught by the Minotaur!</h3>
-            <p>Try again or undo your last move</p>
-            <div className={styles.loseButtons}>
-              <button className={styles.undoBtnLarge} onClick={undoMove}>
-                ↶ Undo
-              </button>
-              <button className={styles.restartBtnSmall} onClick={() => generateNewPuzzle(difficulty)}>
-                New Puzzle
-              </button>
-            </div>
-          </div>
-        )}
+        <GameResult
+          gameState={gameState}
+          onNewGame={() => generateNewPuzzle(difficulty)}
+          winTitle="Escape Successful!"
+          winMessage={`Completed in ${moves} moves (optimal: ${puzzle.minMoves})${moves === puzzle.minMoves ? ' • 🏆 Perfect Solution!' : ''}`}
+          lostTitle="Caught by the Minotaur!"
+          lostMessage="Try again or undo your last move"
+        />
 
         <div className={styles.buttons}>
           <button

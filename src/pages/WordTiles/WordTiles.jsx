@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { isValidWord } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
@@ -456,13 +457,10 @@ export default function WordTiles() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>WordTiles</h1>
-        <p className={styles.instructions}>
-          Type your word, or click tiles to place. Backspace to undo, Enter to submit.
-        </p>
-      </div>
+      <GameHeader
+        title="WordTiles"
+        instructions="Type your word, or click tiles to place. Backspace to undo, Enter to submit."
+      />
 
       <div className={styles.scoreBoard}>
         <div className={styles.scoreLabel}>Score</div>
@@ -568,18 +566,12 @@ export default function WordTiles() {
           </div>
         )}
 
-        {gameState === 'finished' && (
-          <div className={`${styles.gameOver} ${isNewHighScore ? styles.newHighScore : ''}`}>
-            <div className={styles.winEmoji}>{isNewHighScore ? '🏆' : '🎯'}</div>
-            {isNewHighScore && <div className={styles.newHighScoreBanner}>New High Score!</div>}
-            <h3>Game Over!</h3>
-            <p className={styles.finalScore}>Final Score: {score}</p>
-            <p>{wordsPlayed.length} words played</p>
-            {finalPenalty > 0 && (
-              <p className={styles.penalty}>-{finalPenalty} pts for unused tiles</p>
-            )}
-          </div>
-        )}
+        <GameResult
+          gameState={gameState === 'finished' ? 'won' : 'playing'}
+          onNewGame={initGame}
+          winTitle={isNewHighScore ? '🏆 New High Score!' : 'Game Over!'}
+          winMessage={`Final Score: ${score} • ${wordsPlayed.length} words played${finalPenalty > 0 ? ` • -${finalPenalty} pts for unused tiles` : ''}`}
+        />
 
         <button className={styles.newGameBtn} onClick={initGame}>
           New Game

@@ -1,7 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import SizeSelector from '../../components/SizeSelector';
+import StatsPanel from '../../components/StatsPanel';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Squarish.module.css';
 
 const CONFIGS = {
@@ -304,29 +308,16 @@ export default function Squarish() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Squar-ish</h1>
+      <GameHeader
+        title="Squar-ish"
+        instructions={`Swap letters to form ${config.wordCount} valid words. Green = correct, yellow = wrong spot.`}
+      />
 
-        <div className={styles.sizeToggle}>
-          <button
-            className={`${styles.sizeBtn} ${size === 5 ? styles.active : ''}`}
-            onClick={() => handleSizeChange(5)}
-          >
-            5×5
-          </button>
-          <button
-            className={`${styles.sizeBtn} ${size === 7 ? styles.active : ''}`}
-            onClick={() => handleSizeChange(7)}
-          >
-            7×7
-          </button>
-        </div>
-
-        <p className={styles.instructions}>
-          Swap letters to form {config.wordCount} valid words. Green = correct, yellow = wrong spot.
-        </p>
-      </div>
+      <SizeSelector
+        sizes={[5, 7]}
+        currentSize={size}
+        onSizeChange={handleSizeChange}
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -336,7 +327,7 @@ export default function Squarish() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(size, seedNum);
@@ -345,14 +336,12 @@ export default function Squarish() {
       )}
 
       <div className={styles.gameArea}>
-        <div className={styles.statsBar}>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Swaps Left</span>
-            <span className={`${styles.statValue} ${swapsLeft <= warningThreshold ? styles.warning : ''}`}>
-              {swapsLeft}
-            </span>
-          </div>
-        </div>
+        <StatsPanel
+          stats={[
+            { label: 'Swaps Left', value: swapsLeft, highlight: swapsLeft <= warningThreshold }
+          ]}
+          layout="row"
+        />
 
         <div className={`${styles.board} ${size === 7 ? styles.board7 : ''}`}>
           {grid.map((row, rowIndex) =>
@@ -379,36 +368,45 @@ export default function Squarish() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Solved with {swapsLeft} swaps remaining!
-          </div>
+          <GameResult
+            status="won"
+            title="🎉 Solved!"
+            message={`With ${swapsLeft} swaps remaining!`}
+            onNewGame={() => initGame(size)}
+            newGameLabel="New Puzzle"
+          />
         )}
 
         {gameState === 'lost' && (
-          <div className={styles.loseMessage}>
-            Out of swaps! The words were: {Object.values(puzzle.words).join(', ')}
-          </div>
+          <GameResult
+            status="lost"
+            title="Out of swaps!"
+            message={`The words were: ${Object.values(puzzle.words).join(', ')}`}
+            onNewGame={() => initGame(size)}
+            newGameLabel="New Puzzle"
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
+          <GameResult
+            status="gaveUp"
+            title="Solution Revealed"
+            onNewGame={() => initGame(size)}
+            newGameLabel="New Puzzle"
+          />
         )}
 
-        <div className={styles.buttons}>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
-            disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
-          <button className={styles.newGameBtn} onClick={() => initGame(size)}>
-            New Puzzle
-          </button>
-        </div>
+        {gameState === 'playing' && (
+          <div className={styles.buttons}>
+            <GiveUpButton
+              onGiveUp={handleGiveUp}
+              disabled={gameState !== 'playing'}
+            />
+            <button className={styles.newGameBtn} onClick={() => initGame(size)}>
+              New Puzzle
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
