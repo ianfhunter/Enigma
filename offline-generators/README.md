@@ -34,4 +34,3 @@ node offline-generators/generate-tapa.js 100 1
 2. Include a solver to verify unique solvability
 3. Output to `public/datasets/{puzzle}Puzzles.json`
 4. Follow the JSON schema pattern from existing datasets
-

@@ -1,0 +1,17 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hidato: Minimalist consecutive number path -->
+
+  <!-- Background circle -->
+  <circle cx="12" cy="12" r="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+
+  <!-- Connected path showing consecutive numbers -->
+  <path d="M6 8 L10 8 L10 12 L14 12 L14 16 L18 16" stroke="#d97706" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Numbers along the path -->
+  <text x="6" y="9.5" font-family="Arial" font-size="4" font-weight="bold" fill="#92400e" text-anchor="middle">1</text>
+  <text x="10" y="9.5" font-family="Arial" font-size="4" font-weight="bold" fill="#92400e" text-anchor="middle">2</text>
+  <text x="10" y="13.5" font-family="Arial" font-size="4" font-weight="bold" fill="#92400e" text-anchor="middle">3</text>
+  <text x="14" y="13.5" font-family="Arial" font-size="4" font-weight="bold" fill="#92400e" text-anchor="middle">4</text>
+  <text x="14" y="17.5" font-family="Arial" font-size="4" font-weight="bold" fill="#92400e" text-anchor="middle">5</text>
+  <text x="18" y="17.5" font-family="Arial" font-size="4" font-weight="bold" fill="#92400e" text-anchor="middle">6</text>
+</svg>

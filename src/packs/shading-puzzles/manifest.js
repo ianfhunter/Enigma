@@ -16,6 +16,9 @@ import yinyangIcon from '../../assets/icons/yinyang.svg';
 import creekIcon from '../../assets/icons/creek.svg';
 import minesweeperIcon from '../../assets/icons/minesweeper.svg';
 import starbattleIcon from '../../assets/icons/starbattle.svg';
+import tapaIcon from '../../assets/icons/tapa.svg';
+import nurikabeIcon from '../../assets/icons/nurikabe.svg';
+import aquariumIcon from '../../assets/icons/aquarium.svg';
 
 /**
  * Pack metadata
@@ -70,7 +73,8 @@ export const categories = [
         slug: 'nurikabe',
         aliases: ['Cell Structure', 'Island Puzzle'],
         description: 'Shade cells to form one connected sea around numbered islands of the given sizes.',
-        icon: '🌊',
+        icon: nurikabeIcon,
+        emojiIcon: '🌊',
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         version: 'v1.0',
@@ -93,7 +97,8 @@ export const categories = [
         slug: 'aquarium',
         aliases: ['Water Fun', 'Fill the Tanks'],
         description: 'Fill water in tanks to match row and column totals. Water settles to the bottom!',
-        icon: '🐠',
+        icon: aquariumIcon,
+        emojiIcon: '🐠',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         version: 'v1.0',
@@ -211,6 +216,18 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
         version: 'v1.0',
         component: () => import('../../pages/Mosaic'),
+      },
+      {
+        title: 'Tapa',
+        slug: 'tapa',
+        aliases: ['Tapa Puzzle'],
+        description: 'Shade cells so clue numbers show consecutive shaded groups around them. All shaded cells must connect!',
+        icon: tapaIcon,
+        emojiIcon: '⬛',
+        colors: { primary: '#a855f7', secondary: '#6366f1' },
+        gradient: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/Tapa'),
       },
     ],
   },

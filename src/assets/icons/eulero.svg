@@ -1,0 +1,16 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Eulero: Minimalist number+letter pairs -->
+
+  <!-- Background circle -->
+  <circle cx="12" cy="12" r="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5"/>
+
+  <!-- Number-letter pairs showing the concept -->
+  <text x="7" y="10" font-family="Arial" font-size="6" font-weight="bold" fill="#7c3aed" text-anchor="middle">1</text>
+  <text x="7" y="16" font-family="Arial" font-size="5" font-weight="bold" fill="#a78bfa" text-anchor="middle">A</text>
+
+  <text x="17" y="10" font-family="Arial" font-size="6" font-weight="bold" fill="#7c3aed" text-anchor="middle">2</text>
+  <text x="17" y="16" font-family="Arial" font-size="5" font-weight="bold" fill="#a78bfa" text-anchor="middle">B</text>
+
+  <!-- Divider line -->
+  <line x1="12" y1="5" x2="12" y2="19" stroke="#c4b5fd" stroke-width="1" stroke-dasharray="2,2"/>
+</svg>

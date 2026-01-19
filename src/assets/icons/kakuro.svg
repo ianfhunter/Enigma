@@ -1,44 +1,24 @@
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Kakuro: Cross sums puzzle -->
+  <!-- Kakuro: Abstract cross-sum representation -->
 
   <!-- Background -->
-  <rect x="1" y="1" width="22" height="22" rx="2" fill="#ecfeff"/>
+  <circle cx="12" cy="12" r="10" fill="#ecfeff"/>
 
-  <!-- Grid outline -->
-  <rect x="2" y="2" width="20" height="20" rx="1" fill="none" stroke="#06b6d4" stroke-width="1.5"/>
+  <!-- Diagonal slash representing the clue division -->
+  <line x1="6" y1="6" x2="18" y2="18" stroke="#0e7490" stroke-width="2" stroke-linecap="round"/>
 
-  <!-- Black cells with diagonal clues -->
-  <!-- Top-left corner black -->
-  <rect x="2" y="2" width="5" height="5" fill="#0e7490"/>
+  <!-- Upper triangle area (down clue) -->
+  <path d="M8 6 L18 6 L18 16 Z" fill="#22d3ee" opacity="0.3"/>
+  <text x="15" y="10" font-family="Arial" font-size="5" font-weight="bold" fill="#0e7490" text-anchor="middle">16</text>
 
-  <!-- Clue cell (row 1) -->
-  <rect x="7" y="2" width="5" height="5" fill="#0e7490"/>
-  <line x1="7" y1="2" x2="12" y2="7" stroke="#164e63" stroke-width="0.5"/>
-  <text x="10" y="4.5" font-family="Arial" font-size="2.5" font-weight="bold" fill="#22d3ee" text-anchor="middle">16</text>
-  <text x="8.5" y="6" font-family="Arial" font-size="2.5" font-weight="bold" fill="#67e8f9" text-anchor="middle">4</text>
+  <!-- Lower triangle area (across clue) -->
+  <path d="M6 8 L6 18 L16 18 Z" fill="#06b6d4" opacity="0.3"/>
+  <text x="9" y="16" font-family="Arial" font-size="5" font-weight="bold" fill="#0e7490" text-anchor="middle">9</text>
 
-  <!-- Clue cell (row 1, col 3) -->
-  <rect x="12" y="2" width="5" height="5" fill="#0e7490"/>
-  <line x1="12" y1="2" x2="17" y2="7" stroke="#164e63" stroke-width="0.5"/>
-  <text x="15" y="4.5" font-family="Arial" font-size="2.5" font-weight="bold" fill="#22d3ee" text-anchor="middle">7</text>
+  <!-- Sum symbols -->
+  <text x="5" y="12" font-family="Arial" font-size="4" fill="#67e8f9">Σ</text>
+  <text x="17" y="12" font-family="Arial" font-size="4" fill="#67e8f9">Σ</text>
 
-  <!-- More black cells -->
-  <rect x="17" y="2" width="5" height="5" fill="#0e7490"/>
-  <rect x="2" y="7" width="5" height="5" fill="#0e7490"/>
-  <line x1="2" y1="7" x2="7" y2="12" stroke="#164e63" stroke-width="0.5"/>
-  <text x="5" y="9.5" font-family="Arial" font-size="2.5" font-weight="bold" fill="#22d3ee" text-anchor="middle">17</text>
-
-  <rect x="2" y="12" width="5" height="5" fill="#0e7490"/>
-  <line x1="2" y1="12" x2="7" y2="17" stroke="#164e63" stroke-width="0.5"/>
-  <text x="5" y="14.5" font-family="Arial" font-size="2.5" font-weight="bold" fill="#22d3ee" text-anchor="middle">9</text>
-
-  <rect x="2" y="17" width="5" height="5" fill="#0e7490"/>
-  <rect x="17" y="17" width="5" height="5" fill="#0e7490"/>
-
-  <!-- White cells with numbers -->
-  <text x="9.5" y="11" font-family="Arial" font-size="4" font-weight="bold" fill="#0891b2" text-anchor="middle">8</text>
-  <text x="14.5" y="11" font-family="Arial" font-size="4" font-weight="bold" fill="#0891b2" text-anchor="middle">9</text>
-  <text x="9.5" y="16" font-family="Arial" font-size="4" font-weight="bold" fill="#0891b2" text-anchor="middle">3</text>
-  <text x="14.5" y="16" font-family="Arial" font-size="4" font-weight="bold" fill="#0891b2" text-anchor="middle">6</text>
-  <text x="19.5" y="11" font-family="Arial" font-size="4" font-weight="bold" fill="#0891b2" text-anchor="middle">7</text>
+  <!-- Border ring -->
+  <circle cx="12" cy="12" r="10" fill="none" stroke="#06b6d4" stroke-width="1.5"/>
 </svg>

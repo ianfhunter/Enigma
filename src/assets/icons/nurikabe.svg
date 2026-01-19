@@ -1,0 +1,16 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Nurikabe: Abstract islands in sea -->
+
+  <!-- Background circle -->
+  <circle cx="12" cy="12" r="10" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5"/>
+
+  <!-- Sea (connected dark region) -->
+  <path d="M4 8 Q8 6, 12 8 Q16 10, 20 8 L20 16 Q16 18, 12 16 Q8 14, 4 16 Z" fill="#0284c7" opacity="0.6"/>
+
+  <!-- Islands (white spots with numbers) -->
+  <circle cx="7" cy="10" r="2.5" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="1"/>
+  <text x="7" y="11.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0369a1" text-anchor="middle">2</text>
+
+  <circle cx="17" cy="14" r="2.5" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="1"/>
+  <text x="17" y="15.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0369a1" text-anchor="middle">3</text>
+</svg>

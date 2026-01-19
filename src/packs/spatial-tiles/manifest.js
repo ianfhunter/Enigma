@@ -19,6 +19,11 @@ import twiddleIcon from '../../assets/icons/twiddle.svg';
 import netgameIcon from '../../assets/icons/netgame.svg';
 import samegameIcon from '../../assets/icons/samegame.svg';
 import cubeIcon from '../../assets/icons/cube.svg';
+import flooditIcon from '../../assets/icons/floodit.svg';
+import fifteenIcon from '../../assets/icons/fifteen.svg';
+import sixteenIcon from '../../assets/icons/sixteen.svg';
+import netslideIcon from '../../assets/icons/netslide.svg';
+import pentominoIcon from '../../assets/icons/pentomino.svg';
 
 /**
  * Pack metadata
@@ -113,7 +118,8 @@ export const categories = [
         slug: 'flood-it',
         aliases: ['Color Flood', 'Floodfill'],
         description: 'Fill the board with one color in limited moves. Start from the corner!',
-        icon: '🌊',
+        icon: flooditIcon,
+        emojiIcon: '🌊',
         colors: { primary: '#38bdf8', secondary: '#0ea5e9' },
         gradient: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
         version: 'v1.0',
@@ -169,7 +175,8 @@ export const categories = [
         slug: 'fifteen',
         aliases: ['15 Puzzle', 'Gem Puzzle', 'Boss Puzzle', 'Game of Fifteen'],
         description: 'Classic 15-puzzle: slide tiles to put them in order.',
-        icon: '1️⃣',
+        icon: fifteenIcon,
+        emojiIcon: '1️⃣',
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         version: 'v1.0',
@@ -179,7 +186,8 @@ export const categories = [
         title: 'Sixteen',
         slug: 'sixteen',
         description: 'Classic 16-tile sliding puzzle variant.',
-        icon: '🔢',
+        icon: sixteenIcon,
+        emojiIcon: '🔢',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         version: 'v1.0',
@@ -211,7 +219,8 @@ export const categories = [
         title: 'Netslide',
         slug: 'netslide',
         description: 'Slide tiles to connect the entire network.',
-        icon: '🧩',
+        icon: netslideIcon,
+        emojiIcon: '🧩',
         colors: { primary: '#4ade80', secondary: '#22c55e' },
         gradient: 'linear-gradient(135deg, #4ade80 0%, #22c55e 100%)',
         version: 'v1.0',
@@ -254,7 +263,8 @@ export const categories = [
         title: 'Pentomino',
         slug: 'pentomino',
         description: 'Fill the 8×8 board using all 12 pentomino pieces. The center 2×2 cells form a hole.',
-        icon: '🧩',
+        icon: pentominoIcon,
+        emojiIcon: '🧩',
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         version: 'v1.0',

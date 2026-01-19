@@ -1,0 +1,270 @@
+.container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Mobile White Toggle */
+.whiteToggle {
+  padding: 0.6rem 1.25rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.whiteToggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.whiteToggle.whiteModeActive {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: #a855f7;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1px;
+  background: rgba(168, 85, 247, 0.4);
+  padding: 2px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
+}
+
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  min-width: 0;
+}
+
+.cell:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell.clue {
+  background: #f5f0ff;
+  cursor: default;
+}
+
+.cell.shaded {
+  background: #2d1b4e;
+}
+
+.cell.markedWhite {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.cell.markedWhite::after {
+  content: '·';
+  color: rgba(168, 85, 247, 0.5);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.cell.error {
+  box-shadow: inset 0 0 0 2px #ef4444;
+}
+
+.cell.error.clue {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.clueValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #6d28d9;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.clueValue.smallClue {
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+/* Win/Lose Messages handled by GameResult component */
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 22px;
+  background: var(--panel-bg);
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s ease;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #a855f7;
+}
+
+.toggle input:checked + .toggleSlider::after {
+  transform: translateX(18px);
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.resetBtn {
+  padding: 0.75rem 1.5rem;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.newGameBtn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  border: none;
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.legendBox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.shadedLegend {
+  background: #2d1b4e;
+}
+
+.whiteLegend {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .grid {
+    width: 100% !important;
+    max-width: 350px;
+  }
+
+  .clueValue {
+    font-size: 0.75rem;
+  }
+
+  .clueValue.smallClue {
+    font-size: 0.55rem;
+  }
+
+  .buttons {
+    gap: 0.5rem;
+  }
+
+  .resetBtn,
+  .newGameBtn {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+}

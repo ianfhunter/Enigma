@@ -1,0 +1,26 @@
+{
+  "7x7-easy": {
+    "lastSeed": 101,
+    "count": 100,
+    "complete": true
+  },
+  "7x7-medium": {
+    "lastSeed": 101,
+    "count": 100,
+    "complete": true
+  },
+  "7x7-hard": {
+    "lastSeed": 101,
+    "count": 100,
+    "complete": true
+  },
+  "10x10-easy": {
+    "lastSeed": 101,
+    "count": 100,
+    "complete": true
+  },
+  "10x10-medium": {
+    "lastSeed": 20,
+    "count": 20
+  }
+}
