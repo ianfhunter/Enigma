@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Nurikabe.module.css';
 
 const GRID_SIZES = {
@@ -312,10 +316,7 @@ export default function Nurikabe() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Nurikabe</h1>
-        </div>
+        <GameHeader title="Nurikabe" />
         <div className={styles.loading}>Loading puzzles...</div>
       </div>
     );
@@ -327,40 +328,24 @@ export default function Nurikabe() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Nurikabe</h1>
-        <p className={styles.instructions}>
-          Shade cells to create a connected sea (dark) around islands (white). Each number indicates
-          the total size of its island—the numbered cell plus adjacent white cells must equal that number.
-          All sea cells must connect, no 2×2 sea squares allowed, and islands cannot touch orthogonally.
-          Tap to shade, use island mode to mark as island.
-        </p>
-      </div>
+      <GameHeader
+        title="Nurikabe"
+        instructions="Shade cells to create a connected sea (dark) around islands (white). Each number indicates the total size of its island. All sea cells must connect, no 2×2 sea squares allowed, and islands cannot touch orthogonally."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        options={Object.keys(GRID_SIZES)}
+        value={sizeKey}
+        onChange={setSizeKey}
+        className={styles.sizeSelector}
+      />
 
-      <div className={styles.difficultySelector}>
-        {['easy', 'medium', 'hard'].map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        options={['easy', 'medium', 'hard']}
+        value={difficulty}
+        onChange={setDifficulty}
+        className={styles.difficultySelector}
+      />
 
       <div className={styles.gameArea}>
         <button
@@ -409,19 +394,21 @@ export default function Nurikabe() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🌊</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Sea and islands perfectly balanced!</p>
-          </div>
+          <GameResult
+            state="won"
+            title="🌊 Puzzle Solved!"
+            message="Sea and islands perfectly balanced!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>🗺️</div>
-            <h3>Solution Revealed</h3>
-            <p>Study the pattern and try another puzzle!</p>
-          </div>
+          <GameResult
+            state="gaveup"
+            title="🗺️ Solution Revealed"
+            message="Study the pattern and try another puzzle!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.controls}>
@@ -440,11 +427,10 @@ export default function Nurikabe() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

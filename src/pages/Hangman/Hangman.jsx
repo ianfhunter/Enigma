@@ -4,6 +4,9 @@ import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import GameHeader from '../../components/GameHeader';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
+import StatsPanel from '../../components/StatsPanel';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Hangman.module.css';
 
@@ -142,24 +145,12 @@ export default function Hangman() {
           <div className={styles.word}>{renderWord()}</div>
 
           {gameState !== 'playing' && (
-            <div className={styles.result}>
-              {gameState === 'won' ? (
-                <div className={styles.winMessage}>🎉 You got it!</div>
-              ) : gameState === 'gaveUp' ? (
-                <div className={styles.gaveUpMessage}>
-                  <span className={styles.gaveUpIcon}>📖</span>
-                  <span>The word was <WordWithDefinition word={word} className={styles.wordDef} /></span>
-                </div>
-              ) : (
-                <div className={styles.loseMessage}>
-                  The word was <WordWithDefinition word={word} className={styles.wordDef} />
-                </div>
-              )}
-
-              <button className={styles.playAgainBtn} onClick={initGame}>
-                Play Again
-              </button>
-            </div>
+            <GameResult
+              state={gameState === 'won' ? 'won' : gameState === 'gaveUp' ? 'gaveup' : 'lost'}
+              title={gameState === 'won' ? '🎉 You got it!' : undefined}
+              message={gameState !== 'won' && <span>The word was <WordWithDefinition word={word} className={styles.wordDef} /></span>}
+              actions={[{ label: 'Play Again', onClick: initGame, primary: true }]}
+            />
           )}
         </div>
 
@@ -191,31 +182,21 @@ export default function Hangman() {
             >
               💡 Hint (costs 1 guess)
             </button>
-            <button
-              className={styles.giveUpBtn}
-              onClick={handleGiveUp}
-            >
-              Give Up
-            </button>
+            <GiveUpButton
+              onGiveUp={handleGiveUp}
+              disabled={gameState !== 'playing'}
+            />
           </div>
         )}
 
-        <div className={styles.statsPanel}>
-          <div className={styles.stat}>
-            <span className={styles.statValue}>{stats.played}</span>
-            <span className={styles.statLabel}>Played</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statValue}>{stats.won}</span>
-            <span className={styles.statLabel}>Won</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statValue}>
-              {stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%
-            </span>
-            <span className={styles.statLabel}>Win Rate</span>
-          </div>
-        </div>
+        <StatsPanel
+          stats={[
+            { label: 'Played', value: stats.played },
+            { label: 'Won', value: stats.won },
+            { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+          ]}
+          className={styles.statsPanel}
+        />
       </div>
     </div>
   );

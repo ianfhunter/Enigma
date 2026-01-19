@@ -1,5 +1,9 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Lightup.module.css';
 import akariPuzzles from '../../../public/datasets/akariPuzzles.json';
 
@@ -352,46 +356,41 @@ export default function Lightup() {
       />
 
       <div className={styles.toolbar}>
-        <div className={styles.settingGroup}>
-          <label>Difficulty:</label>
-          {DIFFICULTIES.map((d) => (
-            <button
-              key={d}
-              className={`${styles.button} ${difficulty === d ? styles.active : ''}`}
-              onClick={() => setDifficulty(d)}
-            >
-              {d.charAt(0).toUpperCase() + d.slice(1)}
-            </button>
-          ))}
-        </div>
-        <div className={styles.settingGroup}>
-          <label>Size:</label>
-          {availableSizes.map((s) => (
-            <button
-              key={s}
-              className={`${styles.button} ${sizeKey === s ? styles.active : ''}`}
-              onClick={() => setSizeKey(s)}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+        <DifficultySelector
+          difficulties={DIFFICULTIES}
+          selected={difficulty}
+          onSelect={setDifficulty}
+        />
+        <SizeSelector
+          sizes={availableSizes}
+          selected={sizeKey}
+          onSelect={setSizeKey}
+        />
         <div className={styles.actions}>
           <button className={styles.generateBtn} onClick={loadPuzzle}>New Puzzle</button>
           <button className={styles.button} onClick={reset}>Clear</button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>Give Up</button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
         </div>
-        <div className={styles.status}>
-          {gameState === 'won' ? (
-            <span className={styles.win}>🎉 Solved!</span>
-          ) : gameState === 'gaveUp' ? (
-            <span className={styles.gaveUp}>Solution Revealed</span>
-          ) : (
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Solved!"
+          inline
+        />
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          inline
+        />
+        {gameState === 'playing' && (
+          <div className={styles.status}>
             <span>Conflicts: {bulbConflicts.size} • Unlit: {allLit ? 0 : 'some'}</span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Mobile Mark Toggle */}
         <button

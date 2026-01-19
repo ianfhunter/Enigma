@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Thermometers.module.css';
 import { ThermometerBulb, ThermometerTube } from './ThermometerSVG';
 
@@ -308,26 +311,16 @@ export default function Thermometers() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Thermometers</h1>
-        <p className={styles.instructions}>
-          Fill thermometers from the bulb (round end) upward. Mercury must be continuous from the bulb.
-          Numbers show how many filled cells in each row/column.
-        </p>
-      </div>
+      <GameHeader
+        title="Thermometers"
+        instructions="Fill thermometers from the bulb (round end) upward. Mercury must be continuous from the bulb. Numbers show how many filled cells in each row/column."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.gridWrapper}>
@@ -394,21 +387,19 @@ export default function Thermometers() {
           </div>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🌡️</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All thermometers correctly filled!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🌡️ Puzzle Solved!"
+          message="All thermometers correctly filled!"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Better luck next time!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -426,13 +417,10 @@ export default function Thermometers() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

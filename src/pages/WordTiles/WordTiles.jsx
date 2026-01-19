@@ -146,7 +146,6 @@ export default function WordTiles() {
   const [wordsPlayed, setWordsPlayed] = useState([]);
   const [gameState, setGameState] = useState('playing');
   const [message, setMessage] = useState('');
-  const [selectedTileIndex, setSelectedTileIndex] = useState(null);
   const [finalPenalty, setFinalPenalty] = useState(0);
   const [highScore, setHighScore] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -165,7 +164,6 @@ export default function WordTiles() {
     setWordsPlayed([]);
     setGameState('playing');
     setMessage('');
-    setSelectedTileIndex(null);
     setFinalPenalty(0);
     setIsNewHighScore(false);
   }, []);
@@ -187,12 +185,7 @@ export default function WordTiles() {
   const submitRef = useRef(null);
   const clearRef = useRef(null);
 
-  const handleTileClick = (index) => {
-    if (gameState !== 'playing') return;
-    setSelectedTileIndex(selectedTileIndex === index ? null : index);
-  };
-
-  const handleTileDoubleClick = (handIndex) => {
+  const handleTileClick = (handIndex) => {
     if (gameState !== 'playing') return;
     const letter = tiles[handIndex];
     if (!letter) return;
@@ -213,41 +206,6 @@ export default function WordTiles() {
       newTiles[handIndex] = null;
       return newTiles;
     });
-    setSelectedTileIndex(null);
-    setMessage('');
-  };
-
-  const handleSlotClick = (slotIndex) => {
-    if (gameState !== 'playing' || selectedTileIndex === null) return;
-
-    // Check if slot is already occupied
-    if (placedTiles.some(t => t.slotIndex === slotIndex)) {
-      // Remove tile from slot and return to hand
-      const tileInSlot = placedTiles.find(t => t.slotIndex === slotIndex);
-      setPlacedTiles(prev => prev.filter(t => t.slotIndex !== slotIndex));
-      setTiles(prev => {
-        const newTiles = [...prev];
-        newTiles[tileInSlot.handIndex] = tileInSlot.letter;
-        return newTiles;
-      });
-      return;
-    }
-
-    // Place selected tile
-    const letter = tiles[selectedTileIndex];
-    if (!letter) return;
-
-    setPlacedTiles(prev => [...prev, {
-      letter,
-      slotIndex,
-      handIndex: selectedTileIndex
-    }]);
-    setTiles(prev => {
-      const newTiles = [...prev];
-      newTiles[selectedTileIndex] = null;
-      return newTiles;
-    });
-    setSelectedTileIndex(null);
     setMessage('');
   };
 
@@ -395,7 +353,6 @@ export default function WordTiles() {
           newTiles[tileIndex] = null;
           return newTiles;
         });
-        setSelectedTileIndex(null);
         setMessage('');
       }
 
@@ -469,7 +426,6 @@ export default function WordTiles() {
     setTiles(swapResult.nextTiles);
     setBag(swapResult.nextBag);
     setPlacedTiles([]);
-    setSelectedTileIndex(null);
     setMessage(
       swapResult.partial
         ? `Swapped ${swapResult.swapCount} tile${swapResult.swapCount === 1 ? '' : 's'} (bag low) -10 points`
@@ -535,7 +491,7 @@ export default function WordTiles() {
                   ${i === doubleWordSlot ? styles.doubleWord : ''}
                   ${letter ? styles.filled : ''}
                 `}
-                onClick={() => letter ? handlePlacedTileClick(i) : handleSlotClick(i)}
+                onClick={() => letter && handlePlacedTileClick(i)}
               >
                 {i === doubleWordSlot && !letter && (
                   <span className={styles.doubleLabel}>2×</span>
@@ -565,10 +521,8 @@ export default function WordTiles() {
               className={`
                 ${styles.tile}
                 ${tile ? '' : styles.empty}
-                ${selectedTileIndex === i ? styles.selected : ''}
               `}
               onClick={() => tile && handleTileClick(i)}
-              onDoubleClick={() => tile && handleTileDoubleClick(i)}
               disabled={!tile}
             >
               {tile && (

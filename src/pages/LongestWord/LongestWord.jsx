@@ -93,7 +93,7 @@ export default function LongestWord() {
     e.preventDefault();
     if (!currentWord || gameState !== 'playing') return;
 
-    const upperWord = currentWord.toUpperCase();
+    const upperWord = currentWord.trim().toUpperCase();
 
     // Validate word contains seed
     if (!containsSeed(upperWord, seed)) {
@@ -163,7 +163,7 @@ export default function LongestWord() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             initGame(false, seedNum);

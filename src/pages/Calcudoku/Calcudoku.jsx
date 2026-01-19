@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { formatTime } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Calcudoku.module.css';
 import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
 
@@ -439,37 +443,22 @@ export default function Calcudoku() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Calcudoku</h1>
-        <p className={styles.instructions}>
-          Fill each row and column with 1-{size}. Cage numbers must equal the target using the operation.
-        </p>
-      </div>
+      <GameHeader
+        title="Calcudoku"
+        instructions={`Fill each row and column with 1-${size}. Cage numbers must equal the target using the operation.`}
+      />
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => handleDifficultyChange(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={DIFFICULTIES}
+        selected={difficulty}
+        onSelect={handleDifficultyChange}
+      />
 
-      <div className={styles.sizeSelector}>
-        {availableSizes.map((s) => (
-          <button
-            key={s}
-            className={`${styles.sizeBtn} ${size === s ? styles.active : ''}`}
-            onClick={() => handleSizeChange(s)}
-          >
-            {s}×{s}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={availableSizes}
+        selected={size}
+        onSelect={handleSizeChange}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
@@ -560,28 +549,25 @@ export default function Calcudoku() {
           </button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Solved in {formatTime(timer)}!
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message={`Completed in ${formatTime(timer)}`}
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Better luck next time!"
+        />
 
         <div className={styles.buttons}>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button
             className={styles.newGameBtn}
             onClick={() => initPuzzle(size, difficulty, true)}

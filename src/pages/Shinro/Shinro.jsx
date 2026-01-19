@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Shinro.module.css';
 
 const GRID_SIZES = {
@@ -273,26 +276,16 @@ export default function Shinro() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Shinro</h1>
-        <p className={styles.instructions}>
-          Find all hidden gems! Numbers show how many gems are in each row/column.
-          Arrows point toward at least one gem. Click to place a gem, right-click to mark as empty.
-        </p>
-      </div>
+      <GameHeader
+        title="Shinro"
+        instructions="Find all hidden gems! Numbers show how many gems are in each row/column. Arrows point toward at least one gem. Click to place a gem, right-click to mark as empty."
+      />
 
-      <div className={styles.sizeSelector}>
-        {Object.keys(GRID_SIZES).map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        sizes={Object.keys(GRID_SIZES)}
+        selected={sizeKey}
+        onSelect={setSizeKey}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.gridContainer}>
@@ -369,21 +362,19 @@ export default function Shinro() {
           Gems: {showSolution ? puzzleData.gems.size : playerGems.size} / {puzzleData.gems.size}
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>💎</div>
-            <h3>All Gems Found!</h3>
-            <p>You're a treasure hunter!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="💎 All Gems Found!"
+          message="You're a treasure hunter!"
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>💡</div>
-            <h3>Solution Revealed</h3>
-            <p>Try a new puzzle!</p>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+          message="Try a new puzzle!"
+        />
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
@@ -401,11 +392,10 @@ export default function Shinro() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

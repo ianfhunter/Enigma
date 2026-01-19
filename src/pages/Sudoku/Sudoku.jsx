@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { formatTime, createSeededRandom, seededShuffleArray, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { createSeededRandom, seededShuffleArray, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import Timer, { formatTime } from '../../components/Timer/Timer';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Sudoku.module.css';
 
@@ -641,18 +645,14 @@ export default function Sudoku() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>
-          ← Back to Games
-        </Link>
-        <h1 className={styles.title}>Sudoku</h1>
-        <p className={styles.instructions}>
-          Fill the grid so each row, column, and 3×3 box contains the numbers <strong>1-9</strong>.
-        </p>
+      <GameHeader
+        title="Sudoku"
+        instructions={<>Fill the grid so each row, column, and 3×3 box contains the numbers <strong>1-9</strong>.</>}
+      >
         <p className={styles.dailyInfo}>
           Daily Puzzle #{puzzleNumber} • {today}
         </p>
-      </div>
+      </GameHeader>
 
       {seed !== null && (
         <SeedDisplay
@@ -680,22 +680,16 @@ export default function Sudoku() {
       <div className={styles.gameArea}>
         <div className={styles.boardSection}>
           <div className={styles.gameControls}>
-            <div className={styles.difficultySelector}>
-              {['easy', 'medium', 'hard', 'expert'].map((diff) => (
-                <button
-                  key={diff}
-                  className={`${styles.difficultyBtn} ${difficulty === diff ? styles.active : ''} ${playerState[diff]?.isComplete ? styles.completed : ''}`}
-                  onClick={() => handleDifficultyChange(diff)}
-                >
-                  {diff.charAt(0).toUpperCase() + diff.slice(1)}
-                  {playerState[diff]?.isComplete && <span className={styles.checkmark}>✓</span>}
-                </button>
-              ))}
-            </div>
-            <div className={styles.timerDisplay}>
-              <span className={styles.timerIcon}>⏱</span>
-              <span className={styles.timerValue}>{formatTime(timer)}</span>
-            </div>
+            <DifficultySelector
+              options={['easy', 'medium', 'hard', 'expert']}
+              value={difficulty}
+              onChange={handleDifficultyChange}
+              completedStates={Object.fromEntries(
+                ['easy', 'medium', 'hard', 'expert'].map(d => [d, playerState[d]?.isComplete])
+              )}
+              className={styles.difficultySelector}
+            />
+            <Timer seconds={timer} size="compact" running={isRunning} />
           </div>
 
           <div className={styles.board}>
@@ -783,15 +777,11 @@ export default function Sudoku() {
               <span className={styles.actionIcon}>💡</span>
               Hint
             </button>
-            <button
-              className={`${styles.actionBtn} ${styles.giveUpBtn}`}
-              onClick={handleGiveUp}
+            <GiveUpButton
+              onGiveUp={handleGiveUp}
               disabled={isComplete || gaveUp}
-              title="Give up and see solution"
-            >
-              <span className={styles.actionIcon}>🏳️</span>
-              Give Up
-            </button>
+              variant="compact"
+            />
           </div>
         </div>
 
@@ -810,31 +800,19 @@ export default function Sudoku() {
           </div>
 
           {isComplete && (
-            <div className={styles.completeMessage}>
-              <div className={styles.completeEmoji}>🎉</div>
-              <h3>Congratulations!</h3>
-              <p>You solved the {difficulty} puzzle in {formatTime(timer)}</p>
-              <button
-                className={styles.playAgainBtn}
-                onClick={handleNewPuzzle}
-              >
-                New Puzzle
-              </button>
-            </div>
+            <GameResult
+              state="won"
+              message={`You solved the ${difficulty} puzzle in ${formatTime(timer)}`}
+              actions={[{ label: 'New Puzzle', onClick: handleNewPuzzle, primary: true }]}
+            />
           )}
 
           {gaveUp && (
-            <div className={styles.gaveUpMessage}>
-              <div className={styles.gaveUpEmoji}>😔</div>
-              <h3>Solution Revealed</h3>
-              <p>Better luck next time!</p>
-              <button
-                className={styles.playAgainBtn}
-                onClick={handleNewPuzzle}
-              >
-                Try Again
-              </button>
-            </div>
+            <GameResult
+              state="gaveup"
+              message="Better luck next time!"
+              actions={[{ label: 'Try Again', onClick: handleNewPuzzle, primary: true }]}
+            />
           )}
 
           <div className={styles.settingsPanel}>

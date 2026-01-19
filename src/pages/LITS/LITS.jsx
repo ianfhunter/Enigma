@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './LITS.module.css';
 
 // Dataset-based difficulty mapping
@@ -559,10 +562,7 @@ export default function LITS() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>LITS</h1>
-        </div>
+        <GameHeader title="LITS" />
         <div className={styles.loading}>Loading puzzles...</div>
       </div>
     );
@@ -644,17 +644,12 @@ export default function LITS() {
         </div>
       </div>
 
-      <div className={styles.sizeSelector}>
-        {['easy', 'medium', 'hard'].map((diff) => (
-          <button
-            key={diff}
-            className={`${styles.sizeBtn} ${difficulty === diff ? styles.active : ''}`}
-            onClick={() => setDifficulty(diff)}
-          >
-            {diff.charAt(0).toUpperCase() + diff.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        options={['easy', 'medium', 'hard']}
+        value={difficulty}
+        onChange={setDifficulty}
+        className={styles.sizeSelector}
+      />
 
       <div className={styles.gameArea}>
         <div
@@ -700,19 +695,21 @@ export default function LITS() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🧩</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All tetrominoes placed correctly!</p>
-          </div>
+          <GameResult
+            state="won"
+            title="🧩 Puzzle Solved!"
+            message="All tetrominoes placed correctly!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>💡</div>
-            <h3>Solution Revealed</h3>
-            <p>Try a new puzzle!</p>
-          </div>
+          <GameResult
+            state="gaveup"
+            title="💡 Solution Revealed"
+            message="Try a new puzzle!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.controls}>
@@ -731,11 +728,10 @@ export default function LITS() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          {gameState === 'playing' && (
-            <button className={styles.giveUpBtn} onClick={handleGiveUp}>
-              Give Up
-            </button>
-          )}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
+            disabled={gameState !== 'playing'}
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

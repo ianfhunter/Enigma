@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import SizeSelector from '../../components/SizeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Takuzu.module.css';
 import binairoPuzzles from '../../../public/datasets/binairoPuzzles.json';
 
@@ -203,38 +207,24 @@ export default function Takuzu() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Takuzu</h1>
-        <p className={styles.instructions}>
-          Fill the grid with 0s and 1s. No more than two consecutive same digits.
-          Each row and column must have equal counts of 0s and 1s.
-        </p>
-      </div>
+      <GameHeader
+        title="Takuzu"
+        instructions="Fill the grid with 0s and 1s. No more than two consecutive same digits. Each row and column must have equal counts of 0s and 1s."
+      />
 
-      <div className={styles.difficultySelector}>
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => setDifficulty(d)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        options={DIFFICULTIES}
+        value={difficulty}
+        onChange={setDifficulty}
+        className={styles.difficultySelector}
+      />
 
-      <div className={styles.sizeSelector}>
-        {availableSizes.map((key) => (
-          <button
-            key={key}
-            className={`${styles.sizeBtn} ${sizeKey === key ? styles.active : ''}`}
-            onClick={() => setSizeKey(key)}
-          >
-            {key}
-          </button>
-        ))}
-      </div>
+      <SizeSelector
+        options={availableSizes}
+        value={sizeKey}
+        onChange={setSizeKey}
+        className={styles.sizeSelector}
+      />
 
       <div className={styles.gameArea}>
         <div
@@ -271,19 +261,20 @@ export default function Takuzu() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>Perfect binary balance achieved!</p>
-          </div>
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message="Perfect binary balance achieved!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
+          <GameResult
+            state="gaveup"
+            message="Better luck next time!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.controls}>
@@ -302,13 +293,10 @@ export default function Takuzu() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

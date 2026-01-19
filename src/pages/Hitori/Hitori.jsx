@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import styles from './Hitori.module.css';
 
 const DIFFICULTY_SIZES = {
@@ -343,10 +346,7 @@ export default function Hitori() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to="/" className={styles.backLink}>← Back to Games</Link>
-          <h1 className={styles.title}>Hitori</h1>
-        </div>
+        <GameHeader title="Hitori" />
         <div className={styles.loading}>Loading puzzles...</div>
       </div>
     );
@@ -356,26 +356,17 @@ export default function Hitori() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Hitori</h1>
-        <p className={styles.instructions}>
-          Shade cells so no number repeats in any row or column. Shaded cells can't touch.
-          Unshaded cells must stay connected. Tap to shade, use mark mode to mark.
-        </p>
-      </div>
+      <GameHeader
+        title="Hitori"
+        instructions="Shade cells so no number repeats in any row or column. Shaded cells can't touch. Unshaded cells must stay connected. Tap to shade, use mark mode to mark."
+      />
 
-      <div className={styles.sizeSelector}>
-        {['easy', 'medium', 'hard'].map((diff) => (
-          <button
-            key={diff}
-            className={`${styles.sizeBtn} ${difficulty === diff ? styles.active : ''}`}
-            onClick={() => setDifficulty(diff)}
-          >
-            {diff.charAt(0).toUpperCase() + diff.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        options={['easy', 'medium', 'hard']}
+        value={difficulty}
+        onChange={setDifficulty}
+        className={styles.sizeSelector}
+      />
 
       <div className={styles.gameArea}>
         {/* Mobile Mark Toggle */}
@@ -419,19 +410,20 @@ export default function Hitori() {
         </div>
 
         {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            <div className={styles.winEmoji}>🎉</div>
-            <h3>Puzzle Solved!</h3>
-            <p>All rules satisfied</p>
-          </div>
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message="All rules satisfied"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <div className={styles.gaveUpEmoji}>😔</div>
-            <h3>Solution Revealed</h3>
-            <p>Better luck next time!</p>
-          </div>
+          <GameResult
+            state="gaveup"
+            message="Better luck next time!"
+            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+          />
         )}
 
         <div className={styles.controls}>
@@ -450,13 +442,10 @@ export default function Hitori() {
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
           </button>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>

@@ -209,13 +209,9 @@ export default function CountdownLetters() {
       return;
     }
 
-    if (!isValidCountdownWord(currentWord, selectedLetters)) {
-      setMessage({ text: 'Not a valid word', type: 'error' });
-      return;
-    }
-
+    // Don't validate here - let the player lock in any word, validation happens at end of game
     setSubmittedWord(currentWord);
-    setMessage({ text: `✓ "${currentWord}" locked in!`, type: 'success' });
+    setMessage({ text: `✓ "${currentWord}" locked in! (will be checked at end)`, type: 'success' });
   };
 
   const handleKeyDown = (e) => {
@@ -351,7 +347,7 @@ export default function CountdownLetters() {
 
               {submittedWord && (
                 <div className={styles.lockedWord}>
-                  Locked: <strong>{submittedWord}</strong> ({submittedWord.length} pts)
+                  Locked: <strong>{submittedWord}</strong> ({submittedWord.length} pts if valid)
                 </div>
               )}
             </div>
@@ -410,8 +406,8 @@ export default function CountdownLetters() {
               {submittedWord && (
                 <div className={styles.scoreItem}>
                   <span className={styles.scoreLabelSmall}>Locked</span>
-                  <span className={styles.scoreValueBig}>{submittedWord.length}</span>
-                  <span className={styles.scoreLabelSmall}>points</span>
+                  <span className={styles.scoreValueBig}>{submittedWord.length}?</span>
+                  <span className={styles.scoreLabelSmall}>pending</span>
                 </div>
               )}
             </div>

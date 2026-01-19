@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { formatTime, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import GameHeader from '../../components/GameHeader';
+import DifficultySelector from '../../components/DifficultySelector';
+import Timer from '../../components/Timer';
+import GiveUpButton from '../../components/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
 import styles from './Kakuro.module.css';
 
@@ -353,15 +357,10 @@ export default function Kakuro() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Link to="/" className={styles.backLink}>← Back to Games</Link>
-        <h1 className={styles.title}>Kakuro</h1>
-        <p className={styles.instructions}>
-          Fill white cells with 1-9. Numbers in a run must be unique and sum to the clue.
-          <br />
-          <small>Top-left number = sum down ↓ | Bottom-right number = sum across →</small>
-        </p>
-      </div>
+      <GameHeader
+        title="Kakuro"
+        instructions="Fill white cells with 1-9. Numbers in a run must be unique and sum to the clue. Top-left number = sum down ↓ | Bottom-right number = sum across →"
+      />
 
       {seed !== null && (
         <SeedDisplay
@@ -379,24 +378,15 @@ export default function Kakuro() {
         />
       )}
 
-      <div className={styles.difficultySelector}>
-        {['easy', 'medium', 'hard'].map((d) => (
-          <button
-            key={d}
-            className={`${styles.difficultyBtn} ${difficulty === d ? styles.active : ''}`}
-            onClick={() => initPuzzle(d, true)}
-          >
-            {d.charAt(0).toUpperCase() + d.slice(1)}
-          </button>
-        ))}
-      </div>
+      <DifficultySelector
+        difficulties={['easy', 'medium', 'hard']}
+        selected={difficulty}
+        onSelect={(d) => initPuzzle(d, true)}
+      />
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Time</span>
-            <span className={styles.statValue}>{formatTime(timer)}</span>
-          </div>
+          <Timer time={timer} />
           <div className={styles.stat}>
             <span className={styles.statLabel}>Size</span>
             <span className={styles.statValue}>{rows}×{cols}</span>
@@ -503,27 +493,24 @@ export default function Kakuro() {
           </button>
         </div>
 
-        {gameState === 'won' && (
-          <div className={styles.winMessage}>
-            🎉 Solved in {formatTime(timer)}!
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'won'}
+          type="won"
+          title="🎉 Puzzle Solved!"
+          message={`Completed in ${formatTime(timer)}`}
+        />
 
-        {gameState === 'gaveUp' && (
-          <div className={styles.gaveUpMessage}>
-            <span className={styles.gaveUpIcon}>📖</span>
-            <span>Solution Revealed</span>
-          </div>
-        )}
+        <GameResult
+          show={gameState === 'gaveUp'}
+          type="gaveUp"
+          title="Solution Revealed"
+        />
 
         <div className={styles.buttonRow}>
-          <button
-            className={styles.giveUpBtn}
-            onClick={handleGiveUp}
+          <GiveUpButton
+            onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
-          >
-            Give Up
-          </button>
+          />
           <button
             className={styles.newGameBtn}
             onClick={() => initPuzzle(difficulty, true)}
