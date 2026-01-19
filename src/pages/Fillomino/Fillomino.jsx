@@ -4,6 +4,7 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { getConnectedRegion, cellKey } from '../../utils/generatorUtils';
 import styles from './Fillomino.module.css';
 
 const GRID_SIZES = {
@@ -14,54 +15,25 @@ const GRID_SIZES = {
   '15×15': 15,
 };
 
-// Helper function
-function getConnectedRegion(grid, r, c, size) {
-  const val = grid[r][c];
-  if (!val) return [];
-
-  const visited = new Set();
-  const queue = [[r, c]];
-  const cells = [];
-
-  while (queue.length > 0) {
-    const [cr, cc] = queue.shift();
-    const key = `${cr},${cc}`;
-    if (visited.has(key)) continue;
-    if (grid[cr][cc] !== val) continue;
-
-    visited.add(key);
-    cells.push([cr, cc]);
-
-    for (const [nr, nc] of [[cr-1,cc], [cr+1,cc], [cr,cc-1], [cr,cc+1]]) {
-      if (nr >= 0 && nr < size && nc >= 0 && nc < size && !visited.has(`${nr},${nc}`)) {
-        queue.push([nr, nc]);
-      }
-    }
-  }
-
-  return cells;
-}
-
 function checkValidity(grid) {
-  const size = grid.length;
   const errors = new Set();
   const checked = new Set();
 
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (!grid[r][c] || checked.has(`${r},${c}`)) continue;
+  for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < grid[r].length; c++) {
+      if (!grid[r][c] || checked.has(cellKey(r, c))) continue;
 
-      const region = getConnectedRegion(grid, r, c, size);
+      const region = getConnectedRegion(grid, r, c);
       const val = grid[r][c];
 
       for (const [cr, cc] of region) {
-        checked.add(`${cr},${cc}`);
+        checked.add(cellKey(cr, cc));
       }
 
       // Region is too big
       if (region.length > val) {
         for (const [cr, cc] of region) {
-          errors.add(`${cr},${cc}`);
+          errors.add(cellKey(cr, cc));
         }
       }
     }
@@ -71,26 +43,25 @@ function checkValidity(grid) {
 }
 
 function checkSolved(grid) {
-  const size = grid.length;
   const checked = new Set();
 
   // All cells must be filled
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
+  for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < grid[r].length; c++) {
       if (!grid[r][c]) return false;
     }
   }
 
   // Each region must have size equal to its number
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (checked.has(`${r},${c}`)) continue;
+  for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < grid[r].length; c++) {
+      if (checked.has(cellKey(r, c))) continue;
 
-      const region = getConnectedRegion(grid, r, c, size);
+      const region = getConnectedRegion(grid, r, c);
       const val = grid[r][c];
 
       for (const [cr, cc] of region) {
-        checked.add(`${cr},${cc}`);
+        checked.add(cellKey(cr, cc));
       }
 
       if (region.length !== val) return false;
@@ -306,7 +277,7 @@ export default function Fillomino() {
             row.map((cell, c) => {
               const isSelected = selected && selected[0] === r && selected[1] === c;
               const isFixed = fixed[r][c];
-              const hasError = errors.has(`${r},${c}`);
+              const hasError = errors.has(cellKey(r, c));
 
               return (
                 <button

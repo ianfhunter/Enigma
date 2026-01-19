@@ -4,6 +4,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { generateMaze, findShortestPath, cellKey } from '../../utils/generatorUtils';
 import styles from './Maze.module.css';
 
 const GRID_SIZES = {
@@ -12,79 +13,16 @@ const GRID_SIZES = {
   'Large': { width: 81, height: 55 },
 };
 
-// Generate maze using recursive backtracking
-function generateMaze(width, height) {
-  // Initialize grid with walls
-  const maze = Array(height).fill(null).map(() => Array(width).fill(1)); // 1 = wall
-
-  // Carve passages
-  function carve(x, y) {
-    maze[y][x] = 0; // 0 = passage
-
-    const directions = [
-      [0, -2], // up
-      [2, 0],  // right
-      [0, 2],  // down
-      [-2, 0], // left
-    ].sort(() => Math.random() - 0.5);
-
-    for (const [dx, dy] of directions) {
-      const nx = x + dx;
-      const ny = y + dy;
-
-      if (nx > 0 && nx < width - 1 && ny > 0 && ny < height - 1 && maze[ny][nx] === 1) {
-        maze[y + dy / 2][x + dx / 2] = 0; // Remove wall between
-        carve(nx, ny);
-      }
-    }
-  }
-
-  // Start from position (1, 1)
-  carve(1, 1);
-
-  // Set start and end
-  const start = { x: 1, y: 1 };
-  const end = { x: width - 2, y: height - 2 };
-
-  return { maze, start, end };
-}
-
-// BFS to find shortest path
+// Wrapper to convert findShortestPath result to {x, y} format for backward compatibility
 function findPath(maze, start, end) {
-  const height = maze.length;
-  const width = maze[0].length;
-  const visited = new Set();
-  const queue = [[start.x, start.y, []]];
-
-  while (queue.length > 0) {
-    const [x, y, path] = queue.shift();
-    const key = `${x},${y}`;
-
-    if (x === end.x && y === end.y) {
-      return [...path, { x, y }];
-    }
-
-    if (visited.has(key)) continue;
-    visited.add(key);
-
-    const newPath = [...path, { x, y }];
-
-    const neighbors = [
-      [x, y - 1],
-      [x + 1, y],
-      [x, y + 1],
-      [x - 1, y],
-    ];
-
-    for (const [nx, ny] of neighbors) {
-      if (nx >= 0 && nx < width && ny >= 0 && ny < height &&
-          maze[ny][nx] === 0 && !visited.has(`${nx},${ny}`)) {
-        queue.push([nx, ny, newPath]);
-      }
-    }
-  }
-
-  return null;
+  const path = findShortestPath(
+    maze,
+    [start.y, start.x],
+    [end.y, end.x],
+    v => v === 0
+  );
+  if (!path) return null;
+  return path.map(([y, x]) => ({ x, y }));
 }
 
 export default function Maze() {
@@ -109,7 +47,7 @@ export default function Maze() {
     const data = generateMaze(width, height);
     setMazeData(data);
     setPlayerPos(data.start);
-    setPath(new Set([`${data.start.x},${data.start.y}`]));
+    setPath(new Set([cellKey(data.start.x, data.start.y)]));
     setMoves(0);
     setTimer(0);
     setIsRunning(false);
@@ -151,7 +89,7 @@ export default function Maze() {
     }
 
     setPlayerPos({ x: newX, y: newY });
-    setPath(prev => new Set([...prev, `${newX},${newY}`]));
+    setPath(prev => new Set([...prev, cellKey(newX, newY)]));
     setMoves(prev => prev + 1);
 
     // Check win
@@ -338,7 +276,7 @@ export default function Maze() {
               const isStart = x === mazeData.start.x && y === mazeData.start.y;
               const isEnd = x === mazeData.end.x && y === mazeData.end.y;
               const isPlayer = x === playerPos.x && y === playerPos.y;
-              const isPath = path.has(`${x},${y}`);
+              const isPath = path.has(cellKey(x, y));
               const isSolution = showSolution && solution.some(p => p.x === x && p.y === y);
 
               return (
