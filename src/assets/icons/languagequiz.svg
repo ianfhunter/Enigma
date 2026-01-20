@@ -1,0 +1,32 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Language Quiz: Official languages of countries -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f3e8ff"/>
+
+  <!-- Globe -->
+  <circle cx="12" cy="10" r="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1"/>
+  <ellipse cx="12" cy="10" rx="3" ry="7" fill="none" stroke="#3b82f6" stroke-width="0.7"/>
+  <line x1="5" y1="10" x2="19" y2="10" stroke="#3b82f6" stroke-width="0.7"/>
+  <ellipse cx="12" cy="7" rx="5.5" ry="2" fill="none" stroke="#3b82f6" stroke-width="0.5"/>
+  <ellipse cx="12" cy="13" rx="5.5" ry="2" fill="none" stroke="#3b82f6" stroke-width="0.5"/>
+
+  <!-- Speech bubbles with language characters -->
+  <!-- Left bubble - A (Latin) -->
+  <path d="M2 4 L8 4 Q9 4 9 5 L9 8 Q9 9 8 9 L5 9 L3 11 L3.5 9 L2 9 Q1 9 1 8 L1 5 Q1 4 2 4" fill="#ffffff" stroke="#8b5cf6" stroke-width="0.8"/>
+  <text x="5" y="7.5" font-family="Arial" font-size="4" font-weight="bold" fill="#7c3aed" text-anchor="middle">A</text>
+
+  <!-- Right bubble - あ (Hiragana) -->
+  <path d="M16 2 L22 2 Q23 2 23 3 L23 6 Q23 7 22 7 L19 7 L21 9 L18.5 7 L16 7 Q15 7 15 6 L15 3 Q15 2 16 2" fill="#ffffff" stroke="#ec4899" stroke-width="0.8"/>
+  <text x="19" y="5.5" font-family="Arial" font-size="3.5" font-weight="bold" fill="#db2777" text-anchor="middle">あ</text>
+
+  <!-- Bottom language badges -->
+  <rect x="2" y="18" width="6" height="4" rx="1" fill="#22c55e"/>
+  <text x="5" y="21" font-family="Arial" font-size="2.5" font-weight="bold" fill="#ffffff" text-anchor="middle">EN</text>
+
+  <rect x="9" y="18" width="6" height="4" rx="1" fill="#ef4444"/>
+  <text x="12" y="21" font-family="Arial" font-size="2.5" font-weight="bold" fill="#ffffff" text-anchor="middle">中文</text>
+
+  <rect x="16" y="18" width="6" height="4" rx="1" fill="#3b82f6"/>
+  <text x="19" y="21" font-family="Arial" font-size="2.5" font-weight="bold" fill="#ffffff" text-anchor="middle">ES</text>
+</svg>

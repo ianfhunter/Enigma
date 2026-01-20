@@ -19,6 +19,10 @@ import starbattleIcon from '../../assets/icons/starbattle.svg';
 import tapaIcon from '../../assets/icons/tapa.svg';
 import nurikabeIcon from '../../assets/icons/nurikabe.svg';
 import aquariumIcon from '../../assets/icons/aquarium.svg';
+import lightupIcon from '../../assets/icons/lightup.svg';
+import campixuIcon from '../../assets/icons/campixu.svg';
+import thermometersIcon from '../../assets/icons/thermometers.svg';
+import mochikoroIcon from '../../assets/icons/mochikoro.svg';
 
 /**
  * Pack metadata
@@ -120,7 +124,8 @@ export const categories = [
         title: 'Campixu',
         slug: 'campixu',
         description: 'Place tents using nonogram clues. Tents must be next to trees and cannot touch.',
-        icon: '🏕️',
+        icon: campixuIcon,
+        emojiIcon: '🏕️',
         colors: { primary: '#22c55e', secondary: '#84cc16' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #84cc16 100%)',
         version: 'v1.0',
@@ -177,7 +182,8 @@ export const categories = [
         slug: 'thermometers',
         aliases: ['Thermometer Puzzle', 'Mercury'],
         description: 'Fill thermometers from the bulb. Numbers show filled cells per row/column.',
-        icon: '🌡️',
+        icon: thermometersIcon,
+        emojiIcon: '🌡️',
         colors: { primary: '#ef4444', secondary: '#f97316' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #f97316 100%)',
         version: 'v1.0',
@@ -200,7 +206,8 @@ export const categories = [
         slug: 'lightup',
         aliases: ['Light Placement', 'Bijutsukan'],
         description: 'Place lights so every cell is lit, without lights seeing each other.',
-        icon: '💡',
+        icon: lightupIcon,
+        emojiIcon: '💡',
         colors: { primary: '#fde047', secondary: '#facc15' },
         gradient: 'linear-gradient(135deg, #fde047 0%, #facc15 100%)',
         version: 'v1.0',
@@ -228,6 +235,18 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
         version: 'v1.0',
         component: () => import('../../pages/Tapa'),
+      },
+      {
+        title: 'Mochikoro',
+        slug: 'mochikoro',
+        aliases: ['Rectangle Division'],
+        description: 'Divide the grid into white rectangles. Each contains one number showing its area. Fill gaps with black.',
+        icon: mochikoroIcon,
+        emojiIcon: '📦',
+        colors: { primary: '#10b981', secondary: '#059669' },
+        gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/Mochikoro'),
       },
     ],
   },

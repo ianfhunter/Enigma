@@ -20,6 +20,10 @@ import inshinoheyaIcon from '../../assets/icons/inshinoheya.svg';
 import hotarubeamIcon from '../../assets/icons/hotarubeam.svg';
 import hidatoIcon from '../../assets/icons/hidato.svg';
 import numberlinkIcon from '../../assets/icons/numberlink.svg';
+import slantIcon from '../../assets/icons/slant.svg';
+import tracksIcon from '../../assets/icons/tracks.svg';
+import bagIcon from '../../assets/icons/bag.svg';
+import hashiIcon from '../../assets/icons/hashi.svg';
 
 /**
  * Pack metadata
@@ -62,7 +66,8 @@ export const categories = [
         slug: 'hashi',
         aliases: ['Bridges', 'Bridge Building'],
         description: 'Connect islands with bridges. Each island shows how many bridges connect to it.',
-        icon: '🌉',
+        icon: hashiIcon,
+        emojiIcon: '🌉',
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
         version: 'v1.0',
@@ -107,7 +112,8 @@ export const categories = [
         slug: 'slant',
         aliases: ['Diagonal'],
         description: 'Draw slashes in cells so the vertex counts match the clues.',
-        icon: '／',
+        icon: slantIcon,
+        emojiIcon: '／',
         colors: { primary: '#e879f9', secondary: '#d946ef' },
         gradient: 'linear-gradient(135deg, #e879f9 0%, #d946ef 100%)',
         version: 'v1.0',
@@ -161,7 +167,8 @@ export const categories = [
         title: 'Tracks',
         slug: 'tracks',
         description: 'Lay tracks through the grid to satisfy the numbers.',
-        icon: '🛤️',
+        icon: tracksIcon,
+        emojiIcon: '🛤️',
         colors: { primary: '#84cc16', secondary: '#65a30d' },
         gradient: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)',
         version: 'v1.0',
@@ -182,7 +189,8 @@ export const categories = [
         title: 'Bag (Corral)',
         slug: 'bag',
         description: 'Draw a loop so numbered cells are inside and can see exactly that many cells.',
-        icon: '🎒',
+        icon: bagIcon,
+        emojiIcon: '🎒',
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
         version: 'v1.0',

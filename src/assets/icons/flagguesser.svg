@@ -1,0 +1,26 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flag Guesser: Country flag quiz -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef3c7"/>
+
+  <!-- Flag pole -->
+  <rect x="4" y="3" width="1.5" height="18" rx="0.5" fill="#78350f"/>
+  <circle cx="4.75" cy="3" r="1.2" fill="#ca8a04"/>
+
+  <!-- Flag with stripes (tricolor style) -->
+  <rect x="6" y="4" width="14" height="9" rx="0.5" fill="#ffffff"/>
+  <rect x="6" y="4" width="4.67" height="9" fill="#2563eb"/>
+  <rect x="10.67" y="4" width="4.67" height="9" fill="#ffffff"/>
+  <rect x="15.33" y="4" width="4.67" height="9" fill="#dc2626"/>
+  <rect x="6" y="4" width="14" height="9" rx="0.5" fill="none" stroke="#1f2937" stroke-width="0.5"/>
+
+  <!-- Question mark bubble -->
+  <circle cx="17" cy="18" r="4" fill="#7c3aed"/>
+  <text x="17" y="20.5" font-family="Arial" font-size="6" font-weight="bold" fill="#ffffff" text-anchor="middle">?</text>
+
+  <!-- Globe hint bottom left -->
+  <circle cx="8" cy="18" r="2.5" fill="none" stroke="#16a34a" stroke-width="1"/>
+  <ellipse cx="8" cy="18" rx="1" ry="2.5" fill="none" stroke="#16a34a" stroke-width="0.5"/>
+  <line x1="5.5" y1="18" x2="10.5" y2="18" stroke="#16a34a" stroke-width="0.5"/>
+</svg>

@@ -1,0 +1,15 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Memory Match: Two cards, one flipped -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef9c3"/>
+
+  <!-- Card 1 - face down -->
+  <rect x="2" y="4" width="9" height="12" rx="1.5" fill="#8b5cf6"/>
+  <text x="6.5" y="12" font-family="Arial" font-size="8" font-weight="bold" fill="#c4b5fd" text-anchor="middle">?</text>
+
+  <!-- Card 2 - face up with star -->
+  <rect x="13" y="4" width="9" height="12" rx="1.5" fill="#fff" stroke="#f59e0b" stroke-width="2"/>
+  <text x="17.5" y="12.5" font-family="Arial" font-size="9" text-anchor="middle">★</text>
+
+  <!-- Match indicator -->
+  <text x="12" y="21" font-family="Arial" font-size="4" font-weight="bold" fill="#16a34a" text-anchor="middle">MATCH!</text>
+</svg>

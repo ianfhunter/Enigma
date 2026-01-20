@@ -21,6 +21,7 @@ import longestWordIcon from '../../assets/icons/longest-word.svg';
 import pyramidIcon from '../../assets/icons/pyramid.svg';
 import wordtilesIcon from '../../assets/icons/wordtiles.svg';
 import letterwebIcon from '../../assets/icons/letterweb.svg';
+import letterorbitIcon from '../../assets/icons/letter-orbit.svg';
 import flipquotesIcon from '../../assets/icons/flipquotes.svg';
 import cryptogramIcon from '../../assets/icons/cryptogram.svg';
 import phraseguessIcon from '../../assets/icons/phraseguess.svg';
@@ -223,7 +224,7 @@ export const categories = [
         title: 'Letter Orbit',
         slug: 'letter-orbit',
         description: 'Form words using letters from 4 concentric orbit rings. Find words that span all orbits for bonus points!',
-        icon: letterwebIcon,
+        icon: letterorbitIcon,
         emojiIcon: '🌀',
         colors: { primary: '#667eea', secondary: '#764ba2' },
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',

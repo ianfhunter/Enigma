@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
-import Timer from '../../components/Timer';
+import Timer, { formatTime } from '../../components/Timer/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import styles from './ABCEndView.module.css';
@@ -402,7 +402,7 @@ export default function ABCEndView() {
       />
 
       <div className={styles.gameArea}>
-        <Timer time={timer} />
+        <Timer seconds={timer} />
 
         <div className={styles.boardWrapper}>
           {/* Top clues */}
@@ -483,7 +483,7 @@ export default function ABCEndView() {
         <GameResult
           gameState={gameState}
           onPlayAgain={initGame}
-          stats={gameState === 'won' ? [{ label: 'Time', value: timer, format: 'time' }] : undefined}
+          stats={gameState === 'won' ? [{ label: 'Time', value: formatTime(timer) }] : undefined}
         />
 
         <div className={styles.controls}>
