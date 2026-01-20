@@ -318,9 +318,9 @@ describe('PackLoader', () => {
       expect(shadingPuzzlesPack.categories[0].name).toBe('Grid Shading');
     });
 
-    it('should have 15 games', () => {
-      expect(shadingPuzzlesPack.gameCount).toBe(15);
-      expect(shadingPuzzlesPack.allGames.length).toBe(15);
+    it('should have 16 games', () => {
+      expect(shadingPuzzlesPack.gameCount).toBe(16);
+      expect(shadingPuzzlesPack.allGames.length).toBe(16);
     });
 
     it('should have expected games', () => {
@@ -357,7 +357,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('shading-puzzles');
-      expect(games.length).toBe(15);
+      expect(games.length).toBe(16);
       expect(games.some(g => g.slug === 'nonogram')).toBe(true);
       expect(games.some(g => g.slug === 'minesweeper')).toBe(true);
     });

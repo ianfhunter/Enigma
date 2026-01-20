@@ -7,27 +7,18 @@ import Timer, { formatTime } from '../../components/Timer/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
+import { createGrid, cloneGrid, isValidInRow, isValidInColumn, notesToJSON, notesFromJSON } from '../../utils/generatorUtils';
 import styles from './Sudoku.module.css';
 
 const STORAGE_KEY = 'sudoku-game-state';
 
-// Sudoku generation and solving utilities
-function createEmptyGrid() {
-  return Array(9).fill(null).map(() => Array(9).fill(0));
-}
-
+// Sudoku-specific validation (includes 3x3 box check)
 function isValidPlacement(grid, row, col, num) {
-  // Check row
-  for (let x = 0; x < 9; x++) {
-    if (grid[row][x] === num) return false;
-  }
+  // Check row and column using shared utilities
+  if (!isValidInRow(grid, row, col, num)) return false;
+  if (!isValidInColumn(grid, row, col, num)) return false;
 
-  // Check column
-  for (let x = 0; x < 9; x++) {
-    if (grid[x][col] === num) return false;
-  }
-
-  // Check 3x3 box
+  // Check 3x3 box (Sudoku-specific)
   const boxRow = Math.floor(row / 3) * 3;
   const boxCol = Math.floor(col / 3) * 3;
   for (let i = 0; i < 3; i++) {
@@ -40,7 +31,7 @@ function isValidPlacement(grid, row, col, num) {
 }
 
 function solveSudoku(grid) {
-  const gridCopy = grid.map(row => [...row]);
+  const gridCopy = cloneGrid(grid);
 
   function solve() {
     for (let row = 0; row < 9; row++) {
@@ -65,7 +56,7 @@ function solveSudoku(grid) {
 }
 
 function generateSolvedGrid(random) {
-  const grid = createEmptyGrid();
+  const grid = createGrid(9, 9, 0);
 
   // Fill diagonal 3x3 boxes first (they are independent)
   for (let box = 0; box < 9; box += 3) {
@@ -89,7 +80,7 @@ function generatePuzzle(difficulty = 'medium', seed = null) {
     : () => Math.random();
 
   const solution = generateSolvedGrid(random);
-  const puzzle = solution.map(row => [...row]);
+  const puzzle = cloneGrid(solution);
 
   // Number of cells to remove based on difficulty
   const cellsToRemove = {
@@ -117,23 +108,6 @@ function generatePuzzle(difficulty = 'medium', seed = null) {
   }
 
   return { puzzle, solution };
-}
-
-// Convert notes object to/from JSON-safe format
-function notesToJSON(notes) {
-  const result = {};
-  for (const [key, value] of Object.entries(notes)) {
-    result[key] = Array.from(value);
-  }
-  return result;
-}
-
-function notesFromJSON(json) {
-  const result = {};
-  for (const [key, value] of Object.entries(json || {})) {
-    result[key] = new Set(value);
-  }
-  return result;
 }
 
 
@@ -378,7 +352,7 @@ export default function Sudoku() {
     if (initialCells?.has(key)) return;
 
     // Save to history for undo
-    setHistory(prev => [...prev, { grid: grid.map(r => [...r]), notes: { ...notes } }]);
+    setHistory(prev => [...prev, { grid: cloneGrid(grid), notes: { ...notes } }]);
 
     if (notesMode) {
       // Toggle note
@@ -394,7 +368,7 @@ export default function Sudoku() {
       });
     } else {
       // Set cell value
-      const newGrid = grid.map(r => [...r]);
+      const newGrid = cloneGrid(grid);
       newGrid[row][col] = num;
 
       // Clear notes for this cell
@@ -416,9 +390,9 @@ export default function Sudoku() {
 
     if (initialCells?.has(key)) return;
 
-    setHistory(prev => [...prev, { grid: grid.map(r => [...r]), notes: { ...notes } }]);
+    setHistory(prev => [...prev, { grid: cloneGrid(grid), notes: { ...notes } }]);
 
-    const newGrid = grid.map(r => [...r]);
+    const newGrid = cloneGrid(grid);
     newGrid[row][col] = 0;
 
     const newNotes = { ...notes };
@@ -460,9 +434,9 @@ export default function Sudoku() {
     const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
     const { row, col } = randomCell;
 
-    setHistory(prev => [...prev, { grid: grid.map(r => [...r]), notes: { ...notes } }]);
+    setHistory(prev => [...prev, { grid: cloneGrid(grid), notes: { ...notes } }]);
 
-    const newGrid = grid.map(r => [...r]);
+    const newGrid = cloneGrid(grid);
     newGrid[row][col] = currentPuzzle.solution[row][col];
 
     // Clear notes for this cell

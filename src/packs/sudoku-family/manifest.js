@@ -15,6 +15,8 @@ import sujikoIcon from '../../assets/icons/sujiko.svg';
 import sukoIcon from '../../assets/icons/suko.svg';
 import futoshikiIcon from '../../assets/icons/futoshiki.svg';
 import abcendviewIcon from '../../assets/icons/abcendview.svg';
+import euleroIcon from '../../assets/icons/eulero.svg';
+import japaneseSumsIcon from '../../assets/icons/japanesesums.svg';
 
 /**
  * Pack metadata
@@ -178,7 +180,8 @@ export const categories = [
         slug: 'eulero',
         aliases: ['Graeco-Latin Square', 'Euler Square'],
         description: 'Fill each cell with a number and letter. Each row and column must have all numbers and letters once, with no repeated pairs.',
-        icon: '🔷',
+        icon: euleroIcon,
+        emojiIcon: '🔷',
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         version: 'v1.0',
@@ -189,7 +192,8 @@ export const categories = [
         slug: 'japanese-sums',
         aliases: ['Sum Cross', 'Number Cross'],
         description: 'Fill cells with numbers so rows and columns have unique numbers. Outside clues show sums of consecutive filled groups.',
-        icon: '🔢',
+        icon: japaneseSumsIcon,
+        emojiIcon: '🔢',
         colors: { primary: '#ec4899', secondary: '#f472b6' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)',
         version: 'v1.0',

@@ -14,6 +14,8 @@ import shinroIcon from '../../assets/icons/shinro.svg';
 import rangeIcon from '../../assets/icons/range.svg';
 import sequenceIcon from '../../assets/icons/sequence.svg';
 import magnetsIcon from '../../assets/icons/magnets.svg';
+import memorizeItemsIcon from '../../assets/icons/memorizeitems.svg';
+import guessIcon from '../../assets/icons/guess.svg';
 
 /**
  * Pack metadata
@@ -99,7 +101,7 @@ export const categories = [
         title: 'Guess',
         slug: 'guess',
         description: 'Make guesses and use the clues to deduce the hidden answer.',
-        icon: '❓',
+        icon: guessIcon,
         emojiIcon: '❓',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
@@ -216,7 +218,8 @@ export const categories = [
         title: 'Memorize Items',
         slug: 'memorize-items',
         description: 'Study items shown briefly, then select all the items you remember from the scene!',
-        icon: '🧠',
+        icon: memorizeItemsIcon,
+        emojiIcon: '🧠',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         version: 'v1.0',

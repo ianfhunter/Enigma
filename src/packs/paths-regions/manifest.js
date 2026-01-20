@@ -18,6 +18,8 @@ import suguruIcon from '../../assets/icons/suguru.svg';
 import norinoriIcon from '../../assets/icons/norinori.svg';
 import inshinoheyaIcon from '../../assets/icons/inshinoheya.svg';
 import hotarubeamIcon from '../../assets/icons/hotarubeam.svg';
+import hidatoIcon from '../../assets/icons/hidato.svg';
+import numberlinkIcon from '../../assets/icons/numberlink.svg';
 
 /**
  * Pack metadata
@@ -48,7 +50,8 @@ export const categories = [
         slug: 'numberlink',
         aliases: ['Number Link', 'Path Puzzle'],
         description: 'Connect matching number pairs without crossing paths.',
-        icon: '🔗',
+        icon: numberlinkIcon,
+        emojiIcon: '🔗',
         colors: { primary: '#a78bfa', secondary: '#8b5cf6' },
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)',
         version: 'v1.0',
@@ -137,7 +140,8 @@ export const categories = [
         slug: 'hidato',
         aliases: ['Number Snake', 'Number Path'],
         description: 'Fill the grid with consecutive numbers that connect horizontally, vertically, or diagonally.',
-        icon: '🔢',
+        icon: hidatoIcon,
+        emojiIcon: '🔢',
         colors: { primary: '#f59e0b', secondary: '#d97706' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         version: 'v1.0',

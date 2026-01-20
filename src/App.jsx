@@ -130,6 +130,7 @@ const slugToFolder = {
   'sujiko': 'Sujiko',
   'suko': 'Suko',
   'takuzu': 'Takuzu',
+  'tapa': 'Tapa',
   'cirkitz': 'Cirkitz',
   'tatamibari': 'Tatamibari',
   'thermometers': 'Thermometers',

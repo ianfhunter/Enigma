@@ -3,6 +3,7 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { createGrid, cellKey, getNeighbors, has2x2Block, isFullyConnected, countCells } from '../../utils/generatorUtils';
 import styles from './LITS.module.css';
 
 // Dataset-based difficulty mapping
@@ -53,7 +54,7 @@ function normalizeShapeKey(cells) {
 
 // Generate random regions
 function generateRegions(size) {
-  const regions = Array(size).fill(null).map(() => Array(size).fill(-1));
+  const regions = createGrid(size, size, -1);
   let regionId = 0;
   const regionCells = {};
 
@@ -82,9 +83,8 @@ function generateRegions(size) {
     for (let g = 1; g < targetSize; g++) {
       const frontier = [];
       for (const [cr, cc] of cells) {
-        for (const [nr, nc] of [[cr-1,cc], [cr+1,cc], [cr,cc-1], [cr,cc+1]]) {
-          if (nr >= 0 && nr < size && nc >= 0 && nc < size &&
-              regions[nr][nc] === -1 && !cells.some(([r,c]) => r === nr && c === nc)) {
+        for (const [nr, nc] of getNeighbors(cr, cc, size)) {
+          if (regions[nr][nc] === -1 && !cells.some(([r,c]) => r === nr && c === nc)) {
             frontier.push([nr, nc]);
           }
         }
@@ -129,53 +129,14 @@ function getTetrominoShape(cells) {
 
 // Check if all shaded cells are connected
 function areShadedConnected(shaded, size) {
-  let first = null;
-  for (let r = 0; r < size && !first; r++) {
-    for (let c = 0; c < size && !first; c++) {
-      if (shaded[r][c]) first = [r, c];
-    }
-  }
-
-  if (!first) return true;
-
-  const visited = new Set();
-  const queue = [first];
-  let count = 0;
-
-  while (queue.length > 0) {
-    const [r, c] = queue.shift();
-    const key = `${r},${c}`;
-    if (visited.has(key) || !shaded[r][c]) continue;
-    visited.add(key);
-    count++;
-
-    for (const [nr, nc] of [[r-1,c], [r+1,c], [r,c-1], [r,c+1]]) {
-      if (nr >= 0 && nr < size && nc >= 0 && nc < size && !visited.has(`${nr},${nc}`)) {
-        queue.push([nr, nc]);
-      }
-    }
-  }
-
-  let total = 0;
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (shaded[r][c]) total++;
-    }
-  }
-
-  return count === total;
+  // Use shared utility - check if all truthy cells are connected
+  return isFullyConnected(shaded, v => v === true);
 }
 
 // Check for 2x2 shaded squares
 function has2x2Shaded(shaded, size) {
-  for (let r = 0; r < size - 1; r++) {
-    for (let c = 0; c < size - 1; c++) {
-      if (shaded[r][c] && shaded[r+1][c] && shaded[r][c+1] && shaded[r+1][c+1]) {
-        return true;
-      }
-    }
-  }
-  return false;
+  // Use shared utility
+  return has2x2Block(shaded, true);
 }
 
 // Check if same-shape tetrominoes touch
@@ -196,16 +157,14 @@ function sameShapesTouch(shaded, regions, regionCells, size) {
   for (const [rid1, shape1] of Object.entries(regionShapes)) {
     for (const [r, c] of regionCells[rid1]) {
       if (!shaded[r]?.[c]) continue;
-      for (const [nr, nc] of [[r-1,c], [r+1,c], [r,c-1], [r,c+1]]) {
-        if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-          const rid2 = regions[nr]?.[nc];
-          if (rid2 !== parseInt(rid1) && shaded[nr]?.[nc] && regionShapes[rid2]) {
-            const shape2 = regionShapes[rid2];
-            const sameNamedShape = shape1.shapeName && shape2.shapeName && shape1.shapeName === shape2.shapeName;
-            const sameGeometry = shape1.shapeKey && shape2.shapeKey && shape1.shapeKey === shape2.shapeKey;
-            if (sameNamedShape || (!sameNamedShape && sameGeometry)) {
-              return true;
-            }
+      for (const [nr, nc] of getNeighbors(r, c, size)) {
+        const rid2 = regions[nr]?.[nc];
+        if (rid2 !== parseInt(rid1) && shaded[nr]?.[nc] && regionShapes[rid2]) {
+          const shape2 = regionShapes[rid2];
+          const sameNamedShape = shape1.shapeName && shape2.shapeName && shape1.shapeName === shape2.shapeName;
+          const sameGeometry = shape1.shapeKey && shape2.shapeKey && shape1.shapeKey === shape2.shapeKey;
+          if (sameNamedShape || (!sameNamedShape && sameGeometry)) {
+            return true;
           }
         }
       }
@@ -223,7 +182,7 @@ function generatePuzzle(size) {
     const { regions, regionCells } = generateRegions(size);
 
     // Try to find a valid solution
-    const solution = Array(size).fill(null).map(() => Array(size).fill(false));
+    const solution = createGrid(size, size, false);
 
     // For each region, try to place a tetromino
     let valid = true;
@@ -300,16 +259,17 @@ function isConnected(cells) {
 
   const visited = new Set();
   const queue = [cells[0]];
-  const cellSet = new Set(cells.map(([r, c]) => `${r},${c}`));
+  const cellSet = new Set(cells.map(([r, c]) => cellKey(r, c)));
 
   while (queue.length > 0) {
     const [r, c] = queue.shift();
-    const key = `${r},${c}`;
+    const key = cellKey(r, c);
     if (visited.has(key)) continue;
     visited.add(key);
 
+    // Check orthogonal neighbors within the cell set
     for (const [nr, nc] of [[r-1,c], [r+1,c], [r,c-1], [r,c+1]]) {
-      const nkey = `${nr},${nc}`;
+      const nkey = cellKey(nr, nc);
       if (cellSet.has(nkey) && !visited.has(nkey)) {
         queue.push([nr, nc]);
       }
@@ -357,10 +317,10 @@ function checkValidity(shaded, regions, regionCells, size) {
   for (let r = 0; r < size - 1; r++) {
     for (let c = 0; c < size - 1; c++) {
       if (shaded[r]?.[c] && shaded[r+1]?.[c] && shaded[r]?.[c+1] && shaded[r+1]?.[c+1]) {
-        errors.add(`${r},${c}`);
-        errors.add(`${r+1},${c}`);
-        errors.add(`${r},${c+1}`);
-        errors.add(`${r+1},${c+1}`);
+        errors.add(cellKey(r, c));
+        errors.add(cellKey(r+1, c));
+        errors.add(cellKey(r, c+1));
+        errors.add(cellKey(r+1, c+1));
         violations.add('no2x2');
       }
     }
@@ -373,21 +333,21 @@ function checkValidity(shaded, regions, regionCells, size) {
     if (shadedCells.length > 4) {
       // Too many shaded in region
       for (const [r, c] of shadedCells) {
-        errors.add(`${r},${c}`);
+        errors.add(cellKey(r, c));
       }
       violations.add('onePerRegion');
     } else if (shadedCells.length === 4) {
       // Check if connected
       if (!isConnected(shadedCells)) {
         for (const [r, c] of shadedCells) {
-          errors.add(`${r},${c}`);
+          errors.add(cellKey(r, c));
         }
         violations.add('onePerRegion');
       } else {
         const shape = getTetrominoShape(shadedCells);
         if (!shape) {
           for (const [r, c] of shadedCells) {
-            errors.add(`${r},${c}`);
+            errors.add(cellKey(r, c));
           }
           violations.add('onePerRegion');
         }
@@ -401,12 +361,7 @@ function checkValidity(shaded, regions, regionCells, size) {
   }
 
   // Check global connectivity (only if we have some shaded cells)
-  let totalShaded = 0;
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (shaded[r]?.[c]) totalShaded++;
-    }
-  }
+  const totalShaded = countCells(shaded, v => v === true);
   if (totalShaded > 0 && !areShadedConnected(shaded, size)) {
     violations.add('allConnected');
   }
@@ -499,12 +454,12 @@ export default function LITS() {
       const puzzle = datasetRef.current[Math.floor(Math.random() * datasetRef.current.length)];
       const data = datasetPuzzleToGameFormat(puzzle);
       setPuzzleData(data);
-      setShaded(Array(data.size).fill(null).map(() => Array(data.size).fill(false)));
+      setShaded(createGrid(data.size, data.size, false));
     } else {
       const puzzle = filtered[Math.floor(Math.random() * filtered.length)];
       const data = datasetPuzzleToGameFormat(puzzle);
     setPuzzleData(data);
-      setShaded(Array(data.size).fill(null).map(() => Array(data.size).fill(false)));
+      setShaded(createGrid(data.size, data.size, false));
     }
 
     setGameState('playing');
@@ -548,7 +503,7 @@ export default function LITS() {
 
   const handleReset = () => {
     if (!puzzleData) return;
-    setShaded(Array(puzzleData.size).fill(null).map(() => Array(puzzleData.size).fill(false)));
+    setShaded(createGrid(puzzleData.size, puzzleData.size, false));
     setGameState('playing');
     setShowSolution(false);
   };
@@ -665,7 +620,7 @@ export default function LITS() {
               const isShaded = showSolution
                 ? (puzzleData.solution[r]?.[c] ?? false)
                 : (shaded[r]?.[c] ?? false);
-              const hasError = !showSolution && errors.has(`${r},${c}`);
+              const hasError = !showSolution && errors.has(cellKey(r, c));
 
               // Determine borders for region boundaries
               const borderTop = r === 0 || puzzleData.regions[r-1][c] !== regionId;

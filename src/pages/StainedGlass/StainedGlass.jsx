@@ -3,6 +3,7 @@ import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { createGrid, getNeighbors } from '../../utils/generatorUtils';
 import styles from './StainedGlass.module.css';
 
 const GRID_SIZES = {
@@ -22,8 +23,8 @@ const COLORS = [
 ];
 
 // Generate regions for stained glass pattern
-function generateRegions(size, numColors) {
-  const grid = Array(size).fill(null).map(() => Array(size).fill(-1));
+function generateRegionsForGlass(size, numColors) {
+  const grid = createGrid(size, size, -1);
   const regions = [];
 
   // Create random regions using flood fill
@@ -55,16 +56,10 @@ function generateRegions(size, numColors) {
       grid[r][c] = regionId;
       region.push([r, c]);
 
-      // Add neighbors
-      const neighbors = [
-        [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]
-      ];
-
-      for (const [nr, nc] of neighbors) {
-        if (nr >= 0 && nr < size && nc >= 0 && nc < size && grid[nr][nc] === -1) {
-          if (!queue.some(([qr, qc]) => qr === nr && qc === nc)) {
-            queue.push([nr, nc]);
-          }
+      // Add neighbors using shared utility
+      for (const [nr, nc] of getNeighbors(r, c, size)) {
+        if (grid[nr][nc] === -1 && !queue.some(([qr, qc]) => qr === nr && qc === nc)) {
+          queue.push([nr, nc]);
         }
       }
     }
@@ -82,12 +77,8 @@ function generateRegions(size, numColors) {
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         if (grid[r][c] === -1) {
-          const neighbors = [
-            [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]
-          ];
-
-          for (const [nr, nc] of neighbors) {
-            if (nr >= 0 && nr < size && nc >= 0 && nc < size && grid[nr][nc] !== -1) {
+          for (const [nr, nc] of getNeighbors(r, c, size)) {
+            if (grid[nr][nc] !== -1) {
               const rid = grid[nr][nc];
               grid[r][c] = rid;
               regions[rid].push([r, c]);
@@ -112,16 +103,10 @@ function isValidColoring(regionGrid, coloring, size) {
 
       if (color === -1) continue;
 
-      const neighbors = [
-        [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]
-      ];
-
-      for (const [nr, nc] of neighbors) {
-        if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-          const neighborRegion = regionGrid[nr][nc];
-          if (neighborRegion !== regionId && coloring[neighborRegion] === color) {
-            return false;
-          }
+      for (const [nr, nc] of getNeighbors(r, c, size)) {
+        const neighborRegion = regionGrid[nr][nc];
+        if (neighborRegion !== regionId && coloring[neighborRegion] === color) {
+          return false;
         }
       }
     }
@@ -140,16 +125,10 @@ function generateSolution(regionGrid, regions, size, numColors) {
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       const regionId = regionGrid[r][c];
-      const neighbors = [
-        [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]
-      ];
-
-      for (const [nr, nc] of neighbors) {
-        if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-          const neighborRegion = regionGrid[nr][nc];
-          if (neighborRegion !== regionId) {
-            adjacent[regionId].add(neighborRegion);
-          }
+      for (const [nr, nc] of getNeighbors(r, c, size)) {
+        const neighborRegion = regionGrid[nr][nc];
+        if (neighborRegion !== regionId) {
+          adjacent[regionId].add(neighborRegion);
         }
       }
     }
@@ -192,7 +171,7 @@ function generateSolution(regionGrid, regions, size, numColors) {
 
 // Generate puzzle with some pre-filled hints
 function generatePuzzle(size, numColors) {
-  const { grid: regionGrid, regions } = generateRegions(size, numColors);
+  const { grid: regionGrid, regions } = generateRegionsForGlass(size, numColors);
   const solution = generateSolution(regionGrid, regions, size, numColors);
 
   // Pre-fill some regions as hints (about 30%)
@@ -232,20 +211,14 @@ function findErrors(regionGrid, coloring, size) {
 
       if (color === -1) continue;
 
-      const neighbors = [
-        [r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]
-      ];
-
-      for (const [nr, nc] of neighbors) {
-        if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-          if (!regionGrid[nr] || regionGrid[nr][nc] === undefined) {
-            continue;
-          }
-          const neighborRegion = regionGrid[nr][nc];
-          if (neighborRegion !== regionId && coloring[neighborRegion] === color) {
-            errors.add(regionId);
-            errors.add(neighborRegion);
-          }
+      for (const [nr, nc] of getNeighbors(r, c, size)) {
+        if (!regionGrid[nr] || regionGrid[nr][nc] === undefined) {
+          continue;
+        }
+        const neighborRegion = regionGrid[nr][nc];
+        if (neighborRegion !== regionId && coloring[neighborRegion] === color) {
+          errors.add(regionId);
+          errors.add(neighborRegion);
         }
       }
     }

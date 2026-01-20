@@ -1,28 +1,5 @@
 import { createSeededRandom, seededShuffleArray } from '../../data/wordUtils';
-
-/**
- * Generate a Latin square (each row and column has 1..n exactly once)
- */
-function generateLatinSquare(n, random) {
-  const grid = Array(n).fill(null).map(() => Array(n).fill(0));
-  
-  // Fill first row
-  const firstRow = seededShuffleArray([...Array(n).keys()].map(i => i + 1), random);
-  for (let c = 0; c < n; c++) {
-    grid[0][c] = firstRow[c];
-  }
-  
-  // Fill remaining rows using cyclic permutation
-  for (let r = 1; r < n; r++) {
-    for (let c = 0; c < n; c++) {
-      grid[r][c] = grid[r - 1][(c + 1) % n];
-    }
-  }
-  
-  // Shuffle rows for randomness
-  const rowIndices = seededShuffleArray([...Array(n).keys()], random);
-  return rowIndices.map(r => grid[r]);
-}
+import { createGrid, generateLatinSquare as sharedGenerateLatinSquare } from '../../utils/generatorUtils';
 
 /**
  * Find runs of consecutive filled cells in a row/column
@@ -30,7 +7,7 @@ function generateLatinSquare(n, random) {
 function findRuns(pattern) {
   const runs = [];
   let start = -1;
-  
+
   for (let i = 0; i < pattern.length; i++) {
     if (pattern[i] && start === -1) {
       start = i;
@@ -39,11 +16,11 @@ function findRuns(pattern) {
       start = -1;
     }
   }
-  
+
   if (start !== -1) {
     runs.push({ start, end: pattern.length - 1, length: pattern.length - start });
   }
-  
+
   return runs;
 }
 
@@ -81,32 +58,32 @@ function calculateColSums(solution, pattern, col) {
  */
 function solveJapaneseSums(clues, n, maxSolutions = 2) {
   const { rowClues, colClues, pattern, prefilled } = clues;
-  const grid = Array(n).fill(null).map(() => Array(n).fill(0));
+  const grid = createGrid(n, n, 0);
   const solutions = [];
-  
+
   // Fill in prefilled cells
   if (prefilled) {
     for (const { r, c, value } of prefilled) {
       grid[r][c] = value;
     }
   }
-  
+
   function isValid(r, c, num) {
     // Check row: no duplicate numbers
     for (let col = 0; col < n; col++) {
       if (col !== c && grid[r][col] === num) return false;
     }
-    
+
     // Check column: no duplicate numbers
     for (let row = 0; row < n; row++) {
       if (row !== r && grid[row][c] === num) return false;
     }
-    
+
     // For now, accept any valid Latin square constraint
     // Full sum validation would be too slow for generator
     return true;
   }
-  
+
   function validateSums() {
     // Validate row sums
     for (let r = 0; r < n; r++) {
@@ -123,7 +100,7 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
         }
         return complete ? sum : null;
       }).filter(s => s !== null);
-      
+
       const expectedSums = rowClues[r] || [];
       if (actualSums.length === expectedSums.length) {
         for (let i = 0; i < actualSums.length; i++) {
@@ -131,7 +108,7 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
         }
       }
     }
-    
+
     // Validate column sums
     for (let c = 0; c < n; c++) {
       const colPattern = pattern.map(row => row[c]);
@@ -148,7 +125,7 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
         }
         return complete ? sum : null;
       }).filter(s => s !== null);
-      
+
       const expectedSums = colClues[c] || [];
       if (actualSums.length === expectedSums.length) {
         for (let i = 0; i < actualSums.length; i++) {
@@ -156,13 +133,13 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
         }
       }
     }
-    
+
     return true;
   }
-  
+
   function backtrack() {
     if (solutions.length >= maxSolutions) return;
-    
+
     // Find next empty cell (that should be filled according to pattern)
     let r = -1, c = -1;
     for (let row = 0; row < n; row++) {
@@ -175,7 +152,7 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
       }
       if (r !== -1) break;
     }
-    
+
     if (r === -1) {
       // Check if solution is valid
       if (validateSums()) {
@@ -183,7 +160,7 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
       }
       return;
     }
-    
+
     // Try numbers 1..n
     const numbers = seededShuffleArray([...Array(n).keys()].map(i => i + 1), () => Math.random());
     for (const num of numbers) {
@@ -195,7 +172,7 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
       }
     }
   }
-  
+
   backtrack();
   return solutions;
 }
@@ -206,12 +183,12 @@ function solveJapaneseSums(clues, n, maxSolutions = 2) {
 export function generatePuzzle(size = 7, difficulty = 'medium', seed = null) {
   const actualSeed = seed !== null ? seed : Date.now();
   const random = createSeededRandom(actualSeed);
-  
+
   const n = Math.max(5, Math.min(size, 9)); // Typically 5-9
-  
-  // Generate solution (Latin square)
-  const solution = generateLatinSquare(n, random);
-  
+
+  // Generate solution (Latin square) using shared utility
+  const solution = sharedGenerateLatinSquare(n, random);
+
   // Determine fill density based on difficulty
   const densities = {
     easy: 0.6,
@@ -222,43 +199,43 @@ export function generatePuzzle(size = 7, difficulty = 'medium', seed = null) {
   const fillDensity = densities[difficulty] || densities.medium;
   const totalCells = n * n;
   const filledCount = Math.floor(totalCells * fillDensity);
-  
+
   // Generate fill pattern (which cells are filled vs shaded)
-  const pattern = Array(n).fill(null).map(() => Array(n).fill(false));
+  const pattern = createGrid(n, n, false);
   const positions = [];
   for (let r = 0; r < n; r++) {
     for (let c = 0; c < n; c++) {
       positions.push([r, c]);
     }
   }
-  
+
   // Select filled positions with some constraint to ensure good runs
   const shuffledPositions = seededShuffleArray(positions, random);
   for (let i = 0; i < filledCount; i++) {
     const [r, c] = shuffledPositions[i];
     pattern[r][c] = true;
   }
-  
+
   // Calculate row and column clues (sums of runs)
   const rowClues = [];
   const colClues = [];
-  
+
   for (let r = 0; r < n; r++) {
     const sums = calculateRowSums(solution, pattern, r);
     rowClues.push(sums.length > 0 ? sums : []);
   }
-  
+
   for (let c = 0; c < n; c++) {
     const sums = calculateColSums(solution, pattern, c);
     colClues.push(sums.length > 0 ? sums : []);
   }
-  
+
   // Remove numbers from grid (only pattern and clues remain)
-  const puzzle = Array(n).fill(null).map(() => Array(n).fill(null));
-  
+  const puzzle = createGrid(n, n, null);
+
   // Verify uniqueness (simplified - just ensure we have enough constraints)
   const clues = { rowClues, colClues, pattern, prefilled: [] };
-  
+
   // Add a few hints if needed for uniqueness (simplified approach)
   // In practice, full uniqueness checking is expensive, so we add some prefilled cells
   const hintCount = difficulty === 'expert' ? 0 : difficulty === 'hard' ? 1 : 2;
@@ -269,7 +246,7 @@ export function generatePuzzle(size = 7, difficulty = 'medium', seed = null) {
     puzzle[r][c] = solution[r][c];
     clues.prefilled.push({ r, c, value: solution[r][c] });
   }
-  
+
   return {
     puzzle: puzzle, // null for empty/shaded, number for prefilled hints
     solution: solution,
@@ -287,7 +264,7 @@ export function generatePuzzle(size = 7, difficulty = 'medium', seed = null) {
  */
 export function isSolved(userGrid, solution, pattern) {
   if (!userGrid || !solution || !pattern) return false;
-  
+
   for (let r = 0; r < userGrid.length; r++) {
     for (let c = 0; c < userGrid[r].length; c++) {
       if (pattern[r][c]) {

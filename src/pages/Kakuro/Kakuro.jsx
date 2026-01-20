@@ -7,6 +7,7 @@ import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
+import { selectPuzzleFromDataset, notesToJSON, notesFromJSON } from '../../utils/generatorUtils';
 import styles from './Kakuro.module.css';
 
 const STORAGE_KEY = 'kakuro-game-state';
@@ -25,32 +26,12 @@ async function loadPuzzleDataset() {
       }
     }
 
-// Select a puzzle based on difficulty and seed
+// Select a puzzle based on difficulty and seed (uses shared utility)
 function selectPuzzle(puzzles, difficulty, seed) {
-  const random = createSeededRandom(seed);
-  const filtered = puzzles.filter(p => p.difficulty === difficulty);
-  if (filtered.length === 0) return puzzles[Math.floor(random() * puzzles.length)];
-  return filtered[Math.floor(random() * filtered.length)];
+  return selectPuzzleFromDataset(puzzles, { difficulty }, seed);
 }
 
-// Convert notes object to/from JSON-safe format
-function notesToJSON(notes) {
-  const result = {};
-  for (const [key, value] of Object.entries(notes)) {
-    result[key] = Array.from(value);
-  }
-  return result;
-}
-
-function notesFromJSON(json) {
-  const result = {};
-  for (const [key, value] of Object.entries(json || {})) {
-    result[key] = new Set(value);
-  }
-  return result;
-}
-
-// Export helpers for testing
+// Export helpers for testing (notesToJSON and notesFromJSON now come from generatorUtils)
 export {
   selectPuzzle,
   notesToJSON,
