@@ -25,3 +25,4 @@ public/audio/classical/01.mp3 filter=lfs diff=lfs merge=lfs -text
 public/audio/classical/10.mp3 filter=lfs diff=lfs merge=lfs -text
 public/audio/classical/50.mp3 filter=lfs diff=lfs merge=lfs -text
 public/audio/classical/03.mp3 filter=lfs diff=lfs merge=lfs -text
+public/datasets/anthems/ filter=lfs diff=lfs merge=lfs -text
