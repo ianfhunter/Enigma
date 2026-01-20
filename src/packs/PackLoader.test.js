@@ -318,9 +318,9 @@ describe('PackLoader', () => {
       expect(shadingPuzzlesPack.categories[0].name).toBe('Grid Shading');
     });
 
-    it('should have 16 games', () => {
-      expect(shadingPuzzlesPack.gameCount).toBe(16);
-      expect(shadingPuzzlesPack.allGames.length).toBe(16);
+    it('should have 17 games', () => {
+      expect(shadingPuzzlesPack.gameCount).toBe(17);
+      expect(shadingPuzzlesPack.allGames.length).toBe(17);
     });
 
     it('should have expected games', () => {
@@ -357,7 +357,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('shading-puzzles');
-      expect(games.length).toBe(16);
+      expect(games.length).toBe(17);
       expect(games.some(g => g.slug === 'nonogram')).toBe(true);
       expect(games.some(g => g.slug === 'minesweeper')).toBe(true);
     });
@@ -616,9 +616,9 @@ describe('PackLoader', () => {
       expect(classicLogicPack.categories[1].name).toBe('Memory & Speed');
     });
 
-    it('should have 16 games total (12 + 4)', () => {
-      expect(classicLogicPack.gameCount).toBe(16);
-      expect(classicLogicPack.allGames.length).toBe(16);
+    it('should have 17 games total (13 + 4)', () => {
+      expect(classicLogicPack.gameCount).toBe(17);
+      expect(classicLogicPack.allGames.length).toBe(17);
     });
 
     it('should have expected Classic Logic games', () => {
@@ -629,6 +629,7 @@ describe('PackLoader', () => {
       expect(slugs).toContain('water-pouring');
       expect(slugs).toContain('dominosa');
       expect(slugs).toContain('shinro');
+      expect(slugs).toContain('map');
     });
 
     it('should have expected Memory & Speed games', () => {
@@ -658,7 +659,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('classic-logic');
-      expect(games.length).toBe(16);
+      expect(games.length).toBe(17);
       expect(games.some(g => g.slug === 'einstein')).toBe(true);
       expect(games.some(g => g.slug === 'memory-match')).toBe(true);
     });
@@ -779,7 +780,6 @@ describe('PackLoader', () => {
       expect(slugs).toContain('pokemon-quiz');
       expect(slugs).toContain('periodic-table-quiz');
       expect(slugs).toContain('classical-music-quiz');
-      expect(slugs).toContain('map');
     });
 
     it('should have getGameBySlug function', () => {

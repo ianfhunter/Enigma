@@ -434,7 +434,7 @@ export default function SandwichSudoku() {
       />
 
       <div className={styles.gameArea}>
-        <Timer time={timer} />
+        <Timer seconds={timer} />
 
         <div className={styles.boardWrapper}>
           {/* Top clues */}

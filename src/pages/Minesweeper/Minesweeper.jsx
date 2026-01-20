@@ -263,7 +263,7 @@ export default function Minesweeper() {
           <GameResult
             state="won"
             title="🎉 Minefield Cleared!"
-            message={`Completed in ${time} seconds!`}
+            message={`Completed in ${formatTime(time)}!`}
             actions={[{ label: 'Play Again', onClick: initGame, primary: true }]}
           />
         )}

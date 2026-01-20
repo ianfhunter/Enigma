@@ -1,0 +1,1952 @@
+{
+  "metadata": {
+    "source": "nationalanthems.info",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "National Anthems - nationalanthems.info",
+    "downloadDate": "2026-01-20",
+    "note": "Many of these files are MIDI-to-MP3 conversions created by the site editors."
+  },
+  "anthems": [
+    {
+      "countryCode": "ad",
+      "countryName": "Andorra",
+      "isoCode": "AND",
+      "title": null,
+      "filename": "and.mp3",
+      "fileSize": 2506886,
+      "sourceUrl": "https://nationalanthems.info/ad.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ae",
+      "countryName": "United Arab Emirates",
+      "isoCode": "ARE",
+      "title": null,
+      "filename": "are.mp3",
+      "fileSize": 777631,
+      "sourceUrl": "https://nationalanthems.info/ae.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "af",
+      "countryName": "Afghanistan",
+      "isoCode": "AFG",
+      "title": null,
+      "filename": "afg.mp3",
+      "fileSize": 1185331,
+      "sourceUrl": "https://nationalanthems.info/af.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ag",
+      "countryName": "Antigua and Barbuda",
+      "isoCode": "ATG",
+      "title": null,
+      "filename": "atg.mp3",
+      "fileSize": 1948653,
+      "sourceUrl": "https://nationalanthems.info/ag.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "al",
+      "countryName": "Albania",
+      "isoCode": "ALB",
+      "title": null,
+      "filename": "alb.mp3",
+      "fileSize": 1057021,
+      "sourceUrl": "https://nationalanthems.info/al.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "am",
+      "countryName": "Armenia",
+      "isoCode": "ARM",
+      "title": null,
+      "filename": "arm.mp3",
+      "fileSize": 477391,
+      "sourceUrl": "https://nationalanthems.info/am.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ao",
+      "countryName": "Angola",
+      "isoCode": "AGO",
+      "title": null,
+      "filename": "ago.mp3",
+      "fileSize": 1311808,
+      "sourceUrl": "https://nationalanthems.info/ao.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ar",
+      "countryName": "Argentina",
+      "isoCode": "ARG",
+      "title": null,
+      "filename": "arg.mp3",
+      "fileSize": 3409735,
+      "sourceUrl": "https://nationalanthems.info/ar.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "at",
+      "countryName": "Austria",
+      "isoCode": "AUT",
+      "title": null,
+      "filename": "aut.mp3",
+      "fileSize": 1433155,
+      "sourceUrl": "https://nationalanthems.info/at.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "au",
+      "countryName": "Australia",
+      "isoCode": "AUS",
+      "title": null,
+      "filename": "aus.mp3",
+      "fileSize": 872290,
+      "sourceUrl": "https://nationalanthems.info/au.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "az",
+      "countryName": "Azerbaijan",
+      "isoCode": "AZE",
+      "title": null,
+      "filename": "aze.mp3",
+      "fileSize": 2107392,
+      "sourceUrl": "https://nationalanthems.info/az.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ba",
+      "countryName": "Bosnia and Herzegovina",
+      "isoCode": "BIH",
+      "title": null,
+      "filename": "bih.mp3",
+      "fileSize": 4004801,
+      "sourceUrl": "https://nationalanthems.info/ba.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bb",
+      "countryName": "Barbados",
+      "isoCode": "BRB",
+      "title": null,
+      "filename": "brb.mp3",
+      "fileSize": 1255715,
+      "sourceUrl": "https://nationalanthems.info/bb.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bd",
+      "countryName": "Bangladesh",
+      "isoCode": "BGD",
+      "title": null,
+      "filename": "bgd.mp3",
+      "fileSize": 2157067,
+      "sourceUrl": "https://nationalanthems.info/bd.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "be",
+      "countryName": "Belgium",
+      "isoCode": "BEL",
+      "title": null,
+      "filename": "bel.mp3",
+      "fileSize": 1009977,
+      "sourceUrl": "https://nationalanthems.info/be.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bf",
+      "countryName": "Burkina Faso",
+      "isoCode": "BFA",
+      "title": null,
+      "filename": "bfa.mp3",
+      "fileSize": 1715464,
+      "sourceUrl": "https://nationalanthems.info/bf.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bg",
+      "countryName": "Bulgaria",
+      "isoCode": "BGR",
+      "title": null,
+      "filename": "bgr.mp3",
+      "fileSize": 1175552,
+      "sourceUrl": "https://nationalanthems.info/bg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bh",
+      "countryName": "Bahrain",
+      "isoCode": "BHR",
+      "title": null,
+      "filename": "bhr.mp3",
+      "fileSize": 790967,
+      "sourceUrl": "https://nationalanthems.info/bh.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bi",
+      "countryName": "Burundi",
+      "isoCode": "BDI",
+      "title": null,
+      "filename": "bdi.mp3",
+      "fileSize": 2059446,
+      "sourceUrl": "https://nationalanthems.info/bi.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bj",
+      "countryName": "Benin",
+      "isoCode": "BEN",
+      "title": null,
+      "filename": "ben.mp3",
+      "fileSize": 1086628,
+      "sourceUrl": "https://nationalanthems.info/bj.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bn",
+      "countryName": "Brunei",
+      "isoCode": "BRN",
+      "title": null,
+      "filename": "brn.mp3",
+      "fileSize": 1039507,
+      "sourceUrl": "https://nationalanthems.info/bn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bo",
+      "countryName": "Bolivia",
+      "isoCode": "BOL",
+      "title": null,
+      "filename": "bol.mp3",
+      "fileSize": 1609963,
+      "sourceUrl": "https://nationalanthems.info/bo.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "br",
+      "countryName": "Brazil",
+      "isoCode": "BRA",
+      "title": null,
+      "filename": "bra.mp3",
+      "fileSize": 1805119,
+      "sourceUrl": "https://nationalanthems.info/br.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bs",
+      "countryName": "Bahamas",
+      "isoCode": "BHS",
+      "title": null,
+      "filename": "bhs.mp3",
+      "fileSize": 1198801,
+      "sourceUrl": "https://nationalanthems.info/bs.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bt",
+      "countryName": "Bhutan",
+      "isoCode": "BTN",
+      "title": null,
+      "filename": "btn.mp3",
+      "fileSize": 1668537,
+      "sourceUrl": "https://nationalanthems.info/bt.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bw",
+      "countryName": "Botswana",
+      "isoCode": "BWA",
+      "title": null,
+      "filename": "bwa.mp3",
+      "fileSize": 902805,
+      "sourceUrl": "https://nationalanthems.info/bw.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "by",
+      "countryName": "Belarus",
+      "isoCode": "BLR",
+      "title": null,
+      "filename": "blr.mp3",
+      "fileSize": 1850155,
+      "sourceUrl": "https://nationalanthems.info/by.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "bz",
+      "countryName": "Belize",
+      "isoCode": "BLZ",
+      "title": null,
+      "filename": "blz.mp3",
+      "fileSize": 2598640,
+      "sourceUrl": "https://nationalanthems.info/bz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ca",
+      "countryName": "Canada",
+      "isoCode": "CAN",
+      "title": null,
+      "filename": "can.mp3",
+      "fileSize": 1264687,
+      "sourceUrl": "https://nationalanthems.info/ca.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cd",
+      "countryName": "Congo, Democratic Republic of",
+      "isoCode": "COD",
+      "title": null,
+      "filename": "cod.mp3",
+      "fileSize": 2138130,
+      "sourceUrl": "https://nationalanthems.info/cd.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cf",
+      "countryName": "Central African Republic",
+      "isoCode": "CAF",
+      "title": null,
+      "filename": "caf.mp3",
+      "fileSize": 1053591,
+      "sourceUrl": "https://nationalanthems.info/cf.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cg",
+      "countryName": "Congo, Republic of",
+      "isoCode": "COG",
+      "title": null,
+      "filename": "cog.mp3",
+      "fileSize": 1205473,
+      "sourceUrl": "https://nationalanthems.info/cg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ch",
+      "countryName": "Switzerland",
+      "isoCode": "CHE",
+      "title": null,
+      "filename": "che.mp3",
+      "fileSize": 1349755,
+      "sourceUrl": "https://nationalanthems.info/ch.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ci",
+      "countryName": "Côte d'Ivoire",
+      "isoCode": "CIV",
+      "title": null,
+      "filename": "civ.mp3",
+      "fileSize": 1108312,
+      "sourceUrl": "https://nationalanthems.info/ci.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cl",
+      "countryName": "Chile",
+      "isoCode": "CHL",
+      "title": null,
+      "filename": "chl.mp3",
+      "fileSize": 1958992,
+      "sourceUrl": "https://nationalanthems.info/cl.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cm",
+      "countryName": "Cameroon",
+      "isoCode": "CMR",
+      "title": null,
+      "filename": "cmr.mp3",
+      "fileSize": 930670,
+      "sourceUrl": "https://nationalanthems.info/cm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cn",
+      "countryName": "China",
+      "isoCode": "CHN",
+      "title": null,
+      "filename": "chn.mp3",
+      "fileSize": 705907,
+      "sourceUrl": "https://nationalanthems.info/cn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "co",
+      "countryName": "Colombia",
+      "isoCode": "COL",
+      "title": null,
+      "filename": "col.mp3",
+      "fileSize": 2572816,
+      "sourceUrl": "https://nationalanthems.info/co.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cr",
+      "countryName": "Costa Rica",
+      "isoCode": "CRI",
+      "title": null,
+      "filename": "cri.mp3",
+      "fileSize": 3524148,
+      "sourceUrl": "https://nationalanthems.info/cr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cu",
+      "countryName": "Cuba",
+      "isoCode": "CUB",
+      "title": null,
+      "filename": "cub.mp3",
+      "fileSize": 1125409,
+      "sourceUrl": "https://nationalanthems.info/cu.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cv",
+      "countryName": "Cabo Verde",
+      "isoCode": "CPV",
+      "title": null,
+      "filename": "cpv.mp3",
+      "fileSize": 1709320,
+      "sourceUrl": "https://nationalanthems.info/cv.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cy",
+      "countryName": "Cyprus",
+      "isoCode": "CYP",
+      "title": null,
+      "filename": "cyp.mp3",
+      "fileSize": 727591,
+      "sourceUrl": "https://nationalanthems.info/cy.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "cz",
+      "countryName": "Czechia",
+      "isoCode": "CZE",
+      "title": null,
+      "filename": "cze.mp3",
+      "fileSize": 1037005,
+      "sourceUrl": "https://nationalanthems.info/cz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "de",
+      "countryName": "Germany",
+      "isoCode": "DEU",
+      "title": null,
+      "filename": "deu.mp3",
+      "fileSize": 1186291,
+      "sourceUrl": "https://nationalanthems.info/de.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "dj",
+      "countryName": "Djibouti",
+      "isoCode": "DJI",
+      "title": null,
+      "filename": "dji.mp3",
+      "fileSize": 766372,
+      "sourceUrl": "https://nationalanthems.info/dj.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "dk",
+      "countryName": "Denmark",
+      "isoCode": "DNK",
+      "title": null,
+      "filename": "dnk.mp3",
+      "fileSize": 1272193,
+      "sourceUrl": "https://nationalanthems.info/dk.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "dm",
+      "countryName": "Dominica",
+      "isoCode": "DMA",
+      "title": null,
+      "filename": "dma.mp3",
+      "fileSize": 784697,
+      "sourceUrl": "https://nationalanthems.info/dm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "do",
+      "countryName": "Dominican Republic",
+      "isoCode": "DOM",
+      "title": null,
+      "filename": "dom.mp3",
+      "fileSize": 1549081,
+      "sourceUrl": "https://nationalanthems.info/do.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "dz",
+      "countryName": "Algeria",
+      "isoCode": "DZA",
+      "title": null,
+      "filename": "dza.mp3",
+      "fileSize": 2504327,
+      "sourceUrl": "https://nationalanthems.info/dz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ec",
+      "countryName": "Ecuador",
+      "isoCode": "ECU",
+      "title": null,
+      "filename": "ecu.mp3",
+      "fileSize": 3176448,
+      "sourceUrl": "https://nationalanthems.info/ec.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ee",
+      "countryName": "Estonia",
+      "isoCode": "EST",
+      "title": null,
+      "filename": "est.mp3",
+      "fileSize": 511168,
+      "sourceUrl": "https://nationalanthems.info/ee.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "eg",
+      "countryName": "Egypt",
+      "isoCode": "EGY",
+      "title": null,
+      "filename": "egy.mp3",
+      "fileSize": 1373941,
+      "sourceUrl": "https://nationalanthems.info/eg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "er",
+      "countryName": "Eritrea",
+      "isoCode": "ERI",
+      "title": null,
+      "filename": "eri.mp3",
+      "fileSize": 3828422,
+      "sourceUrl": "https://nationalanthems.info/er.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "es",
+      "countryName": "Spain",
+      "isoCode": "ESP",
+      "title": null,
+      "filename": "esp.mp3",
+      "fileSize": 566251,
+      "sourceUrl": "https://nationalanthems.info/es.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "et",
+      "countryName": "Ethiopia",
+      "isoCode": "ETH",
+      "title": null,
+      "filename": "eth.mp3",
+      "fileSize": 1346419,
+      "sourceUrl": "https://nationalanthems.info/et.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "fi",
+      "countryName": "Finland",
+      "isoCode": "FIN",
+      "title": null,
+      "filename": "fin.mp3",
+      "fileSize": 745105,
+      "sourceUrl": "https://nationalanthems.info/fi.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "fj",
+      "countryName": "Fiji",
+      "isoCode": "FJI",
+      "title": null,
+      "filename": "fji.mp3",
+      "fileSize": 1379779,
+      "sourceUrl": "https://nationalanthems.info/fj.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "fm",
+      "countryName": "Micronesia",
+      "isoCode": "FSM",
+      "title": null,
+      "filename": "fsm.mp3",
+      "fileSize": 723836,
+      "sourceUrl": "https://nationalanthems.info/fm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "fr",
+      "countryName": "France",
+      "isoCode": "FRA",
+      "title": null,
+      "filename": "fra.mp3",
+      "fileSize": 1269691,
+      "sourceUrl": "https://nationalanthems.info/fr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ga",
+      "countryName": "Gabon",
+      "isoCode": "GAB",
+      "title": null,
+      "filename": "gab.mp3",
+      "fileSize": 1681366,
+      "sourceUrl": "https://nationalanthems.info/ga.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gb",
+      "countryName": "United Kingdom",
+      "isoCode": "GBR",
+      "title": null,
+      "filename": "gbr.mp3",
+      "fileSize": 1011151,
+      "sourceUrl": "https://nationalanthems.info/gb.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gd",
+      "countryName": "Grenada",
+      "isoCode": "GRD",
+      "title": null,
+      "filename": "grd.mp3",
+      "fileSize": 1271751,
+      "sourceUrl": "https://nationalanthems.info/gd.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ge",
+      "countryName": "Georgia",
+      "isoCode": "GEO",
+      "title": null,
+      "filename": "geo.mp3",
+      "fileSize": 2056192,
+      "sourceUrl": "https://nationalanthems.info/ge.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gh",
+      "countryName": "Ghana",
+      "isoCode": "GHA",
+      "title": null,
+      "filename": "gha.mp3",
+      "fileSize": 925278,
+      "sourceUrl": "https://nationalanthems.info/gh.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gm",
+      "countryName": "Gambia",
+      "isoCode": "GMB",
+      "title": null,
+      "filename": "gmb.mp3",
+      "fileSize": 1278247,
+      "sourceUrl": "https://nationalanthems.info/gm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gn",
+      "countryName": "Guinea",
+      "isoCode": "GIN",
+      "title": null,
+      "filename": "gin.mp3",
+      "fileSize": 1158353,
+      "sourceUrl": "https://nationalanthems.info/gn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gq",
+      "countryName": "Equatorial Guinea",
+      "isoCode": "GNQ",
+      "title": null,
+      "filename": "gnq.mp3",
+      "fileSize": 4608216,
+      "sourceUrl": "https://nationalanthems.info/gq.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gr",
+      "countryName": "Greece",
+      "isoCode": "GRC",
+      "title": null,
+      "filename": "grc.mp3",
+      "fileSize": 727591,
+      "sourceUrl": "https://nationalanthems.info/gr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gt",
+      "countryName": "Guatemala",
+      "isoCode": "GTM",
+      "title": null,
+      "filename": "gtm.mp3",
+      "fileSize": 1569008,
+      "sourceUrl": "https://nationalanthems.info/gt.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gw",
+      "countryName": "Guinea-Bissau",
+      "isoCode": "GNB",
+      "title": null,
+      "filename": "gnb.mp3",
+      "fileSize": 972370,
+      "sourceUrl": "https://nationalanthems.info/gw.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "gy",
+      "countryName": "Guyana",
+      "isoCode": "GUY",
+      "title": null,
+      "filename": "guy.mp3",
+      "fileSize": 854359,
+      "sourceUrl": "https://nationalanthems.info/gy.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "hn",
+      "countryName": "Honduras",
+      "isoCode": "HND",
+      "title": null,
+      "filename": "hnd.mp3",
+      "fileSize": 2663305,
+      "sourceUrl": "https://nationalanthems.info/hn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "hr",
+      "countryName": "Croatia",
+      "isoCode": "HRV",
+      "title": null,
+      "filename": "hrv.mp3",
+      "fileSize": 952354,
+      "sourceUrl": "https://nationalanthems.info/hr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ht",
+      "countryName": "Haiti",
+      "isoCode": "HTI",
+      "title": null,
+      "filename": "hti.mp3",
+      "fileSize": 593317,
+      "sourceUrl": "https://nationalanthems.info/ht.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "hu",
+      "countryName": "Hungary",
+      "isoCode": "HUN",
+      "title": null,
+      "filename": "hun.mp3",
+      "fileSize": 1493203,
+      "sourceUrl": "https://nationalanthems.info/hu.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "id",
+      "countryName": "Indonesia",
+      "isoCode": "IDN",
+      "title": null,
+      "filename": "idn.mp3",
+      "fileSize": 1745071,
+      "sourceUrl": "https://nationalanthems.info/id.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ie",
+      "countryName": "Ireland",
+      "isoCode": "IRL",
+      "title": null,
+      "filename": "irl.mp3",
+      "fileSize": 1050665,
+      "sourceUrl": "https://nationalanthems.info/ie.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "il",
+      "countryName": "Israel",
+      "isoCode": "ISR",
+      "title": null,
+      "filename": "isr.mp3",
+      "fileSize": 1189210,
+      "sourceUrl": "https://nationalanthems.info/il.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "in",
+      "countryName": "India",
+      "isoCode": "IND",
+      "title": null,
+      "filename": "ind.mp3",
+      "fileSize": 1020742,
+      "sourceUrl": "https://nationalanthems.info/in.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "iq",
+      "countryName": "Iraq",
+      "isoCode": "IRQ",
+      "title": null,
+      "filename": "irq.mp3",
+      "fileSize": 2108800,
+      "sourceUrl": "https://nationalanthems.info/iq.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ir",
+      "countryName": "Iran",
+      "isoCode": "IRN",
+      "title": null,
+      "filename": "irn.mp3",
+      "fileSize": 913111,
+      "sourceUrl": "https://nationalanthems.info/ir.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "is",
+      "countryName": "Iceland",
+      "isoCode": "ISL",
+      "title": null,
+      "filename": "isl.mp3",
+      "fileSize": 1589113,
+      "sourceUrl": "https://nationalanthems.info/is.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "it",
+      "countryName": "Italy",
+      "isoCode": "ITA",
+      "title": null,
+      "filename": "ita.mp3",
+      "fileSize": 1580356,
+      "sourceUrl": "https://nationalanthems.info/it.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "jm",
+      "countryName": "Jamaica",
+      "isoCode": "JAM",
+      "title": null,
+      "filename": "jam.mp3",
+      "fileSize": 1359119,
+      "sourceUrl": "https://nationalanthems.info/jm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "jo",
+      "countryName": "Jordan",
+      "isoCode": "JOR",
+      "title": null,
+      "filename": "jor.mp3",
+      "fileSize": 606572,
+      "sourceUrl": "https://nationalanthems.info/jo.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "jp",
+      "countryName": "Japan",
+      "isoCode": "JPN",
+      "title": null,
+      "filename": "jpn.mp3",
+      "fileSize": 941095,
+      "sourceUrl": "https://nationalanthems.info/jp.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ke",
+      "countryName": "Kenya",
+      "isoCode": "KEN",
+      "title": null,
+      "filename": "ken.mp3",
+      "fileSize": 658786,
+      "sourceUrl": "https://nationalanthems.info/ke.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "kg",
+      "countryName": "Kyrgyzstan",
+      "isoCode": "KGZ",
+      "title": null,
+      "filename": "kgz.mp3",
+      "fileSize": 1972753,
+      "sourceUrl": "https://nationalanthems.info/kg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "kh",
+      "countryName": "Cambodia",
+      "isoCode": "KHM",
+      "title": null,
+      "filename": "khm.mp3",
+      "fileSize": 1467349,
+      "sourceUrl": "https://nationalanthems.info/kh.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ki",
+      "countryName": "Kiribati",
+      "isoCode": "KIR",
+      "title": null,
+      "filename": "kir.mp3",
+      "fileSize": 1793592,
+      "sourceUrl": "https://nationalanthems.info/ki.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "km",
+      "countryName": "Comoros",
+      "isoCode": "COM",
+      "title": null,
+      "filename": "com.mp3",
+      "fileSize": 1554004,
+      "sourceUrl": "https://nationalanthems.info/km.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "kn",
+      "countryName": "Saint Kitts and Nevis",
+      "isoCode": "KNA",
+      "title": null,
+      "filename": "kna.mp3",
+      "fileSize": 1013155,
+      "sourceUrl": "https://nationalanthems.info/kn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "kp",
+      "countryName": "North Korea",
+      "isoCode": "PRK",
+      "title": null,
+      "filename": "prk.mp3",
+      "fileSize": 1844140,
+      "sourceUrl": "https://nationalanthems.info/kp.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "kr",
+      "countryName": "South Korea",
+      "isoCode": "KOR",
+      "title": null,
+      "filename": "kor.mp3",
+      "fileSize": 926419,
+      "sourceUrl": "https://nationalanthems.info/kr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "kw",
+      "countryName": "Kuwait",
+      "isoCode": "KWT",
+      "title": null,
+      "filename": "kwt.mp3",
+      "fileSize": 563212,
+      "sourceUrl": "https://nationalanthems.info/kw.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "kz",
+      "countryName": "Kazakhstan",
+      "isoCode": "KAZ",
+      "title": null,
+      "filename": "kaz.mp3",
+      "fileSize": 2481092,
+      "sourceUrl": "https://nationalanthems.info/kz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "la",
+      "countryName": "Laos",
+      "isoCode": "LAO",
+      "title": null,
+      "filename": "lao.mp3",
+      "fileSize": 812995,
+      "sourceUrl": "https://nationalanthems.info/la.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "lb",
+      "countryName": "Lebanon",
+      "isoCode": "LBN",
+      "title": null,
+      "filename": "lbn.mp3",
+      "fileSize": 818416,
+      "sourceUrl": "https://nationalanthems.info/lb.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "lc",
+      "countryName": "Saint Lucia",
+      "isoCode": "LCA",
+      "title": null,
+      "filename": "lca.mp3",
+      "fileSize": 1753920,
+      "sourceUrl": "https://nationalanthems.info/lc.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "li",
+      "countryName": "Liechtenstein",
+      "isoCode": "LIE",
+      "title": null,
+      "filename": "lie.mp3",
+      "fileSize": 1345536,
+      "sourceUrl": "https://nationalanthems.info/li.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "lk",
+      "countryName": "Sri Lanka",
+      "isoCode": "LKA",
+      "title": null,
+      "filename": "lka.mp3",
+      "fileSize": 6981228,
+      "sourceUrl": "https://nationalanthems.info/lk.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "lr",
+      "countryName": "Liberia",
+      "isoCode": "LBR",
+      "title": null,
+      "filename": "lbr.mp3",
+      "fileSize": 1421751,
+      "sourceUrl": "https://nationalanthems.info/lr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ls",
+      "countryName": "Lesotho",
+      "isoCode": "LSO",
+      "title": null,
+      "filename": "lso.mp3",
+      "fileSize": 1802988,
+      "sourceUrl": "https://nationalanthems.info/ls.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "lt",
+      "countryName": "Lithuania",
+      "isoCode": "LTU",
+      "title": null,
+      "filename": "ltu.mp3",
+      "fileSize": 1721213,
+      "sourceUrl": "https://nationalanthems.info/lt.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "lu",
+      "countryName": "Luxembourg",
+      "isoCode": "LUX",
+      "title": null,
+      "filename": "lux.mp3",
+      "fileSize": 1338793,
+      "sourceUrl": "https://nationalanthems.info/lu.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "lv",
+      "countryName": "Latvia",
+      "isoCode": "LVA",
+      "title": null,
+      "filename": "lva.mp3",
+      "fileSize": 1704958,
+      "sourceUrl": "https://nationalanthems.info/lv.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ly",
+      "countryName": "Libya",
+      "isoCode": "LBY",
+      "title": null,
+      "filename": "lby.mp3",
+      "fileSize": 1083392,
+      "sourceUrl": "https://nationalanthems.info/ly.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ma",
+      "countryName": "Morocco",
+      "isoCode": "MAR",
+      "title": null,
+      "filename": "mar.mp3",
+      "fileSize": 1085440,
+      "sourceUrl": "https://nationalanthems.info/ma.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mc",
+      "countryName": "Monaco",
+      "isoCode": "MCO",
+      "title": null,
+      "filename": "mco.mp3",
+      "fileSize": 1402880,
+      "sourceUrl": "https://nationalanthems.info/mc.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "md",
+      "countryName": "Moldova",
+      "isoCode": "MDA",
+      "title": null,
+      "filename": "mda.mp3",
+      "fileSize": 1145761,
+      "sourceUrl": "https://nationalanthems.info/md.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "me",
+      "countryName": "Montenegro",
+      "isoCode": "MNE",
+      "title": null,
+      "filename": "mne.mp3",
+      "fileSize": 2007040,
+      "sourceUrl": "https://nationalanthems.info/me.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mg",
+      "countryName": "Madagascar",
+      "isoCode": "MDG",
+      "title": null,
+      "filename": "mdg.mp3",
+      "fileSize": 992460,
+      "sourceUrl": "https://nationalanthems.info/mg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mh",
+      "countryName": "Marshall Islands",
+      "isoCode": "MHL",
+      "title": null,
+      "filename": "mhl.mp3",
+      "fileSize": 2774782,
+      "sourceUrl": "https://nationalanthems.info/mh.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mk",
+      "countryName": "North Macedonia",
+      "isoCode": "MKD",
+      "title": null,
+      "filename": "mkd.mp3",
+      "fileSize": 807574,
+      "sourceUrl": "https://nationalanthems.info/mk.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ml",
+      "countryName": "Mali",
+      "isoCode": "MLI",
+      "title": null,
+      "filename": "mli.mp3",
+      "fileSize": 3195684,
+      "sourceUrl": "https://nationalanthems.info/ml.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mm",
+      "countryName": "Myanmar",
+      "isoCode": "MMR",
+      "title": null,
+      "filename": "mmr.mp3",
+      "fileSize": 628736,
+      "sourceUrl": "https://nationalanthems.info/mm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mn",
+      "countryName": "Mongolia",
+      "isoCode": "MNG",
+      "title": null,
+      "filename": "mng.mp3",
+      "fileSize": 4006872,
+      "sourceUrl": "https://nationalanthems.info/mn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mr",
+      "countryName": "Mauritania",
+      "isoCode": "MRT",
+      "title": null,
+      "filename": "mrt.mp3",
+      "fileSize": 3461904,
+      "sourceUrl": "https://nationalanthems.info/mr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mt",
+      "countryName": "Malta",
+      "isoCode": "MLT",
+      "title": null,
+      "filename": "mlt.mp3",
+      "fileSize": 789226,
+      "sourceUrl": "https://nationalanthems.info/mt.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mu",
+      "countryName": "Mauritius",
+      "isoCode": "MUS",
+      "title": null,
+      "filename": "mus.mp3",
+      "fileSize": 948520,
+      "sourceUrl": "https://nationalanthems.info/mu.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mv",
+      "countryName": "Maldives",
+      "isoCode": "MDV",
+      "title": null,
+      "filename": "mdv.mp3",
+      "fileSize": 1098632,
+      "sourceUrl": "https://nationalanthems.info/mv.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mw",
+      "countryName": "Malawi",
+      "isoCode": "MWI",
+      "title": null,
+      "filename": "mwi.mp3",
+      "fileSize": 839675,
+      "sourceUrl": "https://nationalanthems.info/mw.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mx",
+      "countryName": "Mexico",
+      "isoCode": "MEX",
+      "title": null,
+      "filename": "mex.mp3",
+      "fileSize": 1634477,
+      "sourceUrl": "https://nationalanthems.info/mx.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "my",
+      "countryName": "Malaysia",
+      "isoCode": "MYS",
+      "title": null,
+      "filename": "mys.mp3",
+      "fileSize": 946427,
+      "sourceUrl": "https://nationalanthems.info/my.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "mz",
+      "countryName": "Mozambique",
+      "isoCode": "MOZ",
+      "title": null,
+      "filename": "moz.mp3",
+      "fileSize": 1500150,
+      "sourceUrl": "https://nationalanthems.info/mz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "na",
+      "countryName": "Namibia",
+      "isoCode": "NAM",
+      "title": null,
+      "filename": "nam.mp3",
+      "fileSize": 1433900,
+      "sourceUrl": "https://nationalanthems.info/na.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ne",
+      "countryName": "Niger",
+      "isoCode": "NER",
+      "title": null,
+      "filename": "ner.mp3",
+      "fileSize": 1946890,
+      "sourceUrl": "https://nationalanthems.info/ne.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ng",
+      "countryName": "Nigeria",
+      "isoCode": "NGA",
+      "title": null,
+      "filename": "nga.mp3",
+      "fileSize": 2246635,
+      "sourceUrl": "https://nationalanthems.info/ng.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ni",
+      "countryName": "Nicaragua",
+      "isoCode": "NIC",
+      "title": null,
+      "filename": "nic.mp3",
+      "fileSize": 1940397,
+      "sourceUrl": "https://nationalanthems.info/ni.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "nl",
+      "countryName": "Netherlands",
+      "isoCode": "NLD",
+      "title": null,
+      "filename": "nld.mp3",
+      "fileSize": 787133,
+      "sourceUrl": "https://nationalanthems.info/nl.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "no",
+      "countryName": "Norway",
+      "isoCode": "NOR",
+      "title": null,
+      "filename": "nor.mp3",
+      "fileSize": 1004390,
+      "sourceUrl": "https://nationalanthems.info/no.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "np",
+      "countryName": "Nepal",
+      "isoCode": "NPL",
+      "title": null,
+      "filename": "npl.mp3",
+      "fileSize": 1116160,
+      "sourceUrl": "https://nationalanthems.info/np.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "nr",
+      "countryName": "Nauru",
+      "isoCode": "NRU",
+      "title": null,
+      "filename": "nru.mp3",
+      "fileSize": 1260064,
+      "sourceUrl": "https://nationalanthems.info/nr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "nz",
+      "countryName": "New Zealand",
+      "isoCode": "NZL",
+      "title": null,
+      "filename": "nzl.mp3",
+      "fileSize": 1013981,
+      "sourceUrl": "https://nationalanthems.info/nz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "om",
+      "countryName": "Oman",
+      "isoCode": "OMN",
+      "title": null,
+      "filename": "omn.mp3",
+      "fileSize": 1832154,
+      "sourceUrl": "https://nationalanthems.info/om.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "pa",
+      "countryName": "Panama",
+      "isoCode": "PAN",
+      "title": null,
+      "filename": "pan.mp3",
+      "fileSize": 1762913,
+      "sourceUrl": "https://nationalanthems.info/pa.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "pe",
+      "countryName": "Peru",
+      "isoCode": "PER",
+      "title": null,
+      "filename": "per.mp3",
+      "fileSize": 3034763,
+      "sourceUrl": "https://nationalanthems.info/pe.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "pg",
+      "countryName": "Papua New Guinea",
+      "isoCode": "PNG",
+      "title": null,
+      "filename": "png.mp3",
+      "fileSize": 925696,
+      "sourceUrl": "https://nationalanthems.info/pg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ph",
+      "countryName": "Philippines",
+      "isoCode": "PHL",
+      "title": null,
+      "filename": "phl.mp3",
+      "fileSize": 999803,
+      "sourceUrl": "https://nationalanthems.info/ph.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "pk",
+      "countryName": "Pakistan",
+      "isoCode": "PAK",
+      "title": null,
+      "filename": "pak.mp3",
+      "fileSize": 1319731,
+      "sourceUrl": "https://nationalanthems.info/pk.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "pl",
+      "countryName": "Poland",
+      "isoCode": "POL",
+      "title": null,
+      "filename": "pol.mp3",
+      "fileSize": 694559,
+      "sourceUrl": "https://nationalanthems.info/pl.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "pt",
+      "countryName": "Portugal",
+      "isoCode": "PRT",
+      "title": null,
+      "filename": "prt.mp3",
+      "fileSize": 1121991,
+      "sourceUrl": "https://nationalanthems.info/pt.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "pw",
+      "countryName": "Palau",
+      "isoCode": "PLW",
+      "title": null,
+      "filename": "plw.mp3",
+      "fileSize": 834254,
+      "sourceUrl": "https://nationalanthems.info/pw.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "py",
+      "countryName": "Paraguay",
+      "isoCode": "PRY",
+      "title": null,
+      "filename": "pry.mp3",
+      "fileSize": 3135488,
+      "sourceUrl": "https://nationalanthems.info/py.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "qa",
+      "countryName": "Qatar",
+      "isoCode": "QAT",
+      "title": null,
+      "filename": "qat.mp3",
+      "fileSize": 1382400,
+      "sourceUrl": "https://nationalanthems.info/qa.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ro",
+      "countryName": "Romania",
+      "isoCode": "ROU",
+      "title": null,
+      "filename": "rou.mp3",
+      "fileSize": 2220805,
+      "sourceUrl": "https://nationalanthems.info/ro.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "rs",
+      "countryName": "Serbia",
+      "isoCode": "SRB",
+      "title": null,
+      "filename": "srb.mp3",
+      "fileSize": 2563090,
+      "sourceUrl": "https://nationalanthems.info/rs.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ru",
+      "countryName": "Russia",
+      "isoCode": "RUS",
+      "title": null,
+      "filename": "rus.mp3",
+      "fileSize": 2186157,
+      "sourceUrl": "https://nationalanthems.info/ru.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "rw",
+      "countryName": "Rwanda",
+      "isoCode": "RWA",
+      "title": null,
+      "filename": "rwa.mp3",
+      "fileSize": 2220032,
+      "sourceUrl": "https://nationalanthems.info/rw.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sa",
+      "countryName": "Saudi Arabia",
+      "isoCode": "SAU",
+      "title": null,
+      "filename": "sau.mp3",
+      "fileSize": 2032796,
+      "sourceUrl": "https://nationalanthems.info/sa.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sb",
+      "countryName": "Solomon Islands",
+      "isoCode": "SLB",
+      "title": null,
+      "filename": "slb.mp3",
+      "fileSize": 1449770,
+      "sourceUrl": "https://nationalanthems.info/sb.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sc",
+      "countryName": "Seychelles",
+      "isoCode": "SYC",
+      "title": null,
+      "filename": "syc.mp3",
+      "fileSize": 1353890,
+      "sourceUrl": "https://nationalanthems.info/sc.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sd",
+      "countryName": "Sudan",
+      "isoCode": "SDN",
+      "title": null,
+      "filename": "sdn.mp3",
+      "fileSize": 731344,
+      "sourceUrl": "https://nationalanthems.info/sd.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "se",
+      "countryName": "Sweden",
+      "isoCode": "SWE",
+      "title": null,
+      "filename": "swe.mp3",
+      "fileSize": 1408463,
+      "sourceUrl": "https://nationalanthems.info/se.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sg",
+      "countryName": "Singapore",
+      "isoCode": "SGP",
+      "title": null,
+      "filename": "sgp.mp3",
+      "fileSize": 1271202,
+      "sourceUrl": "https://nationalanthems.info/sg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "si",
+      "countryName": "Slovenia",
+      "isoCode": "SVN",
+      "title": null,
+      "filename": "svn.mp3",
+      "fileSize": 907229,
+      "sourceUrl": "https://nationalanthems.info/si.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sk",
+      "countryName": "Slovakia",
+      "isoCode": "SVK",
+      "title": null,
+      "filename": "svk.mp3",
+      "fileSize": 541520,
+      "sourceUrl": "https://nationalanthems.info/sk.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sl",
+      "countryName": "Sierra Leone",
+      "isoCode": "SLE",
+      "title": null,
+      "filename": "sle.mp3",
+      "fileSize": 746684,
+      "sourceUrl": "https://nationalanthems.info/sl.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sm",
+      "countryName": "San Marino",
+      "isoCode": "SMR",
+      "title": null,
+      "filename": "smr.mp3",
+      "fileSize": 2283311,
+      "sourceUrl": "https://nationalanthems.info/sm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sn",
+      "countryName": "Senegal",
+      "isoCode": "SEN",
+      "title": null,
+      "filename": "sen.mp3",
+      "fileSize": 900974,
+      "sourceUrl": "https://nationalanthems.info/sn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "so",
+      "countryName": "Somalia",
+      "isoCode": "SOM",
+      "title": null,
+      "filename": "som.mp3",
+      "fileSize": 2663244,
+      "sourceUrl": "https://nationalanthems.info/so.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sr",
+      "countryName": "Suriname",
+      "isoCode": "SUR",
+      "title": null,
+      "filename": "sur.mp3",
+      "fileSize": 2199708,
+      "sourceUrl": "https://nationalanthems.info/sr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ss",
+      "countryName": "South Sudan",
+      "isoCode": "SSD",
+      "title": null,
+      "filename": "ssd.mp3",
+      "fileSize": 1232896,
+      "sourceUrl": "https://nationalanthems.info/ss.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "st",
+      "countryName": "Sao Tome and Principe",
+      "isoCode": "STP",
+      "title": null,
+      "filename": "stp.mp3",
+      "fileSize": 2000186,
+      "sourceUrl": "https://nationalanthems.info/st.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sv",
+      "countryName": "El Salvador",
+      "isoCode": "SLV",
+      "title": null,
+      "filename": "slv.mp3",
+      "fileSize": 4173824,
+      "sourceUrl": "https://nationalanthems.info/sv.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sy",
+      "countryName": "Syria",
+      "isoCode": "SYR",
+      "title": null,
+      "filename": "syr.mp3",
+      "fileSize": 1062912,
+      "sourceUrl": "https://nationalanthems.info/sy.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "sz",
+      "countryName": "Eswatini",
+      "isoCode": "SWZ",
+      "title": null,
+      "filename": "swz.mp3",
+      "fileSize": 1083392,
+      "sourceUrl": "https://nationalanthems.info/sz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "td",
+      "countryName": "Chad",
+      "isoCode": "TCD",
+      "title": null,
+      "filename": "tcd.mp3",
+      "fileSize": 2506644,
+      "sourceUrl": "https://nationalanthems.info/td.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tg",
+      "countryName": "Togo",
+      "isoCode": "TGO",
+      "title": null,
+      "filename": "tgo.mp3",
+      "fileSize": 841760,
+      "sourceUrl": "https://nationalanthems.info/tg.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "th",
+      "countryName": "Thailand",
+      "isoCode": "THA",
+      "title": null,
+      "filename": "tha.mp3",
+      "fileSize": 713336,
+      "sourceUrl": "https://nationalanthems.info/th.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tj",
+      "countryName": "Tajikistan",
+      "isoCode": "TJK",
+      "title": null,
+      "filename": "tjk.mp3",
+      "fileSize": 4481892,
+      "sourceUrl": "https://nationalanthems.info/tj.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tl",
+      "countryName": "Timor-Leste",
+      "isoCode": "TLS",
+      "title": null,
+      "filename": "tls.mp3",
+      "fileSize": 3127742,
+      "sourceUrl": "https://nationalanthems.info/tl.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tm",
+      "countryName": "Turkmenistan",
+      "isoCode": "TKM",
+      "title": null,
+      "filename": "tkm.mp3",
+      "fileSize": 1918850,
+      "sourceUrl": "https://nationalanthems.info/tm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tn",
+      "countryName": "Tunisia",
+      "isoCode": "TUN",
+      "title": null,
+      "filename": "tun.mp3",
+      "fileSize": 839450,
+      "sourceUrl": "https://nationalanthems.info/tn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "to",
+      "countryName": "Tonga",
+      "isoCode": "TON",
+      "title": null,
+      "filename": "ton.mp3",
+      "fileSize": 945637,
+      "sourceUrl": "https://nationalanthems.info/to.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tr",
+      "countryName": "Turkey",
+      "isoCode": "TUR",
+      "title": null,
+      "filename": "tur.mp3",
+      "fileSize": 1343488,
+      "sourceUrl": "https://nationalanthems.info/tr.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tt",
+      "countryName": "Trinidad and Tobago",
+      "isoCode": "TTO",
+      "title": null,
+      "filename": "tto.mp3",
+      "fileSize": 1196805,
+      "sourceUrl": "https://nationalanthems.info/tt.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tv",
+      "countryName": "Tuvalu",
+      "isoCode": "TUV",
+      "title": null,
+      "filename": "tuv.mp3",
+      "fileSize": 1297218,
+      "sourceUrl": "https://nationalanthems.info/tv.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "tz",
+      "countryName": "Tanzania",
+      "isoCode": "TZA",
+      "title": null,
+      "filename": "tza.mp3",
+      "fileSize": 833428,
+      "sourceUrl": "https://nationalanthems.info/tz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ua",
+      "countryName": "Ukraine",
+      "isoCode": "UKR",
+      "title": null,
+      "filename": "ukr.mp3",
+      "fileSize": 1280444,
+      "sourceUrl": "https://nationalanthems.info/ua.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ug",
+      "countryName": "Uganda",
+      "isoCode": "UGA",
+      "title": null,
+      "filename": "uga.mp3",
+      "fileSize": 1809252,
+      "sourceUrl": "https://nationalanthems.info/ug.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "us",
+      "countryName": "United States",
+      "isoCode": "USA",
+      "title": null,
+      "filename": "usa.mp3",
+      "fileSize": 1260011,
+      "sourceUrl": "https://nationalanthems.info/us.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "uy",
+      "countryName": "Uruguay",
+      "isoCode": "URY",
+      "title": null,
+      "filename": "ury.mp3",
+      "fileSize": 4317009,
+      "sourceUrl": "https://nationalanthems.info/uy.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "uz",
+      "countryName": "Uzbekistan",
+      "isoCode": "UZB",
+      "title": null,
+      "filename": "uzb.mp3",
+      "fileSize": 2343377,
+      "sourceUrl": "https://nationalanthems.info/uz.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "va",
+      "countryName": "Vatican City",
+      "isoCode": "VAT",
+      "title": null,
+      "filename": "vat.mp3",
+      "fileSize": 6201073,
+      "sourceUrl": "https://nationalanthems.info/va.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "vc",
+      "countryName": "Saint Vincent and the Grenadines",
+      "isoCode": "VCT",
+      "title": null,
+      "filename": "vct.mp3",
+      "fileSize": 2105748,
+      "sourceUrl": "https://nationalanthems.info/vc.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ve",
+      "countryName": "Venezuela",
+      "isoCode": "VEN",
+      "title": null,
+      "filename": "ven.mp3",
+      "fileSize": 1460588,
+      "sourceUrl": "https://nationalanthems.info/ve.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "vn",
+      "countryName": "Vietnam",
+      "isoCode": "VNM",
+      "title": null,
+      "filename": "vnm.mp3",
+      "fileSize": 1154510,
+      "sourceUrl": "https://nationalanthems.info/vn.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "vu",
+      "countryName": "Vanuatu",
+      "isoCode": "VUT",
+      "title": null,
+      "filename": "vut.mp3",
+      "fileSize": 954350,
+      "sourceUrl": "https://nationalanthems.info/vu.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ws",
+      "countryName": "Samoa",
+      "isoCode": "WSM",
+      "title": null,
+      "filename": "wsm.mp3",
+      "fileSize": 1166699,
+      "sourceUrl": "https://nationalanthems.info/ws.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "ye",
+      "countryName": "Yemen",
+      "isoCode": "YEM",
+      "title": null,
+      "filename": "yem.mp3",
+      "fileSize": 791303,
+      "sourceUrl": "https://nationalanthems.info/ye.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "za",
+      "countryName": "South Africa",
+      "isoCode": "ZAF",
+      "title": null,
+      "filename": "zaf.mp3",
+      "fileSize": 1968097,
+      "sourceUrl": "https://nationalanthems.info/za.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "zm",
+      "countryName": "Zambia",
+      "isoCode": "ZMB",
+      "title": null,
+      "filename": "zmb.mp3",
+      "fileSize": 3268094,
+      "sourceUrl": "https://nationalanthems.info/zm.htm",
+      "isMidiSource": false
+    },
+    {
+      "countryCode": "zw",
+      "countryName": "Zimbabwe",
+      "isoCode": "ZWE",
+      "title": null,
+      "filename": "zwe.mp3",
+      "fileSize": 1549456,
+      "sourceUrl": "https://nationalanthems.info/zw.htm",
+      "isMidiSource": false
+    }
+  ]
+}

@@ -1,35 +1,28 @@
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Anagrams: Letters being shuffled/rearranged -->
+  <!-- Anagrams: Letters rearranging to form new words -->
 
-  <!-- Letter tiles in scattered/shuffled positions -->
-  <!-- Top left tile (tilted) -->
-  <g transform="rotate(-15 5 5)">
-    <rect x="1" y="1" width="6" height="7" rx="1.5" fill="#ec4899"/>
-  </g>
+  <!-- Top word: "CAT" -->
+  <rect x="3" y="3" width="5" height="6" rx="1" fill="#ec4899"/>
+  <text x="5.5" y="7.2" font-family="Georgia, serif" font-size="4" font-weight="bold" fill="#fff" text-anchor="middle">C</text>
 
-  <!-- Top right tile (tilted other way) -->
-  <g transform="rotate(12 18 5)">
-    <rect x="15" y="1" width="6" height="7" rx="1.5" fill="#db2777"/>
-  </g>
+  <rect x="9.5" y="3" width="5" height="6" rx="1" fill="#db2777"/>
+  <text x="12" y="7.2" font-family="Georgia, serif" font-size="4" font-weight="bold" fill="#fff" text-anchor="middle">A</text>
 
-  <!-- Middle tile (straight, highlighted as the "found" arrangement) -->
-  <rect x="9" y="8.5" width="6" height="7" rx="1.5" fill="#fce7f3" stroke="#ec4899" stroke-width="1"/>
+  <rect x="16" y="3" width="5" height="6" rx="1" fill="#ec4899"/>
+  <text x="18.5" y="7.2" font-family="Georgia, serif" font-size="4" font-weight="bold" fill="#fff" text-anchor="middle">T</text>
 
-  <!-- Bottom left tile (tilted) -->
-  <g transform="rotate(10 5 19)">
-    <rect x="1" y="16" width="6" height="7" rx="1.5" fill="#db2777"/>
-  </g>
+  <!-- Swap arrows in the middle -->
+  <path d="M8 12 L16 12" stroke="#f9a8d4" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M14 10.5 L16 12 L14 13.5" stroke="#f9a8d4" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10 10.5 L8 12 L10 13.5" stroke="#f9a8d4" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- Bottom right tile (tilted) -->
-  <g transform="rotate(-12 19 19)">
-    <rect x="16" y="16" width="6" height="7" rx="1.5" fill="#ec4899"/>
-  </g>
+  <!-- Bottom word: "ACT" (rearranged) -->
+  <rect x="3" y="15" width="5" height="6" rx="1" fill="#db2777"/>
+  <text x="5.5" y="19.2" font-family="Georgia, serif" font-size="4" font-weight="bold" fill="#fff" text-anchor="middle">A</text>
 
-  <!-- Shuffle arrows in center suggesting rearrangement -->
-  <path d="M7 12 C8 10, 10 10, 9 12" stroke="#db2777" stroke-width="1" fill="none" stroke-linecap="round"/>
-  <path d="M15 12 C16 14, 14 14, 15 12" stroke="#db2777" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <rect x="9.5" y="15" width="5" height="6" rx="1" fill="#ec4899"/>
+  <text x="12" y="19.2" font-family="Georgia, serif" font-size="4" font-weight="bold" fill="#fff" text-anchor="middle">C</text>
 
-  <!-- Small curved arrows suggesting movement -->
-  <path d="M6 8 Q 8 6, 10 8" stroke="#f9a8d4" stroke-width="0.8" fill="none" stroke-linecap="round"/>
-  <path d="M14 16 Q 16 18, 18 16" stroke="#f9a8d4" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <rect x="16" y="15" width="5" height="6" rx="1" fill="#db2777"/>
+  <text x="18.5" y="19.2" font-family="Georgia, serif" font-size="4" font-weight="bold" fill="#fff" text-anchor="middle">T</text>
 </svg>

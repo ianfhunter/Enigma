@@ -24,6 +24,8 @@ import fifteenIcon from '../../assets/icons/fifteen.svg';
 import sixteenIcon from '../../assets/icons/sixteen.svg';
 import netslideIcon from '../../assets/icons/netslide.svg';
 import pentominoIcon from '../../assets/icons/pentomino.svg';
+import jigsawIcon from '../../assets/icons/jigsaw.svg';
+import congestionIcon from '../../assets/icons/congestion.svg';
 
 /**
  * Pack metadata
@@ -53,7 +55,8 @@ export const categories = [
         title: 'Jigsaw',
         slug: 'jigsaw',
         description: 'Drag and drop interlocking pieces to complete the picture puzzle!',
-        icon: '🧩',
+        icon: jigsawIcon,
+        emojiIcon: '🧩',
         colors: { primary: '#fb923c', secondary: '#f97316' },
         gradient: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
         version: 'v1.0',
@@ -75,7 +78,8 @@ export const categories = [
         slug: 'congestion',
         aliases: ['Traffic Jam', 'Sliding Block Puzzle'],
         description: 'Slide cars and trucks to free the red car from the traffic jam!',
-        icon: '🚗',
+        icon: congestionIcon,
+        emojiIcon: '🚗',
         colors: { primary: '#ef4444', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
         version: 'v1.0',

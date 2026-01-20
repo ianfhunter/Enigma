@@ -1,0 +1,8 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Killer Sudoku: Simple, airy cage design -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f3e8ff"/>
+
+  <!-- Single L-shaped cage - thin and elegant -->
+  <path d="M4 4 L14 4 L14 12 L20 12 L20 20 L12 20 L12 12 L4 12 Z"
+        fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="3,2"/>
+</svg>

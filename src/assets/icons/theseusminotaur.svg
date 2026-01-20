@@ -1,0 +1,36 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Theseus & Minotaur: Escape maze puzzle -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef9c3"/>
+
+  <!-- Maze walls -->
+  <rect x="2" y="2" width="20" height="20" fill="#fef3c7" stroke="#78350f" stroke-width="1.5"/>
+
+  <!-- Internal maze walls -->
+  <line x1="2" y1="7" x2="10" y2="7" stroke="#78350f" stroke-width="1.5"/>
+  <line x1="7" y1="7" x2="7" y2="12" stroke="#78350f" stroke-width="1.5"/>
+  <line x1="12" y1="2" x2="12" y2="7" stroke="#78350f" stroke-width="1.5"/>
+  <line x1="12" y1="7" x2="17" y2="7" stroke="#78350f" stroke-width="1.5"/>
+  <line x1="17" y1="7" x2="17" y2="17" stroke="#78350f" stroke-width="1.5"/>
+  <line x1="7" y1="12" x2="12" y2="12" stroke="#78350f" stroke-width="1.5"/>
+  <line x1="12" y1="12" x2="12" y2="17" stroke="#78350f" stroke-width="1.5"/>
+  <line x1="2" y1="17" x2="12" y2="17" stroke="#78350f" stroke-width="1.5"/>
+
+  <!-- Theseus (hero) -->
+  <circle cx="4.5" cy="4.5" r="2" fill="#3b82f6"/>
+  <text x="4.5" y="5.5" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">T</text>
+
+  <!-- Minotaur (enemy) -->
+  <circle cx="14.5" cy="14.5" r="2.2" fill="#dc2626"/>
+  <path d="M13 12.5 L12.5 11 M16 12.5 L16.5 11" stroke="#dc2626" stroke-width="1" stroke-linecap="round"/>
+  <text x="14.5" y="15.5" font-family="Arial" font-size="3" font-weight="bold" fill="#ffffff" text-anchor="middle">M</text>
+
+  <!-- Exit -->
+  <rect x="19" y="19" width="3" height="3" fill="#22c55e"/>
+  <text x="20.5" y="21.3" font-family="Arial" font-size="3" fill="#ffffff" text-anchor="middle">⚑</text>
+
+  <!-- Arrow keys hint -->
+  <path d="M4.5 7 L4.5 9" fill="none" stroke="#60a5fa" stroke-width="1" stroke-linecap="round"/>
+  <path d="M4 8.5 L4.5 9 L5 8.5" fill="none" stroke="#60a5fa" stroke-width="0.8"/>
+</svg>

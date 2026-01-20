@@ -17,6 +17,8 @@ import futoshikiIcon from '../../assets/icons/futoshiki.svg';
 import abcendviewIcon from '../../assets/icons/abcendview.svg';
 import euleroIcon from '../../assets/icons/eulero.svg';
 import japaneseSumsIcon from '../../assets/icons/japanesesums.svg';
+import killersudokuIcon from '../../assets/icons/killersudoku.svg';
+import sandwichsudokuIcon from '../../assets/icons/sandwichsudoku.svg';
 
 /**
  * Pack metadata
@@ -58,7 +60,8 @@ export const categories = [
         title: 'Killer Sudoku',
         slug: 'killer-sudoku',
         description: 'Sudoku with cage sums. Numbers in dotted cages must sum to the clue.',
-        icon: '💀',
+        icon: killersudokuIcon,
+        emojiIcon: '💀',
         colors: { primary: '#8b5cf6', secondary: '#ec4899' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
         version: 'v1.0',
@@ -68,7 +71,8 @@ export const categories = [
         title: 'Sandwich Sudoku',
         slug: 'sandwich-sudoku',
         description: 'Sudoku where clues show the sum of digits sandwiched between 1 and 9. A 0 means they are adjacent.',
-        icon: '🥪',
+        icon: sandwichsudokuIcon,
+        emojiIcon: '🥪',
         colors: { primary: '#f59e0b', secondary: '#84cc16' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #84cc16 100%)',
         version: 'v1.0',

@@ -281,7 +281,7 @@ export default function Suguru() {
 
       <div className={styles.gameArea}>
         <div className={styles.statusBar}>
-          <Timer time={timer} />
+          <Timer seconds={timer} />
           {puzzleData?.source && (
             <div className={styles.attribution}>
               Puzzle from {puzzleData.source}

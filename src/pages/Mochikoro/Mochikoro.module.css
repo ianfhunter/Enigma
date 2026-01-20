@@ -1,0 +1,265 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px 32px;
+}
+
+.loading {
+  margin-top: 2rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modeToggle {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 2px solid #374151;
+  background: #1f2937;
+  color: #f3f4f6;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modeToggle:hover {
+  background: #374151;
+}
+
+.whiteModeActive {
+  background: #f3f4f6;
+  color: #111827;
+  border-color: #10b981;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  background: #374151;
+  padding: 3px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.cell {
+  aspect-ratio: 1;
+  border: none;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  border-radius: 2px;
+  min-width: 32px;
+  min-height: 32px;
+  user-select: none;
+}
+
+.cell:hover {
+  background: #e5e7eb;
+}
+
+.cell.black {
+  background: #111827;
+  color: #f3f4f6;
+}
+
+.cell.black:hover {
+  background: #1f2937;
+}
+
+.cell.clue {
+  background: #fefce8;
+  cursor: pointer;
+}
+
+.cell.clue:hover {
+  background: #fef9c3;
+}
+
+.cell.clue.black {
+  background: #111827;
+}
+
+.cell.error {
+  box-shadow: inset 0 0 0 2px #ef4444;
+  animation: pulse-error 0.5s ease-out;
+}
+
+@keyframes pulse-error {
+  0% {
+    box-shadow: inset 0 0 0 3px #ef4444;
+  }
+  100% {
+    box-shadow: inset 0 0 0 2px #ef4444;
+  }
+}
+
+.clueValue {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #059669;
+  pointer-events: none;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 22px;
+  background: #374151;
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleSlider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #9ca3af;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: #10b981;
+}
+
+.toggle input:checked + .toggleSlider::before {
+  transform: translateX(18px);
+  background: white;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.buttons button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.resetBtn {
+  background: #374151;
+  color: #f3f4f6;
+  border-color: #4b5563 !important;
+}
+
+.resetBtn:hover {
+  background: #4b5563;
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-color: #059669 !important;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.legendBox {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 2px solid #4b5563;
+}
+
+.blackLegend {
+  background: #111827;
+}
+
+.whiteLegend {
+  background: #f9fafb;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .cell {
+    font-size: 0.85rem;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .clueValue {
+    font-size: 0.95rem;
+  }
+
+  .grid {
+    gap: 1px;
+    padding: 2px;
+  }
+
+  .buttons button {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+}

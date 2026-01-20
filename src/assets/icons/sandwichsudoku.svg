@@ -1,0 +1,23 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sandwich Sudoku: Row with 1...9 concept -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef9c3"/>
+
+  <!-- Simple row of 3 cells -->
+  <rect x="3" y="7" width="18" height="10" fill="#fff" stroke="#ca8a04" stroke-width="1.5"/>
+  <line x1="9" y1="7" x2="9" y2="17" stroke="#ca8a04" stroke-width="1"/>
+  <line x1="15" y1="7" x2="15" y2="17" stroke="#ca8a04" stroke-width="1"/>
+
+  <!-- 1 on left (bread) -->
+  <rect x="3" y="7" width="6" height="10" fill="#fef3c7"/>
+  <text x="6" y="14" font-family="Arial" font-size="7" font-weight="bold" fill="#b45309" text-anchor="middle">1</text>
+
+  <!-- Middle cells highlighted (filling) -->
+  <rect x="9" y="7" width="6" height="10" fill="#bbf7d0"/>
+
+  <!-- 9 on right (bread) -->
+  <rect x="15" y="7" width="6" height="10" fill="#fef3c7"/>
+  <text x="18" y="14" font-family="Arial" font-size="7" font-weight="bold" fill="#b45309" text-anchor="middle">9</text>
+
+  <!-- Sum clue -->
+  <text x="12" y="5" font-family="Arial" font-size="4" font-weight="bold" fill="#65a30d" text-anchor="middle">= 21</text>
+</svg>

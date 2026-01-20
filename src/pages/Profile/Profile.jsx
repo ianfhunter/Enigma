@@ -507,17 +507,6 @@ function GamesTab() {
       case 'disableAll':
         newDisabled = allGames.map(g => g.slug);
         break;
-      case 'enableDev':
-        newDisabled = (settings?.disabledGames || []).filter(slug => {
-          const game = allGames.find(g => g.slug === slug);
-          return game && game.version !== 'DEV';
-        });
-        break;
-      case 'disableDev':
-        const devSlugs = allGames.filter(g => g.version === 'DEV').map(g => g.slug);
-        const currentDisabled = settings?.disabledGames || [];
-        newDisabled = [...new Set([...currentDisabled, ...devSlugs])];
-        break;
       default:
         return;
     }
@@ -589,7 +578,6 @@ function GamesTab() {
     game.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const devGamesCount = allGames.filter(g => g.version === 'DEV').length;
   const enabledCount = allGames.length - disabledGames.length;
 
   // Create a map of game stats for quick lookup
@@ -698,13 +686,6 @@ function GamesTab() {
             </button>
             <button className={styles.bulkButton} onClick={() => handleBulkAction('disableAll')}>
               Disable All
-            </button>
-            <span className={styles.bulkDivider}>|</span>
-            <button className={styles.bulkButton} onClick={() => handleBulkAction('enableDev')}>
-              Enable DEV ({devGamesCount})
-            </button>
-            <button className={styles.bulkButton} onClick={() => handleBulkAction('disableDev')}>
-              Disable DEV
             </button>
           </div>
 

@@ -1,0 +1,33 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Letter Orbit: Concentric orbital rings with letters -->
+
+  <!-- Outer orbit ring -->
+  <circle cx="12" cy="12" r="10" fill="none" stroke="#a5b4fc" stroke-width="1" stroke-dasharray="3 2"/>
+
+  <!-- Middle orbit ring -->
+  <circle cx="12" cy="12" r="6.5" fill="none" stroke="#818cf8" stroke-width="1" stroke-dasharray="3 2"/>
+
+  <!-- Inner orbit ring -->
+  <circle cx="12" cy="12" r="3" fill="none" stroke="#6366f1" stroke-width="1"/>
+
+  <!-- Center dot (like a sun) -->
+  <circle cx="12" cy="12" r="1.5" fill="#4f46e5"/>
+
+  <!-- Letters on outer orbit -->
+  <circle cx="12" cy="2.5" r="2" fill="#6366f1"/>
+  <text x="12" y="3.5" font-family="Georgia, serif" font-size="2.5" font-weight="bold" fill="#fff" text-anchor="middle">W</text>
+
+  <circle cx="21" cy="14" r="2" fill="#6366f1"/>
+  <text x="21" y="15" font-family="Georgia, serif" font-size="2.5" font-weight="bold" fill="#fff" text-anchor="middle">D</text>
+
+  <!-- Letters on middle orbit -->
+  <circle cx="5.5" cy="12" r="2" fill="#818cf8"/>
+  <text x="5.5" y="13" font-family="Georgia, serif" font-size="2.5" font-weight="bold" fill="#fff" text-anchor="middle">O</text>
+
+  <circle cx="16" cy="8" r="2" fill="#818cf8"/>
+  <text x="16" y="9" font-family="Georgia, serif" font-size="2.5" font-weight="bold" fill="#fff" text-anchor="middle">R</text>
+
+  <!-- Letter on inner orbit -->
+  <circle cx="14" cy="13.5" r="1.8" fill="#4f46e5"/>
+  <text x="14" y="14.4" font-family="Georgia, serif" font-size="2.2" font-weight="bold" fill="#fff" text-anchor="middle">A</text>
+</svg>

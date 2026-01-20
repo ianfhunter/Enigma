@@ -9,6 +9,11 @@
 import pegsIcon from '../../assets/icons/pegs.svg';
 import sokobanIcon from '../../assets/icons/sokoban.svg';
 import inertiaIcon from '../../assets/icons/inertia.svg';
+import chesspuzzleIcon from '../../assets/icons/chesspuzzle.svg';
+import knightstourIcon from '../../assets/icons/knightstour.svg';
+import nqueensIcon from '../../assets/icons/nqueens.svg';
+import chessmazeIcon from '../../assets/icons/chessmaze.svg';
+import theseusminotaurIcon from '../../assets/icons/theseusminotaur.svg';
 
 /**
  * Pack metadata
@@ -38,7 +43,8 @@ export const categories = [
         title: 'Chess Puzzles',
         slug: 'chess-puzzle',
         description: 'Solve tactical chess puzzles! Find the best move to checkmate or win material.',
-        icon: '♟️',
+        icon: chesspuzzleIcon,
+        emojiIcon: '♟️',
         colors: { primary: '#b58863', secondary: '#8b6914' },
         gradient: 'linear-gradient(135deg, #b58863 0%, #8b6914 100%)',
         version: 'v1.0',
@@ -49,7 +55,8 @@ export const categories = [
         slug: 'knights-tour',
         aliases: ['Knights Tour', 'Knight Tour Puzzle'],
         description: 'Move the knight to visit every square exactly once. A classic chess puzzle!',
-        icon: '♞',
+        icon: knightstourIcon,
+        emojiIcon: '♞',
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
         gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
         version: 'v1.0',
@@ -60,7 +67,8 @@ export const categories = [
         slug: 'n-queens',
         aliases: ['Eight Queens', 'Queens Problem', '8 Queens Puzzle'],
         description: 'Place queens so none can attack each other. A classic combinatorial puzzle!',
-        icon: '👑',
+        icon: nqueensIcon,
+        emojiIcon: '👑',
         colors: { primary: '#ec4899', secondary: '#db2777' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
         version: 'v1.0',
@@ -70,7 +78,8 @@ export const categories = [
         title: 'Chess Maze',
         slug: 'chess-maze',
         description: 'Navigate your piece to the goal without getting captured by enemy pieces!',
-        icon: '🏰',
+        icon: chessmazeIcon,
+        emojiIcon: '🏰',
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         version: 'v1.0',
@@ -80,7 +89,8 @@ export const categories = [
         title: 'Theseus & the Minotaur',
         slug: 'theseus-minotaur',
         description: 'Guide Theseus to the exit while the Minotaur chases! Classic logic maze puzzle.',
-        icon: '🐂',
+        icon: theseusminotaurIcon,
+        emojiIcon: '🐂',
         colors: { primary: '#f59e0b', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #dc2626 100%)',
         version: 'v1.0',
