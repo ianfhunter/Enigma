@@ -240,11 +240,17 @@ export function formatClue(clue) {
 }
 
 // Get available sizes from dataset
+// Note: 12x12 is disabled - generation is too slow for a full dataset
+const DISABLED_SIZES = ['12x12'];
+
 function getAvailableSizes(puzzles, difficulty) {
   const sizes = new Set();
   puzzles.forEach(p => {
     if (p.difficulty === difficulty) {
-      sizes.add(`${p.rows}x${p.cols}`);
+      const sizeKey = `${p.rows}x${p.cols}`;
+      if (!DISABLED_SIZES.includes(sizeKey)) {
+        sizes.add(sizeKey);
+      }
     }
   });
   return Array.from(sizes).sort((a, b) => {
