@@ -317,7 +317,7 @@ export default function Kropki() {
       />
 
       <div className={styles.gameArea}>
-        <Timer time={timer} />
+        <Timer seconds={timer} />
 
         <div className={styles.boardWrapper}>
           <div className={styles.board} style={{ '--grid-size': size }}>

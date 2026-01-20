@@ -1,0 +1,40 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Undead: Place ghosts and zombies with line-of-sight -->
+
+  <!-- Background (spooky) -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#052e16"/>
+
+  <!-- Grid -->
+  <rect x="4" y="4" width="16" height="16" fill="#14532d" stroke="#22c55e" stroke-width="0.5"/>
+  <line x1="9.33" y1="4" x2="9.33" y2="20" stroke="#22c55e" stroke-width="0.3"/>
+  <line x1="14.67" y1="4" x2="14.67" y2="20" stroke="#22c55e" stroke-width="0.3"/>
+  <line x1="4" y1="9.33" x2="20" y2="9.33" stroke="#22c55e" stroke-width="0.3"/>
+  <line x1="4" y1="14.67" x2="20" y2="14.67" stroke="#22c55e" stroke-width="0.3"/>
+
+  <!-- Ghost -->
+  <path d="M6.5 5 Q4 5 4 8 L4 9 Q4.5 8.5 5 9 Q5.5 8.5 6 9 Q6.5 8.5 7 9 Q7.5 8.5 8 9 L8 8 Q8 5 6.5 5" fill="#ffffff"/>
+  <circle cx="5.5" cy="6.5" r="0.6" fill="#1f2937"/>
+  <circle cx="7" cy="6.5" r="0.6" fill="#1f2937"/>
+
+  <!-- Zombie -->
+  <circle cx="17" cy="7" r="2" fill="#84cc16"/>
+  <rect x="15.5" y="5.5" width="3" height="1" fill="#65a30d"/>
+  <circle cx="16.3" cy="7" r="0.4" fill="#1f2937"/>
+  <circle cx="17.7" cy="7" r="0.4" fill="#1f2937"/>
+  <path d="M16 8 L18 8" stroke="#1f2937" stroke-width="0.5"/>
+
+  <!-- Vampire -->
+  <path d="M12 11 Q10 11 10 13 Q10 15 12 15 Q14 15 14 13 Q14 11 12 11" fill="#7c3aed"/>
+  <path d="M10 15 L10.5 16.5 M14 15 L13.5 16.5" stroke="#7c3aed" stroke-width="0.8"/>
+  <circle cx="11.3" cy="12.5" r="0.4" fill="#ef4444"/>
+  <circle cx="12.7" cy="12.5" r="0.4" fill="#ef4444"/>
+
+  <!-- Line-of-sight clues -->
+  <text x="2.5" y="7" font-family="Arial" font-size="3" font-weight="bold" fill="#4ade80" text-anchor="middle">2</text>
+  <text x="2.5" y="12" font-family="Arial" font-size="3" font-weight="bold" fill="#4ade80" text-anchor="middle">1</text>
+  <text x="2.5" y="17" font-family="Arial" font-size="3" font-weight="bold" fill="#4ade80" text-anchor="middle">3</text>
+
+  <text x="6.5" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#4ade80" text-anchor="middle">1</text>
+  <text x="12" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#4ade80" text-anchor="middle">2</text>
+  <text x="17.5" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#4ade80" text-anchor="middle">1</text>
+</svg>

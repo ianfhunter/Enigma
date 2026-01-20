@@ -1,0 +1,49 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Map: Four-color map coloring puzzle -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#f5f5f4"/>
+
+  <!-- Map regions with four colors -->
+  <!-- Region 1 - Red -->
+  <path d="M3 3 L10 3 L8 8 L3 6 Z" fill="#fca5a5" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 2 - Blue -->
+  <path d="M10 3 L18 3 L16 7 L11 9 L8 8 Z" fill="#93c5fd" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 3 - Yellow -->
+  <path d="M18 3 L21 3 L21 10 L17 12 L16 7 Z" fill="#fde047" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 4 - Green -->
+  <path d="M3 6 L8 8 L7 14 L3 12 Z" fill="#86efac" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 5 - Blue -->
+  <path d="M8 8 L11 9 L12 15 L7 14 Z" fill="#93c5fd" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 6 - Red -->
+  <path d="M11 9 L16 7 L17 12 L14 16 L12 15 Z" fill="#fca5a5" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 7 - Yellow -->
+  <path d="M3 12 L7 14 L6 19 L3 21 Z" fill="#fde047" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 8 - Red -->
+  <path d="M7 14 L12 15 L10 21 L6 19 Z" fill="#fca5a5" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 9 - Green -->
+  <path d="M12 15 L14 16 L15 21 L10 21 Z" fill="#86efac" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 10 - Yellow -->
+  <path d="M17 12 L21 10 L21 16 L18 18 Z" fill="#fde047" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 11 - Blue -->
+  <path d="M14 16 L17 12 L18 18 L15 21 Z" fill="#93c5fd" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Region 12 - Green -->
+  <path d="M18 18 L21 16 L21 21 L15 21 Z" fill="#86efac" stroke="#1f2937" stroke-width="0.8"/>
+
+  <!-- Color palette indicator -->
+  <circle cx="4" cy="21" r="1.2" fill="#ef4444" stroke="#1f2937" stroke-width="0.4"/>
+  <circle cx="7" cy="21" r="1.2" fill="#3b82f6" stroke="#1f2937" stroke-width="0.4"/>
+  <circle cx="10" cy="21" r="1.2" fill="#eab308" stroke="#1f2937" stroke-width="0.4"/>
+  <circle cx="13" cy="21" r="1.2" fill="#22c55e" stroke="#1f2937" stroke-width="0.4"/>
+</svg>

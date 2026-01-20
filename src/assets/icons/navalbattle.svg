@@ -1,0 +1,41 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Naval Battle: Place ships with clues -->
+
+  <!-- Background (ocean) -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#dbeafe"/>
+
+  <!-- Grid -->
+  <rect x="4" y="4" width="16" height="16" fill="#eff6ff" stroke="#3b82f6" stroke-width="0.5"/>
+
+  <!-- Grid lines -->
+  <line x1="8" y1="4" x2="8" y2="20" stroke="#93c5fd" stroke-width="0.3"/>
+  <line x1="12" y1="4" x2="12" y2="20" stroke="#93c5fd" stroke-width="0.3"/>
+  <line x1="16" y1="4" x2="16" y2="20" stroke="#93c5fd" stroke-width="0.3"/>
+  <line x1="4" y1="8" x2="20" y2="8" stroke="#93c5fd" stroke-width="0.3"/>
+  <line x1="4" y1="12" x2="20" y2="12" stroke="#93c5fd" stroke-width="0.3"/>
+  <line x1="4" y1="16" x2="20" y2="16" stroke="#93c5fd" stroke-width="0.3"/>
+
+  <!-- Ships -->
+  <!-- Battleship (4 cells horizontal) -->
+  <rect x="4.5" y="4.5" width="15" height="3" rx="1.5" fill="#64748b" stroke="#475569" stroke-width="0.5"/>
+
+  <!-- Cruiser (3 cells vertical) -->
+  <rect x="16.5" y="8.5" width="3" height="11" rx="1.5" fill="#64748b" stroke="#475569" stroke-width="0.5"/>
+
+  <!-- Submarine (2 cells) -->
+  <rect x="4.5" y="12.5" width="7" height="3" rx="1.5" fill="#64748b" stroke="#475569" stroke-width="0.5"/>
+
+  <!-- Row/column clues -->
+  <text x="2.5" y="6.5" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">4</text>
+  <text x="2.5" y="10.5" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">1</text>
+  <text x="2.5" y="14.5" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">2</text>
+  <text x="2.5" y="18.5" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">1</text>
+
+  <text x="6" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">2</text>
+  <text x="10" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">1</text>
+  <text x="14" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">2</text>
+  <text x="18" y="22" font-family="Arial" font-size="3" font-weight="bold" fill="#1e40af" text-anchor="middle">3</text>
+
+  <!-- Water wave -->
+  <path d="M1 20 Q3 19 5 20 Q7 21 9 20" fill="none" stroke="#60a5fa" stroke-width="0.8"/>
+</svg>

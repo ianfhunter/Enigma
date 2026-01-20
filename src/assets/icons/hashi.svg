@@ -1,0 +1,47 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hashi: Connect islands with bridges -->
+
+  <!-- Background (water) -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#cffafe"/>
+
+  <!-- Water pattern -->
+  <path d="M1 8 Q4 7 7 8 Q10 9 13 8 Q16 7 19 8 Q22 9 23 8" fill="none" stroke="#a5f3fc" stroke-width="0.8"/>
+  <path d="M1 14 Q4 13 7 14 Q10 15 13 14 Q16 13 19 14 Q22 15 23 14" fill="none" stroke="#a5f3fc" stroke-width="0.8"/>
+  <path d="M1 20 Q4 19 7 20 Q10 21 13 20 Q16 19 19 20" fill="none" stroke="#a5f3fc" stroke-width="0.8"/>
+
+  <!-- Bridges (double lines for 2 bridges) -->
+  <line x1="5" y1="5" x2="12" y2="5" stroke="#0e7490" stroke-width="1"/>
+  <line x1="5" y1="6" x2="12" y2="6" stroke="#0e7490" stroke-width="1"/>
+
+  <line x1="12" y1="5.5" x2="19" y2="5.5" stroke="#0e7490" stroke-width="1"/>
+
+  <line x1="5" y1="5.5" x2="5" y2="12" stroke="#0e7490" stroke-width="1"/>
+
+  <line x1="12" y1="5.5" x2="12" y2="18.5" stroke="#0e7490" stroke-width="1"/>
+  <line x1="13" y1="5.5" x2="13" y2="18.5" stroke="#0e7490" stroke-width="1"/>
+
+  <line x1="5" y1="12" x2="12" y2="12" stroke="#0e7490" stroke-width="1"/>
+
+  <line x1="19" y1="5.5" x2="19" y2="18.5" stroke="#0e7490" stroke-width="1"/>
+
+  <line x1="12.5" y1="18.5" x2="19" y2="18.5" stroke="#0e7490" stroke-width="1"/>
+
+  <!-- Islands (circles with numbers) -->
+  <circle cx="5" cy="5" r="2.5" fill="#ffffff" stroke="#0891b2" stroke-width="1.5"/>
+  <text x="5" y="6.2" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0e7490" text-anchor="middle">3</text>
+
+  <circle cx="12" cy="5" r="2.5" fill="#ffffff" stroke="#0891b2" stroke-width="1.5"/>
+  <text x="12" y="6.2" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0e7490" text-anchor="middle">5</text>
+
+  <circle cx="19" cy="5" r="2.5" fill="#ffffff" stroke="#0891b2" stroke-width="1.5"/>
+  <text x="19" y="6.2" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0e7490" text-anchor="middle">2</text>
+
+  <circle cx="5" cy="12" r="2.5" fill="#ffffff" stroke="#0891b2" stroke-width="1.5"/>
+  <text x="5" y="13.2" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0e7490" text-anchor="middle">2</text>
+
+  <circle cx="12" cy="18.5" r="2.5" fill="#ffffff" stroke="#0891b2" stroke-width="1.5"/>
+  <text x="12" y="19.7" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0e7490" text-anchor="middle">4</text>
+
+  <circle cx="19" cy="18.5" r="2.5" fill="#ffffff" stroke="#0891b2" stroke-width="1.5"/>
+  <text x="19" y="19.7" font-family="Arial" font-size="3.5" font-weight="bold" fill="#0e7490" text-anchor="middle">2</text>
+</svg>

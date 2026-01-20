@@ -26,3 +26,22 @@ describe('Layout header markup', () => {
     expect(layoutJsx).toContain('<span className={styles.surpriseText}>Surprise Me!</span>');
   });
 });
+
+describe('Layout footer', () => {
+  it('contains a GitHub link pointing to the repository', () => {
+    expect(layoutJsx).toContain('href="https://github.com/ianfhunter/enigma"');
+  });
+
+  it('renders the GitHub link with proper accessibility attributes', () => {
+    expect(layoutJsx).toContain('target="_blank"');
+    expect(layoutJsx).toContain('rel="noopener noreferrer"');
+  });
+
+  it('has a githubLink class defined in CSS', () => {
+    expect(layoutCss).toContain('.githubLink');
+  });
+
+  it('has a githubIcon class for the SVG icon', () => {
+    expect(layoutCss).toContain('.githubIcon');
+  });
+});

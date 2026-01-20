@@ -1,0 +1,28 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pokemon Quiz: Guess generation and types -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#fef2f2"/>
+
+  <!-- Pokeball -->
+  <circle cx="12" cy="10" r="7" fill="#ef4444" stroke="#1f2937" stroke-width="1.2"/>
+  <rect x="5" y="9.4" width="14" height="1.2" fill="#1f2937"/>
+  <circle cx="12" cy="10" r="7" fill="none" stroke="#1f2937" stroke-width="1.2"/>
+  <path d="M5 10 A7 7 0 0 1 19 10" fill="#ef4444"/>
+  <path d="M5 10 A7 7 0 0 0 19 10" fill="#ffffff"/>
+  <circle cx="12" cy="10" r="2.5" fill="#ffffff" stroke="#1f2937" stroke-width="1.2"/>
+  <circle cx="12" cy="10" r="1" fill="#1f2937"/>
+
+  <!-- Type badges at bottom -->
+  <rect x="2" y="18" width="6" height="3" rx="1" fill="#f97316"/>
+  <text x="5" y="20.2" font-family="Arial" font-size="2.2" font-weight="bold" fill="#ffffff" text-anchor="middle">FIRE</text>
+
+  <rect x="9" y="18" width="6" height="3" rx="1" fill="#3b82f6"/>
+  <text x="12" y="20.2" font-family="Arial" font-size="2.2" font-weight="bold" fill="#ffffff" text-anchor="middle">WATER</text>
+
+  <rect x="16" y="18" width="6" height="3" rx="1" fill="#22c55e"/>
+  <text x="19" y="20.2" font-family="Arial" font-size="2.2" font-weight="bold" fill="#ffffff" text-anchor="middle">GRASS</text>
+
+  <!-- Question mark on pokeball -->
+  <text x="12" y="11.5" font-family="Arial" font-size="5" font-weight="bold" fill="#7c3aed" text-anchor="middle">?</text>
+</svg>

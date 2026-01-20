@@ -32,6 +32,7 @@ const slugToFolder = {
   'chess-maze': 'ChessMaze',
   'chess-puzzle': 'ChessPuzzle',
   'classical-music-quiz': 'ClassicalMusicQuiz',
+  'national-anthem-quiz': 'NationalAnthemQuiz',
   'code-breaker': 'CodeBreaker',
   'color-cube': 'ColorCube',
   'categories': 'Categories',

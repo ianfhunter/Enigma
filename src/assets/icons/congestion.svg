@@ -1,0 +1,39 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Congestion: Rush Hour sliding puzzle -->
+
+  <!-- Background (parking lot) -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#e5e7eb"/>
+
+  <!-- Grid -->
+  <rect x="2" y="2" width="20" height="20" fill="#d1d5db" stroke="#6b7280" stroke-width="0.8"/>
+
+  <!-- Grid lines -->
+  <line x1="5.33" y1="2" x2="5.33" y2="22" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="8.67" y1="2" x2="8.67" y2="22" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="12" y1="2" x2="12" y2="22" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="15.33" y1="2" x2="15.33" y2="22" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="18.67" y1="2" x2="18.67" y2="22" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="2" y1="5.33" x2="22" y2="5.33" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="2" y1="8.67" x2="22" y2="8.67" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="2" y1="12" x2="22" y2="12" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="2" y1="15.33" x2="22" y2="15.33" stroke="#9ca3af" stroke-width="0.3"/>
+  <line x1="2" y1="18.67" x2="22" y2="18.67" stroke="#9ca3af" stroke-width="0.3"/>
+
+  <!-- Red car (player - horizontal) -->
+  <rect x="2.5" y="8.9" width="6.2" height="2.9" rx="1" fill="#ef4444" stroke="#b91c1c" stroke-width="0.5"/>
+  <circle cx="4" cy="10.3" r="0.8" fill="#1f2937"/>
+  <circle cx="7" cy="10.3" r="0.8" fill="#1f2937"/>
+
+  <!-- Blue truck (vertical) -->
+  <rect x="12.2" y="2.5" width="2.9" height="9.2" rx="0.8" fill="#3b82f6" stroke="#1d4ed8" stroke-width="0.5"/>
+
+  <!-- Yellow car (horizontal) -->
+  <rect x="15.5" y="15.5" width="6.2" height="2.9" rx="1" fill="#eab308" stroke="#a16207" stroke-width="0.5"/>
+
+  <!-- Green truck (vertical) -->
+  <rect x="5.5" y="12.2" width="2.9" height="9.2" rx="0.8" fill="#22c55e" stroke="#15803d" stroke-width="0.5"/>
+
+  <!-- Exit arrow -->
+  <path d="M22 10.3 L24 10.3" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+  <path d="M23 9 L24.5 10.3 L23 11.6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

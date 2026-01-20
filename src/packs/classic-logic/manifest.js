@@ -16,6 +16,11 @@ import sequenceIcon from '../../assets/icons/sequence.svg';
 import magnetsIcon from '../../assets/icons/magnets.svg';
 import memorizeItemsIcon from '../../assets/icons/memorizeitems.svg';
 import guessIcon from '../../assets/icons/guess.svg';
+import memorymatchIcon from '../../assets/icons/memorymatch.svg';
+import chimptestIcon from '../../assets/icons/chimptest.svg';
+import navalbattleIcon from '../../assets/icons/navalbattle.svg';
+import undeadIcon from '../../assets/icons/undead.svg';
+import mapIcon from '../../assets/icons/map.svg';
 
 /**
  * Pack metadata
@@ -147,7 +152,8 @@ export const categories = [
         title: 'Undead',
         slug: 'undead',
         description: 'Place ghosts and zombies so the line-of-sight clues are satisfied.',
-        icon: '👻',
+        icon: undeadIcon,
+        emojiIcon: '👻',
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         version: 'v1.0',
@@ -168,11 +174,23 @@ export const categories = [
         title: 'Naval Battle',
         slug: 'naval-battle',
         description: 'Place ships on the grid using row/column clues. Ships cannot touch each other!',
-        icon: '🚢',
+        icon: navalbattleIcon,
+        emojiIcon: '🚢',
         colors: { primary: '#0ea5e9', secondary: '#1e3a5f' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #1e3a5f 100%)',
         version: 'v1.0',
         component: () => import('../../pages/NavalBattle'),
+      },
+      {
+        title: 'Map',
+        slug: 'map',
+        description: 'Color regions on a map so adjacent regions have different colors.',
+        icon: mapIcon,
+        emojiIcon: '🗺️',
+        colors: { primary: '#22d3ee', secondary: '#06b6d4' },
+        gradient: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/Map'),
       },
     ],
   },
@@ -198,7 +216,8 @@ export const categories = [
         slug: 'memory-match',
         aliases: ['Concentration', 'Pairs', 'Pelmanism', 'Match Match'],
         description: 'Flip cards to find matching pairs. Test your memory!',
-        icon: '🃏',
+        icon: memorymatchIcon,
+        emojiIcon: '🃏',
         colors: { primary: '#fcd34d', secondary: '#fbbf24' },
         gradient: 'linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%)',
         version: 'v1.0',
@@ -208,7 +227,8 @@ export const categories = [
         title: 'Chimp Test',
         slug: 'chimp-test',
         description: 'Remember and click numbered boxes in order. The sequence gets longer each round!',
-        icon: '🦍',
+        icon: chimptestIcon,
+        emojiIcon: '🦍',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
         version: 'v1.0',

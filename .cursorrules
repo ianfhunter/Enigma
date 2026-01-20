@@ -18,8 +18,16 @@ Puzzles should generally:
 - Not infringe on existing copyrights
 - Not have fallbacks to datasets.
 - Be reproducible given a seed number (and display the active puzzle's seed number on screen)
+- Re-use components if available.
+- Have both an emoji and svg logo.
+- Have many tests that stress various aspects of the puzzle.
 
 ## Tests
 Try to avoid shallow tests which are almost guarnteed to pass. Instead, try ones that challenge the componet you're testing.
 If you need to delete a test, give the user a justification.
 Tests should be deterministic.
+
+## Datasets
+When datasets must be created ourselves, make sure:
+- It will continually increment the dataset, so that it might be resumed upon a crash
+- It does not include invalid or trivial items

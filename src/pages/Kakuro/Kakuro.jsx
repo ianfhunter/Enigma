@@ -351,7 +351,7 @@ export default function Kakuro() {
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
-          <Timer time={timer} />
+          <Timer seconds={timer} />
           <div className={styles.stat}>
             <span className={styles.statLabel}>Size</span>
             <span className={styles.statValue}>{rows}×{cols}</span>

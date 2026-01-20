@@ -402,7 +402,7 @@ export default function KillerSudoku() {
         onDifficultyChange={setDifficulty}
       />
 
-      <Timer time={timer} />
+      <Timer seconds={timer} />
 
       <div className={styles.gameArea}>
         <div
