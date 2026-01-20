@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { getGameIcon, getGameColors } from '../../data/gameRegistry';
+import { useFavourites } from '../../context/SettingsContext';
 import styles from './GameCard.module.css';
 
 /**
@@ -15,6 +16,7 @@ import styles from './GameCard.module.css';
  * @param {string|function} customIcon - Custom icon (emoji string or component)
  * @param {object} customColors - Custom colors { primary, secondary }
  * @param {string} typeBadge - Optional type badge (e.g., "Community", "External")
+ * @param {boolean} showFavouriteButton - Whether to show the favourite toggle button
  */
 export default function GameCard({
   title,
@@ -27,10 +29,19 @@ export default function GameCard({
   customIcon = null,
   customColors = null,
   typeBadge = null,
+  showFavouriteButton = true,
 }) {
   const icon = customIcon || getGameIcon(slug);
   const colors = customColors || getGameColors(slug);
   const hasTag = !!tag;
+  const { isFavourite, toggleFavourite } = useFavourites();
+  const isFav = isFavourite(slug);
+
+  const handleFavouriteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavourite(slug);
+  };
 
   // Render icon - supports emoji strings, SVG URLs, or React components
   const renderIcon = () => {
@@ -59,8 +70,17 @@ export default function GameCard({
         '--card-secondary': colors.secondary,
       }}
     >
+      {showFavouriteButton && !disabled && (
+        <button
+          className={`${styles.favouriteButton} ${isFav ? styles.favourited : ''}`}
+          onClick={handleFavouriteClick}
+          aria-label={isFav ? 'Remove from favourites' : 'Add to favourites'}
+          title={isFav ? 'Remove from favourites' : 'Add to favourites'}
+        >
+          {isFav ? '★' : '☆'}
+        </button>
+      )}
       {hasTag && <span className={styles.languageTag}>{tag}</span>}
-      {version && <span className={styles.versionTag}>{version}</span>}
       {typeBadge && <span className={styles.typeBadge}>{typeBadge}</span>}
       <div className={styles.iconWrapper}>
         <span className={styles.icon}>{renderIcon()}</span>

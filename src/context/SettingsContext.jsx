@@ -9,6 +9,7 @@ const defaultSettings = {
   theme: 'dark',
   soundEnabled: true,
   disabledGames: [],
+  favouriteGames: [],
   gamePreferences: {},
   searchEngine: 'google',
 };
@@ -150,4 +151,38 @@ export function useSoundEnabled() {
 export function useEnglishVariant() {
   const { settings } = useSettings();
   return settings.englishVariant || 'us';
+}
+
+// Convenience hook for favourites
+export function useFavourites() {
+  const { settings, updateSetting } = useSettings();
+  const favourites = settings.favouriteGames || [];
+
+  const isFavourite = (slug) => favourites.includes(slug);
+
+  const addFavourite = (slug) => {
+    if (!isFavourite(slug)) {
+      updateSetting('favouriteGames', [...favourites, slug]);
+    }
+  };
+
+  const removeFavourite = (slug) => {
+    updateSetting('favouriteGames', favourites.filter(s => s !== slug));
+  };
+
+  const toggleFavourite = (slug) => {
+    if (isFavourite(slug)) {
+      removeFavourite(slug);
+    } else {
+      addFavourite(slug);
+    }
+  };
+
+  return {
+    favourites,
+    isFavourite,
+    addFavourite,
+    removeFavourite,
+    toggleFavourite,
+  };
 }
