@@ -1,16 +1,18 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import GameCard from '../../components/GameCard';
-import { categories } from '../../data/gameRegistry';
+import { categories, allGames } from '../../data/gameRegistry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import { communityPacks, isCommunityPack } from '../../packs/registry';
 import { getFilteredCategories, officialPacks } from '../../data/packageRegistry';
+import { useFavourites } from '../../context/SettingsContext';
 import styles from './Home.module.css';
 
 export default function Home() {
   const { installedPackages } = useInstalledPackages();
   const { customPacks } = useCustomPacks();
+  const { favourites } = useFavourites();
 
   // Filter categories and games based on installed packages
   // This handles includeGames/excludeGames for proper game filtering
@@ -19,6 +21,13 @@ export default function Home() {
     const officialPackageIds = installedPackages.filter(id => !isCommunityPack(id));
     return getFilteredCategories(officialPackageIds, categories);
   }, [installedPackages]);
+
+  // Get favourite games with their full data
+  const favouriteGames = useMemo(() => {
+    return favourites
+      .map(slug => allGames.find(game => game.slug === slug))
+      .filter(Boolean); // Filter out any games that no longer exist
+  }, [favourites]);
 
   // Get community pack categories from the registry (loaded at build time)
   const communityCategories = useMemo(() => {
@@ -40,6 +49,30 @@ export default function Home() {
 
   return (
     <div className={styles.home}>
+      {/* Favourites Section */}
+      {favouriteGames.length > 0 && (
+        <section className={`${styles.category} ${styles.favouritesSection}`}>
+          <h2 className={styles.categoryTitle}>
+            <span className={styles.categoryIcon}>⭐</span>
+            Favourites
+            <span className={styles.gameCount}>{favouriteGames.length}</span>
+          </h2>
+          <div className={styles.grid}>
+            {favouriteGames.map((game) => (
+              <GameCard
+                key={game.slug}
+                title={game.title}
+                slug={game.slug}
+                description={game.description}
+                disabled={game.disabled}
+                tag={game.tag}
+                version={game.version}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
       {filteredCategories.map((category) => {
         if (category.games.length === 0) return null;
 

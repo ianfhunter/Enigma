@@ -223,7 +223,7 @@
 .typeBadge {
   position: absolute;
   top: 8px;
-  left: 8px;
+  right: 8px;
   padding: 0.2rem 0.5rem;
   background: rgba(139, 92, 246, 0.15);
   border: 1px solid rgba(139, 92, 246, 0.3);
@@ -245,4 +245,67 @@
 :global([data-theme="light"]) .typeBadge {
   background: rgba(139, 92, 246, 0.1);
   color: #7c3aed;
+}
+
+/* Favourite button */
+.favouriteButton {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.card:hover .favouriteButton {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.favouriteButton:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fbbf24;
+  transform: scale(1.1);
+}
+
+.favouriteButton.favourited {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.favouriteButton.favourited:hover {
+  background: rgba(251, 191, 36, 0.3);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+:global([data-theme="light"]) .favouriteButton {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.4);
+}
+
+:global([data-theme="light"]) .favouriteButton:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #f59e0b;
+}
+
+:global([data-theme="light"]) .favouriteButton.favourited {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
 }
