@@ -112,7 +112,7 @@ docker run -d \
   -v enigma-data:/app/data \
   -e SESSION_SECRET=$(openssl rand -hex 32) \
   -e FRONTEND_URL=http://localhost:3000 \
-  ianfhunter/enigma:latest
+  boopboopboop/enigma:latest
 ```
 
 **With docker-compose:**
