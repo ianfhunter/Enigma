@@ -27,6 +27,7 @@ RUN npm ci
 COPY src ./src
 COPY public ./public
 COPY datasets ./datasets
+COPY scripts ./scripts
 COPY index.html vite.config.js eslint.config.js ./
 
 # Build frontend
