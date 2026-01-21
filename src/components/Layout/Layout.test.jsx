@@ -23,7 +23,8 @@ describe('Layout surprise button styles', () => {
 
 describe('Layout header markup', () => {
   it('wraps the surprise label in the surpriseText span', () => {
-    expect(layoutJsx).toContain('<span className={styles.surpriseText}>Surprise Me!</span>');
+    // The surprise text uses i18n translation: t('header.surpriseMe')
+    expect(layoutJsx).toContain('<span className={styles.surpriseText}>{t(\'header.surpriseMe\')}</span>');
   });
 });
 

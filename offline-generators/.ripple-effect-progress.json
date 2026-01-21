@@ -1,0 +1,17 @@
+{
+  "10x10-easy": {
+    "lastSeed": 5000000,
+    "count": 20,
+    "complete": true
+  },
+  "10x10-medium": {
+    "lastSeed": 5000000,
+    "count": 0,
+    "complete": true
+  },
+  "10x10-hard": {
+    "lastSeed": 5000000,
+    "count": 0,
+    "complete": true
+  }
+}

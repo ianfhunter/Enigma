@@ -152,6 +152,7 @@ docker-compose up -d
 - `FRONTEND_URL` (optional) - Frontend URL for CORS. Defaults to `http://localhost:5173`
 - `DB_PATH` (optional) - Database path. Defaults to `/app/data/enigma.db`
 - `PORT` (optional) - Server port. Defaults to `3000`
+- `DEFAULT_LANGUAGE` (optional) - Default interface language for new users. Options: `en` (English), `es` (Spanish). Defaults to `en`. Users can change this in Settings.
 
 **Data Persistence:**
 The container stores data in `/app/data`. Use a Docker volume (as shown above) to persist your database and user data between container restarts.
@@ -174,6 +175,11 @@ If you prefer to build the image yourself:
 ```bash
 docker build -t enigma .
 docker run -p 3000:3000 -v enigma-data:/app/data enigma
+```
+
+**Build with a custom default language:**
+```bash
+docker build --build-arg DEFAULT_LANGUAGE=es -t enigma .
 ```
 
 ---

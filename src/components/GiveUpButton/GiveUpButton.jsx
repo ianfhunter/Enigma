@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './GiveUpButton.module.css';
 
 /**
@@ -5,7 +6,7 @@ import styles from './GiveUpButton.module.css';
  * @param {Object} props
  * @param {function} props.onGiveUp - Callback when give up is confirmed
  * @param {boolean} [props.disabled] - Whether the button is disabled
- * @param {string} [props.label] - Custom button label
+ * @param {string} [props.label] - Custom button label (overrides translation)
  * @param {boolean} [props.requireConfirm] - Require double-click/confirmation
  * @param {string} [props.className] - Additional CSS class
  * @param {'default'|'compact'|'text'} [props.variant] - Button style variant
@@ -13,16 +14,19 @@ import styles from './GiveUpButton.module.css';
 export default function GiveUpButton({
   onGiveUp,
   disabled = false,
-  label = 'Give Up',
+  label,
   requireConfirm = false,
   className = '',
   variant = 'default',
 }) {
+  const { t } = useTranslation();
+  const displayLabel = label || t('common.giveUp');
+
   const handleClick = () => {
     if (disabled) return;
 
     if (requireConfirm) {
-      const confirmed = window.confirm('Are you sure you want to give up? The solution will be revealed.');
+      const confirmed = window.confirm(t('common.giveUpConfirm'));
       if (!confirmed) return;
     }
 
@@ -35,10 +39,10 @@ export default function GiveUpButton({
       className={`${styles.button} ${styles[variant]} ${className}`}
       onClick={handleClick}
       disabled={disabled}
-      aria-label={label}
+      aria-label={displayLabel}
     >
       <span className={styles.icon} aria-hidden="true">🏳️</span>
-      <span className={styles.label}>{label}</span>
+      <span className={styles.label}>{displayLabel}</span>
     </button>
   );
 }

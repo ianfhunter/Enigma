@@ -5,6 +5,12 @@
 #
 # Build: docker build -t enigma .
 # Run:   docker run -p 3000:3000 -v enigma-data:/app/data enigma
+#
+# Build with custom default language:
+#   docker build --build-arg DEFAULT_LANGUAGE=es -t enigma .
+#
+# Supported languages: en (English), es (Spanish/Español)
+# Users can always change their language preference in Settings.
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
@@ -14,6 +20,11 @@ FROM node:22-alpine AS frontend-builder
 
 # Increase Node memory limit for large builds
 ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Build arguments for customization
+# DEFAULT_LANGUAGE: Set the default interface language (en, es, etc.)
+ARG DEFAULT_LANGUAGE=en
+ENV VITE_DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE}
 
 WORKDIR /app
 
