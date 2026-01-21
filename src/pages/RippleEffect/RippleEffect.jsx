@@ -5,34 +5,30 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import Timer from '../../components/Timer';
-import puzzleDataset from '@datasets/suguruPuzzles_bundled.json';
-import styles from './Suguru.module.css';
+import SeedDisplay from '../../components/SeedDisplay';
+import puzzleDataset from '@datasets/rippleEffectPuzzles.json';
+import styles from './RippleEffect.module.css';
 
 const GRID_SIZES = {
   '6×6': 6,
-  '7×7': 7,
   '8×8': 8,
-  '9×9': 9,
   '10×10': 10,
 };
 
 // Load a puzzle from the curated dataset
 function loadDatasetPuzzle(size, usedIds = new Set()) {
   // Filter puzzles by size, excluding already used ones
-  const available = puzzleDataset.filter(p => p.size === size && !usedIds.has(p.id));
+  const available = puzzleDataset.puzzles.filter(p => p.rows === size && !usedIds.has(p.id));
 
   // Fall back to all puzzles of this size if we've used them all
   const candidates = available.length > 0
     ? available
-    : puzzleDataset.filter(p => p.size === size);
+    : puzzleDataset.puzzles.filter(p => p.rows === size);
 
   if (candidates.length === 0) return null;
 
   // Pick a random puzzle
   const puzzleData = candidates[Math.floor(Math.random() * candidates.length)];
-
-  // Convert to our internal format
-  const regionGrid = puzzleData.regions;
 
   // Build regions array from regionCells
   const regions = Object.entries(puzzleData.regionCells).map(([id, cells]) => ({
@@ -47,57 +43,69 @@ function loadDatasetPuzzle(size, usedIds = new Set()) {
   );
 
   return {
-    regionGrid,
+    regionGrid: puzzleData.regions,
     regions,
     solution: puzzleData.solution,
     puzzle,
     puzzleId: puzzleData.id,
-    source: puzzleData.source,
-    attribution: puzzleData.attribution
+    seed: puzzleData.seed,
+    difficulty: puzzleData.difficulty
   };
 }
 
+// Check for Ripple Effect constraint violations
 function checkValidity(grid, regionGrid, regions, size) {
   const errors = new Set();
 
-  // Check no touching same numbers (8 neighbors)
+  // Check distance constraint: same number N in row/col must have at least N cells between
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      if (grid[r][c] === 0) continue;
+      const value = grid[r][c];
+      if (value === 0) continue;
 
-      for (let dr = -1; dr <= 1; dr++) {
-        for (let dc = -1; dc <= 1; dc++) {
-          if (dr === 0 && dc === 0) continue;
-          const nr = r + dr;
-          const nc = c + dc;
-          if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
-            if (grid[nr][nc] === grid[r][c]) {
-              errors.add(`${r},${c}`);
-              errors.add(`${nr},${nc}`);
-            }
+      // Check horizontal (same row)
+      for (let c2 = c + 1; c2 < size; c2++) {
+        if (grid[r][c2] === value) {
+          const distance = c2 - c - 1; // cells between them
+          if (distance < value) {
+            errors.add(`${r},${c}`);
+            errors.add(`${r},${c2}`);
+          }
+        }
+      }
+
+      // Check vertical (same column)
+      for (let r2 = r + 1; r2 < size; r2++) {
+        if (grid[r2][c] === value) {
+          const distance = r2 - r - 1; // cells between them
+          if (distance < value) {
+            errors.add(`${r},${c}`);
+            errors.add(`${r2},${c}`);
           }
         }
       }
     }
   }
 
-  // Check region constraints
+  // Check region constraints: no duplicates in same region
   for (const region of regions) {
-    const seen = new Set();
+    const seen = new Map();
     for (const [r, c] of region.cells) {
-      if (grid[r][c] === 0) continue;
-      if (grid[r][c] > region.size) {
+      const value = grid[r][c];
+      if (value === 0) continue;
+
+      // Check if value exceeds room size
+      if (value > region.size) {
         errors.add(`${r},${c}`);
       }
-      if (seen.has(grid[r][c])) {
-        // Duplicate in region
-        for (const [rr, cc] of region.cells) {
-          if (grid[rr][cc] === grid[r][c]) {
-            errors.add(`${rr},${cc}`);
-          }
-        }
+
+      // Check for duplicates
+      if (seen.has(value)) {
+        errors.add(`${r},${c}`);
+        errors.add(seen.get(value));
+      } else {
+        seen.set(value, `${r},${c}`);
       }
-      seen.add(grid[r][c]);
     }
   }
 
@@ -107,6 +115,8 @@ function checkValidity(grid, regionGrid, regions, size) {
 function checkSolved(grid, solution, size) {
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
+      // Must have all cells filled (no empty cells)
+      if (grid[r][c] === 0) return false;
       if (grid[r][c] !== solution[r][c]) return false;
     }
   }
@@ -126,8 +136,8 @@ function getRegionBorders(r, c, regionGrid, size) {
   return borders;
 }
 
-export default function Suguru() {
-  const [sizeKey, setSizeKey] = useState('6×6');
+export default function RippleEffect() {
+  const [sizeKey, setSizeKey] = useState('8×8');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
@@ -145,7 +155,7 @@ export default function Suguru() {
   const puzzleCounts = useMemo(() => {
     const counts = {};
     for (const s of Object.values(GRID_SIZES)) {
-      counts[s] = puzzleDataset.filter(p => p.size === s).length;
+      counts[s] = puzzleDataset.puzzles.filter(p => p.rows === s).length;
     }
     return counts;
   }, []);
@@ -205,9 +215,10 @@ export default function Suguru() {
     const { row, col } = selectedCell;
     if (puzzleData.puzzle[row][col] !== 0) return;
 
+    // Get the room this cell belongs to
     const regionId = puzzleData.regionGrid[row][col];
     const region = puzzleData.regions.find(r => r.id === regionId);
-    if (num > region.size) return;
+    if (num > region.size) return; // Can't exceed room size
 
     setGrid(prev => {
       const newGrid = prev.map(r => [...r]);
@@ -237,37 +248,56 @@ export default function Suguru() {
         handleNumberInput(num);
       } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
         handleClear();
+      } else if (e.key === 'ArrowUp' && selectedCell.row > 0) {
+        setSelectedCell(prev => ({ ...prev, row: prev.row - 1 }));
+      } else if (e.key === 'ArrowDown' && selectedCell.row < size - 1) {
+        setSelectedCell(prev => ({ ...prev, row: prev.row + 1 }));
+      } else if (e.key === 'ArrowLeft' && selectedCell.col > 0) {
+        setSelectedCell(prev => ({ ...prev, col: prev.col - 1 }));
+      } else if (e.key === 'ArrowRight' && selectedCell.col < size - 1) {
+        setSelectedCell(prev => ({ ...prev, col: prev.col + 1 }));
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCell, gameState]);
+  }, [selectedCell, gameState, size]);
 
   if (!puzzleData) return null;
 
   // Prevent rendering when grid size doesn't match current size (during size transitions)
   if (grid.length !== size || puzzleData.regionGrid.length !== size) return null;
 
-  // Color palette for regions
+  // Color palette for regions - softer colors that work well together
   const colors = [
-    'rgba(239, 68, 68, 0.2)',
-    'rgba(34, 197, 94, 0.2)',
-    'rgba(59, 130, 246, 0.2)',
-    'rgba(168, 85, 247, 0.2)',
-    'rgba(234, 179, 8, 0.2)',
-    'rgba(236, 72, 153, 0.2)',
-    'rgba(20, 184, 166, 0.2)',
-    'rgba(249, 115, 22, 0.2)',
-    'rgba(99, 102, 241, 0.2)',
-    'rgba(132, 204, 22, 0.2)',
+    'rgba(99, 179, 237, 0.25)',   // blue
+    'rgba(154, 230, 180, 0.25)', // green
+    'rgba(246, 173, 85, 0.25)',  // orange
+    'rgba(183, 148, 244, 0.25)', // purple
+    'rgba(252, 129, 129, 0.25)', // red
+    'rgba(129, 230, 217, 0.25)', // teal
+    'rgba(251, 207, 232, 0.25)', // pink
+    'rgba(253, 230, 138, 0.25)', // yellow
+    'rgba(165, 180, 252, 0.25)', // indigo
+    'rgba(167, 243, 208, 0.25)', // emerald
   ];
+
+  // Get max value for current room (for number pad)
+  const getMaxForSelectedCell = () => {
+    if (!selectedCell) return 5;
+    const regionId = puzzleData.regionGrid[selectedCell.row][selectedCell.col];
+    const region = puzzleData.regions.find(r => r.id === regionId);
+    return region ? region.size : 5;
+  };
+
+  const maxNum = getMaxForSelectedCell();
 
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Suguru"
-        instructions="Fill each region with numbers 1 to N (where N = region size). Same numbers cannot touch, even diagonally."
+        title="Ripple Effect"
+        emoji="🌊"
+        instructions="Fill each room with numbers 1 to N (room size). If the same number appears twice in a row or column, there must be at least that many cells between them."
       />
 
       <SizeSelector
@@ -282,10 +312,12 @@ export default function Suguru() {
       <div className={styles.gameArea}>
         <div className={styles.statusBar}>
           <Timer seconds={timer} />
-          {puzzleData?.source && (
-            <div className={styles.attribution}>
-              Puzzle from {puzzleData.source}
-            </div>
+          {puzzleData?.seed && (
+            <SeedDisplay
+              seed={puzzleData.seed}
+              variant="compact"
+              showShare={true}
+            />
           )}
         </div>
 
@@ -301,6 +333,11 @@ export default function Suguru() {
                 const regionId = puzzleData.regionGrid[r][c];
                 const bgColor = colors[regionId % colors.length];
 
+                // Highlight same number in row/col when selected
+                const isHighlighted = selectedCell && value !== 0 &&
+                  (selectedCell.row === r || selectedCell.col === c) &&
+                  !(selectedCell.row === r && selectedCell.col === c);
+
                 return (
                   <div
                     key={c}
@@ -309,6 +346,7 @@ export default function Suguru() {
                       ${isGiven ? styles.given : ''}
                       ${isSelected ? styles.selected : ''}
                       ${hasError ? styles.error : ''}
+                      ${isHighlighted ? styles.highlighted : ''}
                       ${borders.includes('top') ? styles.borderTop : ''}
                       ${borders.includes('bottom') ? styles.borderBottom : ''}
                       ${borders.includes('left') ? styles.borderLeft : ''}
@@ -326,16 +364,23 @@ export default function Suguru() {
         </div>
 
         <div className={styles.numberPad}>
-          {[1, 2, 3, 4, 5].map(num => (
+          {Array.from({ length: Math.min(maxNum, 6) }, (_, i) => i + 1).map(num => (
             <button
               key={num}
               className={styles.numBtn}
               onClick={() => handleNumberInput(num)}
+              disabled={gameState !== 'playing'}
             >
               {num}
             </button>
           ))}
-          <button className={styles.numBtn} onClick={handleClear}>✕</button>
+          <button
+            className={styles.numBtn}
+            onClick={handleClear}
+            disabled={gameState !== 'playing'}
+          >
+            ✕
+          </button>
         </div>
 
         {gameState === 'won' && (
@@ -386,6 +431,11 @@ export default function Suguru() {
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle
           </button>
+        </div>
+
+        <div className={styles.ruleReminder}>
+          <strong>Ripple Rule:</strong> If two identical numbers N appear in the same row or column,
+          there must be at least N cells between them.
         </div>
       </div>
     </div>

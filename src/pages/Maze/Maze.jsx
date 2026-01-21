@@ -311,12 +311,13 @@ export default function Maze() {
           <button className={styles.controlBtn} onClick={() => movePlayer(0, 1)}>↓</button>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Maze Complete!"
-          winMessage={`Time: ${formatTime(timer)} • Moves: ${moves}${moves === solution.length - 1 ? ' • 🏆 Perfect Path!' : ''}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Maze Complete!"
+            message={`Time: ${formatTime(timer)} • Moves: ${moves}${moves === solution.length - 1 ? ' • 🏆 Perfect Path!' : ''}`}
+          />
+        )}
 
         <div className={styles.buttons}>
           <GiveUpButton

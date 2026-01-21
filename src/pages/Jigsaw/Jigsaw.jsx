@@ -626,12 +626,13 @@ export default function Jigsaw() {
           }).map(renderPiece)}
         </svg>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={() => initGame(difficulty)}
-          winTitle="Puzzle Complete!"
-          winMessage="Well done!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Puzzle Complete!"
+            message="Well done!"
+          />
+        )}
       </div>
 
       <button className={styles.newGameBtn} onClick={() => initGame(difficulty)}>

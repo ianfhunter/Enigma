@@ -412,12 +412,13 @@ export default function Campixu() {
           </div>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onPlayAgain={initGame}
-          winTitle="Camp Complete!"
-          winMessage="All tents perfectly placed!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Camp Complete!"
+            message="All tents perfectly placed!"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

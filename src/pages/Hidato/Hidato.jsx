@@ -379,19 +379,21 @@ export default function Hidato() {
           )}
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 Puzzle Solved!"
-          message={`Path complete from 1 to ${puzzleData.maxNum}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message={`Path complete from 1 to ${puzzleData.maxNum}`}
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'revealed'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Better luck next time!"
-        />
+        {gameState === 'revealed' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Better luck next time!"
+          />
+        )}
 
         <div className={styles.numberPad}>
           {Array.from({ length: puzzleData.maxNum }, (_, i) => i + 1).map(num => {

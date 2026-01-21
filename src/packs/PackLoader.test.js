@@ -392,9 +392,9 @@ describe('PackLoader', () => {
       expect(pathsRegionsPack.categories[1].name).toBe('Region Division');
     });
 
-    it('should have 21 games total (13 + 8)', () => {
-      expect(pathsRegionsPack.gameCount).toBe(21);
-      expect(pathsRegionsPack.allGames.length).toBe(21);
+    it('should have 22 games total (13 + 9)', () => {
+      expect(pathsRegionsPack.gameCount).toBe(22);
+      expect(pathsRegionsPack.allGames.length).toBe(22);
     });
 
     it('should have expected Loop & Path games', () => {
@@ -437,7 +437,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('paths-regions');
-      expect(games.length).toBe(21);
+      expect(games.length).toBe(22);
       expect(games.some(g => g.slug === 'numberlink')).toBe(true);
       expect(games.some(g => g.slug === 'shikaku')).toBe(true);
     });

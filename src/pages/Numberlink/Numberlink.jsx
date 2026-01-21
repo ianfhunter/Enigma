@@ -490,19 +490,21 @@ export default function Numberlink() {
           )}
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 All Connected!"
-          message="Puzzle solved perfectly"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 All Connected!"
+            message="Puzzle solved perfectly"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Better luck next time!"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Better luck next time!"
+          />
+        )}
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>

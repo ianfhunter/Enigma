@@ -628,14 +628,20 @@ export default function LetterWeb() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState === 'revealed' ? 'gaveUp' : gameState}
-          onNewGame={() => initGame(true)}
-          winTitle="Congratulations!"
-          winMessage={`Solved in ${words.length} words!`}
-          gaveUpTitle="Solution Revealed"
-          gaveUpMessage={`The solution used ${solution.length} words.`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Congratulations!"
+            message={`Solved in ${words.length} words!`}
+          />
+        )}
+        {gameState === 'revealed' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message={`The solution used ${solution.length} words.`}
+          />
+        )}
 
         <div className={styles.bottomButtons}>
           {gameState === 'playing' && (

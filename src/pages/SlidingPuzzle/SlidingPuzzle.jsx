@@ -256,12 +256,13 @@ export default function SlidingPuzzle() {
           </div>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Puzzle Solved!"
-          winMessage={`🎉 Solved in ${moves} moves and ${formatTime(time)}!`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Puzzle Solved!"
+            message={`🎉 Solved in ${moves} moves and ${formatTime(time)}!`}
+          />
+        )}
 
         <button className={styles.shuffleBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'Shuffle'}

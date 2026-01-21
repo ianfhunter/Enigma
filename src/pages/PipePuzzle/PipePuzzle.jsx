@@ -287,12 +287,13 @@ export default function PipePuzzle() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="All Connected!"
-          winMessage={`Solved in ${moves} moves`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="All Connected!"
+            message={`Solved in ${moves} moves`}
+          />
+        )}
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'New Puzzle'}

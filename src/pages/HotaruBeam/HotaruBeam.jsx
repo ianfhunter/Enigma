@@ -742,11 +742,17 @@ export default function HotaruBeam() {
           </svg>
         </div>
 
-        <GameResult
-          gameState={gameState === 'revealed' ? 'gaveUp' : gameState}
-          onPlayAgain={initGame}
-          winMessage="All loops complete!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            message="All loops complete!"
+          />
+        )}
+        {gameState === 'revealed' && (
+          <GameResult
+            state="gaveup"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

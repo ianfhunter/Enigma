@@ -431,14 +431,20 @@ export default function StainedGlass() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Beautiful!"
-          winMessage="Your stained glass is complete!"
-          gaveUpTitle="Solution Revealed"
-          gaveUpMessage="Here's the solution."
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Beautiful!"
+            message="Your stained glass is complete!"
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Here's the solution."
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

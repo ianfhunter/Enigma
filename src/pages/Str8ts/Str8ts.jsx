@@ -686,19 +686,21 @@ export default function Str8ts() {
           </button>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 Excellent!"
-          message="You solved the Str8ts puzzle!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 Excellent!"
+            message="You solved the Str8ts puzzle!"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Better luck next time!"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Better luck next time!"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

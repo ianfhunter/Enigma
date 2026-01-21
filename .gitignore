@@ -50,11 +50,15 @@ docker-compose.yml
 # Plugin data
 .plugins/
 
+# Generator progress files
+*-progress.json
+
 # Auto-generated community packs registry
 
 src/packs/installedCommunityPacks.js
 
 
+.venv/
 venv/
 __pycache__/
 *.pyc

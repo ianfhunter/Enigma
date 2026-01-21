@@ -145,12 +145,13 @@ export default function LightsOut() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="All Lights Out!"
-          winMessage={`Solved in ${moves} moves!`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="All Lights Out!"
+            message={`Solved in ${moves} moves!`}
+          />
+        )}
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'New Puzzle'}

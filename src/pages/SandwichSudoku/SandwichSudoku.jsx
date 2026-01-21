@@ -498,14 +498,19 @@ export default function SandwichSudoku() {
           <button className={styles.numBtn} onClick={handleClear}>✕</button>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Puzzle Solved!"
-          winMessage={`Completed in ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
-          winEmoji="🥪"
-          gaveUpTitle="Solution Revealed"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🥪 Puzzle Solved!"
+            message={`Completed in ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

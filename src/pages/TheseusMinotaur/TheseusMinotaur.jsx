@@ -587,14 +587,20 @@ export default function TheseusMinotaur() {
           <button className={styles.controlBtn} onClick={() => moveTheseus(0, 1)}>↓</button>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={() => generateNewPuzzle(difficulty)}
-          winTitle="Escape Successful!"
-          winMessage={`Completed in ${moves} moves (optimal: ${puzzle.minMoves})${moves === puzzle.minMoves ? ' • 🏆 Perfect Solution!' : ''}`}
-          lostTitle="Caught by the Minotaur!"
-          lostMessage="Try again or undo your last move"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Escape Successful!"
+            message={`Completed in ${moves} moves (optimal: ${puzzle.minMoves})${moves === puzzle.minMoves ? ' • 🏆 Perfect Solution!' : ''}`}
+          />
+        )}
+        {gameState === 'lost' && (
+          <GameResult
+            state="lost"
+            title="Caught by the Minotaur!"
+            message="Try again or undo your last move"
+          />
+        )}
 
         <div className={styles.buttons}>
           <button

@@ -426,16 +426,20 @@ export default function Einstein() {
         </div>
       </div>
 
-      <GameResult
-        gameState={gameState}
-        onNewGame={initGame}
-        winTitle="Puzzle Solved!"
-        winMessage="You cracked the Einstein puzzle!"
-        winEmoji="🧠"
-        gaveUpTitle="Solution Revealed"
-        gaveUpMessage="Better luck next time!"
-        overlay={true}
-      />
+      {gameState === 'won' && (
+        <GameResult
+          state="won"
+          title="🧠 Puzzle Solved!"
+          message="You cracked the Einstein puzzle!"
+        />
+      )}
+      {gameState === 'gaveUp' && (
+        <GameResult
+          state="gaveup"
+          title="Solution Revealed"
+          message="Better luck next time!"
+        />
+      )}
 
       <div className={styles.controls}>
         <div className={styles.toggleGroup}>

@@ -9,7 +9,7 @@ Also known as: Bulls and Cows, Cows and Bulls
 
 ## Category
 
-Cipher & Decode
+Classic Logic
 
 ## How to Play
 

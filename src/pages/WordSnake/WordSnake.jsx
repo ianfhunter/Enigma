@@ -266,14 +266,20 @@ export default function WordSnake() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Word Found!"
-          winMessage={puzzleData.word}
-          gaveUpTitle="Solution Revealed"
-          gaveUpMessage={`The word was: ${puzzleData.word}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Word Found!"
+            message={puzzleData.word}
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message={`The word was: ${puzzleData.word}`}
+          />
+        )}
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>

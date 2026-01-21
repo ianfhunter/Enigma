@@ -349,12 +349,13 @@ export default function WordSearch() {
           </div>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={() => initGame(true)}
-          winTitle="All Words Found!"
-          winMessage="🎉 You found all the words!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="All Words Found!"
+            message="🎉 You found all the words!"
+          />
+        )}
 
         <button className={styles.newGameBtn} onClick={() => initGame(true)}>
           New Puzzle

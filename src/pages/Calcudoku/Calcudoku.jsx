@@ -532,19 +532,21 @@ export default function Calcudoku() {
           </button>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 Puzzle Solved!"
-          message={`Completed in ${formatTime(timer)}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message={`Completed in ${formatTime(timer)}`}
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Better luck next time!"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Better luck next time!"
+          />
+        )}
 
         <div className={styles.buttons}>
           <GiveUpButton

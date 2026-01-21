@@ -163,10 +163,11 @@ export default function JapaneseSums() {
         />
       </div>
 
-      <GameResult
-        gameState={gameState}
-        onPlayAgain={handleNewPuzzle}
-      />
+      {gameState === 'won' && (
+        <GameResult
+          state="won"
+        />
+      )}
 
       {seed && (
         <div className={styles.seedContainer}>

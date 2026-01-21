@@ -448,13 +448,19 @@ export default function KillerSudoku() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState === 'gave_up' ? 'gaveUp' : gameState}
-          onNewGame={initGame}
-          winTitle="Puzzle Solved!"
-          winMessage={`Time: ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
-          gaveUpTitle="Solution Revealed"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Puzzle Solved!"
+            message={`Time: ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
+          />
+        )}
+        {gameState === 'gave_up' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+          />
+        )}
 
         <div className={styles.controls}>
           <button

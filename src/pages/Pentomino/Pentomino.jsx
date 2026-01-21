@@ -769,14 +769,20 @@ export default function Pentomino() {
           />
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={handleNewPuzzle}
-          winTitle="Congratulations!"
-          winMessage="You solved the pentomino puzzle!"
-          gaveUpTitle="Solution Shown"
-          gaveUpMessage="Here's a possible solution. Try another puzzle!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Congratulations!"
+            message="You solved the pentomino puzzle!"
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Shown"
+            message="Here's a possible solution. Try another puzzle!"
+          />
+        )}
       </div>
     </div>
   );

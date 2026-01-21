@@ -458,18 +458,20 @@ export default function Kakuro() {
           </button>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 Puzzle Solved!"
-          message={`Completed in ${formatTime(timer)}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message={`Completed in ${formatTime(timer)}`}
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+          />
+        )}
 
         <div className={styles.buttonRow}>
           <GiveUpButton

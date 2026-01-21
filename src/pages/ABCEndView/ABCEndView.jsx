@@ -480,11 +480,12 @@ export default function ABCEndView() {
           <button className={styles.letterBtn} onClick={handleClear}>✕</button>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onPlayAgain={initGame}
-          stats={gameState === 'won' ? [{ label: 'Time', value: formatTime(timer) }] : undefined}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            stats={[{ label: 'Time', value: formatTime(timer) }]}
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

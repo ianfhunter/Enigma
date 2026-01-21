@@ -278,18 +278,20 @@ export default function Galaxies() {
             </div>
           </div>
         )}
-        <GameResult
-          show={gameState === 'solved'}
-          type="won"
-          title="🎉 Solved!"
-          inline
-        />
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution revealed"
-          inline
-        />
+        {gameState === 'solved' && (
+          <GameResult
+            state="won"
+            title="🎉 Solved!"
+            variant="inline"
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution revealed"
+            variant="inline"
+          />
+        )}
         {gameState === 'playing' && (
           <div className={styles.status}>
             {bad.size > 0 ? (

@@ -479,11 +479,12 @@ export default function InshiNoHeya() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onPlayAgain={initGame}
-          winMessage="All products correct!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            message="All products correct!"
+          />
+        )}
 
         <div className={styles.numberPad}>
           {Array.from({ length: puzzleSize }, (_, i) => i + 1).map(num => (

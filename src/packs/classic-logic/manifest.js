@@ -15,7 +15,7 @@ import rangeIcon from '../../assets/icons/range.svg';
 import sequenceIcon from '../../assets/icons/sequence.svg';
 import magnetsIcon from '../../assets/icons/magnets.svg';
 import memorizeItemsIcon from '../../assets/icons/memorizeitems.svg';
-import guessIcon from '../../assets/icons/guess.svg';
+import codebreakerIcon from '../../assets/icons/codebreaker.svg';
 import memorymatchIcon from '../../assets/icons/memorymatch.svg';
 import chimptestIcon from '../../assets/icons/chimptest.svg';
 import navalbattleIcon from '../../assets/icons/navalbattle.svg';
@@ -103,15 +103,16 @@ export const categories = [
         component: () => import('../../pages/Blackbox'),
       },
       {
-        title: 'Guess',
-        slug: 'guess',
-        description: 'Make guesses and use the clues to deduce the hidden answer.',
-        icon: guessIcon,
-        emojiIcon: '❓',
-        colors: { primary: '#fbbf24', secondary: '#f59e0b' },
-        gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+        title: 'CodeBreaker',
+        slug: 'code-breaker',
+        aliases: ['Bulls and Cows', 'Cows and Bulls', 'Mastermind'],
+        description: 'Crack the secret color code using logic and deduction.',
+        icon: codebreakerIcon,
+        emojiIcon: '🧠',
+        colors: { primary: '#e879f9', secondary: '#d946ef' },
+        gradient: 'linear-gradient(135deg, #e879f9 0%, #d946ef 100%)',
         version: 'v1.0',
-        component: () => import('../../pages/Guess'),
+        component: () => import('../../pages/CodeBreaker'),
       },
       {
         title: 'Dominosa',
