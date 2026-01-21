@@ -281,18 +281,20 @@ export default function Kurotto() {
           )}
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="⭕ Puzzle Solved!"
-          message="All clues satisfied!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="⭕ Puzzle Solved!"
+            message="All clues satisfied!"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

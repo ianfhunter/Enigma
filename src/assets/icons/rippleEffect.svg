@@ -1,0 +1,50 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ripple Effect: Fill rooms with 1-N, same numbers must be N cells apart -->
+
+  <!-- Background -->
+  <rect x="1" y="1" width="22" height="22" rx="2" fill="#eff6ff"/>
+
+  <!-- Grid lines -->
+  <line x1="8" y1="1" x2="8" y2="23" stroke="#bfdbfe" stroke-width="0.5"/>
+  <line x1="15" y1="1" x2="15" y2="23" stroke="#bfdbfe" stroke-width="0.5"/>
+  <line x1="1" y1="8" x2="23" y2="8" stroke="#bfdbfe" stroke-width="0.5"/>
+  <line x1="1" y1="15" x2="23" y2="15" stroke="#bfdbfe" stroke-width="0.5"/>
+
+  <!-- Region 1 (top-left, 4 cells) - light blue -->
+  <path d="M1 1 L15 1 L15 8 L1 8 Z" fill="#dbeafe" stroke="#3182ce" stroke-width="1.5"/>
+
+  <!-- Region 2 (top-right + middle-right, 4 cells) - blue-green -->
+  <path d="M15 1 L23 1 L23 15 L15 15 Z" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
+
+  <!-- Region 3 (middle-left, 2 cells) -->
+  <path d="M1 8 L8 8 L8 15 L1 15 Z" fill="#e0f2fe" stroke="#3182ce" stroke-width="1.5"/>
+
+  <!-- Region 4 (center, 2 cells) -->
+  <path d="M8 8 L15 8 L15 15 L8 15 Z" fill="#dbeafe" stroke="#3182ce" stroke-width="1.5"/>
+
+  <!-- Region 5 (bottom row, 3 cells) -->
+  <path d="M1 15 L23 15 L23 23 L1 23 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5"/>
+
+  <!-- Numbers in Region 1 -->
+  <text x="4.5" y="5.5" font-family="Arial" font-size="5" font-weight="bold" fill="#1e40af" text-anchor="middle">2</text>
+  <text x="11.5" y="5.5" font-family="Arial" font-size="5" font-weight="bold" fill="#1e40af" text-anchor="middle">1</text>
+
+  <!-- Numbers in Region 2 -->
+  <text x="19" y="5.5" font-family="Arial" font-size="5" font-weight="bold" fill="#0e7490" text-anchor="middle">3</text>
+  <text x="19" y="12" font-family="Arial" font-size="5" font-weight="bold" fill="#0e7490" text-anchor="middle">1</text>
+
+  <!-- Numbers in Region 3 -->
+  <text x="4.5" y="12" font-family="Arial" font-size="5" font-weight="bold" fill="#1e40af" text-anchor="middle">1</text>
+
+  <!-- Numbers in Region 4 -->
+  <text x="11.5" y="12" font-family="Arial" font-size="5" font-weight="bold" fill="#1e40af" text-anchor="middle">2</text>
+
+  <!-- Numbers in Region 5 (bottom) -->
+  <text x="4.5" y="19.5" font-family="Arial" font-size="5" font-weight="bold" fill="#075985" text-anchor="middle">3</text>
+  <text x="11.5" y="19.5" font-family="Arial" font-size="5" font-weight="bold" fill="#075985" text-anchor="middle">2</text>
+  <text x="19" y="19.5" font-family="Arial" font-size="5" font-weight="bold" fill="#075985" text-anchor="middle">1</text>
+
+  <!-- Ripple effect visualization (concentric arcs) -->
+  <circle cx="4.5" cy="12" r="2" fill="none" stroke="#60a5fa" stroke-width="0.3" opacity="0.5"/>
+  <circle cx="4.5" cy="12" r="4" fill="none" stroke="#60a5fa" stroke-width="0.3" opacity="0.3"/>
+</svg>

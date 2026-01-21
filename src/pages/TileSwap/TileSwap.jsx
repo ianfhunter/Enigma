@@ -294,12 +294,13 @@ export default function TileSwap() {
           </div>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={() => initGame(size)}
-          winTitle="Puzzle Complete!"
-          winMessage={`Completed in ${moves} moves!`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Puzzle Complete!"
+            message={`Completed in ${moves} moves!`}
+          />
+        )}
 
         <button className={styles.newGameBtn} onClick={() => initGame(size)}>
           New Puzzle

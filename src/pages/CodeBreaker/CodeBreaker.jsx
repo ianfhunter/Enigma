@@ -3,7 +3,9 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { createSeededRNG, parseSeedFromUrl, generateRandomSeed } from '../../enigma-sdk/seeding';
 import styles from './CodeBreaker.module.css';
 
 const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6'];
@@ -15,11 +17,12 @@ const DIFFICULTIES = {
   hard: { codeLength: 5, colorCount: 8, maxGuesses: 10 },
 };
 
-function generateSecretCode(length, colorCount) {
-  return Array.from({ length }, () => Math.floor(Math.random() * colorCount));
+export function generateSecretCode(length, colorCount, seed) {
+  const rng = createSeededRNG(seed);
+  return Array.from({ length }, () => Math.floor(rng() * colorCount));
 }
 
-function checkGuess(guess, secret) {
+export function checkGuess(guess, secret) {
   const exactMatches = []; // correct color and position
   const colorMatches = [];  // correct color, wrong position
 
@@ -60,11 +63,14 @@ export default function CodeBreaker() {
   const [selectedSlot, setSelectedSlot] = useState(0);
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
   const [stats, setStats] = usePersistedState('codebreaker-stats', { wins: 0, losses: 0 });
+  const [seed, setSeed] = useState(() => parseSeedFromUrl() || generateRandomSeed());
 
   const { codeLength, colorCount, maxGuesses } = DIFFICULTIES[difficulty];
 
-  const initGame = useCallback(() => {
-    setSecretCode(generateSecretCode(codeLength, colorCount));
+  const initGame = useCallback((customSeed = null) => {
+    const gameSeed = customSeed !== null ? customSeed : generateRandomSeed();
+    setSeed(gameSeed);
+    setSecretCode(generateSecretCode(codeLength, colorCount, gameSeed));
     setGuesses([]);
     setCurrentGuess(Array(codeLength).fill(null));
     setSelectedSlot(0);
@@ -72,8 +78,11 @@ export default function CodeBreaker() {
   }, [codeLength, colorCount]);
 
   useEffect(() => {
-    initGame();
-  }, [initGame]);
+    // Initialize with seed from URL or the generated seed
+    initGame(seed);
+    // Only run on mount, not when seed changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleColorSelect = (colorIndex) => {
     if (gameState !== 'playing') return;
@@ -171,6 +180,17 @@ export default function CodeBreaker() {
         difficulties={Object.keys(DIFFICULTIES)}
         selectedDifficulty={difficulty}
         onDifficultyChange={setDifficulty}
+      />
+
+      <SeedDisplay
+        seed={seed}
+        variant="compact"
+        onSeedChange={(newSeed) => {
+          const seedNum = typeof newSeed === 'string'
+            ? (isNaN(parseInt(newSeed, 10)) ? newSeed.split('').reduce((a, c) => a + c.charCodeAt(0), 0) : parseInt(newSeed, 10))
+            : newSeed;
+          initGame(seedNum);
+        }}
       />
 
       <div className={styles.gameArea}>
@@ -274,15 +294,26 @@ export default function CodeBreaker() {
           </div>
         )}
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Code Cracked!"
-          winMessage={`You cracked the code in ${guesses.length} guesses!`}
-          lostTitle="Game Over!"
-          lostMessage="The code was revealed above."
-          gaveUpTitle="Code Revealed"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Code Cracked!"
+            message={`You cracked the code in ${guesses.length} guesses!`}
+          />
+        )}
+        {gameState === 'lost' && (
+          <GameResult
+            state="lost"
+            title="Game Over!"
+            message="The code was revealed above."
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Code Revealed"
+          />
+        )}
 
         <div className={styles.buttons}>
           <GiveUpButton

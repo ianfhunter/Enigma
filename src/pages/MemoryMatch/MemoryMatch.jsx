@@ -207,12 +207,13 @@ export default function MemoryMatch() {
           })}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Congratulations!"
-          winMessage={`Completed in ${moves} moves and ${formatTime(timer)}${currentBest && moves === currentBest.moves && timer <= currentBest.time ? ' • 🏆 New Best Score!' : ''}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Congratulations!"
+            message={`Completed in ${moves} moves and ${formatTime(timer)}${currentBest && moves === currentBest.moves && timer <= currentBest.time ? ' • 🏆 New Best Score!' : ''}`}
+          />
+        )}
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'New Game'}

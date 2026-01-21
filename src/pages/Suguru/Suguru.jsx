@@ -338,19 +338,21 @@ export default function Suguru() {
           <button className={styles.numBtn} onClick={handleClear}>✕</button>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 Puzzle Solved!"
-          message={`Completed in ${formatTime(timer)}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message={`Completed in ${formatTime(timer)}`}
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gave_up'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Try another puzzle!"
-        />
+        {gameState === 'gave_up' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Try another puzzle!"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

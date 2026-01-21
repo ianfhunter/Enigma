@@ -545,12 +545,13 @@ export default function Tatamibari() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onPlayAgain={() => initGame()}
-          winTitle="Perfect!"
-          winMessage="All regions are valid!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Perfect!"
+            message="All regions are valid!"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

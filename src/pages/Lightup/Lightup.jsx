@@ -374,18 +374,20 @@ export default function Lightup() {
             disabled={gameState !== 'playing'}
           />
         </div>
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 Solved!"
-          inline
-        />
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          inline
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 Solved!"
+            variant="inline"
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            variant="inline"
+          />
+        )}
         {gameState === 'playing' && (
           <div className={styles.status}>
             <span>Conflicts: {bulbConflicts.size} • Unlit: {allLit ? 0 : 'some'}</span>

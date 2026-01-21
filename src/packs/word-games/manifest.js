@@ -25,7 +25,6 @@ import letterorbitIcon from '../../assets/icons/letter-orbit.svg';
 import flipquotesIcon from '../../assets/icons/flipquotes.svg';
 import cryptogramIcon from '../../assets/icons/cryptogram.svg';
 import phraseguessIcon from '../../assets/icons/phraseguess.svg';
-import codebreakerIcon from '../../assets/icons/codebreaker.svg';
 import wordarithmeticIcon from '../../assets/icons/wordarithmetic.svg';
 import dropquotesIcon from '../../assets/icons/dropquotes.svg';
 import wordsnakeIcon from '../../assets/icons/wordsnake.svg';
@@ -305,18 +304,6 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)',
         version: 'v1.0',
         component: () => import('../../pages/PhraseGuess'),
-      },
-      {
-        title: 'CodeBreaker',
-        slug: 'code-breaker',
-        aliases: ['Bulls and Cows', 'Cows and Bulls'],
-        description: 'Crack the secret color code using logic and deduction.',
-        icon: codebreakerIcon,
-        emojiIcon: '🧠',
-        colors: { primary: '#e879f9', secondary: '#d946ef' },
-        gradient: 'linear-gradient(135deg, #e879f9 0%, #d946ef 100%)',
-        version: 'v1.0',
-        component: () => import('../../pages/CodeBreaker'),
       },
       {
         title: 'Word Arithmetic',

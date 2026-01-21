@@ -362,19 +362,21 @@ export default function Shinro() {
           Gems: {showSolution ? puzzleData.gems.size : playerGems.size} / {puzzleData.gems.size}
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="💎 All Gems Found!"
-          message="You're a treasure hunter!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="💎 All Gems Found!"
+            message="You're a treasure hunter!"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Try a new puzzle!"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Try a new puzzle!"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

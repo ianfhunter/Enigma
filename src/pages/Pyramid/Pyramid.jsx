@@ -703,12 +703,13 @@ export default function Pyramid() {
           </div>
         )}
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={() => initGame(true)}
-          winTitle="All letters used! You win!"
-          winMessage={hintsUsed > 0 ? `with ${hintsUsed} hint${hintsUsed > 1 ? 's' : ''}` : ''}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="All letters used! You win!"
+            message={hintsUsed > 0 ? `with ${hintsUsed} hint${hintsUsed > 1 ? 's' : ''}` : ''}
+          />
+        )}
 
         {gameState === 'playing' && (
           <div className={styles.actionButtons}>

@@ -216,14 +216,20 @@ export default function FloodIt() {
           ))}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Board Flooded!"
-          winMessage={`You flooded the board in ${moves} moves!`}
-          lostTitle="Out of moves!"
-          lostMessage={`You reached ${percentage}% coverage.`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Board Flooded!"
+            message={`You flooded the board in ${moves} moves!`}
+          />
+        )}
+        {gameState === 'lost' && (
+          <GameResult
+            state="lost"
+            title="Out of moves!"
+            message={`You reached ${percentage}% coverage.`}
+          />
+        )}
 
         <button className={styles.newGameBtn} onClick={initGame}>
           {gameState === 'playing' ? 'New Game' : 'Play Again'}

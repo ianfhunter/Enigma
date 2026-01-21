@@ -514,12 +514,13 @@ export default function WaterPouring() {
             </div>
           )}
 
-          <GameResult
-            gameState={gameState}
-            onNewGame={generateNew}
-            winTitle="Measured!"
-            winMessage={`Completed in ${moves} moves!${puzzle.minMoves && moves === puzzle.minMoves ? ' (Perfect!)' : ''}`}
-          />
+          {gameState === 'won' && (
+            <GameResult
+              state="won"
+              title="Measured!"
+              message={`Completed in ${moves} moves!${puzzle.minMoves && moves === puzzle.minMoves ? ' (Perfect!)' : ''}`}
+            />
+          )}
 
           <div className={styles.buttons}>
             <button

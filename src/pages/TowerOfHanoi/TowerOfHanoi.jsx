@@ -165,12 +165,13 @@ export default function TowerOfHanoi() {
           ))}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Tower Complete!"
-          winMessage={`Solved in ${moves} moves!${moves === minMoves ? ' Perfect!' : ''}`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Tower Complete!"
+            message={`Solved in ${moves} moves!${moves === minMoves ? ' Perfect!' : ''}`}
+          />
+        )}
 
         <button className={styles.resetBtn} onClick={initGame}>
           {gameState === 'won' ? 'Play Again' : 'Reset'}

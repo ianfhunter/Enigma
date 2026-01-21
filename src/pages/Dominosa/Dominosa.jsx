@@ -238,18 +238,20 @@ export default function Dominosa() {
           onGiveUp={giveUp}
           disabled={solved || gaveUp}
         />
-        <GameResult
-          show={gaveUp}
-          type="gaveUp"
-          title="Solution shown"
-          inline
-        />
-        <GameResult
-          show={solved && !gaveUp}
-          type="won"
-          title="Solved!"
-          inline
-        />
+        {gaveUp && (
+          <GameResult
+            state="gaveup"
+            title="Solution shown"
+            variant="inline"
+          />
+        )}
+        {solved && !gaveUp && (
+          <GameResult
+            state="won"
+            title="Solved!"
+            variant="inline"
+          />
+        )}
         {!solved && !gaveUp && (
           <div className={styles.status}>
             <span>Placed: {usedPairs.length}/{requiredCount}</span>

@@ -368,16 +368,27 @@ export default function Categories() {
         </div>
 
         {/* Results section for end of game */}
-        <GameResult
-          gameState={gameState === 'lost' ? 'lost' : gameState}
-          onNewGame={handleNewGame}
-          winTitle="Congratulations!"
-          winMessage={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
-          lostTitle="Game Over"
-          lostMessage={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
-          gaveUpTitle="Solution Revealed"
-          gaveUpMessage={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Congratulations!"
+            message={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
+          />
+        )}
+        {gameState === 'lost' && (
+          <GameResult
+            state="lost"
+            title="Game Over"
+            message={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message={`Mistakes: ${mistakes}/${MAX_MISTAKES} • Categories found: ${solvedCategories.length}/4`}
+          />
+        )}
       </div>
     </div>
   );

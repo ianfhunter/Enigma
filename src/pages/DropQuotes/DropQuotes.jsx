@@ -266,14 +266,20 @@ export default function DropQuotes() {
           )}
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={initGame}
-          winTitle="Quote Revealed!"
-          winMessage={`"${puzzleData.quote}" — ${puzzleData.author}`}
-          gaveUpTitle="Solution Revealed"
-          gaveUpMessage="Here's the quote."
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Quote Revealed!"
+            message={`"${puzzleData.quote}" — ${puzzleData.author}`}
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Here's the quote."
+          />
+        )}
 
         <div className={styles.buttons}>
           <button className={styles.clearBtn} onClick={handleClear}>

@@ -192,12 +192,13 @@ export default function Sequence() {
           </div>
         </div>
 
-        <GameResult
-          gameState={gameState === 'gameOver' ? 'lost' : 'playing'}
-          onNewGame={startGame}
-          lostTitle="Game Over!"
-          lostMessage={`You scored ${score} ${score === 1 ? 'point' : 'points'}`}
-        />
+        {gameState === 'gameOver' && (
+          <GameResult
+            state="lost"
+            title="Game Over!"
+            message={`You scored ${score} ${score === 1 ? 'point' : 'points'}`}
+          />
+        )}
       </div>
     </div>
   );

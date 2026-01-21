@@ -566,12 +566,13 @@ export default function WordTiles() {
           </div>
         )}
 
-        <GameResult
-          gameState={gameState === 'finished' ? 'won' : 'playing'}
-          onNewGame={initGame}
-          winTitle={isNewHighScore ? '🏆 New High Score!' : 'Game Over!'}
-          winMessage={`Final Score: ${score} • ${wordsPlayed.length} words played${finalPenalty > 0 ? ` • -${finalPenalty} pts for unused tiles` : ''}`}
-        />
+        {gameState === 'finished' && (
+          <GameResult
+            state="won"
+            title={isNewHighScore ? '🏆 New High Score!' : 'Game Over!'}
+            message={`Final Score: ${score} • ${wordsPlayed.length} words played${finalPenalty > 0 ? ` • -${finalPenalty} pts for unused tiles` : ''}`}
+          />
+        )}
 
         <button className={styles.newGameBtn} onClick={initGame}>
           New Game

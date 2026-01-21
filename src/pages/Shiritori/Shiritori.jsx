@@ -391,12 +391,18 @@ export default function Shiritori() {
           <div className={styles.message}>{message}</div>
         )}
 
-        <GameResult
-          gameState={gameState === 'playerWin' ? 'won' : (gameState === 'nLose' || gameState === 'aiWin') ? 'lost' : gameState}
-          onNewGame={initGame}
-          winTitle={t.playerWin(chain.length)}
-          lostTitle={gameState === 'nLose' ? t.nLose(chain.length) : t.gameOver(chain.length)}
-        />
+        {gameState === 'playerWin' && (
+          <GameResult
+            state="won"
+            title={t.playerWin(chain.length)}
+          />
+        )}
+        {(gameState === 'nLose' || gameState === 'aiWin') && (
+          <GameResult
+            state="lost"
+            title={gameState === 'nLose' ? t.nLose(chain.length) : t.gameOver(chain.length)}
+          />
+        )}
 
         {gameState === 'aiWin' && suggestions.length > 0 && (
           <div className={styles.suggestions}>

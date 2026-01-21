@@ -194,13 +194,19 @@ export default function Eulero() {
         />
       </div>
 
-      <GameResult
-        gameState={gameState}
-        onNewGame={handleNewPuzzle}
-        winTitle="Solved!"
-        winMessage="All pairs are unique!"
-        gaveUpTitle="Solution Revealed"
-      />
+      {gameState === 'won' && (
+        <GameResult
+          state="won"
+          title="Solved!"
+          message="All pairs are unique!"
+        />
+      )}
+      {gameState === 'gaveUp' && (
+        <GameResult
+          state="gaveup"
+          title="Solution Revealed"
+        />
+      )}
 
       {seed && (
         <div className={styles.seedContainer}>

@@ -205,12 +205,13 @@ export default function ChimpTest() {
           </div>
         )}
 
-        <GameResult
-          gameState={gameState === 'lost' ? 'lost' : 'playing'}
-          onNewGame={initGame}
-          lostTitle="Game Over!"
-          lostMessage={`You reached round ${currentRound + 1} with a score of ${score}${score === currentBest && score > 0 ? ' • 🏆 New Best Score!' : ''}`}
-        />
+        {gameState === 'lost' && (
+          <GameResult
+            state="lost"
+            title="Game Over!"
+            message={`You reached round ${currentRound + 1} with a score of ${score}${score === currentBest && score > 0 ? ' • 🏆 New Best Score!' : ''}`}
+          />
+        )}
 
         {gameState !== 'lost' && gameState !== 'showing' && gameState !== 'playing' && (
           <button className={styles.newGameBtn} onClick={initGame}>

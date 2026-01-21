@@ -1,26 +1,49 @@
 import { describe, it, expect } from 'vitest';
+import { generateSecretCode, checkGuess } from './CodeBreaker.jsx';
 
 // ===========================================
 // CodeBreaker - Code Generation Tests
 // ===========================================
 describe('CodeBreaker - Code Generation', () => {
-  function generateSecretCode(length, colorCount) {
-    return Array.from({ length }, () => Math.floor(Math.random() * colorCount));
-  }
-
   it('should generate code of correct length', () => {
-    const code = generateSecretCode(4, 6);
+    const code = generateSecretCode(4, 6, 12345);
     expect(code.length).toBe(4);
   });
 
   it('should only use valid color indices', () => {
     for (let i = 0; i < 100; i++) {
-      const code = generateSecretCode(5, 8);
+      const code = generateSecretCode(5, 8, i * 1000);
       code.forEach(color => {
         expect(color).toBeGreaterThanOrEqual(0);
         expect(color).toBeLessThan(8);
       });
     }
+  });
+
+  it('should generate reproducible codes with same seed', () => {
+    const seed = 42;
+    const code1 = generateSecretCode(4, 6, seed);
+    const code2 = generateSecretCode(4, 6, seed);
+    expect(code1).toEqual(code2);
+  });
+
+  it('should generate different codes with different seeds', () => {
+    const code1 = generateSecretCode(4, 6, 12345);
+    const code2 = generateSecretCode(4, 6, 54321);
+    // Different seeds should produce different codes (extremely unlikely to match)
+    expect(code1).not.toEqual(code2);
+  });
+
+  it('should generate consistent codes across multiple calls with same seed', () => {
+    const seed = 99999;
+    const codes = [];
+    for (let i = 0; i < 10; i++) {
+      codes.push(generateSecretCode(5, 8, seed));
+    }
+    // All codes should be identical
+    codes.forEach(code => {
+      expect(code).toEqual(codes[0]);
+    });
   });
 });
 
@@ -28,39 +51,6 @@ describe('CodeBreaker - Code Generation', () => {
 // CodeBreaker - Guess Checking Tests
 // ===========================================
 describe('CodeBreaker - Guess Checking', () => {
-  function checkGuess(guess, secret) {
-    const exactMatches = [];
-    const colorMatches = [];
-
-    const secretCopy = [...secret];
-    const guessCopy = [...guess];
-
-    // First pass: find exact matches
-    for (let i = 0; i < guess.length; i++) {
-      if (guessCopy[i] === secretCopy[i]) {
-        exactMatches.push(i);
-        secretCopy[i] = null;
-        guessCopy[i] = null;
-      }
-    }
-
-    // Second pass: find color matches
-    for (let i = 0; i < guess.length; i++) {
-      if (guessCopy[i] === null) continue;
-
-      const foundIndex = secretCopy.findIndex(c => c === guessCopy[i] && c !== null);
-      if (foundIndex !== -1) {
-        colorMatches.push(i);
-        secretCopy[foundIndex] = null;
-      }
-    }
-
-    return {
-      exact: exactMatches.length,
-      color: colorMatches.length,
-    };
-  }
-
   it('should detect exact match', () => {
     const result = checkGuess([1, 2, 3, 4], [1, 2, 3, 4]);
     expect(result.exact).toBe(4);
@@ -109,6 +99,35 @@ describe('CodeBreaker - Guess Checking', () => {
     const result = checkGuess([1, 2, 3, 4], [1, 2, 5, 6]);
     expect(result.exact).toBe(2);
     expect(result.color).toBe(0);
+  });
+
+  it('should handle all colors in wrong positions', () => {
+    const result = checkGuess([0, 1, 2, 3], [3, 2, 1, 0]);
+    expect(result.exact).toBe(0);
+    expect(result.color).toBe(4);
+  });
+
+  it('should handle repeated colors with some exact', () => {
+    // Secret: [0, 0, 1, 1]
+    // Guess:  [0, 1, 0, 1]
+    // Position 0: exact (0)
+    // Position 3: exact (1)
+    // Position 1: color match with position 2 of secret (0)
+    // Position 2: color match with position 1 of secret (1)... wait no
+    // Let me think again:
+    // Secret: [0, 0, 1, 1]
+    // Guess:  [0, 1, 0, 1]
+    // Pos 0: guess=0, secret=0 -> exact
+    // Pos 1: guess=1, secret=0 -> not exact
+    // Pos 2: guess=0, secret=1 -> not exact
+    // Pos 3: guess=1, secret=1 -> exact
+    // After exact pass: secretCopy=[null, 0, 1, null], guessCopy=[null, 1, 0, null]
+    // Color pass:
+    // Pos 1: guess=1, look for 1 in secretCopy -> found at pos 2 -> color match
+    // Pos 2: guess=0, look for 0 in secretCopy -> found at pos 1 -> color match
+    const result = checkGuess([0, 1, 0, 1], [0, 0, 1, 1]);
+    expect(result.exact).toBe(2);
+    expect(result.color).toBe(2);
   });
 });
 
@@ -187,5 +206,46 @@ describe('CodeBreaker - Game State', () => {
   it('should continue playing with guesses remaining', () => {
     const guesses = Array(5).fill({});
     expect(determineGameState(guesses, 10, { exact: 2, color: 1 }, 4)).toBe('playing');
+  });
+});
+
+// ===========================================
+// CodeBreaker - Seed Reproducibility Tests
+// ===========================================
+describe('CodeBreaker - Seed Reproducibility', () => {
+  it('should produce identical puzzles for identical seeds', () => {
+    const seed = 123456789;
+    const puzzle1 = generateSecretCode(4, 6, seed);
+    const puzzle2 = generateSecretCode(4, 6, seed);
+    expect(puzzle1).toEqual(puzzle2);
+  });
+
+  it('should produce different puzzles for different seeds', () => {
+    const puzzles = new Set();
+    for (let seed = 1; seed <= 100; seed++) {
+      const puzzle = generateSecretCode(4, 6, seed);
+      puzzles.add(JSON.stringify(puzzle));
+    }
+    // Should have generated mostly unique puzzles (allow some collisions)
+    expect(puzzles.size).toBeGreaterThan(90);
+  });
+
+  it('should work with large seed values', () => {
+    const seed = 2147483647; // Max 32-bit signed integer
+    const code = generateSecretCode(4, 6, seed);
+    expect(code.length).toBe(4);
+    code.forEach(color => {
+      expect(color).toBeGreaterThanOrEqual(0);
+      expect(color).toBeLessThan(6);
+    });
+  });
+
+  it('should work with seed value 0', () => {
+    const code = generateSecretCode(4, 6, 0);
+    expect(code.length).toBe(4);
+    code.forEach(color => {
+      expect(color).toBeGreaterThanOrEqual(0);
+      expect(color).toBeLessThan(6);
+    });
   });
 });

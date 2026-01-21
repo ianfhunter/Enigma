@@ -318,12 +318,13 @@ export default function Sujiko() {
           </button>
         </div>
 
-        <GameResult
-          gameState={gameState}
-          onPlayAgain={initGame}
-          winTitle="Perfect!"
-          winMessage="All sums are correct!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Perfect!"
+            message="All sums are correct!"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

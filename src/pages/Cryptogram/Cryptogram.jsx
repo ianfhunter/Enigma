@@ -392,13 +392,19 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
           autoComplete="off"
         />
 
-        <GameResult
-          gameState={gameState}
-          onNewGame={() => initGame(Math.floor(Math.random() * 2147483647))}
-          winTitle="Puzzle Solved!"
-          winMessage={`Time: ${formatTime(timeTaken)} • Hints used: ${hintsUsed}`}
-          gaveUpTitle="Solution Revealed"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="Puzzle Solved!"
+            message={`Time: ${formatTime(timeTaken)} • Hints used: ${hintsUsed}`}
+          />
+        )}
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+          />
+        )}
 
         <div className={styles.buttonRow}>
           <GiveUpButton

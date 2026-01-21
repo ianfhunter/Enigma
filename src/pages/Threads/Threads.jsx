@@ -989,14 +989,20 @@ export default function Threads() {
         </div>
 
         {/* Win/Give up messages */}
-        <GameResult
-          gameState={gameWon ? 'won' : gaveUp ? 'gaveUp' : 'playing'}
-          onNewGame={initGame}
-          winTitle="You completed today's Threads!"
-          winMessage={`Theme: ${puzzle.theme}`}
-          gaveUpTitle="Solution Revealed"
-          gaveUpMessage={`Theme: ${puzzle.theme}`}
-        />
+        {gameWon && (
+          <GameResult
+            state="won"
+            title="You completed today's Threads!"
+            message={`Theme: ${puzzle.theme}`}
+          />
+        )}
+        {gaveUp && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message={`Theme: ${puzzle.theme}`}
+          />
+        )}
 
         <div className={styles.buttonRow}>
           {!gameWon && !gaveUp && (

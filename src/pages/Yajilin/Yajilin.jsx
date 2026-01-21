@@ -678,19 +678,21 @@ export default function Yajilin() {
           )}
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🎉 Puzzle Solved!"
-          message="Loop complete!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🎉 Puzzle Solved!"
+            message="Loop complete!"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="The correct shading and loop are shown."
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="The correct shading and loop are shown."
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

@@ -507,19 +507,21 @@ export default function NavalBattle() {
           </div>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🚢 Fleet Located!"
-          message="All ships correctly placed!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🚢 Fleet Located!"
+            message="All ships correctly placed!"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Here's how it should be solved."
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Here's how it should be solved."
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>

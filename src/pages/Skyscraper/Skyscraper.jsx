@@ -382,19 +382,21 @@ export default function Skyscraper() {
           </div>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="🏙️ Puzzle Solved!"
-          message="All skyscrapers correctly placed!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="🏙️ Puzzle Solved!"
+            message="All skyscrapers correctly placed!"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gave_up'}
-          type="gaveUp"
-          title="Solution Revealed"
-          message="Study the pattern and try another puzzle!"
-        />
+        {gameState === 'gave_up' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+            message="Study the pattern and try another puzzle!"
+          />
+        )}
 
         <div className={styles.numberPad}>
           {Array.from({ length: gridSize }, (_, i) => i + 1).map((num) => (

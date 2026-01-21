@@ -15,6 +15,7 @@ import tatamibariIcon from '../../assets/icons/tatamibari.svg';
 import shikakuIcon from '../../assets/icons/shikaku.svg';
 import fillominoIcon from '../../assets/icons/fillomino.svg';
 import suguruIcon from '../../assets/icons/suguru.svg';
+import rippleEffectIcon from '../../assets/icons/rippleEffect.svg';
 import norinoriIcon from '../../assets/icons/norinori.svg';
 import inshinoheyaIcon from '../../assets/icons/inshinoheya.svg';
 import hotarubeamIcon from '../../assets/icons/hotarubeam.svg';
@@ -269,6 +270,18 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #f472b6 0%, #c084fc 100%)',
         version: 'v1.0',
         component: () => import('../../pages/Suguru'),
+      },
+      {
+        title: 'Ripple Effect',
+        slug: 'ripple-effect',
+        aliases: ['Hakyuu'],
+        description: 'Fill rooms with 1-N. Same numbers in a row/column must be N cells apart.',
+        icon: rippleEffectIcon,
+        emojiIcon: '🌊',
+        colors: { primary: '#63b3ed', secondary: '#3182ce' },
+        gradient: 'linear-gradient(135deg, #63b3ed 0%, #3182ce 100%)',
+        version: 'v1.0',
+        component: () => import('../../pages/RippleEffect'),
       },
       {
         title: 'Norinori',

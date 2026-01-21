@@ -287,18 +287,20 @@ export default function GokigenNaname() {
           </div>
         </div>
 
-        <GameResult
-          show={gameState === 'won'}
-          type="won"
-          title="／＼ Puzzle Solved!"
-          message="All slashes in place!"
-        />
+        {gameState === 'won' && (
+          <GameResult
+            state="won"
+            title="／＼ Puzzle Solved!"
+            message="All slashes in place!"
+          />
+        )}
 
-        <GameResult
-          show={gameState === 'gaveUp'}
-          type="gaveUp"
-          title="Solution Revealed"
-        />
+        {gameState === 'gaveUp' && (
+          <GameResult
+            state="gaveup"
+            title="Solution Revealed"
+          />
+        )}
 
         <div className={styles.controls}>
           <label className={styles.toggle}>
