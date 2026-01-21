@@ -29,6 +29,7 @@ COPY public ./public
 COPY datasets ./datasets
 COPY scripts ./scripts
 COPY index.html vite.config.js eslint.config.js ./
+COPY vite-plugins ./vite-plugins
 
 # Build frontend
 RUN npm run build
