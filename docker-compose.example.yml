@@ -39,6 +39,10 @@ services:
       - NODE_ENV=development
       # API_PROXY_TARGET is used by Vite's dev server proxy (server-side, not exposed to browser)
       - API_PROXY_TARGET=http://enigma-backend:3000
+      # Default interface language for new users (before they set a preference)
+      # Supported values: en, es (more coming soon)
+      # Users can always change their language in Settings > Interface Language
+      - VITE_DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-en}
     depends_on:
       - enigma-backend
     restart: unless-stopped
