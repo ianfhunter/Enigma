@@ -121,7 +121,7 @@ version: '3.8'
 
 services:
   enigma:
-    image: ianfhunter/enigma:latest
+    image: boopboopboop/enigma:latest
     container_name: enigma
     ports:
       - "3000:3000"
@@ -248,7 +248,7 @@ Test the published Docker image to ensure it works correctly:
 ./tests/docker/docker-image.test.sh
 
 # Test a specific version
-./tests/docker/docker-image.test.sh ianfhunter/enigma:1.0.1
+./tests/docker/docker-image.test.sh boopboopboop/enigma:1.0.1
 ```
 
 See [tests/docker/README.md](tests/docker/README.md) for more details.
