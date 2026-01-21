@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -555,6 +556,7 @@ export {
 };
 
 export default function Threads() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [selectedCells, setSelectedCells] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -854,7 +856,7 @@ export default function Threads() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

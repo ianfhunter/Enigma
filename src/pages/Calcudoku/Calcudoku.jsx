@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatTime } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
@@ -145,6 +146,7 @@ function notesFromJSON(json) {
 
 
 export default function Calcudoku() {
+  const { t } = useTranslation();
   const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [difficulty, setDifficulty] = useState('easy');
   const [size, setSize] = useState(4);
@@ -419,7 +421,7 @@ export default function Calcudoku() {
   if (!isLoaded || !puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -535,8 +537,8 @@ export default function Calcudoku() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message={`Completed in ${formatTime(timer)}`}
+            title={t('gameStatus.solved')}
+            message={t('common.completedIn', { time: formatTime(timer) })}
           />
         )}
 

@@ -319,7 +319,7 @@ export default function Nurikabe() {
     return (
       <div className={styles.container}>
         <GameHeader title="Nurikabe" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -398,8 +398,8 @@ export default function Nurikabe() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🌊 Puzzle Solved!"
-            message="Sea and islands perfectly balanced!"
+            title={t('gameStatus.solved')}
+            message={t('common.seaAndIslandsBalanced', 'Sea and islands perfectly balanced!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}

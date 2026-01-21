@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
@@ -116,6 +117,7 @@ const REGION_COLORS = [
 ];
 
 export default function StarBattle() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('6×6');
   const [difficulty, setDifficulty] = useState('easy');
   const [allPuzzles, setAllPuzzles] = useState([]);
@@ -218,7 +220,7 @@ export default function StarBattle() {
     return (
       <div className={styles.container}>
         <GameHeader title="Star Battle" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -296,8 +298,8 @@ export default function StarBattle() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🌟 Puzzle Solved!"
-            message="All stars perfectly placed!"
+            title={t('gameStatus.solved')}
+            message={t('common.allStarsPlaced', 'All stars perfectly placed!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}

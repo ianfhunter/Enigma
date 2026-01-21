@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Mosaic.module.css';
 import mosaicPuzzles from '../../../public/datasets/mosaicPuzzles.json';
@@ -81,6 +82,7 @@ export {
 };
 
 export default function Mosaic() {
+  const { t } = useTranslation();
   const availableSizes = useMemo(() => getAvailableSizes(), []);
   const [sizeKey, setSizeKey] = useState(availableSizes[0] || '15x15');
   const [puzzleData, setPuzzleData] = useState(null);

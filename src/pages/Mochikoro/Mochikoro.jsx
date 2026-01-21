@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
@@ -207,6 +208,7 @@ function getAvailableSizes(puzzles, difficulty) {
 }
 
 export default function Mochikoro() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [sizeKey, setSizeKey] = useState('7x7');
   const [allPuzzles, setAllPuzzles] = useState([]);

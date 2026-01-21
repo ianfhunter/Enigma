@@ -315,7 +315,7 @@ export default function Kakuro() {
   if (!isLoaded || !puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -463,8 +463,8 @@ export default function Kakuro() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message={`Completed in ${formatTime(timer)}`}
+            title={t('gameStatus.solved')}
+            message={t('common.completedIn', { time: formatTime(timer) })}
           />
         )}
 

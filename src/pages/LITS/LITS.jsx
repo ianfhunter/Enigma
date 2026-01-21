@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -413,6 +414,7 @@ export {
 };
 
 export default function LITS() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
@@ -518,7 +520,7 @@ export default function LITS() {
     return (
       <div className={styles.container}>
         <GameHeader title="LITS" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -652,8 +654,8 @@ export default function LITS() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🧩 Puzzle Solved!"
-            message="All tetrominoes placed correctly!"
+            title={t('gameStatus.solved')}
+            message={t('common.allTetrominoesPlaced', 'All tetrominoes placed correctly!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}

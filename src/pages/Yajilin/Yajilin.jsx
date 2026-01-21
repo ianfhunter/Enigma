@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
@@ -315,6 +316,7 @@ export {
 };
 
 export default function Yajilin() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
@@ -566,7 +568,7 @@ export default function Yajilin() {
           title="Yajilin"
           instructions="Loading puzzles..."
         />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -681,8 +683,8 @@ export default function Yajilin() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="Loop complete!"
+            title={t('gameStatus.solved')}
+            message={t('common.loopComplete', 'Loop complete!')}
           />
         )}
 

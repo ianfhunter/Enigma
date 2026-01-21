@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -445,6 +446,7 @@ function findErrors(grid, isBlack, solution) {
 }
 
 export default function Str8ts() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
@@ -624,7 +626,7 @@ export default function Str8ts() {
           title="Str8ts"
           instructions="Loading puzzles..."
         />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
