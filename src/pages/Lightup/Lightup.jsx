@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
@@ -182,6 +183,7 @@ export {
 };
 
 export default function Lightup() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [sizeKey, setSizeKey] = useState('10x10');
   const [base, setBase] = useState({ w: 0, h: 0, cells: [], solutionBulbs: new Set() });
@@ -367,8 +369,8 @@ export default function Lightup() {
           onSelect={setSizeKey}
         />
         <div className={styles.actions}>
-          <button className={styles.generateBtn} onClick={loadPuzzle}>New Puzzle</button>
-          <button className={styles.button} onClick={reset}>Clear</button>
+          <button className={styles.generateBtn} onClick={loadPuzzle}>{t('common.newPuzzle')}</button>
+          <button className={styles.button} onClick={reset}>{t('common.clear')}</button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
@@ -377,20 +379,20 @@ export default function Lightup() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Solved!"
+            title={t('gameStatus.solved')}
             variant="inline"
           />
         )}
         {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
-            title="Solution Revealed"
+            title={t('gameStatus.solutionRevealed')}
             variant="inline"
           />
         )}
         {gameState === 'playing' && (
           <div className={styles.status}>
-            <span>Conflicts: {bulbConflicts.size} • Unlit: {allLit ? 0 : 'some'}</span>
+            <span>{t('gameStatus.conflicts')}: {bulbConflicts.size} • {t('gameStatus.unlit')}: {allLit ? 0 : t('gameStatus.some')}</span>
           </div>
         )}
 
@@ -399,7 +401,7 @@ export default function Lightup() {
           className={`${styles.markToggle} ${markMode ? styles.markModeActive : ''}`}
           onClick={() => setMarkMode(!markMode)}
         >
-          ✖ {markMode ? 'Mark Mode ON' : 'Mark Mode'}
+          ✖ {markMode ? t('gameStatus.markModeOn') : t('gameStatus.markMode')}
         </button>
       </div>
 

@@ -168,7 +168,7 @@ export default function Takuzu() {
   const size = puzzleData?.rows || 10;
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(grid) : new Set();
     setErrors(newErrors);
@@ -176,7 +176,7 @@ export default function Takuzu() {
     if (checkSolved(grid, puzzleData.solution)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || fixed[r][c]) return;

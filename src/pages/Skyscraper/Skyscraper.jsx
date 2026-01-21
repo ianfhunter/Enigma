@@ -212,7 +212,7 @@ export default function Skyscraper() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(grid, puzzleData.clues) : new Set();
     setErrors(newErrors);
@@ -220,7 +220,7 @@ export default function Skyscraper() {
     if (checkSolved(grid, puzzleData.solution)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   // Keyboard input
   useEffect(() => {

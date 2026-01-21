@@ -302,7 +302,7 @@ export default function Mochikoro() {
 
   // Check validity and win condition
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, rows, cols)
@@ -312,7 +312,7 @@ export default function Mochikoro() {
     if (checkSolved(grid, puzzleData.clues, rows, cols)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors, rows, cols]);
+  }, [grid, puzzleData, showErrors, rows, cols, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing') return;

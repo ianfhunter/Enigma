@@ -258,7 +258,7 @@ export default function Campixu() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(playerGrid, puzzleData.puzzle, puzzleData.rowClues, puzzleData.colClues, size)
@@ -270,7 +270,7 @@ export default function Campixu() {
     if (checkSolved(playerGrid, puzzleData.solution, size)) {
       setGameState('won');
     }
-  }, [playerGrid, puzzleData, showErrors, size]);
+  }, [playerGrid, puzzleData, showErrors, size, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing') return;

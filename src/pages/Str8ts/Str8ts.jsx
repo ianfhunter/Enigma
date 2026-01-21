@@ -503,6 +503,9 @@ export default function Str8ts() {
     const newErrors = showErrors ? findErrors(grid, puzzleData.isBlack, puzzleData.solution) : new Set();
     setErrors(newErrors);
 
+    // Don't check for win if game is not in playing state
+    if (gameState !== 'playing') return;
+
     // Check if solved
     let allFilled = true;
     let allCorrect = true;
@@ -519,7 +522,7 @@ export default function Str8ts() {
     if (allFilled && allCorrect) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || !puzzleData) return;

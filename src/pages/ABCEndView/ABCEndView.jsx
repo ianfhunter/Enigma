@@ -321,7 +321,7 @@ export default function ABCEndView() {
   }, [isRunning, gameState]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
     // Safety check: ensure puzzleData size matches current size
     if (puzzleData.size !== size) return;
 
@@ -334,7 +334,7 @@ export default function ABCEndView() {
       setGameState('won');
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, size]);
+  }, [grid, puzzleData, showErrors, size, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

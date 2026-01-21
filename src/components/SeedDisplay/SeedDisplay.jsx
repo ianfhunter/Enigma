@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './SeedDisplay.module.css';
 
 /**
@@ -6,7 +7,7 @@ import styles from './SeedDisplay.module.css';
  *
  * @param {Object} props
  * @param {number|string} props.seed - The seed value to display
- * @param {string} [props.label] - Optional label (default: "Seed")
+ * @param {string} [props.label] - Optional label (uses translation if not provided)
  * @param {boolean} [props.showCopy] - Show copy button (default: true)
  * @param {boolean} [props.showShare] - Show share button (default: true)
  * @param {string} [props.shareUrl] - Custom share URL (default: current URL with seed param)
@@ -21,11 +22,11 @@ import styles from './SeedDisplay.module.css';
  */
 export default function SeedDisplay({
   seed,
-  label = 'Seed',
+  label,
   showCopy = true,
   showShare = true,
   shareUrl,
-  shareTitle = 'Check out this puzzle!',
+  shareTitle,
   shareText,
   className = '',
   variant = 'default',
@@ -34,13 +35,16 @@ export default function SeedDisplay({
   onSeedChange,
   editable,
 }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState('');
   const inputRef = useRef(null);
-  
+
   const isEditable = editable !== undefined ? editable : !!onSeedChange;
+  const displayLabel = label !== undefined ? label : t('common.seed');
+  const displayShareTitle = shareTitle || t('common.checkOutThisPuzzle');
 
   const seedString = String(seed);
 
@@ -160,12 +164,12 @@ export default function SeedDisplay({
   // Share using Web Share API
   const handleShare = useCallback(async () => {
     const url = getShareUrl();
-    const text = shareText || `Try this puzzle! Seed: ${seedString}`;
+    const text = shareText || t('common.tryThisPuzzle', { seed: seedString });
 
     if (navigator.share) {
       try {
         await navigator.share({
-          title: shareTitle,
+          title: displayShareTitle,
           text,
           url,
         });
@@ -181,7 +185,7 @@ export default function SeedDisplay({
       // No Web Share API, copy URL instead
       handleCopyUrl();
     }
-  }, [getShareUrl, shareTitle, shareText, seedString, handleCopyUrl]);
+  }, [getShareUrl, displayShareTitle, shareText, seedString, handleCopyUrl, t]);
 
   const containerClass = [
     styles.container,
@@ -192,13 +196,13 @@ export default function SeedDisplay({
   return (
     <div className={styles.wrapper}>
       <div className={containerClass}>
-      {variant !== 'inline' && label && (
-        <span className={styles.label}>{label}:</span>
+      {variant !== 'inline' && displayLabel && (
+        <span className={styles.label}>{displayLabel}:</span>
       )}
 
-      <span className={styles.seed} title={`Seed: ${seedString}`}>
-        {variant === 'inline' && label && (
-          <span className={styles.inlineLabel}>{label}: </span>
+      <span className={styles.seed} title={`${t('common.seed')}: ${seedString}`}>
+        {variant === 'inline' && displayLabel && (
+          <span className={styles.inlineLabel}>{displayLabel}: </span>
         )}
         {isEditing ? (
           <input
@@ -210,13 +214,13 @@ export default function SeedDisplay({
             onBlur={handleSubmitEdit}
             onKeyDown={handleKeyDown}
             onClick={(e) => e.stopPropagation()}
-            aria-label="Enter seed value"
+            aria-label={t('common.enterSeedValue')}
           />
         ) : (
           <code
             className={`${styles.seedValue} ${isEditable ? styles.editable : ''}`}
             onClick={handleStartEdit}
-            title={isEditable ? 'Click to edit seed' : `Seed: ${seedString}`}
+            title={isEditable ? t('common.clickToEditSeed') : `${t('common.seed')}: ${seedString}`}
           >
             {seedString}
           </code>
@@ -228,8 +232,8 @@ export default function SeedDisplay({
           <button
             className={styles.actionButton}
             onClick={handleCopySeed}
-            title={copied ? 'Copied!' : 'Copy seed'}
-            aria-label={copied ? 'Copied!' : 'Copy seed'}
+            title={copied ? t('common.copied') : t('common.copySeed')}
+            aria-label={copied ? t('common.copied') : t('common.copySeed')}
           >
             {copied ? (
               <CheckIcon />
@@ -243,8 +247,8 @@ export default function SeedDisplay({
           <button
             className={styles.actionButton}
             onClick={handleShare}
-            title={shared ? 'Shared!' : 'Share puzzle'}
-            aria-label={shared ? 'Shared!' : 'Share puzzle'}
+            title={shared ? t('common.shared') : t('common.sharePuzzle')}
+            aria-label={shared ? t('common.shared') : t('common.sharePuzzle')}
           >
             {shared ? (
               <CheckIcon />
@@ -258,8 +262,8 @@ export default function SeedDisplay({
           <button
             className={styles.newButton}
             onClick={onNewSeed}
-            title="Generate new puzzle"
-            aria-label="Generate new puzzle"
+            title={t('common.generateNewPuzzle')}
+            aria-label={t('common.generateNewPuzzle')}
           >
             🎲
           </button>

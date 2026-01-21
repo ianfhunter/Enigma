@@ -276,6 +276,9 @@ export default function StainedGlass() {
     const newErrors = showErrors ? findErrors(puzzleData.regionGrid, coloring, size) : new Set();
     setErrors(newErrors);
 
+    // Don't check for win if game is not in playing state
+    if (gameState !== 'playing') return;
+
     // Check if solved
     const allFilled = coloring.every(c => c !== -1);
     const noErrors = findErrors(puzzleData.regionGrid, coloring, size).size === 0;
@@ -283,7 +286,7 @@ export default function StainedGlass() {
     if (allFilled && noErrors) {
       setGameState('won');
     }
-  }, [coloring, puzzleData, size, showErrors]);
+  }, [coloring, puzzleData, size, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || !puzzleData) return;

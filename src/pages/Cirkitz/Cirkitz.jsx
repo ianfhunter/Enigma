@@ -364,7 +364,7 @@ export default function Cirkitz() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const info = checkMatches(puzzleData.tiles, rotations, puzzleData.size);
     setMatchInfo(info);
@@ -372,7 +372,7 @@ export default function Cirkitz() {
     if (info.solved) {
       setGameState('won');
     }
-  }, [rotations, puzzleData]);
+  }, [rotations, puzzleData, gameState]);
 
   const handleTileClick = (r, c, e) => {
     if (gameState !== 'playing' || !puzzleData?.tiles[r]?.[c]) return;

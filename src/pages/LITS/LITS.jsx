@@ -475,7 +475,7 @@ export default function LITS() {
   }, [loading, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     if (showErrors) {
       const result = checkValidity(shaded, puzzleData.regions, puzzleData.regionCells, size);
@@ -489,7 +489,7 @@ export default function LITS() {
     if (checkSolved(shaded, puzzleData.regions, puzzleData.regionCells, size)) {
       setGameState('won');
     }
-  }, [shaded, puzzleData, showErrors, size]);
+  }, [shaded, puzzleData, showErrors, size, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || showSolution) return;

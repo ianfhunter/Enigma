@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 // ===========================================
 // useFavourites - Default State Tests
@@ -245,5 +245,125 @@ describe('useFavourites - Persistence Format', () => {
     expect(parseFavourites('{}')).toEqual([]);
     expect(parseFavourites('null')).toEqual([]);
     expect(parseFavourites('["valid"]')).toEqual(['valid']);
+  });
+});
+
+// ===========================================
+// Settings - localStorage Persistence Tests
+// ===========================================
+describe('Settings - localStorage Persistence', () => {
+  const STORAGE_KEY = 'enigma-settings';
+  const defaultSettings = {
+    englishVariant: 'us',
+    theme: 'dark',
+    soundEnabled: true,
+    disabledGames: [],
+    favouriteGames: [],
+    gamePreferences: {},
+    searchEngine: 'google',
+    language: 'en',
+  };
+
+  let mockStorage = {};
+
+  beforeEach(() => {
+    mockStorage = {};
+    vi.stubGlobal('localStorage', {
+      getItem: vi.fn((key) => mockStorage[key] || null),
+      setItem: vi.fn((key, value) => { mockStorage[key] = value; }),
+      removeItem: vi.fn((key) => { delete mockStorage[key]; }),
+      clear: vi.fn(() => { mockStorage = {}; }),
+    });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  // Helper that mimics loadLocalSettings from SettingsContext.jsx
+  const loadLocalSettings = () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return { ...defaultSettings, ...parsed };
+      }
+    } catch (e) {
+      console.error('Failed to load settings from localStorage:', e);
+    }
+    return defaultSettings;
+  };
+
+  // Helper that mimics saveLocalSettings from SettingsContext.jsx
+  const saveLocalSettings = (settings) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    } catch (e) {
+      console.error('Failed to save settings to localStorage:', e);
+    }
+  };
+
+  it('should load default settings when localStorage is empty', () => {
+    const settings = loadLocalSettings();
+    expect(settings).toEqual(defaultSettings);
+  });
+
+  it('should load settings from localStorage when present', () => {
+    mockStorage[STORAGE_KEY] = JSON.stringify({ favouriteGames: ['sudoku', 'chess'] });
+    const settings = loadLocalSettings();
+    expect(settings.favouriteGames).toEqual(['sudoku', 'chess']);
+    expect(settings.theme).toBe('dark'); // Default value preserved
+  });
+
+  it('should save settings to localStorage', () => {
+    const settings = { ...defaultSettings, favouriteGames: ['minesweeper'] };
+    saveLocalSettings(settings);
+    expect(mockStorage[STORAGE_KEY]).toBe(JSON.stringify(settings));
+  });
+
+  it('should merge saved settings with defaults', () => {
+    // Simulate an older version of settings that's missing new fields
+    mockStorage[STORAGE_KEY] = JSON.stringify({ theme: 'light' });
+    const settings = loadLocalSettings();
+    expect(settings.theme).toBe('light');
+    expect(settings.favouriteGames).toEqual([]); // Default
+    expect(settings.language).toBe('en'); // Default
+  });
+
+  it('should handle corrupted JSON gracefully', () => {
+    mockStorage[STORAGE_KEY] = 'not valid json';
+    const settings = loadLocalSettings();
+    expect(settings).toEqual(defaultSettings);
+  });
+
+  it('should persist favourites through simulated refresh', () => {
+    // First "session" - add favourites
+    let settings = loadLocalSettings();
+    settings = { ...settings, favouriteGames: ['sudoku', 'chess'] };
+    saveLocalSettings(settings);
+
+    // Second "session" - simulate refresh by loading again
+    const reloadedSettings = loadLocalSettings();
+    expect(reloadedSettings.favouriteGames).toEqual(['sudoku', 'chess']);
+  });
+
+  it('should persist theme changes through simulated refresh', () => {
+    let settings = loadLocalSettings();
+    settings = { ...settings, theme: 'light' };
+    saveLocalSettings(settings);
+
+    const reloadedSettings = loadLocalSettings();
+    expect(reloadedSettings.theme).toBe('light');
+  });
+
+  it('should persist multiple settings changes', () => {
+    let settings = loadLocalSettings();
+    settings = { ...settings, favouriteGames: ['tetris'], theme: 'light', soundEnabled: false };
+    saveLocalSettings(settings);
+
+    const reloadedSettings = loadLocalSettings();
+    expect(reloadedSettings.favouriteGames).toEqual(['tetris']);
+    expect(reloadedSettings.theme).toBe('light');
+    expect(reloadedSettings.soundEnabled).toBe(false);
   });
 });

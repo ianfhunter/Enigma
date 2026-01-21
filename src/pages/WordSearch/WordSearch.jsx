@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
@@ -126,6 +127,7 @@ export const WORD_SEARCH_DIRECTIONS = DIRECTIONS;
 export { generatePuzzle };
 
 export default function WordSearch() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [seed, setSeed] = useState(null);
   const [foundWords, setFoundWords] = useState(new Set());
@@ -268,7 +270,7 @@ export default function WordSearch() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -337,7 +339,7 @@ export default function WordSearch() {
         </div>
 
         <div className={styles.wordList}>
-          <h3>Words to Find</h3>
+          <h3>{t('common.wordsToFind')}</h3>
           <div className={styles.words}>
             {puzzle.words.map(word => (
               <WordWithDefinition
@@ -358,7 +360,7 @@ export default function WordSearch() {
         )}
 
         <button className={styles.newGameBtn} onClick={() => initGame(true)}>
-          New Puzzle
+          {t('common.newPuzzle')}
         </button>
       </div>
     </div>

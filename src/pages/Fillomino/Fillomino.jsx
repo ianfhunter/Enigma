@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
@@ -72,6 +73,7 @@ function checkSolved(grid) {
 }
 
 export default function Fillomino() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('7×7');
   const [difficulty, setDifficulty] = useState('easy');
   const [allPuzzles, setAllPuzzles] = useState([]);
@@ -144,7 +146,7 @@ export default function Fillomino() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(grid) : new Set();
     setErrors(newErrors);
@@ -152,7 +154,7 @@ export default function Fillomino() {
     if (checkSolved(grid)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   // Keyboard input for numbers
   useEffect(() => {
@@ -234,7 +236,7 @@ export default function Fillomino() {
     return (
       <div className={styles.container}>
         <GameHeader title="Fillomino" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -300,8 +302,8 @@ export default function Fillomino() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="All regions complete!"
+            title={t('gameStatus.solved')}
+            message={t('common.allRegionsComplete', 'All regions complete!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}

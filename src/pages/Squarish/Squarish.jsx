@@ -209,10 +209,10 @@ export default function Squarish() {
   }, [size, initGame]);
 
   useEffect(() => {
-    if (puzzle && isSolved(grid, puzzle.solution, puzzle.size)) {
+    if (puzzle && gameState === 'playing' && isSolved(grid, puzzle.solution, puzzle.size)) {
       setGameState('won');
     }
-  }, [grid, puzzle]);
+  }, [grid, puzzle, gameState]);
 
   const handleSizeChange = (newSize) => {
     setSize(newSize);

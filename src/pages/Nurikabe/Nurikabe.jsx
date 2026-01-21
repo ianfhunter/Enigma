@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
@@ -178,6 +179,7 @@ export {
 };
 
 export default function Nurikabe() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('10×10');
   const [difficulty, setDifficulty] = useState('easy');
   const [allPuzzles, setAllPuzzles] = useState([]);
@@ -254,7 +256,7 @@ export default function Nurikabe() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.grid, shaded) : new Set();
     setErrors(newErrors);
@@ -262,7 +264,7 @@ export default function Nurikabe() {
     if (checkSolved(puzzleData.grid, shaded)) {
       setGameState('won');
     }
-  }, [shaded, puzzleData, showErrors]);
+  }, [shaded, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing' || showSolution) return;

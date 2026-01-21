@@ -238,7 +238,7 @@ export default function Kropki() {
   }, [isRunning, gameState]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.horizontalDots, puzzleData.verticalDots, size)
@@ -249,7 +249,7 @@ export default function Kropki() {
       setGameState('won');
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, size]);
+  }, [grid, puzzleData, showErrors, size, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

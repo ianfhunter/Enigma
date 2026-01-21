@@ -289,7 +289,7 @@ export default function Thermometers() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(filled, puzzleData.thermometers, puzzleData.rowClues, puzzleData.colClues, size)
@@ -299,7 +299,7 @@ export default function Thermometers() {
     if (checkSolved(filled, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues, size)) {
       setGameState('won');
     }
-  }, [filled, puzzleData, showErrors, size]);
+  }, [filled, puzzleData, showErrors, size, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

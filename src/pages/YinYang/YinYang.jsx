@@ -213,7 +213,7 @@ export default function YinYang() {
   const size = puzzleData?.rows || 6;
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(grid, size) : new Set();
     setErrors(newErrors);
@@ -221,7 +221,7 @@ export default function YinYang() {
     if (checkSolved(grid, puzzleData.solution, size)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors, size]);
+  }, [grid, puzzleData, showErrors, size, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing') return;

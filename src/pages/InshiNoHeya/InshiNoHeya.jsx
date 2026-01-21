@@ -307,10 +307,13 @@ export default function InshiNoHeya() {
       setErrors(new Set());
     }
 
+    // Don't check for win if game is not in playing state
+    if (gameState !== 'playing') return;
+
     if (checkSolved(grid, puzzleData.solution, puzzleSize)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

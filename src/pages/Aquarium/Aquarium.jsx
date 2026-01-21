@@ -381,7 +381,7 @@ export default function Aquarium() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.tanks, water, puzzleData.rowClues, puzzleData.colClues) : new Set();
     setErrors(newErrors);
@@ -389,7 +389,7 @@ export default function Aquarium() {
     if (checkSolved(puzzleData.tanks, water, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues)) {
       setGameState('won');
     }
-  }, [water, puzzleData, showErrors]);
+  }, [water, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

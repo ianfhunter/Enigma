@@ -171,7 +171,7 @@ export default function Kurotto() {
   const size = puzzleData?.rows || 10;
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, size)
@@ -181,7 +181,7 @@ export default function Kurotto() {
     if (checkSolved(grid, puzzleData.solution, size)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors, size]);
+  }, [grid, puzzleData, showErrors, size, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing') return;

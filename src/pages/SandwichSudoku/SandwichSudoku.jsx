@@ -358,7 +358,7 @@ export default function SandwichSudoku() {
   }, [isRunning, gameState]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.solution)
@@ -369,7 +369,7 @@ export default function SandwichSudoku() {
       setGameState('won');
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

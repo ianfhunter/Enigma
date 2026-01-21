@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './DifficultySelector.module.css';
 
 /**
@@ -18,16 +19,25 @@ export default function DifficultySelector({
   labels = {},
   className = '',
 }) {
+  const { t } = useTranslation();
+
   const getLabel = (option) => {
     if (labels[option]) return labels[option];
+    // Try to get from translations first
+    const translationKey = `difficulties.${option}`;
+    const translated = t(translationKey);
+    // If translation exists (not returning the key), use it
+    if (translated !== translationKey) return translated;
+    // Fallback to capitalized option
     return option.charAt(0).toUpperCase() + option.slice(1);
   };
 
   return (
-    <div className={`${styles.selector} ${className}`} role="group" aria-label="Difficulty selector">
+    <div className={`${styles.selector} ${className}`} role="group" aria-label={t('common.difficultySelector')}>
       {options.map((option) => {
         const isActive = value === option;
         const isCompleted = completedStates[option];
+        const label = getLabel(option);
 
         return (
           <button
@@ -36,9 +46,9 @@ export default function DifficultySelector({
             className={`${styles.option} ${isActive ? styles.active : ''} ${isCompleted ? styles.completed : ''}`}
             onClick={() => onChange(option)}
             aria-pressed={isActive}
-            aria-label={`${getLabel(option)}${isCompleted ? ', completed' : ''}`}
+            aria-label={`${label}${isCompleted ? `, ${t('common.completed')}` : ''}`}
           >
-            {getLabel(option)}
+            {label}
             {isCompleted && <span className={styles.checkmark} aria-hidden="true">✓</span>}
           </button>
         );

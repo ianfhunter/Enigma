@@ -182,7 +182,7 @@ export default function Hidato() {
   }, [difficulty]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     if (showErrors) {
       setErrors(findErrors(grid, puzzleData.maxNum));
@@ -193,7 +193,7 @@ export default function Hidato() {
     if (checkSolved(grid, puzzleData.solution)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

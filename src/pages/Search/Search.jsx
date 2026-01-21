@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import GameCard from '../../components/GameCard';
 import { categories } from '../../data/gameRegistry';
 import { communityPacks } from '../../packs/registry';
@@ -7,6 +8,7 @@ import { fuzzySearchGames } from '../../utils/fuzzySearch';
 import styles from './Search.module.css';
 
 export default function Search() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
 
@@ -29,13 +31,15 @@ export default function Search() {
     <div className={styles.search}>
       <div className={styles.header}>
         <Link to="/" className={styles.backLink}>
-          ← Back to all games
+          {t('search.backToAllGames')}
         </Link>
         <h1 className={styles.title}>
-          Search results for "{query}"
+          {t('search.resultsFor', { query })}
         </h1>
         <p className={styles.count}>
-          {allMatches.length} game{allMatches.length !== 1 ? 's' : ''} found
+          {allMatches.length === 1
+            ? t('search.gamesFound', { count: allMatches.length })
+            : t('search.gamesFoundPlural', { count: allMatches.length })}
         </p>
       </div>
 
@@ -53,16 +57,16 @@ export default function Search() {
               linkTo={game.isCommunity ? `/community/${game.packId}/${game.slug}` : null}
               customIcon={game.isCommunity ? (game.icon || game.emojiIcon || '🎮') : null}
               customColors={game.isCommunity ? (game.colors || { primary: '#8b5cf6', secondary: '#7c3aed' }) : null}
-              typeBadge={game.isCommunity ? 'Community' : null}
+              typeBadge={game.isCommunity ? t('home.community') : null}
             />
           ))}
         </div>
       ) : (
         <div className={styles.noResults}>
           <span className={styles.noResultsIcon}>🔍</span>
-          <p>No games match your search</p>
+          <p>{t('search.noGamesMatch')}</p>
           <Link to="/" className={styles.browseLink}>
-            Browse all games
+            {t('search.browseAllGames')}
           </Link>
         </div>
       )}

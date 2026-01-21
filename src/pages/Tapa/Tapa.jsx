@@ -366,7 +366,7 @@ export default function Tapa() {
 
   // Check validity and win condition
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, rows)
@@ -376,7 +376,7 @@ export default function Tapa() {
     if (checkSolved(grid, puzzleData.clues, rows)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors, rows]);
+  }, [grid, puzzleData, showErrors, rows, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing') return;

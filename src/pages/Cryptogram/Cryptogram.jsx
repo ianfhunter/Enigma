@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -73,6 +74,7 @@ const DEFAULT_STARTING_HINTS = 3;
 const MAX_STARTING_HINTS = 5;
 
 export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
+  const { t } = useTranslation();
   // Clamp startingHints between 0 and MAX_STARTING_HINTS
   const numStartingHints = Math.max(0, Math.min(MAX_STARTING_HINTS, startingHints));
 
@@ -323,7 +325,7 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
   if (!quote) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -395,7 +397,7 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="Puzzle Solved!"
+            title={t('gameStatus.solved')}
             message={`Time: ${formatTime(timeTaken)} • Hints used: ${hintsUsed}`}
           />
         )}

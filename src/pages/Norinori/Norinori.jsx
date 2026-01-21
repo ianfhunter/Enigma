@@ -180,7 +180,7 @@ export default function Norinori() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(playerGrid, puzzleData.regions) : new Set();
     setErrors(newErrors);
@@ -188,7 +188,7 @@ export default function Norinori() {
     if (checkSolved(playerGrid, puzzleData.solution)) {
       setGameState('won');
     }
-  }, [playerGrid, puzzleData, showErrors]);
+  }, [playerGrid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

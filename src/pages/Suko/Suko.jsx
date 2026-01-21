@@ -255,6 +255,9 @@ export default function Suko() {
     setColorSumStatus(newColorSumStatus);
 
     // Check if solved
+    // Don't check for win if game is not in playing state
+    if (gameState !== 'playing') return;
+
     let allFilled = true;
     let allCorrect = true;
 

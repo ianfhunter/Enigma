@@ -373,7 +373,7 @@ export default function Tatamibari() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? validateSolution(playerGrid, puzzleData.clueGrid, size) : new Set();
     setErrors(newErrors);
@@ -381,7 +381,7 @@ export default function Tatamibari() {
     if (isSolved(playerGrid, puzzleData.clueGrid, size)) {
       setGameState('won');
     }
-  }, [playerGrid, puzzleData, size, showErrors]);
+  }, [playerGrid, puzzleData, size, showErrors, gameState]);
 
   const handleCellMouseDown = (r, c) => {
     if (gameState !== 'playing') return;

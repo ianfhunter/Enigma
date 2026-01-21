@@ -394,7 +394,7 @@ export default function Hashi() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.islands, bridges) : new Set();
     setErrors(newErrors);
@@ -402,7 +402,7 @@ export default function Hashi() {
     if (checkSolved(puzzleData.islands, bridges)) {
       setGameState('won');
     }
-  }, [bridges, puzzleData, showErrors]);
+  }, [bridges, puzzleData, showErrors, gameState]);
 
   const handleIslandClick = (island) => {
     if (gameState !== 'playing') return;

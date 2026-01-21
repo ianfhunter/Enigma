@@ -245,7 +245,7 @@ export default function KillerSudoku() {
   }, [isRunning, gameState]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const gridSize = puzzleData.size;
     const newErrors = showErrors ? checkValidity(grid, puzzleData.cages, gridSize) : new Set();
@@ -255,7 +255,7 @@ export default function KillerSudoku() {
       setGameState('won');
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   // Keyboard input
   useEffect(() => {

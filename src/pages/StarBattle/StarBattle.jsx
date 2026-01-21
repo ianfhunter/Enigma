@@ -182,7 +182,7 @@ export default function StarBattle() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(stars, puzzleData.regions, puzzleData.starsPerUnit) : new Set();
     setErrors(newErrors);
@@ -190,7 +190,7 @@ export default function StarBattle() {
     if (checkSolved(stars, puzzleData.regions, puzzleData.starsPerUnit)) {
       setGameState('won');
     }
-  }, [stars, puzzleData, showErrors]);
+  }, [stars, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

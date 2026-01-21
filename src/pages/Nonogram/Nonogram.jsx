@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -156,6 +157,7 @@ export {
 };
 
 export default function Nonogram() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [userGrid, setUserGrid] = useState([]);
   const [gameState, setGameState] = useState('loading');
@@ -332,7 +334,7 @@ export default function Nonogram() {
   if (gameState === 'loading' || !puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -429,7 +431,7 @@ export default function Nonogram() {
             state="won"
             title="🎨 Puzzle Complete!"
             message={<>You revealed: {currentImage?.name}</>}
-            actions={[{ label: 'New Puzzle', onClick: loadRandomPuzzle, primary: true }]}
+            actions={[{ label: t('common.newPuzzle'), onClick: loadRandomPuzzle, primary: true }]}
           >
             <div className={styles.revealedImage}>
               <img src={currentImage?.url} alt={currentImage?.name} />
@@ -442,7 +444,7 @@ export default function Nonogram() {
             state="gaveup"
             title="🖼️ Solution Revealed"
             message={<>It was: {currentImage?.name}</>}
-            actions={[{ label: 'New Puzzle', onClick: loadRandomPuzzle, primary: true }]}
+            actions={[{ label: t('common.newPuzzle'), onClick: loadRandomPuzzle, primary: true }]}
           >
             <div className={styles.revealedImage}>
               <img src={currentImage?.url} alt={currentImage?.name} />
@@ -459,7 +461,7 @@ export default function Nonogram() {
             disabled={gameState !== 'playing'}
           />
           <button className={styles.newGameBtn} onClick={loadRandomPuzzle}>
-            New Puzzle
+            {t('common.newPuzzle')}
           </button>
         </div>
 

@@ -162,13 +162,13 @@ export default function Shikaku() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData || playerRects.length === 0) return;
+    if (!puzzleData || playerRects.length === 0 || gameState !== 'playing') return;
 
     const gridSize = puzzleData.size || size;
     if (checkSolved(playerRects, puzzleData.grid, gridSize)) {
       setGameState('won');
     }
-  }, [playerRects, puzzleData, size]);
+  }, [playerRects, puzzleData, size, gameState]);
 
   const handleMouseDown = (r, c) => {
     if (gameState !== 'playing') return;

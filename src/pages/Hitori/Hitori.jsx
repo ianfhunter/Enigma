@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -229,6 +230,7 @@ export {
 };
 
 export default function Hitori() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
@@ -282,7 +284,7 @@ export default function Hitori() {
   }, [loading, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.grid, shaded) : new Set();
     setErrors(newErrors);
@@ -290,7 +292,7 @@ export default function Hitori() {
     if (checkSolved(puzzleData.grid, shaded)) {
       setGameState('won');
     }
-  }, [shaded, puzzleData, showErrors]);
+  }, [shaded, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c, e) => {
     if (gameState !== 'playing') return;
@@ -347,7 +349,7 @@ export default function Hitori() {
     return (
       <div className={styles.container}>
         <GameHeader title="Hitori" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -412,17 +414,17 @@ export default function Hitori() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="All rules satisfied"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            title={t('gameStatus.solved')}
+            message={t('common.allRulesSatisfied', 'All rules satisfied')}
+            actions={[{ label: t('common.newPuzzle'), onClick: initGame, primary: true }]}
           />
         )}
 
         {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
-            message="Better luck next time!"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            message={t('common.betterLuckNextTime')}
+            actions={[{ label: t('common.newPuzzle'), onClick: initGame, primary: true }]}
           />
         )}
 
@@ -447,7 +449,7 @@ export default function Hitori() {
             disabled={gameState !== 'playing'}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
-            New Puzzle
+            {t('common.newPuzzle')}
           </button>
         </div>
 

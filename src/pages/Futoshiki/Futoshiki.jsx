@@ -228,7 +228,7 @@ export default function Futoshiki() {
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     if (showErrors) {
       setErrors(findErrors(grid, puzzleData.horizontal, puzzleData.vertical, size));
@@ -239,7 +239,7 @@ export default function Futoshiki() {
     if (checkSolved(grid, puzzleData.solution)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, size, showErrors]);
+  }, [grid, puzzleData, size, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;

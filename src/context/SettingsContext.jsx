@@ -4,6 +4,8 @@ import { users } from '../api/client';
 
 const SettingsContext = createContext(null);
 
+const STORAGE_KEY = 'enigma-settings';
+
 const defaultSettings = {
   englishVariant: 'us',
   theme: 'dark',
@@ -15,18 +17,42 @@ const defaultSettings = {
   language: 'en', // Interface language
 };
 
+// Load settings from localStorage
+function loadLocalSettings() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return { ...defaultSettings, ...parsed };
+    }
+  } catch (e) {
+    console.error('Failed to load settings from localStorage:', e);
+  }
+  return defaultSettings;
+}
+
+// Save settings to localStorage
+function saveLocalSettings(settings) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch (e) {
+    console.error('Failed to save settings to localStorage:', e);
+  }
+}
+
 export function SettingsProvider({ children }) {
   const { isAuthenticated, loading: authLoading } = useAuth();
   const [settings, setSettings] = useState(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch settings from API when authenticated
+  // Fetch settings from API when authenticated, or load from localStorage
   useEffect(() => {
     if (authLoading) return;
 
     if (!isAuthenticated) {
-      setSettings(defaultSettings);
+      // Load from localStorage for unauthenticated users
+      setSettings(loadLocalSettings());
       setLoading(false);
       return;
     }
@@ -67,7 +93,14 @@ export function SettingsProvider({ children }) {
   // Update a single setting
   const updateSetting = useCallback(async (key, value) => {
     // Optimistically update local state
-    setSettings(prev => ({ ...prev, [key]: value }));
+    setSettings(prev => {
+      const newSettings = { ...prev, [key]: value };
+      // Save to localStorage for unauthenticated users
+      if (!isAuthenticated) {
+        saveLocalSettings(newSettings);
+      }
+      return newSettings;
+    });
 
     // Persist to server if authenticated
     if (isAuthenticated) {
@@ -83,7 +116,14 @@ export function SettingsProvider({ children }) {
   // Update multiple settings at once
   const updateSettings = useCallback(async (updates) => {
     // Optimistically update local state
-    setSettings(prev => ({ ...prev, ...updates }));
+    setSettings(prev => {
+      const newSettings = { ...prev, ...updates };
+      // Save to localStorage for unauthenticated users
+      if (!isAuthenticated) {
+        saveLocalSettings(newSettings);
+      }
+      return newSettings;
+    });
 
     // Persist to server if authenticated
     if (isAuthenticated) {

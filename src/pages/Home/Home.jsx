@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import GameCard from '../../components/GameCard';
 import { categories, allGames } from '../../data/gameRegistry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
@@ -10,6 +11,7 @@ import { useFavourites } from '../../context/SettingsContext';
 import styles from './Home.module.css';
 
 export default function Home() {
+  const { t } = useTranslation();
   const { installedPackages } = useInstalledPackages();
   const { customPacks } = useCustomPacks();
   const { favourites } = useFavourites();
@@ -54,7 +56,7 @@ export default function Home() {
         <section className={`${styles.category} ${styles.favouritesSection}`}>
           <h2 className={styles.categoryTitle}>
             <span className={styles.categoryIcon}>⭐</span>
-            Favourites
+            {t('home.favourites')}
             <span className={styles.gameCount}>{favouriteGames.length}</span>
           </h2>
           <div className={styles.grid}>
@@ -107,7 +109,7 @@ export default function Home() {
             <span className={styles.categoryIcon}>{pack.icon}</span>
             {pack.name}
             <span className={styles.gameCount}>{pack.games.length}</span>
-            <span className={styles.customTag}>Custom</span>
+            <span className={styles.customTag}>{t('home.custom')}</span>
           </h2>
           <div className={styles.grid}>
             {pack.games.map((game) => (
@@ -119,7 +121,7 @@ export default function Home() {
                 linkTo={`/custom/${pack.id}/${game.id}`}
                 customIcon={game.icon || '🎮'}
                 customColors={{ primary: '#f59e0b', secondary: '#d97706' }}
-                typeBadge="External"
+                typeBadge={t('common.external')}
               />
             ))}
           </div>
@@ -136,7 +138,7 @@ export default function Home() {
               <span className={styles.categoryIcon}>{category.icon || category.packIcon}</span>
               {category.name}
               <span className={styles.gameCount}>{category.games.length}</span>
-              <span className={styles.communityTag}>Community</span>
+              <span className={styles.communityTag}>{t('home.community')}</span>
             </h2>
             <div className={styles.grid}>
               {category.games.map((game) => (
@@ -148,7 +150,7 @@ export default function Home() {
                   linkTo={`/community/${category.packId}/${game.slug}`}
                   customIcon={game.icon || game.emojiIcon || '🎮'}
                   customColors={game.colors || { primary: '#8b5cf6', secondary: '#7c3aed' }}
-                  typeBadge="Community"
+                  typeBadge={t('home.community')}
                 />
               ))}
             </div>
@@ -162,11 +164,11 @@ export default function Home() {
           <div className={styles.promoContent}>
             <span className={styles.promoIcon}>🏪</span>
             <div className={styles.promoText}>
-              <h3>Want more puzzles?</h3>
-              <p>Browse the Game Store to install additional puzzle packs!</p>
+              <h3>{t('home.wantMorePuzzles')}</h3>
+              <p>{t('home.browseStore')}</p>
             </div>
             <Link to="/store" className={styles.promoButton}>
-              Visit Store
+              {t('home.visitStore')}
             </Link>
           </div>
         </section>

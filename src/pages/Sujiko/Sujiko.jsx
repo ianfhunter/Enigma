@@ -145,6 +145,9 @@ export default function Sujiko() {
     const newSumStatus = checkSums(grid, puzzleData.sums);
     setSumStatus(newSumStatus);
 
+    // Don't check for win if game is not in playing state
+    if (gameState !== 'playing') return;
+
     // Check if solved
     let allFilled = true;
     let allCorrect = true;
@@ -159,7 +162,7 @@ export default function Sujiko() {
     if (allFilled && allCorrect) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing' || !puzzleData) return;

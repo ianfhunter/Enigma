@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
@@ -176,6 +177,7 @@ export {
 };
 
 export default function Galaxies() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(7);
   const [difficulty, setDifficulty] = useState('e');
   const [puz, setPuz] = useState(null);
@@ -250,9 +252,9 @@ export default function Galaxies() {
           labels={Object.fromEntries(DIFFICULTIES.map(d => [d.code, d.label]))}
         />
         <div className={styles.group}>
-          <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
+          <button className={styles.generateBtn} onClick={generateNew}>{t('common.newPuzzle')}</button>
           {puz && gameState === 'playing' && (
-            <button className={styles.button} onClick={() => setAssign(new Array(puz.w * puz.h).fill(-1))}>Clear</button>
+            <button className={styles.button} onClick={() => setAssign(new Array(puz.w * puz.h).fill(-1))}>{t('common.clear')}</button>
           )}
           <GiveUpButton
             onGiveUp={handleGiveUp}
@@ -281,7 +283,7 @@ export default function Galaxies() {
         {gameState === 'solved' && (
           <GameResult
             state="won"
-            title="🎉 Solved!"
+            title={t('gameStatus.solved')}
             variant="inline"
           />
         )}

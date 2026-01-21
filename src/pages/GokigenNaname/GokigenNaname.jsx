@@ -166,7 +166,7 @@ export default function GokigenNaname() {
   };
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || gameState !== 'playing') return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, rows, cols)
@@ -176,7 +176,7 @@ export default function GokigenNaname() {
     if (checkSolved(grid, puzzleData.clues, rows, cols)) {
       setGameState('won');
     }
-  }, [grid, puzzleData, showErrors, rows, cols]);
+  }, [grid, puzzleData, showErrors, rows, cols, gameState]);
 
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;
