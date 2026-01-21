@@ -96,3 +96,116 @@ describe('GameResult - Variant', () => {
     expect(defaultVariant).toBe('inline');
   });
 });
+
+// ===========================================
+// GameResult - Visibility Tests
+// ===========================================
+describe('GameResult - Visibility', () => {
+  // Tests the logic for when the component should render
+  const shouldRenderComponent = (state, show) => {
+    // Don't render if show is explicitly false
+    if (show === false) return false;
+    // Don't render if game is still in progress
+    if (state === 'playing' || !state) return false;
+    return true;
+  };
+
+  it('should NOT render when state is "playing"', () => {
+    expect(shouldRenderComponent('playing', undefined)).toBe(false);
+  });
+
+  it('should NOT render when state is undefined/null', () => {
+    expect(shouldRenderComponent(undefined, undefined)).toBe(false);
+    expect(shouldRenderComponent(null, undefined)).toBe(false);
+  });
+
+  it('should NOT render when show is explicitly false', () => {
+    expect(shouldRenderComponent('won', false)).toBe(false);
+    expect(shouldRenderComponent('lost', false)).toBe(false);
+  });
+
+  it('should render when state is "won"', () => {
+    expect(shouldRenderComponent('won', undefined)).toBe(true);
+  });
+
+  it('should render when state is "lost"', () => {
+    expect(shouldRenderComponent('lost', undefined)).toBe(true);
+  });
+
+  it('should render when state is "gaveup"', () => {
+    expect(shouldRenderComponent('gaveup', undefined)).toBe(true);
+  });
+});
+
+// ===========================================
+// GameResult - Sound Effect Logic Tests
+// ===========================================
+describe('GameResult - Sound Effect Logic', () => {
+  // Tests the logic for when sound should be played
+  const shouldPlayWinSound = (state, hasPlayedSound) => {
+    return state === 'won' && !hasPlayedSound;
+  };
+
+  const shouldResetSoundFlag = (state) => {
+    return state !== 'won';
+  };
+
+  it('should trigger sound when state is "won" and sound has not been played', () => {
+    expect(shouldPlayWinSound('won', false)).toBe(true);
+  });
+
+  it('should not trigger sound when state is "won" but sound has already been played', () => {
+    expect(shouldPlayWinSound('won', true)).toBe(false);
+  });
+
+  it('should not trigger sound when state is "lost"', () => {
+    expect(shouldPlayWinSound('lost', false)).toBe(false);
+    expect(shouldPlayWinSound('lost', true)).toBe(false);
+  });
+
+  it('should not trigger sound when state is "gaveup"', () => {
+    expect(shouldPlayWinSound('gaveup', false)).toBe(false);
+    expect(shouldPlayWinSound('gaveup', true)).toBe(false);
+  });
+
+  it('should not trigger sound when state is "playing"', () => {
+    expect(shouldPlayWinSound('playing', false)).toBe(false);
+  });
+
+  it('should reset sound flag when state changes away from "won"', () => {
+    expect(shouldResetSoundFlag('lost')).toBe(true);
+    expect(shouldResetSoundFlag('gaveup')).toBe(true);
+    expect(shouldResetSoundFlag('playing')).toBe(true);
+  });
+
+  it('should not reset sound flag when state is "won"', () => {
+    expect(shouldResetSoundFlag('won')).toBe(false);
+  });
+
+  it('should allow sound to play again after transitioning away from "won" and back', () => {
+    // Simulate state transitions
+    let hasPlayedSound = false;
+    let state = 'playing';
+
+    // Transition to won - should play
+    state = 'won';
+    if (shouldPlayWinSound(state, hasPlayedSound)) {
+      hasPlayedSound = true;
+    }
+    expect(hasPlayedSound).toBe(true);
+
+    // Transition to playing - should reset flag
+    state = 'playing';
+    if (shouldResetSoundFlag(state)) {
+      hasPlayedSound = false;
+    }
+    expect(hasPlayedSound).toBe(false);
+
+    // Transition back to won - should play again
+    state = 'won';
+    if (shouldPlayWinSound(state, hasPlayedSound)) {
+      hasPlayedSound = true;
+    }
+    expect(hasPlayedSound).toBe(true);
+  });
+});

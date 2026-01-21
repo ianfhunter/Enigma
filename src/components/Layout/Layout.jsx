@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useFavicon } from '../../hooks/useFavicon';
+import { useLanguageSync } from '../../hooks/useLanguageSync';
 import { enabledGames, allGames, getGameIcon } from '../../data/gameRegistry';
 import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
@@ -12,6 +14,8 @@ import styles from './Layout.module.css';
 
 export default function Layout() {
   useFavicon();
+  useLanguageSync(); // Sync user's language preference with i18n
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
@@ -107,7 +111,7 @@ export default function Layout() {
       <div className={styles.layout}>
         <div className={styles.loadingContainer}>
           <img src={logo} alt="Loading" className={styles.loadingLogo} />
-          <p className={styles.loadingText}>Loading...</p>
+          <p className={styles.loadingText}>{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -131,18 +135,18 @@ export default function Layout() {
                 <input
                   type="text"
                   className={styles.searchInput}
-                  placeholder="Search games..."
+                  placeholder={t('common.searchGames')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onKeyDown={handleSearchKeyDown}
-                  aria-label="Search games"
+                  aria-label={t('common.searchGames')}
                 />
                 {searchQuery && (
                   <button
                     className={styles.clearButton}
                     onClick={() => setSearchQuery('')}
-                    aria-label="Clear search"
+                    aria-label={t('common.clearSearch')}
                   >
                     ✕
                   </button>
@@ -171,13 +175,13 @@ export default function Layout() {
                             className={styles.searchResultsMore}
                             onClick={handleViewAllResults}
                           >
-                            +{searchResults.total - 5} more — view all results
+                            {t('common.viewAllResults', { count: searchResults.total - 5 })}
                           </button>
                         )}
                       </>
                     ) : (
                       <div className={styles.searchNoResults}>
-                        No games found
+                        {t('common.noGamesFound')}
                       </div>
                     )}
                   </div>
@@ -188,25 +192,25 @@ export default function Layout() {
                 <div className={styles.stats}>
                   <div className={styles.statItem}>
                     <span className={styles.statNumber}>{totalGames}</span>
-                    <span className={styles.statLabel}>Games</span>
+                    <span className={styles.statLabel}>{t('common.games')}</span>
                   </div>
                 </div>
 
                 <button
                   className={styles.surpriseButton}
                   onClick={handleSurpriseMe}
-                  aria-label="Surprise me"
+                  aria-label={t('header.surpriseMe')}
                 >
                   <span className={styles.surpriseIcon}>🎲</span>
-                  <span className={styles.surpriseText}>Surprise Me!</span>
+                  <span className={styles.surpriseText}>{t('header.surpriseMe')}</span>
                 </button>
 
-                <Link to="/store" className={styles.storeButton} aria-label="Game Store">
+                <Link to="/store" className={styles.storeButton} aria-label={t('header.store')}>
                   <span className={styles.storeIcon}>🏪</span>
-                  <span className={styles.storeText}>Store</span>
+                  <span className={styles.storeText}>{t('header.store')}</span>
                 </Link>
 
-                <Link to="/profile" className={styles.profileButton} aria-label="Profile">
+                <Link to="/profile" className={styles.profileButton} aria-label={t('header.profile')}>
                   <span className={styles.profileAvatar}>
                     {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
                   </span>
@@ -231,18 +235,18 @@ export default function Layout() {
                 <input
                   type="text"
                   className={styles.searchInput}
-                  placeholder="Search games..."
+                  placeholder={t('common.searchGames')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onKeyDown={handleSearchKeyDown}
-                  aria-label="Search games"
+                  aria-label={t('common.searchGames')}
                 />
                 {searchQuery && (
                   <button
                     className={styles.clearButton}
                     onClick={() => setSearchQuery('')}
-                    aria-label="Clear search"
+                    aria-label={t('common.clearSearch')}
                   >
                     ✕
                   </button>
@@ -271,20 +275,20 @@ export default function Layout() {
                             className={styles.searchResultsMore}
                             onClick={handleViewAllResults}
                           >
-                            +{searchResults.total - 5} more — view all results
+                            {t('common.viewAllResults', { count: searchResults.total - 5 })}
                           </button>
                         )}
                       </>
                     ) : (
                       <div className={styles.searchNoResults}>
-                        No games found
+                        {t('common.noGamesFound')}
                       </div>
                     )}
                   </div>
                 )}
               </div>
 
-              <Link to="/profile" className={styles.profileButton} aria-label="Profile">
+              <Link to="/profile" className={styles.profileButton} aria-label={t('header.profile')}>
                 <span className={styles.profileAvatar}>
                   {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
                 </span>
@@ -300,7 +304,7 @@ export default function Layout() {
         <Outlet context={{ settings }} />
       </main>
       <footer className={styles.footer}>
-        <p>Self-hosted puzzle collection</p>
+        <p>{t('footer.selfHosted')}</p>
         <a
           href="https://github.com/ianfhunter/enigma"
           target="_blank"
@@ -315,7 +319,7 @@ export default function Layout() {
           >
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
           </svg>
-          <span>View on GitHub</span>
+          <span>{t('footer.viewOnGithub')}</span>
         </a>
       </footer>
 

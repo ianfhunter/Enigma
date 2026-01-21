@@ -12,6 +12,7 @@ const defaultSettings = {
   favouriteGames: [],
   gamePreferences: {},
   searchEngine: 'google',
+  language: 'en', // Interface language
 };
 
 export function SettingsProvider({ children }) {
@@ -151,6 +152,15 @@ export function useSoundEnabled() {
 export function useEnglishVariant() {
   const { settings } = useSettings();
   return settings.englishVariant || 'us';
+}
+
+// Convenience hook for language setting
+export function useLanguage() {
+  const { settings, updateSetting } = useSettings();
+  return {
+    language: settings.language || 'en',
+    setLanguage: (lang) => updateSetting('language', lang),
+  };
 }
 
 // Convenience hook for favourites
