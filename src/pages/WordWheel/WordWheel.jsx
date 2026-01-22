@@ -256,8 +256,8 @@ export default function WordWheel() {
 
       <ModeSelector
         modes={modeOptions}
-        selectedMode={mode}
-        onSelectMode={handleModeChange}
+        value={mode}
+        onChange={handleModeChange}
       />
 
       <div className={styles.gameArea}>

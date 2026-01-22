@@ -252,7 +252,7 @@ export default function FamousPaintings() {
               { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} questions, test your knowledge!` },
               { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep playing until you want to stop' },
             ]}
-            onSelectMode={startGame}
+            onChange={startGame}
           />
 
           <StatsPanel

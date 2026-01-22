@@ -273,7 +273,7 @@
     "bestStreak": "Mejor Racha",
     "gameVisibility": "Visibilidad de Juegos",
     "enabledCount": "{{enabled}} de {{total}} activados",
-    "gameVisibilityDescription": "Controla qué juegos aparecen en la página principal. Los juegos DEV están en desarrollo y pueden estar incompletos.",
+    "gameVisibilityDescription": "Controla qué juegos aparecen en la página principal.",
     "enableAll": "Activar Todos",
     "disableAll": "Desactivar Todos",
     "failedToLoad": "Error al cargar los datos",
@@ -317,8 +317,6 @@
     "userDeleted": "¡Usuario eliminado!",
     "gameEnabled": "¡Juego activado en todo el servidor!",
     "gameDisabled": "¡Juego desactivado en todo el servidor!",
-    "noDevGames": "No se encontraron juegos DEV.",
-    "devGamesToggled": "¡{{action}} {{count}} juego(s) DEV en todo el servidor!",
     "loadingAdminData": "Cargando datos de administración...",
     "adminPanel": "Panel de Administración",
     "stats": "Estadísticas",
@@ -346,9 +344,7 @@
     "removeAdmin": "Quitar administrador",
     "makeAdmin": "Hacer administrador",
     "serverGameConfig": "Configuración de Juegos del Servidor",
-    "serverGameConfigDescription": "Activar o desactivar juegos en todo el servidor. Los juegos desactivados no aparecerán para ningún usuario.",
-    "disableAllDevGames": "Desactivar Todos los Juegos DEV",
-    "enableAllDevGames": "Activar Todos los Juegos DEV"
+    "serverGameConfigDescription": "Activar o desactivar juegos en todo el servidor. Los juegos desactivados no aparecerán para ningún usuario."
   },
   "store": {
     "title": "Tienda de Juegos",

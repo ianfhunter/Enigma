@@ -416,6 +416,79 @@
   color: var(--color-text-secondary);
 }
 
+/* Light mode overrides */
+:global([data-theme="light"]) .title {
+  background: linear-gradient(135deg, #1a1625 0%, #4a4458 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+:global([data-theme="light"]) .modeCard {
+  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.15);
+}
+
+:global([data-theme="light"]) .modeCard:hover {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+:global([data-theme="light"]) .question {
+  color: #1a1625;
+}
+
+:global([data-theme="light"]) .optionBtn {
+  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.15);
+}
+
+:global([data-theme="light"]) .optionBtn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+:global([data-theme="light"]) .constellationInfo {
+  background: rgba(139, 92, 246, 0.06);
+  color: #1a1625;
+}
+
+:global([data-theme="light"]) .nextBtn {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #ffffff;
+}
+
+:global([data-theme="light"]) .gameOverArea {
+  background: rgba(139, 92, 246, 0.04);
+  border-color: rgba(139, 92, 246, 0.12);
+}
+
+:global([data-theme="light"]) .playAgainBtn {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #ffffff;
+}
+
+:global([data-theme="light"]) .menuBtn {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+:global([data-theme="light"]) .menuBtn:hover {
+  background: rgba(139, 92, 246, 0.15);
+}
+
+:global([data-theme="light"]) .statsPanel {
+  background: rgba(139, 92, 246, 0.04);
+  border-color: rgba(139, 92, 246, 0.12);
+}
+
+:global([data-theme="light"]) .dataInfo {
+  color: #6b6580;
+}
+
 /* Responsive */
 @media (max-width: 500px) {
   .optionsGrid {

@@ -183,6 +183,11 @@
   overflow: hidden;
 }
 
+:global([data-theme="light"]) .mapContainer {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
 .map {
   width: 100%;
   height: auto;
@@ -204,6 +209,22 @@
 .region.missed {
   fill: rgba(251, 191, 36, 0.5);
   stroke: #fbbf24;
+}
+
+/* Light mode - dark outlines for visibility */
+:global([data-theme="light"]) .region {
+  fill: rgba(0, 0, 0, 0.06);
+  stroke: rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="light"]) .region.guessed {
+  fill: #0d9488;
+  stroke: #0f766e;
+}
+
+:global([data-theme="light"]) .region.missed {
+  fill: rgba(251, 191, 36, 0.4);
+  stroke: #d97706;
 }
 
 /* Input Area */

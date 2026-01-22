@@ -57,7 +57,6 @@ export const categories = [
         emojiIcon: '🖼️',
         colors: { primary: '#f472b6', secondary: '#db2777' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #db2777 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Nonogram'),
       },
       {
@@ -69,7 +68,6 @@ export const categories = [
         emojiIcon: '💣',
         colors: { primary: '#ef4444', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Minesweeper'),
       },
       {
@@ -81,7 +79,6 @@ export const categories = [
         emojiIcon: '🌊',
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Nurikabe'),
       },
       {
@@ -93,7 +90,6 @@ export const categories = [
         emojiIcon: '⬛',
         colors: { primary: '#71717a', secondary: '#52525b' },
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Hitori'),
       },
       {
@@ -105,7 +101,6 @@ export const categories = [
         emojiIcon: '🐠',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Aquarium'),
       },
       {
@@ -117,7 +112,6 @@ export const categories = [
         emojiIcon: '⭐',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/StarBattle'),
       },
       {
@@ -128,7 +122,6 @@ export const categories = [
         emojiIcon: '🏕️',
         colors: { primary: '#22c55e', secondary: '#84cc16' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #84cc16 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Campixu'),
       },
       {
@@ -140,7 +133,6 @@ export const categories = [
         emojiIcon: '🔘',
         colors: { primary: '#0ea5e9', secondary: '#0284c7' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Takuzu'),
       },
       {
@@ -152,7 +144,6 @@ export const categories = [
         emojiIcon: '☯️',
         colors: { primary: '#1a1a1a', secondary: '#666666' },
         gradient: 'linear-gradient(135deg, #1a1a1a 0%, #666666 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/YinYang'),
       },
       {
@@ -163,7 +154,6 @@ export const categories = [
         emojiIcon: '🏞️',
         colors: { primary: '#06b6d4', secondary: '#22d3ee' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)',
-        version: 'v1.1',
         component: () => import('../../pages/Creek'),
       },
       {
@@ -174,7 +164,6 @@ export const categories = [
         emojiIcon: '⭕',
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Kurotto'),
       },
       {
@@ -186,7 +175,6 @@ export const categories = [
         emojiIcon: '🌡️',
         colors: { primary: '#ef4444', secondary: '#f97316' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #f97316 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Thermometers'),
       },
       {
@@ -198,7 +186,6 @@ export const categories = [
         emojiIcon: '💡',
         colors: { primary: '#facc15', secondary: '#eab308' },
         gradient: 'linear-gradient(135deg, #facc15 0%, #eab308 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/LightsOut'),
       },
       {
@@ -210,7 +197,6 @@ export const categories = [
         emojiIcon: '💡',
         colors: { primary: '#fde047', secondary: '#facc15' },
         gradient: 'linear-gradient(135deg, #fde047 0%, #facc15 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Lightup'),
       },
       {
@@ -221,7 +207,6 @@ export const categories = [
         emojiIcon: '🧱',
         colors: { primary: '#71717a', secondary: '#52525b' },
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Mosaic'),
       },
       {
@@ -233,7 +218,6 @@ export const categories = [
         emojiIcon: '⬛',
         colors: { primary: '#a855f7', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Tapa'),
       },
       {
@@ -245,7 +229,6 @@ export const categories = [
         emojiIcon: '📦',
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Mochikoro'),
       },
     ],

@@ -385,6 +385,77 @@
   cursor: not-allowed;
 }
 
+/* Light mode overrides */
+:global([data-theme="light"]) .board {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+:global([data-theme="light"]) .cell {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+:global([data-theme="light"]) .cell:hover {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+:global([data-theme="light"]) .cell.selected {
+  background: rgba(245, 158, 11, 0.15);
+  box-shadow: inset 0 0 0 2px #d97706;
+}
+
+:global([data-theme="light"]) .cell.error {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+:global([data-theme="light"]) .cell.cageTop {
+  border-top-color: rgba(30, 30, 50, 0.5);
+}
+
+:global([data-theme="light"]) .cell.cageBottom {
+  border-bottom-color: rgba(30, 30, 50, 0.5);
+}
+
+:global([data-theme="light"]) .cell.cageLeft {
+  border-left-color: rgba(30, 30, 50, 0.5);
+}
+
+:global([data-theme="light"]) .cell.cageRight {
+  border-right-color: rgba(30, 30, 50, 0.5);
+}
+
+:global([data-theme="light"]) .cageLabel {
+  color: #4a4458;
+}
+
+:global([data-theme="light"]) .cellValue {
+  color: #b45309;
+}
+
+:global([data-theme="light"]) .note {
+  color: rgba(180, 83, 9, 0.8);
+}
+
+:global([data-theme="light"]) .numBtn {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: #1a1625;
+}
+
+:global([data-theme="light"]) .numBtn:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+:global([data-theme="light"]) .actionBtn {
+  color: #4a4458;
+}
+
+:global([data-theme="light"]) .actionBtn.active {
+  color: #b45309;
+}
+
 @media (max-width: 400px) {
   .board {
     max-width: 300px;

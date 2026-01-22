@@ -240,7 +240,7 @@ export default function ClassicalMusicQuiz() {
               { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} pieces, test your musical knowledge!` },
               { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep playing until you want to stop' },
             ]}
-            onSelectMode={startGame}
+            onChange={startGame}
           />
 
           <StatsPanel

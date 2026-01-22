@@ -392,7 +392,7 @@ export default function Constellations() {
               { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} constellations to identify` },
               { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep stargazing!' },
             ]}
-            onSelectMode={startGame}
+            onChange={startGame}
           />
 
           <StatsPanel

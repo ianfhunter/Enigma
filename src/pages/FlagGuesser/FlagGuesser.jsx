@@ -108,8 +108,8 @@ export default function FlagGuesser() {
               { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} flags, score as high as you can!` },
               { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep playing until you want to stop' },
             ]}
-            selectedMode={null}
-            onSelectMode={startGame}
+            value={null}
+            onChange={startGame}
           />
 
           <StatsPanel
