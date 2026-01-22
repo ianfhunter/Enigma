@@ -27,11 +27,6 @@
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    <!-- Mask for the "e" opening -->
-    <mask id="e-mask" maskUnits="userSpaceOnUse" x="560" y="200" width="80" height="80">
-      <rect x="560" y="200" width="80" height="80" fill="white"/>
-      <path d="M 624 246 A 28 28 0 0 1 612 268" fill="none" stroke="black" stroke-width="16"/>
-    </mask>
   </defs>
 
   <!-- Background -->
@@ -61,9 +56,13 @@
     <circle cx="-96" cy="0" r="12" fill="#8046FD"/>
   </g>
 
-  <!-- Center "e" with proper mask (positioned absolutely) -->
-  <g filter="url(#glow)" mask="url(#e-mask)">
-    <circle cx="600" cy="240" r="28" fill="none" stroke="#8046FD" stroke-width="10" stroke-linecap="round"/>
+  <!-- Center "e" drawn as arc path (no mask needed) -->
+  <g filter="url(#glow)">
+    <!-- "e" body - arc from top, around left, to bottom right opening -->
+    <path d="M 628 240
+             A 28 28 0 1 0 618 262"
+          fill="none" stroke="#8046FD" stroke-width="10" stroke-linecap="round"/>
+    <!-- "e" crossbar -->
     <line x1="572" y1="240" x2="628" y2="240" stroke="#8046FD" stroke-width="10" stroke-linecap="round"/>
   </g>
 
@@ -74,7 +73,7 @@
 
   <!-- Tagline -->
   <text x="600" y="480" text-anchor="middle" font-family="Outfit, sans-serif" font-size="28" font-weight="400" fill="rgba(196, 181, 253, 0.8)">
-    140+ Classic Puzzles • Self-Hosted
+    Self-Hosted Puzzle Collection
   </text>
 
   <!-- Bottom accent line -->

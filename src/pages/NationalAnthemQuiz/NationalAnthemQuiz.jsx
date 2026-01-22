@@ -396,11 +396,11 @@ export default function NationalAnthemQuiz() {
             {audioError ? (
               <div className={styles.audioError}>
                 <span>⚠️ Audio unavailable</span>
-                <span className={styles.errorHint}>Try the next anthem</span>
+                <span className={styles.errorHint}>{t('common.tryNextAnthem')}</span>
               </div>
             ) : !audioLoaded ? (
               <div className={styles.audioLoading}>
-                <span>Loading anthem...</span>
+                <span>{t('common.loadingAnthem')}</span>
               </div>
             ) : (
               <div className={styles.audioControls}>
@@ -432,7 +432,7 @@ export default function NationalAnthemQuiz() {
 
           {showHint && selectedAnswer === null && (
             <div className={styles.hint}>
-              <span className={styles.hintLabel}>Region:</span> {getRegion(currentAnthem.isoCode)}
+              <span className={styles.hintLabel}>{t('common.region')}:</span> {getRegion(currentAnthem.isoCode)}
             </div>
           )}
 

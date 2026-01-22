@@ -471,7 +471,7 @@ export default function TheseusMinotaur() {
         />
         <div className={styles.loading}>
           <div className={styles.spinner}></div>
-          <p>Generating puzzle...</p>
+          <p>{t('common.generatingPuzzle')}</p>
         </div>
       </div>
     );

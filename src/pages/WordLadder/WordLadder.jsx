@@ -125,7 +125,7 @@ export default function WordLadder() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Generating puzzle...</div>
+        <div className={styles.loading}>{t('common.generatingPuzzle')}</div>
       </div>
     );
   }
@@ -273,10 +273,10 @@ export default function WordLadder() {
           <div className={styles.tips}>
             <h3>{t('common.howToPlay')}</h3>
             <ul>
-              <li>Change exactly <strong>one letter</strong> at a time</li>
-              <li>Each intermediate word must be valid</li>
-              <li>Try to reach the goal in the fewest steps</li>
-              <li>You can undo moves to try different paths</li>
+              <li>{t('wordLadder.rule1')}</li>
+              <li>{t('wordLadder.rule2')}</li>
+              <li>{t('wordLadder.rule3')}</li>
+              <li>{t('wordLadder.rule4')}</li>
             </ul>
           </div>
 
@@ -284,7 +284,7 @@ export default function WordLadder() {
             <GiveUpButton
               onGiveUp={() => setShowSolution(true)}
               disabled={showSolution || gameWon}
-              buttonText="Show Solution"
+              buttonText={t('common.showSolution')}
             />
             <button className={styles.newGameBtn} onClick={initializePuzzle}>
               New Puzzle

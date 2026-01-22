@@ -381,11 +381,11 @@ export default function CountdownLetters() {
             <div className={styles.rulesPanel}>
               <h4>{t('common.howToPlay')}</h4>
               <ul>
-                <li>Pick <strong>9 letters</strong> - vowels or consonants</li>
-                <li>You must have at least <strong>3 vowels</strong></li>
-                <li>You must have at least <strong>4 consonants</strong></li>
-                <li>You have <strong>30 seconds</strong> to find the longest word</li>
-                <li>Longer words = more points!</li>
+                <li>{t('countdownLetters.rule1')}</li>
+                <li>{t('countdownLetters.rule2')}</li>
+                <li>{t('countdownLetters.rule3')}</li>
+                <li>{t('countdownLetters.rule4')}</li>
+                <li>{t('countdownLetters.rule5')}</li>
                 <li>9-letter words score <strong>18 points</strong> (double!)</li>
               </ul>
             </div>

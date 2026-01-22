@@ -234,7 +234,7 @@ export default function KnightsTour() {
           <div className={styles.stat}>
             <span className={styles.statIcon}>📊</span>
             <span className={styles.statValue}>{percentComplete}%</span>
-            <span className={styles.statLabel}>Complete</span>
+            <span className={styles.statLabel}>{t('common.complete')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statIcon}>🏆</span>
@@ -308,11 +308,11 @@ export default function KnightsTour() {
 
         {/* Tips */}
         <div className={styles.tips}>
-          <div className={styles.tipTitle}>💡 Tips</div>
+          <div className={styles.tipTitle}>💡 {t('common.tips')}</div>
           <ul className={styles.tipList}>
-            <li>The knight moves in an "L" shape: 2 squares in one direction, then 1 square perpendicular</li>
-            <li>Try to avoid corners early — they have fewer escape routes</li>
-            <li>Warnsdorff's rule: move to the square with the fewest onward moves</li>
+            <li>{t('knightsTour.tip1')}</li>
+            <li>{t('knightsTour.tip2')}</li>
+            <li>{t('knightsTour.tip3')}</li>
           </ul>
         </div>
       </div>

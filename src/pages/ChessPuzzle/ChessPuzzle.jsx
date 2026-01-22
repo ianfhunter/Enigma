@@ -424,7 +424,7 @@ export default function ChessPuzzle() {
           title="Chess Puzzles"
           instructions="Find the best move to win material or deliver checkmate!"
         />
-        <div className={styles.gameArea}>Loading puzzles…</div>
+        <div className={styles.gameArea}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -662,7 +662,7 @@ export default function ChessPuzzle() {
         <div className={styles.puzzleInfo}>
           {puzzle && (
             <div className={styles.puzzleIdSection}>
-              <span className={styles.puzzleIdLabel}>Puzzle ID:</span>
+              <span className={styles.puzzleIdLabel}>{t('common.puzzleId')}:</span>
               <code
                 className={styles.puzzleId}
                 onClick={() => {

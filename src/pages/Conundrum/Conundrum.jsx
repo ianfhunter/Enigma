@@ -269,10 +269,10 @@ export default function Conundrum() {
         <div className={styles.howToPlay}>
           <h4>{t('common.howToPlay')}</h4>
           <ul>
-            <li>Press "Start" to reveal the scrambled letters</li>
-            <li>Rearrange all 9 letters to form a valid word</li>
-            <li>Type your answer and submit before time runs out</li>
-            <li>Use "Shuffle" to rearrange the display</li>
+            <li>{t('conundrum.rule1')}</li>
+            <li>{t('conundrum.rule2')}</li>
+            <li>{t('conundrum.rule3')}</li>
+            <li>{t('conundrum.rule4')}</li>
           </ul>
         </div>
       </div>

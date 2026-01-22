@@ -542,7 +542,7 @@ export default function Pentomino() {
   if (!puzzleData) {
     return (
       <div className={styles.container}>
-        <div className={styles.error}>Failed to load puzzle data.</div>
+        <div className={styles.error}>{t('common.failedToLoadPuzzle')}</div>
       </div>
     );
   }

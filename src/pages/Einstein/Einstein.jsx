@@ -291,7 +291,7 @@ export default function Einstein() {
         </div>
 
         <div className={styles.settingGroup}>
-          <label>Difficulty:</label>
+          <label>{t('common.difficulty')}:</label>
           <div className={styles.buttonGroup}>
             {Object.values(DIFFICULTIES).map(diff => (
               <button
@@ -306,7 +306,7 @@ export default function Einstein() {
         </div>
 
         <div className={styles.settingGroup}>
-          <label>Theme:</label>
+          <label>{t('common.theme')}:</label>
           <select
             className={styles.themeSelect}
             value={themeId || theme.id}

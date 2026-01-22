@@ -44,7 +44,7 @@ export default function IframeGame() {
         <div className={styles.errorContent}>
           <span className={styles.errorIcon}>🔍</span>
           <h2>Game not found</h2>
-          <p>This game may have been removed or the link is invalid.</p>
+          <p>{t('common.gameRemovedOrInvalid')}</p>
           <Link to="/" className={styles.homeLink}>
             ← Back to Home
           </Link>
@@ -60,7 +60,7 @@ export default function IframeGame() {
         <div className={styles.redirectContent}>
           <span className={styles.redirectIcon}>{game.icon}</span>
           <h2>Opening {game.title}</h2>
-          <p>Redirecting to external site...</p>
+          <p>{t('common.redirectingExternal')}</p>
           <div className={styles.spinner} />
           <Link to="/" className={styles.cancelRedirect}>
             Cancel and go home
@@ -109,15 +109,15 @@ export default function IframeGame() {
         {isLoading && (
           <div className={styles.loading}>
             <div className={styles.spinner} />
-            <p>Loading game...</p>
+            <p>{t('common.loadingGame')}</p>
           </div>
         )}
 
         {hasError && (
           <div className={styles.loadError}>
             <span className={styles.errorIcon}>⚠️</span>
-            <h3>Failed to load game</h3>
-            <p>The game may have blocked embedding or the URL is invalid.</p>
+            <h3>{t('common.failedToLoadGame')}</h3>
+            <p>{t('common.gameBlockedOrInvalid')}</p>
             <a
               href={game.url}
               target="_blank"

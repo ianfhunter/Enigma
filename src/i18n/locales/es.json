@@ -124,6 +124,22 @@
     "played": "Jugado",
     "streak": "Racha",
     "retry": "Reintentar",
+    "across": "Horizontal",
+    "down": "Vertical",
+    "complete": "Completo",
+    "failedToLoadGame": "Error al cargar el juego",
+    "country": "País",
+    "region": "Región",
+    "pegs": "Clavijas",
+    "puzzleId": "ID del puzzle",
+    "tips": "Consejos",
+    "showSolution": "Mostrar solución",
+    "loadingAnthem": "Cargando himno...",
+    "loadingGame": "Cargando juego...",
+    "generatingPuzzle": "Generando puzzle...",
+    "gameRemovedOrInvalid": "Este juego puede haber sido eliminado o el enlace no es válido.",
+    "redirectingExternal": "Redirigiendo a sitio externo...",
+    "gameBlockedOrInvalid": "El juego puede haber bloqueado la incrustación o la URL no es válida.",
     "comingSoon": "Próximamente",
     "playNow": "Jugar Ahora",
     "addToFavourites": "Añadir a favoritos",
@@ -491,7 +507,9 @@
     "conflict": "Conflicto",
     "edgeMismatch": "Desajuste de borde",
     "totalsOff": "Totales incorrectos",
-    "clueErrors": "Errores de pistas"
+    "clueErrors": "Errores de pistas",
+    "puzzleRevealed": "Puzzle revelado",
+    "puzzleSolved": "¡Puzzle resuelto!"
   },
   "quiz": {
     "timeToStudyArt": "¡Hora de estudiar algo de historia del arte!",
@@ -506,5 +524,34 @@
     "allInequalitiesSatisfied": "Todas las desigualdades satisfechas",
     "binaryBalanceAchieved": "¡Equilibrio binario perfecto logrado!",
     "allIslandsConnected": "¡Todas las islas conectadas!"
+  },
+  "knightsTour": {
+    "tip1": "El caballo se mueve en forma de \"L\": 2 casillas en una dirección, luego 1 casilla perpendicular",
+    "tip2": "Evita las esquinas al principio — tienen menos rutas de escape",
+    "tip3": "Regla de Warnsdorff: muévete a la casilla con menos movimientos posibles"
+  },
+  "wordLadder": {
+    "rule1": "Cambia exactamente una letra a la vez",
+    "rule2": "Cada palabra intermedia debe ser válida",
+    "rule3": "Intenta llegar a la meta en el menor número de pasos",
+    "rule4": "Puedes deshacer movimientos para probar diferentes caminos"
+  },
+  "countdownLetters": {
+    "rule1": "Elige 9 letras - vocales o consonantes",
+    "rule2": "Debes tener al menos 3 vocales",
+    "rule3": "Debes tener al menos 4 consonantes",
+    "rule4": "Tienes 30 segundos para encontrar la palabra más larga",
+    "rule5": "¡Palabras más largas = más puntos!"
+  },
+  "conundrum": {
+    "rule1": "Presiona \"Iniciar\" para revelar las letras desordenadas",
+    "rule2": "Reorganiza las 9 letras para formar una palabra válida",
+    "rule3": "Escribe tu respuesta y envíala antes de que se acabe el tiempo",
+    "rule4": "Usa \"Mezclar\" para reorganizar la visualización"
+  },
+  "nQueens": {
+    "rule1": "Las reinas atacan horizontal, vertical y diagonalmente",
+    "rule2": "Ninguna reina puede estar en la misma fila, columna o diagonal",
+    "rule3": "Haz clic para colocar una reina, haz clic de nuevo para eliminarla"
   }
 }

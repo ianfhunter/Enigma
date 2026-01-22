@@ -339,11 +339,11 @@ export default function ClassicalMusicQuiz() {
             {audioError ? (
               <div className={styles.audioError}>
                 <span>⚠️ Audio unavailable</span>
-                <span className={styles.errorHint}>Try the next piece</span>
+                <span className={styles.errorHint}>{t('common.tryNextPiece')}</span>
               </div>
             ) : !audioLoaded ? (
               <div className={styles.audioLoading}>
-                <span>Loading audio...</span>
+                <span>{t('common.loadingAudio')}</span>
               </div>
             ) : (
               <div className={styles.audioControls}>

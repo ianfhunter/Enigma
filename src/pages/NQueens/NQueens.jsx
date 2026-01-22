@@ -339,9 +339,9 @@ export default function NQueens() {
         <div className={styles.rules}>
           <div className={styles.rulesTitle}>📜 Rules</div>
           <ul className={styles.rulesList}>
-            <li>Queens attack horizontally, vertically, and diagonally</li>
-            <li>No two queens can be on the same row, column, or diagonal</li>
-            <li>Click to place a queen, click again to remove</li>
+            <li>{t('nQueens.rule1')}</li>
+            <li>{t('nQueens.rule2')}</li>
+            <li>{t('nQueens.rule3')}</li>
             <li><span className={styles.preplacedIndicator}>♛</span> Pre-placed queens cannot be moved</li>
           </ul>
         </div>

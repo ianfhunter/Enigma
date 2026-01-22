@@ -498,7 +498,7 @@ export default function Tatamibari() {
 
       <div className={styles.gameArea}>
         <div className={styles.regionSelector}>
-          <span className={styles.label}>Region:</span>
+          <span className={styles.label}>{t('common.region')}:</span>
           {Array.from({ length: 12 }, (_, i) => (
             <button
               key={i}

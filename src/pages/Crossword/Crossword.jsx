@@ -622,7 +622,7 @@ export default function Crossword() {
 
             {gameState === 'gaveUp' && (
               <div className={styles.gaveUpBanner}>
-                <div className={styles.gaveUpTitle}>Puzzle Revealed</div>
+                <div className={styles.gaveUpTitle}>{t('gameStatus.puzzleRevealed')}</div>
                 <div className={styles.gaveUpSubtitle}>
                   Time: {formatTime(timer)} • Missed {missedWords.length} word{missedWords.length !== 1 ? 's' : ''}
                 </div>
@@ -685,7 +685,7 @@ export default function Crossword() {
 
           <div className={styles.cluesSection}>
             <div className={styles.clueColumn}>
-              <h3 className={styles.clueHeader}>Across</h3>
+              <h3 className={styles.clueHeader}>{t('common.across')}</h3>
               <div className={styles.clueList}>
                 {puzzle.across.map(clue => {
                   const isActive = currentWord?.number === clue.number && direction === 'across';
@@ -704,7 +704,7 @@ export default function Crossword() {
             </div>
 
             <div className={styles.clueColumn}>
-              <h3 className={styles.clueHeader}>Down</h3>
+              <h3 className={styles.clueHeader}>{t('common.down')}</h3>
               <div className={styles.clueList}>
                 {puzzle.down.map(clue => {
                   const isActive = currentWord?.number === clue.number && direction === 'down';

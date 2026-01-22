@@ -682,7 +682,7 @@ export default function Congestion() {
                 <div className={styles.winOverlay}>
                   <div className={styles.winContent}>
                     <div className={styles.winEmoji}>🎉</div>
-                    <div className={styles.winTitle}>Puzzle Solved!</div>
+                    <div className={styles.winTitle}>{t('gameStatus.puzzleSolved')}</div>
                     <div className={styles.winStats}>Completed in {moves} moves</div>
                     <button className={styles.nextButton} onClick={goNext}>
                       Next Puzzle →

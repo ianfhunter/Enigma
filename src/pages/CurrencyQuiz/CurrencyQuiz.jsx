@@ -142,7 +142,7 @@ export default function CurrencyQuiz() {
       {data && current && (
         <>
           <div className={styles.promptCard}>
-            <div className={styles.promptLabel}>Country</div>
+            <div className={styles.promptLabel}>{t('common.country')}</div>
             <div className={styles.prompt}>{current.name}</div>
           </div>
 
