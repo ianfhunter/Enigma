@@ -359,7 +359,7 @@ export default function CountdownLetters() {
           {gameState === 'finished' && (
             <div className={styles.resultArea}>
               <div className={styles.finalScore}>
-                <div className={styles.scoreLabel}>Your Score</div>
+                <div className={styles.scoreLabel}>{t('common.yourScore')}</div>
                 <div className={styles.scoreValue}>{calculateScore()}</div>
                 {submittedWord && (
                   <div className={styles.yourWord}>
@@ -379,7 +379,7 @@ export default function CountdownLetters() {
         <div className={styles.sidePanel}>
           {gameState === 'selecting' && (
             <div className={styles.rulesPanel}>
-              <h4>How to Play</h4>
+              <h4>{t('common.howToPlay')}</h4>
               <ul>
                 <li>Pick <strong>9 letters</strong> - vowels or consonants</li>
                 <li>You must have at least <strong>3 vowels</strong></li>
@@ -396,7 +396,7 @@ export default function CountdownLetters() {
               <div className={styles.scoreItem}>
                 <span className={styles.scoreLabelSmall}>Current Word</span>
                 <span className={styles.scoreValueBig}>{currentWord.length || '-'}</span>
-                <span className={styles.scoreLabelSmall}>letters</span>
+                <span className={styles.scoreLabelSmall}>{t('common.letters')}</span>
               </div>
               {submittedWord && (
                 <div className={styles.scoreItem}>
@@ -436,7 +436,7 @@ export default function CountdownLetters() {
 
               {showAllWords && (
                 <div className={styles.allWordsPanel}>
-                  <h4>All Valid Words</h4>
+                  <h4>{t('common.allValidWords')}</h4>
                   <div className={styles.wordsByLength}>
                     {Object.entries(
                       allValidWords.reduce((acc, word) => {

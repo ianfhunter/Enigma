@@ -171,7 +171,7 @@ export default function Riddles() {
 
           {revealed && (
             <div className={styles.answerSection}>
-              <h3 className={styles.answerLabel}>Answer</h3>
+              <h3 className={styles.answerLabel}>{t('common.answer')}</h3>
               <p className={styles.answerText}>{answer}</p>
             </div>
           )}

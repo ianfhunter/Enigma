@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './NQueens.module.css';
 
 // Check if a queen placement is valid
@@ -110,7 +111,7 @@ export default function NQueens() {
   const [queens, setQueens] = useState([]);
   const [preplacedQueens, setPreplacedQueens] = useState([]);
   const [solution, setSolution] = useState([]);
-  const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'checking'
+  const { gameState: gameStatus, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [puzzlesSolved, setPuzzlesSolved] = useState(0);
   const [showAttacks, setShowAttacks] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -124,9 +125,9 @@ export default function NQueens() {
     setSolution(sol);
     setPreplacedQueens(pre);
     setQueens([...pre]);
-    setGameStatus('playing');
+    resetGameState();
     setShowHint(false);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   // Initialize on mount and difficulty change
   useState(() => {
@@ -135,7 +136,7 @@ export default function NQueens() {
 
   // Handle square click
   const handleSquareClick = useCallback((row, col) => {
-    if (gameStatus !== 'playing') return;
+    if (!isPlaying) return;
 
     // Check if this is a preplaced queen (can't remove)
     const isPreplaced = preplacedQueens.some(([r, c]) => r === row && c === col);
@@ -158,12 +159,12 @@ export default function NQueens() {
       if (newQueens.length === size) {
         const attacks = getAttackingPairs(newQueens);
         if (attacks.length === 0) {
-          setGameStatus('won');
+          checkWin(true);
           setPuzzlesSolved(prev => prev + 1);
         }
       }
     }
-  }, [gameStatus, queens, preplacedQueens, size]);
+  }, [isPlaying, queens, preplacedQueens, size, checkWin]);
 
   // Check current placement
   const _checkPlacement = useCallback(() => {
@@ -278,7 +279,7 @@ export default function NQueens() {
         </div>
 
         {/* Info badge */}
-        {gameStatus === 'playing' && queensNeeded > 0 && (
+        {isPlaying && queensNeeded > 0 && (
           <div className={styles.infoBadge}>
             Place {queensNeeded} more queen{queensNeeded !== 1 ? 's' : ''}
           </div>
@@ -295,14 +296,14 @@ export default function NQueens() {
         </div>
 
         {/* Game status */}
-        {gameStatus === 'won' && (
+        {isWon && (
           <div className={`${styles.statusMessage} ${styles.success}`}>
             <span className={styles.statusIcon}>🎉</span>
             Perfect! All {size} queens placed safely!
           </div>
         )}
 
-        {attackingPairs.length > 0 && gameStatus === 'playing' && (
+        {attackingPairs.length > 0 && isPlaying && (
           <div className={`${styles.statusMessage} ${styles.warning}`}>
             <span className={styles.statusIcon}>⚠️</span>
             {attackingPairs.length} queen{attackingPairs.length !== 1 ? 's are' : ' is'} under attack!
@@ -321,7 +322,7 @@ export default function NQueens() {
           <button
             className={styles.hintBtn}
             onClick={getHint}
-            disabled={gameStatus === 'won'}
+            disabled={isWon}
           >
             💡 Hint
           </button>

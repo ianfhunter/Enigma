@@ -320,7 +320,7 @@ export default function WordWheel() {
           <div className={styles.foundWords}>
             <h3>{t('common.foundWords')}</h3>
             {foundWords.length === 0 ? (
-              <p className={styles.noWords}>No words found yet</p>
+              <p className={styles.noWords}>{t('common.noWordsYet')}</p>
             ) : (
               <div className={styles.wordList}>
                 {foundWords.map((word) => (
@@ -349,7 +349,7 @@ export default function WordWheel() {
 
           {showAllWords && (
             <div className={styles.allWords}>
-              <h4>All Possible Words ({possibleWords.length})</h4>
+              <h4>{t('common.allPossibleWords')} ({possibleWords.length})</h4>
               <div className={styles.wordList}>
                 {possibleWords.map((word) => (
                   <WordWithDefinition

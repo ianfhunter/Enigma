@@ -365,7 +365,7 @@ export default function Kakuro() {
               checked={showErrors}
               onChange={(e) => setShowErrors(e.target.checked)}
             />
-            <span className={styles.toggleLabel}>Show Errors</span>
+            <span className={styles.toggleLabel}>{t('common.showErrors')}</span>
           </label>
         </div>
 

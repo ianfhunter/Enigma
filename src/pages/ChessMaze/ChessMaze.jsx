@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './ChessMaze.module.css';
 
 const PIECE_CHARS = {
@@ -258,7 +259,7 @@ export default function ChessMaze() {
   const [puzzle, setPuzzle] = useState(null);
   const [playerPos, setPlayerPos] = useState(null);
   const [path, setPath] = useState([]);
-  const [gameStatus, setGameStatus] = useState('playing');
+  const { gameState: gameStatus, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [moveCount, setMoveCount] = useState(0);
   const [validMoves, setValidMoves] = useState([]);
   const [showDanger, setShowDanger] = useState(false);
@@ -275,9 +276,9 @@ export default function ChessMaze() {
     setPlayerPos(newPuzzle.start);
     setPath([newPuzzle.start]);
     setMoveCount(0);
-    setGameStatus('playing');
+    resetGameState();
     setValidMoves(getValidMoves(piece, newPuzzle.start.row, newPuzzle.start.col, newSize, newPuzzle.enemies, new Set()));
-  }, [pieceType, difficultyLevel]);
+  }, [pieceType, difficultyLevel, resetGameState]);
 
   useEffect(() => {
     initializePuzzle();
@@ -285,7 +286,7 @@ export default function ChessMaze() {
 
   // Handle square click
   const handleSquareClick = useCallback((row, col) => {
-    if (gameStatus !== 'playing' || !puzzle) return;
+    if (!isPlaying || !puzzle) return;
 
     // Check if it's a valid move
     const isValid = validMoves.some(([r, c]) => r === row && c === col);
@@ -301,13 +302,13 @@ export default function ChessMaze() {
 
     // Check win condition
     if (row === puzzle.goal.row && col === puzzle.goal.col) {
-      setGameStatus('won');
+      checkWin(true);
       setPuzzlesSolved(prev => prev + 1);
       setValidMoves([]);
     } else {
       setValidMoves(getValidMoves(pieceType, row, col, size, puzzle.enemies, new Set()));
     }
-  }, [gameStatus, puzzle, validMoves, path, moveCount, pieceType, size]);
+  }, [isPlaying, puzzle, validMoves, path, moveCount, pieceType, size, checkWin]);
 
   // Undo last move
   const undoMove = useCallback(() => {
@@ -319,9 +320,9 @@ export default function ChessMaze() {
     setPath(newPath);
     setPlayerPos(lastPos);
     setMoveCount(newPath.length - 1);
-    setGameStatus('playing');
+    resetGameState();
     setValidMoves(getValidMoves(pieceType, lastPos.row, lastPos.col, size, puzzle.enemies, new Set()));
-  }, [path, pieceType, size, puzzle]);
+  }, [path, pieceType, size, puzzle, resetGameState]);
 
   // Handle piece type change
   const handlePieceChange = useCallback((newPiece) => {
@@ -463,7 +464,7 @@ export default function ChessMaze() {
         </div>
 
         {/* Game status */}
-        {gameStatus === 'won' && (
+        {isWon && (
           <div className={`${styles.statusMessage} ${styles.success}`}>
             <span className={styles.statusIcon}>🎉</span>
             {moveCount === puzzle?.minMoves
@@ -477,7 +478,7 @@ export default function ChessMaze() {
           <button
             className={styles.undoBtn}
             onClick={undoMove}
-            disabled={path.length <= 1 || gameStatus === 'won'}
+            disabled={path.length <= 1 || isWon}
           >
             ↩️ Undo
           </button>
@@ -508,7 +509,7 @@ export default function ChessMaze() {
         <div className={styles.legend}>
           <div className={styles.legendItem}>
             <span className={styles.legendIcon}>♘</span>
-            <span>Your piece</span>
+            <span>{t('common.yourPiece')}</span>
           </div>
           <div className={styles.legendItem}>
             <span className={styles.legendIcon}>♞</span>

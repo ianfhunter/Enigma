@@ -239,7 +239,7 @@ export default function MapGame() {
         </div>
 
         <div className={styles.status}>
-          {solved ? <span className={styles.win}>Solved!</span> : (bad.size ? <span className={styles.bad}>Conflict</span> : <span>OK</span>)}
+          {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : (bad.size ? <span className={styles.bad}>{t('gameStatus.conflict')}</span> : <span>{t('common.ok')}</span>)}
         </div>
       </div>
 

@@ -247,7 +247,7 @@ export default function Undead() {
           <span className={styles.pill}>V {counts.V}/{puz.totals.V}</span>
           <span className={styles.pill}>Z {counts.Z}/{puz.totals.Z}</span>
           <span className={styles.status}>
-            {solved ? <span className={styles.win}>Solved!</span> : (totalsOk ? (bad.size ? <span className={styles.bad}>Edge mismatch</span> : <span>OK</span>) : <span className={styles.bad}>Totals off</span>)}
+            {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : (totalsOk ? (bad.size ? <span className={styles.bad}>{t('gameStatus.edgeMismatch')}</span> : <span>{t('common.ok')}</span>) : <span className={styles.bad}>{t('gameStatus.totalsOff')}</span>)}
           </span>
         </div>
       </div>

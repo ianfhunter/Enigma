@@ -276,7 +276,7 @@ export default function KnightsAndKnaves() {
 
             {(status === 'correct' || revealed) && (
               <div className={styles.solutionCard}>
-                <div className={styles.solutionTitle}>Solution</div>
+                <div className={styles.solutionTitle}>{t('common.solution')}</div>
                 <div className={styles.solutionText}>
                   {puzzle.solutionTextFormat || puzzle.solutionText || 'Solution unavailable.'}
                 </div>

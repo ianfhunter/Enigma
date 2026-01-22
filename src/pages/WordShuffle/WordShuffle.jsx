@@ -409,7 +409,7 @@ export default function WordShuffle() {
 
         {gameState === 'ended' && showAllWords && (
           <div className={styles.allWords}>
-            <h3>All Words ({allValidWords.length})</h3>
+            <h3>{t('common.allWords')} ({allValidWords.length})</h3>
             <div className={styles.words}>
               {allValidWords.map(word => (
                 <WordWithDefinition

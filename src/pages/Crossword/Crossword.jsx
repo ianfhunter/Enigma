@@ -808,7 +808,7 @@ export default function Crossword() {
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>{stats.won}</span>
-            <span className={styles.statLabel}>Won</span>
+            <span className={styles.statLabel}>{t('gameStatus.won')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>

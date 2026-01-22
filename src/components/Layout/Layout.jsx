@@ -9,7 +9,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { setEnglishVariant } from '../../data/wordFrequency';
 import { fuzzySearchGames } from '../../utils/fuzzySearch';
 import AuthModal from '../AuthModal';
-const logo = '/branding/logo-static-e.svg';
+const logo = '/branding/logo-simple-e.svg';
 import styles from './Layout.module.css';
 
 export default function Layout() {

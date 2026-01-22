@@ -614,7 +614,7 @@ export default function LetterWeb() {
         )}
 
         <div className={styles.wordList}>
-          <h3>Your Words</h3>
+          <h3>{t('common.yourWords')}</h3>
           <div className={styles.words}>
             {words.map((word, i) => (
               <span key={i} className={styles.word}>

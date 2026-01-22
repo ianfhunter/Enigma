@@ -121,7 +121,7 @@ export default function Twiddle() {
         </label>
         <button className={styles.button} onClick={() => newGame(size.w, size.h, k)}>New</button>
         <div className={styles.status}>
-          {solved ? <span className={styles.win}>Solved!</span> : <span>Rotate blocks…</span>}
+          {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : <span>{t('common.rotateBlocks')}</span>}
         </div>
       </div>
 

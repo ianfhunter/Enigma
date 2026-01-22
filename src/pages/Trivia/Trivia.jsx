@@ -237,7 +237,7 @@ export default function Trivia() {
           </div>
 
           <div className={styles.modeSection}>
-            <h2 className={styles.sectionTitle}>Game Mode</h2>
+            <h2 className={styles.sectionTitle}>{t('common.gameMode')}</h2>
             <div className={styles.modeCards}>
               <button className={styles.modeCard} onClick={() => startGame('challenge', category)}>
                 <span className={styles.modeIcon}>🏆</span>

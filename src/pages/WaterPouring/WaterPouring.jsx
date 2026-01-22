@@ -461,7 +461,7 @@ export default function WaterPouring() {
           ))}
         </div>
         <div className={styles.settingGroup}>
-          <label>Difficulty:</label>
+          <label>{t('common.difficulty')}:</label>
           {DIFFICULTIES.map((d) => (
             <button
               key={d}

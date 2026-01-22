@@ -279,7 +279,7 @@ export default function Anagrams() {
           <div className={styles.foundWords}>
             <h3>{t('common.foundAnagrams')}</h3>
             {foundWords.length === 0 ? (
-              <p className={styles.noWords}>No anagrams found yet</p>
+              <p className={styles.noWords}>{t('common.noAnagramsYet')}</p>
             ) : (
               <div className={styles.wordList}>
                 {foundWords.map((word) => (
@@ -304,7 +304,7 @@ export default function Anagrams() {
 
           {showAllWords && (
             <div className={styles.allWords}>
-              <h4>All Anagrams ({puzzle.anagrams.length})</h4>
+              <h4>{t('common.allAnagrams')} ({puzzle.anagrams.length})</h4>
               <div className={styles.wordList}>
                 {puzzle.anagrams.map((word) => (
                   <WordWithDefinition

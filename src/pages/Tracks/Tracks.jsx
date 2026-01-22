@@ -316,7 +316,7 @@ export default function Tracks() {
 
       <div className={styles.toolbar}>
         <div className={styles.group}>
-          <label>Size:</label>
+          <label>{t('common.size')}:</label>
           {SIZES.map((s) => (
             <button
               key={s}
@@ -328,7 +328,7 @@ export default function Tracks() {
           ))}
         </div>
         <div className={styles.group}>
-          <label>Difficulty:</label>
+          <label>{t('common.difficulty')}:</label>
           {DIFFICULTIES.map((d) => (
             <button
               key={d}
@@ -357,7 +357,7 @@ export default function Tracks() {
         </div>
 
         <div className={styles.status}>
-          {solved ? <span className={styles.win}>Solved!</span> : (
+          {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : (
             <span className={!rowOk || !colOk || !connectedPath ? styles.bad : ''}>
               {connectedPath ? 'Path OK' : 'Not a single A→B path'} · {rowOk ? 'Rows OK' : 'Row counts off'} · {colOk ? 'Cols OK' : 'Col counts off'}
             </span>

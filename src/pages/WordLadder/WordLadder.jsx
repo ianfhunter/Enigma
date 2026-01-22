@@ -257,7 +257,7 @@ export default function WordLadder() {
         <div className={styles.infoSection}>
           <div className={styles.statsPanel}>
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Your Steps</span>
+              <span className={styles.statLabel}>{t('common.yourSteps')}</span>
               <span className={styles.statValue}>{userSteps.length}</span>
             </div>
             <div className={styles.stat}>
@@ -271,7 +271,7 @@ export default function WordLadder() {
           </div>
 
           <div className={styles.tips}>
-            <h3>How to Play</h3>
+            <h3>{t('common.howToPlay')}</h3>
             <ul>
               <li>Change exactly <strong>one letter</strong> at a time</li>
               <li>Each intermediate word must be valid</li>

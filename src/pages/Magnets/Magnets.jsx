@@ -340,7 +340,7 @@ export default function Magnets() {
 
       <div className={styles.toolbar}>
         <div className={styles.group}>
-          <label>Size:</label>
+          <label>{t('common.size')}:</label>
           {SIZES.map((s) => (
             <button
               key={s}
@@ -352,7 +352,7 @@ export default function Magnets() {
           ))}
         </div>
         <div className={styles.group}>
-          <label>Difficulty:</label>
+          <label>{t('common.difficulty')}:</label>
           {DIFFICULTIES.map((d) => (
             <button
               key={d}

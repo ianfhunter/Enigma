@@ -236,7 +236,7 @@ export default function Conundrum() {
             <div className={styles.resultArea}>
               {gameState === 'won' && (
                 <div className={styles.answerReveal}>
-                  <div className={styles.answerLabel}>Answer</div>
+                  <div className={styles.answerLabel}>{t('common.answer')}</div>
                   <WordWithDefinition word={puzzle.word} className={styles.answerWordWrapper}>
                     <div className={styles.answerWord}>
                       {puzzle.word.split('').map((letter, i) => (
@@ -248,7 +248,7 @@ export default function Conundrum() {
               )}
               {gameState === 'lost' && (
                 <div className={styles.answerReveal}>
-                  <div className={styles.answerLabel}>The answer was</div>
+                  <div className={styles.answerLabel}>{t('common.answerWas')}</div>
                   <WordWithDefinition word={puzzle.word} className={styles.answerWordWrapper}>
                     <div className={`${styles.answerWord} ${styles.missed}`}>
                       {puzzle.word.split('').map((letter, i) => (
@@ -267,7 +267,7 @@ export default function Conundrum() {
         </div>
 
         <div className={styles.howToPlay}>
-          <h4>How to Play</h4>
+          <h4>{t('common.howToPlay')}</h4>
           <ul>
             <li>Press "Start" to reveal the scrambled letters</li>
             <li>Rearrange all 9 letters to form a valid word</li>

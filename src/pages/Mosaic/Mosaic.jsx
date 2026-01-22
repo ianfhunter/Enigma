@@ -249,7 +249,7 @@ export default function Mosaic() {
         <div className={styles.status}>
           {gameState === 'won' && <span className={styles.win}>🎉 Solved!</span>}
           {gameState === 'gaveUp' && <span className={styles.gaveUp}>Solution revealed</span>}
-          {gameState === 'playing' && <span>Clue errors: {analysis.bad.size}</span>}
+          {gameState === 'playing' && <span>{t('gameStatus.clueErrors')}: {analysis.bad.size}</span>}
         </div>
       </div>
 

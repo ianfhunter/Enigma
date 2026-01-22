@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { useGameState } from '../../hooks/useGameState';
 import { parseFEN, applyMove, indexToAlgebraic, PIECE_CHARS, getPieceColor } from './chessUtils';
 import { getRandomPuzzleByRating, getPuzzleById, DIFFICULTIES, loadChessPuzzles } from './chessPuzzles';
 import styles from './ChessPuzzle.module.css';
@@ -11,7 +12,7 @@ export default function ChessPuzzle() {
   const [boardState, setBoardState] = useState(null);
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [moveIndex, setMoveIndex] = useState(0);
-  const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'correct', 'wrong'
+  const { gameState: gameStatus, setGameState: setGameStatus, reset: resetGameState, isPlaying } = useGameState();
   const [showHint, setShowHint] = useState(false);
   const [moveHistory, setMoveHistory] = useState([]);
   const [puzzlesSolved, setPuzzlesSolved] = useState(0);
@@ -53,7 +54,7 @@ export default function ChessPuzzle() {
     setBoardState(afterOpponentMove);
     setSelectedSquare(null);
     setMoveIndex(1);
-    setGameStatus('playing');
+    resetGameState();
     setShowHint(false);
     setHintLevel(0);
     setMoveHistory([]);
@@ -93,7 +94,7 @@ export default function ChessPuzzle() {
     setBoardState(afterOpponentMove);
     setSelectedSquare(null);
     setMoveIndex(1); // Player starts at move index 1
-    setGameStatus('playing');
+    resetGameState();
     setShowHint(false);
     setHintLevel(0);
     setMoveHistory([]);
@@ -122,7 +123,7 @@ export default function ChessPuzzle() {
     setBoardState(afterOpponentMove);
     setSelectedSquare(null);
     setMoveIndex(1);
-    setGameStatus('playing');
+    resetGameState();
     setShowHint(false);
     setHintLevel(0);
     setMoveHistory([]);
@@ -223,7 +224,7 @@ export default function ChessPuzzle() {
 
   // Handle square click
   const handleSquareClick = useCallback((row, col) => {
-    if (gameStatus !== 'playing' || !boardState || !puzzle) return;
+    if (!isPlaying || !boardState || !puzzle) return;
 
     const square = indexToAlgebraic(row, col);
     const piece = boardState.board[row][col];
@@ -435,7 +436,7 @@ export default function ChessPuzzle() {
           title="Chess Puzzles"
           instructions="Find the best move to win material or deliver checkmate!"
         />
-        <div className={styles.gameArea}>No puzzles available.</div>
+        <div className={styles.gameArea}>{t('common.noPuzzlesAvailable')}</div>
       </div>
     );
   }
@@ -510,7 +511,7 @@ export default function ChessPuzzle() {
         </div>
 
         {/* Wrong move indicator */}
-        {wrongMove && gameStatus === 'playing' && (
+        {wrongMove && isPlaying && (
           <div className={styles.wrongMoveIndicator}>
             That's not right — try again!
           </div>
@@ -580,7 +581,7 @@ export default function ChessPuzzle() {
 
         {/* Controls */}
         <div className={styles.controls}>
-          {gameStatus === 'playing' && (
+          {isPlaying && (
             <>
               <button
                 className={styles.hintBtn}
@@ -619,7 +620,7 @@ export default function ChessPuzzle() {
             className={styles.newPuzzleBtn}
             onClick={() => loadPuzzle()}
           >
-            {gameStatus === 'playing' ? '⏭️ Skip' : '➡️ Next Puzzle'}
+            {isPlaying ? '⏭️ Skip' : '➡️ Next Puzzle'}
           </button>
 
           <button
@@ -645,7 +646,7 @@ export default function ChessPuzzle() {
         {/* Move history */}
         {moveHistory.length > 0 && (
           <div className={styles.moveHistory}>
-            <span className={styles.moveHistoryLabel}>Your moves:</span>
+            <span className={styles.moveHistoryLabel}>{t('common.yourMoves')}:</span>
             {moveHistory.map((m, i) => (
               <span
                 key={i}
