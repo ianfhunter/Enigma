@@ -141,9 +141,9 @@ describe('GameResult - Visibility', () => {
 // GameResult - Sound Effect Logic Tests
 // ===========================================
 describe('GameResult - Sound Effect Logic', () => {
-  // Tests the logic for when sound should be played
-  const shouldPlayWinSound = (state, hasPlayedSound) => {
-    return state === 'won' && !hasPlayedSound;
+  // Tests the logic for when sound should be played (now includes soundEnabled check)
+  const shouldPlayWinSound = (state, hasPlayedSound, soundEnabled = true) => {
+    return state === 'won' && !hasPlayedSound && soundEnabled;
   };
 
   const shouldResetSoundFlag = (state) => {
@@ -207,5 +207,29 @@ describe('GameResult - Sound Effect Logic', () => {
       hasPlayedSound = true;
     }
     expect(hasPlayedSound).toBe(true);
+  });
+
+  // New tests for soundEnabled setting
+  it('should NOT trigger sound when soundEnabled is false', () => {
+    expect(shouldPlayWinSound('won', false, false)).toBe(false);
+  });
+
+  it('should trigger sound when soundEnabled is true', () => {
+    expect(shouldPlayWinSound('won', false, true)).toBe(true);
+  });
+
+  it('should not trigger sound on any state when sound is disabled', () => {
+    expect(shouldPlayWinSound('won', false, false)).toBe(false);
+    expect(shouldPlayWinSound('lost', false, false)).toBe(false);
+    expect(shouldPlayWinSound('gaveup', false, false)).toBe(false);
+    expect(shouldPlayWinSound('playing', false, false)).toBe(false);
+  });
+
+  it('should respect soundEnabled even when other conditions are met', () => {
+    // All conditions for playing met EXCEPT soundEnabled
+    expect(shouldPlayWinSound('won', false, false)).toBe(false);
+
+    // Now enable sound - should play
+    expect(shouldPlayWinSound('won', false, true)).toBe(true);
   });
 });
