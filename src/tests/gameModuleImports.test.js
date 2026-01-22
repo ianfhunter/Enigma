@@ -245,6 +245,9 @@ describe('Game Module Imports - No Import Errors', () => {
   ];
 
   for (const folder of SAMPLE_GAMES) {
+    // Nonogram loads many images at import time, so needs more time
+    const timeout = folder === 'Nonogram' ? 15000 : 5000;
+
     it(`should import ${folder} without errors`, async () => {
       // Dynamic import the game module
       const importPromise = import(`../pages/${folder}/index.js`);
@@ -255,7 +258,7 @@ describe('Game Module Imports - No Import Errors', () => {
       // Should have a default export (the component)
       const module = await importPromise;
       expect(module.default).toBeDefined();
-    });
+    }, timeout);
   }
 });
 

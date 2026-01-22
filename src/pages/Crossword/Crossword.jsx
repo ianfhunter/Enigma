@@ -460,7 +460,7 @@ export default function Crossword() {
   }, [puzzle, userGrid]);
 
   // Give up and show solution
-  const giveUp = useCallback(() => {
+  const handleGiveUp = useCallback(() => {
     if (gameState !== 'playing' || !puzzle) return;
 
     // Find missed words
@@ -507,7 +507,7 @@ export default function Crossword() {
       ...prev,
       played: prev.played + 1,
     }));
-  }, [gameState, puzzle, userGrid, setStats]);
+  }, [gameState, puzzle, userGrid, giveUp, setStats]);
 
   // Random loading phrase
   const loadingPhrase = useMemo(() =>
@@ -675,7 +675,7 @@ export default function Crossword() {
               </button>
               <button
                 className={`${styles.toolBtn} ${styles.giveUpBtn}`}
-                onClick={giveUp}
+                onClick={handleGiveUp}
                 disabled={gameState !== 'playing'}
               >
                 Give Up
