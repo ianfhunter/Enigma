@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import React from 'react';
+import { renderToString } from 'react-dom/server';
 
 // ===========================================
 // Game Component Smoke Tests
@@ -284,6 +285,11 @@ vi.mock('../context/SettingsContext', () => ({
     toggleSound: vi.fn(),
     toggleTheme: vi.fn(),
   }),
+  useTheme: () => ({
+    theme: 'dark',
+    setTheme: vi.fn(),
+    toggleTheme: vi.fn(),
+  }),
 }));
 
 vi.mock('../context/AuthContext', () => ({
@@ -303,7 +309,7 @@ describe('Game Component Smoke Tests - No Runtime Errors', () => {
 
   // Test all games
   for (const [slug, folder] of gameEntries) {
-    it(`${folder} (${slug}) should import and create element without errors`, async () => {
+    it(`${folder} (${slug}) should import and render without errors`, async () => {
       // Import the module
       const module = await import(`../pages/${folder}/index.js`);
       expect(module.default).toBeDefined();
@@ -311,22 +317,23 @@ describe('Game Component Smoke Tests - No Runtime Errors', () => {
       // Verify the default export is a function (React component)
       expect(typeof module.default).toBe('function');
 
-      // Try to create a React element from the component
-      // This will catch errors like "t is not defined" because
-      // React.createElement calls the component function
-      let element;
+      // Actually render the component using server-side rendering - this catches
+      // runtime errors like "t is not defined" that React.createElement alone
+      // won't catch (createElement just creates an element descriptor, it doesn't
+      // invoke the component function until render)
       let error = null;
 
       try {
-        element = React.createElement(module.default);
+        renderToString(React.createElement(module.default));
       } catch (e) {
         error = e;
       }
 
-      // Should not throw when creating the element
-      expect(error).toBeNull();
-      expect(element).toBeDefined();
-      expect(element.type).toBe(module.default);
+      // Should not throw when rendering the component
+      if (error) {
+        // Provide helpful error message
+        throw new Error(`${folder} component threw error on render: ${error.message}`);
+      }
     }, 10000); // 10 second timeout for slower imports
   }
 });

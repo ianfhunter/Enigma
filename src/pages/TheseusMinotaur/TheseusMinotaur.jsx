@@ -286,6 +286,7 @@ export {
 };
 
 export default function TheseusMinotaur() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('Medium');
   const [puzzle, setPuzzle] = useState(null);
   const [theseus, setTheseus] = useState({ x: 0, y: 0 });

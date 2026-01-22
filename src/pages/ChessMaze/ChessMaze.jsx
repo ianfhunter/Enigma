@@ -254,6 +254,7 @@ const DIFFICULTIES = {
 };
 
 export default function ChessMaze() {
+  const { t } = useTranslation();
   const [pieceType, setPieceType] = useState('knight');
   const [difficultyLevel, setDifficultyLevel] = useState('medium');
   const [puzzle, setPuzzle] = useState(null);

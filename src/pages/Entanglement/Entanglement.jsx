@@ -279,6 +279,7 @@ function drawActiveThread(pathSegments, frontier) {
 }
 
 export default function Entanglement() {
+  const { t } = useTranslation();
   const gradient = getGameGradient('entanglement');
 
   const tileTypes = TILE_TYPES;

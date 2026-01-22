@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { useTheme } from '../../context/SettingsContext';
 import styles from './Loopy.module.css';
 import slitherlinkPuzzles from '../../../public/datasets/slitherlinkPuzzles.json';
 
@@ -149,6 +150,7 @@ export {
 };
 
 export default function Loopy() {
+  const { isDark } = useTheme();
   const [difficulty, setDifficulty] = useState('easy');
   const [availableSizes, setAvailableSizes] = useState(() => getAvailableSizes('easy'));
   const [sizeKey, setSizeKey] = useState(() => {
@@ -247,9 +249,29 @@ export default function Loopy() {
   };
 
   const strokeFor = (v) => {
-    if (v === 1) return { stroke: 'rgba(0,0,0,0.95)', strokeWidth: 6, opacity: 1 };
-    if (v === -1) return { stroke: 'rgba(255,255,255,0.22)', strokeWidth: 4, opacity: 1, strokeDasharray: '6 6' };
-    return { stroke: 'rgba(245, 158, 11, 0.60)', strokeWidth: 4, opacity: 1 };
+    if (v === 1) {
+      // Active edge (selected)
+      return {
+        stroke: isDark ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.95)',
+        strokeWidth: 6,
+        opacity: 1
+      };
+    }
+    if (v === -1) {
+      // Excluded edge (marked as not part of loop)
+      return {
+        stroke: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.15)',
+        strokeWidth: 4,
+        opacity: 1,
+        strokeDasharray: '6 6'
+      };
+    }
+    // Default/unset edge
+    return {
+      stroke: 'rgba(245, 158, 11, 0.60)',
+      strokeWidth: 4,
+      opacity: 1
+    };
   };
 
   if (!puz) return null;
@@ -336,6 +358,9 @@ export default function Loopy() {
             const x = pad + c * cell + cell / 2;
             const y = pad + r * cell + cell / 2 + 6;
             const bad = clueBad.has(i);
+            const clueColor = bad
+              ? 'rgba(251,113,133,0.95)'
+              : isDark ? 'rgba(255,255,255,0.82)' : 'rgba(0,0,0,0.75)';
             return (
               <text
                 key={`clue-${i}`}
@@ -344,7 +369,7 @@ export default function Loopy() {
                 textAnchor="middle"
                 fontSize="18"
                 fontWeight="800"
-                fill={bad ? 'rgba(251,113,133,0.95)' : 'rgba(255,255,255,0.82)'}
+                fill={clueColor}
               >
                 {clue}
               </text>
@@ -411,7 +436,8 @@ export default function Loopy() {
             const c = i % (puz.w + 1);
             const x = pad + c * cell;
             const y = pad + r * cell;
-            return <circle key={`dot-${i}`} cx={x} cy={y} r="2.3" fill="rgba(255,255,255,0.55)" />;
+            const dotColor = isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.45)';
+            return <circle key={`dot-${i}`} cx={x} cy={y} r="2.3" fill={dotColor} />;
           })}
         </svg>
       </div>

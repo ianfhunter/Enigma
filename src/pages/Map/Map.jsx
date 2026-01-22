@@ -139,6 +139,7 @@ export {
 };
 
 export default function MapGame() {
+  const { t } = useTranslation();
   const [w, setW] = useState(18);
   const [h, setH] = useState(12);
   const [regions, setRegions] = useState(22);

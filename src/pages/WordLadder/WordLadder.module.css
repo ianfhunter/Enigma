@@ -84,8 +84,8 @@
 .rung {
   width: 100%;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 2px solid var(--game-panel-border);
   border-radius: 16px;
   display: flex;
   flex-direction: column;
@@ -98,7 +98,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-tertiary);
   font-weight: 600;
 }
 
@@ -110,8 +110,8 @@
 .letter {
   width: 48px;
   height: 56px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: var(--game-cell-bg);
+  border: 2px solid var(--game-cell-border);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -137,8 +137,8 @@
 
 /* Step rung styling */
 .stepRung {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border-color: var(--game-panel-border);
   animation: slideIn 0.3s ease-out;
 }
 
@@ -202,8 +202,8 @@
 
 /* Input rung */
 .inputRung {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  background: var(--game-cell-bg);
+  border: 2px dashed var(--game-cell-border);
 }
 
 .inputForm {
@@ -256,8 +256,8 @@
 .connectorLine.dashed {
   background: repeating-linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.2) 0px,
-    rgba(255, 255, 255, 0.2) 4px,
+    var(--color-text-muted) 0px,
+    var(--color-text-muted) 4px,
     transparent 4px,
     transparent 8px
   );
@@ -307,7 +307,7 @@
 .btn {
   padding: 0.75rem 1.5rem;
   background: var(--btn-secondary-bg);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--btn-secondary-border);
   border-radius: 12px;
   color: var(--color-text);
   font-size: 0.9rem;
@@ -317,8 +317,8 @@
 }
 
 .btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--btn-secondary-hover-bg);
+  border-color: var(--color-primary-border-hover);
 }
 
 .btn:active:not(:disabled) {
@@ -353,8 +353,8 @@
   gap: 1.5rem;
   justify-content: center;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 16px;
 }
 
@@ -367,7 +367,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--color-text-tertiary);
   margin-bottom: 0.25rem;
 }
 
@@ -439,12 +439,12 @@
 .solutionBtn {
   background: transparent;
   border: 1px solid var(--panel-border);
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--color-text-secondary);
 }
 
 .solutionBtn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--game-panel-bg);
+  border-color: var(--color-primary-border-hover);
 }
 
 .newGameBtn {
@@ -491,7 +491,7 @@
 }
 
 .arrow {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-muted);
   margin: 0 0.35rem;
   font-weight: 400;
 }

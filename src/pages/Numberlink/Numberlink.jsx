@@ -2,12 +2,26 @@ import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
-import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Numberlink.module.css';
 import puzzleDataset from '../../../public/datasets/numberlinkPuzzles.json';
+
+// Size categories based on grid area (rows * cols)
+const SIZE_CATEGORIES = {
+  small: { label: 'Small', maxArea: 49 },    // up to 7x7
+  medium: { label: 'Medium', maxArea: 100 }, // up to 10x10
+  large: { label: 'Large', maxArea: Infinity } // 11x11+
+};
+
+function getSizeCategory(rows, cols) {
+  const area = rows * cols;
+  if (area <= SIZE_CATEGORIES.small.maxArea) return 'small';
+  if (area <= SIZE_CATEGORIES.medium.maxArea) return 'medium';
+  return 'large';
+}
 
 const COLORS = [
   '#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4',
@@ -113,31 +127,35 @@ export {
 };
 
 export default function Numberlink() {
-  // Build available difficulties and sizes from dataset
-  const { difficulties, sizesByDifficulty } = useMemo(() => {
+  const { t } = useTranslation();
+
+  // Build available difficulties and size categories from dataset
+  const { difficulties, categoriesByDifficulty } = useMemo(() => {
     const diffSet = new Set();
-    const sizesMap = {};
+    const catMap = {};
 
     puzzleDataset.puzzles.forEach(p => {
       const diff = p.difficulty || 'medium';
+      const cat = getSizeCategory(p.rows, p.cols);
       diffSet.add(diff);
-      if (!sizesMap[diff]) sizesMap[diff] = new Set();
-      sizesMap[diff].add(`${p.rows}x${p.cols}`);
+      if (!catMap[diff]) catMap[diff] = new Set();
+      catMap[diff].add(cat);
     });
 
     return {
       difficulties: ['easy', 'medium', 'hard'].filter(d => diffSet.has(d)),
-      sizesByDifficulty: Object.fromEntries(
-        Object.entries(sizesMap).map(([d, s]) => [d, [...s].sort()])
+      categoriesByDifficulty: Object.fromEntries(
+        Object.entries(catMap).map(([d, cats]) => [d, ['small', 'medium', 'large'].filter(c => cats.has(c))])
       )
     };
   }, []);
 
   const [difficulty, setDifficulty] = useState(difficulties[0] || 'easy');
-  const [sizeKey, setSizeKey] = useState(() => {
-    const sizes = sizesByDifficulty[difficulties[0] || 'easy'] || [];
-    return sizes[0] || '5x5';
+  const [sizeCategory, setSizeCategory] = useState(() => {
+    const cats = categoriesByDifficulty[difficulties[0] || 'easy'] || [];
+    return cats[0] || 'small';
   });
+  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1000000));
   const [puzzleData, setPuzzleData] = useState(null);
   const [paths, setPaths] = useState({}); // { pairId: [{r, c}, ...] }
   const [currentPath, setCurrentPath] = useState(null); // Currently drawing path
@@ -147,29 +165,29 @@ export default function Numberlink() {
 
   const gridRef = useRef(null);
 
-  // Update size options when difficulty changes
+  // Update size category when difficulty changes
   useEffect(() => {
-    const sizes = sizesByDifficulty[difficulty] || [];
-    if (sizes.length > 0 && !sizes.includes(sizeKey)) {
-      setSizeKey(sizes[0]);
+    const cats = categoriesByDifficulty[difficulty] || [];
+    if (cats.length > 0 && !cats.includes(sizeCategory)) {
+      setSizeCategory(cats[0]);
     }
-  }, [difficulty, sizesByDifficulty, sizeKey]);
+  }, [difficulty, categoriesByDifficulty, sizeCategory]);
 
   const initGame = useCallback(() => {
-    // Filter puzzles by difficulty and size
-    const [targetRows, targetCols] = sizeKey.split('x').map(Number);
+    // Filter puzzles by difficulty and size category
     const candidates = puzzleDataset.puzzles.filter(p =>
       (p.difficulty || 'medium') === difficulty &&
-      p.rows === targetRows && p.cols === targetCols
+      getSizeCategory(p.rows, p.cols) === sizeCategory
     );
 
     if (candidates.length === 0) {
-      console.warn('No puzzles found for', difficulty, sizeKey);
+      console.warn('No puzzles found for', difficulty, sizeCategory);
       return;
     }
 
-    // Pick random puzzle
-    const puzzle = candidates[Math.floor(Math.random() * candidates.length)];
+    // Pick puzzle using seeded random
+    const random = createSeededRandom(seed);
+    const puzzle = candidates[Math.floor(random() * candidates.length)];
 
     // Build grid from endpoints
     const grid = puzzle.endpoints.map(row =>
@@ -197,7 +215,7 @@ export default function Numberlink() {
     setIsDrawing(false);
     resetGameState();
     setCompletedPairs(new Set());
-  }, [difficulty, sizeKey, resetGameState]);
+  }, [difficulty, sizeCategory, seed, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -430,11 +448,21 @@ export default function Numberlink() {
         onSelect={setDifficulty}
       />
 
-      <SizeSelector
-        sizes={sizesByDifficulty[difficulty] || []}
-        selected={sizeKey}
-        onSelect={setSizeKey}
-      />
+      <div className={styles.sizeSelector}>
+        {(categoriesByDifficulty[difficulty] || []).map(cat => (
+          <button
+            key={cat}
+            className={`${styles.sizeBtn} ${sizeCategory === cat ? styles.active : ''}`}
+            onClick={() => setSizeCategory(cat)}
+          >
+            {t(`size.${cat}`, SIZE_CATEGORIES[cat].label)}
+          </button>
+        ))}
+      </div>
+
+      <div className={styles.seedDisplay}>
+        {t('seed', 'Seed')}: {seed}
+      </div>
 
       <div className={styles.gameArea}>
         <div className={styles.progress}>
@@ -510,14 +538,14 @@ export default function Numberlink() {
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
-            Reset
+            {t('reset', 'Reset')}
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
             disabled={!isPlaying}
           />
-          <button className={styles.newGameBtn} onClick={initGame}>
-            {gameState === 'won' || gameState === 'gaveUp' ? 'Play Again' : 'New Puzzle'}
+          <button className={styles.newGameBtn} onClick={() => setSeed(Math.floor(Math.random() * 1000000))}>
+            {gameState === 'won' || gameState === 'gaveUp' ? t('playAgain', 'Play Again') : t('newPuzzle', 'New Puzzle')}
           </button>
         </div>
       </div>

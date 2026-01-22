@@ -95,22 +95,22 @@
   --ms-board-bg: rgba(20, 20, 35, 0.8);
   --ms-board-border: rgba(100, 100, 140, 0.3);
   --ms-board-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
-  
+
   --ms-cell-bg: linear-gradient(145deg, rgba(80, 80, 110, 0.6), rgba(60, 60, 85, 0.5));
   --ms-cell-border: rgba(90, 90, 120, 0.4);
   --ms-cell-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.2);
   --ms-cell-hover: linear-gradient(145deg, rgba(100, 100, 140, 0.7), rgba(80, 80, 110, 0.6));
   --ms-cell-hover-border: rgba(120, 120, 160, 0.5);
-  
+
   --ms-cell-revealed-bg: rgba(30, 30, 50, 0.6);
   --ms-cell-revealed-border: rgba(50, 50, 70, 0.3);
-  
+
   --ms-cell-mine-bg: rgba(220, 38, 38, 0.5);
   --ms-cell-mine-border: rgba(220, 38, 38, 0.6);
-  
+
   --ms-cell-flagged-bg: rgba(250, 204, 21, 0.2);
   --ms-cell-flagged-border: rgba(250, 204, 21, 0.4);
-  
+
   /* Minesweeper number colors (dark theme - brighter for contrast) */
   --ms-num1: #60a5fa;
   --ms-num2: #4ade80;
@@ -128,6 +128,36 @@
   --btn-secondary-hover-bg: rgba(255, 255, 255, 0.2);
   --panel-bg: rgba(255, 255, 255, 0.1);
   --panel-border: rgba(255, 255, 255, 0.15);
+
+  /* Hashi-specific (dark theme) */
+  --hashi-grid-bg: rgba(15, 15, 26, 0.8);
+  --hashi-island-bg: rgba(15, 15, 26, 0.95);
+  --hashi-island-complete-bg: rgba(20, 184, 166, 0.3);
+
+  /* Bag/Corral-specific (dark theme) */
+  --bag-edge-active: #22d3ee;
+  --bag-edge-excluded: rgba(255, 255, 255, 0.2);
+  --bag-edge-default: rgba(255, 255, 255, 0.25);
+  --bag-dot: rgba(255, 255, 255, 0.5);
+  --bag-clue-text: rgba(255, 255, 255, 0.9);
+  --bag-clue-bad: rgba(251, 113, 133, 0.95);
+  --bag-inside-bg: rgba(34, 197, 94, 0.15);
+  --bag-outside-bg: rgba(239, 68, 68, 0.08);
+
+  /* Mosaic-specific (dark theme) */
+  --mosaic-grid-bg: rgba(255, 255, 255, 0.03);
+  --mosaic-grid-border: rgba(255, 255, 255, 0.12);
+  --mosaic-cell-border: rgba(255, 255, 255, 0.08);
+  --mosaic-cell-unknown: rgba(255, 255, 255, 0.04);
+  --mosaic-cell-black: rgba(15, 23, 42, 0.95);
+  --mosaic-cell-white: rgba(248, 250, 252, 0.9);
+  --mosaic-clue-text: rgba(255, 255, 255, 0.8);
+  --mosaic-clue-on-black: rgba(255, 255, 255, 0.9);
+  --mosaic-clue-on-white: rgba(15, 23, 42, 0.9);
+  --mosaic-label-text: rgba(255, 255, 255, 0.75);
+  --mosaic-button-text: rgba(255, 255, 255, 0.85);
+  --mosaic-bad-outline: rgba(251, 113, 133, 0.7);
+  --mosaic-good-outline: rgba(34, 197, 94, 0.35);
 }
 
 /* Light theme */
@@ -224,22 +254,22 @@
   --ms-board-bg: #c8b8d8;
   --ms-board-border: rgba(139, 92, 246, 0.25);
   --ms-board-shadow: inset 0 2px 6px rgba(100, 60, 150, 0.15);
-  
+
   --ms-cell-bg: linear-gradient(145deg, #e8e0f0, #d8d0e5);
   --ms-cell-border: rgba(139, 92, 246, 0.2);
   --ms-cell-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 3px rgba(100, 60, 150, 0.15);
   --ms-cell-hover: linear-gradient(145deg, #f0e8f8, #e0d8ed);
   --ms-cell-hover-border: rgba(139, 92, 246, 0.35);
-  
+
   --ms-cell-revealed-bg: #d5cce5;
   --ms-cell-revealed-border: rgba(139, 92, 246, 0.12);
-  
+
   --ms-cell-mine-bg: rgba(220, 38, 38, 0.25);
   --ms-cell-mine-border: rgba(220, 38, 38, 0.4);
-  
+
   --ms-cell-flagged-bg: rgba(202, 138, 4, 0.2);
   --ms-cell-flagged-border: rgba(202, 138, 4, 0.4);
-  
+
   /* Minesweeper number colors (light theme - deeper for contrast) */
   --ms-num1: #1d4ed8;
   --ms-num2: #15803d;
@@ -257,6 +287,36 @@
   --btn-secondary-hover-bg: rgba(139, 92, 246, 0.18);
   --panel-bg: rgba(139, 92, 246, 0.06);
   --panel-border: rgba(139, 92, 246, 0.15);
+
+  /* Hashi-specific (light theme) */
+  --hashi-grid-bg: rgba(255, 255, 255, 0.9);
+  --hashi-island-bg: #ffffff;
+  --hashi-island-complete-bg: rgba(20, 184, 166, 0.25);
+
+  /* Bag/Corral-specific (light theme) */
+  --bag-edge-active: #0891b2;
+  --bag-edge-excluded: rgba(100, 100, 120, 0.25);
+  --bag-edge-default: rgba(100, 100, 120, 0.35);
+  --bag-dot: rgba(100, 100, 120, 0.6);
+  --bag-clue-text: #1a1625;
+  --bag-clue-bad: #dc2626;
+  --bag-inside-bg: rgba(34, 197, 94, 0.2);
+  --bag-outside-bg: rgba(239, 68, 68, 0.12);
+
+  /* Mosaic-specific (light theme) */
+  --mosaic-grid-bg: rgba(139, 92, 246, 0.06);
+  --mosaic-grid-border: rgba(139, 92, 246, 0.2);
+  --mosaic-cell-border: rgba(139, 92, 246, 0.15);
+  --mosaic-cell-unknown: rgba(139, 92, 246, 0.08);
+  --mosaic-cell-black: rgba(15, 23, 42, 0.92);
+  --mosaic-cell-white: rgba(255, 255, 255, 0.95);
+  --mosaic-clue-text: #1a1625;
+  --mosaic-clue-on-black: rgba(255, 255, 255, 0.95);
+  --mosaic-clue-on-white: #1a1625;
+  --mosaic-label-text: #4a4458;
+  --mosaic-button-text: var(--color-text);
+  --mosaic-bad-outline: rgba(220, 38, 38, 0.6);
+  --mosaic-good-outline: rgba(34, 197, 94, 0.5);
 }
 
 *, *::before, *::after {

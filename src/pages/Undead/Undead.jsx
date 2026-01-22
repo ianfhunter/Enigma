@@ -174,6 +174,7 @@ export {
 };
 
 export default function Undead() {
+  const { t } = useTranslation();
   const [w, setW] = useState(6);
   const [h, setH] = useState(6);
   const [puz, setPuz] = useState(() => buildPuzzle(6, 6));

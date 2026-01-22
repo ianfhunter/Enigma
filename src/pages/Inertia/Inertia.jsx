@@ -206,6 +206,7 @@ export {
 };
 
 export default function Inertia() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(9);
   const [difficulty, setDifficulty] = useState('medium');
   const [_level, setLevel] = useState(null);

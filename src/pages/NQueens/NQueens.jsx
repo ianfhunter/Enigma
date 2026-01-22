@@ -107,6 +107,7 @@ export {
 };
 
 export default function NQueens() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [queens, setQueens] = useState([]);
   const [preplacedQueens, setPreplacedQueens] = useState([]);

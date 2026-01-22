@@ -300,6 +300,7 @@ export {
 };
 
 export default function Pentomino() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerBoard, setPlayerBoard] = useState([]);
   const { gameState, checkWin, giveUp: giveUpFn, reset: resetGameState, isPlaying } = useGameState();

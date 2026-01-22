@@ -7,6 +7,7 @@ import { getRandomPuzzleByRating, getPuzzleById, DIFFICULTIES, loadChessPuzzles 
 import styles from './ChessPuzzle.module.css';
 
 export default function ChessPuzzle() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('beginner');
   const [puzzle, setPuzzle] = useState(null);
   const [boardState, setBoardState] = useState(null);

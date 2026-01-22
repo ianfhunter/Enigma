@@ -46,8 +46,8 @@
 
 .sizeBtn {
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 8px;
   color: var(--color-text-secondary);
   font-size: 0.85rem;
@@ -76,7 +76,7 @@
 
 .grid {
   position: relative;
-  background: rgba(15, 15, 26, 0.8);
+  background: var(--hashi-grid-bg);
   border-radius: 8px;
   border: 2px solid rgba(20, 184, 166, 0.3);
 }
@@ -96,7 +96,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 26, 0.95);
+  background: var(--hashi-island-bg);
   border: 3px solid #14b8a6;
   border-radius: 50%;
   color: var(--color-text);
@@ -118,7 +118,7 @@
 }
 
 .island.complete {
-  background: rgba(20, 184, 166, 0.3);
+  background: var(--hashi-island-complete-bg);
   border-color: #2dd4bf;
 }
 

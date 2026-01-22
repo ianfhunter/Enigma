@@ -17,7 +17,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-text-secondary);
   font-weight: 800;
 }
 
@@ -30,16 +30,16 @@
 }
 
 .button {
-  background: var(--btn-secondary-bg);
-  color: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--panel-border);
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
   padding: 0.45rem 0.75rem;
   font-weight: 900;
 }
 
 .status {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-text-secondary);
   font-weight: 800;
 }
 
@@ -75,8 +75,9 @@
   margin: 0 auto;
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-card);
   overflow: visible;
 }
 
@@ -137,8 +138,8 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  background: var(--game-cell-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,8 +149,8 @@
 }
 
 .cell:hover:not(:disabled) {
-  background: var(--btn-secondary-bg);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--game-cell-hover);
+  border-color: var(--color-primary-border-hover);
 }
 
 .cell:disabled {

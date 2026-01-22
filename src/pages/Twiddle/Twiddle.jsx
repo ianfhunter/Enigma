@@ -58,6 +58,7 @@ export {
 };
 
 export default function Twiddle() {
+  const { t } = useTranslation();
   const [size, setSize] = useState({ w: 4, h: 4 });
   const [k, setK] = useState(2);
   const [board, setBoard] = useState(() => scramble(4, 4, 2));

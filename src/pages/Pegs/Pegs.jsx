@@ -42,6 +42,7 @@ export {
 };
 
 export default function Pegs() {
+  const { t } = useTranslation();
   const [grid, setGrid] = useState(() => makeEnglishBoard());
   const [selected, setSelected] = useState(null); // [r,c]
 

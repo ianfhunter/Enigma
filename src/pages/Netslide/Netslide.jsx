@@ -179,6 +179,7 @@ export {
 };
 
 export default function Netslide() {
+  const { t } = useTranslation();
   const [size, setSize] = useState({ w: 7, h: 7 });
   const [solution, setSolution] = useState(() => makeTreeMasks(7, 7));
   const [masks, setMasks] = useState(() => scrambleBySlides(solution, 7, 7));
