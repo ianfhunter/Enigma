@@ -5,6 +5,10 @@
   --game-gradient: #fff;
 }
 
+:global([data-theme="light"]) .page {
+  --game-gradient: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+}
+
 .subHeader {
   margin-top: 0.75rem;
 }
