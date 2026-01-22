@@ -230,6 +230,7 @@ function findErrors(regionGrid, coloring, size) {
 }
 
 export default function StainedGlass() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('6×6');
   const [numColors, setNumColors] = useState(4);
   const [puzzleData, setPuzzleData] = useState(null);

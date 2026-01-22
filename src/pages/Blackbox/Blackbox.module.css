@@ -25,23 +25,23 @@
   gap: 0.5rem;
   align-items: center;
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--blackbox-label-text);
 }
 
 .select, .input {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: var(--blackbox-input-bg);
+  border: 1px solid var(--blackbox-input-border);
   border-radius: 10px;
   padding: 0.35rem 0.5rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--blackbox-input-text);
 }
 
 .button {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--blackbox-button-bg);
+  border: 1px solid var(--blackbox-button-border);
   border-radius: 12px;
   padding: 0.45rem 0.7rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--blackbox-button-text);
   cursor: pointer;
 }
 .button:disabled {
@@ -51,7 +51,7 @@
 
 .status {
   font-size: 0.95rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--blackbox-status-text);
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -94,9 +94,9 @@
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
+  border: 1px solid var(--blackbox-cell-border);
+  background: var(--blackbox-cell-bg);
+  color: var(--blackbox-cell-text);
   display: grid;
   place-items: center;
   font-weight: 700;
@@ -104,7 +104,7 @@
 }
 
 .innerCell {
-  background: rgba(255,255,255,0.04);
+  background: var(--blackbox-inner-bg);
 }
 
 .laser {
@@ -120,8 +120,8 @@
 }
 
 .guess {
-  background: rgba(0,0,0,0.45);
-  border-color: rgba(255,255,255,0.22);
+  background: var(--blackbox-guess-bg);
+  border-color: var(--blackbox-guess-border);
 }
 
 .revealedBall {

@@ -214,6 +214,237 @@
   --untangle-node-stroke: rgba(255, 255, 255, 0.8);
   --untangle-node-label: #0b1220;
   --untangle-node-shadow: rgba(0, 0, 0, 0.35);
+
+  /* Shikaku-specific (dark theme) */
+  --shikaku-cell-bg: rgba(15, 15, 26, 0.9);
+  --shikaku-grid-bg: rgba(255, 255, 255, 0.2);
+  --shikaku-number-color: #e0e0e8;
+
+  /* Pipe Puzzle-specific (dark theme) */
+  --pipe-grid-bg: rgba(255, 255, 255, 0.02);
+  --pipe-grid-border: rgba(56, 189, 248, 0.2);
+  --pipe-cell-bg: rgba(255, 255, 255, 0.05);
+  --pipe-cell-border: rgba(255, 255, 255, 0.1);
+  --pipe-color: rgba(255, 255, 255, 0.4);
+  --pipe-connected-color: #38bdf8;
+  --pipe-stats-bg: rgba(255, 255, 255, 0.03);
+  --pipe-stats-border: rgba(255, 255, 255, 0.08);
+
+  /* Sokoban-specific (dark theme) */
+  --sokoban-board-bg: rgba(0, 0, 0, 0.22);
+  --sokoban-board-border: rgba(255, 255, 255, 0.14);
+  --sokoban-floor-bg: rgba(255, 255, 255, 0.06);
+  --sokoban-floor-border: rgba(255, 255, 255, 0.08);
+  --sokoban-wall-bg: rgba(12, 12, 20, 0.95);
+  --sokoban-wall-border: rgba(255, 255, 255, 0.10);
+  --sokoban-wall-inset: rgba(0, 0, 0, 0.35);
+  --sokoban-target-bg: rgba(251, 191, 36, 0.22);
+  --sokoban-target-border: rgba(251, 191, 36, 0.35);
+  --sokoban-target-glyph: rgba(251, 191, 36, 0.8);
+  --sokoban-box-done-bg: rgba(34, 197, 94, 0.10);
+  --sokoban-box-done-border: rgba(34, 197, 94, 0.22);
+  --sokoban-glyph-shadow: rgba(0, 0, 0, 0.35);
+  --sokoban-solved-bg: rgba(34, 197, 94, 0.12);
+  --sokoban-solved-border: rgba(34, 197, 94, 0.55);
+  --sokoban-solved-text: rgba(210, 255, 230, 0.92);
+  --sokoban-link: rgba(125, 211, 252, 0.92);
+  --sokoban-dpad-center-bg: rgba(0, 0, 0, 0.3);
+  --sokoban-dpad-active-bg: rgba(34, 211, 238, 0.25);
+  --sokoban-dpad-active-border: rgba(34, 211, 238, 0.5);
+
+  /* Map game-specific (dark theme) */
+  --map-label-text: rgba(255, 255, 255, 0.85);
+  --map-input-bg: rgba(255, 255, 255, 0.08);
+  --map-input-border: rgba(255, 255, 255, 0.14);
+  --map-input-text: rgba(255, 255, 255, 0.92);
+  --map-button-bg: rgba(255, 255, 255, 0.10);
+  --map-button-border: rgba(255, 255, 255, 0.16);
+  --map-button-text: rgba(255, 255, 255, 0.92);
+  --map-status-text: rgba(255, 255, 255, 0.85);
+  --map-swatch-border: rgba(255, 255, 255, 0.20);
+  --map-swatch-active: rgba(255, 255, 255, 0.95);
+  --map-cell-bg: rgba(255, 255, 255, 0.06);
+  --map-cell-border: rgba(255, 255, 255, 0.12);
+  --map-region-border: rgba(0, 0, 0, 0.75);
+  --map-given-shadow: rgba(255, 255, 255, 0.80);
+  --map-bad-shadow: rgba(251, 113, 133, 0.90);
+
+  /* Magnets-specific (dark theme) */
+  --magnets-label-text: rgba(255, 255, 255, 0.75);
+  --magnets-status-text: rgba(255, 255, 255, 0.85);
+  --magnets-button-bg: rgba(255, 255, 255, 0.10);
+  --magnets-button-border: rgba(255, 255, 255, 0.16);
+  --magnets-button-text: rgba(255, 255, 255, 0.92);
+  --magnets-cell-bg: rgba(255, 255, 255, 0.06);
+  --magnets-cell-border: rgba(255, 255, 255, 0.14);
+  --magnets-cell-text: rgba(255, 255, 255, 0.92);
+  --magnets-clue-text: rgba(255, 255, 255, 0.85);
+  --magnets-domino-shadow: rgba(255, 255, 255, 0.20);
+  --magnets-blank-text: rgba(255, 255, 255, 0.65);
+  --magnets-clue-border-green: rgba(34, 197, 94, 0.4);
+  --magnets-clue-border-red: rgba(251, 113, 133, 0.4);
+
+  /* Dominosa-specific (dark theme) */
+  --dominosa-label-text: rgba(255, 255, 255, 0.75);
+  --dominosa-status-text: rgba(255, 255, 255, 0.75);
+  --dominosa-button-text: rgba(255, 255, 255, 0.85);
+  --dominosa-cell-bg: rgba(255, 255, 255, 0.04);
+  --dominosa-cell-border: rgba(255, 255, 255, 0.12);
+  --dominosa-num-text: rgba(255, 255, 255, 0.9);
+  --dominosa-domino-bg: rgba(255, 255, 255, 0.7);
+  --dominosa-hint-text: rgba(255, 255, 255, 0.75);
+
+  /* Blackbox-specific (dark theme) */
+  --blackbox-label-text: rgba(255, 255, 255, 0.85);
+  --blackbox-status-text: rgba(255, 255, 255, 0.85);
+  --blackbox-input-bg: rgba(255, 255, 255, 0.08);
+  --blackbox-input-border: rgba(255, 255, 255, 0.14);
+  --blackbox-input-text: rgba(255, 255, 255, 0.92);
+  --blackbox-button-bg: rgba(255, 255, 255, 0.10);
+  --blackbox-button-border: rgba(255, 255, 255, 0.16);
+  --blackbox-button-text: rgba(255, 255, 255, 0.92);
+  --blackbox-cell-bg: rgba(255, 255, 255, 0.06);
+  --blackbox-cell-border: rgba(255, 255, 255, 0.14);
+  --blackbox-cell-text: rgba(255, 255, 255, 0.92);
+  --blackbox-inner-bg: rgba(255, 255, 255, 0.04);
+  --blackbox-guess-bg: rgba(0, 0, 0, 0.45);
+  --blackbox-guess-border: rgba(255, 255, 255, 0.22);
+
+  /* Knights & Knaves-specific (dark theme) */
+  --knk-label-text: rgba(255, 255, 255, 0.8);
+  --knk-card-bg: rgba(255, 255, 255, 0.06);
+  --knk-card-border: rgba(255, 255, 255, 0.12);
+  --knk-text: rgba(255, 255, 255, 0.92);
+  --knk-text-secondary: rgba(255, 255, 255, 0.75);
+  --knk-text-muted: rgba(255, 255, 255, 0.65);
+  --knk-row-bg: rgba(0, 0, 0, 0.15);
+  --knk-row-border: rgba(255, 255, 255, 0.10);
+  --knk-btn-bg: rgba(255, 255, 255, 0.06);
+  --knk-btn-border: rgba(255, 255, 255, 0.14);
+  --knk-btn-text: rgba(255, 255, 255, 0.9);
+  --knk-btn-hover-bg: rgba(255, 255, 255, 0.10);
+  --knk-btn-active-bg: rgba(255, 255, 255, 0.16);
+  --knk-btn-active-border: rgba(255, 255, 255, 0.22);
+  --knk-primary-bg: rgba(59, 130, 246, 0.22);
+  --knk-select-bg: rgba(0, 0, 0, 0.25);
+  --knk-message-bg: rgba(0, 0, 0, 0.15);
+  --knk-link: rgba(56, 189, 248, 0.95);
+
+  /* Inertia-specific (dark theme) */
+  --inertia-label-text: rgba(255, 255, 255, 0.75);
+  --inertia-status-text: rgba(255, 255, 255, 0.85);
+  --inertia-button-bg: rgba(255, 255, 255, 0.10);
+  --inertia-button-border: rgba(255, 255, 255, 0.16);
+  --inertia-button-text: rgba(255, 255, 255, 0.92);
+  --inertia-button-hover-bg: rgba(255, 255, 255, 0.15);
+  --inertia-button-active-bg: rgba(14, 165, 233, 0.3);
+  --inertia-button-active-border: rgba(14, 165, 233, 0.5);
+  --inertia-select-bg: rgba(255, 255, 255, 0.08);
+  --inertia-select-border: rgba(255, 255, 255, 0.14);
+  --inertia-cell-bg: rgba(255, 255, 255, 0.06);
+  --inertia-cell-border: rgba(255, 255, 255, 0.14);
+  --inertia-cell-text: rgba(255, 255, 255, 0.92);
+  --inertia-wall-bg: rgba(0, 0, 0, 0.65);
+  --inertia-wall-border: rgba(255, 255, 255, 0.14);
+  --inertia-stop-bg: rgba(14, 165, 233, 0.18);
+  --inertia-stop-border: rgba(14, 165, 233, 0.35);
+  --inertia-gem-bg: rgba(34, 197, 94, 0.14);
+  --inertia-gem-border: rgba(34, 197, 94, 0.35);
+  --inertia-mine-bg: rgba(239, 68, 68, 0.18);
+  --inertia-mine-border: rgba(239, 68, 68, 0.35);
+  --inertia-ball-outline: rgba(34, 211, 238, 0.95);
+  --inertia-win-text: #22c55e;
+  --inertia-dead-text: #fb7185;
+  --inertia-generate-bg: linear-gradient(135deg, #0ea5e9, #0284c7);
+  --inertia-generate-shadow: rgba(14, 165, 233, 0.3);
+
+  /* JapaneseSums-specific (dark theme) */
+  --jsums-label-text: rgba(255, 255, 255, 0.75);
+  --jsums-status-text: rgba(255, 255, 255, 0.75);
+  --jsums-button-text: rgba(255, 255, 255, 0.85);
+  --jsums-board-bg: rgba(255, 255, 255, 0.03);
+  --jsums-board-border: rgba(255, 255, 255, 0.12);
+  --jsums-cell-bg: rgba(255, 255, 255, 0.04);
+  --jsums-cell-border: rgba(255, 255, 255, 0.12);
+  --jsums-cell-hover-border: rgba(255, 255, 255, 0.25);
+  --jsums-clue-text: rgba(255, 255, 255, 0.8);
+  --jsums-shaded-bg: rgba(0, 0, 0, 0.3);
+  --jsums-shaded-border: rgba(0, 0, 0, 0.5);
+
+  /* Eulero-specific (dark theme) */
+  --eulero-label-text: rgba(255, 255, 255, 0.75);
+  --eulero-status-text: rgba(255, 255, 255, 0.75);
+  --eulero-button-text: rgba(255, 255, 255, 0.85);
+  --eulero-board-bg: rgba(255, 255, 255, 0.03);
+  --eulero-board-border: rgba(255, 255, 255, 0.12);
+  --eulero-cell-bg: rgba(255, 255, 255, 0.04);
+  --eulero-cell-border: rgba(255, 255, 255, 0.12);
+  --eulero-cell-hover-border: rgba(255, 255, 255, 0.25);
+
+  /* Einstein-specific (dark theme) */
+  --einstein-panel-bg: rgba(255, 255, 255, 0.03);
+  --einstein-panel-border: rgba(255, 255, 255, 0.08);
+  --einstein-cell-bg: rgba(255, 255, 255, 0.03);
+  --einstein-cell-border: rgba(255, 255, 255, 0.08);
+  --einstein-cell-hover-border: rgba(255, 255, 255, 0.2);
+  --einstein-text: rgba(255, 255, 255, 0.9);
+  --einstein-text-secondary: rgba(255, 255, 255, 0.8);
+  --einstein-text-muted: rgba(255, 255, 255, 0.3);
+  --einstein-btn-bg: rgba(255, 255, 255, 0.05);
+  --einstein-btn-border: rgba(255, 255, 255, 0.1);
+  --einstein-btn-text: rgba(255, 255, 255, 0.8);
+
+  /* Undead-specific (dark theme) */
+  --undead-button-bg: rgba(255, 255, 255, 0.10);
+  --undead-button-border: rgba(255, 255, 255, 0.16);
+  --undead-button-text: rgba(255, 255, 255, 0.92);
+  --undead-status-text: rgba(255, 255, 255, 0.85);
+  --undead-cell-bg: rgba(255, 255, 255, 0.06);
+  --undead-cell-border: rgba(255, 255, 255, 0.14);
+  --undead-cell-text: rgba(255, 255, 255, 0.92);
+  --undead-edge-bg: rgba(255, 255, 255, 0.04);
+  --undead-edge-border: rgba(255, 255, 255, 0.10);
+  --undead-edge-text: rgba(255, 255, 255, 0.75);
+  --undead-pill-bg: rgba(255, 255, 255, 0.06);
+  --undead-pill-border: rgba(255, 255, 255, 0.14);
+  --undead-pill-text: rgba(255, 255, 255, 0.85);
+
+  /* Range/Kuromasu-specific (dark theme) */
+  --range-label-text: rgba(255, 255, 255, 0.85);
+  --range-status-text: rgba(255, 255, 255, 0.85);
+  --range-button-bg: rgba(255, 255, 255, 0.10);
+  --range-button-border: rgba(255, 255, 255, 0.16);
+  --range-button-text: rgba(255, 255, 255, 0.92);
+  --range-select-bg: rgba(255, 255, 255, 0.08);
+  --range-select-border: rgba(255, 255, 255, 0.14);
+  --range-select-text: rgba(255, 255, 255, 0.92);
+  --range-cell-bg: rgba(255, 255, 255, 0.06);
+  --range-cell-border: rgba(255, 255, 255, 0.14);
+  --range-cell-text: rgba(255, 255, 255, 0.92);
+  --range-given-bg: rgba(255, 255, 255, 0.10);
+  --range-given-border: rgba(255, 255, 255, 0.25);
+  --range-black-bg: rgba(0, 0, 0, 0.75);
+  --range-black-border: rgba(255, 255, 255, 0.18);
+  --range-black-text: rgba(255, 255, 255, 0.85);
+  --range-dot-color: rgba(255, 255, 255, 0.60);
+  --range-bad-outline: rgba(251, 113, 133, 0.85);
+  --range-win-text: #22c55e;
+  --range-bad-text: #fb7185;
+
+  /* CodeBreaker-specific (dark theme) */
+  --cb-panel-bg: rgba(255, 255, 255, 0.05);
+  --cb-panel-border: rgba(255, 255, 255, 0.1);
+  --cb-hover-bg: rgba(255, 255, 255, 0.12);
+  --cb-peg-hidden-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  --cb-peg-hidden-border: rgba(255, 255, 255, 0.2);
+  --cb-slot-border: rgba(255, 255, 255, 0.3);
+  --cb-slot-empty-bg: rgba(255, 255, 255, 0.05);
+  --cb-feedback-bg: rgba(0, 0, 0, 0.2);
+  --cb-feedback-empty-border: rgba(255, 255, 255, 0.15);
+  --cb-clear-border: rgba(255, 255, 255, 0.2);
+  --cb-win-text: #4ade80;
+  --cb-lose-text: #f87171;
+  --cb-giveup-text: #fbbf24;
 }
 
 /* Light theme */
@@ -429,6 +660,237 @@
   --untangle-node-stroke: rgba(30, 30, 60, 0.7);
   --untangle-node-label: #0b1220;
   --untangle-node-shadow: rgba(100, 60, 150, 0.25);
+
+  /* Shikaku-specific (light theme) */
+  --shikaku-cell-bg: rgba(255, 255, 255, 0.95);
+  --shikaku-grid-bg: rgba(139, 92, 246, 0.25);
+  --shikaku-number-color: #1a1625;
+
+  /* Pipe Puzzle-specific (light theme) */
+  --pipe-grid-bg: rgba(139, 92, 246, 0.06);
+  --pipe-grid-border: rgba(14, 165, 233, 0.35);
+  --pipe-cell-bg: rgba(139, 92, 246, 0.08);
+  --pipe-cell-border: rgba(139, 92, 246, 0.2);
+  --pipe-color: rgba(30, 58, 95, 0.6);
+  --pipe-connected-color: #0284c7;
+  --pipe-stats-bg: rgba(139, 92, 246, 0.05);
+  --pipe-stats-border: rgba(139, 92, 246, 0.15);
+
+  /* Sokoban-specific (light theme) */
+  --sokoban-board-bg: rgba(139, 92, 246, 0.08);
+  --sokoban-board-border: rgba(139, 92, 246, 0.2);
+  --sokoban-floor-bg: rgba(255, 255, 255, 0.7);
+  --sokoban-floor-border: rgba(139, 92, 246, 0.15);
+  --sokoban-wall-bg: #3d3655;
+  --sokoban-wall-border: rgba(139, 92, 246, 0.25);
+  --sokoban-wall-inset: rgba(0, 0, 0, 0.2);
+  --sokoban-target-bg: rgba(251, 191, 36, 0.35);
+  --sokoban-target-border: rgba(202, 138, 4, 0.5);
+  --sokoban-target-glyph: #b45309;
+  --sokoban-box-done-bg: rgba(34, 197, 94, 0.2);
+  --sokoban-box-done-border: rgba(22, 163, 74, 0.4);
+  --sokoban-glyph-shadow: rgba(100, 60, 150, 0.25);
+  --sokoban-solved-bg: rgba(34, 197, 94, 0.15);
+  --sokoban-solved-border: rgba(22, 163, 74, 0.5);
+  --sokoban-solved-text: #15803d;
+  --sokoban-link: #2563eb;
+  --sokoban-dpad-center-bg: rgba(139, 92, 246, 0.12);
+  --sokoban-dpad-active-bg: rgba(34, 211, 238, 0.3);
+  --sokoban-dpad-active-border: rgba(14, 165, 233, 0.6);
+
+  /* Map game-specific (light theme) */
+  --map-label-text: #4a4458;
+  --map-input-bg: #ffffff;
+  --map-input-border: rgba(139, 92, 246, 0.25);
+  --map-input-text: #1a1625;
+  --map-button-bg: rgba(139, 92, 246, 0.1);
+  --map-button-border: rgba(139, 92, 246, 0.25);
+  --map-button-text: #1a1625;
+  --map-status-text: #4a4458;
+  --map-swatch-border: rgba(139, 92, 246, 0.3);
+  --map-swatch-active: #7c3aed;
+  --map-cell-bg: rgba(139, 92, 246, 0.08);
+  --map-cell-border: rgba(139, 92, 246, 0.18);
+  --map-region-border: rgba(30, 20, 50, 0.65);
+  --map-given-shadow: rgba(0, 0, 0, 0.35);
+  --map-bad-shadow: rgba(220, 38, 38, 0.75);
+
+  /* Magnets-specific (light theme) */
+  --magnets-label-text: #4a4458;
+  --magnets-status-text: #4a4458;
+  --magnets-button-bg: rgba(139, 92, 246, 0.1);
+  --magnets-button-border: rgba(139, 92, 246, 0.25);
+  --magnets-button-text: #1a1625;
+  --magnets-cell-bg: rgba(139, 92, 246, 0.08);
+  --magnets-cell-border: rgba(139, 92, 246, 0.2);
+  --magnets-cell-text: #1a1625;
+  --magnets-clue-text: #1a1625;
+  --magnets-domino-shadow: rgba(139, 92, 246, 0.35);
+  --magnets-blank-text: #6b6580;
+  --magnets-clue-border-green: rgba(22, 163, 74, 0.5);
+  --magnets-clue-border-red: rgba(220, 38, 38, 0.5);
+
+  /* Dominosa-specific (light theme) */
+  --dominosa-label-text: #4a4458;
+  --dominosa-status-text: #4a4458;
+  --dominosa-button-text: #1a1625;
+  --dominosa-cell-bg: rgba(139, 92, 246, 0.08);
+  --dominosa-cell-border: rgba(139, 92, 246, 0.2);
+  --dominosa-num-text: #1a1625;
+  --dominosa-domino-bg: rgba(139, 92, 246, 0.45);
+  --dominosa-hint-text: #4a4458;
+
+  /* Blackbox-specific (light theme) */
+  --blackbox-label-text: #4a4458;
+  --blackbox-status-text: #4a4458;
+  --blackbox-input-bg: #ffffff;
+  --blackbox-input-border: rgba(139, 92, 246, 0.25);
+  --blackbox-input-text: #1a1625;
+  --blackbox-button-bg: rgba(139, 92, 246, 0.1);
+  --blackbox-button-border: rgba(139, 92, 246, 0.25);
+  --blackbox-button-text: #1a1625;
+  --blackbox-cell-bg: rgba(139, 92, 246, 0.08);
+  --blackbox-cell-border: rgba(139, 92, 246, 0.2);
+  --blackbox-cell-text: #1a1625;
+  --blackbox-inner-bg: rgba(139, 92, 246, 0.06);
+  --blackbox-guess-bg: rgba(139, 92, 246, 0.25);
+  --blackbox-guess-border: rgba(139, 92, 246, 0.4);
+
+  /* Knights & Knaves-specific (light theme) */
+  --knk-label-text: #4a4458;
+  --knk-card-bg: rgba(139, 92, 246, 0.06);
+  --knk-card-border: rgba(139, 92, 246, 0.2);
+  --knk-text: #1a1625;
+  --knk-text-secondary: #4a4458;
+  --knk-text-muted: #6b6580;
+  --knk-row-bg: rgba(139, 92, 246, 0.08);
+  --knk-row-border: rgba(139, 92, 246, 0.15);
+  --knk-btn-bg: rgba(139, 92, 246, 0.1);
+  --knk-btn-border: rgba(139, 92, 246, 0.25);
+  --knk-btn-text: #1a1625;
+  --knk-btn-hover-bg: rgba(139, 92, 246, 0.18);
+  --knk-btn-active-bg: rgba(139, 92, 246, 0.2);
+  --knk-btn-active-border: rgba(139, 92, 246, 0.35);
+  --knk-primary-bg: rgba(59, 130, 246, 0.18);
+  --knk-select-bg: #ffffff;
+  --knk-message-bg: rgba(139, 92, 246, 0.08);
+  --knk-link: #2563eb;
+
+  /* Inertia-specific (light theme) */
+  --inertia-label-text: #4a4458;
+  --inertia-status-text: #4a4458;
+  --inertia-button-bg: rgba(139, 92, 246, 0.1);
+  --inertia-button-border: rgba(139, 92, 246, 0.25);
+  --inertia-button-text: #1a1625;
+  --inertia-button-hover-bg: rgba(139, 92, 246, 0.18);
+  --inertia-button-active-bg: rgba(14, 165, 233, 0.2);
+  --inertia-button-active-border: rgba(14, 165, 233, 0.45);
+  --inertia-select-bg: #ffffff;
+  --inertia-select-border: rgba(139, 92, 246, 0.25);
+  --inertia-cell-bg: rgba(139, 92, 246, 0.08);
+  --inertia-cell-border: rgba(139, 92, 246, 0.2);
+  --inertia-cell-text: #1a1625;
+  --inertia-wall-bg: #3d3655;
+  --inertia-wall-border: rgba(139, 92, 246, 0.35);
+  --inertia-stop-bg: rgba(14, 165, 233, 0.2);
+  --inertia-stop-border: rgba(14, 165, 233, 0.45);
+  --inertia-gem-bg: rgba(34, 197, 94, 0.22);
+  --inertia-gem-border: rgba(34, 197, 94, 0.5);
+  --inertia-mine-bg: rgba(239, 68, 68, 0.18);
+  --inertia-mine-border: rgba(239, 68, 68, 0.45);
+  --inertia-ball-outline: #0891b2;
+  --inertia-win-text: #15803d;
+  --inertia-dead-text: #dc2626;
+  --inertia-generate-bg: linear-gradient(135deg, #0ea5e9, #0284c7);
+  --inertia-generate-shadow: rgba(14, 165, 233, 0.4);
+
+  /* JapaneseSums-specific (light theme) */
+  --jsums-label-text: #4a4458;
+  --jsums-status-text: #4a4458;
+  --jsums-button-text: #1a1625;
+  --jsums-board-bg: rgba(139, 92, 246, 0.06);
+  --jsums-board-border: rgba(139, 92, 246, 0.2);
+  --jsums-cell-bg: rgba(139, 92, 246, 0.08);
+  --jsums-cell-border: rgba(139, 92, 246, 0.2);
+  --jsums-cell-hover-border: rgba(139, 92, 246, 0.4);
+  --jsums-clue-text: #1a1625;
+  --jsums-shaded-bg: rgba(139, 92, 246, 0.2);
+  --jsums-shaded-border: rgba(139, 92, 246, 0.35);
+
+  /* Eulero-specific (light theme) */
+  --eulero-label-text: #4a4458;
+  --eulero-status-text: #4a4458;
+  --eulero-button-text: #1a1625;
+  --eulero-board-bg: rgba(139, 92, 246, 0.06);
+  --eulero-board-border: rgba(139, 92, 246, 0.2);
+  --eulero-cell-bg: rgba(139, 92, 246, 0.08);
+  --eulero-cell-border: rgba(139, 92, 246, 0.2);
+  --eulero-cell-hover-border: rgba(139, 92, 246, 0.4);
+
+  /* Einstein-specific (light theme) */
+  --einstein-panel-bg: rgba(139, 92, 246, 0.06);
+  --einstein-panel-border: rgba(139, 92, 246, 0.15);
+  --einstein-cell-bg: rgba(139, 92, 246, 0.08);
+  --einstein-cell-border: rgba(139, 92, 246, 0.15);
+  --einstein-cell-hover-border: rgba(139, 92, 246, 0.3);
+  --einstein-text: #1a1625;
+  --einstein-text-secondary: #4a4458;
+  --einstein-text-muted: #9992a8;
+  --einstein-btn-bg: rgba(139, 92, 246, 0.1);
+  --einstein-btn-border: rgba(139, 92, 246, 0.2);
+  --einstein-btn-text: #1a1625;
+
+  /* Undead-specific (light theme) */
+  --undead-button-bg: rgba(139, 92, 246, 0.1);
+  --undead-button-border: rgba(139, 92, 246, 0.25);
+  --undead-button-text: #1a1625;
+  --undead-status-text: #4a4458;
+  --undead-cell-bg: rgba(139, 92, 246, 0.08);
+  --undead-cell-border: rgba(139, 92, 246, 0.2);
+  --undead-cell-text: #1a1625;
+  --undead-edge-bg: rgba(139, 92, 246, 0.06);
+  --undead-edge-border: rgba(139, 92, 246, 0.15);
+  --undead-edge-text: #4a4458;
+  --undead-pill-bg: rgba(139, 92, 246, 0.1);
+  --undead-pill-border: rgba(139, 92, 246, 0.2);
+  --undead-pill-text: #1a1625;
+
+  /* Range/Kuromasu-specific (light theme) */
+  --range-label-text: #4a4458;
+  --range-status-text: #4a4458;
+  --range-button-bg: rgba(139, 92, 246, 0.1);
+  --range-button-border: rgba(139, 92, 246, 0.25);
+  --range-button-text: #1a1625;
+  --range-select-bg: #ffffff;
+  --range-select-border: rgba(139, 92, 246, 0.25);
+  --range-select-text: #1a1625;
+  --range-cell-bg: rgba(139, 92, 246, 0.08);
+  --range-cell-border: rgba(139, 92, 246, 0.2);
+  --range-cell-text: #1a1625;
+  --range-given-bg: rgba(139, 92, 246, 0.15);
+  --range-given-border: rgba(139, 92, 246, 0.35);
+  --range-black-bg: rgba(15, 23, 42, 0.9);
+  --range-black-border: rgba(139, 92, 246, 0.3);
+  --range-black-text: rgba(255, 255, 255, 0.95);
+  --range-dot-color: rgba(100, 80, 140, 0.6);
+  --range-bad-outline: rgba(220, 38, 38, 0.7);
+  --range-win-text: #15803d;
+  --range-bad-text: #dc2626;
+
+  /* CodeBreaker-specific (light theme) */
+  --cb-panel-bg: rgba(139, 92, 246, 0.06);
+  --cb-panel-border: rgba(139, 92, 246, 0.15);
+  --cb-hover-bg: rgba(139, 92, 246, 0.12);
+  --cb-peg-hidden-gradient: linear-gradient(145deg, rgba(139, 92, 246, 0.18), rgba(139, 92, 246, 0.1));
+  --cb-peg-hidden-border: rgba(139, 92, 246, 0.3);
+  --cb-slot-border: rgba(139, 92, 246, 0.35);
+  --cb-slot-empty-bg: rgba(139, 92, 246, 0.08);
+  --cb-feedback-bg: rgba(139, 92, 246, 0.1);
+  --cb-feedback-empty-border: rgba(139, 92, 246, 0.2);
+  --cb-clear-border: rgba(139, 92, 246, 0.25);
+  --cb-win-text: #15803d;
+  --cb-lose-text: #dc2626;
+  --cb-giveup-text: #b45309;
 }
 
 *, *::before, *::after {

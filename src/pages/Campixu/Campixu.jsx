@@ -236,6 +236,7 @@ function checkSolved(playerGrid, solution, size) {
 }
 
 export default function Campixu() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('6×6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGrid, setPlayerGrid] = useState([]);

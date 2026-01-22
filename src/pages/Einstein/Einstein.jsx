@@ -21,6 +21,7 @@ const CELL_STATES = {
 };
 
 export default function Einstein() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('4 Houses');
   const [difficulty, setDifficulty] = useState('medium');
   const [themeId, setThemeId] = useState(null);

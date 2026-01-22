@@ -77,8 +77,8 @@
   display: flex;
   gap: 2rem;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--pipe-stats-bg);
+  border: 1px solid var(--pipe-stats-border);
   border-radius: 12px;
 }
 
@@ -106,8 +106,8 @@
   display: grid;
   gap: 3px;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 2px solid rgba(56, 189, 248, 0.2);
+  background: var(--pipe-grid-bg);
+  border: 2px solid var(--pipe-grid-border);
   border-radius: 12px;
 }
 
@@ -116,8 +116,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--pipe-cell-bg);
+  border: 1px solid var(--pipe-cell-border);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -165,13 +165,13 @@
 
 .pipe {
   font-size: 1.8rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pipe-color);
   transition: transform 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
   line-height: 1;
 }
 
 .cell.connected .pipe {
-  color: #38bdf8;
+  color: var(--pipe-connected-color);
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
   animation: waterFlow 1.5s ease-in-out infinite;
 }
@@ -186,7 +186,7 @@
 }
 
 .cell.start .pipe {
-  color: #38bdf8;
+  color: var(--pipe-connected-color);
 }
 
 .waterSource {

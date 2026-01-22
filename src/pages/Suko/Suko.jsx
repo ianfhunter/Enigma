@@ -150,6 +150,7 @@ export {
 };
 
 export default function Suko() {
+  const { t } = useTranslation();
   const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
@@ -174,7 +175,7 @@ export default function Suko() {
       setErrors(new Set());
       setSumStatus(savedState.sumStatus || [false, false, false, false]);
       setColorSumStatus(savedState.colorSumStatus || [false, false, false]);
-      setSeed(saved.seed);
+      setSeed(savedState.seed);
       setIsLoaded(true);
       return;
     }

@@ -19,7 +19,7 @@
 }
 
 .backLink:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--einstein-text);
 }
 
 .title {
@@ -48,9 +48,9 @@
   justify-content: center;
   margin-bottom: 1rem;
   padding: 0.6rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--einstein-panel-bg);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--einstein-panel-border);
 }
 
 .settingGroup {
@@ -71,8 +71,8 @@
 
 .settingBtn {
   padding: 0.3rem 0.6rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--einstein-btn-bg);
+  border: 1px solid var(--einstein-btn-border);
   border-radius: 5px;
   color: var(--color-text-secondary);
   font-size: 0.75rem;
@@ -92,16 +92,16 @@
 
 .themeSelect {
   padding: 0.3rem 0.6rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--einstein-btn-bg);
+  border: 1px solid var(--einstein-btn-border);
   border-radius: 5px;
-  color: white;
+  color: var(--color-text);
   font-size: 0.75rem;
   cursor: pointer;
 }
 
 .themeSelect option {
-  background: #1a1a2e;
+  background: var(--color-bg);
 }
 
 /* Game Area */
@@ -120,9 +120,9 @@
 
 /* Triangular Grid Section */
 .triangularSection {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--einstein-panel-bg);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--einstein-panel-border);
   padding: 1rem;
   overflow-x: auto;
 }
@@ -146,7 +146,7 @@
   flex-direction: column;
   align-items: center;
   padding: 0.4rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--einstein-cell-bg);
   border-radius: 6px;
   gap: 0.2rem;
 }
@@ -177,7 +177,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.4rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--einstein-cell-bg);
   border-radius: 6px;
   gap: 0.2rem;
 }
@@ -186,10 +186,10 @@
 .subGrid {
   width: 140px;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--einstein-cell-bg);
   border-radius: 6px;
   padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--einstein-cell-border);
 }
 
 .subGrid.positionGrid {
@@ -250,8 +250,8 @@
 .cell {
   flex: 1;
   height: 22px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--einstein-cell-bg);
+  border: 1px solid var(--einstein-cell-border);
   border-radius: 3px;
   cursor: pointer;
   transition: all 0.15s;
@@ -265,7 +265,7 @@
 
 .cell:hover {
   background: var(--btn-secondary-bg);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--einstein-cell-hover-border);
 }
 
 .cell.cellTrue {
@@ -295,9 +295,9 @@
 
 /* Clues Panel */
 .cluesPanel {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--einstein-panel-bg);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--einstein-panel-border);
   padding: 0.75rem;
   max-height: 550px;
   overflow-y: auto;
@@ -308,7 +308,7 @@
 .cluesTitle {
   margin: 0 0 0.6rem 0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--einstein-text);
   font-weight: 600;
 }
 
@@ -323,7 +323,7 @@
   align-items: flex-start;
   gap: 0.35rem;
   padding: 0.45rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--einstein-cell-bg);
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s;
@@ -332,7 +332,7 @@
 }
 
 .clue:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--btn-secondary-bg);
 }
 
 .clue.checked {
@@ -344,7 +344,7 @@
 }
 
 .clueCheck {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--einstein-text-muted);
   font-size: 0.8rem;
   flex-shrink: 0;
   width: 14px;
@@ -360,7 +360,7 @@
 }
 
 .clueText {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--einstein-text-secondary);
 }
 
 /* Win Overlay */
@@ -419,9 +419,9 @@
   gap: 0.75rem;
   margin-top: 1rem;
   padding: 0.6rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--einstein-panel-bg);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--einstein-panel-border);
 }
 
 .toggleGroup {
@@ -503,9 +503,9 @@
 }
 
 .resetBtn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--einstein-btn-bg);
+  border: 1px solid var(--einstein-btn-border);
+  color: var(--einstein-btn-text);
 }
 
 .resetBtn:hover {
@@ -593,7 +593,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.65rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--einstein-cell-bg);
 }
 
 .legendCell.cellTrue {

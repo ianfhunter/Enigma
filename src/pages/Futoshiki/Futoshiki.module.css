@@ -373,6 +373,59 @@
   cursor: not-allowed;
 }
 
+/* Light mode overrides */
+:global([data-theme="light"]) .gridContainer {
+  background: rgba(244, 63, 94, 0.05);
+  border-color: rgba(244, 63, 94, 0.25);
+}
+
+:global([data-theme="light"]) .cell {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(244, 63, 94, 0.25);
+}
+
+:global([data-theme="light"]) .cell:hover {
+  background: rgba(244, 63, 94, 0.1);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+:global([data-theme="light"]) .cell.initial {
+  background: rgba(244, 63, 94, 0.12);
+}
+
+:global([data-theme="light"]) .cell.initial .number {
+  color: #be123c;
+}
+
+:global([data-theme="light"]) .cell.selected {
+  border-color: #e11d48;
+  box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.3);
+}
+
+:global([data-theme="light"]) .cell.error {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+:global([data-theme="light"]) .number {
+  color: #1a1625;
+}
+
+:global([data-theme="light"]) .horizontalOp,
+:global([data-theme="light"]) .verticalOp {
+  color: #b45309;
+}
+
+:global([data-theme="light"]) .numBtn {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.2);
+  color: #1a1625;
+}
+
+:global([data-theme="light"]) .numBtn:hover {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
 /* Responsive */
 @media (max-width: 450px) {
   .cell {

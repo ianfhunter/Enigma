@@ -294,6 +294,7 @@ function analyze(w, h, clues, hEdges, vEdges) {
 }
 
 export default function Bag() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [availableSizes, setAvailableSizes] = useState(() => getAvailableSizes('easy'));
   const [sizeKey, setSizeKey] = useState(() => {

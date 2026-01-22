@@ -325,6 +325,7 @@ export {
 };
 
 export default function SandwichSudoku() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);

@@ -25,23 +25,23 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
   font-weight: 600;
 }
 
 .select {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: rgba(255, 255, 255, 0.92);
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--color-text);
   border-radius: 10px;
   padding: 0.45rem 0.6rem;
   outline: none;
 }
 
 .select:focus {
-  border-color: rgba(34, 211, 238, 0.7);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-bg);
 }
 
 .meta {
@@ -59,23 +59,23 @@
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 650;
-  color: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+  border: 1px solid var(--panel-border);
+  background: var(--btn-secondary-bg);
 }
 
 .solved {
-  border-color: rgba(34, 197, 94, 0.55);
-  background: rgba(34, 197, 94, 0.12);
-  color: rgba(210, 255, 230, 0.92);
+  border-color: var(--sokoban-solved-border);
+  background: var(--sokoban-solved-bg);
+  color: var(--sokoban-solved-text);
 }
 
 .pill {
   display: inline-block;
   padding: 0.12rem 0.45rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--panel-border);
+  background: var(--btn-secondary-bg);
   font-weight: 700;
 }
 
@@ -95,9 +95,9 @@
 .button {
   padding: 0.55rem 0.8rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--panel-border);
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
   font-weight: 700;
   cursor: pointer;
   transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
@@ -105,8 +105,8 @@
 
 .button:hover:not(:disabled) {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: var(--btn-secondary-hover-bg);
+  border-color: var(--color-primary-border);
 }
 
 .button:disabled {
@@ -124,17 +124,17 @@
 .notice {
   padding: 0.8rem 1rem;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--panel-border);
+  background: var(--btn-secondary-bg);
+  color: var(--color-text-secondary);
 }
 
 .noticeError {
   padding: 0.8rem 1rem;
   border-radius: 14px;
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  background: rgba(239, 68, 68, 0.10);
-  color: rgba(255, 220, 220, 0.92);
+  border: 1px solid var(--color-danger-border);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
 }
 
 .board {
@@ -145,14 +145,14 @@
   gap: 3px;
   padding: 10px;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--sokoban-board-border);
+  background: var(--sokoban-board-bg);
   outline: none;
 }
 
 .board:focus {
-  border-color: rgba(34, 211, 238, 0.65);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.16);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-bg);
 }
 
 .cell {
@@ -169,14 +169,14 @@
 }
 
 .floor {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--sokoban-floor-bg);
+  border: 1px solid var(--sokoban-floor-border);
 }
 
 .wall {
-  background: rgba(12, 12, 20, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+  background: var(--sokoban-wall-bg);
+  border: 1px solid var(--sokoban-wall-border);
+  box-shadow: inset 0 0 0 1px var(--sokoban-wall-inset);
 }
 
 .target:not(.wall)::after {
@@ -185,8 +185,8 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: rgba(251, 191, 36, 0.22);
-  border: 1px solid rgba(251, 191, 36, 0.35);
+  background: var(--sokoban-target-bg);
+  border: 1px solid var(--sokoban-target-border);
 }
 
 .box:not(.wall) {
@@ -194,8 +194,8 @@
 }
 
 .boxOnTarget:not(.wall) {
-  background: rgba(34, 197, 94, 0.10);
-  border: 1px solid rgba(34, 197, 94, 0.22);
+  background: var(--sokoban-box-done-bg);
+  border: 1px solid var(--sokoban-box-done-border);
 }
 
 .player:not(.wall),
@@ -204,25 +204,25 @@
 }
 
 .playerGlyph {
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 6px 10px var(--sokoban-glyph-shadow));
 }
 
 .boxGlyph {
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 6px 10px var(--sokoban-glyph-shadow));
 }
 
 .targetGlyph {
   font-size: 24px;
-  color: rgba(251, 191, 36, 0.8);
+  color: var(--sokoban-target-glyph);
 }
 
 .attribution {
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
 }
 
 .link {
-  color: rgba(125, 211, 252, 0.92);
+  color: var(--sokoban-link);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -251,8 +251,8 @@
   justify-content: center;
   font-size: 1.25rem;
   background: var(--btn-secondary-bg);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--panel-border);
+  color: var(--btn-secondary-text);
   cursor: pointer;
   transition: all 0.12s ease;
   user-select: none;
@@ -260,12 +260,12 @@
 }
 
 .dpadBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .dpadBtn:active {
-  background: rgba(34, 211, 238, 0.25);
-  border-color: rgba(34, 211, 238, 0.5);
+  background: var(--sokoban-dpad-active-bg);
+  border-color: var(--sokoban-dpad-active-border);
   transform: scale(0.95);
 }
 
@@ -288,8 +288,8 @@
 .dpadCenter {
   width: 52px;
   height: 52px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--sokoban-dpad-center-bg);
+  border: 1px solid var(--panel-border);
 }
 
 /* Hide D-pad on desktop, show on touch devices */

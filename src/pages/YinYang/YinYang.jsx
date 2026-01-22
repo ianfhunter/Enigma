@@ -165,6 +165,7 @@ export {
 };
 
 export default function YinYang() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [sizeKey, setSizeKey] = useState('6x6');
   const [puzzleData, setPuzzleData] = useState(null);

@@ -87,6 +87,7 @@ export {
 };
 
 export default function Sixteen() {
+  const { t } = useTranslation();
   const [size, setSize] = useState({ w: 4, h: 4 });
   const [board, setBoard] = useState(() => scramble(4, 4));
   const solved = useMemo(() => isSolved(board), [board]);

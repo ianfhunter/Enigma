@@ -16,15 +16,15 @@
 .group { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
 
 .button {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--undead-button-bg);
+  border: 1px solid var(--undead-button-border);
   border-radius: 12px;
   padding: 0.45rem 0.7rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--undead-button-text);
   cursor: pointer;
 }
 
-.status { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+.status { font-size: 0.95rem; color: var(--undead-status-text); }
 .win { color: #22c55e; font-weight: 700; }
 .bad { color: #fb7185; font-weight: 700; }
 
@@ -39,19 +39,19 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
+  border: 1px solid var(--undead-cell-border);
+  background: var(--undead-cell-bg);
+  color: var(--undead-cell-text);
   font-weight: 900;
   display: grid;
   place-items: center;
 }
 
 .edge {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.10);
+  background: var(--undead-edge-bg);
+  border-color: var(--undead-edge-border);
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.75);
+  color: var(--undead-edge-text);
 }
 
 .corner { background: transparent; border-color: transparent; }
@@ -70,9 +70,8 @@
 .pill {
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.85);
+  border: 1px solid var(--undead-pill-border);
+  background: var(--undead-pill-bg);
+  color: var(--undead-pill-text);
   font-weight: 800;
 }
-

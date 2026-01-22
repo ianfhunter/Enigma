@@ -309,6 +309,7 @@ function analyze(puz, succ, pred) {
 }
 
 export default function Signpost() {
+  const { t } = useTranslation();
   const [w, setW] = useState(6);
   const [h, setH] = useState(6);
   const [puz, setPuz] = useState(() => generatePuzzle(6, 6));

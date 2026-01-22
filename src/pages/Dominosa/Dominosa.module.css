@@ -17,7 +17,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--dominosa-label-text);
   font-weight: 800;
 }
 
@@ -31,7 +31,7 @@
 
 .button {
   background: var(--btn-secondary-bg);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--dominosa-button-text);
   border: 1px solid var(--panel-border);
   border-radius: 10px;
   padding: 0.45rem 0.75rem;
@@ -39,7 +39,7 @@
 }
 
 .status {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--dominosa-status-text);
   font-weight: 800;
 }
 
@@ -68,8 +68,8 @@
   position: relative;
   aspect-ratio: 1 / 1;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--dominosa-cell-border);
+  background: var(--dominosa-cell-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,7 +82,7 @@
 .num {
   font-weight: 900;
   font-size: clamp(0.9rem, 2.2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--dominosa-num-text);
 }
 
 .edgeBtn {
@@ -110,7 +110,7 @@
 }
 
 .domino {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--dominosa-domino-bg);
 }
 
 .cross {
@@ -127,7 +127,7 @@
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--dominosa-hint-text);
   font-weight: 700;
 }
 

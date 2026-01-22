@@ -165,6 +165,7 @@ export {
 };
 
 export default function PipePuzzle() {
+  const { t } = useTranslation();
   const [gridSizeKey, setGridSizeKey] = useState('5×5');
   const [grid, setGrid] = useState([]);
   const [moves, setMoves] = useState(0);

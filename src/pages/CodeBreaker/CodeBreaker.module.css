@@ -56,7 +56,7 @@
 }
 
 .difficultyBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--cb-hover-bg);
 }
 
 .difficultyBtn.active {
@@ -76,8 +76,8 @@
   display: flex;
   gap: 2rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cb-panel-bg);
+  border: 1px solid var(--cb-panel-border);
   border-radius: 12px;
 }
 
@@ -107,8 +107,8 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cb-panel-bg);
+  border: 1px solid var(--cb-panel-border);
   border-radius: 12px;
   width: 100%;
   max-width: 360px;
@@ -142,17 +142,17 @@
 }
 
 .peg.hidden {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: var(--cb-peg-hidden-gradient);
+  border: 2px solid var(--cb-peg-hidden-border);
 }
 
 .peg.slot {
   cursor: pointer;
-  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border: 2px dashed var(--cb-slot-border);
 }
 
 .peg.slot.empty {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--cb-slot-empty-bg);
 }
 
 .peg.slot:hover {
@@ -171,7 +171,7 @@
   width: 52px;
   margin-left: 0.75rem;
   padding: 4px;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--cb-feedback-bg);
   border-radius: 8px;
 }
 
@@ -203,7 +203,7 @@
 
 .feedbackPeg.empty {
   background: var(--btn-secondary-bg);
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border: 1px dashed var(--cb-feedback-empty-border);
 }
 
 .submitBtn {
@@ -234,8 +234,8 @@
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cb-panel-bg);
+  border: 1px solid var(--cb-panel-border);
   border-radius: 12px;
   flex-wrap: wrap;
   justify-content: center;
@@ -259,7 +259,7 @@
   width: 38px;
   height: 38px;
   background: var(--btn-secondary-bg);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--cb-clear-border);
   border-radius: 50%;
   color: var(--color-text-secondary);
   font-size: 1rem;
@@ -275,23 +275,23 @@
 
 .winMessage {
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2));
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
   border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #4ade80;
+  color: var(--cb-win-text);
   text-align: center;
 }
 
 .loseMessage {
   padding: 1rem 2rem;
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
   border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #f87171;
+  color: var(--cb-lose-text);
   text-align: center;
 }
 
@@ -299,8 +299,8 @@
   display: flex;
   gap: 1.5rem;
   padding: 0.75rem 1.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cb-panel-bg);
+  border: 1px solid var(--cb-panel-border);
   border-radius: 10px;
   flex-wrap: wrap;
   justify-content: center;
@@ -368,10 +368,10 @@
 
 .giveUpBtn {
   padding: 0.75rem 1.5rem;
-  background: rgba(245, 158, 11, 0.15);
+  background: var(--color-warning-bg);
   border: 1px solid rgba(245, 158, 11, 0.4);
   border-radius: 12px;
-  color: #fbbf24;
+  color: var(--cb-giveup-text);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;

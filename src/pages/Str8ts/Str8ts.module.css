@@ -366,6 +366,50 @@
   cursor: not-allowed;
 }
 
+/* Light mode overrides */
+:global([data-theme="light"]) .grid {
+  background: rgba(96, 165, 250, 0.35);
+}
+
+:global([data-theme="light"]) .cell.white {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-text);
+}
+
+:global([data-theme="light"]) .cell.white:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
+:global([data-theme="light"]) .cell.black {
+  background: #2d3748;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+:global([data-theme="light"]) .cell.given {
+  color: #2563eb;
+}
+
+:global([data-theme="light"]) .cell.given:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+:global([data-theme="light"]) .cell.selected {
+  background: rgba(96, 165, 250, 0.25) !important;
+}
+
+:global([data-theme="light"]) .cell.error {
+  background: rgba(239, 68, 68, 0.15) !important;
+}
+
+:global([data-theme="light"]) .cell:nth-child(3n) {
+  border-right-color: rgba(96, 165, 250, 0.6);
+}
+
+:global([data-theme="light"]) .cell:nth-child(n+19):nth-child(-n+27),
+:global([data-theme="light"]) .cell:nth-child(n+46):nth-child(-n+54) {
+  border-bottom-color: rgba(96, 165, 250, 0.6);
+}
+
 /* Responsive */
 @media (max-width: 450px) {
   .grid {

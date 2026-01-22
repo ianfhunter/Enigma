@@ -150,6 +150,7 @@ export {
 };
 
 export default function Loopy() {
+  const { t } = useTranslation();
   const { isDark } = useTheme();
   const [difficulty, setDifficulty] = useState('easy');
   const [availableSizes, setAvailableSizes] = useState(() => getAvailableSizes('easy'));

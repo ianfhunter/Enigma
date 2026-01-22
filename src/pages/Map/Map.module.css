@@ -25,32 +25,38 @@
   gap: 0.5rem;
   align-items: center;
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--map-label-text);
 }
 
 .select, .input {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: var(--map-input-bg);
+  border: 1px solid var(--map-input-border);
   border-radius: 10px;
   padding: 0.35rem 0.5rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--map-input-text);
 }
 
 .button {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--map-button-bg);
+  border: 1px solid var(--map-button-border);
   border-radius: 12px;
   padding: 0.45rem 0.7rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--map-button-text);
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.button:hover {
+  background: var(--color-primary-bg-hover);
+  border-color: var(--color-primary-border-hover);
 }
 
 .status {
   font-size: 0.95rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--map-status-text);
 }
-.win { color: #22c55e; font-weight: 700; }
-.bad { color: #fb7185; font-weight: 700; }
+.win { color: var(--color-success); font-weight: 700; }
+.bad { color: var(--color-danger); font-weight: 700; }
 
 .palette {
   display: flex;
@@ -62,13 +68,18 @@
   width: 28px;
   height: 28px;
   border-radius: 10px;
-  border: 2px solid rgba(255,255,255,0.20);
+  border: 2px solid var(--map-swatch-border);
   cursor: pointer;
   display: inline-block;
+  transition: transform 0.1s ease;
+}
+
+.swatch:hover {
+  transform: scale(1.08);
 }
 
 .active {
-  outline: 2px solid rgba(255,255,255,0.95);
+  outline: 2px solid var(--map-swatch-active);
   outline-offset: 2px;
 }
 
@@ -83,14 +94,18 @@
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--map-cell-border);
+  background: var(--map-cell-bg);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
-.borderTop { border-top-width: 3px; border-top-color: rgba(0,0,0,0.75); }
-.borderLeft { border-left-width: 3px; border-left-color: rgba(0,0,0,0.75); }
+.cell:hover {
+  transform: scale(1.05);
+}
+
+.borderTop { border-top-width: 3px; border-top-color: var(--map-region-border); }
+.borderLeft { border-left-width: 3px; border-left-color: var(--map-region-border); }
 
 .given {
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.80);
+  box-shadow: inset 0 0 0 2px var(--map-given-shadow);
 }
-

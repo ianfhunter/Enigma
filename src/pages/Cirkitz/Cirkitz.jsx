@@ -345,6 +345,7 @@ export {
 };
 
 export default function Cirkitz() {
+  const { t } = useTranslation();
   const [puzzleSize, setPuzzleSize] = useState(3);
   const [puzzleData, setPuzzleData] = useState(null);
   const [rotations, setRotations] = useState([]);
