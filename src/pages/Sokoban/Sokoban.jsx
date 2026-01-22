@@ -310,10 +310,10 @@ export default function Sokoban() {
 
             <div className={styles.meta}>
               <span className={styles.badge}>{levelLabel}</span>
-              {state && <span className={styles.badge}>Moves: {state.moves}</span>}
-              {state && <span className={styles.badge}>Pushes: {state.pushes}</span>}
-              {levels.length > 0 && <span className={styles.badge}>Level {levelIndex + 1}/{levels.length}</span>}
-              {solved && <span className={`${styles.badge} ${styles.solved}`}>Solved</span>}
+              {state && <span className={styles.badge}>{t('gameStatus.moves')}: {state.moves}</span>}
+              {state && <span className={styles.badge}>{t('common.pushes')}: {state.pushes}</span>}
+              {levels.length > 0 && <span className={styles.badge}>{t('common.level')} {levelIndex + 1}/{levels.length}</span>}
+              {solved && <span className={`${styles.badge} ${styles.solved}`}>{t('gameStatus.solved')}</span>}
             </div>
           </div>
         </div>

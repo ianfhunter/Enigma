@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, findLongestWordWithSeed } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LongestWord.module.css';
 
@@ -48,7 +49,7 @@ export default function LongestWord() {
   const [currentWord, setCurrentWord] = useState('');
   const [message, setMessage] = useState('');
   const [longestPossibleWord, setLongestPossibleWord] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, setGameState, reset: resetGameState, isPlaying } = useGameState();
   const [stats, setStats] = usePersistedState('longestword-stats', { bestLength: 0, gamesPlayed: 0 });
 
   const inputRef = useRef(null);
@@ -80,8 +81,8 @@ export default function LongestWord() {
     setCurrentWord('');
     setMessage('');
     setLongestPossibleWord(longest);
-    setGameState('playing');
-  }, []);
+    resetGameState();
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -89,7 +90,7 @@ export default function LongestWord() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!currentWord || gameState !== 'playing') return;
+    if (!currentWord || !isPlaying) return;
 
     const upperWord = currentWord.trim().toUpperCase();
 

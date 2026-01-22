@@ -148,7 +148,7 @@ export default function TileSwap() {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [showPreview, setShowPreview] = useState(false);
   const [seed, setSeed] = useState(null);
 
@@ -171,22 +171,22 @@ export default function TileSwap() {
     setSize(newSize);
     setSelectedPiece(null);
     setMoves(0);
-    setGameState('playing');
+    resetGameState();
     setShowPreview(false);
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, []);
 
   useEffect(() => {
-    if (pieces.length > 0 && checkSolved(pieces) && moves > 0) {
-      setGameState('won');
+    if (pieces.length > 0 && checkSolved(pieces) && moves > 0 && isPlaying) {
+      checkWin(true);
     }
-  }, [pieces, moves]);
+  }, [pieces, moves, isPlaying, checkWin]);
 
   const handlePieceClick = (piece) => {
-    if (gameState === 'won') return;
+    if (isWon) return;
 
     if (selectedPiece === null) {
       setSelectedPiece(piece);

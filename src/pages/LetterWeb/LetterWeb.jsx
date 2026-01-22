@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LetterWeb.module.css';
 
@@ -328,7 +329,7 @@ export default function LetterWeb() {
   const [currentWord, setCurrentWord] = useState('');
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [message, setMessage] = useState('');
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'revealed'
+  const { gameState, checkWin: checkWinState, giveUp, reset: resetGameState, isPlaying, isWon, isGaveUp } = useGameState();
   const [stats, setStats] = usePersistedState('letterweb-stats', { gamesWon: 0, bestWords: null });
   const [puzzleNumber, setPuzzleNumber] = useState(0);
   const [seed, setSeed] = useState(null);
@@ -349,11 +350,11 @@ export default function LetterWeb() {
     setCurrentWord('');
     setSelectedLetters([]);
     setMessage('');
-    setGameState('playing');
-  }, [puzzleNumber]);
+    resetGameState();
+  }, [puzzleNumber, resetGameState]);
 
   const handleGiveUp = () => {
-    setGameState('revealed');
+    giveUp();
     setWords(solution);
     setCurrentWord('');
     setSelectedLetters([]);
@@ -366,7 +367,7 @@ export default function LetterWeb() {
   const lastLetter = words.length > 0 ? words[words.length - 1].slice(-1) : null;
 
   const handleLetterClick = (letter, sideIndex) => {
-    if (gameState === 'won' || gameState === 'revealed') return;
+    if (isWon || isGaveUp) return;
 
     // Check if this is the first letter or comes from a different side
     if (selectedLetters.length > 0) {
@@ -399,7 +400,7 @@ export default function LetterWeb() {
     setMessage('');
 
     if (checkWin(newWords, sides)) {
-      setGameState('won');
+      checkWinState(true);
       setStats(prev => ({
         gamesWon: prev.gamesWon + 1,
         bestWords: prev.bestWords === null || newWords.length < prev.bestWords

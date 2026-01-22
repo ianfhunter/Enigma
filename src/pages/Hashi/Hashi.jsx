@@ -378,7 +378,7 @@ export default function Hashi() {
   const [bridges, setBridges] = useState(new Map());
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [selectedIsland, setSelectedIsland] = useState(null);
 
   const { size: gridSize, islands: numIslands } = GRID_SIZES[sizeKey];

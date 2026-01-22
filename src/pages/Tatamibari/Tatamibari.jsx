@@ -337,7 +337,7 @@ export default function Tatamibari() {
   const [currentRegion, setCurrentRegion] = useState(0);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const [seed, setSeed] = useState(() => Date.now());
   const [loading, setLoading] = useState(true);

@@ -7,6 +7,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import StatsPanel from '../../components/StatsPanel';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './FlipQuotes.module.css';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -25,7 +26,7 @@ export default function FlipQuotes() {
   const [flipping, setFlipping] = useState({});
   const [flipDirection, setFlipDirection] = useState({});
   const [hintsUsed, setHintsUsed] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [flipCount, setFlipCount] = useState(0);
@@ -75,12 +76,12 @@ export default function FlipQuotes() {
     setFlipping({});
     setFlipDirection({});
     setHintsUsed(0);
-    setGameState('playing');
+    resetGameState();
     setSeed(gameSeed);
     setStartTime(Date.now());
     setEndTime(null);
     setFlipCount(0);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -88,27 +89,27 @@ export default function FlipQuotes() {
 
   // Check win condition
   useEffect(() => {
-    if (!targetText || gameState !== 'playing') return;
+    if (!targetText || !isPlaying) return;
 
     const isComplete = currentLetters.every((letter, idx) => {
       return letter === targetText[idx];
     });
 
     if (isComplete && currentLetters.length > 0) {
-      setGameState('won');
+      checkWin(true);
       setEndTime(Date.now());
     }
-  }, [currentLetters, targetText, gameState]);
+  }, [currentLetters, targetText, isPlaying, checkWin]);
 
   const handleGiveUp = () => {
-    if (!targetText || gameState !== 'playing') return;
+    if (!targetText || !isPlaying) return;
     setCurrentLetters([...targetText]);
-    setGameState('gaveUp');
+    giveUp();
     setEndTime(Date.now());
   };
 
   const handleFlip = (index, direction = 'up') => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (!/[A-Z]/.test(targetText[index])) return;
 
     // Start flip animation

@@ -4,6 +4,7 @@ import { getRandomHangmanWord } from '../../data/wordUtils';
 import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
+import { useGameState } from '../../hooks/useGameState';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -19,15 +20,15 @@ export default function Hangman() {
   const [word, setWord] = useState('');
   const [guessedLetters, setGuessedLetters] = useState(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
+  const { gameState, checkWin: checkWinState, giveUp, lose, reset: resetGameState, isPlaying } = useGameState();
   const [stats, setStats] = usePersistedState('hangman-stats', { played: 0, won: 0 });
 
   const initGame = useCallback(() => {
     setWord(getRandomHangmanWord(5, 8));
     setGuessedLetters(new Set());
     setWrongGuesses(0);
-    setGameState('playing');
-  }, []);
+    resetGameState();
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -38,7 +39,7 @@ export default function Hangman() {
   }, []);
 
   const guessLetter = useCallback((letter) => {
-    if (gameState !== 'playing' || guessedLetters.has(letter)) return;
+    if (!isPlaying || guessedLetters.has(letter)) return;
 
     const newGuessed = new Set(guessedLetters).add(letter);
     setGuessedLetters(newGuessed);
@@ -48,23 +49,23 @@ export default function Hangman() {
       setWrongGuesses(newWrong);
 
       if (newWrong >= MAX_WRONG) {
-        setGameState('lost');
+        lose();
         setStats(prev => ({ ...prev, played: prev.played + 1 }));
       }
     } else if (checkWin(newGuessed, word)) {
-      setGameState('won');
+      checkWinState(true);
       setStats(prev => ({ played: prev.played + 1, won: prev.won + 1 }));
     }
-  }, [gameState, guessedLetters, word, wrongGuesses, checkWin, setStats]);
+  }, [isPlaying, guessedLetters, word, wrongGuesses, checkWin, setStats, checkWinState, lose]);
 
   const handleGiveUp = () => {
-    if (gameState !== 'playing' || !word) return;
-    setGameState('gaveUp');
+    if (!isPlaying || !word) return;
+    giveUp();
     setStats(prev => ({ ...prev, played: prev.played + 1 }));
   };
 
   const useHint = () => {
-    if (gameState !== 'playing' || wrongGuesses >= MAX_WRONG - 1) return;
+    if (!isPlaying || wrongGuesses >= MAX_WRONG - 1) return;
 
     // Find unguessed letters in the word
     const unguessed = word.split('').filter(l => !guessedLetters.has(l));

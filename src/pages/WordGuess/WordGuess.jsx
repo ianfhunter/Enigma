@@ -8,6 +8,7 @@ import {
 } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
+import { useGameState } from '../../hooks/useGameState';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -29,7 +30,7 @@ export default function WordGuess() {
   const [targetWord, setTargetWord] = useState('');
   const [guesses, setGuesses] = useState([]);
   const [currentGuess, setCurrentGuess] = useState('');
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost', 'gaveup'
+  const { gameState, checkWin, giveUp, lose, reset: resetGameState, isPlaying } = useGameState();
   const [message, setMessage] = useState('');
   const [letterStates, setLetterStates] = useState({});
   const [shakeRow, setShakeRow] = useState(false);
@@ -46,23 +47,24 @@ export default function WordGuess() {
     setTargetWord(getRandomWordGuessWord());
     setGuesses([]);
     setCurrentGuess('');
-    setGameState('playing');
+    resetGameState();
     setLetterStates({});
     setMessage('');
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   const handleGiveUp = useCallback(() => {
-    setGameState('gaveup');
+    if (!isPlaying) return;
+    giveUp();
     setStats(prev => ({
       ...prev,
       played: prev.played + 1,
       streak: 0,
     }));
-  }, [setStats]);
+  }, [setStats, giveUp, isPlaying]);
 
   const updateLetterStates = (guess, feedback) => {
     const newStates = { ...letterStates };
@@ -121,7 +123,7 @@ export default function WordGuess() {
     setTimeout(() => {
       setRevealRow(-1);
       if (currentGuess.toUpperCase() === targetWord) {
-        setGameState('won');
+        checkWin(true);
         setStats(prev => ({
           played: prev.played + 1,
           won: prev.won + 1,
@@ -129,7 +131,7 @@ export default function WordGuess() {
           maxStreak: Math.max(prev.maxStreak, prev.streak + 1),
         }));
       } else if (newGuesses.length >= MAX_GUESSES) {
-        setGameState('lost');
+        lose();
         setStats(prev => ({
           ...prev,
           played: prev.played + 1,
@@ -137,10 +139,10 @@ export default function WordGuess() {
         }));
       }
     }, WORD_LENGTH * 300 + 100);
-  }, [currentGuess, targetWord, guesses, setStats, letterStates, strictMode]);
+  }, [currentGuess, targetWord, guesses, setStats, letterStates, strictMode, checkWin, lose]);
 
   const handleKeyPress = useCallback((key) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     if (key === 'ENTER') {
       submitGuess();

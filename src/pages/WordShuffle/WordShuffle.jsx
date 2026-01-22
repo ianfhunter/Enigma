@@ -397,7 +397,7 @@ export default function WordShuffle() {
         )}
 
         <div className={styles.wordList}>
-          <h3>Found Words ({foundWords.size})</h3>
+          <h3>{t('common.foundWords')} ({foundWords.size})</h3>
           <div className={styles.words}>
             {Array.from(foundWords).sort((a, b) => b.length - a.length).map(word => (
               <span key={word} className={styles.word}>

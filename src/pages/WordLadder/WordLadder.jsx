@@ -201,7 +201,7 @@ export default function WordLadder() {
                       value={currentInput}
                       onChange={(e) => setCurrentInput(e.target.value.toUpperCase())}
                       maxLength={puzzle.startWord.length}
-                      placeholder="Type word..."
+                      placeholder={t('common.typeWord')}
                       className={styles.input}
                       autoComplete="off"
                       spellCheck="false"

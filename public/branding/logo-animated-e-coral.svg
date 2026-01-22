@@ -34,7 +34,6 @@
 
   <!-- Outer rotor group -->
   <g class="rotor-outer">
-    <circle cx="32" cy="32" r="26" fill="none" stroke="#16213e" stroke-width="4"/>
     <circle cx="32" cy="32" r="26" fill="none" stroke="#e94560" stroke-width="2"
             stroke-dasharray="8 4" stroke-dashoffset="0"/>
     <circle cx="32" cy="6" r="2" fill="#e94560"/>
@@ -45,7 +44,6 @@
 
   <!-- Middle rotor group -->
   <g class="rotor-middle">
-    <circle cx="32" cy="32" r="18" fill="none" stroke="#16213e" stroke-width="3"/>
     <circle cx="32" cy="32" r="18" fill="none" stroke="#0f3460" stroke-width="2"
             stroke-dasharray="6 3" stroke-dashoffset="2"/>
     <circle cx="32" cy="14" r="1.5" fill="#0f3460"/>

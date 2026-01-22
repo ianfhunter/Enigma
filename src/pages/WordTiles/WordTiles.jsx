@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import { isValidWord } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordTiles.module.css';
@@ -148,7 +149,7 @@ export default function WordTiles() {
   const [doubleWordSlot, setDoubleWordSlot] = useState(2); // Which slot has 2x
   const [score, setScore] = useState(0);
   const [wordsPlayed, setWordsPlayed] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, setGameState, reset: resetGameState, isPlaying, isFinished } = useGameState();
   const [message, setMessage] = useState('');
   const [finalPenalty, setFinalPenalty] = useState(0);
   const [highScore, setHighScore] = usePersistedState(STORAGE_KEY, 0);
@@ -163,11 +164,11 @@ export default function WordTiles() {
     setDoubleWordSlot(Math.floor(Math.random() * WORD_SLOTS));
     setScore(0);
     setWordsPlayed([]);
-    setGameState('playing');
+    resetGameState();
     setMessage('');
     setFinalPenalty(0);
     setIsNewHighScore(false);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();

@@ -156,7 +156,7 @@ export default function Suko() {
   const [selectedCell, setSelectedCell] = useState(null);
   const { gameState, setGameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [sumStatus, setSumStatus] = useState([false, false, false, false]);
   const [colorSumStatus, setColorSumStatus] = useState([false, false, false]);
   const [seed, setSeed] = useState(null);

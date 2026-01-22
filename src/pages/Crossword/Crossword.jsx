@@ -164,16 +164,16 @@ export default function Crossword() {
 
   // Keep hidden input focused when using native keyboard on mobile
   useEffect(() => {
-    if (useNativeKeyboard && gameState === 'playing' && nativeInputRef.current && selectedCell) {
+    if (useNativeKeyboard && isPlaying && nativeInputRef.current && selectedCell) {
       nativeInputRef.current.focus({ preventScroll: true });
     }
-  }, [useNativeKeyboard, gameState, selectedCell]);
+  }, [useNativeKeyboard, isPlaying, selectedCell]);
 
   // Check for win
   useEffect(() => {
-    if (puzzle && userGrid.length > 0 && gameState === 'playing') {
+    if (puzzle && userGrid.length > 0 && isPlaying) {
       if (isPuzzleComplete(puzzle, userGrid)) {
-        setGameState('won');
+        checkWin(true);
         setIsTimerRunning(false);
 
         setStats(prev => ({
@@ -185,7 +185,7 @@ export default function Crossword() {
         }));
       }
     }
-  }, [userGrid, puzzle, gameState, timer, setStats]);
+  }, [userGrid, puzzle, isPlaying, checkWin, timer, setStats]);
 
   // Format time
   const formatTime = (seconds) => {
@@ -493,7 +493,7 @@ export default function Crossword() {
     }
 
     setMissedWords(missed);
-    setGameState('gaveUp');
+    giveUp();
     setIsTimerRunning(false);
 
     // Fill in the solution
@@ -814,7 +814,7 @@ export default function Crossword() {
             <span className={styles.statValue}>
               {stats.bestTime ? formatTime(stats.bestTime) : '-'}
             </span>
-            <span className={styles.statLabel}>Best</span>
+            <span className={styles.statLabel}>{t('common.best')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>

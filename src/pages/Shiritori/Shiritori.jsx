@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import {
   getLastKana,
   endsInN,
@@ -115,7 +116,7 @@ export default function Shiritori() {
   const [chain, setChain] = useState([]);
   const [currentInput, setCurrentInput] = useState('');
   const [message, setMessage] = useState('');
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'playerWin', 'aiWin', 'nLose'
+  const { gameState, setGameState, reset: resetGameState, isPlaying } = useGameState();
   const [usedWords, setUsedWords] = useState(new Set());
   const [isAIThinking, setIsAIThinking] = useState(false);
   const [lang, setLang] = usePersistedState('shiritori-lang', 'beginner');
@@ -139,20 +140,20 @@ export default function Shiritori() {
     setUsedWords(new Set([startWord.hiragana]));
     setCurrentInput('');
     setMessage('');
-    setGameState('playing');
+    resetGameState();
     setIsAIThinking(false);
     setSuggestions([]);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (inputRef.current && !isAIThinking && gameState === 'playing') {
+    if (inputRef.current && !isAIThinking && isPlaying) {
       inputRef.current.focus();
     }
-  }, [isAIThinking, chain, gameState]);
+  }, [isAIThinking, chain, isPlaying]);
 
   useEffect(() => {
     // Scroll chain to bottom when new words are added

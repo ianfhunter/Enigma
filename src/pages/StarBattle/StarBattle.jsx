@@ -126,7 +126,7 @@ export default function StarBattle() {
   const [stars, setStars] = useState([]);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const size = GRID_SIZES[sizeKey];

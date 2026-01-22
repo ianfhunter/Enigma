@@ -235,7 +235,7 @@ export default function Netslide() {
         </label>
         <div className={styles.actions}>
           <button className={styles.button} onClick={() => newGame(size.w, size.h)}>New</button>
-          <button className={styles.button} onClick={showSolved}>Solve</button>
+          <button className={styles.button} onClick={showSolved}>{t('common.reveal')}</button>
         </div>
         <div className={styles.status}>
           {solved ? <span className={styles.win}>Solved!</span> : <span>Moves: {moves} • Connected: {conn.connectedCount}/{total}</span>}

@@ -53,7 +53,7 @@ export default function Kakuro() {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const { gameState, setGameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(null);
   const [seed, setSeed] = useState(null);

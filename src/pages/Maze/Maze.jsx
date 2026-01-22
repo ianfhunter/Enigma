@@ -261,7 +261,7 @@ export default function Maze() {
           )}
           {bestTimes[sizeKey] && (
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statLabel}>{t('common.best')}</span>
               <span className={styles.statValue}>{formatTime(bestTimes[sizeKey])}</span>
             </div>
           )}

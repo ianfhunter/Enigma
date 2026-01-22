@@ -318,7 +318,7 @@ export default function WordWheel() {
           </div>
 
           <div className={styles.foundWords}>
-            <h3>Found Words</h3>
+            <h3>{t('common.foundWords')}</h3>
             {foundWords.length === 0 ? (
               <p className={styles.noWords}>No words found yet</p>
             ) : (

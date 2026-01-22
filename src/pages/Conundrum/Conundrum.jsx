@@ -209,7 +209,7 @@ export default function Conundrum() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 className={styles.guessInput}
-                placeholder="Type your answer..."
+                placeholder={t('common.typeAnswer')}
                 maxLength={9}
                 autoComplete="off"
                 autoCapitalize="characters"

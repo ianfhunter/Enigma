@@ -221,7 +221,7 @@ export default function Anagrams() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 className={styles.wordInput}
-                placeholder="Type a word..."
+                placeholder={t('common.typeWord')}
                 autoComplete="off"
                 autoCapitalize="characters"
               />
@@ -277,7 +277,7 @@ export default function Anagrams() {
           </div>
 
           <div className={styles.foundWords}>
-            <h3>Found Anagrams</h3>
+            <h3>{t('common.foundAnagrams')}</h3>
             {foundWords.length === 0 ? (
               <p className={styles.noWords}>No anagrams found yet</p>
             ) : (

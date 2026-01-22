@@ -225,7 +225,7 @@ export default function Fifteen() {
         </div>
 
         <div className={styles.status}>
-          {solved ? <span className={styles.win}>Solved!</span> : <span>Moves: {cursor}</span>}
+          {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : <span>{t('gameStatus.moves')}: {cursor}</span>}
         </div>
       </div>
 

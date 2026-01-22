@@ -158,8 +158,8 @@ export default function Calcudoku() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [gameState, setGameState] = useState('playing');
-  const [showErrors, setShowErrors] = useState(true);
+  const { gameState, checkWin, giveUp, setGameState, reset: resetGameState, isPlaying, isWon, isGaveUp } = useGameState();
+  const [showErrors, setShowErrors] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const timerRef = useRef(null);
@@ -242,7 +242,7 @@ export default function Calcudoku() {
   }, [puzzle, playerGrid, notes, timer, gameState, size, difficulty, isLoaded, setSavedState]);
 
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(prev => prev + 1);
       }, 1000);
@@ -250,17 +250,17 @@ export default function Calcudoku() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (isLoaded && gameState === 'playing') {
+    if (isLoaded && isPlaying) {
       setIsRunning(true);
     }
-  }, [isLoaded, gameState]);
+  }, [isLoaded, isPlaying]);
 
   // Check for win
   useEffect(() => {
-    if (!puzzle || !playerGrid.length || gameState === 'won' || gameState === 'gaveUp') return;
+    if (!puzzle || !playerGrid.length || !isPlaying) return;
 
     // Check if grid is complete
     const isComplete = playerGrid.every(row => row.every(cell => cell !== 0));
@@ -272,13 +272,13 @@ export default function Calcudoku() {
     );
 
     if (isCorrect) {
-      setGameState('won');
+      checkWin(true);
       setIsRunning(false);
     }
-  }, [playerGrid, puzzle, gameState]);
+  }, [playerGrid, puzzle, isPlaying, checkWin]);
 
   const handleCellClick = (row, col) => {
-    if (gameState === 'won' || gameState === 'gaveUp') return;
+    if (isWon || isGaveUp) return;
     setSelectedCell({ row, col });
   };
 
@@ -413,9 +413,9 @@ export default function Calcudoku() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzle || gameState !== 'playing') return;
+    if (!puzzle || !isPlaying) return;
     setPlayerGrid(puzzle.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
     setIsRunning(false);
   };
 
@@ -554,7 +554,7 @@ export default function Calcudoku() {
         <div className={styles.buttons}>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button
             className={styles.newGameBtn}

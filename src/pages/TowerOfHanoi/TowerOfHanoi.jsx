@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './TowerOfHanoi.module.css';
 
 const DISK_COUNTS = [3, 4, 5, 6, 7];
@@ -25,7 +26,7 @@ export default function TowerOfHanoi() {
   const [towers, setTowers] = useState([[], [], []]);
   const [selectedTower, setSelectedTower] = useState(null);
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won'
+  const { gameState, checkWin: checkWinState, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [bestMoves, setBestMoves] = usePersistedState('tower-hanoi-best', {});
 
   const minMoves = Math.pow(2, diskCount) - 1;
@@ -36,8 +37,8 @@ export default function TowerOfHanoi() {
     setTowers([firstTower, [], []]);
     setSelectedTower(null);
     setMoves(0);
-    setGameState('playing');
-  }, [diskCount]);
+    resetGameState();
+  }, [diskCount, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -49,7 +50,7 @@ export default function TowerOfHanoi() {
   }, [diskCount]);
 
   const handleTowerClick = (towerIndex) => {
-    if (gameState === 'won') return;
+    if (isWon) return;
 
     if (selectedTower === null) {
       // Select a tower (only if it has disks)
@@ -78,7 +79,7 @@ export default function TowerOfHanoi() {
           setSelectedTower(null);
 
           if (checkWin(newTowers)) {
-            setGameState('won');
+            checkWinState(true);
             const key = diskCount.toString();
             const totalMoves = moves + 1;
             if (!bestMoves[key] || totalMoves < bestMoves[key]) {
@@ -131,7 +132,7 @@ export default function TowerOfHanoi() {
           </div>
           {bestMoves[diskCount.toString()] && (
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statLabel}>{t('common.best')}</span>
               <span className={styles.statValue}>{bestMoves[diskCount.toString()]}</span>
             </div>
           )}

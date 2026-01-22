@@ -121,7 +121,7 @@ export default function Sudoku() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [notesMode, setNotesMode] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [errors, setErrors] = useState(new Set());
   const [history, setHistory] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);

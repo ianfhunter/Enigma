@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { getCommonWordsByLength } from '../../data/wordUtils';
+import { useGameState } from '../../hooks/useGameState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSnake.module.css';
 
@@ -92,22 +93,22 @@ export default function WordSnake() {
   const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [selectedPath, setSelectedPath] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [isDragging, setIsDragging] = useState(false);
 
   const initGame = useCallback(() => {
     const data = generatePuzzle();
     setPuzzleData(data);
     setSelectedPath([]);
-    setGameState('playing');
-  }, []);
+    resetGameState();
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     // Check if selected path matches the solution
     if (selectedPath.length === puzzleData.path.length) {
@@ -121,23 +122,23 @@ export default function WordSnake() {
         }
       }
       if (correct) {
-        setGameState('won');
+        checkWin(true);
       }
     }
-  }, [selectedPath, puzzleData]);
+  }, [selectedPath, puzzleData, isPlaying, checkWin]);
 
   const isAdjacent = (r1, c1, r2, c2) => {
     return Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1;
   };
 
   const handleCellMouseDown = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setIsDragging(true);
     setSelectedPath([[r, c]]);
   };
 
   const handleCellMouseEnter = (r, c) => {
-    if (!isDragging || gameState !== 'playing') return;
+    if (!isDragging || !isPlaying) return;
 
     // Check if this cell is adjacent to the last cell in path
     if (selectedPath.length > 0) {
@@ -174,7 +175,7 @@ export default function WordSnake() {
   };
 
   const handleTouchMove = (e) => {
-    if (!isDragging || gameState !== 'playing') return;
+    if (!isDragging || !isPlaying) return;
     e.preventDefault();
 
     const touch = e.touches[0];
@@ -201,13 +202,13 @@ export default function WordSnake() {
 
   const handleReset = () => {
     setSelectedPath([]);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setSelectedPath([...puzzleData.path]);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;

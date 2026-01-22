@@ -494,7 +494,7 @@ export default function ColorCube() {
           aria-label="3D cube view"
         >
           <div className={styles.cubeHud}>
-            <div className={styles.cubeHint}>Drag to rotate</div>
+            <div className={styles.cubeHint}>{t('common.dragToRotate')}</div>
             <button className={styles.cubeResetBtn} onClick={resetView} type="button">
               Reset view
             </button>

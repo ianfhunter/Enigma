@@ -189,7 +189,7 @@ export default function Creek() {
   const [grid, setGrid] = useState([]);
   const [gameState, setGameState] = useState('loading');
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [whiteMode, setWhiteMode] = useState(false); // Mobile white mode
   const [seed, setSeed] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);

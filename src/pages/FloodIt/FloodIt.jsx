@@ -181,7 +181,7 @@ export default function FloodIt() {
           </div>
           {bestScores[`${sizeKey}-${colorCount}`] && (
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statLabel}>{t('common.best')}</span>
               <span className={styles.statValue}>{bestScores[`${sizeKey}-${colorCount}`]}</span>
             </div>
           )}

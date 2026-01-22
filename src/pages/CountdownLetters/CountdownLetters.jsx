@@ -322,7 +322,7 @@ export default function CountdownLetters() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 className={styles.wordInput}
-                placeholder="Type your word..."
+                placeholder={t('common.typeWord')}
                 autoComplete="off"
                 autoCapitalize="characters"
               />

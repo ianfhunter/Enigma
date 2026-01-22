@@ -421,7 +421,7 @@ export default function LetterOrbit() {
         <div className={styles.statsSection}>
           <div className={styles.stats}>
             <div className={styles.statItem}>
-              <span className={styles.statLabel}>Score:</span>
+              <span className={styles.statLabel}>{t('gameStatus.score')}:</span>
               <span className={styles.statValue}>{calculateScore()}</span>
             </div>
             <div className={styles.statItem}>
@@ -432,7 +432,7 @@ export default function LetterOrbit() {
 
           <div className={styles.wordsList}>
             <div className={styles.wordsHeader}>
-              <h3>Found Words</h3>
+              <h3>{t('common.foundWords')}</h3>
               <button
                 className={styles.toggleBtn}
                 onClick={() => setShowAllWords(!showAllWords)}

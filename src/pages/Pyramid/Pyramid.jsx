@@ -5,6 +5,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { isValidWord, isCommonWord, getZipfScore, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray, getAllWords } from '../../data/wordUtils';
+import { useGameState } from '../../hooks/useGameState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Pyramid.module.css';
 
@@ -284,7 +285,7 @@ export default function Pyramid() {
   const [currentPath, setCurrentPath] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
   const [usedIndices, setUsedIndices] = useState(new Set());
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, setGameState, reset: resetGameState, isPlaying } = useGameState();
   const [message, setMessage] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [showAllWords, setShowAllWords] = useState(false);
@@ -313,7 +314,7 @@ export default function Pyramid() {
     currentPathRef.current = [];
     setCurrentWord('');
     setUsedIndices(new Set());
-    setGameState('playing');
+    resetGameState();
     setMessage('');
     setShowAllWords(false);
     setShowSolution(false);
@@ -321,7 +322,7 @@ export default function Pyramid() {
     if (newPuzzle) {
       setPuzzleNumber(nextPuzzleNum);
     }
-  }, [puzzleNumber]);
+  }, [puzzleNumber, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -329,14 +330,14 @@ export default function Pyramid() {
 
   // Check win condition
   useEffect(() => {
-    if (usedIndices.size === TOTAL_CELLS && gameState === 'playing') {
-      setGameState('won');
+    if (usedIndices.size === TOTAL_CELLS && isPlaying) {
+      checkWin(true);
       setMessage('');
     }
-  }, [usedIndices, gameState]);
+  }, [usedIndices, isPlaying, checkWin]);
 
   const handleCellMouseDown = (index) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     // Cannot start on a cell that's already used in another word
     if (usedIndices.has(index)) return;
@@ -723,7 +724,7 @@ export default function Pyramid() {
         )}
 
         <div className={styles.wordList}>
-          <h3>Found Words ({foundWords.size})</h3>
+          <h3>{t('common.foundWords')} ({foundWords.size})</h3>
           <div className={styles.words}>
             {Array.from(foundWords).map((word) => {
               const color = WORD_COLORS[getWordColorIndex(word)];

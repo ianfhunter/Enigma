@@ -323,7 +323,7 @@ export default function Yajilin() {
   const [shaded, setShaded] = useState([]);
   const [pathSegments, setPathSegments] = useState(new Set());
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [loading, setLoading] = useState(true);
   const [seed, setSeed] = useState(null);

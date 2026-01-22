@@ -219,7 +219,7 @@ export default function Trivia() {
 
         <div className={styles.menuArea}>
           <div className={styles.categorySection}>
-            <h2 className={styles.sectionTitle}>Select Category</h2>
+            <h2 className={styles.sectionTitle}>{t('common.selectCategory')}</h2>
             <div className={styles.categoryGrid}>
               {CATEGORIES.map(cat => (
                 <button
@@ -336,12 +336,12 @@ export default function Trivia() {
             {catInfo.icon} {catInfo.name}
           </span>
           {mode === 'challenge' && (
-            <span className={styles.roundInfo}>Question {currentIndex + 1}/{TOTAL_ROUNDS}</span>
+            <span className={styles.roundInfo}>{t('common.question')} {currentIndex + 1}/{TOTAL_ROUNDS}</span>
           )}
           {mode === 'endless' && (
-            <span className={styles.roundInfo}>Question {currentIndex + 1}</span>
+            <span className={styles.roundInfo}>{t('common.question')} {currentIndex + 1}</span>
           )}
-          <span className={styles.scoreInfo}>Score: {score}</span>
+          <span className={styles.scoreInfo}>{t('gameStatus.score')}: {score}</span>
           {streak > 1 && <span className={styles.streakBadge}>🔥 {streak} streak</span>}
         </div>
       </div>
