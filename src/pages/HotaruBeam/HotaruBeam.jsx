@@ -535,6 +535,7 @@ function findErrors(circleGrid, hEdges, vEdges, size) {
 }
 
 export default function HotaruBeam() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
   const [difficultyKey, setDifficultyKey] = useState('Easy');
   const [puzzleData, setPuzzleData] = useState(null);

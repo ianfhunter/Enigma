@@ -83,4 +83,65 @@ describe('LetterWeb - helpers', () => {
     expect(chain).toHaveLength(4);
     expect(hasSolution(sides, validWords, 5)).toBe(true);
   });
+
+  it('findSolution terminates quickly with no solution', () => {
+    const sides = [
+      ['A', 'B', 'C'],
+      ['D', 'E', 'F'],
+      ['G', 'H', 'I'],
+      ['J', 'K', 'L'],
+    ];
+    // Words that cannot cover all 12 letters
+    const validWords = ['AD', 'DG', 'GJ', 'JA'];
+    const startTime = Date.now();
+    const chain = findSolution(sides, validWords, 5);
+    const elapsed = Date.now() - startTime;
+    expect(chain).toBeNull();
+    // Should complete quickly, not hang
+    expect(elapsed).toBeLessThan(5000);
+  });
+
+  it('findSolution handles large word lists without hanging', () => {
+    const sides = [
+      ['A', 'B', 'C'],
+      ['D', 'E', 'F'],
+      ['G', 'H', 'I'],
+      ['J', 'K', 'L'],
+    ];
+    // Generate many valid words that alternate sides correctly
+    const validWords = [];
+    const letters = sides.flat();
+    // Create many 4-letter combinations that alternate sides
+    for (let i = 0; i < 1000; i++) {
+      // Pick letters from alternating sides
+      const word = [
+        sides[0][i % 3],
+        sides[1][i % 3],
+        sides[2][i % 3],
+        sides[3][i % 3],
+      ].join('');
+      validWords.push(word);
+    }
+
+    const startTime = Date.now();
+    // Even with many words, should terminate
+    findSolution(sides, validWords, 5);
+    const elapsed = Date.now() - startTime;
+    // Should complete in reasonable time (under 5 seconds)
+    expect(elapsed).toBeLessThan(5000);
+  });
+
+  it('findSolution returns null when maxWords limit prevents solution', () => {
+    const sides = [
+      ['A', 'B', 'C'],
+      ['D', 'E', 'F'],
+      ['G', 'H', 'I'],
+      ['J', 'K', 'L'],
+    ];
+    // These words need 4 words to cover all letters
+    const validWords = ['ADGJ', 'JBEK', 'KCFI', 'ILH'];
+    // But we only allow 2 words
+    const chain = findSolution(sides, validWords, 2);
+    expect(chain).toBeNull();
+  });
 });

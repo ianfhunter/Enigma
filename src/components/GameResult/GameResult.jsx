@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSoundEnabled } from '../../context/SettingsContext';
 import styles from './GameResult.module.css';
 import winSound from '../../assets/sound_effects/marimba-win-b-3-209679.mp3';
 
@@ -33,6 +34,7 @@ export default function GameResult({
   winMessage,
 }) {
   const { t } = useTranslation();
+  const { soundEnabled } = useSoundEnabled();
   const hasPlayedSound = useRef(false);
 
   // Normalize different prop patterns to a single 'normalizedState'
@@ -52,7 +54,7 @@ export default function GameResult({
   // Play win sound effect when state becomes 'won'
   // Note: This must be called before any conditional returns to satisfy React's rules of hooks
   useEffect(() => {
-    if (normalizedState === 'won' && !hasPlayedSound.current) {
+    if (normalizedState === 'won' && !hasPlayedSound.current && soundEnabled) {
       hasPlayedSound.current = true;
       const audio = new Audio(winSound);
       audio.volume = 0.5;
@@ -64,7 +66,7 @@ export default function GameResult({
     if (normalizedState !== 'won') {
       hasPlayedSound.current = false;
     }
-  }, [normalizedState]);
+  }, [normalizedState, soundEnabled]);
 
   // Don't render if show is explicitly false (legacy behavior)
   if (show === false) {

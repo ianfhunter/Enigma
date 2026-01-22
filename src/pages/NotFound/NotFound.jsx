@@ -6,6 +6,7 @@ import styles from './NotFound.module.css';
 const puzzlePieces = ['🧩', '🎮', '🎲', '🎯', '🃏', '♟️', '🎰', '🎪'];
 
 function NotFound() {
+  const { t } = useTranslation();
   const [floatingPieces, setFloatingPieces] = useState([]);
 
   useEffect(() => {
@@ -72,4 +73,3 @@ function NotFound() {
 }
 
 export default NotFound;
-

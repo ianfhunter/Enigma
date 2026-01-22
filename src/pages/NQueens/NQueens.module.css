@@ -33,8 +33,8 @@
 }
 
 .difficultyBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--btn-secondary-hover-bg);
+  color: var(--color-text);
 }
 
 .difficultyBtn.active {
@@ -48,9 +48,9 @@
   display: flex;
   gap: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--game-panel-bg);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--game-panel-border);
 }
 
 .stat {
@@ -67,7 +67,7 @@
 .statValue {
   font-size: 1.25rem;
   font-weight: 700;
-  color: white;
+  color: var(--color-text);
 }
 
 .statLabel {
@@ -243,12 +243,12 @@
 
 .showAttacksBtn {
   background: var(--btn-secondary-bg);
-  color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--btn-secondary-text);
+  border: 1px solid var(--btn-secondary-border);
 }
 
 .showAttacksBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
   transform: translateY(-2px);
 }
 
@@ -288,8 +288,8 @@
 /* Rules */
 .rules {
   padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
   width: 100%;
   max-width: 480px;
@@ -297,7 +297,7 @@
 
 .rulesTitle {
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text);
   margin-bottom: 0.75rem;
 }
 

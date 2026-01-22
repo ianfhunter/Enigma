@@ -184,6 +184,11 @@
   overflow: hidden;
 }
 
+:global([data-theme="light"]) .mapContainer {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
 .map {
   width: 100%;
   height: auto;
@@ -212,6 +217,27 @@
   stroke: rgba(255, 255, 255, 0.08);
 }
 
+/* Light mode - dark outlines for visibility */
+:global([data-theme="light"]) .country {
+  fill: rgba(0, 0, 0, 0.08);
+  stroke: rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="light"]) .country.guessed {
+  fill: #06b6d4;
+  stroke: #0891b2;
+}
+
+:global([data-theme="light"]) .country.missed {
+  fill: rgba(239, 68, 68, 0.4);
+  stroke: #dc2626;
+}
+
+:global([data-theme="light"]) .country.outOfRegion {
+  fill: rgba(0, 0, 0, 0.02);
+  stroke: rgba(0, 0, 0, 0.1);
+}
+
 /* Micronation markers */
 .microMarker {
   fill: rgba(255, 255, 255, 0.3);
@@ -228,6 +254,22 @@
 .microMarker.missed {
   fill: #ef4444;
   stroke: #dc2626;
+}
+
+/* Light mode micronation markers */
+:global([data-theme="light"]) .microMarker {
+  fill: rgba(0, 0, 0, 0.2);
+  stroke: rgba(0, 0, 0, 0.4);
+}
+
+:global([data-theme="light"]) .microMarker.guessed {
+  fill: #06b6d4;
+  stroke: #0891b2;
+}
+
+:global([data-theme="light"]) .microMarker.missed {
+  fill: #dc2626;
+  stroke: #b91c1c;
 }
 
 /* Input Area */
@@ -263,7 +305,7 @@
 }
 
 .input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-placeholder);
 }
 
 /* Feedback */

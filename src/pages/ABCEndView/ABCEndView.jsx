@@ -240,6 +240,7 @@ function checkSolved(grid, solution, size) {
 const AVAILABLE_SIZES = [...new Set(puzzleDataset.puzzles.map(p => p.rows))].sort((a, b) => a - b);
 
 export default function ABCEndView() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(AVAILABLE_SIZES[1] || 4); // Default to second smallest
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);

@@ -261,6 +261,7 @@ export {
 };
 
 export default function Tracks() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(8);
   const [difficulty, setDifficulty] = useState('medium');
   const [puz, setPuz] = useState(null);

@@ -1084,45 +1084,6 @@ function AdminTab() {
     }
   };
 
-  const handleToggleDevGames = async () => {
-    const devGames = allGames.filter(g => g.version === 'DEV');
-    if (devGames.length === 0) {
-      setMessage({ type: 'info', text: t('admin.noDevGames') });
-      return;
-    }
-
-    // Check if any DEV games are currently enabled
-    const anyEnabled = devGames.some(game => {
-      const config = gameConfigs.find(g => g.gameSlug === game.slug);
-      return config ? config.enabled : true; // default is enabled
-    });
-
-    const newEnabled = !anyEnabled;
-
-    try {
-      await Promise.all(devGames.map(game =>
-        admin.updateGameConfig(game.slug, { enabled: newEnabled })
-      ));
-
-      setGameConfigs(prev => {
-        const updated = [...prev];
-        devGames.forEach(game => {
-          const existingIdx = updated.findIndex(g => g.gameSlug === game.slug);
-          if (existingIdx >= 0) {
-            updated[existingIdx] = { ...updated[existingIdx], enabled: newEnabled };
-          } else {
-            updated.push({ gameSlug: game.slug, enabled: newEnabled, settings: {} });
-          }
-        });
-        return updated;
-      });
-
-      setMessage({ type: 'success', text: t('admin.devGamesToggled', { action: newEnabled ? t('common.enabled') : t('common.disabled'), count: devGames.length }) });
-    } catch (err) {
-      setMessage({ type: 'error', text: err.message });
-    }
-  };
-
   if (loading) {
     return <div className={styles.loading}>{t('admin.loadingAdminData')}</div>;
   }
@@ -1325,27 +1286,12 @@ function AdminTab() {
         </section>
       )}
 
-      {activeSection === 'games' && (() => {
-        const devGames = allGames.filter(g => g.version === 'DEV');
-        const devGamesEnabled = devGames.some(game => {
-          const config = configMap.get(game.slug);
-          return config ? config.enabled : true;
-        });
-
-        return (
+      {activeSection === 'games' && (
         <section className={styles.card}>
           <h3 className={styles.cardTitle}>{t('admin.serverGameConfig')}</h3>
           <p className={styles.cardDescription}>
             {t('admin.serverGameConfigDescription')}
           </p>
-          <div className={styles.devGamesActions}>
-            <button
-              className={devGamesEnabled ? styles.actionButtonDanger : styles.actionButton}
-              onClick={handleToggleDevGames}
-            >
-              {devGamesEnabled ? `🚫 ${t('admin.disableAllDevGames')}` : `✅ ${t('admin.enableAllDevGames')}`}
-            </button>
-          </div>
           <div className={styles.gameConfigList}>
             {allGames.map(game => {
               const config = configMap.get(game.slug);
@@ -1369,8 +1315,7 @@ function AdminTab() {
             })}
           </div>
         </section>
-        );
-      })()}
+      )}
     </div>
   );
 }

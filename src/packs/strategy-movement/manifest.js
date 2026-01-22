@@ -47,7 +47,6 @@ export const categories = [
         emojiIcon: '♟️',
         colors: { primary: '#b58863', secondary: '#8b6914' },
         gradient: 'linear-gradient(135deg, #b58863 0%, #8b6914 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/ChessPuzzle'),
       },
       {
@@ -59,7 +58,6 @@ export const categories = [
         emojiIcon: '♞',
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
         gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/KnightsTour'),
       },
       {
@@ -71,7 +69,6 @@ export const categories = [
         emojiIcon: '👑',
         colors: { primary: '#ec4899', secondary: '#db2777' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/NQueens'),
       },
       {
@@ -82,7 +79,6 @@ export const categories = [
         emojiIcon: '🏰',
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/ChessMaze'),
       },
       {
@@ -93,7 +89,6 @@ export const categories = [
         emojiIcon: '🐂',
         colors: { primary: '#f59e0b', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #dc2626 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/TheseusMinotaur'),
       },
       {
@@ -105,7 +100,6 @@ export const categories = [
         emojiIcon: '📍',
         colors: { primary: '#f472b6', secondary: '#ec4899' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Pegs'),
       },
       {
@@ -117,7 +111,6 @@ export const categories = [
         emojiIcon: '📦',
         colors: { primary: '#22d3ee', secondary: '#0ea5e9' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #0ea5e9 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Sokoban'),
       },
       {
@@ -128,7 +121,6 @@ export const categories = [
         emojiIcon: '🧲',
         colors: { primary: '#0ea5e9', secondary: '#0284c7' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Inertia'),
       },
     ],

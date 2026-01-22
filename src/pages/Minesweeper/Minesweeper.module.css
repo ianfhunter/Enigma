@@ -19,13 +19,13 @@
 }
 
 .backLink:hover {
-  color: #3498db;
+  color: var(--game-accent-blue);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  background: linear-gradient(135deg, var(--game-accent-blue) 0%, var(--game-accent-blue-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -57,13 +57,13 @@
 }
 
 .difficultyBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .difficultyBtn.active {
-  background: rgba(52, 152, 219, 0.2);
-  border-color: rgba(52, 152, 219, 0.4);
-  color: #3498db;
+  background: var(--game-accent-blue-bg);
+  border-color: var(--game-accent-blue-border);
+  color: var(--game-accent-blue);
 }
 
 .gameArea {
@@ -78,8 +78,8 @@
   align-items: center;
   gap: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
 }
 
@@ -87,12 +87,12 @@
   font-size: 1.25rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: #e74c3c;
+  color: var(--game-accent-red);
   min-width: 70px;
 }
 
 .timer {
-  color: #3498db;
+  color: var(--game-accent-blue);
   text-align: right;
 }
 
@@ -111,24 +111,25 @@
 }
 
 .resetBtn:hover {
-  background: var(--panel-bg);
+  background: var(--btn-secondary-hover-bg);
   transform: scale(1.05);
 }
 
 .board {
   display: grid;
   gap: 1px;
-  background: var(--btn-secondary-bg);
+  background: var(--ms-board-bg, var(--color-border));
   padding: 4px;
   border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: 2px solid var(--ms-board-border, var(--panel-border));
+  box-shadow: var(--ms-board-shadow, inset 0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .cell {
   width: 26px;
   height: 26px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--ms-cell-bg);
+  border: 1px solid var(--ms-cell-border);
   border-radius: 3px;
   font-size: 0.85rem;
   font-weight: 800;
@@ -138,44 +139,50 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  box-shadow: var(--ms-cell-shadow);
 }
 
 .cell:hover:not(.revealed) {
-  background: var(--btn-secondary-hover-bg);
+  background: var(--ms-cell-hover);
+  border-color: var(--ms-cell-hover-border);
 }
 
 .cell:active:not(.revealed) {
   transform: scale(0.95);
+  box-shadow: none;
 }
 
 .cell.revealed {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--ms-cell-revealed-bg);
   cursor: default;
-  border-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--ms-cell-revealed-border);
+  box-shadow: none;
 }
 
 .cell.mine {
-  background: rgba(231, 76, 60, 0.4);
+  background: var(--ms-cell-mine-bg);
+  border-color: var(--ms-cell-mine-border);
 }
 
 .cell.flagged {
-  background: rgba(241, 196, 15, 0.15);
+  background: var(--ms-cell-flagged-bg);
+  border-color: var(--ms-cell-flagged-border);
 }
 
-/* Number colors */
-.cell.num1 { color: #3498db; }
-.cell.num2 { color: #27ae60; }
-.cell.num3 { color: #e74c3c; }
-.cell.num4 { color: #9b59b6; }
-.cell.num5 { color: #e67e22; }
-.cell.num6 { color: #1abc9c; }
-.cell.num7 { color: #34495e; }
-.cell.num8 { color: #95a5a6; }
+/* Number colors - using CSS variables for theme awareness */
+.cell.num1 { color: var(--ms-num1); }
+.cell.num2 { color: var(--ms-num2); }
+.cell.num3 { color: var(--ms-num3); }
+.cell.num4 { color: var(--ms-num4); }
+.cell.num5 { color: var(--ms-num5); }
+.cell.num6 { color: var(--ms-num6); }
+.cell.num7 { color: var(--ms-num7); }
+.cell.num8 { color: var(--ms-num8); }
 
 .resultMessage {
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
@@ -206,13 +213,13 @@
 }
 
 .flagToggle:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .flagToggle.flagModeActive {
-  background: rgba(241, 196, 15, 0.2);
-  border-color: rgba(241, 196, 15, 0.4);
-  color: #f1c40f;
+  background: var(--game-accent-yellow-bg);
+  border-color: var(--game-accent-yellow-border);
+  color: var(--game-accent-yellow);
 }
 
 @media (max-width: 600px) {

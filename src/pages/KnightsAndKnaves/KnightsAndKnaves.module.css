@@ -18,9 +18,9 @@
 }
 
 .modeBtn {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--knk-btn-border);
+  background: var(--knk-btn-bg);
+  color: var(--knk-btn-text);
   padding: 0.55rem 0.8rem;
   border-radius: 10px;
   font-weight: 600;
@@ -29,12 +29,12 @@
 }
 
 .modeBtn:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: var(--knk-btn-hover-bg);
 }
 
 .active {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: var(--knk-btn-active-bg);
+  border-color: var(--knk-btn-active-border);
 }
 
 .practiceControls {
@@ -48,13 +48,13 @@
   gap: 0.5rem;
   align-items: center;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--knk-label-text);
 }
 
 .select {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(0, 0, 0, 0.25);
-  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--knk-btn-border);
+  background: var(--knk-select-bg);
+  color: var(--knk-btn-text);
   padding: 0.45rem 0.6rem;
   border-radius: 10px;
   outline: none;
@@ -68,9 +68,9 @@
 .loading {
   padding: 1rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--knk-card-border);
+  background: var(--knk-card-bg);
+  color: var(--knk-label-text);
 }
 
 .puzzleCard,
@@ -78,20 +78,20 @@
 .solutionCard {
   padding: 1rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--knk-card-border);
+  background: var(--knk-card-bg);
 }
 
 .quizText {
   white-space: pre-wrap;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--knk-text);
 }
 
 .assignmentTitle {
   font-weight: 700;
   margin-bottom: 0.75rem;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--knk-text);
 }
 
 .peopleGrid {
@@ -106,13 +106,13 @@
   align-items: center;
   padding: 0.6rem 0.75rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--knk-row-border);
+  background: var(--knk-row-bg);
 }
 
 .personName {
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--knk-text);
 }
 
 .toggleGroup {
@@ -121,9 +121,9 @@
 }
 
 .toggleBtn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--knk-btn-border);
+  background: var(--knk-btn-bg);
+  color: var(--knk-btn-text);
   padding: 0.45rem 0.65rem;
   border-radius: 10px;
   font-weight: 700;
@@ -149,17 +149,17 @@
   padding: 0.55rem 0.9rem;
   font-weight: 800;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--knk-btn-border);
 }
 
 .primaryBtn {
-  background: rgba(59, 130, 246, 0.22);
-  color: rgba(255, 255, 255, 0.95);
+  background: var(--knk-primary-bg);
+  color: var(--knk-text);
 }
 
 .secondaryBtn {
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--knk-btn-bg);
+  color: var(--knk-btn-text);
 }
 
 .primaryBtn:disabled,
@@ -171,7 +171,7 @@
 
 .meta {
   margin-left: auto;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--knk-text-secondary);
   font-size: 0.9rem;
 }
 
@@ -179,9 +179,9 @@
   margin-top: 0.7rem;
   padding: 0.7rem 0.85rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(0, 0, 0, 0.15);
-  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--knk-btn-border);
+  background: var(--knk-message-bg);
+  color: var(--knk-btn-text);
 }
 
 .messageSuccess {
@@ -192,13 +192,13 @@
 .solutionTitle {
   font-weight: 800;
   margin-bottom: 0.5rem;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--knk-text);
 }
 
 .solutionText {
   white-space: pre-wrap;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--knk-btn-text);
 }
 
 .statsPanel {
@@ -210,11 +210,11 @@
 .attribution {
   margin-top: 0.25rem;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--knk-text-muted);
 }
 
 .attribution a {
-  color: rgba(56, 189, 248, 0.95);
+  color: var(--knk-link);
   text-decoration: none;
 }
 
@@ -226,22 +226,22 @@
   text-align: center;
   padding: 0.8rem 0.6rem;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--knk-card-border);
+  background: var(--knk-card-bg);
 }
 
 .statValue {
   display: block;
   font-weight: 900;
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--knk-text);
 }
 
 .statLabel {
   display: block;
   margin-top: 0.25rem;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.70);
+  color: var(--knk-text-secondary);
 }
 
 @media (max-width: 700px) {
@@ -255,4 +255,3 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-

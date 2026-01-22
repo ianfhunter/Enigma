@@ -166,6 +166,7 @@ export {
 };
 
 export default function Netgame() {
+  const { t } = useTranslation();
   const [size, setSize] = useState({ w: 7, h: 7 });
   const [locked, setLocked] = useState(() => Array(49).fill(false));
   const [solution] = useState(() => makeTreeMasks(7, 7));

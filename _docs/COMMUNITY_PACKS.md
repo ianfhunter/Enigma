@@ -534,7 +534,6 @@ const myPack = {
             secondary: '#7c3aed'
           },
           gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-          version: 'v1.0',
           component: () => import('./games/MyGame'),  // Lazy load
         },
       ],

@@ -15,6 +15,7 @@ const DIFFICULTIES = ['easy', 'medium', 'hard', 'expert'];
 const SIZES = [4, 5, 6, 7];
 
 export default function Eulero() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(5);
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);

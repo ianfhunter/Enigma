@@ -112,6 +112,7 @@ export {
 };
 
 export default function Hidato() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [availableSizes, setAvailableSizes] = useState(() => getAvailableSizes('easy'));
   const [sizeKey, setSizeKey] = useState(() => {

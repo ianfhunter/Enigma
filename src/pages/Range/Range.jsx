@@ -195,6 +195,7 @@ export {
 };
 
 export default function Range() {
+  const { t } = useTranslation();
   const [w, setW] = useState(8);
   const [h, setH] = useState(8);
 

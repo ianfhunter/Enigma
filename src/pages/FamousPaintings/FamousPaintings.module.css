@@ -58,8 +58,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -145,8 +145,8 @@
   width: 100%;
   min-height: 300px;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 20px;
   position: relative;
 }
@@ -157,7 +157,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-tertiary);
   font-size: 1rem;
 }
 
@@ -199,7 +199,7 @@
 
 .question {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text);
   text-align: center;
   font-weight: 500;
 }
@@ -217,8 +217,8 @@
   align-items: center;
   justify-content: center;
   padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel-bg);
+  border: 2px solid var(--panel-border);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -290,15 +290,15 @@
 
 .correctAnswerInfo {
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-secondary);
 }
 
 .paintingInfo {
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--panel-bg);
   border-radius: 12px;
   text-align: center;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text);
   font-size: 0.95rem;
   line-height: 1.6;
 }
@@ -310,7 +310,7 @@
 
 .attributionHint {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-muted);
   text-align: center;
   font-style: italic;
 }
@@ -321,8 +321,8 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 8px;
   width: 100%;
 }
@@ -331,13 +331,13 @@
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--color-text-muted);
   font-weight: 600;
 }
 
 .attributionText {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-tertiary);
   text-align: center;
   line-height: 1.4;
 }
@@ -366,8 +366,8 @@
   align-items: center;
   gap: 1.5rem;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 20px;
 }
 
@@ -443,7 +443,7 @@
 }
 
 .menuBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 /* Stats Panel */
@@ -452,8 +452,8 @@
   gap: 2rem;
   justify-content: center;
   padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 12px;
   flex-wrap: wrap;
 }
@@ -481,7 +481,7 @@
 .dataInfo {
   text-align: center;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-tertiary);
 }
 
 /* Responsive */

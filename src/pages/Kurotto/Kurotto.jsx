@@ -124,6 +124,7 @@ export {
 };
 
 export default function Kurotto() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [sizeKey, setSizeKey] = useState('10x10');
   const [puzzleData, setPuzzleData] = useState(null);

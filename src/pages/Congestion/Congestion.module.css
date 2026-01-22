@@ -1,6 +1,5 @@
 .page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
   padding-bottom: 2rem;
 }
 
@@ -21,14 +20,14 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: #94a3b8;
+  color: var(--color-text-secondary);
 }
 
 .select {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 0.5rem;
-  color: #e2e8f0;
+  color: var(--color-text);
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
@@ -36,13 +35,13 @@
 }
 
 .select:hover {
-  border-color: #475569;
+  border-color: var(--color-primary-border-hover);
 }
 
 .select:focus {
   outline: none;
-  border-color: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+  border-color: var(--game-accent-red);
+  box-shadow: 0 0 0 2px var(--game-accent-red-bg);
 }
 
 .meta {
@@ -52,19 +51,19 @@
 }
 
 .badge {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 0.5rem;
   padding: 0.375rem 0.75rem;
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .won {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  border-color: #22c55e;
-  color: var(--color-text);
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
   animation: pulse 1s ease-in-out infinite;
 }
 
@@ -87,10 +86,10 @@
 }
 
 .button {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 0.5rem;
-  color: #e2e8f0;
+  color: var(--btn-secondary-text);
   padding: 0.625rem 1rem;
   font-size: 0.875rem;
   cursor: pointer;
@@ -100,8 +99,8 @@
 }
 
 .button:hover:not(:disabled) {
-  background: #334155;
-  border-color: #475569;
+  background: var(--btn-secondary-hover-bg);
+  border-color: var(--color-primary-border-hover);
 }
 
 .button:disabled {
@@ -119,12 +118,10 @@
   position: relative;
   padding: 1rem;
   padding-right: 3rem; /* Space for exit indicator */
-  background: #1e293b;
+  background: var(--panel-bg);
   border-radius: 1rem;
-  border: 2px solid #334155;
-  box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--panel-border);
+  box-shadow: var(--shadow-card);
 }
 
 .board {
@@ -132,7 +129,7 @@
   grid-template-columns: repeat(6, 60px);
   grid-template-rows: repeat(6, 60px);
   gap: 4px;
-  background: #0f172a;
+  background: var(--color-bg-tertiary);
   padding: 8px;
   border-radius: 0.5rem;
   position: relative;
@@ -145,7 +142,7 @@
 .cell {
   width: 60px;
   height: 60px;
-  background: #1e293b;
+  background: var(--game-cell-bg);
   border-radius: 6px;
   position: relative;
   cursor: pointer;
@@ -153,11 +150,11 @@
 }
 
 .cell:hover {
-  background: #334155;
+  background: var(--game-cell-hover);
 }
 
 .wall {
-  background: #374151 !important;
+  background: var(--color-bg-tertiary) !important;
   cursor: default;
   display: flex;
   align-items: center;
@@ -165,7 +162,7 @@
 }
 
 .wallBlock {
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 1.5rem;
   font-weight: bold;
 }
@@ -200,7 +197,7 @@
 
 .targetCar {
   box-shadow:
-    0 0 20px rgba(239, 68, 68, 0.4),
+    0 0 20px var(--game-accent-red-bg),
     0 4px 12px rgba(0, 0, 0, 0.3);
   animation: glow 2s ease-in-out infinite;
 }
@@ -208,12 +205,12 @@
 @keyframes glow {
   0%, 100% {
     box-shadow:
-      0 0 20px rgba(239, 68, 68, 0.4),
+      0 0 20px var(--game-accent-red-bg),
       0 4px 12px rgba(0, 0, 0, 0.3);
   }
   50% {
     box-shadow:
-      0 0 30px rgba(239, 68, 68, 0.6),
+      0 0 30px var(--game-accent-red-border),
       0 4px 12px rgba(0, 0, 0, 0.3);
   }
 }
@@ -245,7 +242,7 @@
 
 .exitArrow {
   font-size: 2rem;
-  color: #ef4444;
+  color: var(--game-accent-red);
   animation: bounce 1s ease-in-out infinite;
 }
 
@@ -257,7 +254,7 @@
 .exitText {
   font-size: 0.65rem;
   font-weight: 700;
-  color: #ef4444;
+  color: var(--game-accent-red);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -311,15 +308,15 @@
 
 .winStats {
   font-size: 1rem;
-  color: #94a3b8;
+  color: var(--color-text-secondary);
   margin-bottom: 1rem;
 }
 
 .nextButton {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: linear-gradient(135deg, var(--game-accent-red) 0%, var(--game-accent-red-dark) 100%);
   border: none;
   border-radius: 0.5rem;
-  color: var(--color-text);
+  color: #fff;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
@@ -329,50 +326,50 @@
 
 .nextButton:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 4px 12px var(--game-accent-red-bg);
 }
 
 .attribution {
   margin-top: 1.5rem;
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--color-text-tertiary);
   text-align: center;
 }
 
 .link {
-  color: #94a3b8;
+  color: var(--color-text-secondary);
   text-decoration: underline;
   transition: color 0.2s;
 }
 
 .link:hover {
-  color: #e2e8f0;
+  color: var(--color-text);
 }
 
 .notice {
   padding: 2rem;
   text-align: center;
-  color: #94a3b8;
+  color: var(--color-text-secondary);
 }
 
 .noticeError {
   padding: 2rem;
   text-align: center;
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .pill {
   display: inline-block;
-  background: #334155;
+  background: var(--btn-secondary-bg);
   border-radius: 0.25rem;
   padding: 0.125rem 0.375rem;
   font-size: 0.75rem;
   font-family: monospace;
-  color: #e2e8f0;
+  color: var(--color-text);
 }
 
 .redCar {
-  color: #ef4444;
+  color: var(--game-accent-red);
   font-weight: 600;
 }
 

@@ -258,7 +258,7 @@
 }
 
 .input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-placeholder);
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: normal;

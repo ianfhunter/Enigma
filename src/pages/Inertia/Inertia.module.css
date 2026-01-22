@@ -21,35 +21,35 @@
 }
 
 .button {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--inertia-button-bg);
+  border: 1px solid var(--inertia-button-border);
   border-radius: 12px;
   padding: 0.45rem 0.7rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--inertia-button-text);
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.button:hover:not(:disabled) { background: rgba(255,255,255,0.15); }
+.button:hover:not(:disabled) { background: var(--inertia-button-hover-bg); }
 .button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .button.active {
-  background: rgba(14, 165, 233, 0.3);
-  border-color: rgba(14, 165, 233, 0.5);
+  background: var(--inertia-button-active-bg);
+  border-color: var(--inertia-button-active-border);
   color: var(--color-text);
 }
 
 .group label {
-  color: var(--color-text-secondary);
+  color: var(--inertia-label-text);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .generateBtn {
   padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  background: var(--inertia-generate-bg);
   border: none;
   border-radius: 12px;
-  color: var(--color-text);
+  color: #fff;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
@@ -58,23 +58,23 @@
 
 .generateBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 4px 12px var(--inertia-generate-shadow);
 }
 
 .select {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: var(--inertia-select-bg);
+  border: 1px solid var(--inertia-select-border);
   border-radius: 10px;
   padding: 0.35rem 0.5rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--inertia-button-text);
 }
 
 .status {
   font-size: 0.95rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--inertia-status-text);
 }
-.win { color: #22c55e; font-weight: 700; }
-.dead { color: #fb7185; font-weight: 800; }
+.win { color: var(--inertia-win-text); font-weight: 700; }
+.dead { color: var(--inertia-dead-text); font-weight: 800; }
 
 .grid {
   display: grid;
@@ -87,19 +87,35 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.14);
+  border: 1px solid var(--inertia-cell-border);
   display: grid;
   place-items: center;
   font-weight: 800;
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
+  background: var(--inertia-cell-bg);
+  color: var(--inertia-cell-text);
 }
 
-.wall { background: rgba(0,0,0,0.65); border-color: rgba(255,255,255,0.14); }
-.stop { background: rgba(14,165,233,0.18); border-color: rgba(14,165,233,0.35); }
-.gem { background: rgba(34,197,94,0.14); border-color: rgba(34,197,94,0.35); }
-.mine { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.35); }
-.ball { outline: 2px solid rgba(34,211,238,0.95); outline-offset: 2px; }
+.wall {
+  background: var(--inertia-wall-bg);
+  border-color: var(--inertia-wall-border);
+  color: rgba(255, 255, 255, 0.7);
+}
+.stop {
+  background: var(--inertia-stop-bg);
+  border-color: var(--inertia-stop-border);
+}
+.gem {
+  background: var(--inertia-gem-bg);
+  border-color: var(--inertia-gem-border);
+}
+.mine {
+  background: var(--inertia-mine-bg);
+  border-color: var(--inertia-mine-border);
+}
+.ball {
+  outline: 2px solid var(--inertia-ball-outline);
+  outline-offset: 2px;
+}
 
 .pad {
   display: grid;
@@ -113,11 +129,14 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.16);
-  background: rgba(255,255,255,0.10);
-  color: rgba(255,255,255,0.92);
+  border: 1px solid var(--inertia-button-border);
+  background: var(--inertia-button-bg);
+  color: var(--inertia-button-text);
   cursor: pointer;
   font-weight: 900;
+  transition: all 0.2s ease;
+}
+.dirBtn:hover:not(:disabled) {
+  background: var(--inertia-button-hover-bg);
 }
 .dirBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-

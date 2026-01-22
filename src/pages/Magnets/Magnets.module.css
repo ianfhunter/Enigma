@@ -16,17 +16,17 @@
 .group { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
 
 .button {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--magnets-button-bg);
+  border: 1px solid var(--magnets-button-border);
   border-radius: 12px;
   padding: 0.45rem 0.7rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--magnets-button-text);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .button:hover {
-  background: rgba(255,255,255,0.15);
+  filter: brightness(1.1);
 }
 
 .button.active {
@@ -36,7 +36,7 @@
 }
 
 .group label {
-  color: var(--color-text-secondary);
+  color: var(--magnets-label-text);
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -58,7 +58,7 @@
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
-.status { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+.status { font-size: 0.95rem; color: var(--magnets-status-text); }
 .win { color: #22c55e; font-weight: 700; }
 .bad { color: #fb7185; font-weight: 700; }
 
@@ -90,24 +90,24 @@
   justify-content: center;
   font-weight: 700;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--magnets-clue-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .clueTop {
-  border-bottom: 2px solid rgba(34, 197, 94, 0.4);
+  border-bottom: 2px solid var(--magnets-clue-border-green);
 }
 
 .clueBottom {
-  border-top: 2px solid rgba(251, 113, 133, 0.4);
+  border-top: 2px solid var(--magnets-clue-border-red);
 }
 
 .clueLeft {
-  border-right: 2px solid rgba(34, 197, 94, 0.4);
+  border-right: 2px solid var(--magnets-clue-border-green);
 }
 
 .clueRight {
-  border-left: 2px solid rgba(251, 113, 133, 0.4);
+  border-left: 2px solid var(--magnets-clue-border-red);
 }
 
 .legend {
@@ -120,9 +120,9 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
+  border: 1px solid var(--magnets-cell-border);
+  background: var(--magnets-cell-bg);
+  color: var(--magnets-cell-text);
   font-weight: 900;
   display: grid;
   place-items: center;
@@ -130,10 +130,10 @@
 }
 
 .domino {
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.20);
+  box-shadow: inset 0 0 0 2px var(--magnets-domino-shadow);
 }
 
-.plus { color: #22c55e; }
-.minus { color: #fb7185; }
-.blank { color: rgba(255,255,255,0.65); }
+.plus { color: var(--color-success); }
+.minus { color: var(--color-danger); }
+.blank { color: var(--magnets-blank-text); }
 .badCell { outline: 2px solid rgba(251,113,133,0.85); outline-offset: 2px; }

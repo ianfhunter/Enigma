@@ -234,7 +234,7 @@
 }
 
 .placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-placeholder);
   font-size: 1rem;
   font-weight: 400;
   letter-spacing: normal;
@@ -547,4 +547,27 @@
 
 .feedbackBtn.unflagBtn:hover {
   background: rgba(255, 100, 100, 0.25);
+}
+
+/* Light mode adjustments */
+:global([data-theme="light"]) .outerLetter {
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.06));
+  border: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+:global([data-theme="light"]) .outerLetter:hover:not(.used) {
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.12));
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+:global([data-theme="light"]) .centerLetter {
+  box-shadow:
+    0 8px 25px rgba(255, 107, 107, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+:global([data-theme="light"]) .centerLetter:hover:not(.used) {
+  box-shadow:
+    0 12px 35px rgba(255, 107, 107, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
 }

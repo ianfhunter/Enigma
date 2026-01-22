@@ -76,6 +76,7 @@ export {
 };
 
 export default function Untangle() {
+  const { t } = useTranslation();
   const [n, setN] = useState(12);
   const [edges, setEdges] = useState(() => makeOuterPlanarGraph(12));
   const [points, setPoints] = useState(() => Array.from({ length: 12 }, () => ({ x: randBetween(60, 540), y: randBetween(80, 520) })));

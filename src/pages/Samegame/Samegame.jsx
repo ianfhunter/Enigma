@@ -97,6 +97,7 @@ export {
 };
 
 export default function Samegame() {
+  const { t } = useTranslation();
   const [settings, setSettings] = useState({ w: 12, h: 10, colors: 5 });
   const [grid, setGrid] = useState(() => makeGrid(12, 10, 5));
   const [selected, setSelected] = useState(null); // Set of "r,c"

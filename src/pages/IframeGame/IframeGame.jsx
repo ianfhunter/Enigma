@@ -9,6 +9,7 @@ import styles from './IframeGame.module.css';
  * Used for external pack games that users add via URL
  */
 export default function IframeGame() {
+  const { t } = useTranslation();
   const { packId, gameId } = useParams();
   const navigate = useNavigate();
   const { getPackById, getGameFromPack, removeGameFromPack } = useCustomPacks();

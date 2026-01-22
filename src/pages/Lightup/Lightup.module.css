@@ -44,7 +44,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--lightup-label-text);
   font-weight: 800;
 }
 
@@ -63,7 +63,7 @@
 
 .button {
   background: var(--btn-secondary-bg);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--lightup-button-text);
   border: 1px solid var(--panel-border);
   border-radius: 10px;
   padding: 0.45rem 0.75rem;
@@ -134,7 +134,7 @@
 }
 
 .status {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--lightup-status-text);
   font-weight: 800;
 }
 
@@ -149,14 +149,14 @@
   margin: 0 auto;
   padding: 10px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--lightup-grid-border);
+  background: var(--lightup-grid-bg);
 }
 
 .cell {
   aspect-ratio: 1 / 1;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--lightup-cell-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,16 +164,16 @@
 }
 
 .floor {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--lightup-floor-bg);
 }
 
 .wall {
-  background: rgba(15, 23, 42, 0.95);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: var(--lightup-wall-bg);
+  border-color: var(--lightup-wall-border);
 }
 
 .lit {
-  background: rgba(250, 204, 21, 0.16);
+  background: var(--lightup-lit-bg);
 }
 
 .bulb .icon {
@@ -181,13 +181,13 @@
 }
 
 .mark .icon {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--lightup-mark-color);
   font-weight: 900;
 }
 
 .num {
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--lightup-wall-text);
 }
 
 .icon {
@@ -195,5 +195,5 @@
 }
 
 .bad {
-  outline: 2px solid rgba(251, 113, 133, 0.75);
+  outline: 2px solid var(--lightup-bad-outline);
 }

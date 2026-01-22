@@ -130,6 +130,7 @@ export {
 };
 
 export default function Fifteen() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(4);
   const [history, setHistory] = useState(() => [scrambleFromSolved(4)]);
   const [cursor, setCursor] = useState(0);

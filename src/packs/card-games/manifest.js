@@ -34,7 +34,6 @@ const cardGamesPack = {
           emojiIcon: '🔺',
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-          version: 'v1.0',
           component: () => import('../../pages/PyramidCards'),
         },
         {
@@ -46,7 +45,6 @@ const cardGamesPack = {
           emojiIcon: '⛰️',
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-          version: 'v1.0',
           component: () => import('../../pages/TriPeaks'),
         },
       ],

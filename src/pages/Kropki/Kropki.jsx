@@ -202,6 +202,7 @@ export {
 };
 
 export default function Kropki() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);

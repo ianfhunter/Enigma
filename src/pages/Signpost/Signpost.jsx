@@ -309,6 +309,7 @@ function analyze(puz, succ, pred) {
 }
 
 export default function Signpost() {
+  const { t } = useTranslation();
   const [w, setW] = useState(6);
   const [h, setH] = useState(6);
   const [puz, setPuz] = useState(() => generatePuzzle(6, 6));
@@ -378,7 +379,7 @@ export default function Signpost() {
       <div className={styles.toolbar}>
         <div className={styles.group}>
           <label>
-            <span style={{ color: 'rgba(255,255,255,0.85)', marginRight: 8 }}>Size</span>
+            <span style={{ marginRight: 8 }}>Size</span>
             <select
               className={styles.button}
               value={`${w}x${h}`}

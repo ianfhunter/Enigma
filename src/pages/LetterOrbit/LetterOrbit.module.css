@@ -170,8 +170,8 @@
 }
 
 .currentWord {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(102, 126, 234, 0.08);
+  border: 2px solid rgba(102, 126, 234, 0.4);
   border-radius: 12px;
   padding: 1rem 1.5rem;
   font-size: 1.5rem;
@@ -186,12 +186,20 @@
   width: 100%;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.15);
 }
 
 .currentWord:focus {
   border-color: #667eea;
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(102, 126, 234, 0.12);
+  box-shadow: 0 0 16px rgba(102, 126, 234, 0.25);
+}
+
+.currentWord::placeholder {
+  color: var(--color-placeholder);
+  letter-spacing: 0.05em;
+  font-weight: 400;
 }
 
 .placeholder {

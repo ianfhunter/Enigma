@@ -262,6 +262,7 @@ export {
 };
 
 export default function NavalBattle() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('10×10');
   const [difficulty, setDifficulty] = useState('Medium');
   const [puzzleData, setPuzzleData] = useState(null);

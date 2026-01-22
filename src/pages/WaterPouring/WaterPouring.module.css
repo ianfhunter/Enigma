@@ -63,7 +63,7 @@
   background: linear-gradient(135deg, #06b6d4, #0891b2);
   border: none;
   border-radius: 8px;
-  color: var(--color-text);
+  color: #fff;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -75,10 +75,14 @@
   box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
 }
 
+:global([data-theme="light"]) .generateBtn:hover {
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+}
+
 .puzzleBtn {
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--btn-secondary-border);
   border-radius: 8px;
   color: var(--color-text-secondary);
   font-size: 0.85rem;
@@ -89,13 +93,19 @@
 
 .puzzleBtn:hover {
   color: var(--color-text);
-  background: var(--btn-secondary-bg);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .puzzleBtn.active {
   color: var(--color-text);
   background: rgba(6, 182, 212, 0.3);
   border-color: rgba(6, 182, 212, 0.5);
+}
+
+:global([data-theme="light"]) .puzzleBtn.active {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: rgba(6, 182, 212, 0.5);
+  color: #0891b2;
 }
 
 .targetDisplay {
@@ -105,7 +115,7 @@
   gap: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--game-panel-bg);
   border-radius: 12px;
 }
 
@@ -140,7 +150,7 @@
   align-items: flex-end;
   gap: 2rem;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--game-panel-bg);
   border-radius: 16px;
   min-height: 300px;
 }
@@ -155,8 +165,8 @@
 .jug {
   width: 70px;
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border: 3px solid rgba(255, 255, 255, 0.2);
+  background: var(--water-jug-bg, rgba(255, 255, 255, 0.05));
+  border: 3px solid var(--water-jug-border, rgba(255, 255, 255, 0.2));
   border-bottom-width: 4px;
   border-radius: 0 0 10px 10px;
   cursor: pointer;
@@ -176,6 +186,25 @@
 .jug.target {
   border-color: #22c55e;
   box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+
+:global([data-theme="light"]) .jug {
+  --water-jug-bg: rgba(139, 92, 246, 0.08);
+  --water-jug-border: rgba(139, 92, 246, 0.25);
+}
+
+:global([data-theme="light"]) .jug:hover {
+  border-color: rgba(6, 182, 212, 0.6);
+}
+
+:global([data-theme="light"]) .jug.selected {
+  border-color: #0891b2;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+}
+
+:global([data-theme="light"]) .jug.target {
+  border-color: #16a34a;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
 }
 
 .water {
@@ -200,6 +229,10 @@
   z-index: 2;
 }
 
+:global([data-theme="light"]) .jugLevel {
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+}
+
 .jugMarks {
   position: absolute;
   top: 0;
@@ -213,7 +246,11 @@
   right: 0;
   width: 8px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--water-mark-color, rgba(255, 255, 255, 0.3));
+}
+
+:global([data-theme="light"]) .mark {
+  --water-mark-color: rgba(139, 92, 246, 0.35);
 }
 
 .jugCapacity {
@@ -247,6 +284,16 @@
   cursor: not-allowed;
 }
 
+:global([data-theme="light"]) .actionBtn {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.35);
+  color: #0891b2;
+}
+
+:global([data-theme="light"]) .actionBtn:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.22);
+}
+
 .hint {
   color: var(--color-text-secondary);
   font-size: 0.9rem;
@@ -254,6 +301,11 @@
   padding: 0.5rem 1rem;
   background: rgba(6, 182, 212, 0.1);
   border-radius: 8px;
+}
+
+:global([data-theme="light"]) .hint {
+  background: rgba(6, 182, 212, 0.12);
+  color: #0e7490;
 }
 
 .winMessage {
@@ -266,6 +318,11 @@
   border: 1px solid rgba(6, 182, 212, 0.3);
   border-radius: 16px;
   animation: fadeIn 0.5s ease;
+}
+
+:global([data-theme="light"]) .winMessage {
+  background: rgba(6, 182, 212, 0.08);
+  border-color: rgba(6, 182, 212, 0.35);
 }
 
 @keyframes fadeIn {
@@ -322,7 +379,7 @@
 
 .undoBtn:hover:not(:disabled),
 .resetBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .undoBtn:disabled {
@@ -335,7 +392,7 @@
   background: linear-gradient(135deg, #06b6d4, #0891b2);
   border: none;
   border-radius: 10px;
-  color: var(--color-text);
+  color: #fff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -345,6 +402,10 @@
 .nextBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+}
+
+:global([data-theme="light"]) .nextBtn:hover {
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.5);
 }
 
 @media (max-width: 500px) {

@@ -34,7 +34,6 @@ const internationalWordsPack = {
           colors: { primary: '#dc2626', secondary: '#b91c1c' },
           gradient: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
           tag: 'JP',
-          version: 'v1.0',
           component: () => import('../../pages/Shiritori'),
         },
       ],

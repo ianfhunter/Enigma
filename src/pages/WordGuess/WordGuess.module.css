@@ -6,6 +6,10 @@
   --game-gradient: #fff;
 }
 
+:global([data-theme="light"]) .container {
+  --game-gradient: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+}
+
 .controls {
   width: 100%;
   margin: 0.25rem 0 0.5rem;

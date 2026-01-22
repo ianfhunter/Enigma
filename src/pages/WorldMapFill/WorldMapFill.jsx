@@ -103,6 +103,7 @@ const REGIONS = {
 export { MICRONATIONS, REGIONS };
 
 export default function WorldMapFill() {
+  const { t } = useTranslation();
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [guessedCountries, setGuessedCountries] = useState(new Set());
   const [inputValue, setInputValue] = useState('');

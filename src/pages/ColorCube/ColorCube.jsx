@@ -296,6 +296,7 @@ function FaceGrid({ label, colors, faceClassName, stickerClassName }) {
 }
 
 export default function ColorCube() {
+  const { t } = useTranslation();
   const [stickers, setStickers] = useState(() => makeSolvedStickers());
   const [moves, setMoves] = useState(0);
   const [moveHistory, setMoveHistory] = useState(() => /** @type {string[]} */ ([]));

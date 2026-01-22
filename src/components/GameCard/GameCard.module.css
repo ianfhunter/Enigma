@@ -24,6 +24,10 @@
     inset 0 1px 0 rgba(139, 92, 246, 0.1);
 }
 
+:global([data-theme="light"]) .card {
+  box-shadow: 0 8px 32px rgba(168, 85, 247, 0.4);
+}
+
 .card::before {
   content: '';
   position: absolute;
@@ -103,8 +107,16 @@
   transition: filter 0.3s ease;
 }
 
+:global([data-theme="light"]) .icon {
+  filter: drop-shadow(0 3px 6px rgba(139, 92, 246, 0.35));
+}
+
 .card:hover .icon {
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+:global([data-theme="light"]) .card:hover .icon {
+  filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.45));
 }
 
 .svgIcon {
@@ -114,8 +126,16 @@
   transition: filter 0.3s ease;
 }
 
+:global([data-theme="light"]) .svgIcon {
+  filter: drop-shadow(0 3px 8px rgba(139, 92, 246, 0.4));
+}
+
 .card:hover .svgIcon {
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.6));
+}
+
+:global([data-theme="light"]) .card:hover .svgIcon {
+  filter: drop-shadow(0 5px 15px rgba(139, 92, 246, 0.5));
 }
 
 .title {

@@ -17,7 +17,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--jsums-label-text);
   font-weight: 800;
 }
 
@@ -31,7 +31,7 @@
 
 .button {
   background: var(--btn-secondary-bg);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--jsums-button-text);
   border: 1px solid var(--panel-border);
   border-radius: 10px;
   padding: 0.45rem 0.75rem;
@@ -40,7 +40,7 @@
 }
 
 .button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  filter: brightness(1.1);
 }
 
 .button:disabled {
@@ -59,7 +59,7 @@
 }
 
 .status {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--jsums-status-text);
   font-weight: 800;
 }
 
@@ -82,8 +82,8 @@
   margin: 0 auto;
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--jsums-board-border);
+  background: var(--jsums-board-bg);
   overflow-x: auto;
 }
 
@@ -126,7 +126,7 @@
 .clueValue {
   font-size: 0.85rem;
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--jsums-clue-text);
   background: rgba(139, 92, 246, 0.2);
   border-radius: 4px;
   padding: 0.15rem 0.4rem;
@@ -173,8 +173,8 @@
 .cell {
   aspect-ratio: 1;
   border-radius: 6px;
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid var(--jsums-cell-border);
+  background: var(--jsums-cell-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -187,12 +187,12 @@
 
 .cell:hover:not(.shaded):not(.initial) {
   background: var(--btn-secondary-bg);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: var(--jsums-cell-hover-border);
 }
 
 .cell.shaded {
-  background: rgba(0, 0, 0, 0.3);
-  border-color: rgba(0, 0, 0, 0.5);
+  background: var(--jsums-shaded-bg);
+  border-color: var(--jsums-shaded-border);
   cursor: not-allowed;
 }
 
@@ -238,7 +238,7 @@
 
 .numBtn:hover:not(:disabled),
 .clearBtn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  filter: brightness(1.1);
   transform: translateY(-2px);
 }
 

@@ -54,8 +54,8 @@
 .sizeBtn,
 .difficultyBtn {
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-cell-bg);
+  border: 1px solid var(--game-cell-border);
   border-radius: 8px;
   color: var(--color-text-secondary);
   font-size: 0.85rem;
@@ -97,7 +97,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 26, 0.9);
+  background: var(--game-cell-bg);
   border: none;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -106,7 +106,7 @@
 }
 
 .cell:hover:not(.empty):not(.given) {
-  background: var(--btn-secondary-bg);
+  background: var(--game-cell-hover);
 }
 
 .cell.given {
@@ -125,11 +125,11 @@
 }
 
 .cell.error {
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--color-danger-bg);
 }
 
 .cell.empty {
-  background: #1e1e2e;
+  background: var(--color-bg-tertiary);
   cursor: default;
 }
 
@@ -240,14 +240,14 @@
 }
 
 .numBtnUsed {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.25);
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border-light);
+  color: var(--color-text-muted);
   cursor: not-allowed;
 }
 
 .numBtnUsed:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-bg-tertiary);
 }
 
 .controls {
@@ -315,7 +315,7 @@
 }
 
 .resetBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .giveUpBtn {
@@ -362,7 +362,7 @@
 }
 
 .hint p {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   margin: 0;
 }

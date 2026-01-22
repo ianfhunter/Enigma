@@ -273,7 +273,7 @@
     "bestStreak": "Best Streak",
     "gameVisibility": "Game Visibility",
     "enabledCount": "{{enabled}} of {{total}} enabled",
-    "gameVisibilityDescription": "Control which games appear on the home page. DEV games are in development and may be incomplete.",
+    "gameVisibilityDescription": "Control which games appear on the home page.",
     "enableAll": "Enable All",
     "disableAll": "Disable All",
     "failedToLoad": "Failed to load data",
@@ -317,8 +317,6 @@
     "userDeleted": "User deleted!",
     "gameEnabled": "Game enabled server-wide!",
     "gameDisabled": "Game disabled server-wide!",
-    "noDevGames": "No DEV games found.",
-    "devGamesToggled": "{{action}} {{count}} DEV game(s) server-wide!",
     "loadingAdminData": "Loading admin data...",
     "adminPanel": "Admin Panel",
     "stats": "Stats",
@@ -346,9 +344,7 @@
     "removeAdmin": "Remove admin",
     "makeAdmin": "Make admin",
     "serverGameConfig": "Server Game Configuration",
-    "serverGameConfigDescription": "Enable or disable games server-wide. Disabled games won't appear for any user.",
-    "disableAllDevGames": "Disable All DEV Games",
-    "enableAllDevGames": "Enable All DEV Games"
+    "serverGameConfigDescription": "Enable or disable games server-wide. Disabled games won't appear for any user."
   },
   "store": {
     "title": "Game Store",

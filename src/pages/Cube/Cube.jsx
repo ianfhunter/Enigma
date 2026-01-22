@@ -108,6 +108,7 @@ function makeGridBlues() {
 }
 
 export default function CubeGame() {
+  const { t } = useTranslation();
   const [blueSquares, setBlueSquares] = useState(() => makeGridBlues());
   const [pos, setPos] = useState(() => Math.floor(Math.random() * 16));
   const [ori, setOri] = useState(() => ({ U: false, D: false, N: false, S: false, W: false, E: false }));

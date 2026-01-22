@@ -163,6 +163,7 @@ const SHOT_COST = 1;
 const WRONG_GUESS_PENALTY = 5;
 
 export default function Blackbox() {
+  const { t } = useTranslation();
   const [w, setW] = useState(8);
   const [h, setH] = useState(8);
   const [ballCount, setBallCount] = useState(4);

@@ -67,6 +67,7 @@ function generateStartPosition(size) {
 }
 
 export default function KnightsTour() {
+  const { t } = useTranslation();
   const [boardSize, setBoardSize] = useState(6);
   const [visited, setVisited] = useState([]);
   const [path, setPath] = useState([]);

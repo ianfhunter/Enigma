@@ -115,6 +115,7 @@ export {
 };
 
 export default function Sujiko() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);

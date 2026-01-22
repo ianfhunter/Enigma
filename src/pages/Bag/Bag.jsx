@@ -294,6 +294,7 @@ function analyze(w, h, clues, hEdges, vEdges) {
 }
 
 export default function Bag() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [availableSizes, setAvailableSizes] = useState(() => getAvailableSizes('easy'));
   const [sizeKey, setSizeKey] = useState(() => {
@@ -391,9 +392,9 @@ export default function Bag() {
   };
 
   const strokeFor = (v) => {
-    if (v === 1) return { stroke: '#22d3ee', strokeWidth: 5, opacity: 1 };
-    if (v === -1) return { stroke: 'rgba(255,255,255,0.2)', strokeWidth: 3, opacity: 1, strokeDasharray: '4 4' };
-    return { stroke: 'rgba(255,255,255,0.25)', strokeWidth: 2, opacity: 1 };
+    if (v === 1) return { stroke: 'var(--bag-edge-active)', strokeWidth: 5, opacity: 1 };
+    if (v === -1) return { stroke: 'var(--bag-edge-excluded)', strokeWidth: 3, opacity: 1, strokeDasharray: '4 4' };
+    return { stroke: 'var(--bag-edge-default)', strokeWidth: 2, opacity: 1 };
   };
 
   if (!puz) return null;
@@ -491,7 +492,7 @@ export default function Bag() {
                 y={y + 1}
                 width={cell - 2}
                 height={cell - 2}
-                fill={isIn ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.08)'}
+                fill={isIn ? 'var(--bag-inside-bg)' : 'var(--bag-outside-bg)'}
                 rx="2"
               />
             );
@@ -516,7 +517,7 @@ export default function Bag() {
                 textAnchor="middle"
                 fontSize="18"
                 fontWeight="800"
-                fill={bad ? 'rgba(251,113,133,0.95)' : 'rgba(255,255,255,0.9)'}
+                fill={bad ? 'var(--bag-clue-bad)' : 'var(--bag-clue-text)'}
               >
                 {clue}
               </text>
@@ -583,7 +584,7 @@ export default function Bag() {
             const c = i % (puz.w + 1);
             const x = pad + c * cell;
             const y = pad + r * cell;
-            return <circle key={`dot-${i}`} cx={x} cy={y} r="3" fill="rgba(255,255,255,0.5)" />;
+            return <circle key={`dot-${i}`} cx={x} cy={y} r="3" fill="var(--bag-dot)" />;
           })}
         </svg>
       </div>

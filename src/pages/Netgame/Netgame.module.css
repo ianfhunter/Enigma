@@ -17,7 +17,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--net-label-text);
   font-weight: 800;
 }
 
@@ -31,15 +31,21 @@
 
 .button {
   background: var(--btn-secondary-bg);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--net-button-text);
   border: 1px solid var(--panel-border);
   border-radius: 10px;
   padding: 0.45rem 0.75rem;
   font-weight: 900;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.button:hover {
+  background: var(--btn-secondary-hover-bg);
 }
 
 .status {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--net-status-text);
   font-weight: 800;
 }
 
@@ -58,32 +64,33 @@
   position: relative;
   aspect-ratio: 1 / 1;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--net-tile-border);
+  background: var(--net-tile-bg);
+  box-shadow: var(--net-tile-shadow);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-color 0.15s ease;
 }
 
 .tile:hover {
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: var(--net-tile-hover-border);
 }
 
 .glyph {
   font-size: clamp(16px, 3vw, 28px);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--net-glyph-color);
 }
 
 .lit {
-  background: rgba(34, 197, 94, 0.08);
-  border-color: rgba(34, 197, 94, 0.45);
+  background: var(--net-lit-bg);
+  border-color: var(--net-lit-border);
 }
 
 .locked {
-  outline: 2px dashed rgba(251, 191, 36, 0.7);
+  outline: 2px dashed var(--net-locked-outline);
 }
 
 .centerDot {
@@ -91,8 +98,7 @@
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--net-center-dot);
   bottom: 8px;
   right: 8px;
 }
-

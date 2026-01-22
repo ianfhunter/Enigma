@@ -116,7 +116,7 @@ export default function Sudoku() {
   const { t } = useTranslation();
   const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [puzzles, setPuzzles] = useState({}); // { difficulty: { puzzle, solution, date, puzzleNumber } }
-  const [playerState, setPlayerState] = useState({}); // { difficulty: { grid, notes, timer, isComplete } }
+  const [playerState, setPlayerState] = useState({}); // { difficulty: { grid, notes, timer, gameState } }
   const [difficulty, setDifficulty] = useState('medium');
   const [selectedCell, setSelectedCell] = useState(null);
   const [notesMode, setNotesMode] = useState(false);
@@ -134,8 +134,11 @@ export default function Sudoku() {
   const grid = currentPlayerState?.grid;
   const notes = currentPlayerState?.notes || {};
   const timer = currentPlayerState?.timer || 0;
-  const isComplete = currentPlayerState?.isComplete || false;
-  const gaveUp = currentPlayerState?.gaveUp || false;
+  const gameState = currentPlayerState?.gameState || 'playing';
+  // Derived convenience flags (matching useGameState pattern)
+  const isComplete = gameState === 'won';
+  const gaveUp = gameState === 'gaveUp';
+  const isPlaying = gameState === 'playing';
   const initialCells = currentPuzzle ? new Set(
     currentPuzzle.puzzle.flatMap((row, r) =>
       row.map((cell, c) => cell !== 0 ? `${r}-${c}` : null)
@@ -190,8 +193,7 @@ export default function Sudoku() {
       grid: puzzleData.puzzle.map(row => [...row]),
       notes: {},
       timer: 0,
-      isComplete: false,
-      gaveUp: false
+      gameState: 'playing'
     };
   }, []);
 
@@ -212,9 +214,17 @@ export default function Sudoku() {
           // Same day - restore puzzle and player state
           loadedPuzzles[diff] = savedPuzzle;
           if (savedPlayer) {
+            // Migrate old isComplete/gaveUp format to new gameState format
+            let gameState = savedPlayer.gameState;
+            if (!gameState) {
+              if (savedPlayer.isComplete) gameState = 'won';
+              else if (savedPlayer.gaveUp) gameState = 'gaveUp';
+              else gameState = 'playing';
+            }
             loadedPlayerState[diff] = {
               ...savedPlayer,
-              notes: notesFromJSON(savedPlayer.notes)
+              notes: notesFromJSON(savedPlayer.notes),
+              gameState
             };
           } else {
             loadedPlayerState[diff] = initializePlayerState(savedPuzzle);
@@ -317,17 +327,18 @@ export default function Sudoku() {
 
     setErrors(newErrors);
 
-    if (allFilled && allCorrect && !isComplete) {
+    // Only trigger win if currently playing (prevents give-up from triggering win)
+    if (allFilled && allCorrect && isPlaying) {
       setPlayerState(prev => ({
         ...prev,
         [difficulty]: {
           ...prev[difficulty],
-          isComplete: true
+          gameState: 'won'
         }
       }));
       setIsRunning(false);
     }
-  }, [grid, currentPuzzle?.solution, difficulty, isComplete, timer]);
+  }, [grid, currentPuzzle?.solution, difficulty, isPlaying, timer]);
 
   const handleCellClick = (row, col) => {
     if (isComplete) return;
@@ -455,14 +466,14 @@ export default function Sudoku() {
   }, [grid, currentPuzzle?.solution, isComplete, notes, updatePlayerState]);
 
   const handleGiveUp = useCallback(() => {
-    if (!currentPuzzle?.solution || isComplete || gaveUp) return;
+    if (!currentPuzzle?.solution || !isPlaying) return;
 
     updatePlayerState({
       grid: currentPuzzle.solution.map(row => [...row]),
-      gaveUp: true
+      gameState: 'gaveUp'
     });
     setIsRunning(false);
-  }, [currentPuzzle?.solution, isComplete, gaveUp, updatePlayerState]);
+  }, [currentPuzzle?.solution, isPlaying, updatePlayerState]);
 
   // Handle new puzzle - only resets current difficulty
   const handleNewPuzzle = useCallback(() => {
@@ -641,7 +652,7 @@ export default function Sudoku() {
               value={difficulty}
               onChange={handleDifficultyChange}
               completedStates={Object.fromEntries(
-                ['easy', 'medium', 'hard', 'expert'].map(d => [d, playerState[d]?.isComplete])
+                ['easy', 'medium', 'hard', 'expert'].map(d => [d, playerState[d]?.gameState === 'won'])
               )}
               className={styles.difficultySelector}
             />

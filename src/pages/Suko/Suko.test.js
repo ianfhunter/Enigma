@@ -104,7 +104,7 @@ describe('Suko - color calculations', () => {
     const colorPattern = [5, 4, 2, 6, 7, 8, 3, 9, 1];
     const colors = { green: 4, orange: 3, yellow: 2 };
     const sums = calculateColorSums(grid, colorPattern, colors);
-    
+
     // Verify it returns 3 sums
     expect(sums).toHaveLength(3);
     expect(sums.every(s => typeof s === 'number')).toBe(true);
@@ -113,20 +113,20 @@ describe('Suko - color calculations', () => {
   it('getCellColor returns correct color for position', () => {
     const colorPattern = [5, 4, 2, 6, 7, 8, 3, 9, 1];
     const colors = { green: 4, orange: 3, yellow: 2 };
-    
+
     // Position 0 corresponds to value 1 in pattern (index 8)
     // Position 1 corresponds to value 2 in pattern (index 2)
     // Position 3 corresponds to value 5 in pattern (index 0)
-    
+
     // The sorting number is "542678391"
     // Green positions are indices 0-3: 5,4,2,6 -> positions 4,3,1,5
     // Orange positions are indices 4-6: 7,8,3 -> positions 6,7,2
     // Yellow positions are indices 7-8: 9,1 -> positions 8,0
-    
+
     const color0 = getCellColor(0, colorPattern, colors);
     const color1 = getCellColor(1, colorPattern, colors);
     const color3 = getCellColor(3, colorPattern, colors);
-    
+
     // Verify colors are one of green, orange, or yellow
     expect(['green', 'orange', 'yellow']).toContain(color0);
     expect(['green', 'orange', 'yellow']).toContain(color1);
@@ -141,7 +141,7 @@ describe('Suko - color calculations', () => {
     ];
     const colorPattern = [5, 4, 2, 6, 7, 8, 3, 9, 1];
     const colors = { green: 4, orange: 3, yellow: 2 };
-    
+
     // Calculate actual sums
     const actualSums = calculateColorSums(grid, colorPattern, colors);
     const targetColorSums = {
@@ -149,7 +149,7 @@ describe('Suko - color calculations', () => {
       orange: actualSums[1],
       yellow: actualSums[2],
     };
-    
+
     expect(checkColorSums(grid, colorPattern, colors, targetColorSums)).toEqual([
       true,
       true,
@@ -166,7 +166,7 @@ describe('Suko - color calculations', () => {
     const colorPattern = [5, 4, 2, 6, 7, 8, 3, 9, 1];
     const colors = { green: 4, orange: 3, yellow: 2 };
     const targetColorSums = { green: 100, orange: 100, yellow: 100 }; // All wrong
-    
+
     expect(checkColorSums(grid, colorPattern, colors, targetColorSums)).toEqual([
       false,
       false,

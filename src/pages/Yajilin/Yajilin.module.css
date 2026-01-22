@@ -127,7 +127,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 26, 0.9);
+  background: var(--yajilin-cell-bg);
   border: none;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -140,19 +140,19 @@
 }
 
 .cell.clueCell {
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--yajilin-clue-cell-bg);
   cursor: default;
 }
 
 .cell.shaded {
-  background: rgba(30, 30, 50, 0.95);
+  background: var(--yajilin-shaded-bg);
 }
 
 .cell.shaded::after {
   content: '';
   position: absolute;
   inset: 15%;
-  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+  background: var(--yajilin-shaded-tile);
   border-radius: 4px;
 }
 

@@ -35,6 +35,7 @@ export {
 };
 
 export default function KnightsAndKnaves() {
+  const { t } = useTranslation();
   const [puzzles, setPuzzles] = useState(null); // null while loading
   const [puzzleId, setPuzzleId] = useState(null);
   const [practicePeopleCount, setPracticePeopleCount] = useState(3);

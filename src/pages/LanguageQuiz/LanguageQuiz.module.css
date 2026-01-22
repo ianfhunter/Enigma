@@ -8,20 +8,21 @@
 .promptCard {
   padding: 1rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-card);
 }
 
 .promptLabel {
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .prompt {
   font-weight: 950;
   font-size: 1.8rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--color-text);
 }
 
 .subtle {
@@ -33,7 +34,7 @@
 .sectionTitle {
   font-weight: 800;
   margin: 0.25rem 0 0.75rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text);
 }
 
 .languagesGrid {
@@ -45,9 +46,9 @@
 }
 
 .langBtn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-text);
   padding: 0.45rem 0.4rem;
   border-radius: 10px;
   font-weight: 700;
@@ -57,27 +58,27 @@
 }
 
 .langBtn:hover:not(:disabled) {
-  background: var(--btn-secondary-bg);
+  background: var(--color-bg-hover);
 }
 
 .selected {
-  border-color: rgba(59, 130, 246, 0.6);
-  background: rgba(59, 130, 246, 0.2);
+  border-color: var(--color-primary-border);
+  background: var(--color-primary-bg);
 }
 
 .correctSelected {
-  border-color: rgba(34, 197, 94, 0.6) !important;
-  background: rgba(34, 197, 94, 0.2) !important;
+  border-color: var(--color-success-border) !important;
+  background: var(--color-success-bg) !important;
 }
 
 .missed {
-  border-color: rgba(251, 191, 36, 0.6) !important;
-  background: rgba(251, 191, 36, 0.2) !important;
+  border-color: var(--color-warning-border) !important;
+  background: var(--color-warning-bg) !important;
 }
 
 .wrong {
-  border-color: rgba(239, 68, 68, 0.6) !important;
-  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: var(--color-danger-border) !important;
+  background: var(--color-danger-bg) !important;
 }
 
 .actions {
@@ -89,46 +90,46 @@
   padding: 0.6rem 1rem;
   font-weight: 900;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(59, 130, 246, 0.22);
-  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--color-primary-border);
+  background: var(--color-primary-bg);
+  color: var(--color-text);
 }
 
 .primaryBtn:hover {
-  background: rgba(59, 130, 246, 0.32);
+  background: var(--color-primary-bg-hover);
 }
 
 .result {
   margin-top: 0.85rem;
   padding: 0.85rem;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
 }
 
 .ok {
-  border-color: rgba(34, 197, 94, 0.55);
-  background: rgba(34, 197, 94, 0.12);
+  border-color: var(--color-success-border);
+  background: var(--color-success-bg);
 }
 
 .partial {
-  border-color: rgba(251, 191, 36, 0.55);
-  background: rgba(251, 191, 36, 0.12);
+  border-color: var(--color-warning-border);
+  background: var(--color-warning-bg);
 }
 
 .nope {
-  border-color: rgba(239, 68, 68, 0.55);
-  background: rgba(239, 68, 68, 0.10);
+  border-color: var(--color-danger-border);
+  background: var(--color-danger-bg);
 }
 
 .resultTitle {
   font-weight: 950;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--color-text);
 }
 
 .resultBody {
   margin-top: 0.2rem;
-  color: rgba(255, 255, 255, 0.86);
+  color: var(--color-text-secondary);
 }
 
 .scoreBreakdown {
@@ -148,15 +149,16 @@
   text-align: center;
   padding: 0.8rem 0.6rem;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-card);
 }
 
 .statValue {
   display: block;
   font-weight: 900;
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--color-text);
 }
 
 .statLabel {

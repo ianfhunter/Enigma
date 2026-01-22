@@ -218,6 +218,7 @@ export {
 };
 
 export default function Pearl() {
+  const { t } = useTranslation();
   const [w, setW] = useState(8);
   const [h, setH] = useState(8);
 
@@ -243,9 +244,9 @@ export default function Pearl() {
   const svgH = pad * 2 + (puz.h - 1) * cell;
 
   const strokeFor = (v) => {
-    if (v === 1) return { stroke: 'rgba(0,0,0,0.95)', strokeWidth: 6, opacity: 1 };
-    if (v === -1) return { stroke: 'rgba(255,255,255,0.22)', strokeWidth: 4, opacity: 1, strokeDasharray: '6 6' };
-    return { stroke: 'rgba(255,255,255,0.14)', strokeWidth: 4, opacity: 1 };
+    if (v === 1) return { stroke: 'var(--color-primary)', strokeWidth: 6, opacity: 1 };
+    if (v === -1) return { stroke: 'var(--color-text-muted)', strokeWidth: 4, opacity: 1, strokeDasharray: '6 6' };
+    return { stroke: 'var(--game-cell-border)', strokeWidth: 4, opacity: 1 };
   };
 
   const toggleEdge = (kind, r, c, mode) => {
@@ -347,7 +348,7 @@ export default function Pearl() {
               y1={pad + r * cell}
               x2={pad + (puz.w - 1) * cell}
               y2={pad + r * cell}
-              stroke="rgba(255,255,255,0.08)"
+              stroke="var(--game-cell-border)"
               strokeWidth="2"
             />
           ))}
@@ -358,7 +359,7 @@ export default function Pearl() {
               y1={pad}
               x2={pad + c * cell}
               y2={pad + (puz.h - 1) * cell}
-              stroke="rgba(255,255,255,0.08)"
+              stroke="var(--game-cell-border)"
               strokeWidth="2"
             />
           ))}
@@ -421,26 +422,28 @@ export default function Pearl() {
             const y = pad + r * cell;
             const isBad = bad.has(i);
             if (p === 2) {
+              // Black pearl
               return (
                 <circle
                   key={`pb-${i}`}
                   cx={x}
                   cy={y}
                   r="10"
-                  fill={isBad ? 'rgba(251,113,133,0.95)' : 'rgba(0,0,0,0.92)'}
-                  stroke="rgba(255,255,255,0.75)"
+                  fill={isBad ? 'var(--color-danger)' : 'var(--color-text)'}
+                  stroke="var(--color-bg)"
                   strokeWidth="2"
                 />
               );
             }
+            // White pearl
             return (
               <circle
                 key={`pw-${i}`}
                 cx={x}
                 cy={y}
                 r="10"
-                fill="rgba(255,255,255,0.92)"
-                stroke={isBad ? 'rgba(251,113,133,0.95)' : 'rgba(0,0,0,0.92)'}
+                fill="var(--color-bg)"
+                stroke={isBad ? 'var(--color-danger)' : 'var(--color-text)'}
                 strokeWidth="3"
               />
             );

@@ -139,6 +139,7 @@ export {
 };
 
 export default function MapGame() {
+  const { t } = useTranslation();
   const [w, setW] = useState(18);
   const [h, setH] = useState(12);
   const [regions, setRegions] = useState(22);
@@ -174,14 +175,14 @@ export default function MapGame() {
   const cellStyle = (rid, topBorder, leftBorder) => {
     const col = assign[rid];
     const given = puz.givens[rid] >= 0;
-    const hex = col >= 0 ? COLORS[col].hex : 'rgba(255,255,255,0.06)';
+    const hex = col >= 0 ? COLORS[col].hex : undefined;
     return {
       background: hex,
       borderTopWidth: topBorder ? 3 : 1,
       borderLeftWidth: leftBorder ? 3 : 1,
-      borderTopColor: topBorder ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.12)',
-      borderLeftColor: leftBorder ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.12)',
-      boxShadow: given ? 'inset 0 0 0 2px rgba(255,255,255,0.80)' : (bad.has(rid) ? 'inset 0 0 0 2px rgba(251,113,133,0.90)' : undefined),
+      borderTopColor: topBorder ? 'var(--map-region-border)' : 'var(--map-cell-border)',
+      borderLeftColor: leftBorder ? 'var(--map-region-border)' : 'var(--map-cell-border)',
+      boxShadow: given ? 'inset 0 0 0 2px var(--map-given-shadow)' : (bad.has(rid) ? 'inset 0 0 0 2px var(--map-bad-shadow)' : undefined),
       cursor: given ? 'default' : 'pointer',
     };
   };

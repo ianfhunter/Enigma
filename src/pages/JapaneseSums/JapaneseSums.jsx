@@ -15,6 +15,7 @@ const DIFFICULTIES = ['easy', 'medium', 'hard', 'expert'];
 const SIZES = [5, 6, 7, 8, 9];
 
 export default function JapaneseSums() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(7);
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);

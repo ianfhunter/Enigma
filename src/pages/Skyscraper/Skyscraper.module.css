@@ -434,6 +434,44 @@
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
+/* Light mode overrides */
+:global([data-theme="light"]) .cell {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+:global([data-theme="light"]) .cell:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+:global([data-theme="light"]) .cell.selected {
+  border-color: #b45309;
+  box-shadow: 0 0 10px rgba(180, 83, 9, 0.3);
+}
+
+:global([data-theme="light"]) .cell.fixed {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+:global([data-theme="light"]) .cell.error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+:global([data-theme="light"]) .building {
+  background: linear-gradient(180deg, #818cf8 0%, #6366f1 100%);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+:global([data-theme="light"]) .value {
+  color: #1a1625;
+}
+
+:global([data-theme="light"]) .clue {
+  color: #4a4458;
+}
+
 @media (max-width: 450px) {
   .cell {
     width: 40px;

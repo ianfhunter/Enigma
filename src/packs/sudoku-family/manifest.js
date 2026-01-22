@@ -53,7 +53,6 @@ export const categories = [
         emojiIcon: '🔢',
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Sudoku'),
       },
       {
@@ -64,7 +63,6 @@ export const categories = [
         emojiIcon: '💀',
         colors: { primary: '#8b5cf6', secondary: '#ec4899' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/KillerSudoku'),
       },
       {
@@ -75,7 +73,6 @@ export const categories = [
         emojiIcon: '🥪',
         colors: { primary: '#f59e0b', secondary: '#84cc16' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #84cc16 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/SandwichSudoku'),
       },
       {
@@ -87,7 +84,6 @@ export const categories = [
         emojiIcon: '➕',
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Calcudoku'),
       },
       {
@@ -99,7 +95,6 @@ export const categories = [
         emojiIcon: '➗',
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Kakuro'),
       },
       {
@@ -111,7 +106,6 @@ export const categories = [
         emojiIcon: '⚖️',
         colors: { primary: '#fb7185', secondary: '#f43f5e' },
         gradient: 'linear-gradient(135deg, #fb7185 0%, #f43f5e 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Futoshiki'),
       },
       {
@@ -122,7 +116,6 @@ export const categories = [
         emojiIcon: '🔢',
         colors: { primary: '#60a5fa', secondary: '#3b82f6' },
         gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Str8ts'),
       },
       {
@@ -133,7 +126,6 @@ export const categories = [
         emojiIcon: '⚫',
         colors: { primary: '#64748b', secondary: '#334155' },
         gradient: 'linear-gradient(135deg, #64748b 0%, #334155 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Kropki'),
       },
       {
@@ -144,7 +136,6 @@ export const categories = [
         emojiIcon: '⭕',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Sujiko'),
       },
       {
@@ -155,7 +146,6 @@ export const categories = [
         emojiIcon: '🎨',
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Suko'),
       },
       {
@@ -165,7 +155,6 @@ export const categories = [
         icon: '🏙️',
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
         gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Skyscraper'),
       },
       {
@@ -176,7 +165,6 @@ export const categories = [
         emojiIcon: '🔤',
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/ABCEndView'),
       },
       {
@@ -188,7 +176,6 @@ export const categories = [
         emojiIcon: '🔷',
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/Eulero'),
       },
       {
@@ -200,7 +187,6 @@ export const categories = [
         emojiIcon: '🔢',
         colors: { primary: '#ec4899', secondary: '#f472b6' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)',
-        version: 'v1.0',
         component: () => import('../../pages/JapaneseSums'),
       },
     ],

@@ -147,7 +147,7 @@
 .statValue {
   font-size: 1.25rem;
   font-weight: 700;
-  color: white;
+  color: var(--color-text);
 }
 
 .statLabel {
@@ -718,7 +718,7 @@
 }
 
 .puzzleIdInputField::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-placeholder);
 }
 
 .puzzleIdSubmit {

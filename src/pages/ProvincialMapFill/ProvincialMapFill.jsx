@@ -17,6 +17,7 @@ export {
 };
 
 export default function ProvincialMapFill() {
+  const { t } = useTranslation();
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [guessedRegions, setGuessedRegions] = useState(new Set());
   const [inputValue, setInputValue] = useState('');

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -92,6 +92,13 @@ function findValidLetterBoxedWords(sides) {
 // Find a valid solution using BFS - returns the word chain or null
 function findSolution(sides, validWords, maxWords = 5) {
   const allLetters = new Set(sides.flat());
+  const allLettersArray = [...allLetters];
+  const targetSize = allLetters.size;
+
+  // Safety limits to prevent infinite loops/crashes
+  const MAX_ITERATIONS = 50000;
+  const MAX_QUEUE_SIZE = 10000;
+  let iterations = 0;
 
   // Build a map of words by their starting letter for fast lookup
   const wordsByStartLetter = {};
@@ -104,29 +111,43 @@ function findSolution(sides, validWords, maxWords = 5) {
   }
 
   // Sort words by length (prefer longer words for better solutions)
+  // Also limit to top words per letter to prevent explosion
   for (const letter in wordsByStartLetter) {
     wordsByStartLetter[letter].sort((a, b) => b.length - a.length);
+    // Only keep top 50 words per starting letter to limit search space
+    wordsByStartLetter[letter] = wordsByStartLetter[letter].slice(0, 50);
   }
+
+  // Track visited states using a string key of sorted used letters + last letter
+  const visited = new Set();
+  const getStateKey = (usedLetters, lastLetter) => {
+    return [...usedLetters].sort().join('') + '|' + lastLetter;
+  };
 
   // BFS to find a chain that covers all letters
   // State: { usedLetters: Set, lastLetter: string, words: string[] }
   const queue = [];
 
-  // Start with each valid word (prioritize longer words)
-  const sortedWords = [...validWords].sort((a, b) => b.length - a.length);
+  // Start with longer words first (better chance of quick solution)
+  const sortedWords = [...validWords].sort((a, b) => b.length - a.length).slice(0, 200);
   for (const word of sortedWords) {
     const used = new Set(word.split(''));
-    if (used.size === allLetters.size && [...allLetters].every(l => used.has(l))) {
+    if (used.size === targetSize && allLettersArray.every(l => used.has(l))) {
       return [word]; // Single word solution!
     }
-    queue.push({
-      usedLetters: used,
-      lastLetter: word[word.length - 1],
-      words: [word]
-    });
+    const stateKey = getStateKey(used, word[word.length - 1]);
+    if (!visited.has(stateKey)) {
+      visited.add(stateKey);
+      queue.push({
+        usedLetters: used,
+        lastLetter: word[word.length - 1],
+        words: [word]
+      });
+    }
   }
 
-  while (queue.length > 0) {
+  while (queue.length > 0 && iterations < MAX_ITERATIONS) {
+    iterations++;
     const state = queue.shift();
 
     if (state.words.length >= maxWords) continue;
@@ -141,17 +162,21 @@ function findSolution(sides, validWords, maxWords = 5) {
       }
 
       // Check if we've covered all letters
-      if (newUsed.size === allLetters.size && [...allLetters].every(l => newUsed.has(l))) {
+      if (newUsed.size === targetSize && allLettersArray.every(l => newUsed.has(l))) {
         return [...state.words, word];
       }
 
       // Only continue if we made progress (added new letters)
       if (newUsed.size > state.usedLetters.size) {
-        queue.push({
-          usedLetters: newUsed,
-          lastLetter: word[word.length - 1],
-          words: [...state.words, word]
-        });
+        const stateKey = getStateKey(newUsed, word[word.length - 1]);
+        if (!visited.has(stateKey) && queue.length < MAX_QUEUE_SIZE) {
+          visited.add(stateKey);
+          queue.push({
+            usedLetters: newUsed,
+            lastLetter: word[word.length - 1],
+            words: [...state.words, word]
+          });
+        }
       }
     }
   }
@@ -323,35 +348,44 @@ export {
 };
 
 export default function LetterWeb() {
+  const { t } = useTranslation();
   const [sides, setSides] = useState([[], [], [], []]);
   const [solution, setSolution] = useState([]);
   const [words, setWords] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
   const { gameState, checkWin: checkWinState, giveUp, reset: resetGameState, isPlaying, isWon, isGaveUp } = useGameState();
   const [stats, setStats] = usePersistedState('letterweb-stats', { gamesWon: 0, bestWords: null });
   const [puzzleNumber, setPuzzleNumber] = useState(0);
   const [seed, setSeed] = useState(null);
+  const initializedRef = useRef(false);
 
-  const initGame = useCallback((isNewPuzzle = false, customSeed = null) => {
-    const today = getTodayDateString();
-    const puzzleOffset = isNewPuzzle ? puzzleNumber + 1 : puzzleNumber;
-    if (isNewPuzzle) {
-      setPuzzleNumber(puzzleOffset);
-    }
-    const gameSeed = customSeed ?? stringToSeed(`letterweb-${today}-${puzzleOffset}`);
-    const result = generateLetters(gameSeed);
+  const initGame = useCallback((isNewPuzzle = false, customSeed = null, currentPuzzleNumber = 0) => {
+    setLoading(true);
 
-    setSeed(gameSeed);
-    setSides(result.sides);
-    setSolution(result.solution);
-    setWords([]);
-    setCurrentWord('');
-    setSelectedLetters([]);
-    setMessage('');
-    resetGameState();
-  }, [puzzleNumber, resetGameState]);
+    // Use setTimeout to prevent blocking the UI during generation
+    setTimeout(() => {
+      const today = getTodayDateString();
+      const puzzleOffset = isNewPuzzle ? currentPuzzleNumber + 1 : currentPuzzleNumber;
+      if (isNewPuzzle) {
+        setPuzzleNumber(puzzleOffset);
+      }
+      const gameSeed = customSeed ?? stringToSeed(`letterweb-${today}-${puzzleOffset}`);
+      const result = generateLetters(gameSeed);
+
+      setSeed(gameSeed);
+      setSides(result.sides);
+      setSolution(result.solution);
+      setWords([]);
+      setCurrentWord('');
+      setSelectedLetters([]);
+      setMessage('');
+      setLoading(false);
+      resetGameState();
+    }, 0);
+  }, [resetGameState]);
 
   const handleGiveUp = () => {
     giveUp();
@@ -360,8 +394,12 @@ export default function LetterWeb() {
     setSelectedLetters([]);
   };
 
+  // Initialize game only once on mount
   useEffect(() => {
-    initGame();
+    if (!initializedRef.current) {
+      initializedRef.current = true;
+      initGame(false, null, 0);
+    }
   }, [initGame]);
 
   const lastLetter = words.length > 0 ? words[words.length - 1].slice(-1) : null;
@@ -502,6 +540,20 @@ export default function LetterWeb() {
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <GameHeader
+          title="Letter Web"
+          instructions="Use all 12 letters! Words must chain (last letter = first letter of next). Can't use consecutive letters from the same side."
+        />
+        <div className={styles.gameArea}>
+          <div className={styles.message}>{t('common.loading', 'Generating puzzle...')}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <GameHeader
@@ -520,7 +572,7 @@ export default function LetterWeb() {
             const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
-            initGame(false, seedNum);
+            initGame(false, seedNum, puzzleNumber);
           }}
         />
       )}
@@ -649,7 +701,7 @@ export default function LetterWeb() {
           {gameState === 'playing' && (
             <GiveUpButton onGiveUp={handleGiveUp} />
           )}
-          <button className={styles.newGameBtn} onClick={() => initGame(true)}>
+          <button className={styles.newGameBtn} onClick={() => initGame(true, null, puzzleNumber)}>
             New Puzzle
           </button>
         </div>

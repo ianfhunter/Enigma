@@ -129,8 +129,8 @@ export default function CapitalGuesser() {
               { id: 'challenge', label: 'Challenge', icon: '🏆', description: `${TOTAL_ROUNDS} countries, score as high as you can!` },
               { id: 'endless', label: 'Endless', icon: '∞', description: 'Keep playing until you want to stop' },
             ]}
-            selectedMode={null}
-            onSelectMode={startGame}
+            value={null}
+            onChange={startGame}
           />
 
           <StatsPanel

@@ -180,6 +180,7 @@ export {
 };
 
 export default function Shinro() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('6×6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGems, setPlayerGems] = useState(new Set());

@@ -268,6 +268,7 @@ function getRoomDisplayCell(room) {
 }
 
 export default function InshiNoHeya() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
   const [difficultyKey, setDifficultyKey] = useState('Medium');
   const [puzzleData, setPuzzleData] = useState(null);

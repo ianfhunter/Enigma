@@ -300,6 +300,7 @@ export {
 };
 
 export default function Pentomino() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerBoard, setPlayerBoard] = useState([]);
   const { gameState, checkWin, giveUp: giveUpFn, reset: resetGameState, isPlaying } = useGameState();
@@ -694,12 +695,12 @@ export default function Pentomino() {
                     }`}
                     style={{
                       backgroundColor: isHole
-                        ? '#0f172a'
+                        ? undefined
                         : showAnswer && solutionVal > 0
                           ? solutionPieceInfo.color
                           : playerVal && playerPieceInfo
                             ? playerPieceInfo.color
-                            : '#1f2937'
+                            : undefined
                     }}
                   >
                     {!isHole && (showAnswer || playerVal) && (

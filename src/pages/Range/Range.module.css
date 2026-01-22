@@ -25,32 +25,38 @@
   gap: 0.5rem;
   align-items: center;
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--range-label-text);
 }
 
 .select {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: var(--range-select-bg);
+  border: 1px solid var(--range-select-border);
   border-radius: 10px;
   padding: 0.35rem 0.5rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--range-select-text);
 }
 
 .button {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--range-button-bg);
+  border: 1px solid var(--range-button-border);
   border-radius: 12px;
   padding: 0.45rem 0.7rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--range-button-text);
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.button:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-primary-border-hover);
 }
 
 .status {
   font-size: 0.95rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--range-status-text);
 }
-.win { color: #22c55e; font-weight: 700; }
-.bad { color: #fb7185; font-weight: 700; }
+.win { color: var(--range-win-text); font-weight: 700; }
+.bad { color: var(--range-bad-text); font-weight: 700; }
 
 .grid {
   display: grid;
@@ -63,26 +69,31 @@
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
+  border: 1px solid var(--range-cell-border);
+  background: var(--range-cell-bg);
+  color: var(--range-cell-text);
   display: grid;
   place-items: center;
   font-weight: 800;
   cursor: pointer;
   position: relative;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.cell:hover {
+  border-color: var(--color-primary-border-hover);
 }
 
 .given {
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(255,255,255,0.25);
+  background: var(--range-given-bg);
+  border-color: var(--range-given-border);
   cursor: default;
 }
 
 .black {
-  background: rgba(0,0,0,0.75);
-  border-color: rgba(255,255,255,0.18);
-  color: rgba(255,255,255,0.85);
+  background: var(--range-black-bg);
+  border-color: var(--range-black-border);
+  color: var(--range-black-text);
 }
 
 .dot::after {
@@ -90,12 +101,11 @@
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.60);
+  background: var(--range-dot-color);
   display: block;
 }
 
 .badCell {
-  outline: 2px solid rgba(251,113,133,0.85);
+  outline: 2px solid var(--range-bad-outline);
   outline-offset: 2px;
 }
-

@@ -29,6 +29,7 @@ function playTone(frequency, duration = 300) {
 }
 
 export default function Sequence() {
+  const { t } = useTranslation();
   const [sequence, setSequence] = useState([]);
   const [playerIndex, setPlayerIndex] = useState(0);
   const [gameState, setGameState] = useState('idle'); // 'idle', 'showing', 'playing', 'gameOver'
