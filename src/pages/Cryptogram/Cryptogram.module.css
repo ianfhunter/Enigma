@@ -45,8 +45,8 @@
 
 .puzzleContainer {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 16px;
 }
 
@@ -111,21 +111,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 2px solid var(--game-cell-border);
   width: 100%;
   margin-bottom: 0.25rem;
 }
 
 .encrypted {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-tertiary);
   font-family: monospace;
 }
 
 .authorReveal {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--game-panel-border);
   text-align: right;
   font-style: italic;
   color: var(--color-text-secondary);
@@ -145,8 +145,8 @@
   justify-content: center;
   gap: 0.35rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
 }
 
@@ -158,14 +158,14 @@
   justify-content: center;
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
+  background: var(--game-cell-bg);
   border-radius: 4px;
   transition: all 0.15s ease;
 }
 
 .bankLetter.used {
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-muted);
   text-decoration: line-through;
   background: transparent;
 }
@@ -200,7 +200,7 @@
   background: var(--btn-secondary-bg);
   border: 1px solid var(--panel-border);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--btn-secondary-text);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -314,7 +314,7 @@
 }
 
 .dailyBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .loading {

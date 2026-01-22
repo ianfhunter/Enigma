@@ -169,7 +169,7 @@
 .letter {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: #fff;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
 }
 
@@ -220,7 +220,7 @@
   background: var(--btn-secondary-bg);
   border: 1px solid var(--panel-border);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;

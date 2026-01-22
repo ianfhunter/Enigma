@@ -116,12 +116,16 @@
   border-radius: 8px;
 }
 
+:global([data-theme="light"]) .grid {
+  background: rgba(139, 92, 246, 0.25);
+}
+
 .cell {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 26, 0.9);
+  background: rgba(255, 255, 255, 0.08);
   border: none;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -129,11 +133,11 @@
 }
 
 .cell:hover {
-  background: var(--btn-secondary-bg);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .cell.shaded {
-  background: #1e1e2e;
+  background: #1a1a2e;
 }
 
 .cell.shaded .number {
@@ -155,6 +159,41 @@
 
 .cell.error.shaded {
   background: rgba(239, 68, 68, 0.3);
+}
+
+/* Light theme overrides */
+:global([data-theme="light"]) .cell {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.1);
+}
+
+:global([data-theme="light"]) .cell:hover {
+  background: rgba(139, 92, 246, 0.08);
+}
+
+:global([data-theme="light"]) .cell.shaded {
+  background: #3d3a50;
+  box-shadow: none;
+}
+
+:global([data-theme="light"]) .cell.shaded .number {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+:global([data-theme="light"]) .cell.marked {
+  background: rgba(139, 92, 246, 0.12);
+}
+
+:global([data-theme="light"]) .cell.marked .number {
+  color: #7c3aed;
+}
+
+:global([data-theme="light"]) .cell.error {
+  background: rgba(220, 38, 38, 0.12);
+}
+
+:global([data-theme="light"]) .cell.error.shaded {
+  background: rgba(220, 38, 38, 0.25);
 }
 
 .number {
@@ -353,6 +392,10 @@
   border-radius: 8px;
 }
 
+:global([data-theme="light"]) .legend {
+  background: rgba(139, 92, 246, 0.05);
+}
+
 .legendItem {
   display: flex;
   align-items: center;
@@ -368,13 +411,23 @@
 }
 
 .shadedLegend {
-  background: #1e1e2e;
+  background: #1a1a2e;
   border: 1px solid var(--btn-secondary-border);
 }
 
 .markedLegend {
   background: rgba(129, 140, 248, 0.15);
   border: 1px solid rgba(129, 140, 248, 0.4);
+}
+
+:global([data-theme="light"]) .shadedLegend {
+  background: #3d3a50;
+  border-color: rgba(139, 92, 246, 0.25);
+}
+
+:global([data-theme="light"]) .markedLegend {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.3);
 }
 
 /* Responsive */

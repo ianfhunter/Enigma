@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import ToggleSwitch from '../../components/ToggleSwitch';
 import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
@@ -85,6 +86,7 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
   const [guesses, setGuesses] = useState({});
   const [selectedLetter, setSelectedLetter] = useState(null);
   const [hintsUsed, setHintsUsed] = useState(0);
+  const [showErrors, setShowErrors] = useState(false);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
@@ -271,8 +273,8 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
               const isLetter = /[A-Z]/.test(char);
               const guess = guesses[char];
               const isSelected = selectedLetter === char;
-              const isCorrect = guess && cipher.decrypt[char] === guess;
-              const isWrong = guess && cipher.decrypt[char] !== guess;
+              const isCorrect = showErrors && guess && cipher.decrypt[char] === guess;
+              const isWrong = showErrors && guess && cipher.decrypt[char] !== guess;
 
               if (!isLetter) {
                 return (
@@ -381,6 +383,13 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
                 💡 Get Hint
               </button>
             )}
+
+            <ToggleSwitch
+              checked={showErrors}
+              onChange={setShowErrors}
+              label="common.showErrors"
+              labelIsKey={true}
+            />
           </div>
         </div>
 

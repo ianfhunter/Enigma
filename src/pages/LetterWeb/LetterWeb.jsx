@@ -323,6 +323,7 @@ export {
 };
 
 export default function LetterWeb() {
+  const { t } = useTranslation();
   const [sides, setSides] = useState([[], [], [], []]);
   const [solution, setSolution] = useState([]);
   const [words, setWords] = useState([]);

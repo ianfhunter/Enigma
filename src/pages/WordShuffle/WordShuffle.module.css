@@ -18,13 +18,13 @@
 }
 
 .backLink:hover {
-  color: #06b6d4;
+  color: var(--color-primary);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -56,13 +56,13 @@
 }
 
 .sizeBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .sizeBtn.active {
-  background: rgba(6, 182, 212, 0.2);
-  border-color: rgba(6, 182, 212, 0.4);
-  color: #06b6d4;
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
 }
 
 .gameArea {
@@ -76,8 +76,8 @@
   display: flex;
   gap: 2rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
 }
 
@@ -98,7 +98,7 @@
 .statValue {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #06b6d4;
+  color: var(--color-primary);
   font-variant-numeric: tabular-nums;
 }
 
@@ -114,7 +114,7 @@
 
 .startBtn {
   padding: 1rem 3rem;
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  background: var(--color-primary);
   border: none;
   border-radius: 12px;
   color: white;
@@ -126,15 +126,16 @@
 
 .startBtn:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-glow);
 }
 
 .board {
   display: grid;
   gap: 6px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 2px solid var(--game-panel-border);
   border-radius: 12px;
   user-select: none;
   touch-action: none;
@@ -148,39 +149,40 @@
 .cell {
   width: 60px;
   height: 60px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: var(--game-cell-bg);
+  border: 2px solid var(--game-cell-border);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   font-weight: 800;
-  color: white;
+  color: var(--game-cell-text);
   cursor: pointer;
   transition: all 0.1s ease;
 }
 
 .cell:hover {
-  background: rgba(6, 182, 212, 0.2);
-  border-color: rgba(6, 182, 212, 0.4);
+  background: var(--game-cell-hover);
+  border-color: var(--color-primary-border);
 }
 
 .cell.selected {
-  background: linear-gradient(135deg, #06b6d4, #0891b2);
-  border-color: #06b6d4;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
   transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+  box-shadow: var(--shadow-glow);
 }
 
 .currentWord {
   padding: 0.5rem 1.5rem;
-  background: rgba(6, 182, 212, 0.2);
-  border: 1px solid rgba(6, 182, 212, 0.4);
+  background: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-border);
   border-radius: 8px;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #06b6d4;
+  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -193,23 +195,23 @@
 }
 
 .message.success {
-  background: rgba(34, 197, 94, 0.2);
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  color: #4ade80;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success);
 }
 
 .message.error {
-  background: rgba(239, 68, 68, 0.2);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #f87171;
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger);
 }
 
 .wordList, .allWords {
   width: 100%;
   max-width: 400px;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
   border-radius: 12px;
 }
 
@@ -229,12 +231,12 @@
 
 .word {
   padding: 0.25rem 0.5rem;
-  background: rgba(6, 182, 212, 0.15);
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  background: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-border);
   border-radius: 4px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #06b6d4;
+  color: var(--color-primary);
 }
 
 .word small {
@@ -242,31 +244,31 @@
 }
 
 .word.found {
-  background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.3);
-  color: #4ade80;
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
 }
 
 .word.missed {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
+  color: var(--color-danger);
   opacity: 0.7;
 }
 
 .finalScore {
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(8, 145, 178, 0.2));
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  background: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-border);
   border-radius: 12px;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #06b6d4;
+  color: var(--color-primary);
 }
 
 .newGameBtn {
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  background: var(--color-primary);
   border: none;
   border-radius: 10px;
   color: white;
@@ -278,7 +280,8 @@
 
 .newGameBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-glow);
 }
 
 .btn {
@@ -286,7 +289,7 @@
   background: var(--btn-secondary-bg);
   border: 1px solid var(--btn-secondary-border);
   border-radius: 8px;
-  color: white;
+  color: var(--btn-secondary-text);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
