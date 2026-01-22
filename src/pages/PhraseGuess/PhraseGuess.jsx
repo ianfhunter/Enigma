@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { phraseGuessQuotes } from '@datasets/quotes';
 import GameHeader from '../../components/GameHeader';
@@ -27,6 +28,7 @@ export {
 };
 
 export default function PhraseGuess() {
+  const { t } = useTranslation();
   const [quote, setQuote] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);
@@ -252,7 +254,7 @@ export default function PhraseGuess() {
   if (!quote) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Nurikabe.module.css';
 
 const GRID_SIZES = {
@@ -186,7 +187,7 @@ export default function Nurikabe() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
   const [marked, setMarked] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [showSolution, setShowSolution] = useState(false);
@@ -244,10 +245,10 @@ export default function Nurikabe() {
     });
     setShaded(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
     setMarked(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setShowSolution(false);
-  }, [allPuzzles, size, difficulty]);
+  }, [allPuzzles, size, difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading && allPuzzles.length > 0) {
@@ -256,18 +257,16 @@ export default function Nurikabe() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.grid, shaded) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(puzzleData.grid, shaded)) {
-      setGameState('won');
-    }
-  }, [shaded, puzzleData, showErrors, gameState]);
+    checkWin(checkSolved(puzzleData.grid, shaded));
+  }, [shaded, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     if (puzzleData.grid[r][c] !== null) return;
 
     const isMarkAction = e.type === 'contextmenu' || e.ctrlKey || islandMode;
@@ -306,13 +305,14 @@ export default function Nurikabe() {
     const puzzleSize = puzzleData?.size || size;
     setShaded(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
     setMarked(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading) {
@@ -431,7 +431,7 @@ export default function Nurikabe() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

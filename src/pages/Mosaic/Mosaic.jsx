@@ -207,7 +207,7 @@ export default function Mosaic() {
   if (!puzzleData) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

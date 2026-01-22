@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
 import GameHeader from '../../components/GameHeader';
@@ -16,6 +17,7 @@ function getRandomLetter(random) {
 }
 
 export default function FlipQuotes() {
+  const { t } = useTranslation();
   const [quote, setQuote] = useState(null);
   const [targetText, setTargetText] = useState('');
   const [currentLetters, setCurrentLetters] = useState([]);

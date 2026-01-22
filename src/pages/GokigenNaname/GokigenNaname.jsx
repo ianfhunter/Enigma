@@ -105,6 +105,7 @@ export {
 };
 
 export default function GokigenNaname() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [sizeKey, setSizeKey] = useState('6x6');
   const [puzzleData, setPuzzleData] = useState(null);
@@ -211,7 +212,7 @@ export default function GokigenNaname() {
   if (!puzzleData) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -291,8 +292,8 @@ export default function GokigenNaname() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="／＼ Puzzle Solved!"
-            message="All slashes in place!"
+            title={t('gameStatus.solved')}
+            message={t('common.allSlashesInPlace', 'All slashes in place!')}
           />
         )}
 

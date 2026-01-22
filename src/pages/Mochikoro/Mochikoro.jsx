@@ -368,7 +368,7 @@ export default function Mochikoro() {
           title="Mochikoro"
           gradient="linear-gradient(135deg, #10b981 0%, #059669 100%)"
         />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -456,8 +456,8 @@ export default function Mochikoro() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎯 Puzzle Solved!"
-            message="All rectangles formed correctly!"
+            title={t('gameStatus.solved')}
+            message={t('common.allRectanglesFormed', 'All rectangles formed correctly!')}
             actions={[{ label: 'New Puzzle', onClick: handleNewGame, primary: true }]}
           />
         )}

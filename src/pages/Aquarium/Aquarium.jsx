@@ -3,6 +3,7 @@ import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Aquarium.module.css';
 
 const GRID_SIZES = {
@@ -362,7 +363,7 @@ export default function Aquarium() {
   const [sizeKey, setSizeKey] = useState('6×6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [water, setWater] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
 
@@ -372,27 +373,25 @@ export default function Aquarium() {
     const data = generatePuzzle(size);
     setPuzzleData(data);
     setWater(Array(size).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.tanks, water, puzzleData.rowClues, puzzleData.colClues) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(puzzleData.tanks, water, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues)) {
-      setGameState('won');
-    }
-  }, [water, puzzleData, showErrors, gameState]);
+    checkWin(checkSolved(puzzleData.tanks, water, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues));
+  }, [water, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const tank = puzzleData.tanks[r][c];
     const tankInfo = analyzeTanks(puzzleData.tanks);
@@ -428,12 +427,13 @@ export default function Aquarium() {
 
   const handleReset = () => {
     setWater(Array(size).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     setWater(puzzleData.solution.map(row => [...row]));
-    setGameState('gave_up');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -521,7 +521,7 @@ export default function Aquarium() {
           />
         )}
 
-        {gameState === 'gave_up' && (
+        {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
             title="💧 Solution Revealed"
@@ -548,7 +548,7 @@ export default function Aquarium() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

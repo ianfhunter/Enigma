@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Hitori.module.css';
 
 const DIFFICULTY_SIZES = {
@@ -235,7 +236,7 @@ export default function Hitori() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
   const [marked, setMarked] = useState([]); // Cells marked as definitely not shaded
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [markMode, setMarkMode] = useState(false); // Mobile mark mode
@@ -275,27 +276,25 @@ export default function Hitori() {
       setShaded(Array(5).fill(null).map(() => Array(5).fill(false)));
       setMarked(Array(5).fill(null).map(() => Array(5).fill(false)));
     }
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading) initGame();
   }, [loading, initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.grid, shaded) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(puzzleData.grid, shaded)) {
-      setGameState('won');
-    }
-  }, [shaded, puzzleData, showErrors, gameState]);
+    checkWin(checkSolved(puzzleData.grid, shaded));
+  }, [shaded, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const isMarkAction = e.type === 'contextmenu' || e.ctrlKey || markMode;
 
@@ -336,13 +335,13 @@ export default function Hitori() {
   const handleReset = () => {
     setShaded(Array(size).fill(null).map(() => Array(size).fill(false)));
     setMarked(Array(size).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setShaded(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading) {
@@ -446,7 +445,7 @@ export default function Hitori() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             {t('common.newPuzzle')}

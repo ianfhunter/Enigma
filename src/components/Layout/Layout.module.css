@@ -437,7 +437,7 @@
   position: relative;
   transition: all 0.3s ease;
   display: inline-block;
-  animation: titleGlow 5s ease-in-out infinite, glitch 3s infinite;
+  animation: titleGlow 5s ease-in-out infinite;
 }
 
 :global([data-theme="light"]) .logoText {
@@ -471,20 +471,9 @@
   display: none;
 }
 
-.logoText::before {
-  animation: glitchTop 3s infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-  transform: translate(-4px, 0);
-  color: #00ff00;
-  text-shadow: 0 0 10px #00ff00;
-}
-
+.logoText::before,
 .logoText::after {
-  animation: glitchBottom 3s infinite;
-  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-  transform: translate(4px, 0);
-  color: #ff00ff;
-  text-shadow: 0 0 10px #ff00ff;
+  display: none;
 }
 
 .logo:hover .logoText {

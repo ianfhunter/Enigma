@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Congestion.module.css';
@@ -295,6 +296,7 @@ export {
 };
 
 export default function Congestion() {
+  const { t } = useTranslation();
   const boardRef = useRef(null);
 
   const [allPuzzles, setAllPuzzles] = useState([]);

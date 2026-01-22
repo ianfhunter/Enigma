@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import SizeSelector from '../../components/SizeSelector';
@@ -328,6 +329,7 @@ export {
 };
 
 export default function Tatamibari() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('8×8');
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGrid, setPlayerGrid] = useState([]);
@@ -436,7 +438,7 @@ export default function Tatamibari() {
           title="Tatamibari"
           instructions="Loading puzzle..."
         />
-        <div style={{ textAlign: 'center', padding: '2rem' }}>Loading puzzle...</div>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

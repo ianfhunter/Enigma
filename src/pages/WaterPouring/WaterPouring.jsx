@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import styles from './WaterPouring.module.css';
@@ -252,6 +253,7 @@ export {
 };
 
 export default function WaterPouring() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [jugLevels, setJugLevels] = useState([]);
   const [moves, setMoves] = useState(0);
@@ -432,7 +434,7 @@ export default function WaterPouring() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

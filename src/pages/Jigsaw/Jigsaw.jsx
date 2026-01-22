@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
@@ -219,6 +220,7 @@ function getExpectedRelativePosition(piece1, piece2, pieceWidth, pieceHeight) {
 export { DIFFICULTY, createPieces, shufflePieces, areAdjacent, getExpectedRelativePosition };
 
 export default function Jigsaw() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('Easy (3×2)');
   const [pieces, setPieces] = useState([]);
   const [draggedPiece, setDraggedPiece] = useState(null);
@@ -503,7 +505,7 @@ export default function Jigsaw() {
   if (!imageLoaded) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

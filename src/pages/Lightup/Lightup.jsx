@@ -5,6 +5,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Lightup.module.css';
 import akariPuzzles from '../../../public/datasets/akariPuzzles.json';
 
@@ -190,7 +191,7 @@ export default function Lightup() {
   const [bulbs, setBulbs] = useState(() => new Set());
   const [marks, setMarks] = useState(() => new Set());
   const [markMode, setMarkMode] = useState(false); // Mobile mark mode
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
 
   const availableSizes = useMemo(() => getAvailableSizes(difficulty), [difficulty]);
 
@@ -220,8 +221,8 @@ export default function Lightup() {
 
     setBulbs(new Set());
     setMarks(new Set());
-    setGameState('playing');
-  }, [difficulty, sizeKey]);
+    resetGameState();
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     loadPuzzle();
@@ -230,13 +231,14 @@ export default function Lightup() {
   const reset = () => {
     setBulbs(new Set());
     setMarks(new Set());
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     if (base.solutionBulbs.size > 0) {
       setBulbs(new Set(base.solutionBulbs));
-      setGameState('gaveUp');
+      giveUp();
     }
   };
 
@@ -323,10 +325,8 @@ export default function Lightup() {
 
   // Update game state when solved
   useEffect(() => {
-    if (solved && gameState === 'playing') {
-      setGameState('won');
-    }
-  }, [solved, gameState]);
+    checkWin(solved);
+  }, [solved, checkWin]);
 
   const toggleBulb = (i) => {
     if (isWall(base.cells[i])) return;
@@ -373,7 +373,7 @@ export default function Lightup() {
           <button className={styles.button} onClick={reset}>{t('common.clear')}</button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
         </div>
         {gameState === 'won' && (
@@ -432,7 +432,7 @@ export default function Lightup() {
                   numBad ? styles.bad : '',
                 ].join(' ')}
                 onClick={() => {
-                  if (wall || gameState !== 'playing') return;
+                  if (wall || !isPlaying) return;
                   if (markMode) {
                     toggleMark(i);
                   } else {

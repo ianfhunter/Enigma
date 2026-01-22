@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -162,6 +163,7 @@ export {
 };
 
 export default function Squarish() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(5);
   const [puzzle, setPuzzle] = useState(null);
   const [grid, setGrid] = useState([]);
@@ -301,7 +303,7 @@ export default function Squarish() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -370,8 +372,8 @@ export default function Squarish() {
         {gameState === 'won' && (
           <GameResult
             status="won"
-            title="🎉 Solved!"
-            message={`With ${swapsLeft} swaps remaining!`}
+            title={t('gameStatus.solved')}
+            message={t('common.withSwapsRemaining', { count: swapsLeft })}
             onNewGame={() => initGame(size)}
             newGameLabel="New Puzzle"
           />
