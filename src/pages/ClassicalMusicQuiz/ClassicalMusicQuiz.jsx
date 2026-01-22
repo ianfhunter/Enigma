@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -26,6 +27,7 @@ const getRandomPiece = (data, exclude = []) => {
 };
 
 export default function ClassicalMusicQuiz() {
+  const { t } = useTranslation();
   const [pieces, setPieces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState(null);
@@ -307,16 +309,16 @@ export default function ClassicalMusicQuiz() {
           {mode === 'challenge' && (
             <>
               <span className={styles.modeBadge}>Challenge</span>
-              <span className={styles.roundInfo}>Round {round}/{TOTAL_ROUNDS}</span>
+              <span className={styles.roundInfo}>{t('common.round')} {round}/{TOTAL_ROUNDS}</span>
             </>
           )}
           {mode === 'endless' && (
             <>
               <span className={styles.modeBadge}>Endless</span>
-              <span className={styles.roundInfo}>Round {round}</span>
+              <span className={styles.roundInfo}>{t('common.round')} {round}</span>
             </>
           )}
-          <span className={styles.scoreInfo}>Score: {score}</span>
+          <span className={styles.scoreInfo}>{t('gameStatus.score')}: {score}</span>
           {streak > 1 && <span className={styles.streakBadge}>🔥 {streak} streak</span>}
         </div>
       </div>
@@ -337,11 +339,11 @@ export default function ClassicalMusicQuiz() {
             {audioError ? (
               <div className={styles.audioError}>
                 <span>⚠️ Audio unavailable</span>
-                <span className={styles.errorHint}>Try the next piece</span>
+                <span className={styles.errorHint}>{t('common.tryNextPiece')}</span>
               </div>
             ) : !audioLoaded ? (
               <div className={styles.audioLoading}>
-                <span>Loading audio...</span>
+                <span>{t('common.loadingAudio')}</span>
               </div>
             ) : (
               <div className={styles.audioControls}>

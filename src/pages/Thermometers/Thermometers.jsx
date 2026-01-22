@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Thermometers.module.css';
 import { ThermometerBulb, ThermometerTube } from './ThermometerSVG';
 
@@ -267,12 +269,13 @@ export {
 };
 
 export default function Thermometers() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
   const [puzzleData, setPuzzleData] = useState(null);
   const [filled, setFilled] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const size = GRID_SIZES[sizeKey];
 
@@ -280,29 +283,27 @@ export default function Thermometers() {
     const data = generatePuzzle(size);
     setPuzzleData(data);
     setFilled(Array(size).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors
       ? checkValidity(filled, puzzleData.thermometers, puzzleData.rowClues, puzzleData.colClues, size)
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(filled, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues, size)) {
-      setGameState('won');
-    }
-  }, [filled, puzzleData, showErrors, size]);
+    checkWin(checkSolved(filled, puzzleData.solution, puzzleData.rowClues, puzzleData.colClues, size));
+  }, [filled, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.thermoGrid[r][c] === -1) return; // Not part of thermometer
 
     setFilled(prev => {
@@ -313,14 +314,14 @@ export default function Thermometers() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setFilled(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   const handleReset = () => {
     setFilled(Array(size).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const getCellInfo = (r, c) => {
@@ -456,7 +457,7 @@ export default function Thermometers() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

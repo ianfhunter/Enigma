@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createGrid, cellKey, getNeighbors, has2x2Block, isFullyConnected, countCells } from '../../utils/generatorUtils';
 import styles from './LITS.module.css';
 
@@ -413,13 +416,14 @@ export {
 };
 
 export default function LITS() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [violations, setViolations] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [loading, setLoading] = useState(true);
   const datasetRef = useRef(null);
@@ -462,11 +466,11 @@ export default function LITS() {
       setShaded(createGrid(data.size, data.size, false));
     }
 
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setViolations(new Set());
     setShowSolution(false);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading && datasetRef.current) {
@@ -475,7 +479,7 @@ export default function LITS() {
   }, [loading, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     if (showErrors) {
       const result = checkValidity(shaded, puzzleData.regions, puzzleData.regionCells, size);
@@ -486,13 +490,11 @@ export default function LITS() {
       setViolations(new Set());
     }
 
-    if (checkSolved(shaded, puzzleData.regions, puzzleData.regionCells, size)) {
-      setGameState('won');
-    }
-  }, [shaded, puzzleData, showErrors, size]);
+    checkWin(checkSolved(shaded, puzzleData.regions, puzzleData.regionCells, size));
+  }, [shaded, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
 
     setShaded(prev => {
       const newShaded = prev.map(row => [...row]);
@@ -504,13 +506,14 @@ export default function LITS() {
   const handleReset = () => {
     if (!puzzleData) return;
     setShaded(createGrid(puzzleData.size, puzzleData.size, false));
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   // Loading state
@@ -518,7 +521,7 @@ export default function LITS() {
     return (
       <div className={styles.container}>
         <GameHeader title="LITS" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -652,8 +655,8 @@ export default function LITS() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🧩 Puzzle Solved!"
-            message="All tetrominoes placed correctly!"
+            title={t('gameStatus.solved')}
+            message={t('common.allTetrominoesPlaced', 'All tetrominoes placed correctly!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
@@ -685,7 +688,7 @@ export default function LITS() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

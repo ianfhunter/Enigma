@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -81,6 +82,7 @@ const getRegion = (countryCode) => {
 };
 
 export default function NationalAnthemQuiz() {
+  const { t } = useTranslation();
   const [anthems, setAnthems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState(null);
@@ -364,16 +366,16 @@ export default function NationalAnthemQuiz() {
           {mode === 'challenge' && (
             <>
               <span className={styles.modeBadge}>Challenge</span>
-              <span className={styles.roundInfo}>Round {round}/{TOTAL_ROUNDS}</span>
+              <span className={styles.roundInfo}>{t('common.round')} {round}/{TOTAL_ROUNDS}</span>
             </>
           )}
           {mode === 'endless' && (
             <>
               <span className={styles.modeBadge}>Endless</span>
-              <span className={styles.roundInfo}>Round {round}</span>
+              <span className={styles.roundInfo}>{t('common.round')} {round}</span>
             </>
           )}
-          <span className={styles.scoreInfo}>Score: {score}</span>
+          <span className={styles.scoreInfo}>{t('gameStatus.score')}: {score}</span>
           {streak > 1 && <span className={styles.streakBadge}>🔥 {streak} streak</span>}
         </div>
       </div>
@@ -394,11 +396,11 @@ export default function NationalAnthemQuiz() {
             {audioError ? (
               <div className={styles.audioError}>
                 <span>⚠️ Audio unavailable</span>
-                <span className={styles.errorHint}>Try the next anthem</span>
+                <span className={styles.errorHint}>{t('common.tryNextAnthem')}</span>
               </div>
             ) : !audioLoaded ? (
               <div className={styles.audioLoading}>
-                <span>Loading anthem...</span>
+                <span>{t('common.loadingAnthem')}</span>
               </div>
             ) : (
               <div className={styles.audioControls}>
@@ -430,7 +432,7 @@ export default function NationalAnthemQuiz() {
 
           {showHint && selectedAnswer === null && (
             <div className={styles.hint}>
-              <span className={styles.hintLabel}>Region:</span> {getRegion(currentAnthem.isoCode)}
+              <span className={styles.hintLabel}>{t('common.region')}:</span> {getRegion(currentAnthem.isoCode)}
             </div>
           )}
 

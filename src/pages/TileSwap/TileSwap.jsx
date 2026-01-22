@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './TileSwap.module.css';
 
@@ -140,12 +142,13 @@ export {
 };
 
 export default function TileSwap() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(3);
   const [pieces, setPieces] = useState([]);
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [showPreview, setShowPreview] = useState(false);
   const [seed, setSeed] = useState(null);
 
@@ -168,22 +171,22 @@ export default function TileSwap() {
     setSize(newSize);
     setSelectedPiece(null);
     setMoves(0);
-    setGameState('playing');
+    resetGameState();
     setShowPreview(false);
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, []);
 
   useEffect(() => {
-    if (pieces.length > 0 && checkSolved(pieces) && moves > 0) {
-      setGameState('won');
+    if (pieces.length > 0 && checkSolved(pieces) && moves > 0 && isPlaying) {
+      checkWin(true);
     }
-  }, [pieces, moves]);
+  }, [pieces, moves, isPlaying, checkWin]);
 
   const handlePieceClick = (piece) => {
-    if (gameState === 'won') return;
+    if (isWon) return;
 
     if (selectedPiece === null) {
       setSelectedPiece(piece);

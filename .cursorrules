@@ -5,6 +5,7 @@
 - Never try to start a server to debug. There is a hot-updating server running on http://ian-2014.local:3030/
 - If you need to login, you can use the username "cursor" and password "cursor"
 - Reuse components where possible to reduce complexity
+- Strings in the UI should be using i18n to allow translation support.
 
 ## Puzzles
 Puzzles should generally:

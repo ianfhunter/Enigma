@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -557,7 +558,7 @@ export default function WorldMapFill() {
             )}
 
             <div className={styles.completeActions}>
-              <button className={styles.playAgainBtn} onClick={() => startGame(selectedRegion)}>Play Again</button>
+              <button className={styles.playAgainBtn} onClick={() => startGame(selectedRegion)}>{t('common.playAgain')}</button>
               <button className={styles.menuBtn} onClick={backToMenu}>Change Region</button>
             </div>
           </div>

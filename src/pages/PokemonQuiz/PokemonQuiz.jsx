@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PokemonQuiz.module.css';
@@ -12,6 +13,7 @@ function sortTypes(types) {
 }
 
 export default function PokemonQuiz() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null); // loaded pokemon_min.json
   const [current, setCurrent] = useState(null); // { gen, pokemon }
   const [guessGen, setGuessGen] = useState(1);
@@ -229,11 +231,11 @@ export default function PokemonQuiz() {
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.correct}/{stats.played}</span>
-              <span className={styles.statLabel}>Perfect</span>
+              <span className={styles.statLabel}>{t('common.perfect')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.streak}</span>
-              <span className={styles.statLabel}>Streak</span>
+              <span className={styles.statLabel}>{t('common.streak')}</span>
             </div>
           </div>
         </>

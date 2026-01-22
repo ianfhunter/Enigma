@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Takuzu.module.css';
 import binairoPuzzles from '../../../public/datasets/binairoPuzzles.json';
 
@@ -117,14 +119,15 @@ export {
 };
 
 export default function Takuzu() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [sizeKey, setSizeKey] = useState('10x10');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [fixed, setFixed] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const availableSizes = useMemo(() => getAvailableSizes(difficulty), [difficulty]);
 
@@ -157,9 +160,9 @@ export default function Takuzu() {
     setPuzzleData(data);
     setGrid(data.puzzle.map(row => [...row]));
     setFixed(data.puzzle.map(row => row.map(cell => cell !== null)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty, sizeKey]);
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -168,18 +171,16 @@ export default function Takuzu() {
   const size = puzzleData?.rows || 10;
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(grid) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.solution)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors]);
+    checkWin(checkSolved(grid, puzzleData.solution));
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || fixed[r][c]) return;
+    if (!isPlaying || fixed[r][c]) return;
 
     setGrid(prev => {
       const newGrid = prev.map(row => [...row]);
@@ -194,13 +195,13 @@ export default function Takuzu() {
   const handleReset = () => {
     if (!puzzleData) return;
     setGrid(puzzleData.puzzle.map(row => [...row]));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -263,8 +264,8 @@ export default function Takuzu() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="Perfect binary balance achieved!"
+            title={t('gameStatus.solved')}
+            message={t('gameMessages.binaryBalanceAchieved')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
@@ -295,7 +296,7 @@ export default function Takuzu() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

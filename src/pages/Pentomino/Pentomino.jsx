@@ -15,11 +15,13 @@
  * - Goal: Fill the board with all 12 pieces
  */
 
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { PENTOMINO_SHAPES, rotateShape, flipShape, normalizeShape } from './pentominoShapes';
 import styles from './Pentomino.module.css';
@@ -300,7 +302,7 @@ export {
 export default function Pentomino() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerBoard, setPlayerBoard] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp: giveUpFn, reset: resetGameState, isPlaying } = useGameState();
   const [showSolution, setShowSolution] = useState(false);
   const [loading, setLoading] = useState(true);
   const [seed, setSeed] = useState(null);
@@ -355,13 +357,13 @@ export default function Pentomino() {
       row.map(val => val === 0 ? 0 : null)
     );
     setPlayerBoard(initialBoard);
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
     setGiveUp(false);
     setDraggedPiece(null);
     setHoverCell(null);
     setPieceOrientations({});
-  }, []);
+  }, [resetGameState]);
 
   // Init game when dataset loads
   useEffect(() => {
@@ -372,11 +374,11 @@ export default function Pentomino() {
 
   // Check win condition
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     if (validateSolution(playerBoard, puzzleData.grid)) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [playerBoard, puzzleData, gameState]);
+  }, [playerBoard, puzzleData, isPlaying, checkWin]);
 
   // Get placed pieces for collision detection
   const placedPieces = useRef(new Set());
@@ -519,9 +521,10 @@ export default function Pentomino() {
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     setGiveUp(true);
     setShowSolution(true);
-    setGameState('lost');
+    giveUpFn();
   };
 
   const handleNewPuzzle = () => {
@@ -531,7 +534,7 @@ export default function Pentomino() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading pentomino puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -539,7 +542,7 @@ export default function Pentomino() {
   if (!puzzleData) {
     return (
       <div className={styles.container}>
-        <div className={styles.error}>Failed to load puzzle data.</div>
+        <div className={styles.error}>{t('common.failedToLoadPuzzle')}</div>
       </div>
     );
   }

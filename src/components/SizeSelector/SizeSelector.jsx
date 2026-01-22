@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './SizeSelector.module.css';
 
 /**
@@ -16,6 +17,8 @@ export default function SizeSelector({
   labels = {},
   className = '',
 }) {
+  const { t } = useTranslation();
+
   if (options.length === 0) return null;
 
   const getLabel = (option) => {
@@ -29,10 +32,11 @@ export default function SizeSelector({
     <div
       className={`${styles.selector} ${className}`}
       role="group"
-      aria-label="Size selector"
+      aria-label={t('common.sizeSelector')}
     >
       {options.map((option) => {
         const isActive = value === option || String(value) === String(option);
+        const label = getLabel(option);
 
         return (
           <button
@@ -41,9 +45,9 @@ export default function SizeSelector({
             className={`${styles.option} ${isActive ? styles.active : ''}`}
             onClick={() => onChange(option)}
             aria-pressed={isActive}
-            aria-label={`Size ${getLabel(option)}`}
+            aria-label={`${t('common.size')} ${label}`}
           >
-            {getLabel(option)}
+            {label}
           </button>
         );
       })}

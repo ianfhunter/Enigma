@@ -183,6 +183,20 @@ function runMigrations() {
     console.log('Migration: Adding search_engine column to user_settings');
     db.exec("ALTER TABLE user_settings ADD COLUMN search_engine TEXT DEFAULT 'google'");
   }
+
+  // Add favourite_games column to user_settings if missing
+  // Re-check settingsCols since it may have been cached before search_engine was added
+  const settingsColsUpdated = db.prepare("PRAGMA table_info(user_settings)").all().map(c => c.name);
+  if (!settingsColsUpdated.includes('favourite_games')) {
+    console.log('Migration: Adding favourite_games column to user_settings');
+    db.exec("ALTER TABLE user_settings ADD COLUMN favourite_games TEXT DEFAULT '[]'");
+  }
+
+  // Add language column to user_settings if missing
+  if (!settingsColsUpdated.includes('language')) {
+    console.log('Migration: Adding language column to user_settings');
+    db.exec("ALTER TABLE user_settings ADD COLUMN language TEXT DEFAULT 'en'");
+  }
 }
 
 runMigrations();

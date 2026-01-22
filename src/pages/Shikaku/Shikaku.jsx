@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Shikaku.module.css';
 
 const GRID_SIZES = {
@@ -95,13 +97,14 @@ export {
 };
 
 export default function Shikaku() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('10×10');
   const [difficulty, setDifficulty] = useState('easy');
   const [allPuzzles, setAllPuzzles] = useState([]);
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerRects, setPlayerRects] = useState([]);
   const [drawing, setDrawing] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [loading, setLoading] = useState(true);
 
   const size = GRID_SIZES[sizeKey];
@@ -152,8 +155,8 @@ export default function Shikaku() {
     });
     setPlayerRects([]);
     setDrawing(null);
-    setGameState('playing');
-  }, [allPuzzles, size, difficulty]);
+    resetGameState();
+  }, [allPuzzles, size, difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading && allPuzzles.length > 0) {
@@ -162,26 +165,24 @@ export default function Shikaku() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData || playerRects.length === 0) return;
+    if (!puzzleData || playerRects.length === 0 || !isPlaying) return;
 
     const gridSize = puzzleData.size || size;
-    if (checkSolved(playerRects, puzzleData.grid, gridSize)) {
-      setGameState('won');
-    }
-  }, [playerRects, puzzleData, size]);
+    checkWin(checkSolved(playerRects, puzzleData.grid, gridSize));
+  }, [playerRects, puzzleData, size, isPlaying, checkWin]);
 
   const handleMouseDown = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setDrawing({ startR: r, startC: c, endR: r, endC: c });
   };
 
   const handleMouseMove = (r, c) => {
-    if (!drawing || gameState !== 'playing') return;
+    if (!drawing || !isPlaying) return;
     setDrawing(prev => ({ ...prev, endR: r, endC: c }));
   };
 
   const handleMouseUp = () => {
-    if (!drawing || gameState !== 'playing') return;
+    if (!drawing || !isPlaying) return;
 
     const minR = Math.min(drawing.startR, drawing.endR);
     const maxR = Math.max(drawing.startR, drawing.endR);
@@ -208,7 +209,7 @@ export default function Shikaku() {
 
   const handleRightClick = (r, c, e) => {
     e.preventDefault();
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     // Remove rectangle containing this cell
     setPlayerRects(prev => prev.filter(rect => {
@@ -220,20 +221,20 @@ export default function Shikaku() {
 
   const handleReset = () => {
     setPlayerRects([]);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setPlayerRects([...puzzleData.solution]);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading) {
     return (
       <div className={styles.container}>
         <GameHeader title="Shikaku" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -338,8 +339,8 @@ export default function Shikaku() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="All rectangles complete!"
+            title={t('gameStatus.solved')}
+            message={t('common.allRectanglesComplete', 'All rectangles complete!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
@@ -359,7 +360,7 @@ export default function Shikaku() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

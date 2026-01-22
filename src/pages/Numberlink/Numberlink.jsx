@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Numberlink.module.css';
 import puzzleDataset from '../../../public/datasets/numberlinkPuzzles.json';
 
@@ -140,7 +142,7 @@ export default function Numberlink() {
   const [paths, setPaths] = useState({}); // { pairId: [{r, c}, ...] }
   const [currentPath, setCurrentPath] = useState(null); // Currently drawing path
   const [isDrawing, setIsDrawing] = useState(false);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [completedPairs, setCompletedPairs] = useState(new Set());
 
   const gridRef = useRef(null);
@@ -193,9 +195,9 @@ export default function Numberlink() {
     setPaths({});
     setCurrentPath(null);
     setIsDrawing(false);
-    setGameState('playing');
+    resetGameState();
     setCompletedPairs(new Set());
-  }, [difficulty, sizeKey]);
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -247,7 +249,7 @@ export default function Numberlink() {
   };
 
   const startDrawing = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const pairId = getPairAt(r, c);
     if (pairId === 0) {
@@ -288,7 +290,7 @@ export default function Numberlink() {
   };
 
   const continueDrawing = (r, c) => {
-    if (!isDrawing || !currentPath || gameState !== 'playing') return;
+    if (!isDrawing || !currentPath || !isPlaying) return;
 
     const lastCell = currentPath.cells[currentPath.cells.length - 1];
 
@@ -346,7 +348,7 @@ export default function Numberlink() {
 
         // Check win condition
         if (completedPairs.size + 1 === puzzleData.numPairs) {
-          setGameState('won');
+          checkWin(true);
         }
       }
     }
@@ -393,24 +395,24 @@ export default function Numberlink() {
 
   useEffect(() => {
     // Check win condition only if currently playing (not if gave up)
-    if (puzzleData && completedPairs.size === puzzleData.numPairs && gameState === 'playing') {
-      setGameState('won');
+    if (puzzleData && completedPairs.size === puzzleData.numPairs && isPlaying) {
+      checkWin(true);
     }
-  }, [completedPairs, puzzleData, gameState]);
+  }, [completedPairs, puzzleData, isPlaying, checkWin]);
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     // Use the pre-traced solution paths
     setPaths(puzzleData.solutionPaths);
     setCompletedPairs(new Set(Object.keys(puzzleData.solutionPaths).map(Number)));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   const handleReset = () => {
     setPaths({});
     setCompletedPairs(new Set());
     setCurrentPath(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   if (!puzzleData) return null;
@@ -512,7 +514,7 @@ export default function Numberlink() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             {gameState === 'won' || gameState === 'gaveUp' ? 'Play Again' : 'New Puzzle'}

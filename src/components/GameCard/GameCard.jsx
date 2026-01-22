@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getGameIcon, getGameColors } from '../../data/gameRegistry';
 import { useFavourites } from '../../context/SettingsContext';
 import styles from './GameCard.module.css';
@@ -31,6 +32,7 @@ export default function GameCard({
   typeBadge = null,
   showFavouriteButton = true,
 }) {
+  const { t } = useTranslation();
   const icon = customIcon || getGameIcon(slug);
   const colors = customColors || getGameColors(slug);
   const hasTag = !!tag;
@@ -74,8 +76,8 @@ export default function GameCard({
         <button
           className={`${styles.favouriteButton} ${isFav ? styles.favourited : ''}`}
           onClick={handleFavouriteClick}
-          aria-label={isFav ? 'Remove from favourites' : 'Add to favourites'}
-          title={isFav ? 'Remove from favourites' : 'Add to favourites'}
+          aria-label={isFav ? t('common.removeFromFavourites') : t('common.addToFavourites')}
+          title={isFav ? t('common.removeFromFavourites') : t('common.addToFavourites')}
         >
           {isFav ? '★' : '☆'}
         </button>
@@ -88,10 +90,10 @@ export default function GameCard({
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.description}>{description}</p>
       {disabled && (
-        <span className={styles.badge}>Coming Soon</span>
+        <span className={styles.badge}>{t('common.comingSoon')}</span>
       )}
       {!disabled && (
-        <span className={styles.playBadge}>Play Now</span>
+        <span className={styles.playBadge}>{t('common.playNow')}</span>
       )}
     </div>
   );

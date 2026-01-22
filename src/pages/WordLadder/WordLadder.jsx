@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -13,6 +14,7 @@ const WORD_LENGTH = 4;
 export { generateWordLadderPuzzle, differsByOneLetter, WORD_LENGTH };
 
 export default function WordLadder() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [userSteps, setUserSteps] = useState([]);
   const [currentInput, setCurrentInput] = useState('');
@@ -123,7 +125,7 @@ export default function WordLadder() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Generating puzzle...</div>
+        <div className={styles.loading}>{t('common.generatingPuzzle')}</div>
       </div>
     );
   }
@@ -143,7 +145,7 @@ export default function WordLadder() {
           <div className={styles.ladder}>
             {/* Start word */}
             <div className={`${styles.rung} ${styles.startRung}`}>
-              <div className={styles.rungLabel}>Start</div>
+              <div className={styles.rungLabel}>{t('common.start')}</div>
               <div className={styles.word}>
                 {puzzle.startWord.split('').map((letter, i) => (
                   <span key={i} className={styles.letter}>{letter}</span>
@@ -191,7 +193,7 @@ export default function WordLadder() {
                   <div className={`${styles.connectorLine} ${styles.dashed}`} />
                 </div>
                 <div className={`${styles.rung} ${styles.inputRung}`}>
-                  <div className={styles.rungLabel}>Next</div>
+                  <div className={styles.rungLabel}>{t('common.next')}</div>
                   <form onSubmit={handleSubmit} className={styles.inputForm}>
                     <input
                       ref={inputRef}
@@ -199,7 +201,7 @@ export default function WordLadder() {
                       value={currentInput}
                       onChange={(e) => setCurrentInput(e.target.value.toUpperCase())}
                       maxLength={puzzle.startWord.length}
-                      placeholder="Type word..."
+                      placeholder={t('common.typeWord')}
                       className={styles.input}
                       autoComplete="off"
                       spellCheck="false"
@@ -215,7 +217,7 @@ export default function WordLadder() {
             {/* End word (target) */}
             {!gameWon && (
               <div className={`${styles.rung} ${styles.targetRung}`}>
-                <div className={styles.rungLabel}>Goal</div>
+                <div className={styles.rungLabel}>{t('common.goal')}</div>
                 <div className={styles.word}>
                   {puzzle.endWord.split('').map((letter, i) => (
                     <span key={i} className={styles.letter}>{letter}</span>
@@ -255,11 +257,11 @@ export default function WordLadder() {
         <div className={styles.infoSection}>
           <div className={styles.statsPanel}>
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Your Steps</span>
+              <span className={styles.statLabel}>{t('common.yourSteps')}</span>
               <span className={styles.statValue}>{userSteps.length}</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Optimal</span>
+              <span className={styles.statLabel}>{t('common.optimal')}</span>
               <span className={styles.statValue}>{optimalSteps}</span>
             </div>
             <div className={styles.stat}>
@@ -269,12 +271,12 @@ export default function WordLadder() {
           </div>
 
           <div className={styles.tips}>
-            <h3>How to Play</h3>
+            <h3>{t('common.howToPlay')}</h3>
             <ul>
-              <li>Change exactly <strong>one letter</strong> at a time</li>
-              <li>Each intermediate word must be valid</li>
-              <li>Try to reach the goal in the fewest steps</li>
-              <li>You can undo moves to try different paths</li>
+              <li>{t('wordLadder.rule1')}</li>
+              <li>{t('wordLadder.rule2')}</li>
+              <li>{t('wordLadder.rule3')}</li>
+              <li>{t('wordLadder.rule4')}</li>
             </ul>
           </div>
 
@@ -282,7 +284,7 @@ export default function WordLadder() {
             <GiveUpButton
               onGiveUp={() => setShowSolution(true)}
               disabled={showSolution || gameWon}
-              buttonText="Show Solution"
+              buttonText={t('common.showSolution')}
             />
             <button className={styles.newGameBtn} onClick={initializePuzzle}>
               New Puzzle

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { shuffleArray, randomInt, pickRandom } from '../../data/wordUtils';
 import styles from './CountdownMath.module.css';
@@ -273,6 +274,7 @@ function solve(numbers, target, timeLimit = 2000) {
 }
 
 export default function CountdownMath() {
+  const { t } = useTranslation();
   const [numbers, setNumbers] = useState([]);
   const [target, setTarget] = useState(0);
   const [largeCount, setLargeCount] = useState(2);

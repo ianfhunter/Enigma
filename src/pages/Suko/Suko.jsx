@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './Suko.module.css';
 
@@ -152,9 +154,9 @@ export default function Suko() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, setGameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [sumStatus, setSumStatus] = useState([false, false, false, false]);
   const [colorSumStatus, setColorSumStatus] = useState([false, false, false]);
   const [seed, setSeed] = useState(null);
@@ -213,7 +215,7 @@ export default function Suko() {
     setPuzzleData(puzzleGameData);
     setGrid(puzzle.map(row => [...row]));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setSumStatus([false, false, false, false]);
     setColorSumStatus([false, false, false]);
@@ -255,6 +257,9 @@ export default function Suko() {
     setColorSumStatus(newColorSumStatus);
 
     // Check if solved
+    // Don't check for win if game is not in playing state
+    if (!isPlaying) return;
+
     let allFilled = true;
     let allCorrect = true;
 
@@ -265,8 +270,7 @@ export default function Suko() {
       }
     }
 
-    if (allFilled && allCorrect) {
-      setGameState('won');
+    if (allFilled && allCorrect && checkWin(true)) {
       setSavedState({
         date: getTodayDateString(),
         puzzleId: puzzleData.id,
@@ -293,13 +297,13 @@ export default function Suko() {
   }, [grid, puzzleData, showErrors, isLoaded, seed]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || !puzzleData) return;
+    if (!isPlaying || !puzzleData) return;
 
     setSelectedCell({ r, c });
   };
 
   const handleNumberInput = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
 
     const { r, c } = selectedCell;
 
@@ -311,7 +315,7 @@ export default function Suko() {
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
 
     const { r, c } = selectedCell;
 
@@ -325,7 +329,7 @@ export default function Suko() {
   // Keyboard handling
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
 
       const { r, c } = selectedCell;
 
@@ -353,13 +357,13 @@ export default function Suko() {
     const emptyGrid = puzzleData.solution.map(row => row.map(() => 0));
     setGrid(emptyGrid);
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   // Get which numbers are still available
@@ -485,7 +489,7 @@ export default function Suko() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={() => initGame(true)}>
             New Puzzle

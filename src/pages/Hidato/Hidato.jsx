@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Hidato.module.css';
 import hidokuPuzzles from '../../../public/datasets/hidokuPuzzles.json';
 
@@ -119,9 +121,9 @@ export default function Hidato() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const initGame = useCallback(() => {
     // Parse size from sizeKey
@@ -164,9 +166,9 @@ export default function Hidato() {
     });
     setGrid(initialGrid);
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty, sizeKey]);
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -182,7 +184,7 @@ export default function Hidato() {
   }, [difficulty]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     if (showErrors) {
       setErrors(findErrors(grid, puzzleData.maxNum));
@@ -190,13 +192,11 @@ export default function Hidato() {
       setErrors(new Set());
     }
 
-    if (checkSolved(grid, puzzleData.solution)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors]);
+    checkWin(checkSolved(grid, puzzleData.solution));
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.given[r][c]) return; // Can't modify given cells
 
     setSelectedCell([r, c]);
@@ -206,7 +206,7 @@ export default function Hidato() {
   const cols = puzzleData?.cols || 7;
 
   const handleKeyDown = useCallback((e) => {
-    if (!selectedCell || gameState !== 'playing' || !puzzleData) return;
+    if (!selectedCell || !isPlaying || !puzzleData) return;
 
     const [r, c] = selectedCell;
 
@@ -264,7 +264,7 @@ export default function Hidato() {
         });
       }
     }
-  }, [selectedCell, gameState, puzzleData, rows, cols]);
+  }, [selectedCell, isPlaying, puzzleData, rows, cols]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -272,7 +272,7 @@ export default function Hidato() {
   }, [handleKeyDown]);
 
   const handleNumberPad = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
 
     const [r, c] = selectedCell;
     if (puzzleData.given[r][c]) return;
@@ -298,14 +298,14 @@ export default function Hidato() {
     if (!puzzleData) return;
     setGrid(puzzleData.clues.map(row => row.map(cell => cell ?? 0)));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     setSelectedCell(null);
-    setGameState('revealed');
+    giveUp();
   };
 
   // Compute which numbers are already used on the grid
@@ -387,7 +387,7 @@ export default function Hidato() {
           />
         )}
 
-        {gameState === 'revealed' && (
+        {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
             title="Solution Revealed"
@@ -435,7 +435,7 @@ export default function Hidato() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

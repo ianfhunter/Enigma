@@ -15,8 +15,8 @@ export default function Profile() {
 
   const TABS = [
     { id: 'profile', label: t('profile.title'), icon: '👤' },
-    { id: 'settings', label: t('profile.settings'), icon: '⚙️' },
-    { id: 'games', label: t('profile.games'), icon: '🎮' },
+    { id: 'settings', label: t('common.settings'), icon: '⚙️' },
+    { id: 'games', label: t('common.games'), icon: '🎮' },
     { id: 'security', label: t('profile.security'), icon: '🔒' },
     { id: 'admin', label: t('profile.admin'), icon: '🔧', adminOnly: true },
   ];
@@ -686,7 +686,7 @@ function GamesTab() {
                         {gameInfo?.title || g.gameSlug}
                       </div>
                       <div className={styles.gameStatDetails}>
-                        <span>{t('games.played')}: {g.played}</span>
+                        <span>{t('common.played')}: {g.played}</span>
                         <span>{t('games.won')}: {g.won}</span>
                         <span>{t('games.winRate')}: {g.winRate}%</span>
                         {g.maxStreak > 0 && <span>{t('games.bestStreak')}: {g.maxStreak}</span>}
@@ -723,7 +723,7 @@ function GamesTab() {
 
           <input
             type="text"
-            placeholder={t('games.searchGames')}
+            placeholder={t('common.searchGames')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.input}
@@ -743,7 +743,7 @@ function GamesTab() {
               </label>
             ))}
             {filteredGames.length === 0 && (
-              <p className={styles.noResults}>{t('games.noGamesMatch')}</p>
+              <p className={styles.noResults}>{t('search.noGamesMatch')}</p>
             )}
           </div>
         </section>
@@ -1158,7 +1158,7 @@ function AdminTab() {
           className={`${styles.viewModeButton} ${activeSection === 'games' ? styles.active : ''}`}
           onClick={() => setActiveSection('games')}
         >
-          🎮 {t('profile.games')}
+          🎮 {t('common.games')}
         </button>
       </div>
 

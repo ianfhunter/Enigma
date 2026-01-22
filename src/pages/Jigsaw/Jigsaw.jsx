@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { useGameState } from '../../hooks/useGameState';
 import sampleImage from '../../assets/sample_image.png';
 import styles from './Jigsaw.module.css';
 
@@ -219,12 +221,13 @@ function getExpectedRelativePosition(piece1, piece2, pieceWidth, pieceHeight) {
 export { DIFFICULTY, createPieces, shufflePieces, areAdjacent, getExpectedRelativePosition };
 
 export default function Jigsaw() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('Easy (3×2)');
   const [pieces, setPieces] = useState([]);
   const [draggedPiece, setDraggedPiece] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [showPreview, setShowPreview] = useState(false);
   const [placedCount, setPlacedCount] = useState(0);
   const [seed, setSeed] = useState(null);
@@ -251,10 +254,10 @@ export default function Jigsaw() {
     setSeed(gameSeed);
     setPieces(shuffled);
     setDifficulty(newDifficulty);
-    setGameState('playing');
+    resetGameState();
     setPlacedCount(0);
     setShowPreview(false);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     const img = new Image();
@@ -269,13 +272,13 @@ export default function Jigsaw() {
   useEffect(() => {
     const placed = pieces.filter(p => p.isPlaced).length;
     setPlacedCount(placed);
-    if (pieces.length > 0 && placed === pieces.length) {
-      setGameState('won');
+    if (pieces.length > 0 && placed === pieces.length && isPlaying) {
+      checkWin(true);
     }
-  }, [pieces]);
+  }, [pieces, isPlaying, checkWin]);
 
   const handleMouseDown = (e, piece) => {
-    if (gameState === 'won' || piece.isPlaced) return;
+    if (isWon || piece.isPlaced) return;
 
     const rect = containerRef.current.getBoundingClientRect();
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -503,7 +506,7 @@ export default function Jigsaw() {
   if (!imageLoaded) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

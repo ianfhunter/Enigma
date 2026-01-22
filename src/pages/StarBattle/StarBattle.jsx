@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './StarBattle.module.css';
 
 const GRID_SIZES = {
@@ -116,14 +118,15 @@ const REGION_COLORS = [
 ];
 
 export default function StarBattle() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('6×6');
   const [difficulty, setDifficulty] = useState('easy');
   const [allPuzzles, setAllPuzzles] = useState([]);
   const [puzzleData, setPuzzleData] = useState(null);
   const [stars, setStars] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const size = GRID_SIZES[sizeKey];
@@ -171,9 +174,9 @@ export default function StarBattle() {
       size: puzzleSize
     });
     setStars(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [allPuzzles, size, difficulty]);
+  }, [allPuzzles, size, difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading && allPuzzles.length > 0) {
@@ -182,18 +185,16 @@ export default function StarBattle() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(stars, puzzleData.regions, puzzleData.starsPerUnit) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(stars, puzzleData.regions, puzzleData.starsPerUnit)) {
-      setGameState('won');
-    }
-  }, [stars, puzzleData, showErrors]);
+    checkWin(checkSolved(stars, puzzleData.regions, puzzleData.starsPerUnit));
+  }, [stars, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     setStars(prev => {
       const newStars = prev.map(row => [...row]);
@@ -205,20 +206,20 @@ export default function StarBattle() {
   const handleReset = () => {
     const gridSize = puzzleData?.size || size;
     setStars(Array(gridSize).fill(null).map(() => Array(gridSize).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setStars(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading) {
     return (
       <div className={styles.container}>
         <GameHeader title="Star Battle" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -296,8 +297,8 @@ export default function StarBattle() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🌟 Puzzle Solved!"
-            message="All stars perfectly placed!"
+            title={t('gameStatus.solved')}
+            message={t('common.allStarsPlaced', 'All stars perfectly placed!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
@@ -329,7 +330,7 @@ export default function StarBattle() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -19,6 +20,7 @@ const MODES = {
 export { MODES };
 
 export default function WordWheel() {
+  const { t } = useTranslation();
   const [mode, setMode] = usePersistedState(MODE_KEY, 'CLASSIC');
   const [savedGameState, setSavedGameState] = usePersistedState(STORAGE_KEY, null);
   const [puzzle, setPuzzle] = useState(null);
@@ -295,7 +297,7 @@ export default function WordWheel() {
             <div className={styles.buttons}>
               <button className={styles.btn} onClick={clearWord}>Clear</button>
               <button className={styles.btn} onClick={removeLetter}>⌫</button>
-              <button className={styles.btn} onClick={shuffleLetters}>Shuffle</button>
+              <button className={styles.btn} onClick={shuffleLetters}>{t('common.shuffle')}</button>
               <button className={`${styles.btn} ${styles.submitBtn}`} onClick={submitWord}>
                 Submit
               </button>
@@ -316,9 +318,9 @@ export default function WordWheel() {
           </div>
 
           <div className={styles.foundWords}>
-            <h3>Found Words</h3>
+            <h3>{t('common.foundWords')}</h3>
             {foundWords.length === 0 ? (
-              <p className={styles.noWords}>No words found yet</p>
+              <p className={styles.noWords}>{t('common.noWordsYet')}</p>
             ) : (
               <div className={styles.wordList}>
                 {foundWords.map((word) => (
@@ -347,7 +349,7 @@ export default function WordWheel() {
 
           {showAllWords && (
             <div className={styles.allWords}>
-              <h4>All Possible Words ({possibleWords.length})</h4>
+              <h4>{t('common.allPossibleWords')} ({possibleWords.length})</h4>
               <div className={styles.wordList}>
                 {possibleWords.map((word) => (
                   <WordWithDefinition

@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './TheseusMinotaur.module.css';
 
 // Difficulty presets
@@ -289,7 +291,7 @@ export default function TheseusMinotaur() {
   const [theseus, setTheseus] = useState({ x: 0, y: 0 });
   const [minotaur, setMinotaur] = useState({ x: 0, y: 0 });
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, lose, reset: resetGameState, isPlaying, setGameState } = useGameState();
   const [history, setHistory] = useState([]);
   const [showHint, setShowHint] = useState(false);
   const [gamesWon, setGamesWon] = usePersistedState('theseus-minotaur-wins', 0);
@@ -306,7 +308,7 @@ export default function TheseusMinotaur() {
       setTheseus({ ...newPuzzle.theseus });
       setMinotaur({ ...newPuzzle.minotaur });
       setMoves(0);
-      setGameState('playing');
+      resetGameState();
       setHistory([{ theseus: { ...newPuzzle.theseus }, minotaur: { ...newPuzzle.minotaur } }]);
       setShowHint(false);
       setIsGenerating(false);
@@ -318,7 +320,7 @@ export default function TheseusMinotaur() {
   }, [difficulty, generateNewPuzzle]);
 
   const moveTheseus = useCallback((dx, dy) => {
-    if (gameState !== 'playing' || !puzzle) return;
+    if (!isPlaying || !puzzle) return;
 
     const { walls, width, height, exit } = puzzle;
 
@@ -335,7 +337,7 @@ export default function TheseusMinotaur() {
     if (newTheseus.x === exit.x && newTheseus.y === exit.y) {
       setTheseus(newTheseus);
       setMoves(m => m + 1);
-      setGameState('won');
+      checkWin(true);
       setGamesWon(w => w + 1);
       return;
     }
@@ -349,7 +351,7 @@ export default function TheseusMinotaur() {
         setTheseus(newTheseus);
         setMinotaur(newMinotaur);
         setMoves(m => m + 1);
-        setGameState('lost');
+        lose();
         return;
       }
     }
@@ -371,9 +373,9 @@ export default function TheseusMinotaur() {
     setMinotaur(lastState.minotaur);
     setHistory(newHistory);
     setMoves(m => m - 1);
-    setGameState('playing');
+    resetGameState();
     setShowHint(false);
-  }, [history]);
+  }, [history, resetGameState]);
 
   // Get hint for next move
   const getHint = useCallback(() => {
@@ -469,7 +471,7 @@ export default function TheseusMinotaur() {
         />
         <div className={styles.loading}>
           <div className={styles.spinner}></div>
-          <p>Generating puzzle...</p>
+          <p>{t('common.generatingPuzzle')}</p>
         </div>
       </div>
     );
@@ -523,11 +525,11 @@ export default function TheseusMinotaur() {
             <span className={styles.statValue}>{moves}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Optimal</span>
+            <span className={styles.statLabel}>{t('common.optimal')}</span>
             <span className={styles.statValue}>{puzzle.minMoves}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Wins</span>
+            <span className={styles.statLabel}>{t('common.wins')}</span>
             <span className={styles.statValue}>{gamesWon}</span>
           </div>
         </div>

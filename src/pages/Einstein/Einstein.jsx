@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Einstein.module.css';
 import { generatePuzzle, formatClue } from './generator';
 import { THEME_SETS, THEME_SETS_4, DIFFICULTIES, getRandomTheme } from './puzzleData';
@@ -25,7 +27,7 @@ export default function Einstein() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [logicGrid, setLogicGrid] = useState(null);
   const [checkedClues, setCheckedClues] = useState(new Set());
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [showHints, setShowHints] = useState(false);
   const [autoEliminate, setAutoEliminate] = useState(true);
 
@@ -78,8 +80,8 @@ export default function Einstein() {
     setPuzzleData({ solution, clues, categories });
     setLogicGrid(initializeLogicGrid());
     setCheckedClues(new Set());
-    setGameState('playing');
-  }, [numHouses, theme, difficulty, initializeLogicGrid]);
+    resetGameState();
+  }, [numHouses, theme, difficulty, initializeLogicGrid, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -106,7 +108,7 @@ export default function Einstein() {
 
   // LEFT CLICK: Set to TRUE (or toggle off if already TRUE)
   const handleLeftClick = useCallback((cat1Idx, cat2Idx, item1, item2) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const currentState = getCell(cat1Idx, cat2Idx, item1, item2);
     const { key, swapped } = getGridKey(cat1Idx, cat2Idx);
@@ -145,12 +147,12 @@ export default function Einstein() {
 
       return newGrid;
     });
-  }, [gameState, getCell, getGridKey, allCategories, autoEliminate]);
+  }, [isPlaying, getCell, getGridKey, allCategories, autoEliminate]);
 
   // RIGHT CLICK: Set to FALSE (or toggle off if already FALSE)
   const handleRightClick = useCallback((e, cat1Idx, cat2Idx, item1, item2) => {
     e.preventDefault();
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const currentState = getCell(cat1Idx, cat2Idx, item1, item2);
     const { key, swapped } = getGridKey(cat1Idx, cat2Idx);
@@ -169,11 +171,11 @@ export default function Einstein() {
 
       return newGrid;
     });
-  }, [gameState, getCell, getGridKey]);
+  }, [isPlaying, getCell, getGridKey]);
 
   // Check for win
   useEffect(() => {
-    if (!logicGrid || !puzzleData || gameState === 'won') return;
+    if (!logicGrid || !puzzleData || !isPlaying) return;
 
     const { solution } = puzzleData;
     let allCorrect = true;
@@ -200,8 +202,8 @@ export default function Einstein() {
       if (!allCorrect) break;
     }
 
-    if (allCorrect) setGameState('won');
-  }, [logicGrid, puzzleData, gameState, numHouses, allCategories]);
+    if (allCorrect) checkWin(true);
+  }, [logicGrid, puzzleData, isPlaying, numHouses, allCategories, checkWin]);
 
   const toggleClue = (index) => {
     setCheckedClues(prev => {
@@ -212,7 +214,7 @@ export default function Einstein() {
   };
 
   const getHint = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     const { solution } = puzzleData;
 
     for (let catIdx = 1; catIdx < allCategories.length; catIdx++) {
@@ -235,11 +237,11 @@ export default function Einstein() {
   const handleReset = () => {
     setLogicGrid(initializeLogicGrid());
     setCheckedClues(new Set());
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     const { solution } = puzzleData;
 
     // Reveal all correct answers
@@ -251,7 +253,7 @@ export default function Einstein() {
         handleLeftClick(0, catIdx, houseStr, correctItem);
       }
     }
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData || !logicGrid) return null;
@@ -289,7 +291,7 @@ export default function Einstein() {
         </div>
 
         <div className={styles.settingGroup}>
-          <label>Difficulty:</label>
+          <label>{t('common.difficulty')}:</label>
           <div className={styles.buttonGroup}>
             {Object.values(DIFFICULTIES).map(diff => (
               <button
@@ -304,7 +306,7 @@ export default function Einstein() {
         </div>
 
         <div className={styles.settingGroup}>
-          <label>Theme:</label>
+          <label>{t('common.theme')}:</label>
           <select
             className={styles.themeSelect}
             value={themeId || theme.id}
@@ -457,14 +459,14 @@ export default function Einstein() {
         </div>
 
         <div className={styles.buttons}>
-          <button className={styles.hintBtn} onClick={getHint} disabled={gameState !== 'playing'}>💡 Hint</button>
+          <button className={styles.hintBtn} onClick={getHint} disabled={gameState !== 'playing'}>💡 {t('common.hint')}</button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
             label="🏳️ Give Up"
             requireConfirmation={false}
           />
-          <button className={styles.resetBtn} onClick={handleReset}>🔄 Reset</button>
+          <button className={styles.resetBtn} onClick={handleReset}>🔄 {t('common.reset')}</button>
           <button className={styles.newGameBtn} onClick={initGame}>✨ New Puzzle</button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Undead.module.css';
 
@@ -223,7 +224,7 @@ export default function Undead() {
         <div className={styles.group}>
           <button className={styles.button} onClick={() => newGame(w, h)}>New</button>
           <button className={styles.button} onClick={() => setMonsters(new Array(puz.w * puz.h).fill(''))}>Clear</button>
-          <button className={styles.button} onClick={() => setMonsters(puz.solution.slice())}>Reveal</button>
+          <button className={styles.button} onClick={() => setMonsters(puz.solution.slice())}>{t('common.reveal')}</button>
           <label style={{ color: 'rgba(255,255,255,0.85)' }}>
             W
             <input
@@ -246,7 +247,7 @@ export default function Undead() {
           <span className={styles.pill}>V {counts.V}/{puz.totals.V}</span>
           <span className={styles.pill}>Z {counts.Z}/{puz.totals.Z}</span>
           <span className={styles.status}>
-            {solved ? <span className={styles.win}>Solved!</span> : (totalsOk ? (bad.size ? <span className={styles.bad}>Edge mismatch</span> : <span>OK</span>) : <span className={styles.bad}>Totals off</span>)}
+            {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : (totalsOk ? (bad.size ? <span className={styles.bad}>{t('gameStatus.edgeMismatch')}</span> : <span>{t('common.ok')}</span>) : <span className={styles.bad}>{t('gameStatus.totalsOff')}</span>)}
           </span>
         </div>
       </div>

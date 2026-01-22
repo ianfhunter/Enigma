@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -144,6 +145,7 @@ export {
 };
 
 export default function WordShuffle() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(4);
   const [board, setBoard] = useState([]);
   const [allValidWords, setAllValidWords] = useState([]);
@@ -395,7 +397,7 @@ export default function WordShuffle() {
         )}
 
         <div className={styles.wordList}>
-          <h3>Found Words ({foundWords.size})</h3>
+          <h3>{t('common.foundWords')} ({foundWords.size})</h3>
           <div className={styles.words}>
             {Array.from(foundWords).sort((a, b) => b.length - a.length).map(word => (
               <span key={word} className={styles.word}>
@@ -407,7 +409,7 @@ export default function WordShuffle() {
 
         {gameState === 'ended' && showAllWords && (
           <div className={styles.allWords}>
-            <h3>All Words ({allValidWords.length})</h3>
+            <h3>{t('common.allWords')} ({allValidWords.length})</h3>
             <div className={styles.words}>
               {allValidWords.map(word => (
                 <WordWithDefinition

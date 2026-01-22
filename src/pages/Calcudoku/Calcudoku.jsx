@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatTime } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
@@ -6,6 +7,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Calcudoku.module.css';
 import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
 
@@ -145,6 +147,7 @@ function notesFromJSON(json) {
 
 
 export default function Calcudoku() {
+  const { t } = useTranslation();
   const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [difficulty, setDifficulty] = useState('easy');
   const [size, setSize] = useState(4);
@@ -155,8 +158,8 @@ export default function Calcudoku() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [gameState, setGameState] = useState('playing');
-  const [showErrors, setShowErrors] = useState(true);
+  const { gameState, checkWin, giveUp, setGameState, reset: resetGameState, isPlaying, isWon, isGaveUp } = useGameState();
+  const [showErrors, setShowErrors] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const timerRef = useRef(null);
@@ -239,7 +242,7 @@ export default function Calcudoku() {
   }, [puzzle, playerGrid, notes, timer, gameState, size, difficulty, isLoaded, setSavedState]);
 
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(prev => prev + 1);
       }, 1000);
@@ -247,17 +250,17 @@ export default function Calcudoku() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (isLoaded && gameState === 'playing') {
+    if (isLoaded && isPlaying) {
       setIsRunning(true);
     }
-  }, [isLoaded, gameState]);
+  }, [isLoaded, isPlaying]);
 
   // Check for win
   useEffect(() => {
-    if (!puzzle || !playerGrid.length || gameState === 'won' || gameState === 'gaveUp') return;
+    if (!puzzle || !playerGrid.length || !isPlaying) return;
 
     // Check if grid is complete
     const isComplete = playerGrid.every(row => row.every(cell => cell !== 0));
@@ -269,13 +272,13 @@ export default function Calcudoku() {
     );
 
     if (isCorrect) {
-      setGameState('won');
+      checkWin(true);
       setIsRunning(false);
     }
-  }, [playerGrid, puzzle, gameState]);
+  }, [playerGrid, puzzle, isPlaying, checkWin]);
 
   const handleCellClick = (row, col) => {
-    if (gameState === 'won' || gameState === 'gaveUp') return;
+    if (isWon || isGaveUp) return;
     setSelectedCell({ row, col });
   };
 
@@ -410,16 +413,16 @@ export default function Calcudoku() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzle || gameState !== 'playing') return;
+    if (!puzzle || !isPlaying) return;
     setPlayerGrid(puzzle.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
     setIsRunning(false);
   };
 
   if (!isLoaded || !puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -455,7 +458,7 @@ export default function Calcudoku() {
               checked={showErrors}
               onChange={(e) => setShowErrors(e.target.checked)}
             />
-            <span className={styles.toggleLabel}>Show Errors</span>
+            <span className={styles.toggleLabel}>{t('common.showErrors')}</span>
           </label>
         </div>
 
@@ -535,8 +538,8 @@ export default function Calcudoku() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message={`Completed in ${formatTime(timer)}`}
+            title={t('gameStatus.solved')}
+            message={t('common.completedIn', { time: formatTime(timer) })}
           />
         )}
 
@@ -551,7 +554,7 @@ export default function Calcudoku() {
         <div className={styles.buttons}>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button
             className={styles.newGameBtn}

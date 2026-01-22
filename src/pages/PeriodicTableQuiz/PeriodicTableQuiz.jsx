@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PeriodicTableQuiz.module.css';
@@ -27,6 +28,7 @@ export {
 };
 
 export default function PeriodicTableQuiz() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [mode, setMode] = useState(MODES[0]);
   const [current, setCurrent] = useState(null);

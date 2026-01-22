@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Norinori.module.css';
 
 // Load puzzles from dataset
@@ -130,9 +132,9 @@ export default function Norinori() {
   const [difficulty, setDifficulty] = useState('Medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGrid, setPlayerGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const size = GRID_SIZES[sizeKey];
 
@@ -171,27 +173,25 @@ export default function Norinori() {
       cols
     });
     setPlayerGrid(Array(rows).fill(null).map(() => Array(cols).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size, difficulty]);
+  }, [size, difficulty, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(playerGrid, puzzleData.regions) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(playerGrid, puzzleData.solution)) {
-      setGameState('won');
-    }
-  }, [playerGrid, puzzleData, showErrors]);
+    checkWin(checkSolved(playerGrid, puzzleData.solution));
+  }, [playerGrid, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     setPlayerGrid(prev => {
       const newGrid = prev.map(row => [...row]);
@@ -203,13 +203,13 @@ export default function Norinori() {
   const handleReset = () => {
     if (!puzzleData) return;
     setPlayerGrid(Array(puzzleData.rows).fill(null).map(() => Array(puzzleData.cols).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setPlayerGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -323,7 +323,7 @@ export default function Norinori() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

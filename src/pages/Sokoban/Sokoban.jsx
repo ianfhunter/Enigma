@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Sokoban.module.css';
@@ -133,6 +134,7 @@ export {
 };
 
 export default function Sokoban() {
+  const { t } = useTranslation();
   const boardRef = useRef(null);
 
   const [packId, setPackId] = usePersistedState('sokoban.packId', PACKS[0].id);
@@ -308,10 +310,10 @@ export default function Sokoban() {
 
             <div className={styles.meta}>
               <span className={styles.badge}>{levelLabel}</span>
-              {state && <span className={styles.badge}>Moves: {state.moves}</span>}
-              {state && <span className={styles.badge}>Pushes: {state.pushes}</span>}
-              {levels.length > 0 && <span className={styles.badge}>Level {levelIndex + 1}/{levels.length}</span>}
-              {solved && <span className={`${styles.badge} ${styles.solved}`}>Solved</span>}
+              {state && <span className={styles.badge}>{t('gameStatus.moves')}: {state.moves}</span>}
+              {state && <span className={styles.badge}>{t('common.pushes')}: {state.pushes}</span>}
+              {levels.length > 0 && <span className={styles.badge}>{t('common.level')} {levelIndex + 1}/{levels.length}</span>}
+              {solved && <span className={`${styles.badge} ${styles.solved}`}>{t('gameStatus.solved')}</span>}
             </div>
           </div>
         </div>
@@ -335,7 +337,7 @@ export default function Sokoban() {
 
         <div className={styles.boardWrap}>
           {status.type === 'loading' && (
-            <div className={styles.notice}>Loading levels…</div>
+            <div className={styles.notice}>{t('common.loadingPuzzles')}</div>
           )}
           {status.type === 'error' && (
             <div className={styles.noticeError}>

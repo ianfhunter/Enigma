@@ -1,30 +1,32 @@
 /**
  * Copyright (C) 2024 Ian Hunter
- * 
+ *
  * This file is part of Enigma and is licensed under GPL-3.0.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  * This component uses data derived from:
  * - MsFit wordlist (GPL-3.0) from https://github.com/nzfeng/crossword-dataset
  *   Copyright (c) Nicole Feng
  */
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
+import { useGameState } from '../../hooks/useGameState';
 import GameHeader from '../../components/GameHeader';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import {
@@ -81,12 +83,13 @@ export const getLastTypedLetter = (value = '') => {
 };
 
 export default function Crossword() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzle, setPuzzle] = useState(null);
   const [userGrid, setUserGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const [direction, setDirection] = useState('across'); // 'across' or 'down'
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'gaveUp'
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [missedWords, setMissedWords] = useState([]);
   const [timer, setTimer] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -121,7 +124,7 @@ export default function Crossword() {
   // Initialize game
   const initGame = useCallback((diff = difficulty) => {
     setDifficulty(diff);
-    setGameState('playing');
+    resetGameState();
     setShowErrors(false);
     setMissedWords([]);
 
@@ -161,16 +164,16 @@ export default function Crossword() {
 
   // Keep hidden input focused when using native keyboard on mobile
   useEffect(() => {
-    if (useNativeKeyboard && gameState === 'playing' && nativeInputRef.current && selectedCell) {
+    if (useNativeKeyboard && isPlaying && nativeInputRef.current && selectedCell) {
       nativeInputRef.current.focus({ preventScroll: true });
     }
-  }, [useNativeKeyboard, gameState, selectedCell]);
+  }, [useNativeKeyboard, isPlaying, selectedCell]);
 
   // Check for win
   useEffect(() => {
-    if (puzzle && userGrid.length > 0 && gameState === 'playing') {
+    if (puzzle && userGrid.length > 0 && isPlaying) {
       if (isPuzzleComplete(puzzle, userGrid)) {
-        setGameState('won');
+        checkWin(true);
         setIsTimerRunning(false);
 
         setStats(prev => ({
@@ -182,7 +185,7 @@ export default function Crossword() {
         }));
       }
     }
-  }, [userGrid, puzzle, gameState, timer, setStats]);
+  }, [userGrid, puzzle, isPlaying, checkWin, timer, setStats]);
 
   // Format time
   const formatTime = (seconds) => {
@@ -457,7 +460,7 @@ export default function Crossword() {
   }, [puzzle, userGrid]);
 
   // Give up and show solution
-  const giveUp = useCallback(() => {
+  const handleGiveUp = useCallback(() => {
     if (gameState !== 'playing' || !puzzle) return;
 
     // Find missed words
@@ -490,7 +493,7 @@ export default function Crossword() {
     }
 
     setMissedWords(missed);
-    setGameState('gaveUp');
+    giveUp();
     setIsTimerRunning(false);
 
     // Fill in the solution
@@ -504,7 +507,7 @@ export default function Crossword() {
       ...prev,
       played: prev.played + 1,
     }));
-  }, [gameState, puzzle, userGrid, setStats]);
+  }, [gameState, puzzle, userGrid, giveUp, setStats]);
 
   // Random loading phrase
   const loadingPhrase = useMemo(() =>
@@ -619,7 +622,7 @@ export default function Crossword() {
 
             {gameState === 'gaveUp' && (
               <div className={styles.gaveUpBanner}>
-                <div className={styles.gaveUpTitle}>Puzzle Revealed</div>
+                <div className={styles.gaveUpTitle}>{t('gameStatus.puzzleRevealed')}</div>
                 <div className={styles.gaveUpSubtitle}>
                   Time: {formatTime(timer)} • Missed {missedWords.length} word{missedWords.length !== 1 ? 's' : ''}
                 </div>
@@ -672,7 +675,7 @@ export default function Crossword() {
               </button>
               <button
                 className={`${styles.toolBtn} ${styles.giveUpBtn}`}
-                onClick={giveUp}
+                onClick={handleGiveUp}
                 disabled={gameState !== 'playing'}
               >
                 Give Up
@@ -682,7 +685,7 @@ export default function Crossword() {
 
           <div className={styles.cluesSection}>
             <div className={styles.clueColumn}>
-              <h3 className={styles.clueHeader}>Across</h3>
+              <h3 className={styles.clueHeader}>{t('common.across')}</h3>
               <div className={styles.clueList}>
                 {puzzle.across.map(clue => {
                   const isActive = currentWord?.number === clue.number && direction === 'across';
@@ -701,7 +704,7 @@ export default function Crossword() {
             </div>
 
             <div className={styles.clueColumn}>
-              <h3 className={styles.clueHeader}>Down</h3>
+              <h3 className={styles.clueHeader}>{t('common.down')}</h3>
               <div className={styles.clueList}>
                 {puzzle.down.map(clue => {
                   const isActive = currentWord?.number === clue.number && direction === 'down';
@@ -801,23 +804,23 @@ export default function Crossword() {
         <div className={styles.statsPanel}>
           <div className={styles.stat}>
             <span className={styles.statValue}>{stats.played}</span>
-            <span className={styles.statLabel}>Played</span>
+            <span className={styles.statLabel}>{t('common.played')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>{stats.won}</span>
-            <span className={styles.statLabel}>Won</span>
+            <span className={styles.statLabel}>{t('gameStatus.won')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>
               {stats.bestTime ? formatTime(stats.bestTime) : '-'}
             </span>
-            <span className={styles.statLabel}>Best</span>
+            <span className={styles.statLabel}>{t('common.best')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>
               {stats.avgTime ? formatTime(stats.avgTime) : '-'}
             </span>
-            <span className={styles.statLabel}>Avg</span>
+            <span className={styles.statLabel}>{t('common.avg')}</span>
           </div>
         </div>
       </div>

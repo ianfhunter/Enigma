@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Str8ts.module.css';
 
 const GRID_SIZE = 9;
@@ -445,13 +447,14 @@ function findErrors(grid, isBlack, solution) {
 }
 
 export default function Str8ts() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
   const datasetRef = useRef(null);
 
@@ -487,9 +490,9 @@ export default function Str8ts() {
       setGrid(data.puzzle.map(row => [...row]));
     }
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading) {
@@ -498,7 +501,7 @@ export default function Str8ts() {
   }, [loading, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? findErrors(grid, puzzleData.isBlack, puzzleData.solution) : new Set();
     setErrors(newErrors);
@@ -517,12 +520,12 @@ export default function Str8ts() {
     }
 
     if (allFilled && allCorrect) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || !puzzleData) return;
+    if (!isPlaying || !puzzleData) return;
     if (puzzleData.isBlack[r][c]) return;
     if (puzzleData.puzzle[r][c] !== 0) return; // Given cell
 
@@ -530,7 +533,7 @@ export default function Str8ts() {
   };
 
   const handleNumberInput = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
 
     const { r, c } = selectedCell;
     if (puzzleData.puzzle[r][c] !== 0) return;
@@ -543,7 +546,7 @@ export default function Str8ts() {
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
 
     const { r, c } = selectedCell;
     if (puzzleData.puzzle[r][c] !== 0) return;
@@ -558,7 +561,7 @@ export default function Str8ts() {
   // Keyboard handling
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
 
       const { r, c } = selectedCell;
 
@@ -599,19 +602,19 @@ export default function Str8ts() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCell, gameState, puzzleData]);
+  }, [selectedCell, isPlaying, puzzleData]);
 
   const handleReset = () => {
     if (!puzzleData) return;
     setGrid(puzzleData.puzzle.map(row => [...row]));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading) {
@@ -621,7 +624,7 @@ export default function Str8ts() {
           title="Str8ts"
           instructions="Loading puzzles..."
         />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -720,7 +723,7 @@ export default function Str8ts() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

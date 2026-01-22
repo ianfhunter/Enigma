@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Shinro.module.css';
 
 const GRID_SIZES = {
@@ -182,9 +184,9 @@ export default function Shinro() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGems, setPlayerGems] = useState(new Set());
   const [marked, setMarked] = useState(new Set()); // Cells marked as not gems
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
 
   const size = GRID_SIZES[sizeKey];
@@ -194,30 +196,30 @@ export default function Shinro() {
     setPuzzleData(data);
     setPlayerGems(new Set());
     setMarked(new Set());
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setShowSolution(false);
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors && !showSolution ?
       checkValidity(playerGems, puzzleData.grid, puzzleData.rowCounts, puzzleData.colCounts, size) :
       new Set();
     setErrors(newErrors);
 
-    if (!showSolution && checkSolved(playerGems, puzzleData.gems, puzzleData.rowCounts, puzzleData.colCounts, puzzleData.grid, size)) {
-      setGameState('won');
+    if (!showSolution) {
+      checkWin(checkSolved(playerGems, puzzleData.gems, puzzleData.rowCounts, puzzleData.colCounts, puzzleData.grid, size));
     }
-  }, [playerGems, puzzleData, showErrors, showSolution, size]);
+  }, [playerGems, puzzleData, showErrors, showSolution, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     if (puzzleData.grid[r][c]) return; // Can't click on arrow cells
 
     const key = `${r},${c}`;
@@ -263,13 +265,14 @@ export default function Shinro() {
   const handleReset = () => {
     setPlayerGems(new Set());
     setMarked(new Set());
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -396,7 +399,7 @@ export default function Shinro() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

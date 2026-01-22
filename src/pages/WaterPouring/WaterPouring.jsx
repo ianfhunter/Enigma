@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './WaterPouring.module.css';
 
 // GCD using Euclidean algorithm
@@ -252,10 +254,11 @@ export {
 };
 
 export default function WaterPouring() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [jugLevels, setJugLevels] = useState([]);
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isPlaying } = useGameState();
   const [history, setHistory] = useState([]);
   const [selectedJug, setSelectedJug] = useState(null);
 
@@ -269,19 +272,19 @@ export default function WaterPouring() {
     setPuzzle(newPuzzle);
     setJugLevels(newPuzzle.jugs.map(j => j.initial));
     setMoves(0);
-    setGameState('playing');
+    resetGameState();
     setHistory([]);
     setSelectedJug(null);
-  }, [numJugs, difficulty, hasSource]);
+  }, [numJugs, difficulty, hasSource, resetGameState]);
 
   const initGame = useCallback(() => {
     if (!puzzle) return;
     setJugLevels(puzzle.jugs.map(j => j.initial));
     setMoves(0);
-    setGameState('playing');
+    resetGameState();
     setHistory([]);
     setSelectedJug(null);
-  }, [puzzle]);
+  }, [puzzle, resetGameState]);
 
   useEffect(() => {
     generateNew();
@@ -294,13 +297,13 @@ export default function WaterPouring() {
   }, [puzzle]);
 
   useEffect(() => {
-    if (!puzzle || gameState !== 'playing') return;
+    if (!puzzle || !isPlaying) return;
 
     // Check if target is reached
     if (jugLevels.some(level => level === puzzle.target)) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [jugLevels, puzzle, gameState]);
+  }, [jugLevels, puzzle, isPlaying, checkWin]);
 
   const saveHistory = () => {
     setHistory(prev => [...prev, { jugLevels: [...jugLevels], moves }]);
@@ -432,7 +435,7 @@ export default function WaterPouring() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -458,7 +461,7 @@ export default function WaterPouring() {
           ))}
         </div>
         <div className={styles.settingGroup}>
-          <label>Difficulty:</label>
+          <label>{t('common.difficulty')}:</label>
           {DIFFICULTIES.map((d) => (
             <button
               key={d}
@@ -490,7 +493,7 @@ export default function WaterPouring() {
       </div>
 
       <div className={styles.targetDisplay}>
-        <span className={styles.targetLabel}>Target:</span>
+        <span className={styles.targetLabel}>{t('common.target')}:</span>
         <span className={styles.targetValue}>{puzzle.target}L</span>
         <span className={styles.movesLabel}>Moves:</span>
         <span className={styles.movesValue}>{moves}</span>

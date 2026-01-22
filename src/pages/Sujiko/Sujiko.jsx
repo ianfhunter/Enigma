@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Sujiko.module.css';
 
 // Sujiko is a 3x3 grid where each cell contains 1-9 (each used once)
@@ -117,9 +119,9 @@ export default function Sujiko() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [sumStatus, setSumStatus] = useState([false, false, false, false]);
 
   const initGame = useCallback(() => {
@@ -127,17 +129,17 @@ export default function Sujiko() {
     setPuzzleData(data);
     setGrid(data.puzzle.map(row => [...row]));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setSumStatus([false, false, false, false]);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(grid, puzzleData.solution) : new Set();
     setErrors(newErrors);
@@ -157,19 +159,19 @@ export default function Sujiko() {
     }
 
     if (allFilled && allCorrect) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || !puzzleData) return;
+    if (!isPlaying || !puzzleData) return;
     if (puzzleData.puzzle[r][c] !== 0) return; // Given cell
 
     setSelectedCell({ r, c });
   };
 
   const handleNumberInput = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
 
     const { r, c } = selectedCell;
     if (puzzleData.puzzle[r][c] !== 0) return;
@@ -182,7 +184,7 @@ export default function Sujiko() {
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
 
     const { r, c } = selectedCell;
     if (puzzleData.puzzle[r][c] !== 0) return;
@@ -197,7 +199,7 @@ export default function Sujiko() {
   // Keyboard handling
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
 
       const { r, c } = selectedCell;
 
@@ -218,19 +220,19 @@ export default function Sujiko() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCell, gameState, puzzleData]);
+  }, [selectedCell, isPlaying, puzzleData]);
 
   const handleReset = () => {
     if (!puzzleData) return;
     setGrid(puzzleData.puzzle.map(row => [...row]));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   // Get which numbers are still available
@@ -344,7 +346,7 @@ export default function Sujiko() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

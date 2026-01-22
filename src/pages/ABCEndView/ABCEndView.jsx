@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import Timer, { formatTime } from '../../components/Timer/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './ABCEndView.module.css';
 import puzzleDataset from '../../../public/datasets/abcendviewPuzzles.json';
 
@@ -242,9 +244,9 @@ export default function ABCEndView() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const timerRef = useRef(null);
@@ -272,7 +274,7 @@ export default function ABCEndView() {
       // No puzzles found for this size - clear puzzle data
       setPuzzleData(null);
       setSelectedCell(null);
-      setGameState('playing');
+      resetGameState();
       setErrors(new Set());
       setIsRunning(false);
       return;
@@ -301,27 +303,27 @@ export default function ABCEndView() {
       numLetters
     });
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setTimer(0);
     setIsRunning(true);
-  }, [size, numLetters]);
+  }, [size, numLetters, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(t => t + 1);
       }, 1000);
     }
     return () => clearInterval(timerRef.current);
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
     // Safety check: ensure puzzleData size matches current size
     if (puzzleData.size !== size) return;
 
@@ -331,18 +333,18 @@ export default function ABCEndView() {
     setErrors(newErrors);
 
     if (checkSolved(grid, puzzleData.solution, size)) {
-      setGameState('won');
+      checkWin(true);
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, size]);
+  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setSelectedCell({ row: r, col: c });
   };
 
   const handleLetterInput = (letter) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { row, col } = selectedCell;
     setGrid(prev => {
       const newGrid = prev.map(r => [...r]);
@@ -352,7 +354,7 @@ export default function ABCEndView() {
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { row, col } = selectedCell;
     setGrid(prev => {
       const newGrid = prev.map(r => [...r]);
@@ -362,15 +364,15 @@ export default function ABCEndView() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
     setIsRunning(false);
   };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
 
       const key = e.key.toUpperCase();
       if (letterOptions.includes(key)) {
@@ -502,7 +504,7 @@ export default function ABCEndView() {
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={() => {
             setGrid(Array(size).fill(null).map(() => Array(size).fill('')));
-            setGameState('playing');
+            resetGameState();
             setTimer(0);
             setIsRunning(true);
           }}>
@@ -510,7 +512,7 @@ export default function ABCEndView() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

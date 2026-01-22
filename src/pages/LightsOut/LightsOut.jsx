@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './LightsOut.module.css';
 
 const SIZES = {
@@ -58,24 +60,25 @@ export {
 };
 
 export default function LightsOut() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(5);
   const [grid, setGrid] = useState([]);
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won'
+  const { gameState, checkWin: checkWinState, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [bestScores, setBestScores] = usePersistedState('lights-out-best', {});
 
   const initGame = useCallback(() => {
     setGrid(generatePuzzle(size));
     setMoves(0);
-    setGameState('playing');
-  }, [size]);
+    resetGameState();
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   const handleCellClick = (row, col) => {
-    if (gameState === 'won') return;
+    if (isWon) return;
 
     const newGrid = grid.map(r => [...r]);
     toggleCell(newGrid, row, col, size);
@@ -83,7 +86,7 @@ export default function LightsOut() {
     setMoves(prev => prev + 1);
 
     if (checkWin(newGrid)) {
-      setGameState('won');
+      checkWinState(true);
       const key = `${size}x${size}`;
       const newMoves = moves + 1;
       if (!bestScores[key] || newMoves < bestScores[key]) {
@@ -120,7 +123,7 @@ export default function LightsOut() {
           </div>
           {bestScores[`${size}x${size}`] && (
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statLabel}>{t('common.best')}</span>
               <span className={styles.statValue}>{bestScores[`${size}x${size}`]}</span>
             </div>
           )}

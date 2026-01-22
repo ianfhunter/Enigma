@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -16,6 +17,7 @@ import styles from './Anagrams.module.css';
 const GAME_TIME = 90; // 90 seconds per puzzle
 
 export default function Anagrams() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [displayLetters, setDisplayLetters] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
@@ -219,7 +221,7 @@ export default function Anagrams() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 className={styles.wordInput}
-                placeholder="Type a word..."
+                placeholder={t('common.typeWord')}
                 autoComplete="off"
                 autoCapitalize="characters"
               />
@@ -275,9 +277,9 @@ export default function Anagrams() {
           </div>
 
           <div className={styles.foundWords}>
-            <h3>Found Anagrams</h3>
+            <h3>{t('common.foundAnagrams')}</h3>
             {foundWords.length === 0 ? (
-              <p className={styles.noWords}>No anagrams found yet</p>
+              <p className={styles.noWords}>{t('common.noAnagramsYet')}</p>
             ) : (
               <div className={styles.wordList}>
                 {foundWords.map((word) => (
@@ -302,7 +304,7 @@ export default function Anagrams() {
 
           {showAllWords && (
             <div className={styles.allWords}>
-              <h4>All Anagrams ({puzzle.anagrams.length})</h4>
+              <h4>{t('common.allAnagrams')} ({puzzle.anagrams.length})</h4>
               <div className={styles.wordList}>
                 {puzzle.anagrams.map((word) => (
                   <WordWithDefinition

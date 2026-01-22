@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './CurrencyQuiz.module.css';
 
 export default function CurrencyQuiz() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [current, setCurrent] = useState(null);
   const [options, setOptions] = useState([]);
@@ -135,12 +137,12 @@ export default function CurrencyQuiz() {
         instructions="What currency is used in each country?"
       />
 
-      {!data && <div className={styles.card}>Loading countries...</div>}
+      {!data && <div className={styles.card}>{t('common.loadingCountries')}</div>}
 
       {data && current && (
         <>
           <div className={styles.promptCard}>
-            <div className={styles.promptLabel}>Country</div>
+            <div className={styles.promptLabel}>{t('common.country')}</div>
             <div className={styles.prompt}>{current.name}</div>
           </div>
 
@@ -205,7 +207,7 @@ export default function CurrencyQuiz() {
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.streak}</span>
-              <span className={styles.statLabel}>Streak</span>
+              <span className={styles.statLabel}>{t('common.streak')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.maxStreak}</span>

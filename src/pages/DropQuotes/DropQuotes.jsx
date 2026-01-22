@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './DropQuotes.module.css';
 
 const QUOTES = [
@@ -83,11 +85,12 @@ function generatePuzzle() {
 export { QUOTES, generatePuzzle };
 
 export default function DropQuotes() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const [usedFromColumns, setUsedFromColumns] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
 
   const initGame = useCallback(() => {
     const data = generatePuzzle();
@@ -95,15 +98,15 @@ export default function DropQuotes() {
     setGrid(Array(data.height).fill(null).map(() => Array(data.width).fill('')));
     setUsedFromColumns(Array(data.width).fill(null).map(() => []));
     setSelectedCell(null);
-    setGameState('playing');
-  }, []);
+    resetGameState();
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     // Check if solved
     let solved = true;
@@ -116,18 +119,18 @@ export default function DropQuotes() {
     }
 
     if (solved && grid.some(row => row.some(cell => cell !== ''))) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [grid, puzzleData]);
+  }, [grid, puzzleData, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.solution[r][c] === ' ') return; // Can't place in spaces
     setSelectedCell({ row: r, col: c });
   };
 
   const handleColumnLetterClick = (colIndex, letterIndex) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     if (selectedCell.col !== colIndex) return; // Can only use letters from same column
 
     const letter = puzzleData.columns[colIndex][letterIndex];
@@ -166,7 +169,7 @@ export default function DropQuotes() {
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { row, col } = selectedCell;
 
     if (grid[row][col]) {
@@ -194,13 +197,13 @@ export default function DropQuotes() {
     setGrid(Array(puzzleData.height).fill(null).map(() => Array(puzzleData.width).fill('')));
     setUsedFromColumns(Array(puzzleData.width).fill(null).map(() => []));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import Timer, { formatTime } from '../../components/Timer/Timer';
@@ -12,6 +13,7 @@ const DIFFICULTIES = {
 };
 
 export default function Minesweeper() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [board, setBoard] = useState([]);
   const [revealed, setRevealed] = useState([]);

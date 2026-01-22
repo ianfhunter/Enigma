@@ -3,6 +3,7 @@ import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import {
   getLastKana,
   endsInN,
@@ -113,7 +114,7 @@ export default function Shiritori() {
   const [chain, setChain] = useState([]);
   const [currentInput, setCurrentInput] = useState('');
   const [message, setMessage] = useState('');
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'playerWin', 'aiWin', 'nLose'
+  const { gameState, setGameState, reset: resetGameState, isPlaying } = useGameState();
   const [usedWords, setUsedWords] = useState(new Set());
   const [isAIThinking, setIsAIThinking] = useState(false);
   const [lang, setLang] = usePersistedState('shiritori-lang', 'beginner');
@@ -128,7 +129,7 @@ export default function Shiritori() {
 
   const inputRef = useRef(null);
   const chainRef = useRef(null);
-  const t = TEXT[lang];
+  const text = TEXT[lang];
   const wordStats = getWordStats();
 
   const initGame = useCallback(() => {
@@ -137,20 +138,20 @@ export default function Shiritori() {
     setUsedWords(new Set([startWord.hiragana]));
     setCurrentInput('');
     setMessage('');
-    setGameState('playing');
+    resetGameState();
     setIsAIThinking(false);
     setSuggestions([]);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (inputRef.current && !isAIThinking && gameState === 'playing') {
+    if (inputRef.current && !isAIThinking && isPlaying) {
       inputRef.current.focus();
     }
-  }, [isAIThinking, chain, gameState]);
+  }, [isAIThinking, chain, isPlaying]);
 
   useEffect(() => {
     // Scroll chain to bottom when new words are added
@@ -185,19 +186,19 @@ export default function Shiritori() {
 
     // Check if valid word
     if (!wordData) {
-      setMessage(t.unknownWord);
+      setMessage(text.unknownWord);
       return;
     }
 
     // Check if starts with required kana
     if (!startsWithKana(wordData, requiredKana)) {
-      setMessage(t.mustStartWith(requiredKana));
+      setMessage(text.mustStartWith(requiredKana));
       return;
     }
 
     // Check if already used
     if (usedWords.has(wordData.hiragana)) {
-      setMessage(t.alreadyUsed);
+      setMessage(text.alreadyUsed);
       return;
     }
 
@@ -271,12 +272,12 @@ export default function Shiritori() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title={t.title}
-        instructions={`${t.instructions} ${t.warning}`}
+        title={text.title}
+        instructions={`${text.instructions} ${text.warning}`}
       />
 
       <div className={styles.headerExtras}>
-        <p className={styles.subtitle}>{t.subtitle}</p>
+        <p className={styles.subtitle}>{text.subtitle}</p>
 
         <div className={styles.toggleGroup}>
           <button className={styles.langToggle} onClick={toggleLang}>
@@ -290,27 +291,27 @@ export default function Shiritori() {
 
           <button className={styles.langToggle} onClick={toggleCommonOnly}>
             <span className={`${styles.langOption} ${commonOnly ? styles.active : ''}`}>
-              {t.commonWords}
+              {text.commonWords}
             </span>
             <span className={`${styles.langOption} ${!commonOnly ? styles.active : ''}`}>
-              {t.allWords}
+              {text.allWords}
             </span>
           </button>
         </div>
 
         <p className={styles.wordCountInfo}>
-          {t.wordCount(wordStats.current)}
+          {text.wordCount(wordStats.current)}
         </p>
       </div>
 
       <div className={styles.gameArea}>
         <div className={styles.statsBar}>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>{t.chain}</span>
+            <span className={styles.statLabel}>{text.chain}</span>
             <span className={styles.statValue}>{chain.length}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>{t.best}</span>
+            <span className={styles.statLabel}>{text.best}</span>
             <span className={styles.statValue}>{stats.longestChain}</span>
           </div>
         </div>
@@ -347,7 +348,7 @@ export default function Shiritori() {
 
           {isAIThinking && (
             <div className={styles.thinking}>
-              {t.thinking}
+              {text.thinking}
             </div>
           )}
         </div>
@@ -355,7 +356,7 @@ export default function Shiritori() {
         {gameState === 'playing' && !isAIThinking && (
           <>
             <div className={styles.nextKana}>
-              {t.nextIs} <span className={styles.kanaHighlight}>{getRequiredKana()}</span> {t.startsWith}
+              {text.nextIs} <span className={styles.kanaHighlight}>{getRequiredKana()}</span> {text.startsWith}
             </div>
 
             <form className={styles.inputForm} onSubmit={handleSubmit}>
@@ -367,22 +368,22 @@ export default function Shiritori() {
                   setCurrentInput(e.target.value);
                   setMessage('');
                 }}
-                placeholder={t.placeholder(getRequiredKana())}
+                placeholder={text.placeholder(getRequiredKana())}
                 className={styles.input}
               />
               <button type="submit" className={styles.submitBtn}>
-                {t.submit}
+                {text.submit}
               </button>
             </form>
 
             <p className={styles.hint}>
-              {t.hint}
+              {text.hint}
             </p>
 
             <GiveUpButton
               onGiveUp={handleGiveUp}
               disabled={gameState !== 'playing' || isAIThinking}
-              buttonText={t.giveUp}
+              buttonText={text.giveUp}
             />
           </>
         )}
@@ -394,19 +395,19 @@ export default function Shiritori() {
         {gameState === 'playerWin' && (
           <GameResult
             state="won"
-            title={t.playerWin(chain.length)}
+            title={text.playerWin(chain.length)}
           />
         )}
         {(gameState === 'nLose' || gameState === 'aiWin') && (
           <GameResult
             state="lost"
-            title={gameState === 'nLose' ? t.nLose(chain.length) : t.gameOver(chain.length)}
+            title={gameState === 'nLose' ? text.nLose(chain.length) : text.gameOver(chain.length)}
           />
         )}
 
         {gameState === 'aiWin' && suggestions.length > 0 && (
           <div className={styles.suggestions}>
-            <p className={styles.suggestionsTitle}>{t.couldHavePlayed}</p>
+            <p className={styles.suggestionsTitle}>{text.couldHavePlayed}</p>
             <div className={styles.suggestionsList}>
               {suggestions.map((word, i) => (
                 <div key={i} className={styles.suggestionWord}>
@@ -420,7 +421,7 @@ export default function Shiritori() {
         )}
 
         <button className={styles.newGameBtn} onClick={initGame}>
-          {t.newGame}
+          {text.newGame}
         </button>
       </div>
     </div>

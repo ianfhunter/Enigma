@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Netslide.module.css';
 
@@ -234,10 +235,10 @@ export default function Netslide() {
         </label>
         <div className={styles.actions}>
           <button className={styles.button} onClick={() => newGame(size.w, size.h)}>New</button>
-          <button className={styles.button} onClick={showSolved}>Solve</button>
+          <button className={styles.button} onClick={showSolved}>{t('common.reveal')}</button>
         </div>
         <div className={styles.status}>
-          {solved ? <span className={styles.win}>Solved!</span> : <span>Moves: {moves} • Connected: {conn.connectedCount}/{total}</span>}
+          {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : <span>{t('gameStatus.moves')}: {moves} • {t('gameStatus.connected')}: {conn.connectedCount}/{total}</span>}
         </div>
       </div>
 

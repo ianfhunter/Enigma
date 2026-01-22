@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Blackbox.module.css';
 
@@ -362,7 +363,7 @@ export default function Blackbox() {
           <button className={styles.button} onClick={() => setRevealed((v) => !v)}>
             {revealed ? 'Hide' : 'Reveal'}
           </button>
-          <button className={styles.button} onClick={check}>Check</button>
+          <button className={styles.button} onClick={check}>{t('common.check')}</button>
         </div>
 
         <div className={styles.status}>

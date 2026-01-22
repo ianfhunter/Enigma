@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import puzzleDataset from '@datasets/galaxiesPuzzles_bundled.json';
 import styles from './Galaxies.module.css';
 
@@ -176,12 +178,13 @@ export {
 };
 
 export default function Galaxies() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(7);
   const [difficulty, setDifficulty] = useState('e');
   const [puz, setPuz] = useState(null);
   const [sel, setSel] = useState(0);
   const [assign, setAssign] = useState([]);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'solved', 'gaveUp'
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
 
   // Track used puzzle IDs to avoid repeats
   const usedPuzzleIdsRef = useRef(new Set());
@@ -194,9 +197,9 @@ export default function Galaxies() {
       setPuz(newPuz);
       setAssign(new Array(newPuz.w * newPuz.h).fill(-1));
       setSel(0);
-      setGameState('playing');
+      resetGameState();
     }
-  }, [size, difficulty]);
+  }, [size, difficulty, resetGameState]);
 
   useEffect(() => {
     generateNew();
@@ -209,13 +212,11 @@ export default function Galaxies() {
 
   // Update game state when solved
   useEffect(() => {
-    if (solved && gameState === 'playing') {
-      setGameState('solved');
-    }
-  }, [solved, gameState]);
+    checkWin(solved);
+  }, [solved, checkWin]);
 
   const paint = (i) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setAssign((prev) => {
       const n = prev.slice();
       n[i] = n[i] === sel ? -1 : sel;
@@ -224,9 +225,9 @@ export default function Galaxies() {
   };
 
   const handleGiveUp = () => {
-    if (puz && gameState === 'playing') {
+    if (puz && isPlaying) {
       setAssign(puz.solution.slice());
-      setGameState('gaveUp');
+      giveUp();
     }
   };
 
@@ -250,13 +251,13 @@ export default function Galaxies() {
           labels={Object.fromEntries(DIFFICULTIES.map(d => [d.code, d.label]))}
         />
         <div className={styles.group}>
-          <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
+          <button className={styles.generateBtn} onClick={generateNew}>{t('common.newPuzzle')}</button>
           {puz && gameState === 'playing' && (
-            <button className={styles.button} onClick={() => setAssign(new Array(puz.w * puz.h).fill(-1))}>Clear</button>
+            <button className={styles.button} onClick={() => setAssign(new Array(puz.w * puz.h).fill(-1))}>{t('common.clear')}</button>
           )}
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
         </div>
         {puz && gameState === 'playing' && (
@@ -278,10 +279,10 @@ export default function Galaxies() {
             </div>
           </div>
         )}
-        {gameState === 'solved' && (
+        {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Solved!"
+            title={t('gameStatus.solved')}
             variant="inline"
           />
         )}
@@ -309,8 +310,7 @@ export default function Galaxies() {
             {Array.from({ length: puz.w * puz.h }, (_, i) => {
               const g = assign[i];
               const { r, c } = idxToRC(i, puz.w);
-              const bg = g >= 0 ? COLORS[g % COLORS.length] : 'rgba(255,255,255,0.06)';
-              const style = { background: bg };
+              const style = g >= 0 ? { background: COLORS[g % COLORS.length] } : {};
 
               // Find cell-center dot at this position (r+0.5, c+0.5)
               const cellDot = puz.dots.find(d =>

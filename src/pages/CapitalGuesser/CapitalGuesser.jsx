@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -30,6 +31,7 @@ export function buildRound(deps = defaultDeps) {
 }
 
 export default function CapitalGuesser() {
+  const { t } = useTranslation();
   const [mode, setMode] = useState(null); // 'endless', 'challenge'
   const [currentCountry, setCurrentCountry] = useState(null);
   const [options, setOptions] = useState([]);
@@ -193,17 +195,17 @@ export default function CapitalGuesser() {
           {mode === 'challenge' && (
             <>
               <span className={styles.modeBadge}>Challenge</span>
-              <span className={styles.roundInfo}>Round {round}/{TOTAL_ROUNDS}</span>
+              <span className={styles.roundInfo}>{t('common.round')} {round}/{TOTAL_ROUNDS}</span>
             </>
           )}
           {mode === 'endless' && (
             <>
               <span className={styles.modeBadge}>Endless</span>
-              <span className={styles.roundInfo}>Round {round}</span>
+              <span className={styles.roundInfo}>{t('common.round')} {round}</span>
             </>
           )}
           {(mode === 'challenge' || mode === 'endless') && (
-            <span className={styles.scoreInfo}>Score: {score}</span>
+            <span className={styles.scoreInfo}>{t('gameStatus.score')}: {score}</span>
           )}
           {streak > 1 && <span className={styles.streakBadge}>🔥 {streak} streak</span>}
         </div>

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Map.module.css';
 
@@ -217,7 +218,7 @@ export default function MapGame() {
           >
             Clear
           </button>
-          <button className={styles.button} onClick={() => setAssign(puz.solutionColors.slice())}>Reveal</button>
+          <button className={styles.button} onClick={() => setAssign(puz.solutionColors.slice())}>{t('common.reveal')}</button>
         </div>
 
         <div className={styles.group}>
@@ -238,7 +239,7 @@ export default function MapGame() {
         </div>
 
         <div className={styles.status}>
-          {solved ? <span className={styles.win}>Solved!</span> : (bad.size ? <span className={styles.bad}>Conflict</span> : <span>OK</span>)}
+          {solved ? <span className={styles.win}>{t('gameStatus.solved')}</span> : (bad.size ? <span className={styles.bad}>{t('gameStatus.conflict')}</span> : <span>{t('common.ok')}</span>)}
         </div>
       </div>
 

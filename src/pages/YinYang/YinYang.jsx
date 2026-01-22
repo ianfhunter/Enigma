@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './YinYang.module.css';
 import yinyangPuzzles from '../../../public/datasets/yinyangPuzzles.json';
 
@@ -167,9 +169,9 @@ export default function YinYang() {
   const [sizeKey, setSizeKey] = useState('6x6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [whiteMode, setWhiteMode] = useState(false); // Mobile white mode
 
   const availableSizes = useMemo(() => getAvailableSizes(difficulty), [difficulty]);
@@ -202,9 +204,9 @@ export default function YinYang() {
     const data = parseDatasetPuzzle(selected);
     setPuzzleData(data);
     setGrid(data.puzzle.map(row => [...row]));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty, sizeKey]);
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -213,18 +215,16 @@ export default function YinYang() {
   const size = puzzleData?.rows || 6;
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(grid, size) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.solution, size)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors, size]);
+    checkWin(checkSolved(grid, puzzleData.solution, size));
+  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.puzzle[r][c] !== null) return; // Can't change given cells
 
     const isWhiteAction = e.type === 'contextmenu' || e.ctrlKey || whiteMode;
@@ -249,13 +249,13 @@ export default function YinYang() {
 
   const handleReset = () => {
     setGrid(puzzleData.puzzle.map(row => [...row]));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -355,7 +355,7 @@ export default function YinYang() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './ModeSelector.module.css';
 
 /**
@@ -16,13 +17,15 @@ export default function ModeSelector({
   className = '',
   variant = 'buttons',
 }) {
+  const { t } = useTranslation();
+
   if (modes.length === 0) return null;
 
   return (
     <div
       className={`${styles.selector} ${styles[variant]} ${className}`}
       role="group"
-      aria-label="Game mode selector"
+      aria-label={t('common.gameModeSelector')}
     >
       {modes.map((mode) => {
         const isActive = value === mode.id;
@@ -42,7 +45,7 @@ export default function ModeSelector({
             onClick={() => !isDisabled && onChange(mode.id)}
             disabled={isDisabled}
             aria-pressed={isActive}
-            aria-label={`${mode.label}${isCompleted ? ', completed' : ''}${isDisabled ? ', unavailable' : ''}`}
+            aria-label={`${mode.label}${isCompleted ? `, ${t('common.completed')}` : ''}${isDisabled ? `, ${t('common.unavailable')}` : ''}`}
           >
             {mode.icon && <span className={styles.icon} aria-hidden="true">{mode.icon}</span>}
             <span className={styles.label}>{mode.label}</span>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import {
@@ -49,6 +50,7 @@ const MIN_VOWELS = 3;
 const MIN_CONSONANTS = 4;
 
 export default function CountdownLetters() {
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState('selecting'); // 'selecting', 'playing', 'finished'
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [vowelPool, setVowelPool] = useState([]);
@@ -263,9 +265,9 @@ export default function CountdownLetters() {
           {gameState === 'selecting' && (
             <div className={styles.selectionPanel}>
               <div className={styles.selectionInfo}>
-                <span>Vowels: {vowelCount}</span>
-                <span>Consonants: {consonantCount}</span>
-                <span>Remaining: {remainingPicks}</span>
+                <span>{t('common.vowels')}: {vowelCount}</span>
+                <span>{t('common.consonants')}: {consonantCount}</span>
+                <span>{t('common.remaining')}: {remainingPicks}</span>
               </div>
 
               <div className={styles.selectionButtons}>
@@ -320,7 +322,7 @@ export default function CountdownLetters() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 className={styles.wordInput}
-                placeholder="Type your word..."
+                placeholder={t('common.typeWord')}
                 autoComplete="off"
                 autoCapitalize="characters"
               />
@@ -357,7 +359,7 @@ export default function CountdownLetters() {
           {gameState === 'finished' && (
             <div className={styles.resultArea}>
               <div className={styles.finalScore}>
-                <div className={styles.scoreLabel}>Your Score</div>
+                <div className={styles.scoreLabel}>{t('common.yourScore')}</div>
                 <div className={styles.scoreValue}>{calculateScore()}</div>
                 {submittedWord && (
                   <div className={styles.yourWord}>
@@ -377,13 +379,13 @@ export default function CountdownLetters() {
         <div className={styles.sidePanel}>
           {gameState === 'selecting' && (
             <div className={styles.rulesPanel}>
-              <h4>How to Play</h4>
+              <h4>{t('common.howToPlay')}</h4>
               <ul>
-                <li>Pick <strong>9 letters</strong> - vowels or consonants</li>
-                <li>You must have at least <strong>3 vowels</strong></li>
-                <li>You must have at least <strong>4 consonants</strong></li>
-                <li>You have <strong>30 seconds</strong> to find the longest word</li>
-                <li>Longer words = more points!</li>
+                <li>{t('countdownLetters.rule1')}</li>
+                <li>{t('countdownLetters.rule2')}</li>
+                <li>{t('countdownLetters.rule3')}</li>
+                <li>{t('countdownLetters.rule4')}</li>
+                <li>{t('countdownLetters.rule5')}</li>
                 <li>9-letter words score <strong>18 points</strong> (double!)</li>
               </ul>
             </div>
@@ -392,9 +394,9 @@ export default function CountdownLetters() {
           {gameState === 'playing' && (
             <div className={styles.scorePanel}>
               <div className={styles.scoreItem}>
-                <span className={styles.scoreLabelSmall}>Current Word</span>
+                <span className={styles.scoreLabelSmall}>{t('common.currentWord')}</span>
                 <span className={styles.scoreValueBig}>{currentWord.length || '-'}</span>
-                <span className={styles.scoreLabelSmall}>letters</span>
+                <span className={styles.scoreLabelSmall}>{t('common.letters')}</span>
               </div>
               {submittedWord && (
                 <div className={styles.scoreItem}>
@@ -434,7 +436,7 @@ export default function CountdownLetters() {
 
               {showAllWords && (
                 <div className={styles.allWordsPanel}>
-                  <h4>All Valid Words</h4>
+                  <h4>{t('common.allValidWords')}</h4>
                   <div className={styles.wordsByLength}>
                     {Object.entries(
                       allValidWords.reduce((acc, word) => {

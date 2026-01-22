@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './WordArithmetic.module.css';
 import {
   generatePuzzle,
@@ -11,41 +13,42 @@ import {
 } from './logic';
 
 export default function WordArithmetic() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [letterMap, setLetterMap] = useState({});
   const [selectedLetter, setSelectedLetter] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const initGame = useCallback(() => {
     const data = generatePuzzle();
     setPuzzleData(data);
     setLetterMap({});
     setSelectedLetter(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? getErrors(puzzleData, letterMap) : new Set();
     setErrors(newErrors);
 
     if (checkSolution(puzzleData, letterMap)) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [letterMap, puzzleData, showErrors]);
+  }, [letterMap, puzzleData, showErrors, isPlaying, checkWin]);
 
   // Keyboard input handler
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (gameState !== 'playing') return;
+      if (!isPlaying) return;
 
       // Handle digit keys 0-9
       if (e.key >= '0' && e.key <= '9') {
@@ -108,9 +111,9 @@ export default function WordArithmetic() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setLetterMap({ ...puzzleData.solution });
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -252,13 +255,13 @@ export default function WordArithmetic() {
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={() => {
             setLetterMap({});
-            setGameState('playing');
+            resetGameState();
           }}>
             Reset
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

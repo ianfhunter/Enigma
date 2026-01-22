@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PokemonGenBlitz.module.css';
@@ -28,6 +29,7 @@ export {
 };
 
 export default function PokemonGenBlitz() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [gen, setGen] = useState(1);
   const [seconds, setSeconds] = useState(120);

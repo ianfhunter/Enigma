@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './KillerSudoku.module.css';
 
 const GRID_SIZE = 9;
@@ -176,15 +178,16 @@ export {
 };
 
 export default function KillerSudoku() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [notes, setNotes] = useState({});
   const [selectedCell, setSelectedCell] = useState(null);
   const [notesMode, setNotesMode] = useState(false);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -220,7 +223,7 @@ export default function KillerSudoku() {
       setGrid(puzzleGrid.map(row => [...row]));
       setNotes({});
       setSelectedCell(null);
-      setGameState('playing');
+      resetGameState();
       setErrors(new Set());
       setTimer(0);
       setIsRunning(true);
@@ -236,31 +239,30 @@ export default function KillerSudoku() {
   }, [initGame]);
 
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(t => t + 1);
       }, 1000);
     }
     return () => clearInterval(timerRef.current);
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const gridSize = puzzleData.size;
     const newErrors = showErrors ? checkValidity(grid, puzzleData.cages, gridSize) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.solution)) {
-      setGameState('won');
+    if (checkWin(checkSolved(grid, puzzleData.solution))) {
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors]);
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   // Keyboard input
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
       const [r, c] = selectedCell;
       const gridSize = puzzleData?.size || GRID_SIZE;
 
@@ -306,12 +308,12 @@ export default function KillerSudoku() {
   }, [selectedCell, gameState, notesMode, puzzleData]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setSelectedCell([r, c]);
   };
 
   const handleNumberClick = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const [r, c] = selectedCell;
 
     if (notesMode) {
@@ -341,19 +343,19 @@ export default function KillerSudoku() {
     setGrid(initialGrid);
     setNotes({});
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setTimer(0);
     setIsRunning(true);
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     // Deep copy the solution
     const solution = puzzleData.solution.map(row => [...row]);
     setGrid(solution);
     setSelectedCell(null);
-    setGameState('gave_up');
+    giveUp();
     setIsRunning(false);
   };
 
@@ -451,11 +453,11 @@ export default function KillerSudoku() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="Puzzle Solved!"
+            title={t('gameStatus.solved')}
             message={`Time: ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
           />
         )}
-        {gameState === 'gave_up' && (
+        {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
             title="Solution Revealed"
@@ -486,7 +488,7 @@ export default function KillerSudoku() {
               key={num}
               className={styles.numberBtn}
               onClick={() => handleNumberClick(num)}
-              disabled={gameState !== 'playing'}
+              disabled={!isPlaying}
             >
               {num}
             </button>
@@ -498,7 +500,7 @@ export default function KillerSudoku() {
               newGrid[selectedCell[0]][selectedCell[1]] = 0;
               return newGrid;
             })}
-            disabled={gameState !== 'playing' || !selectedCell}
+            disabled={!isPlaying || !selectedCell}
           >
             ✕
           </button>
@@ -510,7 +512,7 @@ export default function KillerSudoku() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

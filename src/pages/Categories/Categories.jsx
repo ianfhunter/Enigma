@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
+import { useGameState } from '../../hooks/useGameState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Categories.module.css';
 
@@ -87,12 +89,13 @@ function getSeedFromUrl() {
 }
 
 export default function Categories() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [seed, setSeed] = useState(null);
   const [selectedWords, setSelectedWords] = useState([]);
   const [solvedCategories, setSolvedCategories] = useState([]);
   const [mistakes, setMistakes] = useState(0);
-  const [gameState, setGameState] = useState('playing'); // playing, won, lost
+  const { gameState, checkWin, lose, giveUp, reset: resetGameState, isPlaying, isWon, isGaveUp } = useGameState();
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [shakingWords, setShakingWords] = useState([]);
@@ -109,12 +112,12 @@ export default function Categories() {
     setSelectedWords([]);
     setSolvedCategories([]);
     setMistakes(0);
-    setGameState('playing');
+    resetGameState();
     setMessage('');
     setMessageType('');
     setShakingWords([]);
     setRemainingWords(newPuzzle.words.map(w => w.word));
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -122,14 +125,14 @@ export default function Categories() {
 
   // Check for win/lose conditions
   useEffect(() => {
-    if (!puzzle) return;
+    if (!puzzle || !isPlaying) return;
 
     if (solvedCategories.length === 4) {
-      setGameState('won');
+      checkWin(true);
       setMessage('Perfect! You found all connections!');
       setMessageType('win');
     } else if (mistakes >= MAX_MISTAKES) {
-      setGameState('lost');
+      lose();
       setMessage('Game Over! Better luck next time.');
       setMessageType('lose');
       // Reveal remaining categories
@@ -138,13 +141,13 @@ export default function Categories() {
       );
       setSolvedCategories([...solvedCategories, ...remaining]);
     }
-  }, [solvedCategories, mistakes, puzzle]);
+  }, [solvedCategories, mistakes, puzzle, isPlaying, checkWin, lose]);
 
   const showTemporaryMessage = (msg, type, duration = 2000) => {
     setMessage(msg);
     setMessageType(type);
     setTimeout(() => {
-      if (gameState === 'playing') {
+      if (isPlaying) {
         setMessage('');
         setMessageType('');
       }
@@ -152,7 +155,7 @@ export default function Categories() {
   };
 
   const handleWordClick = (word) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (!remainingWords.includes(word)) return;
 
     if (selectedWords.includes(word)) {
@@ -164,7 +167,7 @@ export default function Categories() {
 
   const handleSubmit = () => {
     if (selectedWords.length !== WORDS_PER_CATEGORY) return;
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     // Check if all selected words belong to the same category
     const wordCategories = selectedWords.map(word => {
@@ -205,7 +208,7 @@ export default function Categories() {
   };
 
   const handleShuffle = () => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const seed = Date.now();
     const random = createSeededRandom(seed);
@@ -214,14 +217,14 @@ export default function Categories() {
   };
 
   const handleGiveUp = () => {
-    if (gameState !== 'playing' || !puzzle) return;
+    if (!isPlaying || !puzzle) return;
     // Reveal all unsolved categories
     const unsolved = puzzle.categories.filter(
       cat => !solvedCategories.some(s => s.id === cat.id)
     );
     setSolvedCategories([...solvedCategories, ...unsolved]);
     setRemainingWords([]);
-    setGameState('gaveUp');
+    giveUp();
     setMessage('Solution Revealed');
     setMessageType('gaveUp');
   };
@@ -238,7 +241,7 @@ export default function Categories() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

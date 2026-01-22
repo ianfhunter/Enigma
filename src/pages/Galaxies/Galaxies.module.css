@@ -16,17 +16,17 @@
 .group { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
 
 .button {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--btn-secondary-border);
   border-radius: 12px;
   padding: 0.45rem 0.7rem;
-  color: rgba(255,255,255,0.92);
+  color: var(--btn-secondary-text);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .button:hover {
-  background: rgba(255,255,255,0.15);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .button.active {
@@ -58,7 +58,7 @@
   box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
 }
 
-.status { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+.status { font-size: 0.95rem; color: var(--color-text-secondary); }
 .win { color: #22c55e; font-weight: 700; }
 .bad { color: #fb7185; font-weight: 700; }
 .gaveUp { color: #f59e0b; font-weight: 600; }
@@ -95,10 +95,10 @@
   width: 24px;
   height: 24px;
   border-radius: 8px;
-  border: 2px solid rgba(255,255,255,0.20);
+  border: 2px solid var(--color-border);
   cursor: pointer;
 }
-.swatch.active { outline: 2px solid rgba(255,255,255,0.95); outline-offset: 2px; }
+.swatch.active { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
 .regionCount {
   font-size: 0.8rem;
@@ -150,8 +150,8 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--game-cell-border);
+  background: var(--game-cell-bg);
   cursor: pointer;
   position: relative;
   overflow: hidden;

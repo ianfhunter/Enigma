@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './Timer.module.css';
 
 /**
@@ -40,13 +41,15 @@ export default function Timer({
   size = 'default',
   running = false,
 }) {
+  const { t } = useTranslation();
   const formattedTime = formatTime(seconds, format);
+  const displayLabel = label !== undefined ? label : t('common.time');
 
   return (
     <div
       className={`${styles.timer} ${styles[size]} ${running ? styles.running : ''} ${className}`}
       role="timer"
-      aria-label={`${label || 'Time'}: ${formattedTime}`}
+      aria-label={`${displayLabel}: ${formattedTime}`}
     >
       {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
       <span className={styles.time}>{formattedTime}</span>

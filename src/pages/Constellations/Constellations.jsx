@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -234,6 +235,7 @@ const ConstellationCanvas = ({ constellation, revealed }) => {
 };
 
 export default function Constellations() {
+  const { t } = useTranslation();
   const [constellations, setConstellations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState(null);
@@ -452,7 +454,7 @@ export default function Constellations() {
   if (!currentConstellation || !questionType) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading constellation...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

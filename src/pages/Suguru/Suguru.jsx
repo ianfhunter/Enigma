@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatTime } from '../../data/wordUtils';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import Timer from '../../components/Timer';
+import { useGameState } from '../../hooks/useGameState';
 import puzzleDataset from '@datasets/suguruPuzzles_bundled.json';
 import styles from './Suguru.module.css';
 
@@ -127,13 +129,14 @@ function getRegionBorders(r, c, regionGrid, size) {
 }
 
 export default function Suguru() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('6×6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'gave_up'
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const timerRef = useRef(null);
@@ -157,28 +160,28 @@ export default function Suguru() {
       setPuzzleData(data);
       setGrid(data.puzzle.map(row => [...row]));
       setSelectedCell(null);
-      setGameState('playing');
+      resetGameState();
       setErrors(new Set());
       setTimer(0);
       setIsRunning(true);
     }
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(t => t + 1);
       }, 1000);
     }
     return () => clearInterval(timerRef.current);
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     // Prevent validation when grid size doesn't match current size (during size transitions)
     if (grid.length !== size || puzzleData.regionGrid.length !== size) return;
@@ -188,20 +191,19 @@ export default function Suguru() {
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.solution, size)) {
-      setGameState('won');
+    if (checkWin(checkSolved(grid, puzzleData.solution, size))) {
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, size]);
+  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.puzzle[r][c] !== 0) return; // Can't edit given numbers
     setSelectedCell({ row: r, col: c });
   };
 
   const handleNumberInput = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { row, col } = selectedCell;
     if (puzzleData.puzzle[row][col] !== 0) return;
 
@@ -217,7 +219,7 @@ export default function Suguru() {
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { row, col } = selectedCell;
     if (puzzleData.puzzle[row][col] !== 0) return;
 
@@ -230,7 +232,7 @@ export default function Suguru() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
 
       const num = parseInt(e.key);
       if (num >= 1 && num <= 9) {
@@ -242,7 +244,7 @@ export default function Suguru() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCell, gameState]);
+  }, [selectedCell, isPlaying]);
 
   if (!puzzleData) return null;
 
@@ -346,7 +348,7 @@ export default function Suguru() {
           />
         )}
 
-        {gameState === 'gave_up' && (
+        {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
             title="Solution Revealed"
@@ -369,7 +371,7 @@ export default function Suguru() {
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={() => {
             setGrid(puzzleData.puzzle.map(row => [...row]));
-            setGameState('playing');
+            resetGameState();
             setTimer(0);
             setIsRunning(true);
           }}>
@@ -378,10 +380,10 @@ export default function Suguru() {
           <GiveUpButton
             onGiveUp={() => {
               setGrid(puzzleData.solution);
-              setGameState('gave_up');
+              giveUp();
               setIsRunning(false);
             }}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

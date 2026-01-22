@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Pegs.module.css';
 
@@ -102,7 +103,7 @@ export default function Pegs() {
       <div className={styles.toolbar}>
         <button className={styles.button} onClick={reset}>New</button>
         <div className={styles.stats}>
-          <span><strong>Pegs:</strong> {pegsLeft}</span>
+          <span><strong>{t('common.pegs')}:</strong> {pegsLeft}</span>
           {won && <span className={styles.win}>One peg left!</span>}
           {!won && !anyMoves && <span className={styles.lose}>No moves</span>}
         </div>

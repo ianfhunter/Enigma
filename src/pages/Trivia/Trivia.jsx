@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import StatsPanel from '../../components/StatsPanel';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -102,6 +103,7 @@ export {
 };
 
 export default function Trivia() {
+  const { t } = useTranslation();
   const [mode, setMode] = useState(null);
   const [category, setCategory] = useState('all');
   const [questions, setQuestions] = useState([]);
@@ -217,7 +219,7 @@ export default function Trivia() {
 
         <div className={styles.menuArea}>
           <div className={styles.categorySection}>
-            <h2 className={styles.sectionTitle}>Select Category</h2>
+            <h2 className={styles.sectionTitle}>{t('common.selectCategory')}</h2>
             <div className={styles.categoryGrid}>
               {CATEGORIES.map(cat => (
                 <button
@@ -235,7 +237,7 @@ export default function Trivia() {
           </div>
 
           <div className={styles.modeSection}>
-            <h2 className={styles.sectionTitle}>Game Mode</h2>
+            <h2 className={styles.sectionTitle}>{t('common.gameMode')}</h2>
             <div className={styles.modeCards}>
               <button className={styles.modeCard} onClick={() => startGame('challenge', category)}>
                 <span className={styles.modeIcon}>🏆</span>
@@ -334,12 +336,12 @@ export default function Trivia() {
             {catInfo.icon} {catInfo.name}
           </span>
           {mode === 'challenge' && (
-            <span className={styles.roundInfo}>Question {currentIndex + 1}/{TOTAL_ROUNDS}</span>
+            <span className={styles.roundInfo}>{t('common.question')} {currentIndex + 1}/{TOTAL_ROUNDS}</span>
           )}
           {mode === 'endless' && (
-            <span className={styles.roundInfo}>Question {currentIndex + 1}</span>
+            <span className={styles.roundInfo}>{t('common.question')} {currentIndex + 1}</span>
           )}
-          <span className={styles.scoreInfo}>Score: {score}</span>
+          <span className={styles.scoreInfo}>{t('gameStatus.score')}: {score}</span>
           {streak > 1 && <span className={styles.streakBadge}>🔥 {streak} streak</span>}
         </div>
       </div>

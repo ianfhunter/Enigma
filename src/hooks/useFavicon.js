@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getGameEmojiIcon, defaultIcon, getGameBySlug } from '../data/gameRegistry';
 
-const logo = '/branding/logo.svg';
+const logo = '/branding/logo-simple-e.svg';
 
 // Convert emoji to favicon SVG data URL
 function emojiToFavicon(emoji) {

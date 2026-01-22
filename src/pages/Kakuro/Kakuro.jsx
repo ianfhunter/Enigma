@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatTime, createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
@@ -7,6 +8,7 @@ import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
+import { useGameState } from '../../hooks/useGameState';
 import { selectPuzzleFromDataset, notesToJSON, notesFromJSON } from '../../utils/generatorUtils';
 import styles from './Kakuro.module.css';
 
@@ -40,6 +42,7 @@ export {
 
 
 export default function Kakuro() {
+  const { t } = useTranslation();
   const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzle, setPuzzle] = useState(null);
@@ -49,8 +52,8 @@ export default function Kakuro() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [gameState, setGameState] = useState('playing');
-  const [showErrors, setShowErrors] = useState(true);
+  const { gameState, setGameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const [showErrors, setShowErrors] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(null);
   const [seed, setSeed] = useState(null);
@@ -103,11 +106,11 @@ export default function Kakuro() {
     setPlayerValues({});
     setNotes({});
     setTimer(0);
-    setGameState('playing');
+    resetGameState();
     setDifficulty(newDifficulty);
     setSelectedCell(null);
     setIsLoaded(true);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     initPuzzle();
@@ -132,7 +135,7 @@ export default function Kakuro() {
 
   // Timer
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(prev => prev + 1);
       }, 1000);
@@ -140,17 +143,17 @@ export default function Kakuro() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (isLoaded && gameState === 'playing') {
+    if (isLoaded && isPlaying) {
       setIsRunning(true);
     }
-  }, [isLoaded, gameState]);
+  }, [isLoaded, isPlaying]);
 
   // Check for win
   useEffect(() => {
-    if (!puzzle || gameState === 'won' || gameState === 'gaveUp') return;
+    if (!puzzle || !isPlaying) return;
 
     const { grid, solution } = puzzle;
     if (!solution) return;
@@ -170,9 +173,9 @@ export default function Kakuro() {
       }
     }
 
-    setGameState('won');
+    checkWin(true);
     setIsRunning(false);
-  }, [playerValues, puzzle, gameState]);
+  }, [playerValues, puzzle, isPlaying, checkWin]);
 
   const handleCellClick = (row, col) => {
     if (gameState === 'won' || gameState === 'gaveUp') return;
@@ -285,7 +288,7 @@ export default function Kakuro() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzle || gameState !== 'playing') return;
+    if (!puzzle || !isPlaying) return;
 
     // Fill in all values from solution
     const newValues = {};
@@ -297,7 +300,7 @@ export default function Kakuro() {
       }
     }
     setPlayerValues(newValues);
-    setGameState('gaveUp');
+    giveUp();
     setIsRunning(false);
   };
 
@@ -305,7 +308,7 @@ export default function Kakuro() {
     return (
       <div className={styles.container}>
         <div className={styles.error}>{loadError}</div>
-        <button onClick={() => window.location.reload()}>Retry</button>
+        <button onClick={() => window.location.reload()}>{t('common.retry')}</button>
       </div>
     );
   }
@@ -313,7 +316,7 @@ export default function Kakuro() {
   if (!isLoaded || !puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -362,7 +365,7 @@ export default function Kakuro() {
               checked={showErrors}
               onChange={(e) => setShowErrors(e.target.checked)}
             />
-            <span className={styles.toggleLabel}>Show Errors</span>
+            <span className={styles.toggleLabel}>{t('common.showErrors')}</span>
           </label>
         </div>
 
@@ -461,8 +464,8 @@ export default function Kakuro() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message={`Completed in ${formatTime(timer)}`}
+            title={t('gameStatus.solved')}
+            message={t('common.completedIn', { time: formatTime(timer) })}
           />
         )}
 
@@ -476,7 +479,7 @@ export default function Kakuro() {
         <div className={styles.buttonRow}>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button
             className={styles.newGameBtn}

@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { getConnectedRegion, cellKey } from '../../utils/generatorUtils';
 import styles from './Fillomino.module.css';
 
@@ -72,6 +74,7 @@ function checkSolved(grid) {
 }
 
 export default function Fillomino() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('7×7');
   const [difficulty, setDifficulty] = useState('easy');
   const [allPuzzles, setAllPuzzles] = useState([]);
@@ -79,9 +82,9 @@ export default function Fillomino() {
   const [grid, setGrid] = useState([]);
   const [fixed, setFixed] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const size = GRID_SIZES[sizeKey];
@@ -133,9 +136,9 @@ export default function Fillomino() {
     setGrid(cluesGrid.map(row => [...row]));
     setFixed(cluesGrid.map(row => row.map(cell => cell !== null)));
     setSelected(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [allPuzzles, size, difficulty]);
+  }, [allPuzzles, size, difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading && allPuzzles.length > 0) {
@@ -144,20 +147,18 @@ export default function Fillomino() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(grid) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors]);
+    checkWin(checkSolved(grid));
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   // Keyboard input for numbers
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selected || gameState !== 'playing') return;
+      if (!selected || !isPlaying) return;
       const [r, c] = selected;
       if (fixed[r][c]) return;
 
@@ -200,12 +201,12 @@ export default function Fillomino() {
   }, [selected, gameState, fixed, size, puzzleData]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || fixed[r][c]) return;
+    if (!isPlaying || fixed[r][c]) return;
     setSelected([r, c]);
   };
 
   const handleNumberClick = (num) => {
-    if (!selected || gameState !== 'playing') return;
+    if (!selected || !isPlaying) return;
     const [r, c] = selected;
     if (fixed[r][c]) return;
 
@@ -220,21 +221,21 @@ export default function Fillomino() {
     if (!puzzleData) return;
     setGrid(puzzleData.puzzle.map(row => [...row]));
     setSelected(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     setSelected(null);
-    setGameState('gave_up');
+    giveUp();
   };
 
   if (loading) {
     return (
       <div className={styles.container}>
         <GameHeader title="Fillomino" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -300,13 +301,13 @@ export default function Fillomino() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="All regions complete!"
+            title={t('gameStatus.solved')}
+            message={t('common.allRegionsComplete', 'All regions complete!')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
 
-        {gameState === 'gave_up' && (
+        {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
             message="Better luck next time!"
@@ -320,7 +321,7 @@ export default function Fillomino() {
               key={num}
               className={styles.numberBtn}
               onClick={() => handleNumberClick(num)}
-              disabled={gameState !== 'playing'}
+              disabled={!isPlaying}
             >
               {num}
             </button>
@@ -332,7 +333,7 @@ export default function Fillomino() {
               newGrid[selected[0]][selected[1]] = null;
               return newGrid;
             })}
-            disabled={gameState !== 'playing' || !selected}
+            disabled={!isPlaying || !selected}
           >
             ✕
           </button>
@@ -356,7 +357,7 @@ export default function Fillomino() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

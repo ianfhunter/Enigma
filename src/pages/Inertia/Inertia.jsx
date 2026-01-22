@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Inertia.module.css';
 
@@ -313,7 +314,7 @@ export default function Inertia() {
 
       <div className={styles.toolbar}>
         <div className={styles.group}>
-          <label>Size:</label>
+          <label>{t('common.size')}:</label>
           {SIZES.map((s) => (
             <button
               key={s}
@@ -327,7 +328,7 @@ export default function Inertia() {
           ))}
         </div>
         <div className={styles.group}>
-          <label>Difficulty:</label>
+          <label>{t('common.difficulty')}:</label>
           {DIFFICULTIES.map((d) => (
             <button
               key={d}
@@ -342,26 +343,26 @@ export default function Inertia() {
         </div>
         <div className={styles.group}>
           <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
-          <button className={styles.button} onClick={reset}>Reset</button>
-          <button className={styles.button} onClick={undo} disabled={cursor === 0}>Undo</button>
+          <button className={styles.button} onClick={reset}>{t('common.reset')}</button>
+          <button className={styles.button} onClick={undo} disabled={cursor === 0}>{t('common.undo')}</button>
           <button className={styles.button} onClick={redo} disabled={cursor === history.length - 1}>Redo</button>
         </div>
 
         <div className={styles.status}>
-          {won && <span className={styles.win}>Solved!</span>}
+          {won && <span className={styles.win}>{t('gameStatus.solved')}</span>}
           {!won && state.dead && <span className={styles.dead}>Boom. (Undo to continue)</span>}
           {!won && !state.dead && <span>Gems remaining: {remaining}</span>}
         </div>
       </div>
 
       {loading && (
-        <div className={styles.status}>Generating puzzle...</div>
+        <div className={styles.status}>{t('common.generatingPuzzle')}</div>
       )}
 
       {error && (
         <div className={styles.status} style={{ color: 'red' }}>
           {error}
-          <button onClick={generateNew} style={{ marginLeft: '10px' }}>Retry</button>
+          <button onClick={generateNew} style={{ marginLeft: '10px' }}>{t('common.retry')}</button>
         </div>
       )}
 

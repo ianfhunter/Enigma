@@ -89,6 +89,19 @@ function MyComponent() {
 <span>{t('common.viewAllResults', { count: 10 })}</span>
 ```
 
+### Using Difficulty/Mode Translations
+
+The selector components automatically use translation keys for common difficulties and modes:
+
+```jsx
+// DifficultySelector automatically translates 'easy' to t('difficulties.easy')
+<DifficultySelector
+  options={['easy', 'medium', 'hard', 'expert']}
+  value={difficulty}
+  onChange={setDifficulty}
+/>
+```
+
 ### Changing Language Programmatically
 
 ```jsx
@@ -109,19 +122,34 @@ function LanguageSwitcher() {
 
 | Section | Purpose |
 |---------|---------|
-| `common.*` | Shared UI elements (buttons, labels, etc.) |
+| `common.*` | Shared UI elements (buttons, labels, game controls) |
 | `header.*` | Header navigation elements |
 | `footer.*` | Footer content |
 | `home.*` | Home page specific |
 | `gameResult.*` | Win/lose/giveup screens |
 | `profile.*` | Profile page |
 | `settings.*` | Settings tab |
-| `gamesTab.*` | Games management tab |
-| `securityTab.*` | Security tab |
-| `adminTab.*` | Admin panel |
+| `games.*` | Games management tab |
+| `security.*` | Security tab |
+| `admin.*` | Admin panel |
 | `store.*` | Game store page |
 | `auth.*` | Login/register modals |
 | `loading.*` | Loading screen phrases |
+| `difficulties.*` | Difficulty level names (easy, medium, hard, expert) |
+| `modes.*` | Game mode names (daily, practice, endless, etc.) |
+
+### Common Section Keys
+
+The `common` section includes keys for:
+- **Loading states**: `loading`, `loadingPuzzle`
+- **Actions**: `giveUp`, `newGame`, `newPuzzle`, `playAgain`, `tryAgain`, `hint`, `check`, `submit`, `cancel`, `save`, `delete`, `edit`, `undo`, `clear`
+- **Navigation**: `back`, `backToGames`, `close`
+- **Confirmations**: `yes`, `no`, `ok`, `giveUpConfirm`, `areYouSure`
+- **Search**: `search`, `searchGames`, `noGamesFound`, `clearSearch`
+- **State indicators**: `enabled`, `disabled`, `comingSoon`, `playNow`, `completed`, `unavailable`
+- **Favourites**: `addToFavourites`, `removeFromFavourites`
+- **Seed/sharing**: `seed`, `copied`, `copySeed`, `shared`, `sharePuzzle`, `generateNewPuzzle`, `clickToEditSeed`, `enterSeedValue`, `checkOutThisPuzzle`, `tryThisPuzzle`
+- **Game UI**: `time`, `progress`, `settings`, `notes`, `showErrors`, `keyboardShortcuts`, `difficulty`, `difficultySelector`, `size`, `sizeSelector`, `gameMode`, `gameModeSelector`, `gameStatistics`
 
 ## Docker Configuration
 
@@ -164,9 +192,27 @@ docker build -t enigma .
 
 **Note**: Users can always change their language preference in Settings → Interface Language, regardless of the server default.
 
+## Components with i18n Support
+
+The following components have been updated to use translations:
+
+- **AuthModal** - Login/register forms, validation messages
+- **GameCard** - Play badges, favourite buttons
+- **GameHeader** - Back button text
+- **SeedDisplay** - Seed labels, copy/share tooltips
+- **DifficultySelector** - Difficulty labels, completed state
+- **SizeSelector** - Size labels
+- **ModeSelector** - Mode labels, completed/unavailable states
+- **Timer** - Time label
+- **StatsPanel** - Statistics aria-label
+- **GiveUpButton** - Button text and confirmation
+- **GameResult** - Win/lose/gaveup titles and messages
+- **Home** - Favourites section, custom/community badges, store promo
+- **Layout** - Header, footer, search, loading states
+
 ## Notes
 
-- **Game Content**: Game titles and descriptions in `gameRegistry.js` are not yet translated. These could be moved to translation files for full localization.
+- **Game Content**: Game titles and descriptions in pack manifests are not yet translated. These could be moved to translation files for full localization.
 - **Datasets**: Some puzzle datasets contain language-specific content (riddles, word games). Full localization of these would require language-specific datasets.
 - **Fallback**: If a translation key is missing, i18next will fall back to the configured default language (or English).
 - **Browser Detection**: The language detector tries localStorage first, then browser language settings, then falls back to the configured default.
@@ -178,6 +224,7 @@ To contribute a translation:
 1. Fork the repository
 2. Create the translation file
 3. Register the language in the config
-4. Submit a pull request
+4. Run tests to ensure completeness: `npm run test:run -- src/i18n/i18n.test.js`
+5. Submit a pull request
 
-Please ensure all keys from `en.json` are translated.
+Please ensure all keys from `en.json` are translated. The test suite verifies that both language files have matching keys.

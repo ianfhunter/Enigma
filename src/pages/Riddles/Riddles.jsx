@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import { createSeededRandom } from '../../data/wordUtils';
@@ -43,6 +44,7 @@ function selectRiddle(riddles, seed) {
 }
 
 export default function Riddles() {
+  const { t } = useTranslation();
   const [riddles, setRiddles] = useState(null);
   const [currentRiddle, setCurrentRiddle] = useState(null);
   const [revealed, setRevealed] = useState(false);
@@ -136,7 +138,7 @@ export default function Riddles() {
           showShare={false}
           onSeedChange={(newSeed) => {
             // Convert string seeds to numbers if needed
-            const seedNum = typeof newSeed === 'string' 
+            const seedNum = typeof newSeed === 'string'
               ? (isNaN(parseInt(newSeed, 10)) ? parseInt(newSeed, 10) : Date.now())
               : newSeed;
             initRiddle(seedNum);
@@ -169,7 +171,7 @@ export default function Riddles() {
 
           {revealed && (
             <div className={styles.answerSection}>
-              <h3 className={styles.answerLabel}>Answer</h3>
+              <h3 className={styles.answerLabel}>{t('common.answer')}</h3>
               <p className={styles.answerText}>{answer}</p>
             </div>
           )}

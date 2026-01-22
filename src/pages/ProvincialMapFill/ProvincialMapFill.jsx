@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import StatsPanel from '../../components/StatsPanel';
@@ -389,7 +390,7 @@ export default function ProvincialMapFill() {
             )}
 
             <div className={styles.completeActions}>
-              <button className={styles.playAgainBtn} onClick={startGame}>Play Again</button>
+              <button className={styles.playAgainBtn} onClick={startGame}>{t('common.playAgain')}</button>
               <button className={styles.changeRegionBtn} onClick={goBackToRegionSelect}>
                 Try Different Region
               </button>

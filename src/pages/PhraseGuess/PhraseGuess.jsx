@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { phraseGuessQuotes } from '@datasets/quotes';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import StatsPanel from '../../components/StatsPanel';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './PhraseGuess.module.css';
 
 const VOWELS = new Set(['A', 'E', 'I', 'O', 'U']);
@@ -27,10 +29,11 @@ export {
 };
 
 export default function PhraseGuess() {
+  const { t } = useTranslation();
   const [quote, setQuote] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, lose, reset: resetGameState, isPlaying } = useGameState();
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [showSolveModal, setShowSolveModal] = useState(false);
@@ -53,11 +56,11 @@ export default function PhraseGuess() {
     setQuote(selectedQuote);
     setGuessedLetters(new Set());
     setWrongGuesses(0);
-    setGameState('playing');
+    resetGameState();
     setShowSolveModal(false);
     setSolveAttempt('');
     setSolveBonus(0);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -65,7 +68,7 @@ export default function PhraseGuess() {
 
   // Check win/lose conditions
   useEffect(() => {
-    if (!quote || gameState !== 'playing') return;
+    if (!quote || !isPlaying) return;
 
     const phraseLetters = new Set(
       quote.text.toUpperCase().split('').filter(c => /[A-Z]/.test(c))
@@ -74,17 +77,17 @@ export default function PhraseGuess() {
     const allRevealed = [...phraseLetters].every(letter => guessedLetters.has(letter));
 
     if (allRevealed) {
-      setGameState('won');
+      checkWin(true);
       setScore(prev => prev + (MAX_WRONG_GUESSES - wrongGuesses) * 100);
       setStreak(prev => prev + 1);
     } else if (wrongGuesses >= MAX_WRONG_GUESSES) {
-      setGameState('lost');
+      lose();
       setStreak(0);
     }
-  }, [guessedLetters, wrongGuesses, quote, gameState]);
+  }, [guessedLetters, wrongGuesses, quote, isPlaying, checkWin, lose]);
 
   const handleGuess = (letter) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (guessedLetters.has(letter)) return;
 
     setGuessedLetters(prev => new Set([...prev, letter]));
@@ -100,7 +103,7 @@ export default function PhraseGuess() {
     if (showSolveModal) return;
 
     const letter = e.key.toUpperCase();
-    if (/^[A-Z]$/.test(letter) && gameState === 'playing') {
+    if (/^[A-Z]$/.test(letter) && isPlaying) {
       handleGuess(letter);
     }
   }, [gameState, guessedLetters, quote, showSolveModal]);
@@ -129,7 +132,7 @@ export default function PhraseGuess() {
   }, [quote, guessedLetters]);
 
   const handleSolveAttempt = () => {
-    if (!quote || gameState !== 'playing') return;
+    if (!quote || !isPlaying) return;
 
     const normalizedAttempt = normalizeForComparison(solveAttempt);
     const normalizedQuote = normalizeForComparison(quote.text);
@@ -145,11 +148,11 @@ export default function PhraseGuess() {
       setSolveBonus(bonus);
       setScore(prev => prev + baseScore + bonus);
       setStreak(prev => prev + 1);
-      setGameState('won');
+      checkWin(true);
       setShowSolveModal(false);
     } else {
       // Wrong! Game over
-      setGameState('lost');
+      lose();
       setShowSolveModal(false);
       setStreak(0);
     }
@@ -252,7 +255,7 @@ export default function PhraseGuess() {
   if (!quote) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

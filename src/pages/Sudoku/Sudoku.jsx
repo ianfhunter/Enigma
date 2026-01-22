@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createSeededRandom, seededShuffleArray, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
@@ -112,6 +113,7 @@ function generatePuzzle(difficulty = 'medium', seed = null) {
 
 
 export default function Sudoku() {
+  const { t } = useTranslation();
   const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [puzzles, setPuzzles] = useState({}); // { difficulty: { puzzle, solution, date, puzzleNumber } }
   const [playerState, setPlayerState] = useState({}); // { difficulty: { grid, notes, timer, isComplete } }
@@ -119,7 +121,7 @@ export default function Sudoku() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [notesMode, setNotesMode] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [errors, setErrors] = useState(new Set());
   const [history, setHistory] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -586,7 +588,7 @@ export default function Sudoku() {
   if (!isLoaded || !grid) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -601,10 +603,10 @@ export default function Sudoku() {
     <div className={styles.container}>
       <GameHeader
         title="Sudoku"
-        instructions={<>Fill the grid so each row, column, and 3×3 box contains the numbers <strong>1-9</strong>.</>}
+        instructions={<span dangerouslySetInnerHTML={{ __html: t('common.sudokuInstructions', 'Fill the grid so each row, column, and 3×3 box contains the numbers <strong>1-9</strong>.') }} />}
       >
         <p className={styles.dailyInfo}>
-          Daily Puzzle #{puzzleNumber} • {today}
+          {t('common.dailyPuzzle', { number: puzzleNumber, date: today })}
         </p>
       </GameHeader>
 
@@ -701,35 +703,35 @@ export default function Sudoku() {
             <button
               className={`${styles.actionBtn} ${notesMode ? styles.active : ''}`}
               onClick={() => setNotesMode(!notesMode)}
-              title="Toggle notes mode (N)"
+              title={t('common.toggleNotes')}
             >
               <span className={styles.actionIcon}>✏️</span>
-              Notes
+              {t('common.notes')}
             </button>
             <button
               className={styles.actionBtn}
               onClick={handleClear}
-              title="Clear cell (Delete)"
+              title={t('common.clearCell')}
             >
               <span className={styles.actionIcon}>⌫</span>
-              Clear
+              {t('common.clear')}
             </button>
             <button
               className={styles.actionBtn}
               onClick={handleUndo}
               disabled={history.length === 0}
-              title="Undo (Ctrl+Z)"
+              title={t('common.undo')}
             >
               <span className={styles.actionIcon}>↩️</span>
-              Undo
+              {t('common.undo')}
             </button>
             <button
               className={styles.actionBtn}
               onClick={handleHint}
-              title="Get a hint"
+              title={t('common.hint')}
             >
               <span className={styles.actionIcon}>💡</span>
-              Hint
+              {t('common.hint')}
             </button>
             <GiveUpButton
               onGiveUp={handleGiveUp}
@@ -742,7 +744,7 @@ export default function Sudoku() {
         <div className={styles.infoSection}>
           <div className={styles.progressPanel}>
             <div className={styles.progressInfo}>
-              <span className={styles.progressLabel}>Progress</span>
+              <span className={styles.progressLabel}>{t('common.progress')}</span>
               <span className={styles.progressValue}>{progress} / {total}</span>
             </div>
             <div className={styles.progressBar}>
@@ -756,21 +758,21 @@ export default function Sudoku() {
           {isComplete && (
             <GameResult
               state="won"
-              message={`You solved the ${difficulty} puzzle in ${formatTime(timer)}`}
-              actions={[{ label: 'New Puzzle', onClick: handleNewPuzzle, primary: true }]}
+              message={t('common.solvedIn', { difficulty: t(`difficulties.${difficulty}`), time: formatTime(timer) })}
+              actions={[{ label: t('common.newPuzzle'), onClick: handleNewPuzzle, primary: true }]}
             />
           )}
 
           {gaveUp && (
             <GameResult
               state="gaveup"
-              message="Better luck next time!"
-              actions={[{ label: 'Try Again', onClick: handleNewPuzzle, primary: true }]}
+              message={t('common.betterLuckNextTime')}
+              actions={[{ label: t('common.tryAgain'), onClick: handleNewPuzzle, primary: true }]}
             />
           )}
 
           <div className={styles.settingsPanel}>
-            <h3>Settings</h3>
+            <h3>{t('common.settings')}</h3>
             <label className={styles.toggle}>
               <input
                 type="checkbox"
@@ -778,18 +780,18 @@ export default function Sudoku() {
                 onChange={(e) => setShowErrors(e.target.checked)}
               />
               <span className={styles.toggleSlider}></span>
-              Show errors
+              {t('common.showErrors')}
             </label>
           </div>
 
           <div className={styles.helpPanel}>
-            <h3>Keyboard Shortcuts</h3>
+            <h3>{t('common.keyboardShortcuts')}</h3>
             <ul className={styles.shortcutList}>
-              <li><kbd>1-9</kbd> Enter number</li>
-              <li><kbd>Delete</kbd> Clear cell</li>
-              <li><kbd>N</kbd> Toggle notes</li>
-              <li><kbd>Ctrl+Z</kbd> Undo</li>
-              <li><kbd>Arrow keys</kbd> Navigate</li>
+              <li><kbd>1-9</kbd> {t('common.enterNumber')}</li>
+              <li><kbd>Delete</kbd> {t('common.clearCell')}</li>
+              <li><kbd>N</kbd> {t('common.toggleNotes')}</li>
+              <li><kbd>Ctrl+Z</kbd> {t('common.undo')}</li>
+              <li><kbd>Arrow keys</kbd> {t('common.navigate')}</li>
             </ul>
           </div>
 
@@ -797,7 +799,7 @@ export default function Sudoku() {
             className={styles.newGameBtn}
             onClick={handleNewPuzzle}
           >
-            New Puzzle
+            {t('common.newPuzzle')}
           </button>
         </div>
       </div>

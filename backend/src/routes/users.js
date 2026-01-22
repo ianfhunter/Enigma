@@ -162,7 +162,7 @@ router.delete('/account', async (req, res) => {
 // Get user settings
 router.get('/settings', (req, res) => {
   const settings = db.prepare(`
-    SELECT english_variant, theme, sound_enabled, disabled_games, game_preferences, search_engine
+    SELECT english_variant, theme, sound_enabled, disabled_games, game_preferences, search_engine, favourite_games, language
     FROM user_settings WHERE user_id = ?
   `).get(req.session.userId);
 
@@ -175,7 +175,9 @@ router.get('/settings', (req, res) => {
       soundEnabled: true,
       disabledGames: [],
       gamePreferences: {},
-      searchEngine: 'google'
+      searchEngine: 'google',
+      favouriteGames: [],
+      language: 'en'
     });
   }
 
@@ -185,13 +187,15 @@ router.get('/settings', (req, res) => {
     soundEnabled: Boolean(settings.sound_enabled),
     disabledGames: JSON.parse(settings.disabled_games || '[]'),
     gamePreferences: JSON.parse(settings.game_preferences || '{}'),
-    searchEngine: settings.search_engine || 'google'
+    searchEngine: settings.search_engine || 'google',
+    favouriteGames: JSON.parse(settings.favourite_games || '[]'),
+    language: settings.language || 'en'
   });
 });
 
 // Update user settings
 router.put('/settings', (req, res) => {
-  const { englishVariant, theme, soundEnabled, disabledGames, gamePreferences, searchEngine } = req.body;
+  const { englishVariant, theme, soundEnabled, disabledGames, gamePreferences, searchEngine, favouriteGames, language } = req.body;
 
   // Build update query dynamically based on what's provided
   const updates = [];
@@ -240,6 +244,22 @@ router.put('/settings', (req, res) => {
     }
     updates.push('search_engine = ?');
     values.push(searchEngine);
+  }
+
+  if (favouriteGames !== undefined) {
+    if (!Array.isArray(favouriteGames)) {
+      return res.status(400).json({ error: 'favouriteGames must be an array' });
+    }
+    updates.push('favourite_games = ?');
+    values.push(JSON.stringify(favouriteGames));
+  }
+
+  if (language !== undefined) {
+    if (typeof language !== 'string') {
+      return res.status(400).json({ error: 'language must be a string' });
+    }
+    updates.push('language = ?');
+    values.push(language);
   }
 
   if (updates.length === 0) {

@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Hashi.module.css';
 
 const GRID_SIZES = {
@@ -370,12 +372,13 @@ function checkSolved(islands, bridges) {
 }
 
 export default function Hashi() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('Small');
   const [puzzleData, setPuzzleData] = useState(null);
   const [bridges, setBridges] = useState(new Map());
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [selectedIsland, setSelectedIsland] = useState(null);
 
   const { size: gridSize, islands: numIslands } = GRID_SIZES[sizeKey];
@@ -384,28 +387,26 @@ export default function Hashi() {
     const data = generatePuzzle(gridSize, numIslands);
     setPuzzleData(data);
     setBridges(new Map());
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setSelectedIsland(null);
-  }, [gridSize, numIslands]);
+  }, [gridSize, numIslands, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.islands, bridges) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(puzzleData.islands, bridges)) {
-      setGameState('won');
-    }
-  }, [bridges, puzzleData, showErrors]);
+    checkWin(checkSolved(puzzleData.islands, bridges));
+  }, [bridges, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleIslandClick = (island) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     if (!selectedIsland) {
       setSelectedIsland(island);
@@ -511,14 +512,14 @@ export default function Hashi() {
 
   const handleReset = () => {
     setBridges(new Map());
-    setGameState('playing');
+    resetGameState();
     setSelectedIsland(null);
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setBridges(new Map(puzzleData.solution));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -638,8 +639,8 @@ export default function Hashi() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🌉 Puzzle Solved!"
-            message="All islands connected!"
+            title={t('gameStatus.solved')}
+            message={t('gameMessages.allIslandsConnected')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
@@ -670,7 +671,7 @@ export default function Hashi() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

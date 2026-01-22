@@ -12,7 +12,7 @@ import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import { allGames } from './data/gameRegistry';
 import { getGameBySlug } from './packs/registry';
-const logo = '/branding/logo.svg';
+const logo = '/branding/logo-animated-e.svg';
 import './index.css';
 
 /**
@@ -209,7 +209,9 @@ const LOADING_PHRASES = [
   "Warming Up",
 ];
 
-// Loading fallback component with spinning logo animation
+// Loading fallback component with animated logo
+const animatedLogo = '/branding/logo-animated-e.svg';
+
 function GameLoading() {
   const phrase = LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)];
 
@@ -222,74 +224,33 @@ function GameLoading() {
       minHeight: '50vh',
       gap: '2rem',
     }}>
-      {/* Spinning logo container */}
+      {/* Animated logo */}
       <div style={{
         position: 'relative',
-        width: '100px',
-        height: '100px',
-        perspective: '600px',
+        width: '120px',
+        height: '120px',
       }}>
         {/* Outer glow ring */}
         <div style={{
           position: 'absolute',
-          inset: '-15px',
+          inset: '-20px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)',
           animation: 'pulseGlow 2s ease-in-out infinite',
         }} />
 
-        {/* Logo wrapper with 3D rotation */}
-        <div style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          animation: 'logoSpin 3s cubic-bezier(0.4, 0, 0.2, 1) infinite',
-          transformStyle: 'preserve-3d',
-        }}>
-          <img
-            src={logo}
-            alt="Loading"
-            style={{
-              width: '80px',
-              height: 'auto',
-              filter: `
-                drop-shadow(0 0 12px rgba(139, 92, 246, 0.8))
-                drop-shadow(0 0 24px rgba(124, 58, 237, 0.5))
-                drop-shadow(0 0 36px rgba(88, 28, 135, 0.3))
-              `,
-              animation: 'logoGlow 2s ease-in-out infinite',
-            }}
-          />
-        </div>
-
-        {/* Orbiting particle 1 */}
-        <div style={{
-          position: 'absolute',
-          width: '6px',
-          height: '6px',
-          borderRadius: '50%',
-          background: '#a855f7',
-          boxShadow: '0 0 10px #a855f7, 0 0 20px #a855f7',
-          top: '50%',
-          left: '50%',
-          animation: 'orbit 2.5s linear infinite',
-        }} />
-
-        {/* Orbiting particle 2 */}
-        <div style={{
-          position: 'absolute',
-          width: '4px',
-          height: '4px',
-          borderRadius: '50%',
-          background: '#c084fc',
-          boxShadow: '0 0 8px #c084fc, 0 0 16px #c084fc',
-          top: '50%',
-          left: '50%',
-          animation: 'orbit 2.5s linear infinite reverse',
-          animationDelay: '-0.8s',
-        }} />
+        <img
+          src={animatedLogo}
+          alt="Loading"
+          style={{
+            width: '120px',
+            height: '120px',
+            filter: `
+              drop-shadow(0 0 12px rgba(139, 92, 246, 0.8))
+              drop-shadow(0 0 24px rgba(124, 58, 237, 0.5))
+            `,
+          }}
+        />
       </div>
 
       {/* Mysterious loading text */}
@@ -308,53 +269,14 @@ function GameLoading() {
 
       {/* Keyframe animations */}
       <style>{`
-        @keyframes logoSpin {
-          0% {
-            transform: rotateY(0deg) rotateX(0deg);
-          }
-          25% {
-            transform: rotateY(180deg) rotateX(10deg);
-          }
-          50% {
-            transform: rotateY(360deg) rotateX(0deg);
-          }
-          75% {
-            transform: rotateY(540deg) rotateX(-10deg);
-          }
-          100% {
-            transform: rotateY(720deg) rotateX(0deg);
-          }
-        }
-        @keyframes logoGlow {
-          0%, 100% {
-            filter:
-              drop-shadow(0 0 12px rgba(139, 92, 246, 0.8))
-              drop-shadow(0 0 24px rgba(124, 58, 237, 0.5))
-              drop-shadow(0 0 36px rgba(88, 28, 135, 0.3));
-          }
-          50% {
-            filter:
-              drop-shadow(0 0 20px rgba(167, 139, 250, 1))
-              drop-shadow(0 0 40px rgba(139, 92, 246, 0.7))
-              drop-shadow(0 0 60px rgba(124, 58, 237, 0.5));
-          }
-        }
         @keyframes pulseGlow {
           0%, 100% {
             transform: scale(1);
             opacity: 0.5;
           }
           50% {
-            transform: scale(1.2);
+            transform: scale(1.15);
             opacity: 1;
-          }
-        }
-        @keyframes orbit {
-          0% {
-            transform: rotate(0deg) translateX(55px) rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg) translateX(55px) rotate(-360deg);
           }
         }
         @keyframes textFade {

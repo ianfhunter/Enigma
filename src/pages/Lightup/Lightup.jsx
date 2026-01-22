@@ -1,9 +1,11 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Lightup.module.css';
 import akariPuzzles from '../../../public/datasets/akariPuzzles.json';
 
@@ -182,13 +184,14 @@ export {
 };
 
 export default function Lightup() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [sizeKey, setSizeKey] = useState('10x10');
   const [base, setBase] = useState({ w: 0, h: 0, cells: [], solutionBulbs: new Set() });
   const [bulbs, setBulbs] = useState(() => new Set());
   const [marks, setMarks] = useState(() => new Set());
   const [markMode, setMarkMode] = useState(false); // Mobile mark mode
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
 
   const availableSizes = useMemo(() => getAvailableSizes(difficulty), [difficulty]);
 
@@ -218,8 +221,8 @@ export default function Lightup() {
 
     setBulbs(new Set());
     setMarks(new Set());
-    setGameState('playing');
-  }, [difficulty, sizeKey]);
+    resetGameState();
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     loadPuzzle();
@@ -228,13 +231,14 @@ export default function Lightup() {
   const reset = () => {
     setBulbs(new Set());
     setMarks(new Set());
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     if (base.solutionBulbs.size > 0) {
       setBulbs(new Set(base.solutionBulbs));
-      setGameState('gaveUp');
+      giveUp();
     }
   };
 
@@ -321,10 +325,8 @@ export default function Lightup() {
 
   // Update game state when solved
   useEffect(() => {
-    if (solved && gameState === 'playing') {
-      setGameState('won');
-    }
-  }, [solved, gameState]);
+    checkWin(solved);
+  }, [solved, checkWin]);
 
   const toggleBulb = (i) => {
     if (isWall(base.cells[i])) return;
@@ -367,30 +369,30 @@ export default function Lightup() {
           onSelect={setSizeKey}
         />
         <div className={styles.actions}>
-          <button className={styles.generateBtn} onClick={loadPuzzle}>New Puzzle</button>
-          <button className={styles.button} onClick={reset}>Clear</button>
+          <button className={styles.generateBtn} onClick={loadPuzzle}>{t('common.newPuzzle')}</button>
+          <button className={styles.button} onClick={reset}>{t('common.clear')}</button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
         </div>
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Solved!"
+            title={t('gameStatus.solved')}
             variant="inline"
           />
         )}
         {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
-            title="Solution Revealed"
+            title={t('gameStatus.solutionRevealed')}
             variant="inline"
           />
         )}
         {gameState === 'playing' && (
           <div className={styles.status}>
-            <span>Conflicts: {bulbConflicts.size} • Unlit: {allLit ? 0 : 'some'}</span>
+            <span>{t('gameStatus.conflicts')}: {bulbConflicts.size} • {t('gameStatus.unlit')}: {allLit ? 0 : t('gameStatus.some')}</span>
           </div>
         )}
 
@@ -399,7 +401,7 @@ export default function Lightup() {
           className={`${styles.markToggle} ${markMode ? styles.markModeActive : ''}`}
           onClick={() => setMarkMode(!markMode)}
         >
-          ✖ {markMode ? 'Mark Mode ON' : 'Mark Mode'}
+          ✖ {markMode ? t('gameStatus.markModeOn') : t('gameStatus.markMode')}
         </button>
       </div>
 
@@ -430,7 +432,7 @@ export default function Lightup() {
                   numBad ? styles.bad : '',
                 ].join(' ')}
                 onClick={() => {
-                  if (wall || gameState !== 'playing') return;
+                  if (wall || !isPlaying) return;
                   if (markMode) {
                     toggleMark(i);
                   } else {

@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import styles from './AuthModal.module.css';
 
 export default function AuthModal({ isOpen, onClose, canClose = false }) {
+  const { t } = useTranslation();
   const { login, register, error, clearError } = useAuth();
   const [mode, setMode] = useState('login'); // 'login' | 'register'
   const [username, setUsername] = useState('');
@@ -58,22 +60,22 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
 
     // Validation
     if (!username.trim()) {
-      setLocalError('Username is required');
+      setLocalError(t('auth.usernameRequired'));
       return;
     }
 
     if (!password) {
-      setLocalError('Password is required');
+      setLocalError(t('auth.passwordRequired'));
       return;
     }
 
     if (mode === 'register') {
       if (password !== confirmPassword) {
-        setLocalError('Passwords do not match');
+        setLocalError(t('auth.passwordsDoNotMatch'));
         return;
       }
       if (password.length < 6) {
-        setLocalError('Password must be at least 6 characters');
+        setLocalError(t('auth.passwordTooShort'));
         return;
       }
     }
@@ -91,7 +93,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
       if (err.isRateLimit) {
         setIsRateLimited(true);
       }
-      setLocalError(err.message || 'An error occurred');
+      setLocalError(err.message || t('auth.anErrorOccurred'));
     } finally {
       setLoading(false);
     }
@@ -111,10 +113,10 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
         <div className={styles.header}>
           <h2 className={styles.title}>
             <span className={styles.titleIcon}>🔐</span>
-            {mode === 'login' ? 'Welcome Back' : 'Create Account'}
+            {mode === 'login' ? t('auth.welcomeBack') : t('auth.createAccount')}
           </h2>
           {canClose && (
-            <button className={styles.closeButton} onClick={onClose} aria-label="Close">
+            <button className={styles.closeButton} onClick={onClose} aria-label={t('common.close')}>
               ×
             </button>
           )}
@@ -126,14 +128,14 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
             onClick={() => setMode('login')}
             type="button"
           >
-            Log In
+            {t('auth.login')}
           </button>
           <button
             className={`${styles.tab} ${mode === 'register' ? styles.active : ''}`}
             onClick={() => setMode('register')}
             type="button"
           >
-            Register
+            {t('auth.register')}
           </button>
         </div>
 
@@ -144,14 +146,14 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
               <div className={styles.errorContent}>
                 {displayError}
                 {isRateLimited && (
-                  <span className={styles.rateLimitHint}>Please wait before trying again</span>
+                  <span className={styles.rateLimitHint}>{t('auth.pleaseWait')}</span>
                 )}
               </div>
             </div>
           )}
 
           <div className={styles.field}>
-            <label htmlFor="username" className={styles.label}>Username</label>
+            <label htmlFor="username" className={styles.label}>{t('auth.username')}</label>
             <input
               id="username"
               type="text"
@@ -168,7 +170,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
           {mode === 'register' && (
             <div className={styles.field}>
               <label htmlFor="displayName" className={styles.label}>
-                Display Name <span className={styles.optional}>(optional)</span>
+                {t('auth.displayName')} <span className={styles.optional}>({t('auth.displayNameOptional')})</span>
               </label>
               <input
                 id="displayName"
@@ -176,7 +178,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
                 className={styles.input}
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="How others will see you"
+                placeholder={t('auth.displayNamePlaceholder')}
                 disabled={loading}
                 maxLength={64}
               />
@@ -184,7 +186,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
           )}
 
           <div className={styles.field}>
-            <label htmlFor="password" className={styles.label}>Password</label>
+            <label htmlFor="password" className={styles.label}>{t('auth.password')}</label>
             <input
               id="password"
               type="password"
@@ -198,7 +200,7 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
 
           {mode === 'register' && (
             <div className={styles.field}>
-              <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
+              <label htmlFor="confirmPassword" className={styles.label}>{t('auth.confirmPassword')}</label>
               <input
                 id="confirmPassword"
                 type="password"
@@ -219,16 +221,16 @@ export default function AuthModal({ isOpen, onClose, canClose = false }) {
             {loading ? (
               <span className={styles.spinner}>⏳</span>
             ) : mode === 'login' ? (
-              'Log In'
+              t('auth.login')
             ) : (
-              'Create Account'
+              t('auth.createAccount')
             )}
           </button>
         </form>
 
         {mode === 'register' && (
           <p className={styles.hint}>
-            The first account created will have admin privileges.
+            {t('auth.firstAccountAdmin')}
           </p>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './StatsPanel.module.css';
 
 /**
@@ -14,13 +15,15 @@ export default function StatsPanel({
   layout = 'horizontal',
   size = 'default',
 }) {
+  const { t } = useTranslation();
+
   if (stats.length === 0) return null;
 
   return (
     <div
       className={`${styles.panel} ${styles[layout]} ${styles[size]} ${className}`}
       role="region"
-      aria-label="Game statistics"
+      aria-label={t('common.gameStatistics')}
     >
       {stats.map((stat, index) => (
         <div key={stat.label || index} className={styles.stat}>

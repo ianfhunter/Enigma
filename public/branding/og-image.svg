@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700;400&amp;display=swap');
+    </style>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#050510"/>
+      <stop offset="50%" style="stop-color:#0d0b2e"/>
+      <stop offset="100%" style="stop-color:#050510"/>
+    </linearGradient>
+    <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e9d5ff"/>
+      <stop offset="50%" style="stop-color:#c084fc"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="text-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg-gradient)"/>
+
+  <!-- Subtle grid pattern -->
+  <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(139, 92, 246, 0.05)" stroke-width="1"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="200" fill="none" stroke="rgba(139, 92, 246, 0.1)" stroke-width="1"/>
+  <circle cx="1100" cy="530" r="250" fill="none" stroke="rgba(139, 92, 246, 0.08)" stroke-width="1"/>
+  <circle cx="600" cy="315" r="400" fill="none" stroke="rgba(139, 92, 246, 0.03)" stroke-width="2"/>
+
+  <!-- Logo (centered) -->
+  <g transform="translate(600, 240)" filter="url(#glow)">
+    <!-- Single outer ring -->
+    <circle cx="0" cy="0" r="96" fill="none" stroke="#8046FD" stroke-width="8"
+            stroke-dasharray="48 24" stroke-linecap="round"/>
+
+    <!-- 4 cardinal notches -->
+    <circle cx="0" cy="-96" r="12" fill="#8046FD"/>
+    <circle cx="96" cy="0" r="12" fill="#8046FD"/>
+    <circle cx="0" cy="96" r="12" fill="#8046FD"/>
+    <circle cx="-96" cy="0" r="12" fill="#8046FD"/>
+  </g>
+
+  <!-- Center "e" drawn as arc path (no mask needed) -->
+  <g filter="url(#glow)">
+    <!-- "e" body - arc from top, around left, to bottom right opening -->
+    <path d="M 628 240
+             A 28 28 0 1 0 618 262"
+          fill="none" stroke="#8046FD" stroke-width="10" stroke-linecap="round"/>
+    <!-- "e" crossbar -->
+    <line x1="572" y1="240" x2="628" y2="240" stroke="#8046FD" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <!-- Title text -->
+  <text x="600" y="420" text-anchor="middle" font-family="Outfit, sans-serif" font-size="72" font-weight="700" fill="url(#text-gradient)" filter="url(#text-glow)">
+    Enigma
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="480" text-anchor="middle" font-family="Outfit, sans-serif" font-size="28" font-weight="400" fill="rgba(196, 181, 253, 0.8)">
+    Self-Hosted Puzzle Collection
+  </text>
+
+  <!-- Bottom accent line -->
+  <line x1="400" y1="540" x2="800" y2="540" stroke="url(#text-gradient)" stroke-width="2" opacity="0.5"/>
+</svg>

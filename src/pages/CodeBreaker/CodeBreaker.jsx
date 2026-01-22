@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRNG, parseSeedFromUrl, generateRandomSeed } from '../../enigma-sdk/seeding';
 import styles from './CodeBreaker.module.css';
 
@@ -56,12 +58,13 @@ export function checkGuess(guess, secret) {
 }
 
 export default function CodeBreaker() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [secretCode, setSecretCode] = useState([]);
   const [guesses, setGuesses] = useState([]);
   const [currentGuess, setCurrentGuess] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(0);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
+  const { gameState, checkWin, giveUp, lose, reset: resetGameState, isPlaying } = useGameState();
   const [stats, setStats] = usePersistedState('codebreaker-stats', { wins: 0, losses: 0 });
   const [seed, setSeed] = useState(() => parseSeedFromUrl() || generateRandomSeed());
 
@@ -74,8 +77,8 @@ export default function CodeBreaker() {
     setGuesses([]);
     setCurrentGuess(Array(codeLength).fill(null));
     setSelectedSlot(0);
-    setGameState('playing');
-  }, [codeLength, colorCount]);
+    resetGameState();
+  }, [codeLength, colorCount, resetGameState]);
 
   useEffect(() => {
     // Initialize with seed from URL or the generated seed
@@ -85,7 +88,7 @@ export default function CodeBreaker() {
   }, []);
 
   const handleColorSelect = (colorIndex) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const newGuess = [...currentGuess];
     newGuess[selectedSlot] = colorIndex;
@@ -105,25 +108,25 @@ export default function CodeBreaker() {
   };
 
   const handleSlotClick = (index) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setSelectedSlot(index);
   };
 
   const handleClearSlot = () => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     const newGuess = [...currentGuess];
     newGuess[selectedSlot] = null;
     setCurrentGuess(newGuess);
   };
 
   const handleGiveUp = () => {
-    if (gameState !== 'playing') return;
-    setGameState('gaveUp');
+    if (!isPlaying) return;
+    giveUp();
     setStats(prev => ({ ...prev, losses: prev.losses + 1 }));
   };
 
   const handleSubmitGuess = () => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (currentGuess.some(c => c === null)) return;
 
     const result = checkGuess(currentGuess, secretCode);
@@ -136,10 +139,10 @@ export default function CodeBreaker() {
     setGuesses(newGuesses);
 
     if (result.exact === codeLength) {
-      setGameState('won');
+      checkWin(true);
       setStats(prev => ({ ...prev, wins: prev.wins + 1 }));
     } else if (newGuesses.length >= maxGuesses) {
-      setGameState('lost');
+      lose();
       setStats(prev => ({ ...prev, losses: prev.losses + 1 }));
     } else {
       setCurrentGuess(Array(codeLength).fill(null));
@@ -200,11 +203,11 @@ export default function CodeBreaker() {
             <span className={styles.statValue}>{guesses.length} / {maxGuesses}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Wins</span>
+            <span className={styles.statLabel}>{t('common.wins')}</span>
             <span className={styles.statValue}>{stats.wins}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Losses</span>
+            <span className={styles.statLabel}>{t('common.losses')}</span>
             <span className={styles.statValue}>{stats.losses}</span>
           </div>
         </div>
@@ -318,7 +321,7 @@ export default function CodeBreaker() {
         <div className={styles.buttons}>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             {gameState === 'playing' ? 'New Game' : 'Play Again'}

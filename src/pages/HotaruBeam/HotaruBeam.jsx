@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './HotaruBeam.module.css';
 
 const GRID_SIZES = {
@@ -538,9 +540,9 @@ export default function HotaruBeam() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [hEdges, setHEdges] = useState([]);
   const [vEdges, setVEdges] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const size = GRID_SIZES[sizeKey];
 
@@ -549,9 +551,9 @@ export default function HotaruBeam() {
     setPuzzleData(data);
     setHEdges(Array(size).fill(null).map(() => Array(size - 1).fill(false)));
     setVEdges(Array(size - 1).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size, difficultyKey]);
+  }, [size, difficultyKey, resetGameState]);
 
   // Reset edges immediately when size changes to prevent dimension mismatches
   useEffect(() => {
@@ -578,13 +580,13 @@ export default function HotaruBeam() {
     }
 
     // Only check for win if still playing (not revealed)
-    if (gameState === 'playing' && checkSolved(puzzleData.circleGrid, hEdges, vEdges, size)) {
-      setGameState('won');
+    if (isPlaying && checkSolved(puzzleData.circleGrid, hEdges, vEdges, size)) {
+      checkWin(true);
     }
-  }, [hEdges, vEdges, puzzleData, size, showErrors, gameState]);
+  }, [hEdges, vEdges, puzzleData, size, showErrors, isPlaying, checkWin]);
 
   const toggleHEdge = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setHEdges(prev => {
       const newEdges = prev.map(row => [...row]);
       newEdges[r][c] = !newEdges[r][c];
@@ -593,7 +595,7 @@ export default function HotaruBeam() {
   };
 
   const toggleVEdge = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setVEdges(prev => {
       const newEdges = prev.map(row => [...row]);
       newEdges[r][c] = !newEdges[r][c];
@@ -604,14 +606,14 @@ export default function HotaruBeam() {
   const handleReset = () => {
     setHEdges(Array(size).fill(null).map(() => Array(size - 1).fill(false)));
     setVEdges(Array(size - 1).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
     setHEdges(puzzleData.solutionH.map(row => [...row]));
     setVEdges(puzzleData.solutionV.map(row => [...row]));
-    setGameState('revealed');
+    giveUp();
   };
 
   if (!puzzleData) return null;

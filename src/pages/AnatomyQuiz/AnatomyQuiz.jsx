@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { BODY_SYSTEMS, getPartsBySystem, getRandomPart, SYSTEM_IDS } from '../../data/anatomyData';
@@ -15,6 +16,7 @@ import styles from './AnatomyQuiz.module.css';
 const FEEDBACK_DURATION = 1500;
 
 export default function AnatomyQuiz() {
+  const { t } = useTranslation();
   const [selectedSystem, setSelectedSystem] = useState('all');
   const [currentPart, setCurrentPart] = useState(null);
   const [highlightedPart, setHighlightedPart] = useState(null);
@@ -280,7 +282,7 @@ export default function AnatomyQuiz() {
           <div className={styles.statsPanel}>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
+              <span className={styles.statLabel}>{t('common.played')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>
@@ -290,7 +292,7 @@ export default function AnatomyQuiz() {
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.streak}</span>
-              <span className={styles.statLabel}>Streak</span>
+              <span className={styles.statLabel}>{t('common.streak')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.maxStreak}</span>

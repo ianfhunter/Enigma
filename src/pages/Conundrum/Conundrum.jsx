@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -9,6 +10,7 @@ import styles from './Conundrum.module.css';
 const GAME_TIME = 30; // seconds
 
 export default function Conundrum() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [displayLetters, setDisplayLetters] = useState([]);
   const [guess, setGuess] = useState('');
@@ -207,7 +209,7 @@ export default function Conundrum() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 className={styles.guessInput}
-                placeholder="Type your answer..."
+                placeholder={t('common.typeAnswer')}
                 maxLength={9}
                 autoComplete="off"
                 autoCapitalize="characters"
@@ -234,7 +236,7 @@ export default function Conundrum() {
             <div className={styles.resultArea}>
               {gameState === 'won' && (
                 <div className={styles.answerReveal}>
-                  <div className={styles.answerLabel}>Answer</div>
+                  <div className={styles.answerLabel}>{t('common.answer')}</div>
                   <WordWithDefinition word={puzzle.word} className={styles.answerWordWrapper}>
                     <div className={styles.answerWord}>
                       {puzzle.word.split('').map((letter, i) => (
@@ -246,7 +248,7 @@ export default function Conundrum() {
               )}
               {gameState === 'lost' && (
                 <div className={styles.answerReveal}>
-                  <div className={styles.answerLabel}>The answer was</div>
+                  <div className={styles.answerLabel}>{t('common.answerWas')}</div>
                   <WordWithDefinition word={puzzle.word} className={styles.answerWordWrapper}>
                     <div className={`${styles.answerWord} ${styles.missed}`}>
                       {puzzle.word.split('').map((letter, i) => (
@@ -265,12 +267,12 @@ export default function Conundrum() {
         </div>
 
         <div className={styles.howToPlay}>
-          <h4>How to Play</h4>
+          <h4>{t('common.howToPlay')}</h4>
           <ul>
-            <li>Press "Start" to reveal the scrambled letters</li>
-            <li>Rearrange all 9 letters to form a valid word</li>
-            <li>Type your answer and submit before time runs out</li>
-            <li>Use "Shuffle" to rearrange the display</li>
+            <li>{t('conundrum.rule1')}</li>
+            <li>{t('conundrum.rule2')}</li>
+            <li>{t('conundrum.rule3')}</li>
+            <li>{t('conundrum.rule4')}</li>
           </ul>
         </div>
       </div>

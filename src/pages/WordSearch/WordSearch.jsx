@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSearch.module.css';
@@ -126,13 +128,14 @@ export const WORD_SEARCH_DIRECTIONS = DIRECTIONS;
 export { generatePuzzle };
 
 export default function WordSearch() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [seed, setSeed] = useState(null);
   const [foundWords, setFoundWords] = useState(new Set());
   const [selectedCells, setSelectedCells] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [highlightedCells, setHighlightedCells] = useState(new Set());
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [puzzleIndex, setPuzzleIndex] = useState(0);
 
   const initGame = useCallback((customSeed = null) => {
@@ -159,21 +162,21 @@ export default function WordSearch() {
     setFoundWords(new Set());
     setSelectedCells([]);
     setHighlightedCells(new Set());
-    setGameState('playing');
-  }, [puzzleIndex]);
+    resetGameState();
+  }, [puzzleIndex, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (puzzle && foundWords.size === puzzle.words.length) {
-      setGameState('won');
+    if (puzzle && foundWords.size === puzzle.words.length && isPlaying) {
+      checkWin(true);
     }
-  }, [foundWords, puzzle]);
+  }, [foundWords, puzzle, isPlaying, checkWin]);
 
   const handleCellMouseDown = (row, col) => {
-    if (gameState === 'won') return;
+    if (isWon) return;
     setIsDragging(true);
     setSelectedCells([[row, col]]);
   };
@@ -268,7 +271,7 @@ export default function WordSearch() {
   if (!puzzle) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -337,7 +340,7 @@ export default function WordSearch() {
         </div>
 
         <div className={styles.wordList}>
-          <h3>Words to Find</h3>
+          <h3>{t('common.wordsToFind')}</h3>
           <div className={styles.words}>
             {puzzle.words.map(word => (
               <WordWithDefinition
@@ -358,7 +361,7 @@ export default function WordSearch() {
         )}
 
         <button className={styles.newGameBtn} onClick={() => initGame(true)}>
-          New Puzzle
+          {t('common.newPuzzle')}
         </button>
       </div>
     </div>

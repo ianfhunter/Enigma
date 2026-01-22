@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './InshiNoHeya.module.css';
 
 const GRID_SIZES = {
@@ -271,9 +273,9 @@ export default function InshiNoHeya() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
 
   const size = GRID_SIZES[sizeKey];
 
@@ -282,9 +284,9 @@ export default function InshiNoHeya() {
     setPuzzleData(data);
     setGrid(Array(size).fill(null).map(() => Array(size).fill(0)));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size, difficultyKey]);
+  }, [size, difficultyKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -307,18 +309,19 @@ export default function InshiNoHeya() {
       setErrors(new Set());
     }
 
-    if (checkSolved(grid, puzzleData.solution, puzzleSize)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors]);
+    // Don't check for win if game is not in playing state
+    if (!isPlaying) return;
+
+    checkWin(checkSolved(grid, puzzleData.solution, puzzleSize));
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setSelectedCell([r, c]);
   };
 
   const handleKeyDown = useCallback((e) => {
-    if (!selectedCell || gameState !== 'playing' || !puzzleData) return;
+    if (!selectedCell || !isPlaying || !puzzleData) return;
 
     const [r, c] = selectedCell;
     const puzzleSize = puzzleData.size;
@@ -364,7 +367,7 @@ export default function InshiNoHeya() {
         return newGrid;
       });
     }
-  }, [selectedCell, gameState, puzzleData]);
+  }, [selectedCell, isPlaying, puzzleData]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -372,7 +375,7 @@ export default function InshiNoHeya() {
   }, [handleKeyDown]);
 
   const handleNumberPad = (num) => {
-    if (!selectedCell || gameState !== 'playing' || !puzzleData) return;
+    if (!selectedCell || !isPlaying || !puzzleData) return;
 
     const [r, c] = selectedCell;
     const puzzleSize = puzzleData.size;
@@ -398,13 +401,13 @@ export default function InshiNoHeya() {
   const handleReset = () => {
     setGrid(Array(size).fill(null).map(() => Array(size).fill(0)));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -522,7 +525,7 @@ export default function InshiNoHeya() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './KnightsAndKnaves.module.css';
@@ -275,7 +276,7 @@ export default function KnightsAndKnaves() {
 
             {(status === 'correct' || revealed) && (
               <div className={styles.solutionCard}>
-                <div className={styles.solutionTitle}>Solution</div>
+                <div className={styles.solutionTitle}>{t('common.solution')}</div>
                 <div className={styles.solutionText}>
                   {puzzle.solutionTextFormat || puzzle.solutionText || 'Solution unavailable.'}
                 </div>
@@ -285,7 +286,7 @@ export default function KnightsAndKnaves() {
             <div className={styles.statsPanel}>
               <div className={styles.stat}>
                 <span className={styles.statValue}>{stats.played}</span>
-                <span className={styles.statLabel}>Played</span>
+                <span className={styles.statLabel}>{t('common.played')}</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue}>
@@ -295,7 +296,7 @@ export default function KnightsAndKnaves() {
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue}>{stats.streak}</span>
-                <span className={styles.statLabel}>Streak</span>
+                <span className={styles.statLabel}>{t('common.streak')}</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue}>{stats.maxStreak}</span>

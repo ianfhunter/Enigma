@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Hitori.module.css';
 
 const DIFFICULTY_SIZES = {
@@ -229,11 +231,12 @@ export {
 };
 
 export default function Hitori() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
   const [marked, setMarked] = useState([]); // Cells marked as definitely not shaded
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [markMode, setMarkMode] = useState(false); // Mobile mark mode
@@ -273,27 +276,25 @@ export default function Hitori() {
       setShaded(Array(5).fill(null).map(() => Array(5).fill(false)));
       setMarked(Array(5).fill(null).map(() => Array(5).fill(false)));
     }
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading) initGame();
   }, [loading, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(puzzleData.grid, shaded) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(puzzleData.grid, shaded)) {
-      setGameState('won');
-    }
-  }, [shaded, puzzleData, showErrors]);
+    checkWin(checkSolved(puzzleData.grid, shaded));
+  }, [shaded, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     const isMarkAction = e.type === 'contextmenu' || e.ctrlKey || markMode;
 
@@ -334,20 +335,20 @@ export default function Hitori() {
   const handleReset = () => {
     setShaded(Array(size).fill(null).map(() => Array(size).fill(false)));
     setMarked(Array(size).fill(null).map(() => Array(size).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setShaded(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading) {
     return (
       <div className={styles.container}>
         <GameHeader title="Hitori" />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -412,17 +413,17 @@ export default function Hitori() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="All rules satisfied"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            title={t('gameStatus.solved')}
+            message={t('common.allRulesSatisfied', 'All rules satisfied')}
+            actions={[{ label: t('common.newPuzzle'), onClick: initGame, primary: true }]}
           />
         )}
 
         {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
-            message="Better luck next time!"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            message={t('common.betterLuckNextTime')}
+            actions={[{ label: t('common.newPuzzle'), onClick: initGame, primary: true }]}
           />
         )}
 
@@ -444,10 +445,10 @@ export default function Hitori() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
-            New Puzzle
+            {t('common.newPuzzle')}
           </button>
         </div>
 

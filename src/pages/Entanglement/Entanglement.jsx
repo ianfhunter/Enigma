@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { getGameGradient } from '../../data/gameRegistry';
 import styles from './Entanglement.module.css';
@@ -388,7 +389,7 @@ export default function Entanglement() {
               <span className={styles.value}>{score}</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.label}>Next tile</span>
+              <span className={styles.label}>{t('common.nextTile')}</span>
               <span className={styles.value}>#{nextTileIdx + 1}</span>
             </div>
             <div className={styles.stat}>

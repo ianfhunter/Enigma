@@ -4,6 +4,7 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Skyscraper.module.css';
 
 const GRID_SIZES = {
@@ -144,15 +145,16 @@ export {
 };
 
 export default function Skyscraper() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
   const [difficulty, setDifficulty] = useState('easy');
   const [allPuzzles, setAllPuzzles] = useState([]);
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
-  const [showErrors, setShowErrors] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const size = GRID_SIZES[sizeKey];
@@ -201,7 +203,7 @@ export default function Skyscraper() {
     // Initialize empty grid
     setGrid(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(0)));
     setSelected(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
   }, [allPuzzles, size, difficulty]);
 
@@ -212,20 +214,18 @@ export default function Skyscraper() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(grid, puzzleData.clues) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.solution)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors]);
+    checkWin(checkSolved(grid, puzzleData.solution));
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   // Keyboard input
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selected || gameState !== 'playing') return;
+      if (!selected || !isPlaying) return;
       const [r, c] = selected;
       const gridSize = puzzleData?.size || size;
 
@@ -258,12 +258,12 @@ export default function Skyscraper() {
   }, [selected, gameState, puzzleData, size]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setSelected([r, c]);
   };
 
   const handleNumberClick = (num) => {
-    if (!selected || gameState !== 'playing') return;
+    if (!selected || !isPlaying) return;
     const [r, c] = selected;
     const gridSize = puzzleData?.size || size;
     if (num > gridSize) return;
@@ -279,14 +279,14 @@ export default function Skyscraper() {
     const gridSize = puzzleData?.size || size;
     setGrid(Array(gridSize).fill(null).map(() => Array(gridSize).fill(0)));
     setSelected(null);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     setSelected(null);
-    setGameState('gave_up');
+    giveUp();
   };
 
   if (loading) {
@@ -296,7 +296,7 @@ export default function Skyscraper() {
           title="Skyscraper"
           instructions="Loading puzzles..."
         />
-        <div className={styles.loading}>Loading puzzles...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzles')}</div>
       </div>
     );
   }
@@ -385,12 +385,12 @@ export default function Skyscraper() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🏙️ Puzzle Solved!"
-            message="All skyscrapers correctly placed!"
+            title={t('gameStatus.solved')}
+            message={t('common.allSkyscrapersPlaced', 'All skyscrapers correctly placed!')}
           />
         )}
 
-        {gameState === 'gave_up' && (
+        {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
             title="Solution Revealed"
@@ -404,7 +404,7 @@ export default function Skyscraper() {
               key={num}
               className={styles.numberBtn}
               onClick={() => handleNumberClick(num)}
-              disabled={gameState !== 'playing'}
+              disabled={!isPlaying}
             >
               {num}
             </button>
@@ -416,7 +416,7 @@ export default function Skyscraper() {
               newGrid[selected[0]][selected[1]] = 0;
               return newGrid;
             })}
-            disabled={gameState !== 'playing' || !selected}
+            disabled={!isPlaying || !selected}
           >
             ✕
           </button>
@@ -440,7 +440,7 @@ export default function Skyscraper() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

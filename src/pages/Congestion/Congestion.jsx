@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Congestion.module.css';
@@ -295,6 +296,7 @@ export {
 };
 
 export default function Congestion() {
+  const { t } = useTranslation();
   const boardRef = useRef(null);
 
   const [allPuzzles, setAllPuzzles] = useState([]);
@@ -598,7 +600,7 @@ export default function Congestion() {
         </div>
 
         <div className={styles.boardContainer}>
-          {loading && <div className={styles.notice}>Loading puzzles...</div>}
+          {loading && <div className={styles.notice}>{t('common.loadingPuzzles')}</div>}
           {error && <div className={styles.noticeError}>Error: {error}</div>}
 
           {!loading && !error && (
@@ -680,7 +682,7 @@ export default function Congestion() {
                 <div className={styles.winOverlay}>
                   <div className={styles.winContent}>
                     <div className={styles.winEmoji}>🎉</div>
-                    <div className={styles.winTitle}>Puzzle Solved!</div>
+                    <div className={styles.winTitle}>{t('gameStatus.puzzleSolved')}</div>
                     <div className={styles.winStats}>Completed in {moves} moves</div>
                     <button className={styles.nextButton} onClick={goNext}>
                       Next Puzzle →
