@@ -532,7 +532,7 @@ export default function LetterWeb() {
             <span className={styles.statValue}>{words.length}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Remaining</span>
+            <span className={styles.statLabel}>{t('common.remaining')}</span>
             <span className={styles.statValue}>{remainingCount}</span>
           </div>
           <div className={styles.stat}>

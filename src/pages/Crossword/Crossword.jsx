@@ -804,7 +804,7 @@ export default function Crossword() {
         <div className={styles.statsPanel}>
           <div className={styles.stat}>
             <span className={styles.statValue}>{stats.played}</span>
-            <span className={styles.statLabel}>Played</span>
+            <span className={styles.statLabel}>{t('common.played')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>{stats.won}</span>
@@ -820,7 +820,7 @@ export default function Crossword() {
             <span className={styles.statValue}>
               {stats.avgTime ? formatTime(stats.avgTime) : '-'}
             </span>
-            <span className={styles.statLabel}>Avg</span>
+            <span className={styles.statLabel}>{t('common.avg')}</span>
           </div>
         </div>
       </div>

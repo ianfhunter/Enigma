@@ -525,11 +525,11 @@ export default function TheseusMinotaur() {
             <span className={styles.statValue}>{moves}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Optimal</span>
+            <span className={styles.statLabel}>{t('common.optimal')}</span>
             <span className={styles.statValue}>{puzzle.minMoves}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Wins</span>
+            <span className={styles.statLabel}>{t('common.wins')}</span>
             <span className={styles.statValue}>{gamesWon}</span>
           </div>
         </div>

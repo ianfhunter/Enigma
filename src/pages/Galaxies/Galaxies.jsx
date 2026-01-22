@@ -310,8 +310,7 @@ export default function Galaxies() {
             {Array.from({ length: puz.w * puz.h }, (_, i) => {
               const g = assign[i];
               const { r, c } = idxToRC(i, puz.w);
-              const bg = g >= 0 ? COLORS[g % COLORS.length] : 'rgba(255,255,255,0.06)';
-              const style = { background: bg };
+              const style = g >= 0 ? { background: COLORS[g % COLORS.length] } : {};
 
               // Find cell-center dot at this position (r+0.5, c+0.5)
               const cellDot = puz.dots.find(d =>

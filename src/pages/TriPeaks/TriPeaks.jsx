@@ -405,7 +405,7 @@ export default function TriPeaks() {
 
       <div className={styles.gameInfo}>
         <span className={styles.moves}>Moves: {moves}</span>
-        <span className={styles.remaining}>Remaining: {remainingPeakCards}</span>
+        <span className={styles.remaining}>{t('common.remaining')}: {remainingPeakCards}</span>
       </div>
 
       {message && (
@@ -441,7 +441,7 @@ export default function TriPeaks() {
         {/* Draw and Waste piles */}
         <div className={styles.piles}>
           <div className={styles.pileSection}>
-            <span className={styles.pileLabel}>Draw ({remainingDrawCards})</span>
+            <span className={styles.pileLabel}>{t('common.draw')} ({remainingDrawCards})</span>
             <button
               className={`${styles.pile} ${styles.drawPile} ${drawPile.length === 0 ? styles.empty : ''}`}
               onClick={drawCard}

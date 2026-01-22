@@ -127,7 +127,7 @@ export default function TowerOfHanoi() {
             <span className={styles.statValue}>{moves}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Minimum</span>
+            <span className={styles.statLabel}>{t('common.minimum')}</span>
             <span className={styles.statValue}>{minMoves}</span>
           </div>
           {bestMoves[diskCount.toString()] && (

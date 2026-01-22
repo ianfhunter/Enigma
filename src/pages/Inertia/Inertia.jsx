@@ -362,7 +362,7 @@ export default function Inertia() {
       {error && (
         <div className={styles.status} style={{ color: 'red' }}>
           {error}
-          <button onClick={generateNew} style={{ marginLeft: '10px' }}>Retry</button>
+          <button onClick={generateNew} style={{ marginLeft: '10px' }}>{t('common.retry')}</button>
         </div>
       )}
 

@@ -265,9 +265,9 @@ export default function CountdownLetters() {
           {gameState === 'selecting' && (
             <div className={styles.selectionPanel}>
               <div className={styles.selectionInfo}>
-                <span>Vowels: {vowelCount}</span>
-                <span>Consonants: {consonantCount}</span>
-                <span>Remaining: {remainingPicks}</span>
+                <span>{t('common.vowels')}: {vowelCount}</span>
+                <span>{t('common.consonants')}: {consonantCount}</span>
+                <span>{t('common.remaining')}: {remainingPicks}</span>
               </div>
 
               <div className={styles.selectionButtons}>
@@ -394,7 +394,7 @@ export default function CountdownLetters() {
           {gameState === 'playing' && (
             <div className={styles.scorePanel}>
               <div className={styles.scoreItem}>
-                <span className={styles.scoreLabelSmall}>Current Word</span>
+                <span className={styles.scoreLabelSmall}>{t('common.currentWord')}</span>
                 <span className={styles.scoreValueBig}>{currentWord.length || '-'}</span>
                 <span className={styles.scoreLabelSmall}>{t('common.letters')}</span>
               </div>

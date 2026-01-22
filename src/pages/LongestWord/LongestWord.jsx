@@ -183,7 +183,7 @@ export default function LongestWord() {
             <span className={styles.statValue}>{longestFound}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Total</span>
+            <span className={styles.statLabel}>{t('common.total')}</span>
             <span className={styles.statValue}>{totalLetters}</span>
           </div>
         </div>
@@ -249,7 +249,7 @@ export default function LongestWord() {
             <h3>Game Summary</h3>
             <p>You found {words.length} word{words.length !== 1 ? 's' : ''}</p>
             <p>Your longest: {longestFound} letters</p>
-            <p>Total letters: {totalLetters}</p>
+            <p>{t('common.totalLetters')}: {totalLetters}</p>
             {longestPossibleWord && (
               <div className={styles.longestReveal}>
                 <span className={styles.longestLabel}>Longest possible word:</span>

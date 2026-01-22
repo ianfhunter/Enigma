@@ -203,11 +203,11 @@ export default function CodeBreaker() {
             <span className={styles.statValue}>{guesses.length} / {maxGuesses}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Wins</span>
+            <span className={styles.statLabel}>{t('common.wins')}</span>
             <span className={styles.statValue}>{stats.wins}</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Losses</span>
+            <span className={styles.statLabel}>{t('common.losses')}</span>
             <span className={styles.statValue}>{stats.losses}</span>
           </div>
         </div>

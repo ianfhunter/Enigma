@@ -282,7 +282,7 @@ export default function AnatomyQuiz() {
           <div className={styles.statsPanel}>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
+              <span className={styles.statLabel}>{t('common.played')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>
@@ -292,7 +292,7 @@ export default function AnatomyQuiz() {
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.streak}</span>
-              <span className={styles.statLabel}>Streak</span>
+              <span className={styles.statLabel}>{t('common.streak')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.maxStreak}</span>

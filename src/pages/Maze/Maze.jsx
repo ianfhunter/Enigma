@@ -255,7 +255,7 @@ export default function Maze() {
           </div>
           {solution.length > 0 && (
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Optimal</span>
+              <span className={styles.statLabel}>{t('common.optimal')}</span>
               <span className={styles.statValue}>{solution.length - 1}</span>
             </div>
           )}

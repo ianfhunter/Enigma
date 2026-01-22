@@ -308,7 +308,7 @@ export default function Kakuro() {
     return (
       <div className={styles.container}>
         <div className={styles.error}>{loadError}</div>
-        <button onClick={() => window.location.reload()}>Retry</button>
+        <button onClick={() => window.location.reload()}>{t('common.retry')}</button>
       </div>
     );
   }

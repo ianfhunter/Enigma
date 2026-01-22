@@ -231,11 +231,11 @@ export default function PokemonQuiz() {
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.correct}/{stats.played}</span>
-              <span className={styles.statLabel}>Perfect</span>
+              <span className={styles.statLabel}>{t('common.perfect')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.streak}</span>
-              <span className={styles.statLabel}>Streak</span>
+              <span className={styles.statLabel}>{t('common.streak')}</span>
             </div>
           </div>
         </>

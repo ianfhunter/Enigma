@@ -613,7 +613,7 @@ export default function PyramidCards() {
         {/* Draw and Waste piles */}
         <div className={styles.piles}>
           <div className={styles.pileSection}>
-            <span className={styles.pileLabel}>Draw ({drawPile.length - wasteIndex})</span>
+            <span className={styles.pileLabel}>{t('common.draw')} ({drawPile.length - wasteIndex})</span>
             <button
               className={`${styles.pile} ${styles.drawPile} ${wasteIndex >= drawPile.length ? styles.empty : ''}`}
               onClick={drawCard}

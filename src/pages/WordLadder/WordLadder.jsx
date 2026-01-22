@@ -261,7 +261,7 @@ export default function WordLadder() {
               <span className={styles.statValue}>{userSteps.length}</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statLabel}>Optimal</span>
+              <span className={styles.statLabel}>{t('common.optimal')}</span>
               <span className={styles.statValue}>{optimalSteps}</span>
             </div>
             <div className={styles.stat}>

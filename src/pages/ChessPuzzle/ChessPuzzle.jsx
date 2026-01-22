@@ -492,7 +492,7 @@ export default function ChessPuzzle() {
           <div className={styles.stat}>
             <span className={styles.statIcon}>🔥</span>
             <span className={styles.statValue}>{streak}</span>
-            <span className={styles.statLabel}>Streak</span>
+            <span className={styles.statLabel}>{t('common.streak')}</span>
           </div>
           {puzzle && (
             <div className={styles.stat}>
