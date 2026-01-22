@@ -940,7 +940,7 @@ export default function GameStore() {
     <div className={styles.store}>
       {/* Header */}
       <header className={styles.header}>
-        <Link to="/" className={styles.backLink}>{t('store.backToGames')}</Link>
+        <Link to="/" className={styles.backLink}>{t('common.backToGames')}</Link>
         <h1 className={styles.title}>
           <span className={styles.titleIcon}>🏪</span>
           {t('store.title')}

@@ -209,8 +209,6 @@
   },
   "profile": {
     "title": "Profile",
-    "settings": "Settings",
-    "games": "Games",
     "security": "Security",
     "admin": "Admin",
     "logOut": "Log Out",
@@ -271,7 +269,6 @@
     "winRate": "Win Rate",
     "gamesTried": "Games Tried",
     "perGameProgress": "Per-Game Progress",
-    "played": "Played",
     "won": "Won",
     "bestStreak": "Best Streak",
     "gameVisibility": "Game Visibility",
@@ -279,8 +276,6 @@
     "gameVisibilityDescription": "Control which games appear on the home page. DEV games are in development and may be incomplete.",
     "enableAll": "Enable All",
     "disableAll": "Disable All",
-    "searchGames": "Search games...",
-    "noGamesMatch": "No games match your search",
     "failedToLoad": "Failed to load data",
     "gamesUpdated": "Games updated!",
     "progressData": "Progress Data",
@@ -357,7 +352,6 @@
   },
   "store": {
     "title": "Game Store",
-    "backToGames": "← Back to Games",
     "subtitle": "Browse and install puzzle packs to customize your collection",
     "packsInstalled": "Packs Installed",
     "totalGames": "Total Games",

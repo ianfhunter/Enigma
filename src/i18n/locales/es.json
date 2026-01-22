@@ -209,8 +209,6 @@
   },
   "profile": {
     "title": "Perfil",
-    "settings": "Configuración",
-    "games": "Juegos",
     "security": "Seguridad",
     "admin": "Administración",
     "logOut": "Cerrar Sesión",
@@ -271,7 +269,6 @@
     "winRate": "Tasa de Victoria",
     "gamesTried": "Juegos Probados",
     "perGameProgress": "Progreso por Juego",
-    "played": "Jugados",
     "won": "Ganados",
     "bestStreak": "Mejor Racha",
     "gameVisibility": "Visibilidad de Juegos",
@@ -279,8 +276,6 @@
     "gameVisibilityDescription": "Controla qué juegos aparecen en la página principal. Los juegos DEV están en desarrollo y pueden estar incompletos.",
     "enableAll": "Activar Todos",
     "disableAll": "Desactivar Todos",
-    "searchGames": "Buscar juegos...",
-    "noGamesMatch": "Ningún juego coincide con tu búsqueda",
     "failedToLoad": "Error al cargar los datos",
     "gamesUpdated": "¡Juegos actualizados!",
     "progressData": "Datos de Progreso",
@@ -357,7 +352,6 @@
   },
   "store": {
     "title": "Tienda de Juegos",
-    "backToGames": "← Volver a Juegos",
     "subtitle": "Explora e instala paquetes de puzzles para personalizar tu colección",
     "packsInstalled": "Paquetes Instalados",
     "totalGames": "Juegos Totales",
