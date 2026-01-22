@@ -718,7 +718,7 @@
 }
 
 .puzzleIdInputField::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-placeholder);
 }
 
 .puzzleIdSubmit {

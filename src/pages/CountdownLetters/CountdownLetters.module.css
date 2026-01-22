@@ -216,11 +216,20 @@
 .letterTile.filled {
   background: linear-gradient(145deg, #1e3a5f, #0f2744);
   border: 3px solid rgba(96, 165, 250, 0.6);
-  color: var(--color-text);
+  color: #fff;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.3),
     inset 0 1px 1px rgba(255, 255, 255, 0.1);
   animation: flipIn 0.3s ease;
+}
+
+:global([data-theme="light"]) .letterTile.filled {
+  background: linear-gradient(145deg, #e0e7ff, #c7d2fe);
+  border: 3px solid rgba(99, 102, 241, 0.5);
+  color: #1e1b4b;
+  box-shadow:
+    0 4px 12px rgba(99, 102, 241, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
 @keyframes flipIn {
@@ -240,10 +249,20 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
+:global([data-theme="light"]) .letterTile.empty {
+  background: rgba(99, 102, 241, 0.05);
+  border: 2px dashed rgba(99, 102, 241, 0.25);
+  color: rgba(99, 102, 241, 0.4);
+}
+
 .letterTile.used {
   opacity: 0.35;
   transform: scale(0.9);
   border-color: rgba(96, 165, 250, 0.3);
+}
+
+:global([data-theme="light"]) .letterTile.used {
+  border-color: rgba(99, 102, 241, 0.3);
 }
 
 /* Start Button */
@@ -306,7 +325,7 @@
 }
 
 .wordInput::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-placeholder);
   font-size: 1rem;
   letter-spacing: 0.05em;
   font-weight: 400;

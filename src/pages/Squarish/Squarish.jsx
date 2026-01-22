@@ -372,30 +372,27 @@ export default function Squarish() {
 
         {gameState === 'won' && (
           <GameResult
-            status="won"
+            state="won"
             title={t('gameStatus.solved')}
             message={t('gameMessages.withSwapsRemaining', { count: swapsLeft })}
-            onNewGame={() => initGame(size)}
-            newGameLabel="New Puzzle"
+            actions={[{ label: t('common.newPuzzle'), onClick: () => initGame(size), primary: true }]}
           />
         )}
 
         {gameState === 'lost' && (
           <GameResult
-            status="lost"
-            title="Out of swaps!"
-            message={`The words were: ${Object.values(puzzle.words).join(', ')}`}
-            onNewGame={() => initGame(size)}
-            newGameLabel="New Puzzle"
+            state="lost"
+            title={t('gameStatus.outOfSwaps')}
+            message={`${t('gameMessages.theWordsWere')}: ${Object.values(puzzle.words).join(', ')}`}
+            actions={[{ label: t('common.newPuzzle'), onClick: () => initGame(size), primary: true }]}
           />
         )}
 
         {gameState === 'gaveUp' && (
           <GameResult
-            status="gaveUp"
-            title="Solution Revealed"
-            onNewGame={() => initGame(size)}
-            newGameLabel="New Puzzle"
+            state="gaveup"
+            title={t('gameResult.solutionRevealed')}
+            actions={[{ label: t('common.newPuzzle'), onClick: () => initGame(size), primary: true }]}
           />
         )}
 

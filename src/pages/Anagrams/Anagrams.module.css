@@ -186,7 +186,7 @@
 }
 
 .wordInput::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-placeholder);
   font-weight: 400;
   letter-spacing: normal;
 }

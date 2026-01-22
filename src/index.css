@@ -14,6 +14,7 @@
   --color-text-secondary: #888;
   --color-text-tertiary: #666;
   --color-text-muted: #555;
+  --color-placeholder: rgba(255, 255, 255, 0.35);
 
   --color-primary: #a78bfa;
   --color-primary-light: #c4b5fd;
@@ -112,6 +113,7 @@
   --color-text-secondary: #4a4458;
   --color-text-tertiary: #6b6580;
   --color-text-muted: #9992a8;
+  --color-placeholder: #6b6580;
 
   --color-primary: #7c3aed;
   --color-primary-light: #8b5cf6;

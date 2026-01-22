@@ -194,6 +194,12 @@
   background: rgba(102, 126, 234, 0.1);
 }
 
+.currentWord::placeholder {
+  color: var(--color-placeholder);
+  letter-spacing: 0.05em;
+  font-weight: 400;
+}
+
 .placeholder {
   color: var(--color-text-secondary);
   opacity: 0.5;

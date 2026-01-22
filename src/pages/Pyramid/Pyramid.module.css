@@ -106,20 +106,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: var(--game-cell-bg);
+  border: 2px solid var(--game-cell-border);
   border-radius: 12px;
   font-size: 1.5rem;
   font-weight: 800;
-  color: white;
+  color: var(--game-cell-text);
   cursor: pointer;
   transition: all 0.15s ease;
   position: relative;
 }
 
 .cell:hover {
-  background: rgba(251, 191, 36, 0.2);
-  border-color: rgba(251, 191, 36, 0.4);
+  background: var(--game-cell-hover);
+  border-color: var(--game-accent-yellow-border);
   transform: scale(1.05);
 }
 
@@ -283,8 +283,8 @@
 .wordList {
   width: 100%;
   max-width: 400px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 1rem;
 }
@@ -292,7 +292,7 @@
 .wordList h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
   margin-bottom: 0.75rem;
 }
 
@@ -362,8 +362,8 @@
 .allWords {
   width: 100%;
   max-width: 400px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 1rem;
 }
@@ -371,7 +371,7 @@
 .allWords h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
   margin-bottom: 0.75rem;
 }
 
@@ -382,8 +382,8 @@
 }
 
 .allWords .word.missed {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--game-cell-bg);
+  border-color: var(--game-cell-border);
   color: var(--color-text-tertiary);
 }
 
