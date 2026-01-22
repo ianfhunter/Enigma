@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import Timer from '../../components/Timer';
@@ -177,6 +178,7 @@ export {
 };
 
 export default function KillerSudoku() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
@@ -451,7 +453,7 @@ export default function KillerSudoku() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="Puzzle Solved!"
+            title={t('gameStatus.solved')}
             message={`Time: ${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`}
           />
         )}

@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './CurrencyQuiz.module.css';
 
 export default function CurrencyQuiz() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [current, setCurrent] = useState(null);
   const [options, setOptions] = useState([]);

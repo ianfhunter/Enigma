@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PyramidCards.module.css';
@@ -309,6 +310,7 @@ export {
 };
 
 export default function PyramidCards() {
+  const { t } = useTranslation();
   const boardRef = useRef(null);
 
   const [puzzles, setPuzzles] = useState([]);

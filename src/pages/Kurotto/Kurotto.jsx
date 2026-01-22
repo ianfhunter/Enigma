@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Kurotto.module.css';
 import kurottoPuzzles from '../../../public/datasets/kurottoPuzzles.json';
 
@@ -126,7 +128,7 @@ export default function Kurotto() {
   const [sizeKey, setSizeKey] = useState('10x10');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [whiteMode, setWhiteMode] = useState(false); // Mobile white mode
@@ -160,9 +162,9 @@ export default function Kurotto() {
     const data = parseDatasetPuzzle(selected);
     setPuzzleData(data);
     setGrid(Array(data.rows).fill(null).map(() => Array(data.cols).fill(null)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty, sizeKey]);
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -171,20 +173,18 @@ export default function Kurotto() {
   const size = puzzleData?.rows || 10;
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, size)
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.solution, size)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors, size, gameState]);
+    checkWin(checkSolved(grid, puzzleData.solution, size));
+  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.clues[r][c] !== null) return; // Can't shade clue cells
 
     const isWhiteAction = e.type === 'contextmenu' || e.ctrlKey || whiteMode;
@@ -209,13 +209,13 @@ export default function Kurotto() {
 
   const handleReset = () => {
     setGrid(Array(size).fill(null).map(() => Array(size).fill(null)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -314,7 +314,7 @@ export default function Kurotto() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

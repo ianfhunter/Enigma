@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -40,6 +41,7 @@ export {
 };
 
 export default function LongestWord() {
+  const { t } = useTranslation();
   const [seed, setSeed] = useState('');
   const [seedNum, setSeedNum] = useState(null);
   const [words, setWords] = useState([]);

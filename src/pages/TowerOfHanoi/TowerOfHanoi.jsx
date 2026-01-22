@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -19,6 +20,7 @@ const DISK_COLORS = [
 export { DISK_COUNTS, DISK_COLORS };
 
 export default function TowerOfHanoi() {
+  const { t } = useTranslation();
   const [diskCount, setDiskCount] = useState(4);
   const [towers, setTowers] = useState([[], [], []]);
   const [selectedTower, setSelectedTower] = useState(null);

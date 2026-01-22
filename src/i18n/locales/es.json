@@ -74,6 +74,8 @@
     "notes": "Notas",
     "clear": "Borrar",
     "undo": "Deshacer",
+    "shuffle": "Mezclar",
+    "reveal": "Revelar",
     "comingSoon": "Próximamente",
     "playNow": "Jugar Ahora",
     "addToFavourites": "Añadir a favoritos",
@@ -442,5 +444,14 @@
     "timeToStudyArt": "¡Hora de estudiar algo de historia del arte!",
     "timeToStudySky": "¡Hora de estudiar el cielo nocturno!",
     "timeToVisitConcertHall": "¡Hora de visitar la sala de conciertos!"
+  },
+  "gameMessages": {
+    "allRectanglesFormed": "¡Todos los rectángulos formados correctamente!",
+    "allSlashesInPlace": "¡Todas las diagonales en su lugar!",
+    "withSwapsRemaining": "¡Con {{count}} intercambios restantes!",
+    "aquariumsFilled": "¡Acuarios perfectamente llenos!",
+    "allInequalitiesSatisfied": "Todas las desigualdades satisfechas",
+    "binaryBalanceAchieved": "¡Equilibrio binario perfecto logrado!",
+    "allIslandsConnected": "¡Todas las islas conectadas!"
   }
 }

@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import StatsPanel from '../../components/StatsPanel';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Cirkitz.module.css';
 
 // Cirkitz - hexagonal tile puzzle with colored wedges
@@ -346,7 +348,7 @@ export default function Cirkitz() {
   const [puzzleSize, setPuzzleSize] = useState(3);
   const [puzzleData, setPuzzleData] = useState(null);
   const [rotations, setRotations] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [matchInfo, setMatchInfo] = useState({ matches: 0, total: 0, mismatches: new Set(), connections: [], poweredTiles: new Set() });
   const [animatingTile, setAnimatingTile] = useState(null);
   const prevConnectionsRef = useRef([]);
@@ -355,27 +357,27 @@ export default function Cirkitz() {
     const data = generatePuzzle(puzzleSize);
     setPuzzleData(data);
     setRotations(data.rotations.map(row => [...row]));
-    setGameState('playing');
+    resetGameState();
     prevConnectionsRef.current = [];
-  }, [puzzleSize]);
+  }, [puzzleSize, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const info = checkMatches(puzzleData.tiles, rotations, puzzleData.size);
     setMatchInfo(info);
 
     if (info.solved) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [rotations, puzzleData, gameState]);
+  }, [rotations, puzzleData, isPlaying, checkWin]);
 
   const handleTileClick = (r, c, e) => {
-    if (gameState !== 'playing' || !puzzleData?.tiles[r]?.[c]) return;
+    if (!isPlaying || !puzzleData?.tiles[r]?.[c]) return;
 
     e.preventDefault();
     const delta = e.button === 2 || e.shiftKey ? -1 : 1;
@@ -391,9 +393,9 @@ export default function Cirkitz() {
   };
 
   const handleGiveUp = () => {
-    if (gameState !== 'playing' || !puzzleData) return;
+    if (!isPlaying || !puzzleData) return;
     setRotations(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;

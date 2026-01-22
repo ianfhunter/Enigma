@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { getGameGradient } from '../../data/gameRegistry';
 import styles from './Entanglement.module.css';

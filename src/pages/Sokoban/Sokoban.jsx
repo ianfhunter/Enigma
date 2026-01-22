@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './Sokoban.module.css';
@@ -133,6 +134,7 @@ export {
 };
 
 export default function Sokoban() {
+  const { t } = useTranslation();
   const boardRef = useRef(null);
 
   const [packId, setPackId] = usePersistedState('sokoban.packId', PACKS[0].id);
@@ -335,7 +337,7 @@ export default function Sokoban() {
 
         <div className={styles.boardWrap}>
           {status.type === 'loading' && (
-            <div className={styles.notice}>Loading levels…</div>
+            <div className={styles.notice}>{t('common.loadingPuzzles')}</div>
           )}
           {status.type === 'error' && (
             <div className={styles.noticeError}>

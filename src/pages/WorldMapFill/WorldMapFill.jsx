@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';

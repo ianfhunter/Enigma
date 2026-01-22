@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import StatsPanel from '../../components/StatsPanel';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -102,6 +103,7 @@ export {
 };
 
 export default function Trivia() {
+  const { t } = useTranslation();
   const [mode, setMode] = useState(null);
   const [category, setCategory] = useState('all');
   const [questions, setQuestions] = useState([]);

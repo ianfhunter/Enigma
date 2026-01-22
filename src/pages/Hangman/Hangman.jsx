@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getRandomHangmanWord } from '../../data/wordUtils';
 import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -14,6 +15,7 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const MAX_WRONG = 6;
 
 export default function Hangman() {
+  const { t } = useTranslation();
   const [word, setWord] = useState('');
   const [guessedLetters, setGuessedLetters] = useState(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);

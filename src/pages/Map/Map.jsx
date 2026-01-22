@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Map.module.css';
 
@@ -217,7 +218,7 @@ export default function MapGame() {
           >
             Clear
           </button>
-          <button className={styles.button} onClick={() => setAssign(puz.solutionColors.slice())}>Reveal</button>
+          <button className={styles.button} onClick={() => setAssign(puz.solutionColors.slice())}>{t('common.reveal')}</button>
         </div>
 
         <div className={styles.group}>

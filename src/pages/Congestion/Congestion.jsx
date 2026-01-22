@@ -600,7 +600,7 @@ export default function Congestion() {
         </div>
 
         <div className={styles.boardContainer}>
-          {loading && <div className={styles.notice}>Loading puzzles...</div>}
+          {loading && <div className={styles.notice}>{t('common.loadingPuzzles')}</div>}
           {error && <div className={styles.noticeError}>Error: {error}</div>}
 
           {!loading && !error && (

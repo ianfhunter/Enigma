@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -110,6 +111,7 @@ export {
 };
 
 export default function Shiritori() {
+  const { t } = useTranslation();
   const [chain, setChain] = useState([]);
   const [currentInput, setCurrentInput] = useState('');
   const [message, setMessage] = useState('');

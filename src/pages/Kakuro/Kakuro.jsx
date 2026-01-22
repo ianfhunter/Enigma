@@ -8,6 +8,7 @@ import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
+import { useGameState } from '../../hooks/useGameState';
 import { selectPuzzleFromDataset, notesToJSON, notesFromJSON } from '../../utils/generatorUtils';
 import styles from './Kakuro.module.css';
 
@@ -51,7 +52,7 @@ export default function Kakuro() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, setGameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [showErrors, setShowErrors] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(null);
@@ -105,11 +106,11 @@ export default function Kakuro() {
     setPlayerValues({});
     setNotes({});
     setTimer(0);
-    setGameState('playing');
+    resetGameState();
     setDifficulty(newDifficulty);
     setSelectedCell(null);
     setIsLoaded(true);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     initPuzzle();
@@ -134,7 +135,7 @@ export default function Kakuro() {
 
   // Timer
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(prev => prev + 1);
       }, 1000);
@@ -142,17 +143,17 @@ export default function Kakuro() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (isLoaded && gameState === 'playing') {
+    if (isLoaded && isPlaying) {
       setIsRunning(true);
     }
-  }, [isLoaded, gameState]);
+  }, [isLoaded, isPlaying]);
 
   // Check for win
   useEffect(() => {
-    if (!puzzle || gameState === 'won' || gameState === 'gaveUp') return;
+    if (!puzzle || !isPlaying) return;
 
     const { grid, solution } = puzzle;
     if (!solution) return;
@@ -172,9 +173,9 @@ export default function Kakuro() {
       }
     }
 
-    setGameState('won');
+    checkWin(true);
     setIsRunning(false);
-  }, [playerValues, puzzle, gameState]);
+  }, [playerValues, puzzle, isPlaying, checkWin]);
 
   const handleCellClick = (row, col) => {
     if (gameState === 'won' || gameState === 'gaveUp') return;
@@ -287,7 +288,7 @@ export default function Kakuro() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzle || gameState !== 'playing') return;
+    if (!puzzle || !isPlaying) return;
 
     // Fill in all values from solution
     const newValues = {};
@@ -299,7 +300,7 @@ export default function Kakuro() {
       }
     }
     setPlayerValues(newValues);
-    setGameState('gaveUp');
+    giveUp();
     setIsRunning(false);
   };
 
@@ -478,7 +479,7 @@ export default function Kakuro() {
         <div className={styles.buttonRow}>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button
             className={styles.newGameBtn}

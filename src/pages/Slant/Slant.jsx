@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -320,6 +321,7 @@ function analyze(cells, targetDeg, clues) {
 }
 
 export default function Slant() {
+  const { t } = useTranslation();
   const [size, setSize] = useState({ w: 6, h: 6 });
   const [puzzle, setPuzzle] = useState(() => generatePuzzle(6, 6));
   const [cells, setCells] = useState(() => Array.from({ length: 6 }, () => Array(6).fill(null)));

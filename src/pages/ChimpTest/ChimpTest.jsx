@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GameResult from '../../components/GameResult';
@@ -24,6 +25,7 @@ function generateSequence(length, seed) {
 }
 
 export default function ChimpTest() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [gameState, setGameState] = useState('waiting'); // 'waiting', 'showing', 'playing', 'lost'
   const [currentRound, setCurrentRound] = useState(0);

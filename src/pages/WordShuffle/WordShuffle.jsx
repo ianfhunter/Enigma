@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -144,6 +145,7 @@ export {
 };
 
 export default function WordShuffle() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(4);
   const [board, setBoard] = useState([]);
   const [allValidWords, setAllValidWords] = useState([]);

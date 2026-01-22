@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './LanguageQuiz.module.css';
@@ -38,6 +39,7 @@ export {
 };
 
 export default function LanguageQuiz() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [current, setCurrent] = useState(null);
   const [guessLanguages, setGuessLanguages] = useState(() => new Set());

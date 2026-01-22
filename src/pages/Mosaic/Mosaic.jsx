@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Mosaic.module.css';
 import mosaicPuzzles from '../../../public/datasets/mosaicPuzzles.json';
 
@@ -88,7 +89,7 @@ export default function Mosaic() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [cells, setCells] = useState([]);
   const [showSolution, setShowSolution] = useState(false);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
 
   const dragRef = useRef({ active: false, button: 'left', seen: new Set() });
 
@@ -111,8 +112,8 @@ export default function Mosaic() {
     setPuzzleData(data);
     setCells(Array(data.w * data.h).fill(null));
     setShowSolution(false);
-    setGameState('playing');
-  }, [sizeKey]);
+    resetGameState();
+  }, [sizeKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -160,10 +161,8 @@ export default function Mosaic() {
   }, [cells, clues, puzzleData, size.h, size.w]);
 
   useEffect(() => {
-    if (analysis.solved && gameState === 'playing') {
-      setGameState('won');
-    }
-  }, [analysis.solved, gameState]);
+    checkWin(analysis.solved);
+  }, [analysis.solved, checkWin]);
 
   useEffect(() => {
     const onUp = () => {
@@ -175,7 +174,7 @@ export default function Mosaic() {
   }, []);
 
   const applyAt = (i, button) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setCells((prev) => {
       const next = prev.slice();
       next[i] = cycleCell(next[i], button);
@@ -198,10 +197,10 @@ export default function Mosaic() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData) return;
+    if (!puzzleData || !isPlaying) return;
     setCells([...solution]);
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) {
@@ -241,7 +240,7 @@ export default function Mosaic() {
           <button
             className={styles.button}
             onClick={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           >
             Give Up
           </button>

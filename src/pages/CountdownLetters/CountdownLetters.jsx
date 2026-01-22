@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import {
@@ -49,6 +50,7 @@ const MIN_VOWELS = 3;
 const MIN_CONSONANTS = 4;
 
 export default function CountdownLetters() {
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState('selecting'); // 'selecting', 'playing', 'finished'
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [vowelPool, setVowelPool] = useState([]);

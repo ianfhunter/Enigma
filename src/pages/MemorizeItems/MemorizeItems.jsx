@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
@@ -36,6 +37,7 @@ function generateDistractors(correctItems, count, seed, itemPool) {
 }
 
 export default function MemorizeItems() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [gameState, setGameState] = useState('waiting'); // 'waiting', 'showing', 'recall', 'results'
   const [round, setRound] = useState(0);

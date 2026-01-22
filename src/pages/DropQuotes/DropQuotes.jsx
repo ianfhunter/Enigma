@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -83,6 +84,7 @@ function generatePuzzle() {
 export { QUOTES, generatePuzzle };
 
 export default function DropQuotes() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);

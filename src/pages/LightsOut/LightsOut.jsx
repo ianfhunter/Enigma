@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './LightsOut.module.css';
 
 const SIZES = {
@@ -58,6 +60,7 @@ export {
 };
 
 export default function LightsOut() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(5);
   const [grid, setGrid] = useState([]);
   const [moves, setMoves] = useState(0);

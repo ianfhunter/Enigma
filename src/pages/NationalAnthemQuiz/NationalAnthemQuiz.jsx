@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -81,6 +82,7 @@ const getRegion = (countryCode) => {
 };
 
 export default function NationalAnthemQuiz() {
+  const { t } = useTranslation();
   const [anthems, setAnthems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState(null);

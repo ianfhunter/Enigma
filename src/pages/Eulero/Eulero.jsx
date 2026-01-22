@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -5,6 +6,7 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { generatePuzzle, isSolved } from './generator';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Eulero.module.css';
@@ -17,7 +19,7 @@ export default function Eulero() {
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [seed, setSeed] = useState(null);
   const [showSolution, setShowSolution] = useState(false);
 
@@ -30,10 +32,10 @@ export default function Eulero() {
     const data = generatePuzzle(newSize, newDifficulty, actualSeed);
     setPuzzleData(data);
     setGrid(data.puzzle.map(row => row.map(cell => cell ? { ...cell } : null)));
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
     setSeed(actualSeed);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame(size, difficulty);
@@ -41,7 +43,7 @@ export default function Eulero() {
 
   // Check for win
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing' || showSolution) return;
+    if (!puzzleData || !isPlaying || showSolution) return;
 
     // Check if all cells are filled and correct
     let allFilled = true;
@@ -56,12 +58,12 @@ export default function Eulero() {
     }
 
     if (allFilled && isSolved(grid, puzzleData.solution)) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [grid, puzzleData, gameState, showSolution, size]);
+  }, [grid, puzzleData, isPlaying, showSolution, size, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
 
     setGrid(prev => {
       const newGrid = prev.map(row => row.map(cell => cell ? { ...cell } : null));
@@ -89,7 +91,7 @@ export default function Eulero() {
 
   const handleCellRightClick = (e, r, c) => {
     e.preventDefault();
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
 
     setGrid(prev => {
       const newGrid = prev.map(row => row.map(cell => cell ? { ...cell } : null));
@@ -115,7 +117,7 @@ export default function Eulero() {
   };
 
   const handleNumberInput = (num) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
 
     // Find selected cell (simplified - use last clicked)
     // In a more complete implementation, you'd track selected cell
@@ -141,15 +143,15 @@ export default function Eulero() {
   };
 
   const handleClear = () => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     setGrid(puzzleData.puzzle.map(row => row.map(cell => cell ? { ...cell } : null)));
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => row.map(cell => ({ ...cell }))));
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   const handleNewPuzzle = () => {
@@ -186,10 +188,10 @@ export default function Eulero() {
         />
 
         <button className={styles.button} onClick={handleNewPuzzle}>New</button>
-        <button className={styles.button} onClick={handleClear}>Clear</button>
+        <button className={styles.button} onClick={handleClear}>{t('common.clear')}</button>
         <GiveUpButton
           onGiveUp={handleGiveUp}
-          disabled={gameState !== 'playing' || showSolution}
+          disabled={!isPlaying || showSolution}
           requireConfirmation={false}
         />
       </div>
@@ -258,7 +260,7 @@ export default function Eulero() {
               key={num}
               className={styles.numBtn}
               onClick={() => handleNumberInput(num)}
-              disabled={gameState !== 'playing' || showSolution}
+              disabled={!isPlaying || showSolution}
             >
               {num}
             </button>
@@ -288,7 +290,7 @@ export default function Eulero() {
                   return newGrid;
                 });
               }}
-              disabled={gameState !== 'playing' || showSolution}
+              disabled={!isPlaying || showSolution}
             >
               {letter}
             </button>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Loopy.module.css';
 import slitherlinkPuzzles from '../../../public/datasets/slitherlinkPuzzles.json';

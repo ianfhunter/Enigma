@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './StarBattle.module.css';
 
 const GRID_SIZES = {
@@ -123,7 +124,7 @@ export default function StarBattle() {
   const [allPuzzles, setAllPuzzles] = useState([]);
   const [puzzleData, setPuzzleData] = useState(null);
   const [stars, setStars] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -173,9 +174,9 @@ export default function StarBattle() {
       size: puzzleSize
     });
     setStars(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [allPuzzles, size, difficulty]);
+  }, [allPuzzles, size, difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading && allPuzzles.length > 0) {
@@ -184,18 +185,16 @@ export default function StarBattle() {
   }, [loading, allPuzzles, initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? checkValidity(stars, puzzleData.regions, puzzleData.starsPerUnit) : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(stars, puzzleData.regions, puzzleData.starsPerUnit)) {
-      setGameState('won');
-    }
-  }, [stars, puzzleData, showErrors, gameState]);
+    checkWin(checkSolved(stars, puzzleData.regions, puzzleData.starsPerUnit));
+  }, [stars, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     setStars(prev => {
       const newStars = prev.map(row => [...row]);
@@ -207,13 +206,13 @@ export default function StarBattle() {
   const handleReset = () => {
     const gridSize = puzzleData?.size || size;
     setStars(Array(gridSize).fill(null).map(() => Array(gridSize).fill(false)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setStars(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading) {
@@ -331,7 +330,7 @@ export default function StarBattle() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

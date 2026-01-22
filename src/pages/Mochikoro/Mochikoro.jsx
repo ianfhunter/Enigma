@@ -6,6 +6,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRNG, generateRandomSeed, parseSeedFromUrl, setSeedInUrl } from '../../enigma-sdk/seeding';
 import styles from './Mochikoro.module.css';
 
@@ -214,7 +215,7 @@ export default function Mochikoro() {
   const [allPuzzles, setAllPuzzles] = useState([]);
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [whiteMode, setWhiteMode] = useState(false);
@@ -288,9 +289,9 @@ export default function Mochikoro() {
 
     // Initialize grid - all cells start as white (unshaded)
     setGrid(Array(rows).fill(null).map(() => Array(cols).fill('white')));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [allPuzzles, difficulty, sizeKey]);
+  }, [allPuzzles, difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     if (!loading && allPuzzles.length > 0) {
@@ -304,20 +305,18 @@ export default function Mochikoro() {
 
   // Check validity and win condition
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, rows, cols)
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.clues, rows, cols)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors, rows, cols, gameState]);
+    checkWin(checkSolved(grid, puzzleData.clues, rows, cols));
+  }, [grid, puzzleData, showErrors, rows, cols, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.clues[r][c] !== null) {
       // Clue cells can still be shaded/unshaded
     }
@@ -343,14 +342,14 @@ export default function Mochikoro() {
 
   const handleReset = () => {
     setGrid(Array(rows).fill(null).map(() => Array(cols).fill('white')));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   const handleNewGame = () => {
@@ -457,7 +456,7 @@ export default function Mochikoro() {
           <GameResult
             state="won"
             title={t('gameStatus.solved')}
-            message={t('common.allRectanglesFormed', 'All rectangles formed correctly!')}
+            message={t('gameMessages.allRectanglesFormed')}
             actions={[{ label: 'New Puzzle', onClick: handleNewGame, primary: true }]}
           />
         )}
@@ -489,7 +488,7 @@ export default function Mochikoro() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={handleNewGame}>
             New Puzzle

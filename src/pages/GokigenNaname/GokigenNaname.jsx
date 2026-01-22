@@ -5,6 +5,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './GokigenNaname.module.css';
 import gokigenPuzzles from '../../../public/datasets/gokigennanamePuzzles.json';
 
@@ -110,7 +111,7 @@ export default function GokigenNaname() {
   const [sizeKey, setSizeKey] = useState('6x6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
 
@@ -138,7 +139,7 @@ export default function GokigenNaname() {
         const selected = fallback[Math.floor(Math.random() * fallback.length)];
         setPuzzleData(selected);
         setGrid(Array(selected.rows).fill(null).map(() => Array(selected.cols).fill(null)));
-        setGameState('playing');
+        resetGameState();
         setErrors(new Set());
         return;
       }
@@ -147,9 +148,9 @@ export default function GokigenNaname() {
     const selected = filtered[Math.floor(Math.random() * filtered.length)];
     setPuzzleData(selected);
     setGrid(Array(selected.rows).fill(null).map(() => Array(selected.cols).fill(null)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [difficulty, sizeKey]);
+  }, [difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -168,20 +169,18 @@ export default function GokigenNaname() {
   };
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, rows, cols)
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.clues, rows, cols)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors, rows, cols, gameState]);
+    checkWin(checkSolved(grid, puzzleData.clues, rows, cols));
+  }, [grid, puzzleData, showErrors, rows, cols, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     // Cycle through: empty -> / -> \ -> empty
     setGrid(prev => {
@@ -200,13 +199,13 @@ export default function GokigenNaname() {
   const handleReset = () => {
     if (!puzzleData) return;
     setGrid(Array(rows).fill(null).map(() => Array(cols).fill(null)));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) {
@@ -293,7 +292,7 @@ export default function GokigenNaname() {
           <GameResult
             state="won"
             title={t('gameStatus.solved')}
-            message={t('common.allSlashesInPlace', 'All slashes in place!')}
+            message={t('gameMessages.allSlashesInPlace')}
           />
         )}
 
@@ -322,7 +321,7 @@ export default function GokigenNaname() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

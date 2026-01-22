@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -26,6 +27,7 @@ const getRandomPiece = (data, exclude = []) => {
 };
 
 export default function ClassicalMusicQuiz() {
+  const { t } = useTranslation();
   const [pieces, setPieces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState(null);

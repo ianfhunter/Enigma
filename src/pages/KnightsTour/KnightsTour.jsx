@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import styles from './KnightsTour.module.css';

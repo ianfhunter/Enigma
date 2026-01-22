@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
@@ -181,6 +182,7 @@ export {
 };
 
 export default function Creek() {
+  const { t } = useTranslation();
   const [savedState, setSavedState] = usePersistedState(STORAGE_KEY, null);
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);
@@ -320,7 +322,7 @@ export default function Creek() {
           title="Creek"
           instructions="Loading puzzles..."
         />
-        <div className={styles.loading}>Loading...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }

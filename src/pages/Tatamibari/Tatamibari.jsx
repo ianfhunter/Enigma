@@ -5,6 +5,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Tatamibari.module.css';
 
@@ -334,7 +335,7 @@ export default function Tatamibari() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGrid, setPlayerGrid] = useState([]);
   const [currentRegion, setCurrentRegion] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -361,32 +362,32 @@ export default function Tatamibari() {
       setPuzzleData(data);
       setPlayerGrid(Array(size).fill(null).map(() => Array(size).fill(-1)));
       setCurrentRegion(0);
-      setGameState('playing');
+      resetGameState();
       setErrors(new Set());
     } catch (err) {
       console.error('Failed to initialize game:', err);
     } finally {
       setLoading(false);
     }
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors ? validateSolution(playerGrid, puzzleData.clueGrid, size) : new Set();
     setErrors(newErrors);
 
     if (isSolved(playerGrid, puzzleData.clueGrid, size)) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [playerGrid, puzzleData, size, showErrors, gameState]);
+  }, [playerGrid, puzzleData, size, showErrors, isPlaying, checkWin]);
 
   const handleCellMouseDown = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setIsDrawing(true);
 
     setPlayerGrid(prev => {
@@ -401,7 +402,7 @@ export default function Tatamibari() {
   };
 
   const handleCellMouseEnter = (r, c) => {
-    if (!isDrawing || gameState !== 'playing') return;
+    if (!isDrawing || !isPlaying) return;
 
     setPlayerGrid(prev => {
       const newGrid = prev.map(row => [...row]);
@@ -422,13 +423,13 @@ export default function Tatamibari() {
   const handleReset = () => {
     setPlayerGrid(Array(size).fill(null).map(() => Array(size).fill(-1)));
     setCurrentRegion(0);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setPlayerGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (loading || !puzzleData) {
@@ -573,7 +574,7 @@ export default function Tatamibari() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={() => initGame()}>
             New Puzzle

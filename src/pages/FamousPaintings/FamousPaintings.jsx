@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -93,6 +94,7 @@ export {
 };
 
 export default function FamousPaintings() {
+  const { t } = useTranslation();
   const [paintings, setPaintings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState(null);
@@ -339,7 +341,7 @@ export default function FamousPaintings() {
             <div className={styles.paintingDisplay}>
               {!imageLoaded && !imageError && (
                 <div className={styles.imagePlaceholder}>
-                  <span>Loading painting...</span>
+                  <span>{t('common.loadingPuzzle')}</span>
                 </div>
               )}
               {imageError && (

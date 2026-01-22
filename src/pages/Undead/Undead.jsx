@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Undead.module.css';
 
@@ -223,7 +224,7 @@ export default function Undead() {
         <div className={styles.group}>
           <button className={styles.button} onClick={() => newGame(w, h)}>New</button>
           <button className={styles.button} onClick={() => setMonsters(new Array(puz.w * puz.h).fill(''))}>Clear</button>
-          <button className={styles.button} onClick={() => setMonsters(puz.solution.slice())}>Reveal</button>
+          <button className={styles.button} onClick={() => setMonsters(puz.solution.slice())}>{t('common.reveal')}</button>
           <label style={{ color: 'rgba(255,255,255,0.85)' }}>
             W
             <input

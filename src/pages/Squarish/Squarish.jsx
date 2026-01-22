@@ -7,6 +7,7 @@ import SizeSelector from '../../components/SizeSelector';
 import StatsPanel from '../../components/StatsPanel';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Squarish.module.css';
 
 const CONFIGS = {
@@ -170,7 +171,7 @@ export default function Squarish() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [swapsLeft, setSwapsLeft] = useState(CONFIGS[5].maxSwaps);
   const [correctCells, setCorrectCells] = useState(new Set());
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, lose, reset: resetGameState, isPlaying } = useGameState();
   const [seed, setSeed] = useState(null);
 
   const initGame = useCallback((gameSize, customSeed = null) => {
@@ -203,31 +204,31 @@ export default function Squarish() {
     setSelectedCell(null);
     setSwapsLeft(config.maxSwaps);
     setCorrectCells(checkCorrectness(newPuzzle.scrambled, newPuzzle.solution, gameSize));
-    setGameState('playing');
-  }, []);
+    resetGameState();
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame(size);
   }, [size, initGame]);
 
   useEffect(() => {
-    if (puzzle && gameState === 'playing' && isSolved(grid, puzzle.solution, puzzle.size)) {
-      setGameState('won');
+    if (puzzle && isPlaying) {
+      checkWin(isSolved(grid, puzzle.solution, puzzle.size));
     }
-  }, [grid, puzzle, gameState]);
+  }, [grid, puzzle, isPlaying, checkWin]);
 
   const handleSizeChange = (newSize) => {
     setSize(newSize);
   };
 
   const handleGiveUp = () => {
-    if (!puzzle || gameState !== 'playing') return;
+    if (!puzzle || !isPlaying) return;
     setGrid(puzzle.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   const handleCellClick = (row, col) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (!grid[row][col]) return;
     if (correctCells.has(`${row},${col}`)) return;
 
@@ -252,7 +253,7 @@ export default function Squarish() {
       setSelectedCell(null);
 
       if (swapsLeft - 1 <= 0 && !isSolved(newGrid, puzzle.solution, puzzle.size)) {
-        setGameState('lost');
+        lose();
       }
     }
   };
@@ -373,7 +374,7 @@ export default function Squarish() {
           <GameResult
             status="won"
             title={t('gameStatus.solved')}
-            message={t('common.withSwapsRemaining', { count: swapsLeft })}
+            message={t('gameMessages.withSwapsRemaining', { count: swapsLeft })}
             onNewGame={() => initGame(size)}
             newGameLabel="New Puzzle"
           />
@@ -402,7 +403,7 @@ export default function Squarish() {
           <div className={styles.buttons}>
             <GiveUpButton
               onGiveUp={handleGiveUp}
-              disabled={gameState !== 'playing'}
+              disabled={!isPlaying}
             />
             <button className={styles.newGameBtn} onClick={() => initGame(size)}>
               New Puzzle

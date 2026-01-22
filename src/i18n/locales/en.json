@@ -74,6 +74,8 @@
     "notes": "Notes",
     "clear": "Clear",
     "undo": "Undo",
+    "shuffle": "Shuffle",
+    "reveal": "Reveal",
     "comingSoon": "Coming Soon",
     "playNow": "Play Now",
     "addToFavourites": "Add to favourites",
@@ -442,5 +444,14 @@
     "timeToStudyArt": "Time to study some art history!",
     "timeToStudySky": "Time to study the night sky!",
     "timeToVisitConcertHall": "Time to visit the concert hall!"
+  },
+  "gameMessages": {
+    "allRectanglesFormed": "All rectangles formed correctly!",
+    "allSlashesInPlace": "All slashes in place!",
+    "withSwapsRemaining": "With {{count}} swaps remaining!",
+    "aquariumsFilled": "Aquariums perfectly filled!",
+    "allInequalitiesSatisfied": "All inequalities satisfied",
+    "binaryBalanceAchieved": "Perfect binary balance achieved!",
+    "allIslandsConnected": "All islands connected!"
   }
 }

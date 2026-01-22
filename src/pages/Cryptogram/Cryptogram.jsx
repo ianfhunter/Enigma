@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
 import styles from './Cryptogram.module.css';
@@ -84,7 +85,7 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
   const [guesses, setGuesses] = useState({});
   const [selectedLetter, setSelectedLetter] = useState(null);
   const [hintsUsed, setHintsUsed] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [seed, setSeed] = useState(null);
@@ -131,10 +132,10 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
     setGuesses(initialGuesses);
     setSelectedLetter(null);
     setHintsUsed(0);
-    setGameState('playing');
+    resetGameState();
     setStartTime(Date.now());
     setEndTime(null);
-  }, [numStartingHints]);
+  }, [numStartingHints, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -142,7 +143,7 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
 
   // Check if puzzle is solved
   useEffect(() => {
-    if (!quote || !cipher || gameState !== 'playing') return;
+    if (!quote || !cipher || !isPlaying) return;
 
     const originalLetters = getUniqueLetters(quote.text);
     const allCorrect = originalLetters.every(letter => {
@@ -151,13 +152,13 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
     });
 
     if (allCorrect && Object.keys(guesses).length > 0) {
-      setGameState('won');
+      checkWin(true);
       setEndTime(Date.now());
     }
-  }, [guesses, quote, cipher, gameState]);
+  }, [guesses, quote, cipher, isPlaying, checkWin]);
 
   const handleLetterClick = (encryptedLetter) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (!/[A-Z]/.test(encryptedLetter)) return;
 
     setSelectedLetter(encryptedLetter);
@@ -207,14 +208,14 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
   };
 
   const handleGiveUp = () => {
-    if (!cipher || gameState !== 'playing') return;
+    if (!cipher || !isPlaying) return;
     // Reveal all letters using the cipher's decrypt map
     const allGuesses = {};
     Object.keys(cipher.decrypt).forEach(encLetter => {
       allGuesses[encLetter] = cipher.decrypt[encLetter];
     });
     setGuesses(allGuesses);
-    setGameState('gaveUp');
+    giveUp();
     setEndTime(Date.now());
   };
 
@@ -411,7 +412,7 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
         <div className={styles.buttonRow}>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={() => initGame(Math.floor(Math.random() * 2147483647))}>
             New Random Puzzle

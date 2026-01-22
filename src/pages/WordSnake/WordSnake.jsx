@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -88,6 +89,7 @@ export {
 };
 
 export default function WordSnake() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [selectedPath, setSelectedPath] = useState([]);
   const [gameState, setGameState] = useState('playing');

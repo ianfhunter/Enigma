@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader/GameHeader';
 import styles from './ColorCube.module.css';
 
@@ -469,8 +470,8 @@ export default function ColorCube() {
         </div>
         <div className={styles.actions}>
           <button className={styles.btn} onClick={scramble}>Scramble</button>
-          <button className={styles.btn} onClick={undo} disabled={moveHistory.length === 0}>Undo</button>
-          <button className={styles.btnSecondary} onClick={hardReset}>Reset</button>
+          <button className={styles.btn} onClick={undo} disabled={moveHistory.length === 0}>{t('common.undo')}</button>
+          <button className={styles.btnSecondary} onClick={hardReset}>{t('common.reset')}</button>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createGrid, cellKey, getNeighbors, has2x2Block, isFullyConnected, countCells } from '../../utils/generatorUtils';
 import styles from './LITS.module.css';
 
@@ -418,7 +419,7 @@ export default function LITS() {
   const [difficulty, setDifficulty] = useState('easy');
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [violations, setViolations] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
@@ -464,11 +465,11 @@ export default function LITS() {
       setShaded(createGrid(data.size, data.size, false));
     }
 
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setViolations(new Set());
     setShowSolution(false);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   useEffect(() => {
     if (!loading && datasetRef.current) {
@@ -477,7 +478,7 @@ export default function LITS() {
   }, [loading, initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     if (showErrors) {
       const result = checkValidity(shaded, puzzleData.regions, puzzleData.regionCells, size);
@@ -488,13 +489,11 @@ export default function LITS() {
       setViolations(new Set());
     }
 
-    if (checkSolved(shaded, puzzleData.regions, puzzleData.regionCells, size)) {
-      setGameState('won');
-    }
-  }, [shaded, puzzleData, showErrors, size, gameState]);
+    checkWin(checkSolved(shaded, puzzleData.regions, puzzleData.regionCells, size));
+  }, [shaded, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
 
     setShaded(prev => {
       const newShaded = prev.map(row => [...row]);
@@ -506,13 +505,14 @@ export default function LITS() {
   const handleReset = () => {
     if (!puzzleData) return;
     setShaded(createGrid(puzzleData.size, puzzleData.size, false));
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
   };
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   // Loading state
@@ -687,7 +687,7 @@ export default function LITS() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

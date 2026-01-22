@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -371,6 +372,7 @@ function checkSolved(islands, bridges) {
 }
 
 export default function Hashi() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('Small');
   const [puzzleData, setPuzzleData] = useState(null);
   const [bridges, setBridges] = useState(new Map());
@@ -637,8 +639,8 @@ export default function Hashi() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🌉 Puzzle Solved!"
-            message="All islands connected!"
+            title={t('gameStatus.solved')}
+            message={t('gameMessages.allIslandsConnected')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
@@ -669,7 +671,7 @@ export default function Hashi() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

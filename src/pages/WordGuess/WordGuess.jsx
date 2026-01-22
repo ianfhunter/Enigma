@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   isValidWord,
   getRandomWordGuessWord,
@@ -24,6 +25,7 @@ const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
 export default function WordGuess() {
+  const { t } = useTranslation();
   const [targetWord, setTargetWord] = useState('');
   const [guesses, setGuesses] = useState([]);
   const [currentGuess, setCurrentGuess] = useState('');

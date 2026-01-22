@@ -1,30 +1,32 @@
 /**
  * Copyright (C) 2024 Ian Hunter
- * 
+ *
  * This file is part of Enigma and is licensed under GPL-3.0.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  * This component uses data derived from:
  * - MsFit wordlist (GPL-3.0) from https://github.com/nzfeng/crossword-dataset
  *   Copyright (c) Nicole Feng
  */
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
+import { useGameState } from '../../hooks/useGameState';
 import GameHeader from '../../components/GameHeader';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import {
@@ -81,12 +83,13 @@ export const getLastTypedLetter = (value = '') => {
 };
 
 export default function Crossword() {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzle, setPuzzle] = useState(null);
   const [userGrid, setUserGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const [direction, setDirection] = useState('across'); // 'across' or 'down'
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'gaveUp'
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [missedWords, setMissedWords] = useState([]);
   const [timer, setTimer] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -121,7 +124,7 @@ export default function Crossword() {
   // Initialize game
   const initGame = useCallback((diff = difficulty) => {
     setDifficulty(diff);
-    setGameState('playing');
+    resetGameState();
     setShowErrors(false);
     setMissedWords([]);
 

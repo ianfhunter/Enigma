@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
-import { 
-  isValidWord, 
+import {
+  isValidWord,
   findAllWordsFromLetters,
   createSeededRandom,
   getTodayDateString,
@@ -31,7 +32,7 @@ const LETTERS_PER_ORBIT = 3;
 // Check if a word matches the orbit order (inner to outer or outer to inner)
 function matchesOrbitOrder(word, orbits) {
   if (word.length !== NUM_ORBITS) return false;
-  
+
   // Try inner to outer (0 → 1 → 2 → 3)
   let matchesInnerOuter = true;
   for (let i = 0; i < NUM_ORBITS; i++) {
@@ -40,7 +41,7 @@ function matchesOrbitOrder(word, orbits) {
       break;
     }
   }
-  
+
   // Try outer to inner (3 → 2 → 1 → 0)
   let matchesOuterInner = true;
   for (let i = 0; i < NUM_ORBITS; i++) {
@@ -50,7 +51,7 @@ function matchesOrbitOrder(word, orbits) {
       break;
     }
   }
-  
+
   return matchesInnerOuter || matchesOuterInner;
 }
 
@@ -77,16 +78,16 @@ function generatePuzzle(seed) {
   for (const targetWord of shuffledCommonWords.slice(0, Math.min(200, shuffledCommonWords.length))) {
     // Generate orbits that can form this word (either inner→outer or outer→inner)
     const orbits = generateOrbitsForWord(targetWord, random);
-    
+
     if (!orbits) continue; // Skip if we couldn't generate valid orbits
-    
+
     const allLetters = orbits.flat();
-    
+
     // Find all 4-letter words that match orbit order (inner→outer or outer→inner)
     const validWords = [];
     for (const word of findAllWordsFromLetters(allLetters, 4)) {
       if (word.length !== NUM_ORBITS) continue;
-      
+
       if (matchesOrbitOrder(word, orbits)) {
         validWords.push(word);
       }
@@ -109,16 +110,16 @@ function generatePuzzle(seed) {
 // Generate orbits for a target word (either inner→outer or outer→inner)
 function generateOrbitsForWord(word, random) {
   if (word.length !== NUM_ORBITS) return null;
-  
+
   const allLetters = word.split('');
   const usedLetters = new Set(allLetters);
   const orbits = [];
-  
+
   // Try inner→outer first (word[0] in orbit[0], word[1] in orbit[1], etc.)
   for (let orbitIdx = 0; orbitIdx < NUM_ORBITS; orbitIdx++) {
     const orbitLetters = [word[orbitIdx]]; // First letter from word
     const remainingLetters = [];
-    
+
     // Add 2 more random letters (not already used, not duplicates)
     let added = 1;
     let attempts = 0;
@@ -131,7 +132,7 @@ function generateOrbitsForWord(word, random) {
       }
       attempts++;
     }
-    
+
     // If we couldn't find enough unique letters, fill with any available
     while (added < LETTERS_PER_ORBIT) {
       for (let c = 65; c <= 90; c++) {
@@ -144,16 +145,16 @@ function generateOrbitsForWord(word, random) {
         }
       }
     }
-    
+
     // Shuffle letters in orbit
     for (let i = orbitLetters.length - 1; i > 0; i--) {
       const j = Math.floor(random() * (i + 1));
       [orbitLetters[i], orbitLetters[j]] = [orbitLetters[j], orbitLetters[i]];
     }
-    
+
     orbits.push(orbitLetters);
   }
-  
+
   return orbits;
 }
 
@@ -163,7 +164,7 @@ function generatePuzzleFallback(seed) {
   const allLetters = [];
   const usedLetters = new Set();
   const orbits = [];
-  
+
   for (let orbitIdx = 0; orbitIdx < NUM_ORBITS; orbitIdx++) {
     const orbitLetters = [];
     for (let i = 0; i < LETTERS_PER_ORBIT; i++) {
@@ -202,6 +203,7 @@ function generatePuzzleFallback(seed) {
 export { generatePuzzle, NUM_ORBITS, LETTERS_PER_ORBIT, matchesOrbitOrder };
 
 export default function LetterOrbit() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [foundWords, setFoundWords] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
@@ -213,7 +215,7 @@ export default function LetterOrbit() {
     const today = getTodayDateString();
     const urlSeed = getSeedFromUrl();
     let gameSeed;
-    
+
     if (customSeed !== null) {
       gameSeed = customSeed;
     } else if (urlSeed !== null) {
@@ -222,7 +224,7 @@ export default function LetterOrbit() {
       // Generate a unique seed using timestamp to ensure new puzzles
       gameSeed = stringToSeed(`letterorbit-${today}-${Date.now()}`);
     }
-    
+
     const newPuzzle = generatePuzzle(gameSeed);
     setPuzzle(newPuzzle);
     setSeed(gameSeed);
@@ -256,9 +258,9 @@ export default function LetterOrbit() {
 
     // Check if word matches orbit order (inner→outer or outer→inner)
     if (!matchesOrbitOrder(word, puzzle.orbits)) {
-      setMessage({ 
-        text: `Word must use letters in order: inner→outer OR outer→inner (not other combinations)`, 
-        type: 'error' 
+      setMessage({
+        text: `Word must use letters in order: inner→outer OR outer→inner (not other combinations)`,
+        type: 'error'
       });
       return;
     }
@@ -307,14 +309,14 @@ export default function LetterOrbit() {
             showNewButton={false}
             showShare={true}
             onSeedChange={(newSeed) => {
-              const seedNum = typeof newSeed === 'string' 
+              const seedNum = typeof newSeed === 'string'
                 ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
                 : newSeed;
               initGame(seedNum);
             }}
           />
         )}
-        <button 
+        <button
           className={styles.newGameBtn}
           onClick={() => {
             // Force new puzzle by generating unique seed (ignore URL seed)
@@ -331,26 +333,26 @@ export default function LetterOrbit() {
         <div className={styles.orbitsSection}>
           <div className={styles.orbitsContainer}>
             {puzzle.orbits.map((orbit, orbitIdx) => (
-              <div 
-                key={orbitIdx} 
+              <div
+                key={orbitIdx}
                 className={styles.orbit}
                 style={{ '--orbit-index': orbitIdx }}
               >
                 {orbit.map((letter, letterIdx) => {
                   // Check if this specific letter is used in current word
                   let isUsed = false;
-                  
+
                   // Check inner→outer: letter at position orbitIdx should be from this orbit
                   if (currentWord.length > orbitIdx && currentWord[orbitIdx] === letter) {
                     isUsed = true;
                   }
-                  
+
                   // Check outer→inner: letter at position (NUM_ORBITS-1-orbitIdx) should be from this orbit
                   const reversePos = NUM_ORBITS - 1 - orbitIdx;
                   if (!isUsed && currentWord.length > reversePos && currentWord[reversePos] === letter) {
                     isUsed = true;
                   }
-                  
+
                   return (
                     <button
                       key={`${orbitIdx}-${letterIdx}`}
@@ -431,7 +433,7 @@ export default function LetterOrbit() {
           <div className={styles.wordsList}>
             <div className={styles.wordsHeader}>
               <h3>Found Words</h3>
-              <button 
+              <button
                 className={styles.toggleBtn}
                 onClick={() => setShowAllWords(!showAllWords)}
               >
@@ -443,10 +445,10 @@ export default function LetterOrbit() {
                 const isFound = foundWords.includes(word);
                 const isInnerOuter = puzzle.orbits.every((orbit, i) => orbit.includes(word[i]));
                 const direction = isInnerOuter ? '→' : '←';
-                
+
                 return (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className={`${styles.word} ${isFound ? styles.found : ''} ${styles.spanning}`}
                   >
                     <WordWithDefinition word={word} /> <span className={styles.direction}>{direction}</span>

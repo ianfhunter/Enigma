@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -196,6 +197,7 @@ export {
 };
 
 export default function TriPeaks() {
+  const { t } = useTranslation();
   const [peaks, setPeaks] = useState([]);
   const [drawPile, setDrawPile] = useState([]);
   const [wastePile, setWastePile] = useState([]);

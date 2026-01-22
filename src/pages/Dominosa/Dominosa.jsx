@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -95,6 +96,7 @@ function adjacent(a, b) {
 }
 
 export default function Dominosa() {
+  const { t } = useTranslation();
   const [maxN, setMaxN] = useState(6);
   const [puzzle, setPuzzle] = useState(() => buildPuzzle(6));
   // placed: map cell "r,c" -> partner "r,c"
@@ -248,7 +250,7 @@ export default function Dominosa() {
         {solved && !gaveUp && (
           <GameResult
             state="won"
-            title="Solved!"
+            title={t('gameStatus.solved')}
             variant="inline"
           />
         )}

@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PipePuzzle.module.css';
 
@@ -166,7 +168,7 @@ export default function PipePuzzle() {
   const [gridSizeKey, setGridSizeKey] = useState('5×5');
   const [grid, setGrid] = useState([]);
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isWon } = useGameState();
   const [connectedCells, setConnectedCells] = useState(new Set());
   const [bestScores, setBestScores] = usePersistedState('pipe-puzzle-best', {});
 
@@ -176,16 +178,16 @@ export default function PipePuzzle() {
     const newGrid = generatePuzzle(size);
     setGrid(newGrid);
     setMoves(0);
-    setGameState('playing');
+    resetGameState();
     setConnectedCells(findConnected(newGrid, 0, 0));
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   const handleCellClick = (row, col) => {
-    if (gameState === 'won') return;
+    if (isWon) return;
 
     const newGrid = grid.map(r => r.map(c => ({ ...c })));
     newGrid[row][col].rotation = (newGrid[row][col].rotation + 1) % 4;
@@ -196,7 +198,7 @@ export default function PipePuzzle() {
     setConnectedCells(newConnected);
 
     if (checkSolved(newGrid)) {
-      setGameState('won');
+      checkWin(true);
       const key = gridSizeKey;
       if (!bestScores[key] || moves + 1 < bestScores[key]) {
         setBestScores(prev => ({ ...prev, [key]: moves + 1 }));

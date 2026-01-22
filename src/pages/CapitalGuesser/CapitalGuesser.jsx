@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -30,6 +31,7 @@ export function buildRound(deps = defaultDeps) {
 }
 
 export default function CapitalGuesser() {
+  const { t } = useTranslation();
   const [mode, setMode] = useState(null); // 'endless', 'challenge'
   const [currentCountry, setCurrentCountry] = useState(null);
   const [options, setOptions] = useState([]);

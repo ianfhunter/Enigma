@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createGrid, getNeighbors } from '../../utils/generatorUtils';
 import styles from './StainedGlass.module.css';
 
@@ -233,7 +235,7 @@ export default function StainedGlass() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [coloring, setColoring] = useState([]);
   const [selectedColor, setSelectedColor] = useState(0);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
 
@@ -244,9 +246,9 @@ export default function StainedGlass() {
     const data = generatePuzzle(size, numColors);
     setPuzzleData(data);
     setColoring([...data.hints]);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size, numColors]);
+  }, [size, numColors, resetGameState]);
 
   // Initialize game when sizeKey or numColors changes
   useEffect(() => {
@@ -254,9 +256,9 @@ export default function StainedGlass() {
     const data = generatePuzzle(size, numColors);
     setPuzzleData(data);
     setColoring([...data.hints]);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [sizeKey, numColors, size]);
+  }, [sizeKey, numColors, size, resetGameState]);
 
   // Ensure selectedColor is valid when numColors changes
   useEffect(() => {
@@ -277,19 +279,19 @@ export default function StainedGlass() {
     setErrors(newErrors);
 
     // Don't check for win if game is not in playing state
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
 
     // Check if solved
     const allFilled = coloring.every(c => c !== -1);
     const noErrors = findErrors(puzzleData.regionGrid, coloring, size).size === 0;
 
     if (allFilled && noErrors) {
-      setGameState('won');
+      checkWin(true);
     }
-  }, [coloring, puzzleData, size, showErrors, gameState]);
+  }, [coloring, puzzleData, size, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || !puzzleData) return;
+    if (!isPlaying || !puzzleData) return;
 
     // Safety check: ensure puzzleData matches current size
     if (puzzleData.regionGrid.length !== size || !puzzleData.regionGrid[r] || puzzleData.regionGrid[r][c] === undefined) {
@@ -315,13 +317,13 @@ export default function StainedGlass() {
   const handleReset = () => {
     if (!puzzleData) return;
     setColoring([...puzzleData.hints]);
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setColoring([...puzzleData.solution]);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;

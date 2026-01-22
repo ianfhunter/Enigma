@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
@@ -9,6 +10,7 @@ import styles from './FlagGuesser.module.css';
 const TOTAL_ROUNDS = 10;
 
 export default function FlagGuesser() {
+  const { t } = useTranslation();
   const [mode, setMode] = useState(null); // 'endless', 'challenge'
   const [currentCountry, setCurrentCountry] = useState(null);
   const [options, setOptions] = useState([]);

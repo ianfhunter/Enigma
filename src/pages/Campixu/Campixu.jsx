@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Campixu.module.css';
 
 const GRID_SIZES = {
@@ -237,7 +239,7 @@ export default function Campixu() {
   const [sizeKey, setSizeKey] = useState('6×6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGrid, setPlayerGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [cluesStatus, setCluesStatus] = useState({ rowStatus: [], colStatus: [] });
@@ -249,16 +251,16 @@ export default function Campixu() {
     const data = generatePuzzle(size);
     setPuzzleData(data);
     setPlayerGrid(data.puzzle.map(row => [...row]));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors
       ? checkValidity(playerGrid, puzzleData.puzzle, puzzleData.rowClues, puzzleData.colClues, size)
@@ -267,13 +269,11 @@ export default function Campixu() {
 
     setCluesStatus(getRowColCluesStatus(playerGrid, puzzleData.rowClues, puzzleData.colClues, size));
 
-    if (checkSolved(playerGrid, puzzleData.solution, size)) {
-      setGameState('won');
-    }
-  }, [playerGrid, puzzleData, showErrors, size, gameState]);
+    checkWin(checkSolved(playerGrid, puzzleData.solution, size));
+  }, [playerGrid, puzzleData, showErrors, size, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.puzzle[r][c] === 'tree') return; // Can't click on trees
 
     const isGrassAction = e.type === 'contextmenu' || e.ctrlKey || grassMode;
@@ -298,17 +298,17 @@ export default function Campixu() {
 
   const handleReset = () => {
     setPlayerGrid(puzzleData.puzzle.map(row => [...row]));
-    setGameState('playing');
+    resetGameState();
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     // Reveal solution - show tents in their correct positions
     const solutionGrid = puzzleData.puzzle.map((row, r) =>
       row.map((cell, c) => puzzleData.solution[r][c] === 'tent' ? 'tent' : cell)
     );
     setPlayerGrid(solutionGrid);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData) return null;
@@ -438,7 +438,7 @@ export default function Campixu() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Futoshiki.module.css';
 
 const GRID_SIZES = {
@@ -193,12 +195,13 @@ export {
 };
 
 export default function Futoshiki() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [initialCells, setInitialCells] = useState(new Set());
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
 
@@ -219,16 +222,16 @@ export default function Futoshiki() {
     }
     setInitialCells(initCells);
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [size]);
+  }, [size, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     if (showErrors) {
       setErrors(findErrors(grid, puzzleData.horizontal, puzzleData.vertical, size));
@@ -236,19 +239,17 @@ export default function Futoshiki() {
       setErrors(new Set());
     }
 
-    if (checkSolved(grid, puzzleData.solution)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, size, showErrors, gameState]);
+    checkWin(checkSolved(grid, puzzleData.solution));
+  }, [grid, puzzleData, size, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (initialCells.has(`${r},${c}`)) return;
     setSelectedCell({ r, c });
   };
 
   const handleNumberInput = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { r, c } = selectedCell;
     if (initialCells.has(`${r},${c}`)) return;
 
@@ -260,7 +261,7 @@ export default function Futoshiki() {
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { r, c } = selectedCell;
     if (initialCells.has(`${r},${c}`)) return;
 
@@ -272,15 +273,15 @@ export default function Futoshiki() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   // Keyboard handling
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
 
       if (e.key >= '1' && e.key <= String(size)) {
         handleNumberInput(parseInt(e.key));
@@ -390,8 +391,8 @@ export default function Futoshiki() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🎉 Puzzle Solved!"
-            message="All inequalities satisfied"
+            title={t('gameStatus.solved')}
+            message={t('gameMessages.allInequalitiesSatisfied')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}
@@ -419,7 +420,7 @@ export default function Futoshiki() {
         <div className={styles.buttons}>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

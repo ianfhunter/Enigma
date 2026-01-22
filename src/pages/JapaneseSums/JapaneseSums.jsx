@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -5,6 +6,7 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { generatePuzzle, isSolved } from './generator';
 import { stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './JapaneseSums.module.css';
@@ -17,7 +19,7 @@ export default function JapaneseSums() {
   const [difficulty, setDifficulty] = useState('medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [seed, setSeed] = useState(null);
   const [showSolution, setShowSolution] = useState(false);
 
@@ -31,10 +33,10 @@ export default function JapaneseSums() {
     setPuzzleData(data);
     // Initialize grid with nulls, but show prefilled hints
     setGrid(data.puzzle.map(row => row.map(cell => cell !== null ? cell : null)));
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
     setSeed(actualSeed);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame(size, difficulty);
@@ -42,15 +44,13 @@ export default function JapaneseSums() {
 
   // Check for win
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing' || showSolution) return;
+    if (!puzzleData || !isPlaying || showSolution) return;
 
-    if (isSolved(grid, puzzleData.solution, puzzleData.pattern)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, gameState, showSolution]);
+    checkWin(isSolved(grid, puzzleData.solution, puzzleData.pattern));
+  }, [grid, puzzleData, isPlaying, showSolution, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     if (!puzzleData.pattern[r][c]) return; // Can't fill shaded cells
 
     setGrid(prev => {
@@ -71,7 +71,7 @@ export default function JapaneseSums() {
 
   const handleCellRightClick = (e, r, c) => {
     e.preventDefault();
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     if (!puzzleData.pattern[r][c]) return;
 
     setGrid(prev => {
@@ -91,7 +91,7 @@ export default function JapaneseSums() {
   };
 
   const handleNumberInput = (num) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
 
     setGrid(prev => {
       const newGrid = prev.map(row => [...row]);
@@ -111,15 +111,15 @@ export default function JapaneseSums() {
   };
 
   const handleClear = () => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     setGrid(puzzleData.puzzle.map(row => [...row]));
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   const handleNewPuzzle = () => {
@@ -156,10 +156,10 @@ export default function JapaneseSums() {
         />
 
         <button className={styles.button} onClick={handleNewPuzzle}>New</button>
-        <button className={styles.button} onClick={handleClear}>Clear</button>
+        <button className={styles.button} onClick={handleClear}>{t('common.clear')}</button>
         <GiveUpButton
           onGiveUp={handleGiveUp}
-          disabled={gameState !== 'playing' || showSolution}
+          disabled={!isPlaying || showSolution}
         />
       </div>
 
@@ -263,7 +263,7 @@ export default function JapaneseSums() {
             key={num}
             className={styles.numBtn}
             onClick={() => handleNumberInput(num)}
-            disabled={gameState !== 'playing' || showSolution}
+            disabled={!isPlaying || showSolution}
           >
             {num}
           </button>
@@ -271,7 +271,7 @@ export default function JapaneseSums() {
         <button
           className={styles.clearBtn}
           onClick={handleClear}
-          disabled={gameState !== 'playing' || showSolution}
+          disabled={!isPlaying || showSolution}
         >
           Clear
         </button>

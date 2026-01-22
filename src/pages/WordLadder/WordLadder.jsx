@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -13,6 +14,7 @@ const WORD_LENGTH = 4;
 export { generateWordLadderPuzzle, differsByOneLetter, WORD_LENGTH };
 
 export default function WordLadder() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [userSteps, setUserSteps] = useState([]);
   const [currentInput, setCurrentInput] = useState('');

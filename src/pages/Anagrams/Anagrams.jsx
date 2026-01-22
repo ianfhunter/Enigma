@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -16,6 +17,7 @@ import styles from './Anagrams.module.css';
 const GAME_TIME = 90; // 90 seconds per puzzle
 
 export default function Anagrams() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [displayLetters, setDisplayLetters] = useState([]);
   const [currentWord, setCurrentWord] = useState('');

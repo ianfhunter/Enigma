@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatTime } from '../../data/wordUtils';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
@@ -138,6 +139,7 @@ function getRegionBorders(r, c, regionGrid, size) {
 }
 
 export default function RippleEffect() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('8×8');
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Magnets.module.css';
 
@@ -273,6 +274,7 @@ export {
 };
 
 export default function Magnets() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(6);
   const [difficulty, setDifficulty] = useState('medium');
   const [puz, setPuz] = useState(null);
@@ -362,9 +364,9 @@ export default function Magnets() {
           ))}
         </div>
         <div className={styles.group}>
-          <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
-          <button className={styles.button} onClick={reset}>Clear</button>
-          {puz && <button className={styles.button} onClick={() => setState(puz.solution.slice())}>Reveal</button>}
+          <button className={styles.generateBtn} onClick={generateNew}>{t('common.newPuzzle')}</button>
+          <button className={styles.button} onClick={reset}>{t('common.clear')}</button>
+          {puz && <button className={styles.button} onClick={() => setState(puz.solution.slice())}>{t('common.reveal')}</button>}
         </div>
 
         <div className={styles.status}>

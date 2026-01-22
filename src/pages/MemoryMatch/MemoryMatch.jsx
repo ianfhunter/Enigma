@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
@@ -41,6 +42,7 @@ function generateCards(pairs) {
 }
 
 export default function MemoryMatch() {
+  const { t } = useTranslation();
   const [gridSize, setGridSize] = useState('4×4');
   const [cards, setCards] = useState([]);
   const [flipped, setFlipped] = useState([]);

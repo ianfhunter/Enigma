@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -140,6 +141,7 @@ export {
 };
 
 export default function WordTiles() {
+  const { t } = useTranslation();
   const [tiles, setTiles] = useState([]);
   const [bag, setBag] = useState([]);
   const [placedTiles, setPlacedTiles] = useState([]); // Array of {letter, index}

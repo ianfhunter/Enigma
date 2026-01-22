@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
@@ -360,6 +361,7 @@ const TANK_COLORS = [
 ];
 
 export default function Aquarium() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('6×6');
   const [puzzleData, setPuzzleData] = useState(null);
   const [water, setWater] = useState([]);
@@ -515,8 +517,8 @@ export default function Aquarium() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="🐠 Puzzle Solved!"
-            message="Aquariums perfectly filled!"
+            title={t('gameStatus.solved')}
+            message={t('gameMessages.aquariumsFilled')}
             actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
           />
         )}

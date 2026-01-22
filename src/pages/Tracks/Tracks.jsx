@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Tracks.module.css';
 
@@ -340,7 +341,7 @@ export default function Tracks() {
         </div>
         <div className={styles.group}>
           <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
-          <button className={styles.button} onClick={reset}>Reset</button>
+          <button className={styles.button} onClick={reset}>{t('common.reset')}</button>
           {puz && (
             <button
               className={styles.button}

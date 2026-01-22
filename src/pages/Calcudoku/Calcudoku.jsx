@@ -7,6 +7,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Calcudoku.module.css';
 import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
 

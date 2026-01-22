@@ -6,6 +6,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRNG, generateRandomSeed, parseSeedFromUrl, setSeedInUrl } from '../../enigma-sdk/seeding';
 import styles from './Tapa.module.css';
 
@@ -262,7 +263,7 @@ export default function Tapa() {
   const [allPuzzles, setAllPuzzles] = useState([]);
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [whiteMode, setWhiteMode] = useState(false);
@@ -351,9 +352,9 @@ export default function Tapa() {
 
     // Initialize empty grid (null = empty, true = shaded, false = marked white)
     setGrid(Array(rows).fill(null).map(() => Array(cols).fill(null)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
-  }, [allPuzzles, difficulty, sizeKey]);
+  }, [allPuzzles, difficulty, sizeKey, resetGameState]);
 
   useEffect(() => {
     if (!loading && allPuzzles.length > 0) {
@@ -368,20 +369,18 @@ export default function Tapa() {
 
   // Check validity and win condition
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.clues, rows)
       : new Set();
     setErrors(newErrors);
 
-    if (checkSolved(grid, puzzleData.clues, rows)) {
-      setGameState('won');
-    }
-  }, [grid, puzzleData, showErrors, rows, gameState]);
+    checkWin(checkSolved(grid, puzzleData.clues, rows));
+  }, [grid, puzzleData, showErrors, rows, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.clues[r][c] !== null) return; // Can't shade clue cells
 
     const isWhiteAction = e.type === 'contextmenu' || e.ctrlKey || whiteMode;
@@ -406,14 +405,14 @@ export default function Tapa() {
 
   const handleReset = () => {
     setGrid(Array(rows).fill(null).map(() => Array(cols).fill(null)));
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => row.map(cell => cell ? true : null)));
-    setGameState('gaveUp');
+    giveUp();
   };
 
   const handleNewGame = () => {
@@ -558,7 +557,7 @@ export default function Tapa() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={handleNewGame}>
             New Puzzle

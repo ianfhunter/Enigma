@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
@@ -31,6 +32,7 @@ export function getKeyboardTargetIndex(emptyIndex, size, key) {
 }
 
 export default function SlidingPuzzle() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(4);
   const [tiles, setTiles] = useState([]);
   const [emptyIndex, setEmptyIndex] = useState(0);

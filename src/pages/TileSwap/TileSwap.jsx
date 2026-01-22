@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './TileSwap.module.css';
 
@@ -140,6 +142,7 @@ export {
 };
 
 export default function TileSwap() {
+  const { t } = useTranslation();
   const [size, setSize] = useState(3);
   const [pieces, setPieces] = useState([]);
   const [selectedPiece, setSelectedPiece] = useState(null);

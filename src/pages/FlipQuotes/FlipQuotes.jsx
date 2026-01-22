@@ -274,7 +274,7 @@ export default function FlipQuotes() {
   if (!quote) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading puzzle...</div>
+        <div className={styles.loading}>{t('common.loadingPuzzle')}</div>
       </div>
     );
   }
@@ -334,7 +334,7 @@ export default function FlipQuotes() {
         {gameState === 'won' && (
           <GameResult
             status="won"
-            title="🎉 Puzzle Solved!"
+            title={t('gameStatus.solved')}
             stats={[
               { label: 'Time', value: formatTime(timeTaken) },
               { label: 'Flips', value: flipCount },

@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import { generateMaze, findShortestPath, cellKey } from '../../utils/generatorUtils';
 import styles from './Maze.module.css';
 
@@ -26,6 +28,7 @@ function findPath(maze, start, end) {
 }
 
 export default function Maze() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('Medium');
   const [mazeData, setMazeData] = useState(null);
   const [playerPos, setPlayerPos] = useState({ x: 1, y: 1 });
@@ -33,7 +36,7 @@ export default function Maze() {
   const [moves, setMoves] = useState(0);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [showSolution, setShowSolution] = useState(false);
   const [solution, setSolution] = useState([]);
   const [bestTimes, setBestTimes] = usePersistedState('maze-best-times', {});
@@ -51,10 +54,10 @@ export default function Maze() {
     setMoves(0);
     setTimer(0);
     setIsRunning(false);
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
     setSolution(findPath(data.maze, data.start, data.end) || []);
-  }, [width, height]);
+  }, [width, height, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -74,7 +77,7 @@ export default function Maze() {
   }, [isRunning]);
 
   const movePlayer = useCallback((dx, dy) => {
-    if (gameState !== 'playing' || !mazeData) return;
+    if (!isPlaying || !mazeData) return;
 
     const newX = playerPos.x + dx;
     const newY = playerPos.y + dy;
@@ -94,7 +97,7 @@ export default function Maze() {
 
     // Check win
     if (newX === mazeData.end.x && newY === mazeData.end.y) {
-      setGameState('won');
+      checkWin(true);
       setIsRunning(false);
 
       const key = sizeKey;
@@ -102,7 +105,7 @@ export default function Maze() {
         setBestTimes(prev => ({ ...prev, [key]: timer }));
       }
     }
-  }, [playerPos, mazeData, width, height, isRunning, gameState, timer, sizeKey, bestTimes]);
+  }, [playerPos, mazeData, width, height, isRunning, isPlaying, checkWin, timer, sizeKey, bestTimes]);
 
   // Keyboard controls with key hold for faster movement
   const movePlayerRef = useRef(movePlayer);
@@ -322,7 +325,7 @@ export default function Maze() {
         <div className={styles.buttons}>
           <GiveUpButton
             onGiveUp={() => setShowSolution(!showSolution)}
-            disabled={gameState === 'won'}
+            disabled={isWon}
             buttonText={showSolution ? 'Hide Solution' : 'Show Solution'}
             requireConfirmation={false}
           />

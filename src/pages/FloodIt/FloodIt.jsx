@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './FloodIt.module.css';
 
 const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6'];
@@ -95,11 +97,12 @@ export {
 };
 
 export default function FloodIt() {
+  const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('14×14');
   const [colorCount, setColorCount] = useState(6);
   const [board, setBoard] = useState([]);
   const [moves, setMoves] = useState(0);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
+  const { gameState, checkWin: checkWinState, lose, reset: resetGameState, isPlaying } = useGameState();
   const [bestScores, setBestScores] = usePersistedState('flood-it-best', {});
 
   const { size, maxMoves } = SIZES[sizeKey];
@@ -107,15 +110,15 @@ export default function FloodIt() {
   const initGame = useCallback(() => {
     setBoard(generateBoard(size, colorCount));
     setMoves(0);
-    setGameState('playing');
-  }, [size, colorCount]);
+    resetGameState();
+  }, [size, colorCount, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   const handleColorClick = (colorIndex) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (board[0][0] === colorIndex) return;
 
     const newBoard = floodFill(board, colorIndex);
@@ -124,13 +127,13 @@ export default function FloodIt() {
     setMoves(newMoves);
 
     if (checkWin(newBoard)) {
-      setGameState('won');
+      checkWinState(true);
       const key = `${sizeKey}-${colorCount}`;
       if (!bestScores[key] || newMoves < bestScores[key]) {
         setBestScores(prev => ({ ...prev, [key]: newMoves }));
       }
     } else if (newMoves >= maxMoves) {
-      setGameState('lost');
+      lose();
     }
   };
 

@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './SandwichSudoku.module.css';
 
 // Generate a valid solved Sudoku grid
@@ -326,7 +328,7 @@ export default function SandwichSudoku() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [timer, setTimer] = useState(0);
@@ -338,27 +340,27 @@ export default function SandwichSudoku() {
     setPuzzleData(data);
     setGrid(data.puzzle.map(row => [...row]));
     setSelectedCell(null);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setTimer(0);
     setIsRunning(true);
-  }, []);
+  }, [resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (isRunning && gameState === 'playing') {
+    if (isRunning && isPlaying) {
       timerRef.current = setInterval(() => {
         setTimer(t => t + 1);
       }, 1000);
     }
     return () => clearInterval(timerRef.current);
-  }, [isRunning, gameState]);
+  }, [isRunning, isPlaying]);
 
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
 
     const newErrors = showErrors
       ? checkValidity(grid, puzzleData.solution)
@@ -366,19 +368,19 @@ export default function SandwichSudoku() {
     setErrors(newErrors);
 
     if (checkSolved(grid, puzzleData.solution)) {
-      setGameState('won');
+      checkWin(true);
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, gameState]);
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
 
   const handleCellClick = (r, c) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     if (puzzleData.puzzle[r][c] !== 0) return;
     setSelectedCell({ row: r, col: c });
   };
 
   const handleNumberInput = (num) => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { row, col } = selectedCell;
     if (puzzleData.puzzle[row][col] !== 0) return;
 
@@ -390,14 +392,14 @@ export default function SandwichSudoku() {
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
-    setGameState('gaveUp');
+    giveUp();
     setIsRunning(false);
   };
 
   const handleClear = () => {
-    if (!selectedCell || gameState !== 'playing') return;
+    if (!selectedCell || !isPlaying) return;
     const { row, col } = selectedCell;
     if (puzzleData.puzzle[row][col] !== 0) return;
 
@@ -410,7 +412,7 @@ export default function SandwichSudoku() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedCell || gameState !== 'playing') return;
+      if (!selectedCell || !isPlaying) return;
 
       const num = parseInt(e.key);
       if (num >= 1 && num <= 9) {
@@ -527,7 +529,7 @@ export default function SandwichSudoku() {
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={() => {
             setGrid(puzzleData.puzzle.map(row => [...row]));
-            setGameState('playing');
+            resetGameState();
             setTimer(0);
             setIsRunning(true);
           }}>
@@ -535,7 +537,7 @@ export default function SandwichSudoku() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

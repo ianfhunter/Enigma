@@ -6,6 +6,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './Yajilin.module.css';
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
@@ -321,7 +322,7 @@ export default function Yajilin() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
   const [pathSegments, setPathSegments] = useState(new Set());
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [showErrors, setShowErrors] = useState(true);
   const [showSolution, setShowSolution] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -358,9 +359,9 @@ export default function Yajilin() {
     setPuzzleData(data);
     setShaded(Array(data.rows).fill(null).map(() => Array(data.cols).fill(false)));
     setPathSegments(new Set());
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
-  }, [difficulty]);
+  }, [difficulty, resetGameState]);
 
   // Init game when dataset loads or difficulty changes
   useEffect(() => {
@@ -371,20 +372,19 @@ export default function Yajilin() {
 
   // Check win condition
   useEffect(() => {
-    if (!puzzleData || gameState !== 'playing') return;
-    if (checkSolved(shaded, pathSegments, puzzleData.solutionShaded, puzzleData.clues, puzzleData.rows, puzzleData.cols)) {
-      setGameState('won');
-    }
-  }, [shaded, pathSegments, puzzleData, gameState]);
+    if (!puzzleData || !isPlaying) return;
+    checkWin(checkSolved(shaded, pathSegments, puzzleData.solutionShaded, puzzleData.clues, puzzleData.rows, puzzleData.cols));
+  }, [shaded, pathSegments, puzzleData, isPlaying, checkWin]);
 
   const handleGiveUp = () => {
+    if (!isPlaying) return;
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   // Handle cell click for shading
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     if (puzzleData.clues[r][c]) return; // Can't modify clue cells
     if (isDragging) return; // Don't toggle while dragging
 
@@ -448,7 +448,7 @@ export default function Yajilin() {
 
   // Handle mouse down for path drawing
   const handleMouseDown = (e) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     if (e.button !== 0) return; // Only left button for drawing
 
     const cell = getCellFromPosition(e.clientX, e.clientY);
@@ -499,7 +499,7 @@ export default function Yajilin() {
 
   // Handle touch events for mobile
   const handleTouchStart = (e) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
     const touch = e.touches[0];
     const cell = getCellFromPosition(touch.clientX, touch.clientY);
     if (cell && !puzzleData.clues[cell.r][cell.c] && !shaded[cell.r]?.[cell.c]) {
@@ -548,7 +548,7 @@ export default function Yajilin() {
     if (!puzzleData) return;
     setShaded(Array(puzzleData.rows).fill(null).map(() => Array(puzzleData.cols).fill(false)));
     setPathSegments(new Set());
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
   };
 
@@ -714,7 +714,7 @@ export default function Yajilin() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={handleNewPuzzle}>
             New Puzzle

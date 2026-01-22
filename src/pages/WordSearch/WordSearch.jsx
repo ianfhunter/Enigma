@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSearch.module.css';
@@ -134,7 +135,7 @@ export default function WordSearch() {
   const [selectedCells, setSelectedCells] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [highlightedCells, setHighlightedCells] = useState(new Set());
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, reset: resetGameState, isPlaying, isWon } = useGameState();
   const [puzzleIndex, setPuzzleIndex] = useState(0);
 
   const initGame = useCallback((customSeed = null) => {
@@ -161,21 +162,21 @@ export default function WordSearch() {
     setFoundWords(new Set());
     setSelectedCells([]);
     setHighlightedCells(new Set());
-    setGameState('playing');
-  }, [puzzleIndex]);
+    resetGameState();
+  }, [puzzleIndex, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (puzzle && foundWords.size === puzzle.words.length) {
-      setGameState('won');
+    if (puzzle && foundWords.size === puzzle.words.length && isPlaying) {
+      checkWin(true);
     }
-  }, [foundWords, puzzle]);
+  }, [foundWords, puzzle, isPlaying, checkWin]);
 
   const handleCellMouseDown = (row, col) => {
-    if (gameState === 'won') return;
+    if (isWon) return;
     setIsDragging(true);
     setSelectedCells([[row, col]]);
   };

@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import puzzleDataset from '@datasets/galaxiesPuzzles_bundled.json';
 import styles from './Galaxies.module.css';
 
@@ -183,7 +184,7 @@ export default function Galaxies() {
   const [puz, setPuz] = useState(null);
   const [sel, setSel] = useState(0);
   const [assign, setAssign] = useState([]);
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'solved', 'gaveUp'
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
 
   // Track used puzzle IDs to avoid repeats
   const usedPuzzleIdsRef = useRef(new Set());
@@ -196,9 +197,9 @@ export default function Galaxies() {
       setPuz(newPuz);
       setAssign(new Array(newPuz.w * newPuz.h).fill(-1));
       setSel(0);
-      setGameState('playing');
+      resetGameState();
     }
-  }, [size, difficulty]);
+  }, [size, difficulty, resetGameState]);
 
   useEffect(() => {
     generateNew();
@@ -211,13 +212,11 @@ export default function Galaxies() {
 
   // Update game state when solved
   useEffect(() => {
-    if (solved && gameState === 'playing') {
-      setGameState('solved');
-    }
-  }, [solved, gameState]);
+    checkWin(solved);
+  }, [solved, checkWin]);
 
   const paint = (i) => {
-    if (gameState !== 'playing') return;
+    if (!isPlaying) return;
     setAssign((prev) => {
       const n = prev.slice();
       n[i] = n[i] === sel ? -1 : sel;
@@ -226,9 +225,9 @@ export default function Galaxies() {
   };
 
   const handleGiveUp = () => {
-    if (puz && gameState === 'playing') {
+    if (puz && isPlaying) {
       setAssign(puz.solution.slice());
-      setGameState('gaveUp');
+      giveUp();
     }
   };
 
@@ -258,7 +257,7 @@ export default function Galaxies() {
           )}
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
         </div>
         {puz && gameState === 'playing' && (
@@ -280,7 +279,7 @@ export default function Galaxies() {
             </div>
           </div>
         )}
-        {gameState === 'solved' && (
+        {gameState === 'won' && (
           <GameResult
             state="won"
             title={t('gameStatus.solved')}

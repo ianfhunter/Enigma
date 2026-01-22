@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { useGameState } from '../../hooks/useGameState';
 import styles from './NavalBattle.module.css';
 
 // Load puzzles from dataset
@@ -264,7 +266,7 @@ export default function NavalBattle() {
   const [difficulty, setDifficulty] = useState('Medium');
   const [puzzleData, setPuzzleData] = useState(null);
   const [playerGrid, setPlayerGrid] = useState(null);
-  const [gameState, setGameState] = useState('playing');
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(true);
   const [showSolution, setShowSolution] = useState(false);
@@ -326,30 +328,30 @@ export default function NavalBattle() {
     }
 
     setPlayerGrid(initialGrid);
-    setGameState('playing');
+    resetGameState();
     setErrors(new Set());
     setShowSolution(false);
-  }, [size, difficulty]);
+  }, [size, difficulty, resetGameState]);
 
   useEffect(() => {
     initGame();
   }, [initGame]);
 
   useEffect(() => {
-    if (!puzzleData || !playerGrid) return;
+    if (!puzzleData || !playerGrid || !isPlaying) return;
 
     const newErrors = showErrors && !showSolution
       ? checkValidity(playerGrid, puzzleData.rowCounts, puzzleData.colCounts, puzzleData.size)
       : new Set();
     setErrors(newErrors);
 
-    if (!showSolution && checkSolved(playerGrid, puzzleData.rowCounts, puzzleData.colCounts, puzzleData.size, puzzleData.fleet)) {
-      setGameState('won');
+    if (!showSolution) {
+      checkWin(checkSolved(playerGrid, puzzleData.rowCounts, puzzleData.colCounts, puzzleData.size, puzzleData.fleet));
     }
-  }, [playerGrid, puzzleData, showErrors, showSolution]);
+  }, [playerGrid, puzzleData, showErrors, showSolution, isPlaying, checkWin]);
 
   const handleCellClick = (r, c, e) => {
-    if (gameState !== 'playing' || showSolution) return;
+    if (!isPlaying || showSolution) return;
 
     const isHint = puzzleData.hints.has(`${r},${c}`) || puzzleData.hints.has(`water:${r},${c}`);
     if (isHint) return;
@@ -393,14 +395,14 @@ export default function NavalBattle() {
       }
     }
     setPlayerGrid(initialGrid);
-    setGameState('playing');
+    resetGameState();
     setShowSolution(false);
   };
 
   const handleGiveUp = () => {
-    if (!puzzleData || gameState !== 'playing') return;
+    if (!puzzleData || !isPlaying) return;
     setShowSolution(true);
-    setGameState('gaveUp');
+    giveUp();
   };
 
   if (!puzzleData || !playerGrid) return null;
@@ -541,7 +543,7 @@ export default function NavalBattle() {
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
-            disabled={gameState !== 'playing'}
+            disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
             New Puzzle

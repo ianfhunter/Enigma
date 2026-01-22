@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -9,6 +10,7 @@ import styles from './Conundrum.module.css';
 const GAME_TIME = 30; // seconds
 
 export default function Conundrum() {
+  const { t } = useTranslation();
   const [puzzle, setPuzzle] = useState(null);
   const [displayLetters, setDisplayLetters] = useState([]);
   const [guess, setGuess] = useState('');

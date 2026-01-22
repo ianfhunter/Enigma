@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import styles from './Inertia.module.css';
 
@@ -342,8 +343,8 @@ export default function Inertia() {
         </div>
         <div className={styles.group}>
           <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
-          <button className={styles.button} onClick={reset}>Reset</button>
-          <button className={styles.button} onClick={undo} disabled={cursor === 0}>Undo</button>
+          <button className={styles.button} onClick={reset}>{t('common.reset')}</button>
+          <button className={styles.button} onClick={undo} disabled={cursor === 0}>{t('common.undo')}</button>
           <button className={styles.button} onClick={redo} disabled={cursor === history.length - 1}>Redo</button>
         </div>
 

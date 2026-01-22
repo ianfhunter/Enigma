@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
@@ -11,6 +12,7 @@ import {
 } from './logic';
 
 export default function WordArithmetic() {
+  const { t } = useTranslation();
   const [puzzleData, setPuzzleData] = useState(null);
   const [letterMap, setLetterMap] = useState({});
   const [selectedLetter, setSelectedLetter] = useState(null);
