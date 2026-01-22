@@ -356,7 +356,7 @@ export default function Inertia() {
       </div>
 
       {loading && (
-        <div className={styles.status}>Generating puzzle...</div>
+        <div className={styles.status}>{t('common.generatingPuzzle')}</div>
       )}
 
       {error && (

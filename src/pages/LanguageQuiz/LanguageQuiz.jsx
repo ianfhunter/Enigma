@@ -115,7 +115,7 @@ export default function LanguageQuiz() {
         instructions="Select the official language(s) of each country. Some countries have multiple official languages!"
       />
 
-      {!data && <div className={styles.card}>Loading countries...</div>}
+      {!data && <div className={styles.card}>{t('common.loadingCountries')}</div>}
 
       {data && current && (
         <>

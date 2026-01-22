@@ -137,7 +137,7 @@ export default function CurrencyQuiz() {
         instructions="What currency is used in each country?"
       />
 
-      {!data && <div className={styles.card}>Loading countries...</div>}
+      {!data && <div className={styles.card}>{t('common.loadingCountries')}</div>}
 
       {data && current && (
         <>

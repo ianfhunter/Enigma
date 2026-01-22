@@ -145,7 +145,7 @@ export default function WordLadder() {
           <div className={styles.ladder}>
             {/* Start word */}
             <div className={`${styles.rung} ${styles.startRung}`}>
-              <div className={styles.rungLabel}>Start</div>
+              <div className={styles.rungLabel}>{t('common.start')}</div>
               <div className={styles.word}>
                 {puzzle.startWord.split('').map((letter, i) => (
                   <span key={i} className={styles.letter}>{letter}</span>
@@ -193,7 +193,7 @@ export default function WordLadder() {
                   <div className={`${styles.connectorLine} ${styles.dashed}`} />
                 </div>
                 <div className={`${styles.rung} ${styles.inputRung}`}>
-                  <div className={styles.rungLabel}>Next</div>
+                  <div className={styles.rungLabel}>{t('common.next')}</div>
                   <form onSubmit={handleSubmit} className={styles.inputForm}>
                     <input
                       ref={inputRef}
@@ -217,7 +217,7 @@ export default function WordLadder() {
             {/* End word (target) */}
             {!gameWon && (
               <div className={`${styles.rung} ${styles.targetRung}`}>
-                <div className={styles.rungLabel}>Goal</div>
+                <div className={styles.rungLabel}>{t('common.goal')}</div>
                 <div className={styles.word}>
                   {puzzle.endWord.split('').map((letter, i) => (
                     <span key={i} className={styles.letter}>{letter}</span>

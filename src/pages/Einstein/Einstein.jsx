@@ -459,14 +459,14 @@ export default function Einstein() {
         </div>
 
         <div className={styles.buttons}>
-          <button className={styles.hintBtn} onClick={getHint} disabled={gameState !== 'playing'}>💡 Hint</button>
+          <button className={styles.hintBtn} onClick={getHint} disabled={gameState !== 'playing'}>💡 {t('common.hint')}</button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
             disabled={!isPlaying}
             label="🏳️ Give Up"
             requireConfirmation={false}
           />
-          <button className={styles.resetBtn} onClick={handleReset}>🔄 Reset</button>
+          <button className={styles.resetBtn} onClick={handleReset}>🔄 {t('common.reset')}</button>
           <button className={styles.newGameBtn} onClick={initGame}>✨ New Puzzle</button>
         </div>
       </div>

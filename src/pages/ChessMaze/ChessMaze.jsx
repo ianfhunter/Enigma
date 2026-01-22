@@ -517,7 +517,7 @@ export default function ChessMaze() {
           </div>
           <div className={styles.legendItem}>
             <span className={styles.legendIcon}>⭐</span>
-            <span>Goal</span>
+            <span>{t('common.goal')}</span>
           </div>
           <div className={styles.legendItem}>
             <span className={`${styles.legendColor} ${styles.dangerColor}`}></span>
