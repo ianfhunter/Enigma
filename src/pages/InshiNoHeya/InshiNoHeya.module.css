@@ -87,7 +87,7 @@
 .grid {
   display: grid;
   gap: 0;
-  background: rgba(15, 15, 26, 0.9);
+  background: var(--game-cell-bg);
   padding: 2px;
   border-radius: 8px;
   border: 2px solid rgba(167, 139, 250, 0.5);
@@ -98,7 +98,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 26, 0.9);
+  background: var(--game-cell-bg);
   border: 1px solid var(--panel-border);
   cursor: pointer;
   transition: all 0.15s ease;

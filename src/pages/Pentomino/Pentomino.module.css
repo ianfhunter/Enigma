@@ -169,8 +169,8 @@
 .board {
   display: grid;
   gap: 2px;
-  background: #111827;
-  border: 2px solid #374151;
+  background: var(--pento-board-bg);
+  border: 2px solid var(--pento-board-border);
   border-radius: 8px;
   padding: 2px;
   position: relative;
@@ -179,8 +179,8 @@
 .cell {
   width: 35px;
   height: 35px;
-  background: #1f2937;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--pento-cell-bg);
+  border: 1px solid var(--pento-cell-border);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -191,9 +191,9 @@
 }
 
 .cell.hole {
-  background: #0f172a !important;
+  background: var(--pento-hole-bg) !important;
   cursor: not-allowed;
-  border-color: #475569;
+  border-color: var(--pento-hole-border);
   border-width: 2px;
   position: relative;
 }
@@ -202,7 +202,7 @@
   content: '';
   position: absolute;
   inset: 2px;
-  border: 1px dashed rgba(148, 163, 184, 0.3);
+  border: 1px dashed var(--pento-hole-dashed);
   pointer-events: none;
 }
 

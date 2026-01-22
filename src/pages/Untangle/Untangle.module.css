@@ -17,7 +17,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--untangle-label-text);
   font-weight: 800;
 }
 
@@ -31,7 +31,7 @@
 
 .button {
   background: var(--btn-secondary-bg);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--untangle-button-text);
   border: 1px solid var(--panel-border);
   border-radius: 10px;
   padding: 0.45rem 0.75rem;
@@ -39,7 +39,7 @@
 }
 
 .status {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--untangle-status-text);
   font-weight: 800;
 }
 
@@ -48,9 +48,9 @@
 }
 
 .stageWrap {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--untangle-stage-border);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--untangle-stage-bg);
   overflow: hidden;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .edge {
-  stroke: rgba(255, 255, 255, 0.35);
+  stroke: var(--untangle-edge-stroke);
   stroke-width: 2;
 }
 
@@ -75,16 +75,15 @@
 }
 
 .node {
-  fill: rgba(56, 189, 248, 0.85);
-  stroke: rgba(255, 255, 255, 0.8);
+  fill: var(--untangle-node-fill);
+  stroke: var(--untangle-node-stroke);
   stroke-width: 2;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 6px 10px var(--untangle-node-shadow));
 }
 
 .nodeLabel {
   font-size: 12px;
   font-weight: 900;
-  fill: #0b1220;
+  fill: var(--untangle-node-label);
   user-select: none;
 }
-

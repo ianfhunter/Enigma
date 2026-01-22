@@ -8,7 +8,7 @@
 .container h1 {
   background: none;
   -webkit-background-clip: initial;
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.95);
+  -webkit-text-fill-color: var(--color-text);
   background-clip: initial;
 }
 
@@ -19,8 +19,8 @@
   gap: 16px;
   margin-top: 14px;
   padding: 14px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
   border-radius: 14px;
   backdrop-filter: blur(8px);
 }
@@ -34,13 +34,14 @@
 
 .statLabel {
   font-size: 12px;
-  opacity: 0.7;
+  color: var(--color-text-secondary);
 }
 
 .statValue {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.01em;
+  color: var(--color-text);
 }
 
 .actions {
@@ -53,18 +54,18 @@
 .btn,
 .btnSecondary {
   appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--btn-secondary-border);
   border-radius: 12px;
   padding: 10px 12px;
   font-weight: 650;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--btn-secondary-text);
+  background: var(--btn-secondary-bg);
   transition: transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .btn:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .btn:active {
@@ -77,15 +78,15 @@
 }
 
 .btnSecondary {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-bg-tertiary);
 }
 
 .scramble {
   margin-top: 12px;
   padding: 12px 14px;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border: 1px dashed var(--panel-border);
   border-radius: 14px;
-  background: rgba(0, 0, 0, 0.12);
+  background: var(--color-bg-tertiary);
   display: flex;
   gap: 12px;
   align-items: baseline;
@@ -93,14 +94,14 @@
 
 .scrambleLabel {
   font-size: 12px;
-  opacity: 0.7;
+  color: var(--color-text-secondary);
   white-space: nowrap;
 }
 
 .scrambleText {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 13px;
-  opacity: 0.95;
+  color: var(--color-text);
   overflow-wrap: anywhere;
 }
 
@@ -125,8 +126,8 @@
   position: relative;
   min-height: 420px;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: radial-gradient(1200px 500px at 50% 20%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
   overflow: hidden;
   touch-action: none;
   user-select: none;
@@ -152,29 +153,29 @@
 
 .cubeHint {
   font-size: 12px;
-  opacity: 0.7;
+  color: var(--color-text-secondary);
   padding: 8px 10px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--panel-border);
   backdrop-filter: blur(8px);
 }
 
 .cubeResetBtn {
   pointer-events: auto;
   appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--btn-secondary-border);
   border-radius: 999px;
   padding: 8px 10px;
   font-weight: 750;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(0, 0, 0, 0.18);
+  color: var(--btn-secondary-text);
+  background: var(--btn-secondary-bg);
   backdrop-filter: blur(8px);
 }
 
 .cubeResetBtn:hover {
-  background: rgba(0, 0, 0, 0.26);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .scene {
@@ -224,8 +225,8 @@
   gap: var(--gap);
   padding: var(--pad);
   border-radius: 16px;
-  background: rgba(0, 0, 0, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--panel-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
 }
 
@@ -239,8 +240,8 @@
 
 .controls {
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
   padding: 16px;
 }
 
@@ -248,7 +249,7 @@
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.02em;
-  opacity: 0.9;
+  color: var(--color-text);
   margin-bottom: 10px;
 }
 
@@ -261,18 +262,18 @@
 
 .moveBtn {
   appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--btn-secondary-border);
   border-radius: 12px;
   padding: 10px 0;
   font-weight: 800;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--btn-secondary-text);
+  background: var(--btn-secondary-bg);
   transition: transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .moveBtn:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: var(--btn-secondary-hover-bg);
 }
 
 .moveBtn:active {
@@ -283,16 +284,16 @@
   margin-top: 10px;
   padding: 12px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(34, 197, 94, 0.35);
-  background: rgba(34, 197, 94, 0.10);
-  color: rgba(233, 255, 241, 0.95);
+  border: 1px solid var(--color-success-border);
+  background: var(--color-success-bg);
+  color: var(--color-success);
   font-weight: 800;
 }
 
 .hint {
   margin-top: 12px;
   font-size: 13px;
-  opacity: 0.85;
+  color: var(--color-text-secondary);
   line-height: 1.55;
 }
 
@@ -301,5 +302,5 @@
   background: var(--btn-secondary-bg);
   padding: 2px 6px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid var(--panel-border);
 }

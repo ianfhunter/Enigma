@@ -158,6 +158,62 @@
   --mosaic-button-text: rgba(255, 255, 255, 0.85);
   --mosaic-bad-outline: rgba(251, 113, 133, 0.7);
   --mosaic-good-outline: rgba(34, 197, 94, 0.35);
+
+  /* Light Up/Akari-specific (dark theme) */
+  --lightup-grid-bg: rgba(255, 255, 255, 0.03);
+  --lightup-grid-border: rgba(255, 255, 255, 0.12);
+  --lightup-cell-border: rgba(255, 255, 255, 0.12);
+  --lightup-floor-bg: rgba(255, 255, 255, 0.04);
+  --lightup-wall-bg: rgba(15, 23, 42, 0.95);
+  --lightup-wall-border: rgba(255, 255, 255, 0.16);
+  --lightup-wall-text: rgba(255, 255, 255, 0.85);
+  --lightup-lit-bg: rgba(250, 204, 21, 0.16);
+  --lightup-mark-color: rgba(255, 255, 255, 0.75);
+  --lightup-label-text: rgba(255, 255, 255, 0.75);
+  --lightup-status-text: rgba(255, 255, 255, 0.75);
+  --lightup-button-text: rgba(255, 255, 255, 0.85);
+  --lightup-bad-outline: rgba(251, 113, 133, 0.75);
+
+  /* Yajilin-specific (dark theme) */
+  --yajilin-cell-bg: rgba(15, 15, 26, 0.9);
+  --yajilin-shaded-bg: rgba(30, 30, 50, 0.95);
+  --yajilin-shaded-tile: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+  --yajilin-clue-cell-bg: rgba(168, 85, 247, 0.15);
+
+  /* Pentomino-specific (dark theme) */
+  --pento-board-bg: #111827;
+  --pento-board-border: #374151;
+  --pento-cell-bg: #1f2937;
+  --pento-cell-border: rgba(255, 255, 255, 0.1);
+  --pento-hole-bg: #0f172a;
+  --pento-hole-border: #475569;
+  --pento-hole-dashed: rgba(148, 163, 184, 0.3);
+
+  /* Netgame-specific (dark theme) */
+  --net-label-text: rgba(255, 255, 255, 0.75);
+  --net-status-text: rgba(255, 255, 255, 0.75);
+  --net-button-text: rgba(255, 255, 255, 0.85);
+  --net-tile-bg: rgba(255, 255, 255, 0.04);
+  --net-tile-border: rgba(255, 255, 255, 0.12);
+  --net-tile-hover-border: rgba(255, 255, 255, 0.25);
+  --net-tile-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+  --net-glyph-color: rgba(255, 255, 255, 0.9);
+  --net-lit-bg: rgba(34, 197, 94, 0.08);
+  --net-lit-border: rgba(34, 197, 94, 0.45);
+  --net-locked-outline: rgba(251, 191, 36, 0.7);
+  --net-center-dot: rgba(255, 255, 255, 0.9);
+
+  /* Untangle-specific (dark theme) */
+  --untangle-label-text: rgba(255, 255, 255, 0.75);
+  --untangle-status-text: rgba(255, 255, 255, 0.75);
+  --untangle-button-text: rgba(255, 255, 255, 0.85);
+  --untangle-stage-bg: rgba(255, 255, 255, 0.03);
+  --untangle-stage-border: rgba(255, 255, 255, 0.12);
+  --untangle-edge-stroke: rgba(255, 255, 255, 0.5);
+  --untangle-node-fill: rgba(56, 189, 248, 0.85);
+  --untangle-node-stroke: rgba(255, 255, 255, 0.8);
+  --untangle-node-label: #0b1220;
+  --untangle-node-shadow: rgba(0, 0, 0, 0.35);
 }
 
 /* Light theme */
@@ -317,6 +373,62 @@
   --mosaic-button-text: var(--color-text);
   --mosaic-bad-outline: rgba(220, 38, 38, 0.6);
   --mosaic-good-outline: rgba(34, 197, 94, 0.5);
+
+  /* Light Up/Akari-specific (light theme) */
+  --lightup-grid-bg: rgba(139, 92, 246, 0.06);
+  --lightup-grid-border: rgba(139, 92, 246, 0.2);
+  --lightup-cell-border: rgba(139, 92, 246, 0.18);
+  --lightup-floor-bg: rgba(139, 92, 246, 0.08);
+  --lightup-wall-bg: rgba(15, 23, 42, 0.92);
+  --lightup-wall-border: rgba(139, 92, 246, 0.25);
+  --lightup-wall-text: rgba(255, 255, 255, 0.95);
+  --lightup-lit-bg: rgba(250, 204, 21, 0.3);
+  --lightup-mark-color: #4a4458;
+  --lightup-label-text: #4a4458;
+  --lightup-status-text: #4a4458;
+  --lightup-button-text: var(--color-text);
+  --lightup-bad-outline: rgba(220, 38, 38, 0.7);
+
+  /* Yajilin-specific (light theme) */
+  --yajilin-cell-bg: rgba(255, 255, 255, 0.95);
+  --yajilin-shaded-bg: rgba(245, 245, 250, 0.95);
+  --yajilin-shaded-tile: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  --yajilin-clue-cell-bg: rgba(139, 92, 246, 0.12);
+
+  /* Pentomino-specific (light theme) */
+  --pento-board-bg: #e8e0f0;
+  --pento-board-border: rgba(139, 92, 246, 0.3);
+  --pento-cell-bg: #f5f0fa;
+  --pento-cell-border: rgba(139, 92, 246, 0.2);
+  --pento-hole-bg: #d5cce5;
+  --pento-hole-border: rgba(139, 92, 246, 0.4);
+  --pento-hole-dashed: rgba(139, 92, 246, 0.3);
+
+  /* Netgame-specific (light theme) */
+  --net-label-text: #4a4458;
+  --net-status-text: #4a4458;
+  --net-button-text: var(--color-text);
+  --net-tile-bg: rgba(139, 92, 246, 0.08);
+  --net-tile-border: rgba(139, 92, 246, 0.2);
+  --net-tile-hover-border: rgba(139, 92, 246, 0.4);
+  --net-tile-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+  --net-glyph-color: #1a1625;
+  --net-lit-bg: rgba(34, 197, 94, 0.15);
+  --net-lit-border: rgba(34, 197, 94, 0.5);
+  --net-locked-outline: rgba(202, 138, 4, 0.7);
+  --net-center-dot: #1a1625;
+
+  /* Untangle-specific (light theme) */
+  --untangle-label-text: #4a4458;
+  --untangle-status-text: #4a4458;
+  --untangle-button-text: var(--color-text);
+  --untangle-stage-bg: rgba(139, 92, 246, 0.06);
+  --untangle-stage-border: rgba(139, 92, 246, 0.2);
+  --untangle-edge-stroke: rgba(30, 30, 60, 0.6);
+  --untangle-node-fill: rgba(56, 189, 248, 0.9);
+  --untangle-node-stroke: rgba(30, 30, 60, 0.7);
+  --untangle-node-label: #0b1220;
+  --untangle-node-shadow: rgba(100, 60, 150, 0.25);
 }
 
 *, *::before, *::after {

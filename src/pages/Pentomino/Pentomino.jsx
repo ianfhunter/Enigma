@@ -695,12 +695,12 @@ export default function Pentomino() {
                     }`}
                     style={{
                       backgroundColor: isHole
-                        ? '#0f172a'
+                        ? undefined
                         : showAnswer && solutionVal > 0
                           ? solutionPieceInfo.color
                           : playerVal && playerPieceInfo
                             ? playerPieceInfo.color
-                            : '#1f2937'
+                            : undefined
                     }}
                   >
                     {!isHole && (showAnswer || playerVal) && (
