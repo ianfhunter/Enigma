@@ -21,6 +21,9 @@ import chimptestIcon from '../../assets/icons/chimptest.svg';
 import navalbattleIcon from '../../assets/icons/navalbattle.svg';
 import undeadIcon from '../../assets/icons/undead.svg';
 import mapIcon from '../../assets/icons/map.svg';
+import setsIcon from '../../assets/icons/sets.svg';
+import tetravexIcon from '../../assets/icons/tetravex.svg';
+import kakurasuIcon from '../../assets/icons/kakurasu.svg';
 
 /**
  * Pack metadata
@@ -179,6 +182,39 @@ export const categories = [
         colors: { primary: '#22d3ee', secondary: '#06b6d4' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)',
         component: () => import('../../pages/Map'),
+      },
+      {
+        title: 'Sets',
+        slug: 'sets',
+        aliases: ['Set Game', 'Set Card Game'],
+        description: 'Find groups of 3 cards where each attribute is either all the same or all different.',
+        icon: setsIcon,
+        emojiIcon: '🃏',
+        colors: { primary: '#e53e3e', secondary: '#805ad5' },
+        gradient: 'linear-gradient(135deg, #e53e3e 0%, #38a169 50%, #805ad5 100%)',
+        component: () => import('../../pages/Sets'),
+      },
+      {
+        title: 'Tetravex',
+        slug: 'tetravex',
+        aliases: ['TetraVex', 'Edge Match'],
+        description: 'Place tiles so adjacent edges have matching numbers. A classic edge-matching puzzle!',
+        icon: tetravexIcon,
+        emojiIcon: '🔷',
+        colors: { primary: '#3b82f6', secondary: '#8b5cf6' },
+        gradient: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+        component: () => import('../../pages/Tetravex'),
+      },
+      {
+        title: 'Kakurasu',
+        slug: 'kakurasu',
+        aliases: ['Index Sums', 'Cross Sums'],
+        description: 'Fill cells so row/column sums match targets. Each cell adds its position value to the sum.',
+        icon: kakurasuIcon,
+        emojiIcon: '➕',
+        colors: { primary: '#3b82f6', secondary: '#22c55e' },
+        gradient: 'linear-gradient(135deg, #3b82f6 0%, #22c55e 100%)',
+        component: () => import('../../pages/Kakurasu'),
       },
     ],
   },

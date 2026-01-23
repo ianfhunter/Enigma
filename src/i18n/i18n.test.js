@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import i18n, { supportedLanguages } from './index';
+import i18n, { supportedLanguages, getI18nCode, getEnglishVariant } from './index';
 import en from './locales/en.json';
 import es from './locales/es.json';
 
@@ -35,29 +35,86 @@ describe('i18n configuration', () => {
       expect(supportedLanguages.length).toBeGreaterThan(0);
     });
 
-    it('should include English as a supported language', () => {
-      const english = supportedLanguages.find(lang => lang.code === 'en');
-      expect(english).toBeDefined();
-      expect(english.name).toBe('English');
-      expect(english.flag).toBe('🇬🇧');
+    it('should include EN (US) as a supported language', () => {
+      const enUS = supportedLanguages.find(lang => lang.code === 'en-US');
+      expect(enUS).toBeDefined();
+      expect(enUS.name).toBe('EN (US)');
+      expect(enUS.flag).toBe('🇺🇸');
+      expect(enUS.i18nCode).toBe('en');
+      expect(enUS.englishVariant).toBe('us');
+    });
+
+    it('should include EN (GB) as a supported language', () => {
+      const enGB = supportedLanguages.find(lang => lang.code === 'en-GB');
+      expect(enGB).toBeDefined();
+      expect(enGB.name).toBe('EN (GB)');
+      expect(enGB.flag).toBe('🇬🇧');
+      expect(enGB.i18nCode).toBe('en');
+      expect(enGB.englishVariant).toBe('uk');
     });
 
     it('should include Spanish as a supported language', () => {
       const spanish = supportedLanguages.find(lang => lang.code === 'es');
       expect(spanish).toBeDefined();
-      expect(spanish.name).toContain('Español');
+      expect(spanish.name).toBe('ES');
       expect(spanish.flag).toBe('🇪🇸');
+      expect(spanish.i18nCode).toBe('es');
+      expect(spanish.englishVariant).toBe('us');
     });
 
-    it('should have code, name, and flag for each language', () => {
+    it('should have code, name, flag, i18nCode, and englishVariant for each language', () => {
       supportedLanguages.forEach(lang => {
         expect(lang).toHaveProperty('code');
         expect(lang).toHaveProperty('name');
         expect(lang).toHaveProperty('flag');
+        expect(lang).toHaveProperty('i18nCode');
+        expect(lang).toHaveProperty('englishVariant');
         expect(typeof lang.code).toBe('string');
         expect(typeof lang.name).toBe('string');
         expect(typeof lang.flag).toBe('string');
+        expect(typeof lang.i18nCode).toBe('string');
+        expect(typeof lang.englishVariant).toBe('string');
       });
+    });
+  });
+
+  describe('getI18nCode helper', () => {
+    it('should return en for en-US', () => {
+      expect(getI18nCode('en-US')).toBe('en');
+    });
+
+    it('should return en for en-GB', () => {
+      expect(getI18nCode('en-GB')).toBe('en');
+    });
+
+    it('should return es for es', () => {
+      expect(getI18nCode('es')).toBe('es');
+    });
+
+    it('should return en as fallback for unknown codes', () => {
+      expect(getI18nCode('unknown')).toBe('en');
+      expect(getI18nCode('')).toBe('en');
+      expect(getI18nCode(null)).toBe('en');
+    });
+  });
+
+  describe('getEnglishVariant helper', () => {
+    it('should return us for en-US', () => {
+      expect(getEnglishVariant('en-US')).toBe('us');
+    });
+
+    it('should return uk for en-GB', () => {
+      expect(getEnglishVariant('en-GB')).toBe('uk');
+    });
+
+    it('should return us for es (fallback)', () => {
+      expect(getEnglishVariant('es')).toBe('us');
+    });
+
+    it('should return us as fallback for unknown codes', () => {
+      expect(getEnglishVariant('unknown')).toBe('us');
+      expect(getEnglishVariant('')).toBe('us');
+      expect(getEnglishVariant(null)).toBe('us');
     });
   });
 
@@ -163,7 +220,9 @@ describe('English translation file structure', () => {
     expect(en.settings.theme).toBe('Theme');
     expect(en.settings.dark).toBe('Dark');
     expect(en.settings.light).toBe('Light');
-    expect(en.settings.interfaceLanguage).toBe('Interface Language');
+    expect(en.settings.language).toBe('Language');
+    expect(en.settings.languageDescription).toBe('Choose your language and English variant for word games.');
+    expect(en.settings.languageFallbackNote).toBe('Where a game is unavailable in a language, it will fall back to EN (US).');
   });
 
   it('should have profile section', () => {

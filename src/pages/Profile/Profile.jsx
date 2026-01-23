@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
 import { users, games, admin } from '../../api/client';
 import { allGames } from '../../data/gameRegistry';
-import { supportedLanguages } from '../../i18n';
+import { supportedLanguages, getI18nCode } from '../../i18n';
 import styles from './Profile.module.css';
 
 export default function Profile() {
@@ -315,9 +315,9 @@ function SettingsTab() {
 
     try {
       await updateSetting(key, value);
-      // If changing language, update i18n immediately
+      // If changing language, update i18n immediately with the i18n code
       if (key === 'language') {
-        i18n.changeLanguage(value);
+        i18n.changeLanguage(getI18nCode(value));
       }
       setMessage({ type: 'success', text: t('common.settingSaved') });
     } catch (err) {
@@ -367,9 +367,9 @@ function SettingsTab() {
       </section>
 
       <section className={styles.card}>
-        <h3 className={styles.cardTitle}>🌍 {t('settings.interfaceLanguage')}</h3>
+        <h3 className={styles.cardTitle}>🌍 {t('settings.language')}</h3>
         <p className={styles.cardDescription}>
-          {t('settings.interfaceLanguageDescription')}
+          {t('settings.languageDescription')}
         </p>
         <div className={styles.variantSelector}>
           {supportedLanguages.map((lang) => (
@@ -385,7 +385,7 @@ function SettingsTab() {
           ))}
         </div>
         <p className={styles.cardHint} style={{ marginTop: '0.75rem', fontSize: '0.85rem', opacity: 0.7 }}>
-          {t('settings.moreLanguagesComingSoon')}
+          {t('settings.languageFallbackNote')}
         </p>
       </section>
 
@@ -402,33 +402,6 @@ function SettingsTab() {
             disabled={saving}
           >
             <span className={styles.toggleKnob} />
-          </button>
-        </div>
-      </section>
-
-      <section className={styles.card}>
-        <h3 className={styles.cardTitle}>🌐 {t('settings.englishVariant')}</h3>
-        <p className={styles.cardDescription}>
-          {t('settings.englishVariantDescription')}
-        </p>
-        <div className={styles.variantSelector}>
-          <button
-            className={`${styles.variantOption} ${settings?.englishVariant === 'us' ? styles.active : ''}`}
-            onClick={() => handleSettingChange('englishVariant', 'us')}
-            disabled={saving}
-          >
-            <span className={styles.flagIcon}>🇺🇸</span>
-            <span className={styles.variantLabel}>{t('settings.usEnglish')}</span>
-            <span className={styles.variantHint}>{t('settings.usEnglishExamples')}</span>
-          </button>
-          <button
-            className={`${styles.variantOption} ${settings?.englishVariant === 'uk' ? styles.active : ''}`}
-            onClick={() => handleSettingChange('englishVariant', 'uk')}
-            disabled={saving}
-          >
-            <span className={styles.flagIcon}>🇬🇧</span>
-            <span className={styles.variantLabel}>{t('settings.ukEnglish')}</span>
-            <span className={styles.variantHint}>{t('settings.ukEnglishExamples')}</span>
           </button>
         </div>
       </section>

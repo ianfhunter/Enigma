@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Tile 1 (top-left) -->
+  <g transform="translate(5,5)">
+    <rect width="42" height="42" rx="4" fill="#1e1e2e" stroke="#4a4a6a" stroke-width="2"/>
+    <line x1="0" y1="0" x2="42" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <line x1="42" y1="0" x2="0" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <polygon points="21,21 0,0 42,0" fill="#ef4444" opacity="0.3"/>
+    <text x="21" y="14" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="bold">3</text>
+    <polygon points="21,21 42,0 42,42" fill="#22c55e" opacity="0.3"/>
+    <text x="34" y="24" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="bold">5</text>
+    <polygon points="21,21 42,42 0,42" fill="#3b82f6" opacity="0.3"/>
+    <text x="21" y="36" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">7</text>
+    <polygon points="21,21 0,42 0,0" fill="#eab308" opacity="0.3"/>
+    <text x="8" y="24" text-anchor="middle" fill="#eab308" font-size="10" font-weight="bold">2</text>
+  </g>
+
+  <!-- Tile 2 (top-right) -->
+  <g transform="translate(53,5)">
+    <rect width="42" height="42" rx="4" fill="#1e1e2e" stroke="#4a4a6a" stroke-width="2"/>
+    <line x1="0" y1="0" x2="42" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <line x1="42" y1="0" x2="0" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <polygon points="21,21 0,0 42,0" fill="#8b5cf6" opacity="0.3"/>
+    <text x="21" y="14" text-anchor="middle" fill="#8b5cf6" font-size="10" font-weight="bold">8</text>
+    <polygon points="21,21 42,0 42,42" fill="#f97316" opacity="0.3"/>
+    <text x="34" y="24" text-anchor="middle" fill="#f97316" font-size="10" font-weight="bold">1</text>
+    <polygon points="21,21 42,42 0,42" fill="#14b8a6" opacity="0.3"/>
+    <text x="21" y="36" text-anchor="middle" fill="#14b8a6" font-size="10" font-weight="bold">4</text>
+    <polygon points="21,21 0,42 0,0" fill="#22c55e" opacity="0.3"/>
+    <text x="8" y="24" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="bold">5</text>
+  </g>
+
+  <!-- Tile 3 (bottom-left) -->
+  <g transform="translate(5,53)">
+    <rect width="42" height="42" rx="4" fill="#1e1e2e" stroke="#4a4a6a" stroke-width="2"/>
+    <line x1="0" y1="0" x2="42" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <line x1="42" y1="0" x2="0" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <polygon points="21,21 0,0 42,0" fill="#3b82f6" opacity="0.3"/>
+    <text x="21" y="14" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">7</text>
+    <polygon points="21,21 42,0 42,42" fill="#d946ef" opacity="0.3"/>
+    <text x="34" y="24" text-anchor="middle" fill="#d946ef" font-size="10" font-weight="bold">9</text>
+    <polygon points="21,21 42,42 0,42" fill="#06b6d4" opacity="0.3"/>
+    <text x="21" y="36" text-anchor="middle" fill="#06b6d4" font-size="10" font-weight="bold">6</text>
+    <polygon points="21,21 0,42 0,0" fill="#ef4444" opacity="0.3"/>
+    <text x="8" y="24" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="bold">0</text>
+  </g>
+
+  <!-- Tile 4 (bottom-right) -->
+  <g transform="translate(53,53)">
+    <rect width="42" height="42" rx="4" fill="#1e1e2e" stroke="#4a4a6a" stroke-width="2"/>
+    <line x1="0" y1="0" x2="42" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <line x1="42" y1="0" x2="0" y2="42" stroke="#3a3a4e" stroke-width="1"/>
+    <polygon points="21,21 0,0 42,0" fill="#14b8a6" opacity="0.3"/>
+    <text x="21" y="14" text-anchor="middle" fill="#14b8a6" font-size="10" font-weight="bold">4</text>
+    <polygon points="21,21 42,0 42,42" fill="#ec4899" opacity="0.3"/>
+    <text x="34" y="24" text-anchor="middle" fill="#ec4899" font-size="10" font-weight="bold">3</text>
+    <polygon points="21,21 42,42 0,42" fill="#eab308" opacity="0.3"/>
+    <text x="21" y="36" text-anchor="middle" fill="#eab308" font-size="10" font-weight="bold">2</text>
+    <polygon points="21,21 0,42 0,0" fill="#d946ef" opacity="0.3"/>
+    <text x="8" y="24" text-anchor="middle" fill="#d946ef" font-size="10" font-weight="bold">9</text>
+  </g>
+</svg>

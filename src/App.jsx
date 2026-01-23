@@ -158,6 +158,9 @@ const slugToFolder = {
   'world-map-fill': 'WorldMapFill',
   'yajilin': 'Yajilin',
   'yin-yang': 'YinYang',
+  'sets': 'Sets',
+  'tetravex': 'Tetravex',
+  'kakurasu': 'Kakurasu',
 };
 
 // Cache for lazy-loaded components

@@ -1,0 +1,269 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  min-height: 100%;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.gameArea {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #1a1a2e;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid #3a3a5e;
+}
+
+.headerRow,
+.footerRow,
+.gridRow {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.cornerCell {
+  width: 40px;
+  height: 40px;
+}
+
+.colNumber,
+.rowNumber {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #a5b4fc;
+  background: rgba(165, 180, 252, 0.1);
+  border-radius: 4px;
+}
+
+.sumHeader {
+  width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #3a3a5e;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cell:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #5a5a7e;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell.filled {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-color: #60a5fa;
+}
+
+.cell.filled.revealed {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border-color: #4ade80;
+}
+
+.cell.revealed:not(.filled) {
+  /* Unfilled cells in revealed state stay unfilled-looking */
+  background: rgba(255, 255, 255, 0.03);
+  border-color: #2a2a4e;
+}
+
+.marker {
+  width: 60%;
+  height: 60%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+}
+
+.rowSum {
+  width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  gap: 2px;
+}
+
+.colSum {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  line-height: 1.1;
+}
+
+.rowSum.correct,
+.colSum.correct {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.currentSum {
+  font-weight: 700;
+  color: inherit;
+}
+
+.targetSum {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.resetBtn,
+.newGameBtn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.resetBtn {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  color: white;
+}
+
+.resetBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.4);
+}
+
+.resetBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.newGameBtn {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  color: white;
+}
+
+.newGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.legend {
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.legend h4 {
+  margin: 0 0 0.5rem 0;
+  color: #a5b4fc;
+  font-size: 1rem;
+}
+
+.legend p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+@media (max-width: 500px) {
+  .cell,
+  .colNumber,
+  .rowNumber,
+  .cornerCell {
+    width: 32px;
+    height: 32px;
+  }
+
+  .rowSum,
+  .colSum,
+  .sumHeader {
+    width: 50px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  .colNumber,
+  .rowNumber {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .cell,
+  .colNumber,
+  .rowNumber,
+  .cornerCell {
+    width: 28px;
+    height: 28px;
+  }
+
+  .rowSum,
+  .colSum,
+  .sumHeader {
+    width: 44px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+}

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Grid background -->
+  <rect x="20" y="10" width="70" height="70" rx="6" fill="#1a1a2e" stroke="#3a3a5e" stroke-width="2"/>
+
+  <!-- Column numbers -->
+  <text x="32" y="22" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">1</text>
+  <text x="50" y="22" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">2</text>
+  <text x="68" y="22" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">3</text>
+
+  <!-- Row numbers -->
+  <text x="10" y="38" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">1</text>
+  <text x="10" y="55" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">2</text>
+  <text x="10" y="72" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">3</text>
+
+  <!-- Grid cells -->
+  <!-- Row 1 -->
+  <rect x="25" y="27" width="14" height="14" rx="2" fill="#3b82f6" stroke="#60a5fa" stroke-width="1"/>
+  <rect x="43" y="27" width="14" height="14" rx="2" fill="rgba(255,255,255,0.05)" stroke="#3a3a5e" stroke-width="1"/>
+  <rect x="61" y="27" width="14" height="14" rx="2" fill="#3b82f6" stroke="#60a5fa" stroke-width="1"/>
+
+  <!-- Row 2 -->
+  <rect x="25" y="44" width="14" height="14" rx="2" fill="rgba(255,255,255,0.05)" stroke="#3a3a5e" stroke-width="1"/>
+  <rect x="43" y="44" width="14" height="14" rx="2" fill="#3b82f6" stroke="#60a5fa" stroke-width="1"/>
+  <rect x="61" y="44" width="14" height="14" rx="2" fill="rgba(255,255,255,0.05)" stroke="#3a3a5e" stroke-width="1"/>
+
+  <!-- Row 3 -->
+  <rect x="25" y="61" width="14" height="14" rx="2" fill="#3b82f6" stroke="#60a5fa" stroke-width="1"/>
+  <rect x="43" y="61" width="14" height="14" rx="2" fill="#3b82f6" stroke="#60a5fa" stroke-width="1"/>
+  <rect x="61" y="61" width="14" height="14" rx="2" fill="rgba(255,255,255,0.05)" stroke="#3a3a5e" stroke-width="1"/>
+
+  <!-- Row sums -->
+  <text x="85" y="38" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="bold">4</text>
+  <text x="85" y="55" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="bold">2</text>
+  <text x="85" y="72" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="bold">3</text>
+
+  <!-- Column sums -->
+  <text x="32" y="90" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="bold">4</text>
+  <text x="50" y="90" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="bold">4</text>
+  <text x="68" y="90" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="bold">1</text>
+</svg>

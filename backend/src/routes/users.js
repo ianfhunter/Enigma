@@ -159,55 +159,54 @@ router.delete('/account', async (req, res) => {
   }
 });
 
+// Supported language codes (includes English variant info)
+const SUPPORTED_LANGUAGES = ['en-US', 'en-GB', 'es'];
+
+// Helper to derive English variant from language code
+function getEnglishVariantFromLanguage(language) {
+  if (language === 'en-GB') return 'uk';
+  return 'us'; // Default for en-US, es, and any other language
+}
+
 // Get user settings
 router.get('/settings', (req, res) => {
   const settings = db.prepare(`
-    SELECT english_variant, theme, sound_enabled, disabled_games, game_preferences, search_engine, favourite_games, language
+    SELECT theme, sound_enabled, disabled_games, game_preferences, search_engine, favourite_games, language
     FROM user_settings WHERE user_id = ?
   `).get(req.session.userId);
 
   if (!settings) {
     // Create default settings if missing
-    db.prepare('INSERT INTO user_settings (user_id) VALUES (?)').run(req.session.userId);
+    db.prepare('INSERT INTO user_settings (user_id, language) VALUES (?, ?)').run(req.session.userId, 'en-US');
     return res.json({
-      englishVariant: 'us',
       theme: 'dark',
       soundEnabled: true,
       disabledGames: [],
       gamePreferences: {},
       searchEngine: 'google',
       favouriteGames: [],
-      language: 'en'
+      language: 'en-US'
     });
   }
 
   res.json({
-    englishVariant: settings.english_variant,
     theme: settings.theme || 'dark',
     soundEnabled: Boolean(settings.sound_enabled),
     disabledGames: JSON.parse(settings.disabled_games || '[]'),
     gamePreferences: JSON.parse(settings.game_preferences || '{}'),
     searchEngine: settings.search_engine || 'google',
     favouriteGames: JSON.parse(settings.favourite_games || '[]'),
-    language: settings.language || 'en'
+    language: settings.language || 'en-US'
   });
 });
 
 // Update user settings
 router.put('/settings', (req, res) => {
-  const { englishVariant, theme, soundEnabled, disabledGames, gamePreferences, searchEngine, favouriteGames, language } = req.body;
+  const { theme, soundEnabled, disabledGames, gamePreferences, searchEngine, favouriteGames, language } = req.body;
 
   // Build update query dynamically based on what's provided
   const updates = [];
   const values = [];
-
-  if (englishVariant !== undefined) {
-    if (!['us', 'uk'].includes(englishVariant)) {
-      return res.status(400).json({ error: 'Invalid English variant' });
-    }
-    updates.push('english_variant = ?');
-    values.push(englishVariant);
-  }
 
   if (theme !== undefined) {
     if (!['dark', 'light'].includes(theme)) {
@@ -255,11 +254,14 @@ router.put('/settings', (req, res) => {
   }
 
   if (language !== undefined) {
-    if (typeof language !== 'string') {
-      return res.status(400).json({ error: 'language must be a string' });
+    if (typeof language !== 'string' || !SUPPORTED_LANGUAGES.includes(language)) {
+      return res.status(400).json({ error: 'Invalid language. Supported: ' + SUPPORTED_LANGUAGES.join(', ') });
     }
     updates.push('language = ?');
     values.push(language);
+    // Also update english_variant for backward compatibility with any code that reads it directly
+    updates.push('english_variant = ?');
+    values.push(getEnglishVariantFromLanguage(language));
   }
 
   if (updates.length === 0) {

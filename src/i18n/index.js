@@ -31,22 +31,34 @@ import es from './locales/es.json';
  */
 
 // Available languages configuration
+// Language codes include English variant for word games (e.g., en-US, en-GB)
 export const supportedLanguages = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'es', name: 'Español (Alpha)', flag: '🇪🇸' },
+  { code: 'en-US', name: 'EN (US)', flag: '🇺🇸', i18nCode: 'en', englishVariant: 'us' },
+  { code: 'en-GB', name: 'EN (GB)', flag: '🇬🇧', i18nCode: 'en', englishVariant: 'uk' },
+  { code: 'es', name: 'ES', flag: '🇪🇸', i18nCode: 'es', englishVariant: 'us' },
   // Add more languages here as translations become available
-  // { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  // { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  // { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  // { code: 'fr', name: 'Français', flag: '🇫🇷', i18nCode: 'fr', englishVariant: 'us' },
 ];
+
+// Helper to get the i18n code from a language setting
+export function getI18nCode(languageCode) {
+  const lang = supportedLanguages.find(l => l.code === languageCode);
+  return lang?.i18nCode || 'en';
+}
+
+// Helper to get the English variant from a language setting
+export function getEnglishVariant(languageCode) {
+  const lang = supportedLanguages.find(l => l.code === languageCode);
+  return lang?.englishVariant || 'us';
+}
 
 // Get supported language codes for validation
 const supportedCodes = supportedLanguages.map(l => l.code);
 
 // Default language from environment variable (Docker/build-time config)
-// Falls back to 'en' if not set or invalid
+// Falls back to 'en-US' if not set or invalid
 const envDefaultLanguage = import.meta.env.VITE_DEFAULT_LANGUAGE;
-const defaultLanguage = supportedCodes.includes(envDefaultLanguage) ? envDefaultLanguage : 'en';
+const defaultLanguage = supportedCodes.includes(envDefaultLanguage) ? envDefaultLanguage : 'en-US';
 
 i18n
   .use(LanguageDetector)
@@ -58,10 +70,12 @@ i18n
       // Add more languages here:
       // fr: { translation: fr },
     },
-    fallbackLng: defaultLanguage,
+    // Always fallback to English (US) for missing translations
+    fallbackLng: 'en',
 
     // Detection options - check localStorage first, then browser settings
-    // If nothing is set, fallbackLng (configured above) will be used
+    // Note: The actual language code (en-US, en-GB, es) is managed by SettingsContext,
+    // but the i18n code (en, es) is what i18next uses internally
     detection: {
       order: ['localStorage', 'navigator'],
       lookupLocalStorage: 'enigma-language',
