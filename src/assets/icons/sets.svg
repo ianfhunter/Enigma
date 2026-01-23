@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Card 1 - Diamond -->
+  <rect x="5" y="10" width="25" height="35" rx="3" fill="#1e1e2e" stroke="#e53e3e" stroke-width="2"/>
+  <path d="M17.5 18 L24 27.5 L17.5 37 L11 27.5 Z" fill="#e53e3e"/>
+
+  <!-- Card 2 - Oval striped -->
+  <rect x="37.5" y="10" width="25" height="35" rx="3" fill="#1e1e2e" stroke="#38a169" stroke-width="2"/>
+  <defs>
+    <pattern id="stripes" patternUnits="userSpaceOnUse" width="4" height="4">
+      <line x1="0" y1="0" x2="0" y2="4" stroke="#38a169" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+  <ellipse cx="50" cy="27.5" rx="8" ry="12" fill="url(#stripes)" stroke="#38a169" stroke-width="2"/>
+
+  <!-- Card 3 - Squiggle empty -->
+  <rect x="70" y="10" width="25" height="35" rx="3" fill="#1e1e2e" stroke="#805ad5" stroke-width="2"/>
+  <path d="M76 32 C74 26 77 20 82.5 18 C88 16 92 20 93 25 C94 30 91 34 85 37 C79 40 78 38 76 32 Z"
+        fill="none" stroke="#805ad5" stroke-width="2"/>
+
+  <!-- Card 4 - Two diamonds solid -->
+  <rect x="5" y="55" width="25" height="35" rx="3" fill="#1e1e2e" stroke="#e53e3e" stroke-width="2"/>
+  <path d="M17.5 60 L21.5 65 L17.5 70 L13.5 65 Z" fill="#e53e3e"/>
+  <path d="M17.5 75 L21.5 80 L17.5 85 L13.5 80 Z" fill="#e53e3e"/>
+
+  <!-- Card 5 - Two ovals solid -->
+  <rect x="37.5" y="55" width="25" height="35" rx="3" fill="#1e1e2e" stroke="#38a169" stroke-width="2"/>
+  <ellipse cx="50" cy="65" rx="6" ry="7" fill="#38a169"/>
+  <ellipse cx="50" cy="80" rx="6" ry="7" fill="#38a169"/>
+
+  <!-- Card 6 - Two squiggles striped -->
+  <rect x="70" y="55" width="25" height="35" rx="3" fill="#1e1e2e" stroke="#805ad5" stroke-width="2"/>
+  <defs>
+    <pattern id="stripes2" patternUnits="userSpaceOnUse" width="3" height="3">
+      <line x1="0" y1="0" x2="0" y2="3" stroke="#805ad5" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <path d="M76 68 C75 64 77 60 80 59 C83 58 86 60 87 63 C88 66 86 69 83 71 C80 73 78 72 76 68 Z"
+        fill="url(#stripes2)" stroke="#805ad5" stroke-width="1.5"/>
+  <path d="M76 83 C75 79 77 75 80 74 C83 73 86 75 87 78 C88 81 86 84 83 86 C80 88 78 87 76 83 Z"
+        fill="url(#stripes2)" stroke="#805ad5" stroke-width="1.5"/>
+</svg>
