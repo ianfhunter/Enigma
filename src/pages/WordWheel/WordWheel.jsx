@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
+import GiveUpButton from '../../components/GiveUpButton';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { isValidWord, findAllWords, generatePuzzle, shuffleArray } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
@@ -31,6 +32,7 @@ export default function WordWheel() {
   const [message, setMessage] = useState({ text: '', type: '' });
   const [possibleWords, setPossibleWords] = useState([]);
   const [showAllWords, setShowAllWords] = useState(false);
+  const [gaveUp, setGaveUp] = useState(false);
 
   // Save game state whenever it changes
   useEffect(() => {
@@ -70,6 +72,7 @@ export default function WordWheel() {
     setFoundWords([]);
     setMessage({ text: '', type: '' });
     setShowAllWords(false);
+    setGaveUp(false);
 
     // Calculate possible words
     const words = findAllWords(letters, center);
@@ -339,15 +342,20 @@ export default function WordWheel() {
             <button className={styles.newGameBtn} onClick={createNewPuzzle}>
               New Puzzle
             </button>
-            <button
-              className={styles.revealBtn}
-              onClick={() => setShowAllWords(!showAllWords)}
-            >
-              {showAllWords ? 'Hide Answers' : 'Show All Words'}
-            </button>
+            {!gaveUp && (
+              <GiveUpButton onGiveUp={() => setGaveUp(true)} />
+            )}
+            {gaveUp && (
+              <button
+                className={styles.revealBtn}
+                onClick={() => setShowAllWords(!showAllWords)}
+              >
+                {showAllWords ? 'Hide Answers' : 'Show All Words'}
+              </button>
+            )}
           </div>
 
-          {showAllWords && (
+          {gaveUp && showAllWords && (
             <div className={styles.allWords}>
               <h4>{t('common.allPossibleWords')} ({possibleWords.length})</h4>
               <div className={styles.wordList}>

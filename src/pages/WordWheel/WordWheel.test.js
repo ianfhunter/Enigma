@@ -15,6 +15,7 @@ describe('WordWheel - helpers', () => {
     expect(Array.isArray(words)).toBe(true);
   });
 });
+
 import { describe, it, expect } from 'vitest';
 import {
   findAllWords,
