@@ -4,6 +4,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import {
   getLastKana,
   endsInN,
@@ -14,7 +15,6 @@ import {
   setCommonOnlyFilter,
   getWordStats,
 } from '@datasets/japaneseWords';
-import { loadStats, recordLongestChain } from './stats';
 import styles from './Shiritori.module.css';
 
 // Japanese Shiritori: Last kana of word = first kana of next word
@@ -118,7 +118,12 @@ export default function Shiritori() {
   const [usedWords, setUsedWords] = useState(new Set());
   const [isAIThinking, setIsAIThinking] = useState(false);
   const [lang, setLang] = usePersistedState('shiritori-lang', 'beginner');
-  const [stats, setStats] = usePersistedState('shiritori-stats', { longestChain: 0, totalGames: 0, wins: 0 });
+  const { stats, updateStats, recordWin, recordLoss, recordGiveUp } = useGameStats('shiritori', {
+    trackBestTime: false,
+    trackBestScore: true,
+    scoreComparison: 'higher',
+    defaultStats: { longestChain: 0 },
+  });
   const [suggestions, setSuggestions] = useState([]);
   const [commonOnly, setCommonOnly] = usePersistedState('shiritori-common-only', false);
 
@@ -215,7 +220,11 @@ export default function Shiritori() {
     // Check if player said a word ending in ん
     if (endsInN(wordData.hiragana)) {
       setGameState('nLose');
-      setStats(prev => recordLongestChain(prev, newChain.length));
+      updateStats(prev => ({
+        ...prev,
+        longestChain: Math.max(prev.longestChain || 0, newChain.length),
+      }));
+      recordLoss();
       return;
     }
 
@@ -233,7 +242,11 @@ export default function Shiritori() {
           setChain(aiChain);
           setGameState('playerWin');
           setIsAIThinking(false);
-          setStats(prev => recordLongestChain(prev, aiChain.length));
+          updateStats(prev => ({
+            ...prev,
+            longestChain: Math.max(prev.longestChain || 0, aiChain.length),
+          }));
+          recordWin();
           return;
         }
 
@@ -246,12 +259,19 @@ export default function Shiritori() {
         setIsAIThinking(false);
 
         // Update longest chain
-        setStats(prev => recordLongestChain(prev, aiChain.length));
+        updateStats(prev => ({
+          ...prev,
+          longestChain: Math.max(prev.longestChain || 0, aiChain.length),
+        }));
       } else {
         // AI can't find a word - player wins!
         setGameState('playerWin');
         setIsAIThinking(false);
-        setStats(prev => recordLongestChain(prev, newChain.length));
+        updateStats(prev => ({
+          ...prev,
+          longestChain: Math.max(prev.longestChain || 0, newChain.length),
+        }));
+        recordWin();
       }
     }, 1000);
   };
@@ -266,7 +286,11 @@ export default function Shiritori() {
 
     setSuggestions(availableWords);
     setGameState('aiWin');
-    setStats(prev => recordLongestChain(prev, chain.length));
+    updateStats(prev => ({
+      ...prev,
+      longestChain: Math.max(prev.longestChain || 0, chain.length),
+    }));
+    recordGiveUp();
   };
 
   return (
@@ -312,7 +336,7 @@ export default function Shiritori() {
           </div>
           <div className={styles.stat}>
             <span className={styles.statLabel}>{text.best}</span>
-            <span className={styles.statValue}>{stats.longestChain}</span>
+            <span className={styles.statValue}>{stats.longestChain || 0}</span>
           </div>
         </div>
 

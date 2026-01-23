@@ -8,7 +8,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { BODY_SYSTEMS, getPartsBySystem, getRandomPart, SYSTEM_IDS } from '../../data/anatomyData';
 import BodySVG from './BodySVG';
 import styles from './AnatomyQuiz.module.css';
@@ -26,12 +26,10 @@ export default function AnatomyQuiz() {
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const [stats, setStats] = usePersistedState('anatomy-quiz-stats', {
-    played: 0,
-    correct: 0,
-    streak: 0,
-    maxStreak: 0,
-    bySystem: {},
+  const { stats, updateStats, recordWin, recordGiveUp, winRate } = useGameStats('anatomy-quiz', {
+    trackBestTime: false,
+    trackBestScore: false,
+    defaultStats: { bySystem: {} },
   });
 
   // Get parts for current system
@@ -102,20 +100,13 @@ export default function AnatomyQuiz() {
       setIsTransitioning(true);
 
       // Update stats
-      setStats(prev => {
-        const newStreak = prev.streak + 1;
-        const systemKey = currentPart.systemId || selectedSystem;
-        const bySystem = { ...prev.bySystem };
+      const systemKey = currentPart.systemId || selectedSystem;
+      updateStats(prev => {
+        const bySystem = { ...(prev.bySystem || {}) };
         bySystem[systemKey] = (bySystem[systemKey] || 0) + 1;
-
-        return {
-          played: prev.played + 1,
-          correct: prev.correct + 1,
-          streak: newStreak,
-          maxStreak: Math.max(prev.maxStreak, newStreak),
-          bySystem,
-        };
+        return { ...prev, bySystem };
       });
+      recordWin();
 
       // Move to next question after delay
       setTimeout(() => {
@@ -142,7 +133,7 @@ export default function AnatomyQuiz() {
         setHighlightType(null);
       }, 800);
     }
-  }, [currentPart, wrongAttempts, isTransitioning, selectedSystem, setStats, pickNewPart]);
+  }, [currentPart, wrongAttempts, isTransitioning, selectedSystem, updateStats, recordWin, pickNewPart]);
 
   // Handle giving up / skip
   const handleSkip = () => {
@@ -155,11 +146,7 @@ export default function AnatomyQuiz() {
     setIsTransitioning(true);
 
     // Update stats (count as played but not correct)
-    setStats(prev => ({
-      ...prev,
-      played: prev.played + 1,
-      streak: 0,
-    }));
+    recordGiveUp();
 
     // Move to next question
     setTimeout(() => {
@@ -285,13 +272,11 @@ export default function AnatomyQuiz() {
               <span className={styles.statLabel}>{t('common.played')}</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.correct / stats.played) * 100) : 0}%
-              </span>
+              <span className={styles.statValue}>{winRate}%</span>
               <span className={styles.statLabel}>Accuracy</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.streak}</span>
+              <span className={styles.statValue}>{stats.currentStreak}</span>
               <span className={styles.statLabel}>{t('common.streak')}</span>
             </div>
             <div className={styles.stat}>

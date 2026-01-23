@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './KnightsAndKnaves.module.css';
 
 function buildPuzzleIndex(puzzles) {
@@ -47,11 +47,9 @@ export default function KnightsAndKnaves() {
   const [revealed, setRevealed] = useState(false);
   const [countedThisPuzzle, setCountedThisPuzzle] = useState(false);
 
-  const [stats, setStats] = usePersistedState('knk-stats', {
-    played: 0,
-    won: 0,
-    streak: 0,
-    maxStreak: 0,
+  const { stats, recordWin, recordLoss, winRate } = useGameStats('knightsandknaves', {
+    trackBestTime: false,
+    trackBestScore: false,
   });
 
   const puzzleIndex = useMemo(() => (puzzles ? buildPuzzleIndex(puzzles) : null), [puzzles]);
@@ -146,12 +144,7 @@ export default function KnightsAndKnaves() {
       setMessage('Correct!');
       if (!countedThisPuzzle) {
         setCountedThisPuzzle(true);
-        setStats(prev => ({
-          played: prev.played + 1,
-          won: prev.won + 1,
-          streak: prev.streak + 1,
-          maxStreak: Math.max(prev.maxStreak, prev.streak + 1),
-        }));
+        recordWin();
       }
     } else {
       setMessage('Not quite — adjust and try again.');
@@ -168,11 +161,7 @@ export default function KnightsAndKnaves() {
     setRevealed(true);
     if (!countedThisPuzzle) {
       setCountedThisPuzzle(true);
-      setStats(prev => ({
-        ...prev,
-        played: prev.played + 1,
-        streak: 0,
-      }));
+      recordLoss();
     }
   };
 
@@ -290,13 +279,11 @@ export default function KnightsAndKnaves() {
                 <span className={styles.statLabel}>{t('common.played')}</span>
               </div>
               <div className={styles.stat}>
-                <span className={styles.statValue}>
-                  {stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%
-                </span>
+                <span className={styles.statValue}>{winRate}%</span>
                 <span className={styles.statLabel}>Win %</span>
               </div>
               <div className={styles.stat}>
-                <span className={styles.statValue}>{stats.streak}</span>
+                <span className={styles.statValue}>{stats.currentStreak}</span>
                 <span className={styles.statLabel}>{t('common.streak')}</span>
               </div>
               <div className={styles.stat}>

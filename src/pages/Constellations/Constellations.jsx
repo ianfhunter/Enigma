@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Constellations.module.css';
 
 const TOTAL_ROUNDS = 12;
@@ -249,7 +249,12 @@ export default function Constellations() {
   const [gameOver, setGameOver] = useState(false);
   const [usedConstellations, setUsedConstellations] = useState([]);
   const [streak, setStreak] = useState(0);
-  const [stats, setStats] = usePersistedState('constellations-stats', { played: 0, won: 0, totalCorrect: 0, bestStreak: 0 });
+  const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('constellations', {
+    trackBestTime: false,
+    trackBestScore: true,
+    scoreComparison: 'higher',
+    defaultStats: { totalCorrect: 0 },
+  });
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -320,12 +325,12 @@ export default function Constellations() {
       setScore(prev => prev + 1);
       setStreak(prev => {
         const newStreak = prev + 1;
-        if (newStreak > stats.bestStreak) {
-          setStats(s => ({ ...s, bestStreak: newStreak }));
+        if (newStreak > (stats.maxStreak || 0)) {
+          updateStats({ maxStreak: newStreak });
         }
         return newStreak;
       });
-      setStats(prev => ({ ...prev, totalCorrect: prev.totalCorrect + 1 }));
+      updateStats(prev => ({ ...prev, totalCorrect: (prev.totalCorrect || 0) + 1 }));
     } else {
       setStreak(0);
     }
@@ -334,11 +339,11 @@ export default function Constellations() {
   const nextRound = () => {
     if (mode === 'challenge' && round >= TOTAL_ROUNDS) {
       setGameOver(true);
-      setStats(prev => ({
-        ...prev,
-        played: prev.played + 1,
-        won: score >= Math.floor(TOTAL_ROUNDS / 2) ? prev.won + 1 : prev.won
-      }));
+      if (score >= Math.floor(TOTAL_ROUNDS / 2)) {
+        recordWin();
+      } else {
+        recordLoss();
+      }
       return;
     }
 
@@ -398,9 +403,9 @@ export default function Constellations() {
           <StatsPanel
             stats={[
               { label: 'Played', value: stats.played },
-              { label: 'Correct', value: stats.totalCorrect },
-              { label: 'Best Streak', value: stats.bestStreak },
-              { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+              { label: 'Correct', value: stats.totalCorrect || 0 },
+              { label: 'Best Streak', value: stats.maxStreak || 0 },
+              { label: 'Win Rate', value: `${winRate}%` },
             ]}
           />
 

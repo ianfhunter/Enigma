@@ -7,6 +7,7 @@ import {
   validateStrictWordGuess,
 } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import { useGameState } from '../../hooks/useGameState';
 import GameHeader from '../../components/GameHeader';
@@ -36,11 +37,9 @@ export default function WordGuess() {
   const [shakeRow, setShakeRow] = useState(false);
   const [revealRow, setRevealRow] = useState(-1);
   const [strictMode, setStrictMode] = usePersistedState('wordguess-strict', false);
-  const [stats, setStats] = usePersistedState('wordguess-stats', {
-    played: 0,
-    won: 0,
-    streak: 0,
-    maxStreak: 0,
+  const { stats, recordWin, recordLoss, recordGiveUp, winRate } = useGameStats('wordguess', {
+    trackBestTime: false,
+    trackBestScore: false,
   });
 
   const initGame = useCallback(() => {
@@ -59,12 +58,8 @@ export default function WordGuess() {
   const handleGiveUp = useCallback(() => {
     if (!isPlaying) return;
     giveUp();
-    setStats(prev => ({
-      ...prev,
-      played: prev.played + 1,
-      streak: 0,
-    }));
-  }, [setStats, giveUp, isPlaying]);
+    recordGiveUp();
+  }, [recordGiveUp, giveUp, isPlaying]);
 
   const updateLetterStates = (guess, feedback) => {
     const newStates = { ...letterStates };
@@ -124,22 +119,13 @@ export default function WordGuess() {
       setRevealRow(-1);
       if (currentGuess.toUpperCase() === targetWord) {
         checkWin(true);
-        setStats(prev => ({
-          played: prev.played + 1,
-          won: prev.won + 1,
-          streak: prev.streak + 1,
-          maxStreak: Math.max(prev.maxStreak, prev.streak + 1),
-        }));
+        recordWin();
       } else if (newGuesses.length >= MAX_GUESSES) {
         lose();
-        setStats(prev => ({
-          ...prev,
-          played: prev.played + 1,
-          streak: 0,
-        }));
+        recordLoss();
       }
     }, WORD_LENGTH * 300 + 100);
-  }, [currentGuess, targetWord, guesses, setStats, letterStates, strictMode, checkWin, lose]);
+  }, [currentGuess, targetWord, guesses, letterStates, strictMode, checkWin, lose, recordWin, recordLoss]);
 
   const handleKeyPress = useCallback((key) => {
     if (!isPlaying) return;
@@ -281,8 +267,8 @@ export default function WordGuess() {
         <StatsPanel
           stats={[
             { label: 'Played', value: stats.played },
-            { label: 'Win %', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
-            { label: 'Streak', value: stats.streak },
+            { label: 'Win %', value: `${winRate}%` },
+            { label: 'Streak', value: stats.currentStreak },
             { label: 'Max', value: stats.maxStreak },
           ]}
           className={styles.statsPanel}

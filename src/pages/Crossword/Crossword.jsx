@@ -27,6 +27,7 @@ import { getGameGradient } from '../../data/gameRegistry';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import GameHeader from '../../components/GameHeader';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import {
@@ -100,12 +101,10 @@ export default function Crossword() {
   const useNativeKeyboard = useMemo(() => shouldUseNativeKeyboard(), []);
   const [nativeInputValue, setNativeInputValue] = useState('');
 
-  const [stats, setStats] = usePersistedState('crossword-stats', {
-    played: 0,
-    won: 0,
-    bestTime: null,
-    avgTime: 0,
-    totalTime: 0,
+  const { stats, updateStats, recordWin, recordGiveUp, winRate, updateBestTime } = useGameStats('crossword', {
+    trackBestTime: true,
+    trackBestScore: false,
+    defaultStats: { avgTime: 0, totalTime: 0 },
   });
 
 
@@ -176,16 +175,16 @@ export default function Crossword() {
         checkWin(true);
         setIsTimerRunning(false);
 
-        setStats(prev => ({
-          played: prev.played + 1,
-          won: prev.won + 1,
-          bestTime: prev.bestTime ? Math.min(prev.bestTime, timer) : timer,
-          totalTime: prev.totalTime + timer,
-          avgTime: Math.round((prev.totalTime + timer) / (prev.won + 1)),
+        updateBestTime(timer);
+        updateStats(prev => ({
+          ...prev,
+          totalTime: (prev.totalTime || 0) + timer,
+          avgTime: Math.round(((prev.totalTime || 0) + timer) / ((stats.won || 0) + 1)),
         }));
+        recordWin();
       }
     }
-  }, [userGrid, puzzle, isPlaying, checkWin, timer, setStats]);
+  }, [userGrid, puzzle, isPlaying, checkWin, timer, updateStats, updateBestTime, recordWin, stats.won]);
 
   // Format time
   const formatTime = (seconds) => {
@@ -503,11 +502,8 @@ export default function Crossword() {
     });
 
     // Update stats
-    setStats(prev => ({
-      ...prev,
-      played: prev.played + 1,
-    }));
-  }, [gameState, puzzle, userGrid, giveUp, setStats]);
+    recordGiveUp();
+  }, [gameState, puzzle, userGrid, giveUp, recordGiveUp]);
 
   // Random loading phrase
   const loadingPhrase = useMemo(() =>
@@ -818,7 +814,7 @@ export default function Crossword() {
           </div>
           <div className={styles.stat}>
             <span className={styles.statValue}>
-              {stats.avgTime ? formatTime(stats.avgTime) : '-'}
+              {(stats.avgTime || 0) ? formatTime(stats.avgTime) : '-'}
             </span>
             <span className={styles.statLabel}>{t('common.avg')}</span>
           </div>

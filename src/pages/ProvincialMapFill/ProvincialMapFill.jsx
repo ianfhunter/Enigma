@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import StatsPanel from '../../components/StatsPanel';
 import GiveUpButton from '../../components/GiveUpButton';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { REGION_CONFIGS, buildLookup, getRegionCode } from '@datasets/provincialMapData';
 import styles from './ProvincialMapFill.module.css';
 
@@ -29,7 +29,12 @@ export default function ProvincialMapFill() {
   const [showGuessedList, setShowGuessedList] = useState(false);
   const [geoData, setGeoData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = usePersistedState('provincial-map-fill-stats', {});
+  const { stats, updateStats, recordWin, recordGiveUp } = useGameStats('provincial-map-fill', {
+    trackBestTime: false,
+    trackBestScore: false,
+    trackStreak: false,
+    defaultStats: { byRegion: {} },
+  });
   const inputRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -39,7 +44,7 @@ export default function ProvincialMapFill() {
   // Get stats for current region
   const currentStats = useMemo(() => {
     if (!selectedRegion) return { gamesPlayed: 0, bestScore: 0, bestTime: null };
-    return stats[selectedRegion] || { gamesPlayed: 0, bestScore: 0, bestTime: null };
+    return (stats.byRegion || {})[selectedRegion] || { gamesPlayed: 0, bestScore: 0, bestTime: null };
   }, [selectedRegion, stats]);
 
   // Build lookup map for region names
@@ -97,16 +102,19 @@ export default function ProvincialMapFill() {
       if (guessedRegions.size + 1 === totalRegions) {
         setIsComplete(true);
         clearInterval(timerRef.current);
-        setStats(prev => ({
-          ...prev,
-          [selectedRegion]: {
-            gamesPlayed: (prev[selectedRegion]?.gamesPlayed || 0) + 1,
-            bestScore: Math.max(prev[selectedRegion]?.bestScore || 0, totalRegions),
-            bestTime: prev[selectedRegion]?.bestTime
-              ? Math.min(prev[selectedRegion].bestTime, timeElapsed)
+        updateStats(prev => {
+          const byRegion = { ...(prev.byRegion || {}) };
+          const regionStat = byRegion[selectedRegion] || {};
+          byRegion[selectedRegion] = {
+            gamesPlayed: (regionStat.gamesPlayed || 0) + 1,
+            bestScore: Math.max(regionStat.bestScore || 0, totalRegions),
+            bestTime: regionStat.bestTime
+              ? Math.min(regionStat.bestTime, timeElapsed)
               : timeElapsed
-          }
-        }));
+          };
+          return { ...prev, byRegion };
+        });
+        recordWin();
       }
     } else if (regionCode && guessedRegions.has(regionCode)) {
       const region = regionConfig.regions.find(r => r.code === regionCode);
@@ -137,14 +145,17 @@ export default function ProvincialMapFill() {
   const handleGiveUp = () => {
     setIsComplete(true);
     clearInterval(timerRef.current);
-    setStats(prev => ({
-      ...prev,
-      [selectedRegion]: {
-        ...(prev[selectedRegion] || {}),
-        gamesPlayed: (prev[selectedRegion]?.gamesPlayed || 0) + 1,
-        bestScore: Math.max(prev[selectedRegion]?.bestScore || 0, guessedRegions.size)
-      }
-    }));
+    updateStats(prev => {
+      const byRegion = { ...(prev.byRegion || {}) };
+      const regionStat = byRegion[selectedRegion] || {};
+      byRegion[selectedRegion] = {
+        ...regionStat,
+        gamesPlayed: (regionStat.gamesPlayed || 0) + 1,
+        bestScore: Math.max(regionStat.bestScore || 0, guessedRegions.size)
+      };
+      return { ...prev, byRegion };
+    });
+    recordGiveUp();
   };
 
   const goBackToRegionSelect = () => {
@@ -213,9 +224,9 @@ export default function ProvincialMapFill() {
               <span className={styles.regionIcon}>{region.icon}</span>
               <span className={styles.regionName}>{region.name}</span>
               <span className={styles.regionCount}>{region.regions.length} regions</span>
-              {stats[region.id]?.bestScore > 0 && (
+              {(stats.byRegion || {})[region.id]?.bestScore > 0 && (
                 <span className={styles.regionBest}>
-                  Best: {stats[region.id].bestScore}/{region.regions.length}
+                  Best: {(stats.byRegion || {})[region.id].bestScore}/{region.regions.length}
                 </span>
               )}
             </button>

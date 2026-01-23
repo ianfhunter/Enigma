@@ -5,7 +5,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getAllWeightedWords } from '../../data/wordUtils';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { useGameState } from '../../hooks/useGameState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LetterWeb.module.css';
@@ -357,7 +357,12 @@ export default function LetterWeb() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const { gameState, checkWin: checkWinState, giveUp, reset: resetGameState, isPlaying, isWon, isGaveUp } = useGameState();
-  const [stats, setStats] = usePersistedState('letterweb-stats', { gamesWon: 0, bestWords: null });
+  const { stats, updateStats, recordWin } = useGameStats('letterweb', {
+    trackBestTime: false,
+    trackBestScore: true,
+    scoreComparison: 'lower', // Lower is better (fewer words to win)
+    defaultStats: { bestWords: null },
+  });
   const [puzzleNumber, setPuzzleNumber] = useState(0);
   const [seed, setSeed] = useState(null);
   const initializedRef = useRef(false);
@@ -439,12 +444,11 @@ export default function LetterWeb() {
 
     if (checkWin(newWords, sides)) {
       checkWinState(true);
-      setStats(prev => ({
-        gamesWon: prev.gamesWon + 1,
-        bestWords: prev.bestWords === null || newWords.length < prev.bestWords
-          ? newWords.length
-          : prev.bestWords,
-      }));
+      const bestWords = (stats.bestWords === null || newWords.length < stats.bestWords)
+        ? newWords.length
+        : stats.bestWords;
+      updateStats({ bestWords });
+      recordWin();
     }
   };
 

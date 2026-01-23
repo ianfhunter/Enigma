@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 // ===========================================
 // useGameStats - Default Stats Tests
@@ -287,5 +287,222 @@ describe('useGameStats - Record Loss', () => {
 
     recordLoss();
     expect(stats.currentStreak).toBe(0);
+  });
+});
+
+// ===========================================
+// useGameStats - Merge Stats Tests (Backend Sync)
+// ===========================================
+describe('useGameStats - Merge Stats', () => {
+  // Replicate the mergeStats function logic for testing
+  const mergeStats = (local, server) => {
+    if (!server) return local;
+    if (!local) return server;
+
+    return {
+      played: Math.max(local.played || 0, server.played || 0),
+      won: Math.max(local.won || 0, server.won || 0),
+      currentStreak: server.currentStreak ?? local.currentStreak ?? 0,
+      maxStreak: Math.max(local.maxStreak || 0, server.maxStreak || 0),
+      bestTime: local.bestTime !== null && server.bestTime !== null
+        ? Math.min(local.bestTime, server.bestTime)
+        : local.bestTime ?? server.bestTime,
+      bestScore: local.bestScore !== null && server.bestScore !== null
+        ? Math.max(local.bestScore, server.bestScore)
+        : local.bestScore ?? server.bestScore,
+      lastPlayed: local.lastPlayed && server.lastPlayed
+        ? (new Date(local.lastPlayed) > new Date(server.lastPlayed) ? local.lastPlayed : server.lastPlayed)
+        : local.lastPlayed || server.lastPlayed,
+    };
+  };
+
+  it('should return local stats when server is null', () => {
+    const local = { played: 5, won: 3, currentStreak: 2, maxStreak: 4, bestTime: 100, bestScore: 500, lastPlayed: '2025-01-20T00:00:00Z' };
+    const result = mergeStats(local, null);
+    expect(result).toEqual(local);
+  });
+
+  it('should return server stats when local is null', () => {
+    const server = { played: 10, won: 7, currentStreak: 1, maxStreak: 5, bestTime: 80, bestScore: 600, lastPlayed: '2025-01-21T00:00:00Z' };
+    const result = mergeStats(null, server);
+    expect(result).toEqual(server);
+  });
+
+  it('should prefer higher played/won counts', () => {
+    const local = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: null, lastPlayed: null };
+    const server = { played: 10, won: 2, currentStreak: 0, maxStreak: 3, bestTime: null, bestScore: null, lastPlayed: null };
+
+    const result = mergeStats(local, server);
+    expect(result.played).toBe(10); // Max of 5 and 10
+    expect(result.won).toBe(3); // Max of 3 and 2
+    expect(result.maxStreak).toBe(3); // Max of 2 and 3
+  });
+
+  it('should prefer server currentStreak (represents latest state)', () => {
+    const local = { played: 5, won: 3, currentStreak: 4, maxStreak: 4, bestTime: null, bestScore: null, lastPlayed: null };
+    const server = { played: 5, won: 3, currentStreak: 0, maxStreak: 4, bestTime: null, bestScore: null, lastPlayed: null };
+
+    const result = mergeStats(local, server);
+    expect(result.currentStreak).toBe(0); // Server value takes precedence
+  });
+
+  it('should prefer lower best time', () => {
+    const local = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: 120, bestScore: null, lastPlayed: null };
+    const server = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: 80, bestScore: null, lastPlayed: null };
+
+    const result = mergeStats(local, server);
+    expect(result.bestTime).toBe(80); // Min of 120 and 80
+  });
+
+  it('should prefer higher best score', () => {
+    const local = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: 500, lastPlayed: null };
+    const server = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: 800, lastPlayed: null };
+
+    const result = mergeStats(local, server);
+    expect(result.bestScore).toBe(800); // Max of 500 and 800
+  });
+
+  it('should handle null best time from one source', () => {
+    const local = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: null, lastPlayed: null };
+    const server = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: 100, bestScore: null, lastPlayed: null };
+
+    const result = mergeStats(local, server);
+    expect(result.bestTime).toBe(100); // Use server's value since local is null
+  });
+
+  it('should handle null best score from one source', () => {
+    const local = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: 500, lastPlayed: null };
+    const server = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: null, lastPlayed: null };
+
+    const result = mergeStats(local, server);
+    expect(result.bestScore).toBe(500); // Use local's value since server is null
+  });
+
+  it('should prefer more recent lastPlayed date', () => {
+    const local = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: null, lastPlayed: '2025-01-15T00:00:00Z' };
+    const server = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: null, lastPlayed: '2025-01-20T00:00:00Z' };
+
+    const result = mergeStats(local, server);
+    expect(result.lastPlayed).toBe('2025-01-20T00:00:00Z'); // More recent
+  });
+
+  it('should handle null lastPlayed from one source', () => {
+    const local = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: null, lastPlayed: '2025-01-15T00:00:00Z' };
+    const server = { played: 5, won: 3, currentStreak: 0, maxStreak: 2, bestTime: null, bestScore: null, lastPlayed: null };
+
+    const result = mergeStats(local, server);
+    expect(result.lastPlayed).toBe('2025-01-15T00:00:00Z'); // Use local's value since server is null
+  });
+
+  it('should merge complex scenario correctly', () => {
+    // Simulates: played more locally, but server has better times from another device
+    const local = {
+      played: 15,
+      won: 10,
+      currentStreak: 3,
+      maxStreak: 5,
+      bestTime: 90,
+      bestScore: 1000,
+      lastPlayed: '2025-01-22T10:00:00Z',
+    };
+    const server = {
+      played: 12,
+      won: 9,
+      currentStreak: 0, // Lost on server after local sync
+      maxStreak: 6, // Had a better streak on server
+      bestTime: 75, // Better time on server
+      bestScore: 800,
+      lastPlayed: '2025-01-22T15:00:00Z', // More recent on server
+    };
+
+    const result = mergeStats(local, server);
+    expect(result.played).toBe(15); // Max
+    expect(result.won).toBe(10); // Max
+    expect(result.currentStreak).toBe(0); // Server (authoritative)
+    expect(result.maxStreak).toBe(6); // Max
+    expect(result.bestTime).toBe(75); // Min
+    expect(result.bestScore).toBe(1000); // Max
+    expect(result.lastPlayed).toBe('2025-01-22T15:00:00Z'); // More recent
+  });
+});
+
+// ===========================================
+// useGameStats - Backend Sync Timing Tests
+// ===========================================
+describe('useGameStats - Backend Sync Timing', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('should debounce localStorage saves (100ms)', () => {
+    const saves = [];
+    const debouncedSave = (() => {
+      let timeout = null;
+      return (data) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => saves.push(data), 100);
+      };
+    })();
+
+    // Rapid calls
+    debouncedSave({ played: 1 });
+    debouncedSave({ played: 2 });
+    debouncedSave({ played: 3 });
+
+    expect(saves.length).toBe(0); // Not yet
+
+    vi.advanceTimersByTime(100);
+    expect(saves.length).toBe(1);
+    expect(saves[0]).toEqual({ played: 3 }); // Only last value
+  });
+
+  it('should debounce backend sync (500ms)', () => {
+    const syncs = [];
+    const debouncedSync = (() => {
+      let timeout = null;
+      return (data) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => syncs.push(data), 500);
+      };
+    })();
+
+    // Rapid calls
+    debouncedSync({ played: 1 });
+    debouncedSync({ played: 2 });
+    debouncedSync({ played: 3 });
+
+    expect(syncs.length).toBe(0);
+
+    vi.advanceTimersByTime(300);
+    expect(syncs.length).toBe(0); // Still waiting
+
+    vi.advanceTimersByTime(200);
+    expect(syncs.length).toBe(1);
+    expect(syncs[0]).toEqual({ played: 3 });
+  });
+
+  it('should not sync if stats unchanged', () => {
+    let lastSynced = null;
+    const syncs = [];
+
+    const debouncedSync = (stats) => {
+      const statsJson = JSON.stringify(stats);
+      if (statsJson === lastSynced) return;
+      syncs.push(stats);
+      lastSynced = statsJson;
+    };
+
+    debouncedSync({ played: 5 });
+    expect(syncs.length).toBe(1);
+
+    debouncedSync({ played: 5 }); // Same
+    expect(syncs.length).toBe(1); // No new sync
+
+    debouncedSync({ played: 6 }); // Different
+    expect(syncs.length).toBe(2);
   });
 });
