@@ -156,7 +156,7 @@ router.get('/users/:id', (req, res) => {
 
   // Get user's settings
   const settings = db.prepare(`
-    SELECT english_variant, disabled_games, game_preferences
+    SELECT language, disabled_games, game_preferences
     FROM user_settings WHERE user_id = ?
   `).get(id);
 
@@ -175,7 +175,7 @@ router.get('/users/:id', (req, res) => {
     createdAt: user.created_at,
     updatedAt: user.updated_at,
     settings: settings ? {
-      englishVariant: settings.english_variant,
+      language: settings.language || 'en-US',
       disabledGames: JSON.parse(settings.disabled_games || '[]'),
       gamePreferences: JSON.parse(settings.game_preferences || '{}')
     } : null,

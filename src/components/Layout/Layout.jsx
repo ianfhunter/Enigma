@@ -7,6 +7,7 @@ import { enabledGames, allGames, getGameIcon } from '../../data/gameRegistry';
 import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
 import { setEnglishVariant } from '../../data/wordFrequency';
+import { supportedLanguages, getEnglishVariant } from '../../i18n';
 import { fuzzySearchGames } from '../../utils/fuzzySearch';
 import AuthModal from '../AuthModal';
 const logo = '/branding/logo-simple-e.svg';
@@ -25,12 +26,12 @@ export default function Layout() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchWrapperRef = useRef(null);
 
-  // Update English variant when settings change
+  // Update English variant when language setting changes
   useEffect(() => {
-    if (settings.englishVariant) {
-      setEnglishVariant(settings.englishVariant);
+    if (settings.language) {
+      setEnglishVariant(getEnglishVariant(settings.language));
     }
-  }, [settings.englishVariant]);
+  }, [settings.language]);
 
   // Count all games
   const totalGames = allGames.length;
@@ -218,7 +219,7 @@ export default function Layout() {
                     {user?.displayName || user?.username || 'User'}
                   </span>
                   <span className={styles.languageIndicator}>
-                    {settings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                    {supportedLanguages.find(l => l.code === settings?.language)?.flag || '🇺🇸'}
                   </span>
                 </Link>
               </div>
@@ -293,7 +294,7 @@ export default function Layout() {
                   {user?.displayName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'}
                 </span>
                 <span className={styles.languageIndicator}>
-                  {settings?.englishVariant === 'uk' ? '🇬🇧' : '🇺🇸'}
+                  {supportedLanguages.find(l => l.code === settings?.language)?.flag || '🇺🇸'}
                 </span>
               </Link>
             </div>

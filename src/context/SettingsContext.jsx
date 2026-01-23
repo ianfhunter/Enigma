@@ -1,20 +1,20 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { users } from '../api/client';
+import { getEnglishVariant } from '../i18n';
 
 const SettingsContext = createContext(null);
 
 const STORAGE_KEY = 'enigma-settings';
 
 const defaultSettings = {
-  englishVariant: 'us',
   theme: 'dark',
   soundEnabled: true,
   disabledGames: [],
   favouriteGames: [],
   gamePreferences: {},
   searchEngine: 'google',
-  language: 'en', // Interface language
+  language: 'en-US', // Language (includes English variant for word games)
 };
 
 // Load settings from localStorage
@@ -188,10 +188,10 @@ export function useSoundEnabled() {
   };
 }
 
-// Convenience hook for just getting the English variant
+// Convenience hook for just getting the English variant (derived from language setting)
 export function useEnglishVariant() {
   const { settings } = useSettings();
-  return settings.englishVariant || 'us';
+  return getEnglishVariant(settings.language);
 }
 
 // Convenience hook for language setting

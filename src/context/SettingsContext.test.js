@@ -254,14 +254,13 @@ describe('useFavourites - Persistence Format', () => {
 describe('Settings - localStorage Persistence', () => {
   const STORAGE_KEY = 'enigma-settings';
   const defaultSettings = {
-    englishVariant: 'us',
     theme: 'dark',
     soundEnabled: true,
     disabledGames: [],
     favouriteGames: [],
     gamePreferences: {},
     searchEngine: 'google',
-    language: 'en',
+    language: 'en-US', // Language now includes English variant (en-US, en-GB, es)
   };
 
   let mockStorage = {};
@@ -327,7 +326,7 @@ describe('Settings - localStorage Persistence', () => {
     const settings = loadLocalSettings();
     expect(settings.theme).toBe('light');
     expect(settings.favouriteGames).toEqual([]); // Default
-    expect(settings.language).toBe('en'); // Default
+    expect(settings.language).toBe('en-US'); // Default (includes English variant)
   });
 
   it('should handle corrupted JSON gracefully', () => {
