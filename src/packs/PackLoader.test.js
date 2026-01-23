@@ -616,9 +616,9 @@ describe('PackLoader', () => {
       expect(classicLogicPack.categories[1].name).toBe('Memory & Speed');
     });
 
-    it('should have 17 games total (13 + 4)', () => {
-      expect(classicLogicPack.gameCount).toBe(17);
-      expect(classicLogicPack.allGames.length).toBe(17);
+    it('should have 20 games total (16 + 4)', () => {
+      expect(classicLogicPack.gameCount).toBe(20);
+      expect(classicLogicPack.allGames.length).toBe(20);
     });
 
     it('should have expected Classic Logic games', () => {
@@ -659,7 +659,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('classic-logic');
-      expect(games.length).toBe(17);
+      expect(games.length).toBe(20);
       expect(games.some(g => g.slug === 'einstein')).toBe(true);
       expect(games.some(g => g.slug === 'memory-match')).toBe(true);
     });
