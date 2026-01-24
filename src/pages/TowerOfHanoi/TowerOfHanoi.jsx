@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './TowerOfHanoi.module.css';
 
 const DISK_COUNTS = [3, 4, 5, 6, 7];

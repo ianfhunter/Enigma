@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { generateMaze, findShortestPath, cellKey } from '../../utils/generatorUtils';
 import styles from './Maze.module.css';
 

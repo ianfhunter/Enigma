@@ -5,6 +5,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Str8ts.module.css';
 
 const GRID_SIZE = 9;
@@ -453,6 +454,7 @@ export default function Str8ts() {
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('str8ts');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -521,8 +523,9 @@ export default function Str8ts() {
 
     if (allFilled && allCorrect) {
       checkWin(true);
+      recordWin();
     }
-  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = (r, c) => {
     if (!isPlaying || !puzzleData) return;
@@ -615,6 +618,7 @@ export default function Str8ts() {
     if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     giveUp();
+    recordGiveUp();
   };
 
   if (loading) {

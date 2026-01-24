@@ -6,6 +6,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './GokigenNaname.module.css';
 import gokigenPuzzles from '../../../public/datasets/gokigennanamePuzzles.json';
 

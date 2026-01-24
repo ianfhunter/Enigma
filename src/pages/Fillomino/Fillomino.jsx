@@ -6,6 +6,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { getConnectedRegion, cellKey } from '../../utils/generatorUtils';
 import styles from './Fillomino.module.css';
 

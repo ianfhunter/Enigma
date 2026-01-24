@@ -9,6 +9,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { selectPuzzleFromDataset, notesToJSON, notesFromJSON } from '../../utils/generatorUtils';
 import styles from './Kakuro.module.css';
 
@@ -53,6 +54,7 @@ export default function Kakuro() {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const { gameState, setGameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('kakuro');
   const [showErrors, setShowErrors] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(null);
@@ -174,8 +176,9 @@ export default function Kakuro() {
     }
 
     checkWin(true);
+    recordWin();
     setIsRunning(false);
-  }, [playerValues, puzzle, isPlaying, checkWin]);
+  }, [playerValues, puzzle, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = (row, col) => {
     if (gameState === 'won' || gameState === 'gaveUp') return;
@@ -301,6 +304,7 @@ export default function Kakuro() {
     }
     setPlayerValues(newValues);
     giveUp();
+    recordGiveUp();
     setIsRunning(false);
   };
 

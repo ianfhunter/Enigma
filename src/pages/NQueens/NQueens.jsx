@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './NQueens.module.css';
 
 // Check if a queen placement is valid

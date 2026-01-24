@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import ToggleSwitch from '../../components/ToggleSwitch';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { cryptogramQuotes } from '@datasets/quotes';
 import styles from './Cryptogram.module.css';

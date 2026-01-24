@@ -7,6 +7,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { generatePuzzle, isSolved } from './generator';
 import { stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './JapaneseSums.module.css';
@@ -21,6 +22,7 @@ export default function JapaneseSums() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('japanese-sums');
   const [seed, setSeed] = useState(null);
   const [showSolution, setShowSolution] = useState(false);
 
@@ -47,8 +49,10 @@ export default function JapaneseSums() {
   useEffect(() => {
     if (!puzzleData || !isPlaying || showSolution) return;
 
-    checkWin(isSolved(grid, puzzleData.solution, puzzleData.pattern));
-  }, [grid, puzzleData, isPlaying, showSolution, checkWin]);
+    if (checkWin(isSolved(grid, puzzleData.solution, puzzleData.pattern))) {
+      recordWin();
+    }
+  }, [grid, puzzleData, isPlaying, showSolution, checkWin, recordWin]);
 
   const handleCellClick = (r, c) => {
     if (!isPlaying || showSolution) return;
@@ -121,6 +125,7 @@ export default function JapaneseSums() {
     setGrid(puzzleData.solution.map(row => [...row]));
     setShowSolution(true);
     giveUp();
+    recordGiveUp();
   };
 
   const handleNewPuzzle = () => {

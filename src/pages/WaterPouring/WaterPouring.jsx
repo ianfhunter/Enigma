@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './WaterPouring.module.css';
 
 // GCD using Euclidean algorithm

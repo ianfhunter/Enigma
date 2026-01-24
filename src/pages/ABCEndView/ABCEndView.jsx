@@ -6,6 +6,7 @@ import Timer, { formatTime } from '../../components/Timer/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './ABCEndView.module.css';
 import puzzleDataset from '../../../public/datasets/abcendviewPuzzles.json';
 
@@ -246,6 +247,7 @@ export default function ABCEndView() {
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('abc-end-view');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -335,9 +337,10 @@ export default function ABCEndView() {
 
     if (checkSolved(grid, puzzleData.solution, size)) {
       checkWin(true);
+      recordWin();
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin]);
+  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = (r, c) => {
     if (!isPlaying) return;
@@ -368,6 +371,7 @@ export default function ABCEndView() {
     if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     giveUp();
+    recordGiveUp();
     setIsRunning(false);
   };
 

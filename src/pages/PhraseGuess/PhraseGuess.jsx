@@ -7,6 +7,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import StatsPanel from '../../components/StatsPanel';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './PhraseGuess.module.css';
 
 const VOWELS = new Set(['A', 'E', 'I', 'O', 'U']);

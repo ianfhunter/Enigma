@@ -6,6 +6,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Kurotto.module.css';
 import kurottoPuzzles from '../../../public/datasets/kurottoPuzzles.json';
 

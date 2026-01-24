@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { isValidWord, isCommonWord, getZipfScore, createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray, getAllWords } from '../../data/wordUtils';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Pyramid.module.css';
 

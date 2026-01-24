@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay, { useSeed } from '../../components/SeedDisplay/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom } from '../../utils/generatorUtils';
 import styles from './Kakurasu.module.css';
 

@@ -9,6 +9,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
 import { createGrid, cloneGrid, isValidInRow, isValidInColumn, notesToJSON, notesFromJSON } from '../../utils/generatorUtils';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Sudoku.module.css';
 
 const STORAGE_KEY = 'sudoku-game-state';

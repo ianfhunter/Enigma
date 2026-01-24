@@ -8,6 +8,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Calcudoku.module.css';
 import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
 
@@ -159,6 +160,7 @@ export default function Calcudoku() {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const { gameState, checkWin, giveUp, setGameState, reset: resetGameState, isPlaying, isWon, isGaveUp } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('calcudoku');
   const [showErrors, setShowErrors] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -273,9 +275,10 @@ export default function Calcudoku() {
 
     if (isCorrect) {
       checkWin(true);
+      recordWin();
       setIsRunning(false);
     }
-  }, [playerGrid, puzzle, isPlaying, checkWin]);
+  }, [playerGrid, puzzle, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = (row, col) => {
     if (isWon || isGaveUp) return;
@@ -416,6 +419,7 @@ export default function Calcudoku() {
     if (!puzzle || !isPlaying) return;
     setPlayerGrid(puzzle.solution.map(row => [...row]));
     giveUp();
+    recordGiveUp();
     setIsRunning(false);
   };
 

@@ -7,6 +7,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { generatePuzzle, isSolved } from './generator';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Eulero.module.css';
@@ -21,6 +22,7 @@ export default function Eulero() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('eulero');
   const [seed, setSeed] = useState(null);
   const [showSolution, setShowSolution] = useState(false);
 
@@ -60,8 +62,9 @@ export default function Eulero() {
 
     if (allFilled && isSolved(grid, puzzleData.solution)) {
       checkWin(true);
+      recordWin();
     }
-  }, [grid, puzzleData, isPlaying, showSolution, size, checkWin]);
+  }, [grid, puzzleData, isPlaying, showSolution, size, checkWin, recordWin]);
 
   const handleCellClick = (r, c) => {
     if (!isPlaying || showSolution) return;
@@ -153,6 +156,7 @@ export default function Eulero() {
     setGrid(puzzleData.solution.map(row => row.map(cell => ({ ...cell }))));
     setShowSolution(true);
     giveUp();
+    recordGiveUp();
   };
 
   const handleNewPuzzle = () => {

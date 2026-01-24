@@ -5,6 +5,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import sampleImage from '../../assets/sample_image.png';
 import styles from './Jigsaw.module.css';
 
