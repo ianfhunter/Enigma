@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { parseFEN, applyMove, indexToAlgebraic, PIECE_CHARS, getPieceColor } from './chessUtils';
 import { getRandomPuzzleByRating, getPuzzleById, DIFFICULTIES, loadChessPuzzles } from './chessPuzzles';
 import styles from './ChessPuzzle.module.css';

@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { getRandomCountry } from '@datasets/countries';
 import { getCapital, getRandomCapitalOptions } from '@datasets/capitals';
 import styles from './CapitalGuesser.module.css';
@@ -41,8 +42,12 @@ export default function CapitalGuesser() {
   const [round, setRound] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [bestStreak, setBestStreak] = usePersistedState('capital-guesser-best-streak', 0);
-  const [stats, setStats] = usePersistedState('capital-guesser-stats', { played: 0, won: 0, totalCorrect: 0 });
+  const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('capital-guesser', {
+    trackBestTime: false,
+    trackBestScore: true,
+    scoreComparison: 'higher',
+    defaultStats: { totalCorrect: 0 },
+  });
 
   const setupRound = useCallback(() => {
     const { country, options } = buildRound();
@@ -79,12 +84,12 @@ export default function CapitalGuesser() {
       setScore(prev => prev + 1);
       setStreak(prev => {
         const newStreak = prev + 1;
-        if (newStreak > bestStreak) {
-          setBestStreak(newStreak);
+        if (newStreak > (stats.maxStreak || 0)) {
+          updateStats({ maxStreak: newStreak });
         }
         return newStreak;
       });
-      setStats(prev => ({ ...prev, totalCorrect: prev.totalCorrect + 1 }));
+      updateStats(prev => ({ ...prev, totalCorrect: (prev.totalCorrect || 0) + 1 }));
     } else {
       setStreak(0);
     }
@@ -94,11 +99,11 @@ export default function CapitalGuesser() {
   const nextRound = () => {
     if (mode === 'challenge' && round >= TOTAL_ROUNDS) {
       setGameOver(true);
-      setStats(prev => ({
-        ...prev,
-        played: prev.played + 1,
-        won: score >= Math.floor(TOTAL_ROUNDS / 2) ? prev.won + 1 : prev.won
-      }));
+      if (score >= Math.floor(TOTAL_ROUNDS / 2)) {
+        recordWin();
+      } else {
+        recordLoss();
+      }
       return;
     }
 
@@ -136,9 +141,9 @@ export default function CapitalGuesser() {
           <StatsPanel
             stats={[
               { label: 'Played', value: stats.played },
-              { label: 'Correct', value: stats.totalCorrect },
-              { label: 'Best Streak', value: bestStreak },
-              { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+              { label: 'Correct', value: stats.totalCorrect || 0 },
+              { label: 'Best Streak', value: stats.maxStreak || 0 },
+              { label: 'Win Rate', value: `${winRate}%` },
             ]}
           />
         </div>

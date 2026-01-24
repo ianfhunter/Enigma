@@ -5,6 +5,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Sujiko.module.css';
 
 // Sujiko is a 3x3 grid where each cell contains 1-9 (each used once)
@@ -121,6 +122,7 @@ export default function Sujiko() {
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('sujiko');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [sumStatus, setSumStatus] = useState([false, false, false, false]);
@@ -161,8 +163,9 @@ export default function Sujiko() {
 
     if (allFilled && allCorrect) {
       checkWin(true);
+      recordWin();
     }
-  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = (r, c) => {
     if (!isPlaying || !puzzleData) return;
@@ -234,6 +237,7 @@ export default function Sujiko() {
     if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     giveUp();
+    recordGiveUp();
   };
 
   // Get which numbers are still available

@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { games } from '../api/client';
 
 /**
  * Default stats structure for games
@@ -55,7 +57,34 @@ function saveStats(gameSlug, stats) {
 }
 
 /**
- * Hook for managing game statistics with localStorage persistence
+ * Merge local and server stats, preferring higher values for numeric fields
+ * @param {Object} local - Local stats
+ * @param {Object} server - Server stats
+ * @returns {Object} Merged stats
+ */
+function mergeStats(local, server) {
+  if (!server) return local;
+  if (!local) return server;
+
+  return {
+    played: Math.max(local.played || 0, server.played || 0),
+    won: Math.max(local.won || 0, server.won || 0),
+    currentStreak: server.currentStreak ?? local.currentStreak ?? 0,
+    maxStreak: Math.max(local.maxStreak || 0, server.maxStreak || 0),
+    bestTime: local.bestTime !== null && server.bestTime !== null
+      ? Math.min(local.bestTime, server.bestTime)
+      : local.bestTime ?? server.bestTime,
+    bestScore: local.bestScore !== null && server.bestScore !== null
+      ? Math.max(local.bestScore, server.bestScore)
+      : local.bestScore ?? server.bestScore,
+    lastPlayed: local.lastPlayed && server.lastPlayed
+      ? (new Date(local.lastPlayed) > new Date(server.lastPlayed) ? local.lastPlayed : server.lastPlayed)
+      : local.lastPlayed || server.lastPlayed,
+  };
+}
+
+/**
+ * Hook for managing game statistics with localStorage persistence and backend sync
  * @param {string} gameSlug - Unique identifier for the game
  * @param {Object} [options] - Configuration options
  * @param {Object} [options.defaultStats] - Additional default stats fields
@@ -74,10 +103,54 @@ export function useGameStats(gameSlug, options = {}) {
     scoreComparison = 'higher',
   } = options;
 
+  const { user } = useAuth();
   const mergedDefaults = { ...DEFAULT_STATS, ...defaultStats };
 
   const [stats, setStats] = useState(() => loadStats(gameSlug, mergedDefaults));
+  const [isLoaded, setIsLoaded] = useState(false);
   const saveTimeoutRef = useRef(null);
+  const syncTimeoutRef = useRef(null);
+  const lastSyncedRef = useRef(null);
+
+  // Load from backend when user logs in or on mount if logged in
+  useEffect(() => {
+    if (!user) {
+      setIsLoaded(true);
+      return;
+    }
+
+    let mounted = true;
+
+    async function loadFromServer() {
+      try {
+        const serverStats = await games.getProgress(gameSlug);
+        if (!mounted) return;
+
+        if (serverStats && (serverStats.played > 0 || serverStats.won > 0)) {
+          const localStats = loadStats(gameSlug, mergedDefaults);
+          const merged = mergeStats(localStats, serverStats);
+          setStats(merged);
+          saveStats(gameSlug, merged);
+          lastSyncedRef.current = JSON.stringify(merged);
+        }
+      } catch (e) {
+        // 404 means no progress yet, which is fine
+        if (e.status !== 404) {
+          console.error(`Failed to load stats from server for ${gameSlug}:`, e);
+        }
+      } finally {
+        if (mounted) {
+          setIsLoaded(true);
+        }
+      }
+    }
+
+    loadFromServer();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user, gameSlug]);
 
   // Debounced save to localStorage
   const debouncedSave = useCallback((newStats) => {
@@ -89,10 +162,40 @@ export function useGameStats(gameSlug, options = {}) {
     }, 100);
   }, [gameSlug]);
 
+  // Debounced sync to backend (longer delay to avoid excessive API calls)
+  const debouncedSync = useCallback((newStats) => {
+    if (!user) return;
+
+    // Skip if stats haven't changed since last sync
+    const statsJson = JSON.stringify(newStats);
+    if (statsJson === lastSyncedRef.current) return;
+
+    if (syncTimeoutRef.current) {
+      clearTimeout(syncTimeoutRef.current);
+    }
+
+    syncTimeoutRef.current = setTimeout(async () => {
+      try {
+        await games.updateProgress(gameSlug, {
+          played: newStats.played,
+          won: newStats.won,
+          bestScore: newStats.bestScore,
+          bestTime: newStats.bestTime,
+          currentStreak: newStats.currentStreak,
+          maxStreak: newStats.maxStreak,
+        });
+        lastSyncedRef.current = statsJson;
+      } catch (e) {
+        console.error(`Failed to sync stats to server for ${gameSlug}:`, e);
+      }
+    }, 500);
+  }, [user, gameSlug]);
+
   // Save stats when they change
   useEffect(() => {
     debouncedSave(stats);
-  }, [stats, debouncedSave]);
+    debouncedSync(stats);
+  }, [stats, debouncedSave, debouncedSync]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -102,8 +205,22 @@ export function useGameStats(gameSlug, options = {}) {
         // Immediate save on unmount
         saveStats(gameSlug, stats);
       }
+      if (syncTimeoutRef.current) {
+        clearTimeout(syncTimeoutRef.current);
+        // Attempt immediate sync on unmount if logged in
+        if (user && JSON.stringify(stats) !== lastSyncedRef.current) {
+          games.updateProgress(gameSlug, {
+            played: stats.played,
+            won: stats.won,
+            bestScore: stats.bestScore,
+            bestTime: stats.bestTime,
+            currentStreak: stats.currentStreak,
+            maxStreak: stats.maxStreak,
+          }).catch(() => {}); // Fire and forget
+        }
+      }
     };
-  }, [gameSlug, stats]);
+  }, [gameSlug, stats, user]);
 
   /**
    * Record a game win
@@ -236,6 +353,7 @@ export function useGameStats(gameSlug, options = {}) {
   return {
     stats,
     winRate,
+    isLoaded,
     recordWin,
     recordLoss,
     recordGiveUp,

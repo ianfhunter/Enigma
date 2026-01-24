@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Futoshiki.module.css';
 
 const GRID_SIZES = {
@@ -202,6 +203,7 @@ export default function Futoshiki() {
   const [initialCells, setInitialCells] = useState(new Set());
   const [selectedCell, setSelectedCell] = useState(null);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('futoshiki');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
 
@@ -239,8 +241,10 @@ export default function Futoshiki() {
       setErrors(new Set());
     }
 
-    checkWin(checkSolved(grid, puzzleData.solution));
-  }, [grid, puzzleData, size, showErrors, isPlaying, checkWin]);
+    if (checkWin(checkSolved(grid, puzzleData.solution))) {
+      recordWin();
+    }
+  }, [grid, puzzleData, size, showErrors, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = (r, c) => {
     if (!isPlaying) return;
@@ -276,6 +280,7 @@ export default function Futoshiki() {
     if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     giveUp();
+    recordGiveUp();
   };
 
   // Keyboard handling

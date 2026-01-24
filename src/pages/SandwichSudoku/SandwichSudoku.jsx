@@ -5,6 +5,7 @@ import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './SandwichSudoku.module.css';
 
 // Generate a valid solved Sudoku grid

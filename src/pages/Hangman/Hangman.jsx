@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getRandomHangmanWord } from '../../data/wordUtils';
 import { getGameGradient } from '../../data/gameRegistry';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import { useGameState } from '../../hooks/useGameState';
 import GameHeader from '../../components/GameHeader';
@@ -21,7 +21,11 @@ export default function Hangman() {
   const [guessedLetters, setGuessedLetters] = useState(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);
   const { gameState, checkWin: checkWinState, giveUp, lose, reset: resetGameState, isPlaying } = useGameState();
-  const [stats, setStats] = usePersistedState('hangman-stats', { played: 0, won: 0 });
+  const { stats, recordWin, recordLoss, recordGiveUp, winRate } = useGameStats('hangman', {
+    trackBestTime: false,
+    trackBestScore: false,
+    trackStreak: false,
+  });
 
   const initGame = useCallback(() => {
     setWord(getRandomHangmanWord(5, 8));
@@ -50,18 +54,18 @@ export default function Hangman() {
 
       if (newWrong >= MAX_WRONG) {
         lose();
-        setStats(prev => ({ ...prev, played: prev.played + 1 }));
+        recordLoss();
       }
     } else if (checkWin(newGuessed, word)) {
       checkWinState(true);
-      setStats(prev => ({ played: prev.played + 1, won: prev.won + 1 }));
+      recordWin();
     }
-  }, [isPlaying, guessedLetters, word, wrongGuesses, checkWin, setStats, checkWinState, lose]);
+  }, [isPlaying, guessedLetters, word, wrongGuesses, checkWin, checkWinState, lose, recordWin, recordLoss]);
 
   const handleGiveUp = () => {
     if (!isPlaying || !word) return;
     giveUp();
-    setStats(prev => ({ ...prev, played: prev.played + 1 }));
+    recordGiveUp();
   };
 
   const useHint = () => {
@@ -196,7 +200,7 @@ export default function Hangman() {
           stats={[
             { label: 'Played', value: stats.played },
             { label: 'Won', value: stats.won },
-            { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+            { label: 'Win Rate', value: `${winRate}%` },
           ]}
           className={styles.statsPanel}
         />

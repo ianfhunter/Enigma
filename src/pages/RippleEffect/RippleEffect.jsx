@@ -8,6 +8,7 @@ import GameResult from '../../components/GameResult';
 import Timer from '../../components/Timer';
 import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import puzzleDataset from '@datasets/rippleEffectPuzzles.json';
 import styles from './RippleEffect.module.css';
 

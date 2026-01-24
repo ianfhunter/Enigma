@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, getCommonWordsByLength } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordSearch.module.css';

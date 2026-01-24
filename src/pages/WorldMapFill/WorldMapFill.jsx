@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { countries } from '@datasets/countries';
 import styles from './WorldMapFill.module.css';
 
@@ -115,7 +115,12 @@ export default function WorldMapFill() {
   const [showGuessedList, setShowGuessedList] = useState(false);
   const [geoData, setGeoData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = usePersistedState('world-map-fill-stats', {});
+  const { stats, updateStats, recordWin, recordGiveUp } = useGameStats('world-map-fill', {
+    trackBestTime: false,
+    trackBestScore: false,
+    trackStreak: false,
+    defaultStats: { byRegion: {} },
+  });
   const inputRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -133,7 +138,7 @@ export default function WorldMapFill() {
   const totalCountries = regionCountries.length;
 
   // Get stats for current region
-  const regionStats = stats[selectedRegion] || { gamesPlayed: 0, bestScore: 0, bestTime: null };
+  const regionStats = (stats.byRegion || {})[selectedRegion] || { gamesPlayed: 0, bestScore: 0, bestTime: null };
 
   // Build lookup map for country names (including common alternatives)
   const countryLookup = useCallback(() => {
@@ -253,16 +258,19 @@ export default function WorldMapFill() {
       if (guessedCountries.size + 1 === totalCountries) {
         setIsComplete(true);
         clearInterval(timerRef.current);
-        setStats(prev => ({
-          ...prev,
-          [selectedRegion]: {
-            gamesPlayed: (prev[selectedRegion]?.gamesPlayed || 0) + 1,
-            bestScore: Math.max(prev[selectedRegion]?.bestScore || 0, totalCountries),
-            bestTime: prev[selectedRegion]?.bestTime
-              ? Math.min(prev[selectedRegion].bestTime, timeElapsed)
+        updateStats(prev => {
+          const byRegion = { ...(prev.byRegion || {}) };
+          const regionStats = byRegion[selectedRegion] || {};
+          byRegion[selectedRegion] = {
+            gamesPlayed: (regionStats.gamesPlayed || 0) + 1,
+            bestScore: Math.max(regionStats.bestScore || 0, totalCountries),
+            bestTime: regionStats.bestTime
+              ? Math.min(regionStats.bestTime, timeElapsed)
               : timeElapsed
-          }
-        }));
+          };
+          return { ...prev, byRegion };
+        });
+        recordWin();
       }
     } else if (countryCode && guessedCountries.has(countryCode)) {
       const country = regionCountries.find(c => c.code === countryCode);
@@ -289,14 +297,17 @@ export default function WorldMapFill() {
   const handleGiveUp = () => {
     setIsComplete(true);
     clearInterval(timerRef.current);
-    setStats(prev => ({
-      ...prev,
-      [selectedRegion]: {
-        ...prev[selectedRegion],
-        gamesPlayed: (prev[selectedRegion]?.gamesPlayed || 0) + 1,
-        bestScore: Math.max(prev[selectedRegion]?.bestScore || 0, guessedCountries.size)
-      }
-    }));
+    updateStats(prev => {
+      const byRegion = { ...(prev.byRegion || {}) };
+      const regionStats = byRegion[selectedRegion] || {};
+      byRegion[selectedRegion] = {
+        ...regionStats,
+        gamesPlayed: (regionStats.gamesPlayed || 0) + 1,
+        bestScore: Math.max(regionStats.bestScore || 0, guessedCountries.size)
+      };
+      return { ...prev, byRegion };
+    });
+    recordGiveUp();
   };
 
   const backToMenu = () => {
@@ -369,7 +380,7 @@ export default function WorldMapFill() {
 
         <div className={styles.regionGrid}>
           {Object.entries(REGIONS).map(([key, region]) => {
-            const regionStat = stats[key] || { gamesPlayed: 0, bestScore: 0 };
+            const regionStat = (stats.byRegion || {})[key] || { gamesPlayed: 0, bestScore: 0 };
             const countryCount = region.countries ? region.countries.length : countries.length;
             return (
               <button

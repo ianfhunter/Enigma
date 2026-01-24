@@ -7,6 +7,7 @@ import GameResult from '../../components/GameResult';
 import { createSeededRandom, getTodayDateString, stringToSeed, seededShuffleArray } from '../../data/wordUtils';
 import { wordCategories } from '@datasets/wordCategories';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './Categories.module.css';
 

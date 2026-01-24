@@ -5,6 +5,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Hitori.module.css';
 
 const DIFFICULTY_SIZES = {

@@ -6,6 +6,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './Suko.module.css';
 
@@ -156,6 +157,7 @@ export default function Suko() {
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const { gameState, setGameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('suko');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [sumStatus, setSumStatus] = useState([false, false, false, false]);
@@ -272,6 +274,7 @@ export default function Suko() {
     }
 
     if (allFilled && allCorrect && checkWin(true)) {
+      recordWin();
       setSavedState({
         date: getTodayDateString(),
         puzzleId: puzzleData.id,
@@ -365,6 +368,7 @@ export default function Suko() {
     if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     giveUp();
+    recordGiveUp();
   };
 
   // Get which numbers are still available

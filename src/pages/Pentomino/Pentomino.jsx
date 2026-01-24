@@ -22,6 +22,7 @@ import SeedDisplay from '../../components/SeedDisplay/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { PENTOMINO_SHAPES, rotateShape, flipShape, normalizeShape } from './pentominoShapes';
 import styles from './Pentomino.module.css';

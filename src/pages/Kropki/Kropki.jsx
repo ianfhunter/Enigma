@@ -7,6 +7,7 @@ import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Kropki.module.css';
 
 const GRID_SIZES = {
@@ -208,6 +209,7 @@ export default function Kropki() {
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('kropki');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -250,9 +252,10 @@ export default function Kropki() {
 
     if (checkSolved(grid, puzzleData.solution, size)) {
       checkWin(true);
+      recordWin();
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin]);
+  }, [grid, puzzleData, showErrors, size, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = (r, c) => {
     if (!isPlaying) return;
@@ -275,6 +278,7 @@ export default function Kropki() {
     if (!puzzleData || !isPlaying) return;
     setGrid(puzzleData.solution.map(row => [...row]));
     giveUp();
+    recordGiveUp();
     setIsRunning(false);
   };
 

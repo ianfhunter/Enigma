@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Hashi.module.css';
 
 const GRID_SIZES = {
@@ -377,6 +378,7 @@ export default function Hashi() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [bridges, setBridges] = useState(new Map());
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('hashi');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [selectedIsland, setSelectedIsland] = useState(null);
@@ -402,8 +404,10 @@ export default function Hashi() {
     const newErrors = showErrors ? checkValidity(puzzleData.islands, bridges) : new Set();
     setErrors(newErrors);
 
-    checkWin(checkSolved(puzzleData.islands, bridges));
-  }, [bridges, puzzleData, showErrors, isPlaying, checkWin]);
+    if (checkWin(checkSolved(puzzleData.islands, bridges))) {
+      recordWin();
+    }
+  }, [bridges, puzzleData, showErrors, isPlaying, checkWin, recordWin]);
 
   const handleIslandClick = (island) => {
     if (!isPlaying) return;
@@ -520,6 +524,7 @@ export default function Hashi() {
     if (!puzzleData || !isPlaying) return;
     setBridges(new Map(puzzleData.solution));
     giveUp();
+    recordGiveUp();
   };
 
   if (!puzzleData) return null;

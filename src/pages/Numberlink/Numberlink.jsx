@@ -5,6 +5,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Numberlink.module.css';
 import puzzleDataset from '../../../public/datasets/numberlinkPuzzles.json';
@@ -161,6 +162,7 @@ export default function Numberlink() {
   const [currentPath, setCurrentPath] = useState(null); // Currently drawing path
   const [isDrawing, setIsDrawing] = useState(false);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('numberlink');
   const [completedPairs, setCompletedPairs] = useState(new Set());
 
   const gridRef = useRef(null);
@@ -367,6 +369,7 @@ export default function Numberlink() {
         // Check win condition
         if (completedPairs.size + 1 === puzzleData.numPairs) {
           checkWin(true);
+          recordWin();
         }
       }
     }
@@ -415,8 +418,9 @@ export default function Numberlink() {
     // Check win condition only if currently playing (not if gave up)
     if (puzzleData && completedPairs.size === puzzleData.numPairs && isPlaying) {
       checkWin(true);
+      recordWin();
     }
-  }, [completedPairs, puzzleData, isPlaying, checkWin]);
+  }, [completedPairs, puzzleData, isPlaying, checkWin, recordWin]);
 
   const handleGiveUp = () => {
     if (!puzzleData || !isPlaying) return;
@@ -424,6 +428,7 @@ export default function Numberlink() {
     setPaths(puzzleData.solutionPaths);
     setCompletedPairs(new Set(Object.keys(puzzleData.solutionPaths).map(Number)));
     giveUp();
+    recordGiveUp();
   };
 
   const handleReset = () => {

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { getRandomCountry, getRandomOptions } from '@datasets/countries';
 import styles from './FlagGuesser.module.css';
 
@@ -20,8 +20,12 @@ export default function FlagGuesser() {
   const [round, setRound] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [bestStreak, setBestStreak] = usePersistedState('flag-guesser-best-streak', 0);
-  const [stats, setStats] = usePersistedState('flag-guesser-stats', { played: 0, won: 0, totalCorrect: 0 });
+  const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('flag-guesser', {
+    trackBestTime: false,
+    trackBestScore: true, // Used for totalCorrect
+    scoreComparison: 'higher',
+    defaultStats: { totalCorrect: 0 },
+  });
 
   const setupRound = useCallback(() => {
     const country = getRandomCountry();
@@ -58,12 +62,13 @@ export default function FlagGuesser() {
       setScore(prev => prev + 1);
       setStreak(prev => {
         const newStreak = prev + 1;
-        if (newStreak > bestStreak) {
-          setBestStreak(newStreak);
+        // Update max streak if this is a new record
+        if (newStreak > (stats.maxStreak || 0)) {
+          updateStats({ maxStreak: newStreak });
         }
         return newStreak;
       });
-      setStats(prev => ({ ...prev, totalCorrect: prev.totalCorrect + 1 }));
+      updateStats(prev => ({ ...prev, totalCorrect: (prev.totalCorrect || 0) + 1 }));
     } else {
       setStreak(0);
     }
@@ -73,11 +78,12 @@ export default function FlagGuesser() {
   const nextRound = () => {
     if (mode === 'challenge' && round >= TOTAL_ROUNDS) {
       setGameOver(true);
-      setStats(prev => ({
-        ...prev,
-        played: prev.played + 1,
-        won: score >= Math.floor(TOTAL_ROUNDS / 2) ? prev.won + 1 : prev.won
-      }));
+      // Record win if scored at least half correct
+      if (score >= Math.floor(TOTAL_ROUNDS / 2)) {
+        recordWin();
+      } else {
+        recordLoss();
+      }
       return;
     }
 
@@ -115,9 +121,9 @@ export default function FlagGuesser() {
           <StatsPanel
             stats={[
               { label: 'Played', value: stats.played },
-              { label: 'Correct', value: stats.totalCorrect },
-              { label: 'Best Streak', value: bestStreak },
-              { label: 'Win Rate', value: `${stats.played > 0 ? Math.round((stats.won / stats.played) * 100) : 0}%` },
+              { label: 'Correct', value: stats.totalCorrect || 0 },
+              { label: 'Best Streak', value: stats.maxStreak || 0 },
+              { label: 'Win Rate', value: `${winRate}%` },
             ]}
           />
         </div>

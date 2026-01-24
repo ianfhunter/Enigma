@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './PeriodicTableQuiz.module.css';
 
 const MODES = [
@@ -39,11 +39,9 @@ export default function PeriodicTableQuiz() {
   const inputRef = useRef(null);
   const suggestionsRef = useRef(null);
 
-  const [stats, setStats] = usePersistedState('periodic-table-quiz-stats', {
-    played: 0,
-    correct: 0,
-    streak: 0,
-    maxStreak: 0,
+  const { stats, recordWin, recordLoss, winRate } = useGameStats('periodic-table-quiz', {
+    trackBestTime: false,
+    trackBestScore: false,
   });
 
   useEffect(() => {
@@ -107,14 +105,12 @@ export default function PeriodicTableQuiz() {
     const correctAnswer = current[mode.answer];
     setResult({ correct: isCorrect, correctAnswer });
 
-    setStats(prev => {
-      const played = prev.played + 1;
-      const correctCount = prev.correct + (isCorrect ? 1 : 0);
-      const streak = isCorrect ? prev.streak + 1 : 0;
-      const maxStreak = Math.max(prev.maxStreak, streak);
-      return { played, correct: correctCount, streak, maxStreak };
-    });
-  }, [result, current, mode.answer, setStats]);
+    if (isCorrect) {
+      recordWin();
+    } else {
+      recordLoss();
+    }
+  }, [result, current, mode.answer, recordWin, recordLoss]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -306,13 +302,11 @@ export default function PeriodicTableQuiz() {
               <span className={styles.statLabel}>Played</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.correct / stats.played) * 100) : 0}%
-              </span>
+              <span className={styles.statValue}>{winRate}%</span>
               <span className={styles.statLabel}>Accuracy</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.streak}</span>
+              <span className={styles.statValue}>{stats.currentStreak}</span>
               <span className={styles.statLabel}>Streak</span>
             </div>
             <div className={styles.stat}>

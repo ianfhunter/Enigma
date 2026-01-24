@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import SeedDisplay from '../../components/SeedDisplay';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import styles from './TileSwap.module.css';
 

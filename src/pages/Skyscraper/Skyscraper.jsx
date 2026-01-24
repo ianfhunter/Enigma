@@ -6,6 +6,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Skyscraper.module.css';
 
 const GRID_SIZES = {
@@ -154,6 +155,7 @@ export default function Skyscraper() {
   const [grid, setGrid] = useState([]);
   const [selected, setSelected] = useState(null);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('skyscraper');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -220,8 +222,10 @@ export default function Skyscraper() {
     const newErrors = showErrors ? checkValidity(grid, puzzleData.clues) : new Set();
     setErrors(newErrors);
 
-    checkWin(checkSolved(grid, puzzleData.solution));
-  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
+    if (checkWin(checkSolved(grid, puzzleData.solution))) {
+      recordWin();
+    }
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin, recordWin]);
 
   // Keyboard input
   useEffect(() => {
@@ -288,6 +292,7 @@ export default function Skyscraper() {
     setGrid(puzzleData.solution.map(row => [...row]));
     setSelected(null);
     giveUp();
+    recordGiveUp();
   };
 
   if (loading) {

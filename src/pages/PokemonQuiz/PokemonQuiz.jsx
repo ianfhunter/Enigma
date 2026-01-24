@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './PokemonQuiz.module.css';
 
 function titleCase(s) {
@@ -20,13 +20,11 @@ export default function PokemonQuiz() {
   const [guessTypes, setGuessTypes] = useState(() => new Set());
   const [result, setResult] = useState(null); // { correct, genOk, typesOk, correctGen, correctTypes }
 
-  const [stats, setStats] = usePersistedState('pokemon-quiz-stats', {
-    played: 0,
-    correct: 0,
-    points: 0,
-    totalPossible: 0,
-    streak: 0,
-    maxStreak: 0,
+  const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('pokemon-quiz', {
+    trackBestTime: false,
+    trackBestScore: true,
+    scoreComparison: 'higher',
+    defaultStats: { points: 0, totalPossible: 0 },
   });
 
   useEffect(() => {
@@ -122,15 +120,18 @@ export default function PokemonQuiz() {
       typePoints
     });
 
-    setStats(prev => {
-      const played = prev.played + 1;
-      const correctCount = prev.correct + (correct ? 1 : 0);
-      const points = prev.points + earnedPoints;
-      const totalPossible = prev.totalPossible + maxPoints;
-      const streak = correct ? prev.streak + 1 : 0;
-      const maxStreak = Math.max(prev.maxStreak, streak);
-      return { played, correct: correctCount, points, totalPossible, streak, maxStreak };
-    });
+    // Track points in custom stats
+    updateStats(prev => ({
+      ...prev,
+      points: (prev.points || 0) + earnedPoints,
+      totalPossible: (prev.totalPossible || 0) + maxPoints,
+    }));
+    // Record win/loss based on whether they got the Pokemon exactly right
+    if (correct) {
+      recordWin();
+    } else {
+      recordLoss();
+    }
   };
 
   const onNext = () => {
@@ -220,21 +221,21 @@ export default function PokemonQuiz() {
 
           <div className={styles.statsPanel}>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.points}</span>
+              <span className={styles.statValue}>{stats.points || 0}</span>
               <span className={styles.statLabel}>Points</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>
-                {stats.totalPossible > 0 ? Math.round((stats.points / stats.totalPossible) * 100) : 0}%
+                {(stats.totalPossible || 0) > 0 ? Math.round(((stats.points || 0) / stats.totalPossible) * 100) : 0}%
               </span>
               <span className={styles.statLabel}>Score</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.correct}/{stats.played}</span>
+              <span className={styles.statValue}>{stats.won}/{stats.played}</span>
               <span className={styles.statLabel}>{t('common.perfect')}</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.streak}</span>
+              <span className={styles.statValue}>{stats.currentStreak}</span>
               <span className={styles.statLabel}>{t('common.streak')}</span>
             </div>
           </div>

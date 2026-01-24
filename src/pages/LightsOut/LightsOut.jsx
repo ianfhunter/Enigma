@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './LightsOut.module.css';
 
 const SIZES = {

@@ -5,7 +5,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { isValidWord, createSeededRandom, getTodayDateString, stringToSeed, findLongestWordWithSeed } from '../../data/wordUtils';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { useGameState } from '../../hooks/useGameState';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './LongestWord.module.css';
@@ -50,7 +50,13 @@ export default function LongestWord() {
   const [message, setMessage] = useState('');
   const [longestPossibleWord, setLongestPossibleWord] = useState(null);
   const { gameState, setGameState, reset: resetGameState, isPlaying } = useGameState();
-  const [stats, setStats] = usePersistedState('longestword-stats', { bestLength: 0, gamesPlayed: 0 });
+  const { stats, updateStats, updateBestScore } = useGameStats('longestword', {
+    trackBestTime: false,
+    trackBestScore: true,
+    scoreComparison: 'higher',
+    trackStreak: false,
+    defaultStats: { bestLength: 0 },
+  });
 
   const inputRef = useRef(null);
 
@@ -125,20 +131,20 @@ export default function LongestWord() {
     setMessage(`+${upperWord.length} letters!`);
 
     // Update best
-    if (upperWord.length > stats.bestLength) {
-      setStats(prev => ({ ...prev, bestLength: upperWord.length }));
+    if (upperWord.length > (stats.bestLength || 0)) {
+      updateStats({ bestLength: upperWord.length });
     }
+    // Also track as bestScore for stats hook
+    updateBestScore(upperWord.length);
 
     // Auto-finish after MAX_WORDS
     if (newWords.length >= MAX_WORDS) {
       setGameState('finished');
-      setStats(prev => ({ ...prev, gamesPlayed: prev.gamesPlayed + 1 }));
     }
   };
 
   const handleGiveUp = () => {
     setGameState('finished');
-    setStats(prev => ({ ...prev, gamesPlayed: prev.gamesPlayed + 1 }));
   };
 
   const longestFound = words.length > 0 ? words[0].length : 0;
@@ -272,7 +278,7 @@ export default function LongestWord() {
                 <span className={styles.longestLength}>({longestPossibleWord.length} letters)</span>
               </div>
             )}
-            <p className={styles.bestLabel}>Best ever: {stats.bestLength} letters</p>
+            <p className={styles.bestLabel}>Best ever: {stats.bestLength || stats.bestScore || 0} letters</p>
           </div>
         )}
 

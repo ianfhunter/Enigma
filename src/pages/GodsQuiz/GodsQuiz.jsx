@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './GodsQuiz.module.css';
 
 // Helper to check if guessed domains match exactly the deity's domains
@@ -27,11 +27,9 @@ export default function GodsQuiz() {
   const [guessDomains, setGuessDomains] = useState(() => new Set());
   const [result, setResult] = useState(null);
 
-  const [stats, setStats] = usePersistedState('gods-quiz-stats', {
-    played: 0,
-    correct: 0,
-    streak: 0,
-    maxStreak: 0,
+  const { stats, recordWin, recordLoss, winRate } = useGameStats('gods-quiz', {
+    trackBestTime: false,
+    trackBestScore: false,
   });
 
   useEffect(() => {
@@ -88,13 +86,11 @@ export default function GodsQuiz() {
     const isCorrect = evaluateDomains(correctDomains, guessDomains);
     setResult({ correct: isCorrect, correctDomains });
 
-    setStats(prev => {
-      const played = prev.played + 1;
-      const correctCount = prev.correct + (isCorrect ? 1 : 0);
-      const streak = isCorrect ? prev.streak + 1 : 0;
-      const maxStreak = Math.max(prev.maxStreak, streak);
-      return { played, correct: correctCount, streak, maxStreak };
-    });
+    if (isCorrect) {
+      recordWin();
+    } else {
+      recordLoss();
+    }
   };
 
   return (
@@ -193,13 +189,11 @@ export default function GodsQuiz() {
               <span className={styles.statLabel}>Played</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {stats.played > 0 ? Math.round((stats.correct / stats.played) * 100) : 0}%
-              </span>
+              <span className={styles.statValue}>{winRate}%</span>
               <span className={styles.statLabel}>Accuracy</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{stats.streak}</span>
+              <span className={styles.statValue}>{stats.currentStreak}</span>
               <span className={styles.statLabel}>Streak</span>
             </div>
             <div className={styles.stat}>

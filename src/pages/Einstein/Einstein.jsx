@@ -5,6 +5,7 @@ import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './Einstein.module.css';
 import { generatePuzzle, formatClue } from './generator';
 import { THEME_SETS, THEME_SETS_4, DIFFICULTIES, getRandomTheme } from './puzzleData';

@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import styles from './PipePuzzle.module.css';
 

@@ -5,7 +5,7 @@ import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import SeedDisplay from '../../components/SeedDisplay';
-import { usePersistedState } from '../../hooks/usePersistedState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { useGameState } from '../../hooks/useGameState';
 import { createSeededRNG, parseSeedFromUrl, generateRandomSeed } from '../../enigma-sdk/seeding';
 import styles from './CodeBreaker.module.css';
@@ -65,7 +65,11 @@ export default function CodeBreaker() {
   const [currentGuess, setCurrentGuess] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(0);
   const { gameState, checkWin, giveUp, lose, reset: resetGameState, isPlaying } = useGameState();
-  const [stats, setStats] = usePersistedState('codebreaker-stats', { wins: 0, losses: 0 });
+  const { stats, recordWin, recordLoss, recordGiveUp, winRate } = useGameStats('codebreaker', {
+    trackBestTime: false,
+    trackBestScore: false,
+    trackStreak: false,
+  });
   const [seed, setSeed] = useState(() => parseSeedFromUrl() || generateRandomSeed());
 
   const { codeLength, colorCount, maxGuesses } = DIFFICULTIES[difficulty];
@@ -122,7 +126,7 @@ export default function CodeBreaker() {
   const handleGiveUp = () => {
     if (!isPlaying) return;
     giveUp();
-    setStats(prev => ({ ...prev, losses: prev.losses + 1 }));
+    recordGiveUp();
   };
 
   const handleSubmitGuess = () => {
@@ -140,10 +144,10 @@ export default function CodeBreaker() {
 
     if (result.exact === codeLength) {
       checkWin(true);
-      setStats(prev => ({ ...prev, wins: prev.wins + 1 }));
+      recordWin();
     } else if (newGuesses.length >= maxGuesses) {
       lose();
-      setStats(prev => ({ ...prev, losses: prev.losses + 1 }));
+      recordLoss();
     } else {
       setCurrentGuess(Array(codeLength).fill(null));
       setSelectedSlot(0);
@@ -204,11 +208,11 @@ export default function CodeBreaker() {
           </div>
           <div className={styles.stat}>
             <span className={styles.statLabel}>{t('common.wins')}</span>
-            <span className={styles.statValue}>{stats.wins}</span>
+            <span className={styles.statValue}>{stats.won}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statLabel}>{t('common.losses')}</span>
-            <span className={styles.statValue}>{stats.losses}</span>
+            <span className={styles.statValue}>{stats.played - stats.won}</span>
           </div>
         </div>
 

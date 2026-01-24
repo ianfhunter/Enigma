@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import { isValidWord } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordTiles.module.css';

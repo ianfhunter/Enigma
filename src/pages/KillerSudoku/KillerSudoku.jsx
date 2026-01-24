@@ -6,6 +6,7 @@ import Timer from '../../components/Timer';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
+import { useGameStats } from '../../hooks/useGameStats';
 import styles from './KillerSudoku.module.css';
 
 const GRID_SIZE = 9;
@@ -186,6 +187,7 @@ export default function KillerSudoku() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [notesMode, setNotesMode] = useState(false);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
+  const { recordWin, recordGiveUp } = useGameStats('killer-sudoku');
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -255,9 +257,10 @@ export default function KillerSudoku() {
     setErrors(newErrors);
 
     if (checkWin(checkSolved(grid, puzzleData.solution))) {
+      recordWin();
       setIsRunning(false);
     }
-  }, [grid, puzzleData, showErrors, isPlaying, checkWin]);
+  }, [grid, puzzleData, showErrors, isPlaying, checkWin, recordWin]);
 
   // Keyboard input
   useEffect(() => {
@@ -356,6 +359,7 @@ export default function KillerSudoku() {
     setGrid(solution);
     setSelectedCell(null);
     giveUp();
+    recordGiveUp();
     setIsRunning(false);
   };
 
