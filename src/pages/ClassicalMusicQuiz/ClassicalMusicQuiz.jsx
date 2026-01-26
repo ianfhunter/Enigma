@@ -1,29 +1,38 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './ClassicalMusicQuiz.module.css';
 
 const TOTAL_ROUNDS = 10;
 
-// Shuffle array helper
-const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
-
-// Generate wrong options for composers
-const getRandomComposerOptions = (data, correct, count = 3) => {
-  const allComposers = [...new Set(data.map(p => p.composer))];
-  const wrongOptions = allComposers.filter(c => c !== correct);
-  const selected = shuffle(wrongOptions).slice(0, count);
-  return shuffle([correct, ...selected]);
+// Shuffle array helper using seeded random
+const shuffle = (arr, random) => {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
 };
 
-// Get a random piece
-const getRandomPiece = (data, exclude = []) => {
+// Generate wrong options for composers using seeded random
+const getRandomComposerOptions = (data, correct, random, count = 3) => {
+  const allComposers = [...new Set(data.map(p => p.composer))];
+  const wrongOptions = allComposers.filter(c => c !== correct);
+  const selected = shuffle(wrongOptions, random).slice(0, count);
+  return shuffle([correct, ...selected], random);
+};
+
+// Get a random piece using seeded random
+const getRandomPiece = (data, exclude, random) => {
   const available = data.filter(p => !exclude.includes(p.id));
   if (available.length === 0) return null;
-  return available[Math.floor(Math.random() * available.length)];
+  return available[Math.floor(random() * available.length)];
 };
 
 export default function ClassicalMusicQuiz() {
@@ -44,6 +53,7 @@ export default function ClassicalMusicQuiz() {
   const [audioLoaded, setAudioLoaded] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [seed, setSeed] = useState(() => stringToSeed(`classical-quiz-${getTodayDateString()}`));
   const audioRef = useRef(null);
 
   const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('classical-music-quiz', {
@@ -90,14 +100,15 @@ export default function ClassicalMusicQuiz() {
       audioRef.current = null;
     }
 
-    const piece = getRandomPiece(pieces, usedPieces);
+    const random = createSeededRandom(seed + usedPieces.length);
+    const piece = getRandomPiece(pieces, usedPieces, random);
     if (!piece) {
       setGameOver(true);
       return;
     }
 
     setCurrentPiece(piece);
-    setOptions(getRandomComposerOptions(pieces, piece.composer));
+    setOptions(getRandomComposerOptions(pieces, piece.composer, random));
     setSelectedAnswer(null);
     setIsCorrect(null);
     setUsedPieces(prev => [...prev, piece.id]);
@@ -112,7 +123,7 @@ export default function ClassicalMusicQuiz() {
     audio.addEventListener('error', () => setAudioError(true));
     audio.addEventListener('ended', () => setIsPlaying(false));
     audioRef.current = audio;
-  }, [usedPieces, pieces]);
+  }, [usedPieces, pieces, seed]);
 
   const startGame = (selectedMode) => {
     setMode(selectedMode);
@@ -238,6 +249,21 @@ export default function ClassicalMusicQuiz() {
           title="🎼 Classical Music Quiz"
           instructions="Listen to classical masterpieces and guess the composer!"
         />
+
+        {seed !== null && (
+          <SeedDisplay
+            seed={seed}
+            variant="compact"
+            showNewButton={false}
+            showShare={false}
+            onSeedChange={(newSeed) => {
+              const seedNum = typeof newSeed === 'string'
+                ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+                : newSeed;
+              setSeed(seedNum);
+            }}
+          />
+        )}
 
         <div className={styles.menuArea}>
           <ModeSelector

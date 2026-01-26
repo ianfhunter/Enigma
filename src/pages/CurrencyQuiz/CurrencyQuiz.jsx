@@ -85,14 +85,14 @@ export default function CurrencyQuiz() {
       // Generate fake currencies using seeded shuffle
       const fakeTypes = commonTypes
         .filter(t => t !== correctType);
-      
+
       // Seeded shuffle
       const shuffled = [...fakeTypes];
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
-      
+
       distractors = shuffled.slice(0, 3).map(type => `${adjective} ${type}`);
     } else {
       // Fallback - use real currencies with seeded shuffle
@@ -101,13 +101,13 @@ export default function CurrencyQuiz() {
           .filter(c => c.currency !== correctCurrency)
           .map(c => c.currency)
       )];
-      
+
       // Seeded shuffle
       for (let i = otherCurrencies.length - 1; i > 0; i--) {
         const j = Math.floor(random() * (i + 1));
         [otherCurrencies[i], otherCurrencies[j]] = [otherCurrencies[j], otherCurrencies[i]];
       }
-      
+
       distractors = otherCurrencies.slice(0, 3);
     }
 
@@ -117,7 +117,7 @@ export default function CurrencyQuiz() {
       const j = Math.floor(random() * (i + 1));
       [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
     }
-    
+
     return allOptions;
   }, [countries, seed, roundNumber]);
 
@@ -157,6 +157,22 @@ export default function CurrencyQuiz() {
         title="Currency Quiz"
         instructions="What currency is used in each country?"
       />
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+          onSeedChange={(newSeed) => {
+            const seedNum = typeof newSeed === 'string'
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            setSeed(seedNum);
+            setRoundNumber(0);
+          }}
+        />
+      )}
 
       {!data && <div className={styles.card}>{t('common.loadingCountries')}</div>}
 

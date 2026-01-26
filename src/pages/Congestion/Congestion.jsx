@@ -554,11 +554,11 @@ export default function Congestion() {
 
   return (
     <div className={styles.page}>
-      <GameHeader title="Congestion" instructions={instructions}>
+      <GameHeader title={t('congestion.title', 'Congestion')} instructions={instructions}>
         <div className={styles.subHeader}>
           <div className={styles.packRow}>
             <label className={styles.label}>
-              Difficulty
+              {t('common.difficulty', 'Difficulty')}
               <select
                 className={styles.select}
                 value={difficulty}
@@ -574,10 +574,10 @@ export default function Congestion() {
 
             <div className={styles.meta}>
               <span className={styles.badge}>
-                Level {levelIndex + 1}/{puzzlesForDifficulty.length}
+                {t('congestion.level', 'Level {{current}}/{{total}}', { current: levelIndex + 1, total: puzzlesForDifficulty.length })}
               </span>
-              <span className={styles.badge}>Moves: {moves}</span>
-              {won && <span className={`${styles.badge} ${styles.won}`}>🎉 Solved!</span>}
+              <span className={styles.badge}>{t('congestion.moves', 'Moves: {{count}}', { count: moves })}</span>
+              {won && <span className={`${styles.badge} ${styles.won}`}>🎉 {t('gameStatus.solved', 'Solved!')}</span>}
             </div>
           </div>
         </div>
@@ -586,16 +586,16 @@ export default function Congestion() {
       <div className={styles.main}>
         <div className={styles.controls}>
           <button className={styles.button} onClick={goPrev} disabled={levelIndex === 0}>
-            Prev
+            {t('common.prev', 'Prev')}
           </button>
           <button className={styles.button} onClick={goNext} disabled={levelIndex >= puzzlesForDifficulty.length - 1}>
-            Next
+            {t('common.next', 'Next')}
           </button>
           <button className={styles.button} onClick={reset}>
-            Reset
+            {t('common.reset', 'Reset')}
           </button>
           <button className={styles.button} onClick={undo} disabled={!history.length}>
-            Undo
+            {t('common.undo', 'Undo')}
           </button>
         </div>
 

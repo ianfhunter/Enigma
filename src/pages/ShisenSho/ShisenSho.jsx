@@ -213,7 +213,7 @@ function ShisenSho() {
   }, [grid, selected, isPlaying]);
 
   const handleNewGame = useCallback(() => {
-    setSeed(getTodayDateString() + Math.random());
+    setSeed(stringToSeed(getTodayDateString() + '-' + Date.now()));
   }, []);
 
   const handleGiveUp = useCallback(() => {
@@ -254,7 +254,7 @@ function ShisenSho() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Shisen-Sho"
+        title={t('shisensho.title', 'Shisen-Sho')}
         emoji="🀄"
       />
 

@@ -452,25 +452,21 @@ export default function ColorCube() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="3×3×3 Color Cube"
-        instructions={(
-          <>
-            Scramble the cube, then solve it using standard moves. Drag to rotate the view. Keyboard: <strong>u d l r f b</strong> (Shift = prime).
-          </>
-        )}
+        title={t('colorcube.title', '3×3×3 Color Cube')}
+        instructions={t('colorcube.instructions', 'Scramble the cube, then solve it using standard moves. Drag to rotate the view. Keyboard: u d l r f b (Shift = prime).')}
       />
 
       <div className={styles.topBar}>
         <div className={styles.stat}>
-          <div className={styles.statLabel}>Time</div>
+          <div className={styles.statLabel}>{t('common.time', 'Time')}</div>
           <div className={styles.statValue}>{formatTime(elapsedMs)}</div>
         </div>
         <div className={styles.stat}>
-          <div className={styles.statLabel}>Moves</div>
+          <div className={styles.statLabel}>{t('common.moves', 'Moves')}</div>
           <div className={styles.statValue}>{moves}</div>
         </div>
         <div className={styles.actions}>
-          <button className={styles.btn} onClick={scramble}>Scramble</button>
+          <button className={styles.btn} onClick={scramble}>{t('colorcube.scramble', 'Scramble')}</button>
           <button className={styles.btn} onClick={undo} disabled={moveHistory.length === 0}>{t('common.undo')}</button>
           <button className={styles.btnSecondary} onClick={hardReset}>{t('common.reset')}</button>
         </div>
@@ -478,7 +474,7 @@ export default function ColorCube() {
 
       {scrambleText && (
         <div className={styles.scramble}>
-          <span className={styles.scrambleLabel}>Scramble</span>
+          <span className={styles.scrambleLabel}>{t('colorcube.scramble', 'Scramble')}</span>
           <span className={styles.scrambleText}>{scrambleText}</span>
         </div>
       )}
