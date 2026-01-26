@@ -62,3 +62,7 @@ src/packs/installedCommunityPacks.js
 venv/
 __pycache__/
 *.pyc
+
+
+.notes/
+.TODO/

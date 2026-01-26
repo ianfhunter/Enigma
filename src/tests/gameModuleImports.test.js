@@ -107,7 +107,6 @@ const GAME_MODULES = {
   'samegame': 'Samegame',
   'sandwich-sudoku': 'SandwichSudoku',
   'sequence': 'Sequence',
-  'shakashaka': 'Shakashaka',
   'shikaku': 'Shikaku',
   'shinro': 'Shinro',
   'naval-battle': 'NavalBattle',
