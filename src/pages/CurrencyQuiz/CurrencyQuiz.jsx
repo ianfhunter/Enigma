@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './CurrencyQuiz.module.css';
 
 export default function CurrencyQuiz() {
@@ -11,6 +13,8 @@ export default function CurrencyQuiz() {
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState(null);
   const [result, setResult] = useState(null);
+  const [seed, setSeed] = useState(() => stringToSeed(`currency-quiz-${getTodayDateString()}`));
+  const [roundNumber, setRoundNumber] = useState(0);
 
   const { stats, recordWin, recordLoss, winRate } = useGameStats('currency-quiz', {
     trackBestTime: false,
@@ -34,12 +38,14 @@ export default function CurrencyQuiz() {
 
   const pickRandom = useCallback(() => {
     if (!countries.length) return null;
-    const idx = Math.floor(Math.random() * countries.length);
+    const random = createSeededRandom(seed + roundNumber);
+    const idx = Math.floor(random() * countries.length);
     return countries[idx];
-  }, [countries]);
+  }, [countries, seed, roundNumber]);
 
   const generateOptions = useCallback((correct) => {
     if (!countries.length) return [];
+    const random = createSeededRandom(seed + roundNumber + 1000); // Different offset for options
     const correctCurrency = correct.currency;
 
     // Currency types to detect (check longer/multi-word ones first)
@@ -76,26 +82,44 @@ export default function CurrencyQuiz() {
     let distractors = [];
 
     if (adjective && adjective.length > 0) {
-      // Generate fake currencies: same adjective + different type
-      // e.g., "Mexican Peso" → "Mexican Dollar", "Mexican Franc", "Mexican Yen"
+      // Generate fake currencies using seeded shuffle
       const fakeTypes = commonTypes
-        .filter(t => t !== correctType)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 3);
-
-      distractors = fakeTypes.map(type => `${adjective} ${type}`);
+        .filter(t => t !== correctType);
+      
+      // Seeded shuffle
+      const shuffled = [...fakeTypes];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      
+      distractors = shuffled.slice(0, 3).map(type => `${adjective} ${type}`);
     } else {
-      // Fallback for "Euro" or currencies we couldn't parse - use real currencies
+      // Fallback - use real currencies with seeded shuffle
       const otherCurrencies = [...new Set(
         countries
           .filter(c => c.currency !== correctCurrency)
           .map(c => c.currency)
       )];
-      distractors = otherCurrencies.sort(() => Math.random() - 0.5).slice(0, 3);
+      
+      // Seeded shuffle
+      for (let i = otherCurrencies.length - 1; i > 0; i--) {
+        const j = Math.floor(random() * (i + 1));
+        [otherCurrencies[i], otherCurrencies[j]] = [otherCurrencies[j], otherCurrencies[i]];
+      }
+      
+      distractors = otherCurrencies.slice(0, 3);
     }
 
-    return [correctCurrency, ...distractors].sort(() => Math.random() - 0.5);
-  }, [countries]);
+    // Final shuffle of all options
+    const allOptions = [correctCurrency, ...distractors];
+    for (let i = allOptions.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+    }
+    
+    return allOptions;
+  }, [countries, seed, roundNumber]);
 
   const startRound = useCallback(() => {
     const next = pickRandom();
@@ -104,6 +128,7 @@ export default function CurrencyQuiz() {
     setOptions(generateOptions(next));
     setSelected(null);
     setResult(null);
+    setRoundNumber(prev => prev + 1);
   }, [pickRandom, generateOptions]);
 
   useEffect(() => {

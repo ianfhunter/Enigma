@@ -1006,8 +1006,8 @@ export default function Threads() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Threads"
-        instructions="Find the themed words by connecting adjacent letters"
+        title={t('threads.title', 'Threads')}
+        instructions={t('threads.instructions', 'Find the themed words by connecting adjacent letters')}
       />
 
       {seed !== null && (
@@ -1133,15 +1133,15 @@ export default function Threads() {
         {gameWon && (
           <GameResult
             state="won"
-            title="You completed the puzzle!"
-            message={`Theme: ${puzzle.theme}`}
+            title={t('threads.completed', 'You completed the puzzle!')}
+            message={t('threads.themeWas', 'Theme: {{theme}}', { theme: puzzle.theme })}
           />
         )}
         {gaveUp && (
           <GameResult
             state="gaveup"
-            title="Solution Revealed"
-            message={`Theme: ${puzzle.theme}`}
+            title={t('gameResult.solutionRevealed', 'Solution Revealed')}
+            message={t('threads.themeWas', 'Theme: {{theme}}', { theme: puzzle.theme })}
           />
         )}
 

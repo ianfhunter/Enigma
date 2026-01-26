@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import MahjongTile from '../../components/MahjongTile';
 import { useGameState } from '../../hooks/useGameState';
@@ -155,7 +156,7 @@ function findPath(grid, r1, c1, r2, c2) {
 function ShisenSho() {
   const { t } = useTranslation();
   const gameKey = 'shisen-sho';
-  const { gameState, checkWin, reset: resetGameState, isPlaying } = useGameState();
+  const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const { stats, recordGamePlayed } = useGameStats(gameKey);
 
   const [seed, setSeed] = useState(getTodayDateString());
@@ -215,6 +216,12 @@ function ShisenSho() {
     setSeed(getTodayDateString() + Math.random());
   }, []);
 
+  const handleGiveUp = useCallback(() => {
+    if (!isPlaying) return;
+    giveUp();
+    recordGamePlayed(false);
+  }, [isPlaying, giveUp, recordGamePlayed]);
+
   const handleHint = useCallback(() => {
     if (!isPlaying || !grid) return;
 
@@ -256,6 +263,10 @@ function ShisenSho() {
         <button onClick={handleHint} disabled={!isPlaying} className={styles.hintButton}>
           💡 {t('common.hint', 'Hint')}
         </button>
+        <GiveUpButton
+          onGiveUp={handleGiveUp}
+          disabled={!isPlaying}
+        />
         <button onClick={handleNewGame} className={styles.newGameButton}>
           {t('common.newGame', 'New Game')}
         </button>
