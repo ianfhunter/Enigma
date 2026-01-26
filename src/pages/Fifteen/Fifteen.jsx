@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Fifteen.module.css';
 
 function makeSolved(size) {
@@ -101,13 +102,14 @@ function moveTile(board, size, tileIdx) {
   return null;
 }
 
-function scrambleFromSolved(size, steps = 250) {
+function scrambleFromSolved(size, steps = 250, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   let board = makeSolved(size);
   let blankIdx = board.length - 1;
   let lastMoveFrom = null;
   for (let i = 0; i < steps; i++) {
     const opts = neighborsOfBlank(blankIdx, size).filter((idx) => idx !== lastMoveFrom);
-    const pick = opts[Math.floor(Math.random() * opts.length)];
+    const pick = opts[Math.floor(random() * opts.length)];
     const next = moveTile(board, size, pick);
     if (!next) continue;
     lastMoveFrom = blankIdx;

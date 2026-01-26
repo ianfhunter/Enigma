@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './MemoryMatch.module.css';
 
 const CARD_SYMBOLS = [
@@ -20,17 +21,18 @@ const GRID_SIZES = {
   '6×5': { cols: 6, rows: 5, pairs: 15 },
 };
 
-function shuffleArray(array) {
+function shuffleArray(array, random = Math.random) {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
 }
 
-function generateCards(pairs) {
-  const symbols = shuffleArray(CARD_SYMBOLS).slice(0, pairs);
+function generateCards(pairs, seed = null) {
+  const random = seed !== null ? createSeededRandom(seed) : Math.random;
+  const symbols = shuffleArray(CARD_SYMBOLS, random).slice(0, pairs);
   const cards = [];
 
   symbols.forEach((symbol, index) => {
@@ -38,7 +40,7 @@ function generateCards(pairs) {
     cards.push({ id: index * 2 + 1, symbol, pairId: index });
   });
 
-  return shuffleArray(cards);
+  return shuffleArray(cards, random);
 }
 
 export default function MemoryMatch() {
@@ -58,7 +60,8 @@ export default function MemoryMatch() {
 
   const initGame = useCallback(() => {
     const { pairs } = GRID_SIZES[gridSize];
-    setCards(generateCards(pairs));
+    const seed = Date.now();
+    setCards(generateCards(pairs, seed));
     setFlipped([]);
     setMatched(new Set());
     setMoves(0);

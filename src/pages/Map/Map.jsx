@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Map.module.css';
 
 const COLORS = [
@@ -17,12 +18,12 @@ function idxToRC(i, w) {
   return { r: Math.floor(i / w), c: i % w };
 }
 
-function generateRegions(w, h, regionCount) {
+function generateRegions(w, h, regionCount, random = Math.random) {
   const n = w * h;
   const seeds = [];
   const used = new Set();
   while (seeds.length < Math.min(regionCount, n)) {
-    const i = Math.floor(Math.random() * n);
+    const i = Math.floor(random() * n);
     if (used.has(i)) continue;
     used.add(i);
     seeds.push(i);
@@ -45,7 +46,7 @@ function generateRegions(w, h, regionCount) {
     if (c > 0) nbrs.push(rcToIdx(r, c - 1, w));
     if (c < w - 1) nbrs.push(rcToIdx(r, c + 1, w));
     for (let i = nbrs.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [nbrs[i], nbrs[j]] = [nbrs[j], nbrs[i]];
     }
     for (const v of nbrs) {
@@ -105,7 +106,7 @@ function generateRegions(w, h, regionCount) {
   // Add a few more givens
   const extra = Math.max(2, Math.floor(regions * 0.12));
   for (let t = 0; t < extra; t++) {
-    const rid = Math.floor(Math.random() * regions);
+    const rid = Math.floor(random() * regions);
     givens[rid] = color[rid];
   }
 
@@ -144,7 +145,8 @@ export default function MapGame() {
   const [h, setH] = useState(12);
   const [regions, setRegions] = useState(22);
 
-  const [puz, setPuz] = useState(() => generateRegions(18, 12, 22));
+  const [seed] = useState(() => Math.floor(Math.random() * 1000000));
+  const [puz, setPuz] = useState(() => generateRegions(18, 12, 22, createSeededRandom(seed)));
   const [sel, setSel] = useState(0);
   const [assign, setAssign] = useState(() => {
     const a = new Array(puz.regions).fill(-1);
@@ -153,7 +155,7 @@ export default function MapGame() {
   });
 
   const newGame = useCallback((nw = w, nh = h, nr = regions) => {
-    const np = generateRegions(nw, nh, nr);
+    const np = generateRegions(nw, nh, nr, createSeededRandom(Date.now()));
     setPuz(np);
     const a = new Array(np.regions).fill(-1);
     for (let r = 0; r < np.regions; r++) if (np.givens[r] >= 0) a[r] = np.givens[r];

@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './ABCEndView.module.css';
 import puzzleDataset from '../../../public/datasets/abcendviewPuzzles.json';
 
@@ -284,7 +285,8 @@ export default function ABCEndView() {
     }
 
     // Pick random puzzle
-    const puzzle = pool[Math.floor(Math.random() * pool.length)];
+    const random = createSeededRandom(Date.now());
+    const puzzle = pool[Math.floor(random() * pool.length)];
     usedPuzzleIdsRef.current.add(puzzle.id);
 
     // Convert solution to uppercase

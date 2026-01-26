@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { getGameGradient } from '../../data/gameRegistry';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Entanglement.module.css';
 
 // Hex grid config
@@ -99,8 +100,8 @@ function rotatedExit(baseMap, rot, entrySide) {
   return (baseExit + rot) % 6;
 }
 
-function randomInt(max) {
-  return Math.floor(Math.random() * max);
+function randomInt(max, random = Math.random) {
+  return Math.floor(random() * max);
 }
 
 function computeBoardCells() {

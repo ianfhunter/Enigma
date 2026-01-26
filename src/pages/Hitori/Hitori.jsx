@@ -4,8 +4,10 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Hitori.module.css';
 
 const DIFFICULTY_SIZES = {
@@ -15,7 +17,8 @@ const DIFFICULTY_SIZES = {
 };
 
 // Generate a valid Hitori puzzle
-function generatePuzzle(size) {
+function generatePuzzle(size, seed) {
+  const random = createSeededRandom(seed);
   // Start with a Latin square (each row/col has unique numbers)
   const grid = Array(size).fill(null).map(() => Array(size).fill(0));
 
@@ -28,11 +31,11 @@ function generatePuzzle(size) {
 
   // Shuffle rows and columns to randomize
   for (let i = 0; i < size * 2; i++) {
-    const a = Math.floor(Math.random() * size);
-    const b = Math.floor(Math.random() * size);
+    const a = Math.floor(random() * size);
+    const b = Math.floor(random() * size);
 
     // Swap rows
-    if (Math.random() > 0.5) {
+    if (random() > 0.5) {
       [grid[a], grid[b]] = [grid[b], grid[a]];
     } else {
       // Swap columns
@@ -50,8 +53,8 @@ function generatePuzzle(size) {
   const attempts = size * size * 10;
 
   for (let i = 0; i < attempts && shaded < cellsToShade; i++) {
-    const r = Math.floor(Math.random() * size);
-    const c = Math.floor(Math.random() * size);
+    const r = Math.floor(random() * size);
+    const c = Math.floor(random() * size);
 
     if (solution[r][c]) continue;
 
@@ -78,7 +81,7 @@ function generatePuzzle(size) {
           if (i !== r && !solution[i][c]) candidates.push(grid[i][c]);
         }
         if (candidates.length > 0) {
-          puzzleGrid[r][c] = candidates[Math.floor(Math.random() * candidates.length)];
+          puzzleGrid[r][c] = candidates[Math.floor(random() * candidates.length)];
         }
       }
     }
@@ -234,6 +237,7 @@ export {
 export default function Hitori() {
   const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('easy');
+  const [seed, setSeed] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [shaded, setShaded] = useState([]);
   const [marked, setMarked] = useState([]); // Cells marked as definitely not shaded
@@ -260,19 +264,24 @@ export default function Hitori() {
       });
   }, []);
 
-  const initGame = useCallback(() => {
+  const initGame = useCallback((customSeed = null) => {
+    const today = getTodayDateString();
+    const gameSeed = customSeed ?? stringToSeed(`hitori-${today}-${difficulty}`);
+    const random = createSeededRandom(gameSeed);
+    setSeed(gameSeed);
+
     if (datasetRef.current && datasetRef.current.length > 0) {
       const { min, max } = DIFFICULTY_SIZES[difficulty];
       const filtered = datasetRef.current.filter(p => p.rows >= min && p.rows <= max);
       const puzzleList = filtered.length > 0 ? filtered : datasetRef.current;
-      const puzzle = puzzleList[Math.floor(Math.random() * puzzleList.length)];
+      const puzzle = puzzleList[Math.floor(random() * puzzleList.length)];
       const gridSize = puzzle.rows;
       setPuzzleData({ grid: puzzle.grid, solution: puzzle.solution });
       setShaded(Array(gridSize).fill(null).map(() => Array(gridSize).fill(false)));
       setMarked(Array(gridSize).fill(null).map(() => Array(gridSize).fill(false)));
     } else {
       // Fallback to generator
-      const data = generatePuzzle(5);
+      const data = generatePuzzle(5, gameSeed);
     setPuzzleData(data);
       setShaded(Array(5).fill(null).map(() => Array(5).fill(false)));
       setMarked(Array(5).fill(null).map(() => Array(5).fill(false)));
@@ -369,6 +378,21 @@ export default function Hitori() {
         onChange={setDifficulty}
         className={styles.sizeSelector}
       />
+
+      {seed && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+          onSeedChange={(newSeed) => {
+            const seedNum = typeof newSeed === 'string'
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(seedNum);
+          }}
+        />
+      )}
 
       <div className={styles.gameArea}>
         {/* Mobile Mark Toggle */}

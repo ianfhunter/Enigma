@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './YinYang.module.css';
 import yinyangPuzzles from '../../../public/datasets/yinyangPuzzles.json';
 
@@ -186,6 +187,7 @@ export default function YinYang() {
   }, [availableSizes, sizeKey]);
 
   const initGame = useCallback(() => {
+    const random = createSeededRandom(Date.now());
     const filtered = yinyangPuzzles.puzzles.filter(
       p => p.difficulty === difficulty && `${p.rows}x${p.cols}` === sizeKey
     );
@@ -195,12 +197,12 @@ export default function YinYang() {
       // Fallback to any puzzle of this difficulty
       const fallback = yinyangPuzzles.puzzles.filter(p => p.difficulty === difficulty);
       if (fallback.length > 0) {
-        selected = fallback[Math.floor(Math.random() * fallback.length)];
+        selected = fallback[Math.floor(random() * fallback.length)];
       } else {
-        selected = yinyangPuzzles.puzzles[Math.floor(Math.random() * yinyangPuzzles.puzzles.length)];
+        selected = yinyangPuzzles.puzzles[Math.floor(random() * yinyangPuzzles.puzzles.length)];
       }
     } else {
-      selected = filtered[Math.floor(Math.random() * filtered.length)];
+      selected = filtered[Math.floor(random() * filtered.length)];
     }
 
     const data = parseDatasetPuzzle(selected);

@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import { createGrid, cellKey, getNeighbors, has2x2Block, isFullyConnected, countCells } from '../../utils/generatorUtils';
 import styles from './LITS.module.css';
 
@@ -57,7 +58,7 @@ function normalizeShapeKey(cells) {
 }
 
 // Generate random regions
-function generateRegions(size) {
+function generateRegions(size, random = Math.random) {
   const regions = createGrid(size, size, -1);
   let regionId = 0;
   const regionCells = {};
@@ -72,14 +73,14 @@ function generateRegions(size) {
 
   // Shuffle positions
   for (let i = positions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [positions[i], positions[j]] = [positions[j], positions[i]];
   }
 
   for (const [startR, startC] of positions) {
     if (regions[startR][startC] !== -1) continue;
 
-    const targetSize = 4 + Math.floor(Math.random() * 3); // 4-6 cells per region
+    const targetSize = 4 + Math.floor(random() * 3); // 4-6 cells per region
     const cells = [[startR, startC]];
     regions[startR][startC] = regionId;
 
@@ -96,7 +97,7 @@ function generateRegions(size) {
 
       if (frontier.length === 0) break;
 
-      const [nr, nc] = frontier[Math.floor(Math.random() * frontier.length)];
+      const [nr, nc] = frontier[Math.floor(random() * frontier.length)];
       cells.push([nr, nc]);
       regions[nr][nc] = regionId;
     }
@@ -177,13 +178,13 @@ function sameShapesTouch(shaded, regions, regionCells, size) {
   return false;
 }
 
-function generatePuzzle(size) {
+function generatePuzzle(size, random = Math.random) {
   let attempts = 0;
   const maxAttempts = 200; // Generous attempts before fallback
 
   while (attempts < maxAttempts) {
     attempts++;
-    const { regions, regionCells } = generateRegions(size);
+    const { regions, regionCells } = generateRegions(size, random);
 
     // Try to find a valid solution
     const solution = createGrid(size, size, false);
@@ -204,7 +205,7 @@ function generatePuzzle(size) {
 
       // Shuffle combos
       for (let i = combos.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(random() * (i + 1));
         [combos[i], combos[j]] = [combos[j], combos[i]];
       }
 
@@ -448,6 +449,7 @@ export default function LITS() {
   const initGame = useCallback(() => {
     if (!datasetRef.current || datasetRef.current.length === 0) return;
 
+    const random = createSeededRandom(Date.now());
     // Filter puzzles by difficulty
     const { minSize, maxSize } = DIFFICULTY_SIZES[difficulty];
     const filtered = datasetRef.current.filter(p =>
@@ -456,12 +458,12 @@ export default function LITS() {
 
     if (filtered.length === 0) {
       // Fallback to any puzzle if no matches
-      const puzzle = datasetRef.current[Math.floor(Math.random() * datasetRef.current.length)];
+      const puzzle = datasetRef.current[Math.floor(random() * datasetRef.current.length)];
       const data = datasetPuzzleToGameFormat(puzzle);
       setPuzzleData(data);
       setShaded(createGrid(data.size, data.size, false));
     } else {
-      const puzzle = filtered[Math.floor(Math.random() * filtered.length)];
+      const puzzle = filtered[Math.floor(random() * filtered.length)];
       const data = datasetPuzzleToGameFormat(puzzle);
     setPuzzleData(data);
       setShaded(createGrid(data.size, data.size, false));

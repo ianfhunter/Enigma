@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Kurotto.module.css';
 import kurottoPuzzles from '../../../public/datasets/kurottoPuzzles.json';
 
@@ -145,6 +146,7 @@ export default function Kurotto() {
   }, [availableSizes, sizeKey]);
 
   const initGame = useCallback(() => {
+    const random = createSeededRandom(Date.now());
     const filtered = kurottoPuzzles.puzzles.filter(
       p => p.difficulty === difficulty && `${p.rows}x${p.cols}` === sizeKey
     );
@@ -153,12 +155,12 @@ export default function Kurotto() {
     if (filtered.length === 0) {
       const fallback = kurottoPuzzles.puzzles.filter(p => p.difficulty === difficulty);
       if (fallback.length > 0) {
-        selected = fallback[Math.floor(Math.random() * fallback.length)];
+        selected = fallback[Math.floor(random() * fallback.length)];
       } else {
-        selected = kurottoPuzzles.puzzles[Math.floor(Math.random() * kurottoPuzzles.puzzles.length)];
+        selected = kurottoPuzzles.puzzles[Math.floor(random() * kurottoPuzzles.puzzles.length)];
       }
     } else {
-      selected = filtered[Math.floor(Math.random() * filtered.length)];
+      selected = filtered[Math.floor(random() * filtered.length)];
     }
 
     const data = parseDatasetPuzzle(selected);

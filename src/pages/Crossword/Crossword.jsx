@@ -28,6 +28,7 @@ import { usePersistedState } from '../../hooks/usePersistedState';
 import { useKeyboardInput } from '../../hooks/useKeyboardInput';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import GameHeader from '../../components/GameHeader';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import {
@@ -128,7 +129,7 @@ export default function Crossword() {
     setMissedWords([]);
 
     // Generate a new seed for new puzzles
-    const newSeed = Date.now() + Math.floor(Math.random() * 1000000);
+    const newSeed = Date.now() + Math.floor(createSeededRandom(Date.now())() * 1000000);
     setPuzzleSeed(newSeed);
 
     const newPuzzle = generatePuzzle(diff, newSeed);
@@ -413,13 +414,14 @@ export default function Crossword() {
 
   // Reveal random letter
   const revealRandomLetter = useCallback(() => {
+    const random = createSeededRandom(puzzleSeed + 1);
     if (gameState !== 'playing' || !puzzle || !puzzle.grid) return;
 
     const emptyCells = getEmptyCells(puzzle, userGrid);
     if (!emptyCells || emptyCells.length === 0) return;
 
     // Pick a random empty cell
-    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    const randomCell = emptyCells[Math.floor(random() * emptyCells.length)];
     if (!randomCell || randomCell.answer === undefined) return;
 
     setUserGrid(prev => {
@@ -432,7 +434,7 @@ export default function Crossword() {
 
     // Select the revealed cell
     setSelectedCell({ row: randomCell.row, col: randomCell.col });
-  }, [puzzle, userGrid, gameState]);
+  }, [puzzle, userGrid, gameState, puzzleSeed]);
 
   // Reveal word
   const revealWord = useCallback(() => {
@@ -506,9 +508,10 @@ export default function Crossword() {
   }, [gameState, puzzle, userGrid, giveUp, recordGiveUp]);
 
   // Random loading phrase
-  const loadingPhrase = useMemo(() =>
-    LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)],
-  []);
+  const loadingPhrase = useMemo(() => {
+    const random = createSeededRandom(Date.now());
+    return LOADING_PHRASES[Math.floor(random() * LOADING_PHRASES.length)];
+  }, []);
 
   if (!puzzle) {
     return (

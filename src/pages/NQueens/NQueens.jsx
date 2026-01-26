@@ -3,6 +3,7 @@ import { useState, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './NQueens.module.css';
 
 // Check if a queen placement is valid
@@ -81,7 +82,7 @@ function generatePuzzle(size, preplacedCount) {
   // Pick random queens to pre-place
   const indices = [...Array(size).keys()];
   for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [indices[i], indices[j]] = [indices[j], indices[i]];
   }
 

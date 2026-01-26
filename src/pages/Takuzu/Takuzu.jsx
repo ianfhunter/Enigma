@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Takuzu.module.css';
 import binairoPuzzles from '../../../public/datasets/binairoPuzzles.json';
 
@@ -140,6 +141,7 @@ export default function Takuzu() {
   }, [availableSizes, sizeKey]);
 
   const initGame = useCallback(() => {
+    const random = createSeededRandom(Date.now());
     const filtered = binairoPuzzles.puzzles.filter(
       p => p.difficulty === difficulty && `${p.rows}x${p.cols}` === sizeKey
     );
@@ -149,12 +151,12 @@ export default function Takuzu() {
       // Fallback to any puzzle of this difficulty
       const fallback = binairoPuzzles.puzzles.filter(p => p.difficulty === difficulty);
       if (fallback.length > 0) {
-        selected = fallback[Math.floor(Math.random() * fallback.length)];
+        selected = fallback[Math.floor(random() * fallback.length)];
       } else {
-        selected = binairoPuzzles.puzzles[Math.floor(Math.random() * binairoPuzzles.puzzles.length)];
+        selected = binairoPuzzles.puzzles[Math.floor(random() * binairoPuzzles.puzzles.length)];
       }
     } else {
-      selected = filtered[Math.floor(Math.random() * filtered.length)];
+      selected = filtered[Math.floor(random() * filtered.length)];
     }
 
     const data = parseDatasetPuzzle(selected);

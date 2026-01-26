@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { formatTime } from '../../data/wordUtils';
+import { formatTime, createSeededRandom } from '../../data/wordUtils';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import Timer from '../../components/Timer';
@@ -17,7 +17,7 @@ const GRID_SIZES = {
 };
 
 // Generate a valid Latin square
-function generateLatinSquare(size) {
+function generateLatinSquare(size, random = Math.random) {
   const grid = Array(size).fill(null).map(() => Array(size).fill(0));
 
   function isValid(grid, row, col, num) {
@@ -33,7 +33,7 @@ function generateLatinSquare(size) {
 
     const nums = Array.from({ length: size }, (_, i) => i + 1);
     for (let i = nums.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [nums[i], nums[j]] = [nums[j], nums[i]];
     }
 
@@ -87,8 +87,9 @@ function generateDots(solution, size) {
   return { horizontalDots, verticalDots };
 }
 
-function generatePuzzle(size) {
-  const solution = generateLatinSquare(size);
+function generatePuzzle(size, seed = Date.now()) {
+  const random = createSeededRandom(seed);
+  const solution = generateLatinSquare(size, random);
   const { horizontalDots, verticalDots } = generateDots(solution, size);
 
   return { solution, horizontalDots, verticalDots, size };

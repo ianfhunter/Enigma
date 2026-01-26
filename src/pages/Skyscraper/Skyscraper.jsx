@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Skyscraper.module.css';
 
 const GRID_SIZES = {
@@ -195,7 +196,8 @@ export default function Skyscraper() {
 
     if (available.length === 0) return;
 
-    const puzzle = available[Math.floor(Math.random() * available.length)];
+    const random = createSeededRandom(Date.now());
+    const puzzle = available[Math.floor(random() * available.length)];
     const puzzleSize = puzzle.rows;
 
     setPuzzleData({

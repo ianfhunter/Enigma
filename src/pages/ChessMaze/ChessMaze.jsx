@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './ChessMaze.module.css';
 
 const PIECE_CHARS = {
@@ -146,7 +148,8 @@ function findShortestPath(pieceType, start, goal, enemies, size) {
 }
 
 // Generate a solvable puzzle - keeps trying until it finds one
-function generatePuzzle(pieceType, size, difficulty) {
+function generatePuzzle(pieceType, size, difficulty, seed) {
+  const random = createSeededRandom(seed);
   const maxAttempts = 500;
   let bestPuzzle = null;
   let bestScore = -Infinity;
@@ -157,12 +160,12 @@ function generatePuzzle(pieceType, size, difficulty) {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     // Random start and goal positions
     const start = {
-      row: Math.floor(Math.random() * size),
-      col: Math.floor(Math.random() * 2), // Start on left side
+      row: Math.floor(random() * size),
+      col: Math.floor(random() * 2), // Start on left side
     };
     const goal = {
-      row: Math.floor(Math.random() * size),
-      col: size - 1 - Math.floor(Math.random() * 2), // Goal on right side
+      row: Math.floor(random() * size),
+      col: size - 1 - Math.floor(random() * 2), // Goal on right side
     };
 
     // Start with no enemies and add them one by one, checking solvability each time
@@ -170,15 +173,15 @@ function generatePuzzle(pieceType, size, difficulty) {
     if (difficulty >= 5) enemyTypes.push('queen');
 
     const enemies = [];
-    const maxEnemies = targetEnemies + Math.floor(Math.random() * 3);
+    const maxEnemies = targetEnemies + Math.floor(random() * 3);
 
     // Build up enemies incrementally, ensuring puzzle stays solvable
     for (let i = 0; i < maxEnemies; i++) {
       let placed = false;
 
       for (let tries = 0; tries < 30 && !placed; tries++) {
-        const er = Math.floor(Math.random() * size);
-        const ec = Math.floor(Math.random() * size);
+        const er = Math.floor(random() * size);
+        const ec = Math.floor(random() * size);
 
         // Skip if position is taken or too close to start/goal
         if ((er === start.row && ec === start.col) ||
@@ -189,7 +192,7 @@ function generatePuzzle(pieceType, size, difficulty) {
         }
 
         const newEnemy = {
-          type: enemyTypes[Math.floor(Math.random() * enemyTypes.length)],
+          type: enemyTypes[Math.floor(random() * enemyTypes.length)],
           row: er,
           col: ec,
         };
@@ -258,6 +261,7 @@ export default function ChessMaze() {
   const { t } = useTranslation();
   const [pieceType, setPieceType] = useState('knight');
   const [difficultyLevel, setDifficultyLevel] = useState('medium');
+  const [seed, setSeed] = useState(null);
   const [puzzle, setPuzzle] = useState(null);
   const [playerPos, setPlayerPos] = useState(null);
   const [path, setPath] = useState([]);
@@ -271,9 +275,12 @@ export default function ChessMaze() {
   const { size, difficulty: _difficulty } = DIFFICULTIES[difficultyLevel];
 
   // Initialize puzzle
-  const initializePuzzle = useCallback((piece = pieceType, diff = difficultyLevel) => {
+  const initializePuzzle = useCallback((piece = pieceType, diff = difficultyLevel, customSeed = null) => {
+    const today = getTodayDateString();
     const { size: newSize, difficulty: newDiff } = DIFFICULTIES[diff];
-    const newPuzzle = generatePuzzle(piece, newSize, newDiff);
+    const gameSeed = customSeed ?? stringToSeed(`chessmaze-${today}-${piece}-${diff}`);
+    const newPuzzle = generatePuzzle(piece, newSize, newDiff, gameSeed);
+    setSeed(gameSeed);
     setPuzzle(newPuzzle);
     setPlayerPos(newPuzzle.start);
     setPath([newPuzzle.start]);
@@ -407,6 +414,21 @@ export default function ChessMaze() {
       />
 
       <div className={styles.gameArea}>
+        {seed && (
+          <SeedDisplay
+            seed={seed}
+            variant="compact"
+            showNewButton={false}
+            showShare={false}
+            onSeedChange={(newSeed) => {
+              const seedNum = typeof newSeed === 'string'
+                ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+                : newSeed;
+              initializePuzzle(pieceType, difficultyLevel, seedNum);
+            }}
+          />
+        )}
+
         {/* Piece selector */}
         <div className={styles.pieceSelector}>
           {PIECE_TYPES.map(({ id, label, icon }) => (

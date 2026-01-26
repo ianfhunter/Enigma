@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Netslide.module.css';
 
 // Bitmask directions
@@ -34,25 +35,25 @@ function neighbors(idx, w, h) {
   return out;
 }
 
-function shuffled(arr) {
+function shuffled(arr, random = Math.random) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
 
-function makeTreeMasks(w, h) {
+function makeTreeMasks(w, h, random = Math.random) {
   const n = w * h;
   const masks = Array(n).fill(0);
   const visited = Array(n).fill(false);
-  const stack = [Math.floor(Math.random() * n)];
+  const stack = [Math.floor(random() * n)];
   visited[stack[0]] = true;
 
   while (stack.length) {
     const cur = stack[stack.length - 1];
-    const ns = shuffled(neighbors(cur, w, h).filter((x) => !visited[x.idx]));
+    const ns = shuffled(neighbors(cur, w, h).filter((x) => !visited[x.idx]), random);
     if (!ns.length) {
       stack.pop();
       continue;
@@ -96,15 +97,15 @@ function shiftCol(board, w, h, col, dir) {
   return next;
 }
 
-function scrambleBySlides(masks, w, h, moves = 40) {
+function scrambleBySlides(masks, w, h, moves = 40, random = Math.random) {
   let b = masks.slice();
   for (let i = 0; i < moves; i++) {
-    if (Math.random() < 0.5) {
-      const r = Math.floor(Math.random() * h);
-      b = shiftRow(b, w, r, Math.random() < 0.5 ? 'left' : 'right');
+    if (random() < 0.5) {
+      const r = Math.floor(random() * h);
+      b = shiftRow(b, w, r, random() < 0.5 ? 'left' : 'right');
     } else {
-      const c = Math.floor(Math.random() * w);
-      b = shiftCol(b, w, h, c, Math.random() < 0.5 ? 'up' : 'down');
+      const c = Math.floor(random() * w);
+      b = shiftCol(b, w, h, c, random() < 0.5 ? 'up' : 'down');
     }
   }
   return b;
@@ -181,8 +182,10 @@ export {
 export default function Netslide() {
   const { t } = useTranslation();
   const [size, setSize] = useState({ w: 7, h: 7 });
-  const [solution, setSolution] = useState(() => makeTreeMasks(7, 7));
-  const [masks, setMasks] = useState(() => scrambleBySlides(solution, 7, 7));
+  const [seed] = useState(() => Math.floor(Math.random() * 1000000));
+  const random = createSeededRandom(seed);
+  const [solution, setSolution] = useState(() => makeTreeMasks(7, 7, random));
+  const [masks, setMasks] = useState(() => scrambleBySlides(solution, 7, 7, 40, random));
   const [moves, setMoves] = useState(0);
 
   const centerIdx = Math.floor((size.h * size.w) / 2);
@@ -191,9 +194,10 @@ export default function Netslide() {
   const solved = conn.connectedCount === total && conn.edges === total - 1;
 
   const newGame = useCallback((w = size.w, h = size.h) => {
-    const sol = makeTreeMasks(w, h);
+    const newRandom = createSeededRandom(Date.now());
+    const sol = makeTreeMasks(w, h, newRandom);
     setSolution(sol);
-    setMasks(scrambleBySlides(sol, w, h));
+    setMasks(scrambleBySlides(sol, w, h, 40, newRandom));
     setMoves(0);
   }, [size.w, size.h]);
 

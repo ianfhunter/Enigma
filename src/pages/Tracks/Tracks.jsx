@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Tracks.module.css';
 
 // Simplified Tracks: mark which squares contain track (path) connecting A to B,
@@ -25,7 +27,7 @@ const DIRS = [
 ];
 
 // Generate a random path from start to end using random walk
-function generatePath(w, h, startR, startC, endR, endC) {
+function generatePath(w, h, startR, startC, endR, endC, random) {
   const visited = new Set();
   const path = [[startR, startC]];
   visited.add(`${startR},${startC}`);
@@ -61,13 +63,13 @@ function generatePath(w, h, startR, startC, endR, endC) {
 
     // Sort by distance to end (prefer getting closer) with some randomness
     neighbors.sort((a, b) => {
-      const ra = a.dist + Math.random() * 3;
-      const rb = b.dist + Math.random() * 3;
+      const ra = a.dist + random() * 3;
+      const rb = b.dist + random() * 3;
       return ra - rb;
     });
 
     // Sometimes take a random neighbor instead
-    const next = Math.random() < 0.3 ? neighbors[Math.floor(Math.random() * neighbors.length)] : neighbors[0];
+    const next = random() < 0.3 ? neighbors[Math.floor(random() * neighbors.length)] : neighbors[0];
 
     r = next.r;
     c = next.c;
@@ -84,7 +86,8 @@ function generatePath(w, h, startR, startC, endR, endC) {
 }
 
 // Generate a complete puzzle
-function generatePuzzle(size, difficulty) {
+function generatePuzzle(size, difficulty, seed) {
+  const random = createSeededRandom(seed);
   const w = size;
   const h = size;
 
@@ -93,15 +96,15 @@ function generatePuzzle(size, difficulty) {
 
   for (let attempt = 0; attempt < 50; attempt++) {
     // Random start and end positions (on edges or near edges)
-    const aR = Math.floor(Math.random() * (h - 2)) + 1;
-    const aC = Math.floor(Math.random() * (w - 2)) + 1;
-    const bR = Math.floor(Math.random() * (h - 2)) + 1;
-    const bC = Math.floor(Math.random() * (w - 2)) + 1;
+    const aR = Math.floor(random() * (h - 2)) + 1;
+    const aC = Math.floor(random() * (w - 2)) + 1;
+    const bR = Math.floor(random() * (h - 2)) + 1;
+    const bC = Math.floor(random() * (w - 2)) + 1;
 
     // Ensure A and B are far enough apart
     if (Math.abs(aR - bR) + Math.abs(aC - bC) < size / 2) continue;
 
-    const path = generatePath(w, h, aR, aC, bR, bC);
+    const path = generatePath(w, h, aR, aC, bR, bC, random);
     if (!path || path.length < minPathLen) continue;
 
     // Create solution set
@@ -112,7 +115,7 @@ function generatePuzzle(size, difficulty) {
     // Pick fixed cells (not A or B)
     const fixedCount = Math.max(2, Math.floor(path.length * fixedRatio));
     const middleCells = path.slice(1, -1); // Exclude A and B
-    const shuffled = [...middleCells].sort(() => Math.random() - 0.5);
+    const shuffled = [...middleCells].sort(() => random() - 0.5);
     const fixedCells = shuffled.slice(0, fixedCount);
     const fixed = new Set(fixedCells.map(([r, c]) => rcToIdx(r, c, w)));
 
@@ -154,8 +157,8 @@ function generatePuzzle(size, difficulty) {
   colClues[w - 1] = 1;
 
   // sprinkle randomness so tests can detect generation failures
-  const randIdx1 = Math.floor(Math.random() * cells);
-  const randIdx2 = Math.floor(Math.random() * cells);
+  const randIdx1 = Math.floor(random() * cells);
+  const randIdx2 = Math.floor(random() * cells);
   solution.add(randIdx1);
   solution.add(randIdx2);
   fixed.add(randIdx1);
@@ -266,16 +269,17 @@ export default function Tracks() {
   const [difficulty, setDifficulty] = useState('medium');
   const [puz, setPuz] = useState(null);
   const [marks, setMarks] = useState([]);
+  const [seed, setSeed] = useState(() => stringToSeed(`tracks-${getTodayDateString()}`));
 
   const generateNew = useCallback(() => {
-    const p = generatePuzzle(size, difficulty);
+    const p = generatePuzzle(size, difficulty, seed);
     setPuz(p);
     const m = new Array(p.w * p.h).fill(0);
     m[p.a] = 1;
     m[p.b] = 1;
     for (const i of p.fixed) m[i] = 1;
     setMarks(m);
-  }, [size, difficulty]);
+  }, [size, difficulty, seed]);
 
   useEffect(() => {
     generateNew();
@@ -405,6 +409,23 @@ export default function Tracks() {
           </div>
         </div>
       )}
+
+      <div className={styles.controls}>
+        <button className={styles.button} onClick={reset}>
+          {t('common.reset', 'Reset')}
+        </button>
+        <button className={styles.button} onClick={() => setSeed(stringToSeed(getTodayDateString() + Date.now()))}>
+          {t('common.newPuzzle', 'New Puzzle')}
+        </button>
+      </div>
+
+      <SeedDisplay
+        seed={seed}
+        variant="compact"
+        showNewButton={false}
+        showShare={true}
+        onSeedChange={(newSeed) => setSeed(newSeed)}
+      />
     </div>
   );
 }

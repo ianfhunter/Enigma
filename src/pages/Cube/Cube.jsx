@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Cube.module.css';
 
 // Faces: U, D, N, S, W, E (relative to screen)
@@ -97,10 +98,10 @@ function CubeNet({ ori }) {
   );
 }
 
-function makeGridBlues() {
+function makeGridBlues(random = Math.random) {
   const idxs = Array.from({ length: 16 }, (_, i) => i);
   for (let i = idxs.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [idxs[i], idxs[j]] = [idxs[j], idxs[i]];
   }
   const blues = new Set(idxs.slice(0, 6));
@@ -109,8 +110,10 @@ function makeGridBlues() {
 
 export default function CubeGame() {
   const { t } = useTranslation();
-  const [blueSquares, setBlueSquares] = useState(() => makeGridBlues());
-  const [pos, setPos] = useState(() => Math.floor(Math.random() * 16));
+  const [seed] = useState(() => Math.floor(Math.random() * 1000000));
+  const random = createSeededRandom(seed);
+  const [blueSquares, setBlueSquares] = useState(() => makeGridBlues(random));
+  const [pos, setPos] = useState(() => Math.floor(random() * 16));
   const [ori, setOri] = useState(() => ({ U: false, D: false, N: false, S: false, W: false, E: false }));
   const [moves, setMoves] = useState(0);
   const [lastMove, setLastMove] = useState(null);
@@ -120,8 +123,9 @@ export default function CubeGame() {
   const solved = blueFaces === 6;
 
   const newGame = useCallback(() => {
-    setBlueSquares(makeGridBlues());
-    setPos(Math.floor(Math.random() * 16));
+    const newRandom = createSeededRandom(Date.now());
+    setBlueSquares(makeGridBlues(newRandom));
+    setPos(Math.floor(newRandom() * 16));
     setOri({ U: false, D: false, N: false, S: false, W: false, E: false });
     setMoves(0);
     setLastMove(null);

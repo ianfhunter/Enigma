@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Pearl.module.css';
 
 function idxH(r, c, w) {

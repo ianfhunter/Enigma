@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
-import { getCommonWordsByLength } from '../../data/wordUtils';
+import { getCommonWordsByLength, createSeededRandom } from '../../data/wordUtils';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
@@ -27,13 +27,13 @@ function getWordPool() {
   return SNAKE_WORDS_CACHE;
 }
 
-function generateSnakePath(word, gridSize) {
+function generateSnakePath(word, gridSize, random) {
   const grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
   const path = [];
 
   // Start position
-  let r = Math.floor(Math.random() * (gridSize - 1));
-  let c = Math.floor(Math.random() * (gridSize - 1));
+  let r = Math.floor(random() * (gridSize - 1));
+  let c = Math.floor(random() * (gridSize - 1));
 
   grid[r][c] = word[0];
   path.push([r, c]);
@@ -48,12 +48,12 @@ function generateSnakePath(word, gridSize) {
 
     if (directions.length === 0) {
       // Dead end, restart
-      return generateSnakePath(word, gridSize);
+      return generateSnakePath(word, gridSize, random);
     }
 
     // Shuffle directions
     for (let j = directions.length - 1; j > 0; j--) {
-      const k = Math.floor(Math.random() * (j + 1));
+      const k = Math.floor(random() * (j + 1));
       [directions[j], directions[k]] = [directions[k], directions[j]];
     }
 
@@ -67,7 +67,7 @@ function generateSnakePath(word, gridSize) {
   for (let row = 0; row < gridSize; row++) {
     for (let col = 0; col < gridSize; col++) {
       if (grid[row][col] === '') {
-        grid[row][col] = alphabet[Math.floor(Math.random() * 26)];
+        grid[row][col] = alphabet[Math.floor(random() * 26)];
       }
     }
   }
@@ -75,12 +75,13 @@ function generateSnakePath(word, gridSize) {
   return { grid, path, word };
 }
 
-function generatePuzzle() {
+function generatePuzzle(seed = Date.now()) {
+  const random = createSeededRandom(seed);
   const wordPool = getWordPool();
-  const word = wordPool[Math.floor(Math.random() * wordPool.length)];
+  const word = wordPool[Math.floor(random() * wordPool.length)];
   const gridSize = Math.max(5, Math.ceil(Math.sqrt(word.length * 2)));
 
-  return generateSnakePath(word, gridSize);
+  return generateSnakePath(word, gridSize, random);
 }
 
 // Export helpers for testing

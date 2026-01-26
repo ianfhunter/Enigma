@@ -4,9 +4,10 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
-import { createSeededRandom } from '../../data/wordUtils';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Numberlink.module.css';
 import puzzleDataset from '../../../public/datasets/numberlinkPuzzles.json';
 
@@ -156,7 +157,7 @@ export default function Numberlink() {
     const cats = categoriesByDifficulty[difficulties[0] || 'easy'] || [];
     return cats[0] || 'small';
   });
-  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1000000));
+  const [seed, setSeed] = useState(() => stringToSeed(`numberlink-${getTodayDateString()}`));
   const [puzzleData, setPuzzleData] = useState(null);
   const [paths, setPaths] = useState({}); // { pairId: [{r, c}, ...] }
   const [currentPath, setCurrentPath] = useState(null); // Currently drawing path
@@ -549,10 +550,18 @@ export default function Numberlink() {
             onGiveUp={handleGiveUp}
             disabled={!isPlaying}
           />
-          <button className={styles.newGameBtn} onClick={() => setSeed(Math.floor(Math.random() * 1000000))}>
+          <button className={styles.newGameBtn} onClick={() => setSeed(stringToSeed(getTodayDateString() + Date.now()))}>
             {gameState === 'won' || gameState === 'gaveUp' ? t('playAgain', 'Play Again') : t('newPuzzle', 'New Puzzle')}
           </button>
         </div>
+
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={true}
+          onSeedChange={(newSeed) => setSeed(newSeed)}
+        />
       </div>
     </div>
   );

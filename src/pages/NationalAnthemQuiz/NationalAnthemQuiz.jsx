@@ -3,27 +3,29 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './NationalAnthemQuiz.module.css';
 
 const TOTAL_ROUNDS = 10;
 
 // Shuffle array helper
-const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+const shuffle = (arr, random) => [...arr].sort(() => random() - 0.5);
 
 // Generate wrong options for countries
-const getRandomCountryOptions = (data, correct, count = 3) => {
+const getRandomCountryOptions = (data, correct, random, count = 3) => {
   const allCountries = data.map(a => a.countryName);
   const wrongOptions = allCountries.filter(c => c !== correct);
-  const selected = shuffle(wrongOptions).slice(0, count);
-  return shuffle([correct, ...selected]);
+  const selected = shuffle(wrongOptions, random).slice(0, count);
+  return shuffle([correct, ...selected], random);
 };
 
 // Get a random anthem
-const getRandomAnthem = (data, exclude = []) => {
+const getRandomAnthem = (data, exclude, random) => {
   const available = data.filter(a => !exclude.includes(a.isoCode));
   if (available.length === 0) return null;
-  return available[Math.floor(Math.random() * available.length)];
+  return available[Math.floor(random() * available.length)];
 };
 
 // Get continent/region for a country (simple mapping for hints)
@@ -99,6 +101,8 @@ export default function NationalAnthemQuiz() {
   const [audioLoaded, setAudioLoaded] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [seed, setSeed] = useState(() => stringToSeed(`national-anthem-quiz-${getTodayDateString()}`));
+  const [roundNumber, setRoundNumber] = useState(0);
   const audioRef = useRef(null);
 
   const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('national-anthem-quiz', {
@@ -145,14 +149,15 @@ export default function NationalAnthemQuiz() {
       audioRef.current = null;
     }
 
-    const anthem = getRandomAnthem(anthems, usedAnthems);
+    const random = createSeededRandom(seed + roundNumber);
+    const anthem = getRandomAnthem(anthems, usedAnthems, random);
     if (!anthem) {
       setGameOver(true);
       return;
     }
 
     setCurrentAnthem(anthem);
-    setOptions(getRandomCountryOptions(anthems, anthem.countryName));
+    setOptions(getRandomCountryOptions(anthems, anthem.countryName, random));
     setSelectedAnswer(null);
     setIsCorrect(null);
     setUsedAnthems(prev => [...prev, anthem.isoCode]);
@@ -168,7 +173,7 @@ export default function NationalAnthemQuiz() {
     audio.addEventListener('error', () => setAudioError(true));
     audio.addEventListener('ended', () => setIsPlaying(false));
     audioRef.current = audio;
-  }, [usedAnthems, anthems]);
+  }, [usedAnthems, anthems, seed, roundNumber]);
 
   const startGame = (selectedMode) => {
     setMode(selectedMode);
@@ -180,6 +185,7 @@ export default function NationalAnthemQuiz() {
     setSelectedAnswer(null);
     setIsCorrect(null);
     setCurrentAnthem(null);
+    setRoundNumber(0);
   };
 
   useEffect(() => {
@@ -247,6 +253,7 @@ export default function NationalAnthemQuiz() {
     }
 
     setRound(prev => prev + 1);
+    setRoundNumber(prev => prev + 1);
     setCurrentAnthem(null);
   };
 
@@ -364,26 +371,39 @@ export default function NationalAnthemQuiz() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <button className={styles.backLink} onClick={backToMenu}>← Back to Menu</button>
-        <h1 className={styles.title}>🎺 National Anthem Quiz</h1>
+        <button className={styles.backLink} onClick={backToMenu}>← {t('common.backToMenu', 'Back to Menu')}</button>
+        <h1 className={styles.title}>🎺 {t('nationalAnthemQuiz.title', 'National Anthem Quiz')}</h1>
 
         <div className={styles.gameInfo}>
           {mode === 'challenge' && (
             <>
-              <span className={styles.modeBadge}>Challenge</span>
-              <span className={styles.roundInfo}>{t('common.round')} {round}/{TOTAL_ROUNDS}</span>
+              <span className={styles.modeBadge}>{t('nationalAnthemQuiz.challengeMode', 'Challenge')}</span>
+              <span className={styles.roundInfo}>{t('common.round', 'Round')} {round}/{TOTAL_ROUNDS}</span>
             </>
           )}
           {mode === 'endless' && (
             <>
-              <span className={styles.modeBadge}>Endless</span>
-              <span className={styles.roundInfo}>{t('common.round')} {round}</span>
+              <span className={styles.modeBadge}>{t('nationalAnthemQuiz.endlessMode', 'Endless')}</span>
+              <span className={styles.roundInfo}>{t('common.round', 'Round')} {round}</span>
             </>
           )}
-          <span className={styles.scoreInfo}>{t('gameStatus.score')}: {score}</span>
-          {streak > 1 && <span className={styles.streakBadge}>🔥 {streak} streak</span>}
+          <span className={styles.scoreInfo}>{t('gameStatus.score', 'Score')}: {score}</span>
+          {streak > 1 && <span className={styles.streakBadge}>🔥 {streak} {t('common.streak', 'streak')}</span>}
         </div>
       </div>
+
+      <SeedDisplay
+        seed={seed}
+        variant="compact"
+        showNewButton={false}
+        showShare={false}
+        onSeedChange={(newSeed) => {
+          setSeed(newSeed);
+          setRoundNumber(0);
+          setUsedAnthems([]);
+          setCurrentAnthem(null);
+        }}
+      />
 
       {currentAnthem && (
         <div className={styles.gameArea}>
@@ -427,17 +447,17 @@ export default function NationalAnthemQuiz() {
             )}
           </div>
 
-          <p className={styles.question}>Which country does this anthem belong to?</p>
+          <p className={styles.question}>{t('nationalAnthemQuiz.question', 'Which country does this anthem belong to?')}</p>
 
           {selectedAnswer === null && !showHint && (
             <button className={styles.hintBtn} onClick={() => setShowHint(true)}>
-              💡 Show Region Hint
+              💡 {t('nationalAnthemQuiz.showRegionHint', 'Show Region Hint')}
             </button>
           )}
 
           {showHint && selectedAnswer === null && (
             <div className={styles.hint}>
-              <span className={styles.hintLabel}>{t('common.region')}:</span> {getRegion(currentAnthem.isoCode)}
+              <span className={styles.hintLabel}>{t('common.region', 'Region')}:</span> {getRegion(currentAnthem.isoCode)}
             </div>
           )}
 

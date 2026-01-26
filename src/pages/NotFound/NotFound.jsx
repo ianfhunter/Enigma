@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './NotFound.module.css';
 
 const puzzlePieces = ['🧩', '🎮', '🎲', '🎯', '🃏', '♟️', '🎰', '🎪'];

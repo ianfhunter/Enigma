@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './PeriodicTableQuiz.module.css';
 
 const MODES = [
@@ -36,6 +38,8 @@ export default function PeriodicTableQuiz() {
   const [result, setResult] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [seed, setSeed] = useState(() => stringToSeed(`periodic-table-quiz-${getTodayDateString()}`));
+  const [roundNumber, setRoundNumber] = useState(0);
   const inputRef = useRef(null);
   const suggestionsRef = useRef(null);
 
@@ -76,9 +80,10 @@ export default function PeriodicTableQuiz() {
 
   const pickRandom = useCallback(() => {
     if (!elements.length) return null;
-    const idx = Math.floor(Math.random() * elements.length);
+    const random = createSeededRandom(seed + roundNumber);
+    const idx = Math.floor(random() * elements.length);
     return elements[idx];
-  }, [elements]);
+  }, [elements, seed, roundNumber]);
 
   const startRound = useCallback(() => {
     const next = pickRandom();
@@ -88,6 +93,7 @@ export default function PeriodicTableQuiz() {
     setResult(null);
     setShowSuggestions(false);
     setSelectedSuggestionIndex(-1);
+    setRoundNumber(prev => prev + 1);
     // Focus input after a short delay
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [pickRandom]);
@@ -193,13 +199,13 @@ export default function PeriodicTableQuiz() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Periodic Table Quiz"
-        instructions="Test your knowledge of element symbols and names!"
+        title={t('periodicTableQuiz.title', 'Periodic Table Quiz')}
+        instructions={t('periodicTableQuiz.instructions', 'Test your knowledge of element symbols and names!')}
       />
 
       <div className={styles.controls}>
         <label className={styles.label}>
-          Mode
+          {t('common.mode', 'Mode')}
           <select
             className={styles.select}
             value={mode.id}
@@ -215,7 +221,19 @@ export default function PeriodicTableQuiz() {
         </label>
       </div>
 
-      {!data && <div className={styles.card}>Loading elements...</div>}
+      <SeedDisplay
+        seed={seed}
+        variant="compact"
+        showNewButton={false}
+        showShare={false}
+        onSeedChange={(newSeed) => {
+          setSeed(newSeed);
+          setRoundNumber(0);
+          setCurrent(null);
+        }}
+      />
+
+      {!data && <div className={styles.card}>{t('common.loadingElements', 'Loading elements...')}</div>}
 
       {data && current && (
         <>

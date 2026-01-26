@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './LanguageQuiz.module.css';
 
-function pickRandomCountry(countries, randomFn = Math.random) {
+function pickRandomCountry(countries, randomFn) {
   if (!countries.length) return null;
   const idx = Math.floor(randomFn() * countries.length);
   return countries[idx];
@@ -44,6 +46,8 @@ export default function LanguageQuiz() {
   const [current, setCurrent] = useState(null);
   const [guessLanguages, setGuessLanguages] = useState(() => new Set());
   const [result, setResult] = useState(null);
+  const [seed, setSeed] = useState(() => stringToSeed(`language-quiz-${getTodayDateString()}`));
+  const [roundNumber, setRoundNumber] = useState(0);
 
   const { stats, recordWin, recordLoss, winRate } = useGameStats('language-quiz', {
     trackBestTime: false,
@@ -66,7 +70,10 @@ export default function LanguageQuiz() {
   const countries = useMemo(() => data?.countries || [], [data]);
   const allLanguages = useMemo(() => data?.allLanguages || [], [data]);
 
-  const pickRandom = useCallback(() => pickRandomCountry(countries), [countries]);
+  const pickRandom = useCallback(() => {
+    const random = createSeededRandom(seed + roundNumber);
+    return pickRandomCountry(countries, random);
+  }, [countries, seed, roundNumber]);
 
   const startRound = useCallback(() => {
     const next = pickRandom();
@@ -74,6 +81,7 @@ export default function LanguageQuiz() {
     setCurrent(next);
     setGuessLanguages(new Set());
     setResult(null);
+    setRoundNumber(prev => prev + 1);
   }, [pickRandom]);
 
   useEffect(() => {
@@ -107,11 +115,23 @@ export default function LanguageQuiz() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Language Quiz"
-        instructions="Select the official language(s) of each country. Some countries have multiple official languages!"
+        title={t('languageQuiz.title', 'Language Quiz')}
+        instructions={t('languageQuiz.instructions', 'Select the official language(s) of each country. Some countries have multiple official languages!')}
       />
 
-      {!data && <div className={styles.card}>{t('common.loadingCountries')}</div>}
+      <SeedDisplay
+        seed={seed}
+        variant="compact"
+        showNewButton={false}
+        showShare={false}
+        onSeedChange={(newSeed) => {
+          setSeed(newSeed);
+          setRoundNumber(0);
+          setCurrent(null);
+        }}
+      />
+
+      {!data && <div className={styles.card}>{t('common.loadingCountries', 'Loading countries...')}</div>}
 
       {data && current && (
         <>

@@ -8,8 +8,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
 import { BODY_SYSTEMS, getPartsBySystem, getRandomPart, SYSTEM_IDS } from '../../data/anatomyData';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import BodySVG from './BodySVG';
 import styles from './AnatomyQuiz.module.css';
 
@@ -25,6 +27,8 @@ export default function AnatomyQuiz() {
   const [message, setMessage] = useState(null);
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [seed, setSeed] = useState(() => stringToSeed(`anatomy-quiz-${getTodayDateString()}`));
+  const [roundNumber, setRoundNumber] = useState(0);
 
   const { stats, updateStats, recordWin, recordGiveUp, winRate } = useGameStats('anatomy-quiz', {
     trackBestTime: false,
@@ -50,11 +54,12 @@ export default function AnatomyQuiz() {
     const parts = getActiveParts();
     if (parts.length === 0) return;
 
+    const random = createSeededRandom(seed + roundNumber);
     // Avoid picking the same part twice in a row
     let newPart;
     let attempts = 0;
     do {
-      const idx = Math.floor(Math.random() * parts.length);
+      const idx = Math.floor(random() * parts.length);
       newPart = parts[idx];
       attempts++;
     } while (newPart?.id === currentPart?.id && attempts < 10 && parts.length > 1);
@@ -66,7 +71,8 @@ export default function AnatomyQuiz() {
     setWrongAttempts(0);
     setShowHints(false);
     setIsTransitioning(false);
-  }, [getActiveParts, currentPart]);
+    setRoundNumber(prev => prev + 1);
+  }, [getActiveParts, currentPart, seed, roundNumber]);
 
   // Initialize on mount only - never change target when switching systems
   useEffect(() => {
@@ -171,10 +177,24 @@ export default function AnatomyQuiz() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Anatomy Quiz"
+        title={t('anatomyQuiz.title', 'Anatomy Quiz')}
         instructions={currentPart ? (
-          <>Click on the <strong>{currentPart.name}</strong></>
-        ) : 'Loading...'}
+          <>
+            {t('anatomyQuiz.instructions', 'Click on the')} <strong>{currentPart.name}</strong>
+          </>
+        ) : t('common.loading', 'Loading...')}
+      />
+
+      <SeedDisplay
+        seed={seed}
+        variant="compact"
+        showNewButton={false}
+        showShare={false}
+        onSeedChange={(newSeed) => {
+          setSeed(newSeed);
+          setRoundNumber(0);
+          setCurrentPart(null);
+        }}
       />
 
       {/* System selector */}

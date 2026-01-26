@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Dominosa.module.css';
 
-function shuffled(arr) {
+function shuffled(arr, random = Math.random) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
@@ -62,17 +63,18 @@ function genTiling(w, h) {
   return placements;
 }
 
-function buildPuzzle(maxN) {
+function buildPuzzle(maxN, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   const w = maxN + 2;
   const h = maxN + 1;
-  const pairs = shuffled(pairsUpTo(maxN));
+  const pairs = shuffled(pairsUpTo(maxN), random);
   const tiling = genTiling(w, h);
   // Assign pair to each placement
   const numbers = Array.from({ length: h }, () => Array(w).fill(null));
   for (let i = 0; i < tiling.length; i++) {
     const [[r1, c1], [r2, c2]] = tiling[i];
     const [a, b] = pairs[i];
-    if (Math.random() < 0.5) {
+    if (random() < 0.5) {
       numbers[r1][c1] = a;
       numbers[r2][c2] = b;
     } else {

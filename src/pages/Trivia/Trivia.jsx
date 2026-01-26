@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import StatsPanel from '../../components/StatsPanel';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Trivia.module.css';
 
 // Import trivia data files
@@ -91,7 +93,7 @@ const getAllTrivia = () => {
 };
 
 // Shuffle array helper
-const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+const shuffle = (arr, random) => [...arr].sort(() => random() - 0.5);
 
 // Export helpers for testing
 export {
@@ -113,6 +115,7 @@ export default function Trivia() {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [seed, setSeed] = useState(() => stringToSeed(`trivia-${getTodayDateString()}`));
   const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('trivia', {
     trackBestTime: false,
     trackBestScore: true,
@@ -135,6 +138,7 @@ export default function Trivia() {
   }, [allTrivia]);
 
   const startGame = (selectedMode, selectedCategory) => {
+    const random = createSeededRandom(seed);
     setMode(selectedMode);
     setCategory(selectedCategory);
 
@@ -143,7 +147,7 @@ export default function Trivia() {
       ? allTrivia
       : allTrivia.filter(q => q.category === selectedCategory);
 
-    const shuffled = shuffle(filtered);
+    const shuffled = shuffle(filtered, random);
     const gameQuestions = selectedMode === 'challenge'
       ? shuffled.slice(0, TOTAL_ROUNDS)
       : shuffled;

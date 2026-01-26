@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Shinro.module.css';
 
 const GRID_SIZES = {
@@ -77,7 +78,7 @@ function generatePuzzle(size) {
 
   // Shuffle arrow positions
   for (let i = arrowPositions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [arrowPositions[i], arrowPositions[j]] = [arrowPositions[j], arrowPositions[i]];
   }
 
@@ -105,7 +106,7 @@ function generatePuzzle(size) {
     }
 
     if (validDirs.length > 0) {
-      const dir = validDirs[Math.floor(Math.random() * validDirs.length)];
+      const dir = validDirs[Math.floor(random() * validDirs.length)];
       grid[r][c] = dir;
     }
   }

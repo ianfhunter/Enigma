@@ -5,8 +5,10 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './HotaruBeam.module.css';
 
 const GRID_SIZES = {
@@ -29,13 +31,13 @@ const DIFFICULTY = {
 // - Lines connect orthogonally adjacent cells through their edges
 
 // Generate a loop using random walk that creates a closed path
-function generateRandomLoop(size) {
+function generateRandomLoop(size, random) {
   const solutionH = Array(size).fill(null).map(() => Array(size - 1).fill(false));
   const solutionV = Array(size - 1).fill(null).map(() => Array(size).fill(false));
 
   // Pick a random starting point not on edges
-  const startR = 1 + Math.floor(Math.random() * (size - 2));
-  const startC = 1 + Math.floor(Math.random() * (size - 2));
+  const startR = 1 + Math.floor(random() * (size - 2));
+  const startC = 1 + Math.floor(random() * (size - 2));
 
   // Perform a random walk to create a loop
   const path = [[startR, startC]];
@@ -53,7 +55,7 @@ function generateRandomLoop(size) {
   const maxSteps = size * size;
   for (let step = 0; step < maxSteps; step++) {
     // Shuffle directions
-    const shuffled = [...dirs].sort(() => Math.random() - 0.5);
+    const shuffled = [...dirs].sort(() => random() - 0.5);
     let moved = false;
 
     for (const [dr, dc] of shuffled) {
@@ -118,7 +120,7 @@ function addEdge(r1, c1, r2, c2, solutionH, solutionV, size) {
 }
 
 // Generate an L-shaped or U-shaped loop
-function generateShapedLoop(size, shape) {
+function generateShapedLoop(size, shape, random) {
   const solutionH = Array(size).fill(null).map(() => Array(size - 1).fill(false));
   const solutionV = Array(size - 1).fill(null).map(() => Array(size).fill(false));
 
@@ -128,9 +130,9 @@ function generateShapedLoop(size, shape) {
 
   if (shape === 'L') {
     // L-shape: vertical bar + horizontal bar at bottom
-    const vHeight = 2 + Math.floor(Math.random() * (maxH - 2));
-    const hWidth = 2 + Math.floor(Math.random() * (maxW - 2));
-    const thickness = 1 + Math.floor(Math.random() * 2);
+    const vHeight = 2 + Math.floor(random() * (maxH - 2));
+    const hWidth = 2 + Math.floor(random() * (maxW - 2));
+    const thickness = 1 + Math.floor(random() * 2);
 
     const top = margin;
     const left = margin;
@@ -154,8 +156,8 @@ function generateShapedLoop(size, shape) {
 
   } else if (shape === 'U') {
     // U-shape
-    const width = 3 + Math.floor(Math.random() * (maxW - 3));
-    const height = 3 + Math.floor(Math.random() * (maxH - 3));
+    const width = 3 + Math.floor(random() * (maxW - 3));
+    const height = 3 + Math.floor(random() * (maxH - 3));
     const thickness = 1;
     const gapWidth = Math.max(1, width - 2 * thickness);
 
@@ -186,8 +188,8 @@ function generateShapedLoop(size, shape) {
 
   } else if (shape === 'S') {
     // S-shape / staircase
-    const width = 4 + Math.floor(Math.random() * (maxW - 4));
-    const height = 4 + Math.floor(Math.random() * (maxH - 4));
+    const width = 4 + Math.floor(random() * (maxW - 4));
+    const height = 4 + Math.floor(random() * (maxH - 4));
     const midH = Math.floor(height / 2);
     const midW = Math.floor(width / 2);
 
@@ -211,17 +213,17 @@ function generateShapedLoop(size, shape) {
 }
 
 // Generate a simple rectangle with optional notches
-function generateRectWithNotches(size) {
+function generateRectWithNotches(size, random) {
   const solutionH = Array(size).fill(null).map(() => Array(size - 1).fill(false));
   const solutionV = Array(size - 1).fill(null).map(() => Array(size).fill(false));
 
   const minLoopSize = 3;
-  const margin = Math.floor(Math.random() * 2);
+  const margin = Math.floor(random() * 2);
 
   const loopTop = margin;
   const loopLeft = margin;
-  const loopHeight = minLoopSize + Math.floor(Math.random() * (size - margin - minLoopSize));
-  const loopWidth = minLoopSize + Math.floor(Math.random() * (size - margin - minLoopSize));
+  const loopHeight = minLoopSize + Math.floor(random() * (size - margin - minLoopSize));
+  const loopWidth = minLoopSize + Math.floor(random() * (size - margin - minLoopSize));
 
   const loopBottom = loopTop + loopHeight - 1;
   const loopRight = loopLeft + loopWidth - 1;
@@ -233,13 +235,13 @@ function generateRectWithNotches(size) {
   for (let r = loopTop; r < loopBottom; r++) solutionV[r][loopRight] = true;
 
   // Add notches (indentations) randomly
-  const notchCount = Math.floor(Math.random() * 3);
+  const notchCount = Math.floor(random() * 3);
   for (let n = 0; n < notchCount; n++) {
-    const side = Math.floor(Math.random() * 4);
+    const side = Math.floor(random() * 4);
 
     if (side === 0 && loopRight - loopLeft > 3) {
       // Top notch
-      const notchPos = loopLeft + 1 + Math.floor(Math.random() * (loopRight - loopLeft - 2));
+      const notchPos = loopLeft + 1 + Math.floor(random() * (loopRight - loopLeft - 2));
       const notchDepth = 1;
       if (loopTop + notchDepth < loopBottom - 1) {
         solutionH[loopTop][notchPos] = false;
@@ -250,7 +252,7 @@ function generateRectWithNotches(size) {
       }
     } else if (side === 1 && loopRight - loopLeft > 3) {
       // Bottom notch
-      const notchPos = loopLeft + 1 + Math.floor(Math.random() * (loopRight - loopLeft - 2));
+      const notchPos = loopLeft + 1 + Math.floor(random() * (loopRight - loopLeft - 2));
       const notchDepth = 1;
       if (loopBottom - notchDepth > loopTop + 1) {
         solutionH[loopBottom][notchPos] = false;
@@ -261,7 +263,7 @@ function generateRectWithNotches(size) {
       }
     } else if (side === 2 && loopBottom - loopTop > 3) {
       // Left notch
-      const notchPos = loopTop + 1 + Math.floor(Math.random() * (loopBottom - loopTop - 2));
+      const notchPos = loopTop + 1 + Math.floor(random() * (loopBottom - loopTop - 2));
       const notchDepth = 1;
       if (loopLeft + notchDepth < loopRight - 1) {
         solutionV[notchPos][loopLeft] = false;
@@ -272,7 +274,7 @@ function generateRectWithNotches(size) {
       }
     } else if (side === 3 && loopBottom - loopTop > 3) {
       // Right notch
-      const notchPos = loopTop + 1 + Math.floor(Math.random() * (loopBottom - loopTop - 2));
+      const notchPos = loopTop + 1 + Math.floor(random() * (loopBottom - loopTop - 2));
       const notchDepth = 1;
       if (loopRight - notchDepth > loopLeft + 1) {
         solutionV[notchPos][loopRight] = false;
@@ -287,44 +289,45 @@ function generateRectWithNotches(size) {
   return { solutionH, solutionV };
 }
 
-function generatePuzzle(size, difficultyKey) {
+function generatePuzzle(size, difficultyKey, seed) {
   const { circles } = DIFFICULTY[difficultyKey];
+  const random = createSeededRandom(seed);
 
   let solutionH, solutionV;
 
   // Choose a random loop generation method
-  const method = Math.floor(Math.random() * 5);
+  const method = Math.floor(random() * 5);
 
   if (method === 0) {
     // Random walk loop
-    const result = generateRandomLoop(size);
+    const result = generateRandomLoop(size, random);
     if (result.valid) {
       solutionH = result.solutionH;
       solutionV = result.solutionV;
     } else {
       // Fallback to rectangle with notches
-      const fallback = generateRectWithNotches(size);
+      const fallback = generateRectWithNotches(size, random);
       solutionH = fallback.solutionH;
       solutionV = fallback.solutionV;
     }
   } else if (method === 1) {
     // L-shaped loop
-    const result = generateShapedLoop(size, 'L');
+    const result = generateShapedLoop(size, 'L', random);
     solutionH = result.solutionH;
     solutionV = result.solutionV;
   } else if (method === 2) {
     // U-shaped loop
-    const result = generateShapedLoop(size, 'U');
+    const result = generateShapedLoop(size, 'U', random);
     solutionH = result.solutionH;
     solutionV = result.solutionV;
   } else if (method === 3) {
     // S-shaped loop
-    const result = generateShapedLoop(size, 'S');
+    const result = generateShapedLoop(size, 'S', random);
     solutionH = result.solutionH;
     solutionV = result.solutionV;
   } else {
     // Rectangle with notches
-    const result = generateRectWithNotches(size);
+    const result = generateRectWithNotches(size, random);
     solutionH = result.solutionH;
     solutionV = result.solutionV;
   }
@@ -345,7 +348,7 @@ function generatePuzzle(size, difficultyKey) {
 
   // Shuffle loop cells and place circles
   for (let i = loopCells.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [loopCells[i], loopCells[j]] = [loopCells[j], loopCells[i]];
   }
 
@@ -542,6 +545,7 @@ export default function HotaruBeam() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [hEdges, setHEdges] = useState([]);
   const [vEdges, setVEdges] = useState([]);
+  const [seed, setSeed] = useState(() => stringToSeed(`hotarubeam-${getTodayDateString()}`));
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
@@ -549,13 +553,13 @@ export default function HotaruBeam() {
   const size = GRID_SIZES[sizeKey];
 
   const initGame = useCallback(() => {
-    const data = generatePuzzle(size, difficultyKey);
+    const data = generatePuzzle(size, difficultyKey, seed);
     setPuzzleData(data);
     setHEdges(Array(size).fill(null).map(() => Array(size - 1).fill(false)));
     setVEdges(Array(size - 1).fill(null).map(() => Array(size).fill(false)));
     resetGameState();
     setErrors(new Set());
-  }, [size, difficultyKey, resetGameState]);
+  }, [size, difficultyKey, seed, resetGameState]);
 
   // Reset edges immediately when size changes to prevent dimension mismatches
   useEffect(() => {
@@ -772,16 +776,24 @@ export default function HotaruBeam() {
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
-            Reset
+            {t('common.reset', 'Reset')}
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
             disabled={gameState !== 'playing'}
           />
-          <button className={styles.newGameBtn} onClick={initGame}>
-            New Puzzle
+          <button className={styles.newGameBtn} onClick={() => setSeed(stringToSeed(getTodayDateString() + Date.now()))}>
+            {t('common.newPuzzle', 'New Puzzle')}
           </button>
         </div>
+
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={true}
+          onSeedChange={(newSeed) => setSeed(newSeed)}
+        />
       </div>
     </div>
   );

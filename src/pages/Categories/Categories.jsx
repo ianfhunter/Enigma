@@ -235,7 +235,8 @@ export default function Categories() {
   };
 
   const handleNewGame = () => {
-    const randomSeed = Math.floor(Math.random() * 2147483647);
+    const random = createSeededRandom(Date.now());
+    const randomSeed = Math.floor(random() * 2147483647);
     initGame(randomSeed);
   };
 

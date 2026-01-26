@@ -4,8 +4,10 @@ import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Futoshiki.module.css';
 
 const GRID_SIZES = {
@@ -15,7 +17,8 @@ const GRID_SIZES = {
 };
 
 // Generate a valid Futoshiki puzzle
-function generatePuzzle(size) {
+function generatePuzzle(size, seed) {
+  const random = createSeededRandom(seed);
   // Create a solved Latin square
   const solution = Array(size).fill(null).map(() => Array(size).fill(0));
 
@@ -28,10 +31,10 @@ function generatePuzzle(size) {
 
   // Shuffle rows and columns
   for (let i = 0; i < size * 3; i++) {
-    const a = Math.floor(Math.random() * size);
-    const b = Math.floor(Math.random() * size);
+    const a = Math.floor(random() * size);
+    const b = Math.floor(random() * size);
 
-    if (Math.random() > 0.5) {
+    if (random() > 0.5) {
       [solution[a], solution[b]] = [solution[b], solution[a]];
     } else {
       for (let r = 0; r < size; r++) {
@@ -47,7 +50,7 @@ function generatePuzzle(size) {
   // Add horizontal inequalities
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size - 1; c++) {
-      if (Math.random() < 0.4) { // 40% chance of inequality
+      if (random() < 0.4) { // 40% chance of inequality
         horizontal[r][c] = solution[r][c] > solution[r][c + 1] ? '>' : '<';
       }
     }
@@ -56,7 +59,7 @@ function generatePuzzle(size) {
   // Add vertical inequalities
   for (let r = 0; r < size - 1; r++) {
     for (let c = 0; c < size; c++) {
-      if (Math.random() < 0.4) {
+      if (random() < 0.4) {
         vertical[r][c] = solution[r][c] > solution[r + 1][c] ? 'v' : '^';
       }
     }
@@ -67,8 +70,8 @@ function generatePuzzle(size) {
   const cellsToRemove = Math.floor(size * size * 0.6); // Remove 60% of cells
 
   for (let i = 0; i < cellsToRemove; i++) {
-    const r = Math.floor(Math.random() * size);
-    const c = Math.floor(Math.random() * size);
+    const r = Math.floor(random() * size);
+    const c = Math.floor(random() * size);
     puzzle[r][c] = 0;
   }
 
@@ -198,6 +201,7 @@ export {
 export default function Futoshiki() {
   const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
+  const [seed, setSeed] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [initialCells, setInitialCells] = useState(new Set());
@@ -209,8 +213,11 @@ export default function Futoshiki() {
 
   const size = GRID_SIZES[sizeKey];
 
-  const initGame = useCallback(() => {
-    const data = generatePuzzle(size);
+  const initGame = useCallback((customSeed = null) => {
+    const today = getTodayDateString();
+    const gameSeed = customSeed ?? stringToSeed(`futoshiki-${today}-${size}`);
+    const data = generatePuzzle(size, gameSeed);
+    setSeed(gameSeed);
     setPuzzleData(data);
     setGrid(data.puzzle.map(row => [...row]));
 
@@ -322,6 +329,21 @@ export default function Futoshiki() {
         onChange={setSizeKey}
         className={styles.sizeSelector}
       />
+
+      {seed && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+          onSeedChange={(newSeed) => {
+            const seedNum = typeof newSeed === 'string'
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(seedNum);
+          }}
+        />
+      )}
 
       <div className={styles.gameArea}>
         <div

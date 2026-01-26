@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './FloodIt.module.css';
 
 const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6'];
@@ -17,9 +19,10 @@ const SIZES = {
   '18×18': { size: 18, maxMoves: 35 },
 };
 
-function generateBoard(size, colorCount) {
+function generateBoard(size, colorCount, seed) {
+  const random = createSeededRandom(seed);
   return Array(size).fill(null).map(() =>
-    Array(size).fill(null).map(() => Math.floor(Math.random() * colorCount))
+    Array(size).fill(null).map(() => Math.floor(random() * colorCount))
   );
 }
 
@@ -103,16 +106,17 @@ export default function FloodIt() {
   const [colorCount, setColorCount] = useState(6);
   const [board, setBoard] = useState([]);
   const [moves, setMoves] = useState(0);
+  const [seed, setSeed] = useState(() => stringToSeed(`floodit-${getTodayDateString()}`));
   const { gameState, checkWin: checkWinState, lose, reset: resetGameState, isPlaying } = useGameState();
   const [bestScores, setBestScores] = usePersistedState('flood-it-best', {});
 
   const { size, maxMoves } = SIZES[sizeKey];
 
   const initGame = useCallback(() => {
-    setBoard(generateBoard(size, colorCount));
+    setBoard(generateBoard(size, colorCount, seed));
     setMoves(0);
     resetGameState();
-  }, [size, colorCount, resetGameState]);
+  }, [size, colorCount, seed, resetGameState]);
 
   useEffect(() => {
     initGame();

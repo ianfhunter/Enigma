@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Magnets.module.css';
 
 // Minimal Magnets: procedurally generated domino tiling + computed row/col (+/-) counts from hidden solution.

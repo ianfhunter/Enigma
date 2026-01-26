@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './KnightsTour.module.css';
 
 const KNIGHT_MOVES = [
@@ -53,11 +54,12 @@ function canCompleteTour(startRow, startCol, size) {
 }
 
 // Generate a random starting position that can complete a tour
-function generateStartPosition(size) {
+function generateStartPosition(size, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   const maxAttempts = 100;
   for (let i = 0; i < maxAttempts; i++) {
-    const row = Math.floor(Math.random() * size);
-    const col = Math.floor(Math.random() * size);
+    const row = Math.floor(random() * size);
+    const col = Math.floor(random() * size);
     if (canCompleteTour(row, col, size)) {
       return { row, col };
     }

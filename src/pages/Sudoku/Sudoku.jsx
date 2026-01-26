@@ -445,7 +445,8 @@ export default function Sudoku() {
     if (emptyCells.length === 0) return;
 
     // Pick a random empty cell and fill it
-    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    const random = createSeededRandom(Date.now());
+    const randomCell = emptyCells[Math.floor(random() * emptyCells.length)];
     const { row, col } = randomCell;
 
     setHistory(prev => [...prev, { grid: cloneGrid(grid), notes: { ...notes } }]);

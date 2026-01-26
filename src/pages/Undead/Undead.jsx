@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Undead.module.css';
 
 // Undead: fill non-mirror cells with G/V/Z.
@@ -79,23 +80,24 @@ function traceEdge({ side, idx }, grid, w, h, monsters) {
   return count;
 }
 
-function buildPuzzle(w, h) {
+function buildPuzzle(w, h, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   // Random mirrors + random monster placement
   const n = w * h;
   const grid = new Array(n).fill('.');
   // place some mirrors
   const mirrorCount = Math.max(4, Math.floor(n * 0.14));
   for (let t = 0; t < mirrorCount; t++) {
-    const i = Math.floor(Math.random() * n);
+    const i = Math.floor(random() * n);
     if (grid[i] !== '.') continue;
-    grid[i] = Math.random() < 0.5 ? '/' : '\\';
+    grid[i] = random() < 0.5 ? '/' : '\\';
   }
 
   // monsters only on '.' cells
   const empties = [];
   for (let i = 0; i < n; i++) if (grid[i] === '.') empties.push(i);
   for (let i = empties.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [empties[i], empties[j]] = [empties[j], empties[i]];
   }
 
