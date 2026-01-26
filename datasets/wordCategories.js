@@ -1,12 +1,12 @@
 /**
  * Comprehensive Word Categories Dataset
- * Used for word games like Strands, Connections, Word Search, etc.
- * 
+ * Used for word games like Threads, Categories, Word Search, etc.
+ *
  * Each category contains:
  * - name: Display name for the category
  * - words: Array of words in this category
- * - difficulty: 1-4 (1=easy, 4=hard) - useful for Connections-style games
- * 
+ * - difficulty: 1-4 (1=easy, 4=hard) - useful for Categories-style games
+ *
  * Sources include Corpora project (https://github.com/dariusk/corpora)
  */
 
@@ -47,7 +47,7 @@ export const wordCategories = {
     words: ["AMERICAN", "ASIAGO", "BLEU", "BRIE", "CAMEMBERT", "CHEDDAR", "COLBY", "EDAM", "FETA", "FONTINA", "GOAT", "GOUDA", "GRUYERE", "HAVARTI", "MANCHEGO", "MASCARPONE", "MONTEREY", "MOZZARELLA", "MUENSTER", "PARMESAN", "PROVOLONE", "RICOTTA", "ROMANO", "ROQUEFORT", "SWISS"],
     difficulty: 2
   },
-  
+
   // ANIMALS
   mammals: {
     name: "Mammals",
@@ -79,7 +79,7 @@ export const wordCategories = {
     words: ["ALLOSAURUS", "ANKYLOSAURUS", "BRACHIOSAURUS", "DIPLODOCUS", "IGUANODON", "MEGALOSAURUS", "MOSASAURUS", "PARASAUROLOPHUS", "PTERANODON", "PTERODACTYL", "RAPTOR", "SPINOSAURUS", "STEGOSAURUS", "TRICERATOPS", "TYRANNOSAURUS", "VELOCIRAPTOR"],
     difficulty: 2
   },
-  
+
   // NATURE
   flowers: {
     name: "Flowers",
@@ -106,7 +106,7 @@ export const wordCategories = {
     words: ["ALUMINUM", "BRASS", "BRONZE", "CHROMIUM", "COBALT", "COPPER", "GOLD", "IRON", "LEAD", "MAGNESIUM", "MERCURY", "NICKEL", "PALLADIUM", "PLATINUM", "SILVER", "STEEL", "TIN", "TITANIUM", "TUNGSTEN", "URANIUM", "ZINC"],
     difficulty: 2
   },
-  
+
   // SPACE & SCIENCE
   planets: {
     name: "Planets",
@@ -123,7 +123,7 @@ export const wordCategories = {
     words: ["ARGON", "BARIUM", "BORON", "BROMINE", "CALCIUM", "CARBON", "CHLORINE", "COPPER", "FLUORINE", "GOLD", "HELIUM", "HYDROGEN", "IODINE", "IRON", "KRYPTON", "LEAD", "LITHIUM", "MAGNESIUM", "NEON", "NICKEL", "NITROGEN", "OXYGEN", "PHOSPHORUS", "POTASSIUM", "RADIUM", "RADON", "SILICON", "SILVER", "SODIUM", "SULFUR", "TIN", "URANIUM", "XENON", "ZINC"],
     difficulty: 3
   },
-  
+
   // MUSIC
   instruments: {
     name: "Musical Instruments",
@@ -135,7 +135,7 @@ export const wordCategories = {
     words: ["BLUES", "CLASSICAL", "COUNTRY", "DISCO", "ELECTRONIC", "FOLK", "FUNK", "GOSPEL", "GRUNGE", "HIPHOP", "HOUSE", "INDIE", "JAZZ", "LATIN", "METAL", "OPERA", "POP", "PUNK", "RAP", "REGGAE", "RNB", "ROCK", "SOUL", "SWING", "TECHNO", "TRANCE"],
     difficulty: 2
   },
-  
+
   // SPORTS
   sports: {
     name: "Sports",
@@ -147,7 +147,7 @@ export const wordCategories = {
     words: ["ARCHERY", "ATHLETICS", "BASKETBALL", "BOXING", "CANOE", "CYCLING", "DIVING", "EQUESTRIAN", "FENCING", "GOLF", "GYMNASTICS", "HANDBALL", "HOCKEY", "JUDO", "PENTATHLON", "ROWING", "RUGBY", "SAILING", "SHOOTING", "SKATEBOARDING", "SOCCER", "SOFTBALL", "SURFING", "SWIMMING", "TAEKWONDO", "TENNIS", "TRIATHLON", "VOLLEYBALL", "WEIGHTLIFTING", "WRESTLING"],
     difficulty: 2
   },
-  
+
   // ARTS & CULTURE
   colors: {
     name: "Colors",
@@ -164,7 +164,7 @@ export const wordCategories = {
     words: ["BALLET", "BALLROOM", "BOLERO", "CHA", "DISCO", "FLAMENCO", "FOXTROT", "HIPHOP", "HULA", "JAZZ", "JIVE", "LIMBO", "MAMBO", "POLKA", "RUMBA", "SALSA", "SAMBA", "SWING", "TANGO", "TAP", "TWIST", "WALTZ"],
     difficulty: 2
   },
-  
+
   // HOUSEHOLD
   furniture: {
     name: "Furniture",
@@ -186,7 +186,7 @@ export const wordCategories = {
     words: ["AWL", "AXE", "CHISEL", "CLAMP", "CROWBAR", "DRILL", "FILE", "HACKSAW", "HAMMER", "HATCHET", "JACK", "LEVEL", "MALLET", "NAIL", "PICKAXE", "PLANE", "PLIERS", "RASP", "RATCHET", "SAW", "SCISSORS", "SCRAPER", "SCREWDRIVER", "SHOVEL", "SLEDGE", "SOCKET", "SPADE", "STAPLER", "TAPE", "TROWEL", "VISE", "WRENCH"],
     difficulty: 2
   },
-  
+
   // TRANSPORTATION
   vehicles: {
     name: "Vehicles",
@@ -198,7 +198,7 @@ export const wordCategories = {
     words: ["ACURA", "ALFA", "ASTON", "AUDI", "BENTLEY", "BMW", "BUICK", "CADILLAC", "CHEVROLET", "CHRYSLER", "DODGE", "FERRARI", "FIAT", "FORD", "HONDA", "HYUNDAI", "INFINITI", "JAGUAR", "JEEP", "KIA", "LAMBORGHINI", "LEXUS", "LINCOLN", "LOTUS", "MASERATI", "MAZDA", "MERCEDES", "MINI", "MITSUBISHI", "NISSAN", "PORSCHE", "RAM", "RENAULT", "ROLLS", "SUBARU", "TESLA", "TOYOTA", "VOLKSWAGEN", "VOLVO"],
     difficulty: 2
   },
-  
+
   // GEOGRAPHY
   countries: {
     name: "Countries",
@@ -220,14 +220,14 @@ export const wordCategories = {
     words: ["ARCHIPELAGO", "ATOLL", "BAY", "BEACH", "BLUFF", "BUTTE", "CANYON", "CAPE", "CAVE", "CLIFF", "COAST", "CRATER", "DELTA", "DESERT", "DUNE", "FJORD", "FOREST", "GEYSER", "GLACIER", "GORGE", "GULF", "HILL", "ISLAND", "ISTHMUS", "JUNGLE", "LAGOON", "LAKE", "MARSH", "MESA", "MOUNTAIN", "OASIS", "OCEAN", "PENINSULA", "PLAIN", "PLATEAU", "PRAIRIE", "RAINFOREST", "REEF", "RIDGE", "RIVER", "SAVANNA", "SEA", "STRAIT", "STREAM", "SWAMP", "TUNDRA", "VALLEY", "VOLCANO", "WATERFALL", "WETLAND"],
     difficulty: 2
   },
-  
+
   // OCCUPATIONS
   professions: {
     name: "Professions",
     words: ["ACCOUNTANT", "ACTOR", "ARCHITECT", "ARTIST", "ASTRONAUT", "AUTHOR", "BAKER", "BANKER", "BARBER", "BLACKSMITH", "BUTCHER", "CAPTAIN", "CARPENTER", "CASHIER", "CHEF", "CHEMIST", "CLERK", "COACH", "DANCER", "DENTIST", "DETECTIVE", "DIRECTOR", "DOCTOR", "DRIVER", "EDITOR", "ELECTRICIAN", "ENGINEER", "FARMER", "FIREFIGHTER", "FLORIST", "GARDENER", "GUARD", "JANITOR", "JEWELER", "JOURNALIST", "JUDGE", "LAWYER", "LIBRARIAN", "LOCKSMITH", "MAGICIAN", "MAILMAN", "MANAGER", "MECHANIC", "MUSICIAN", "NURSE", "OPTICIAN", "PAINTER", "PASTOR", "PHARMACIST", "PHOTOGRAPHER", "PILOT", "PLUMBER", "POET", "POLICE", "POLITICIAN", "PRIEST", "PRINCIPAL", "PROFESSOR", "PROGRAMMER", "PSYCHIATRIST", "RANCHER", "RECEPTIONIST", "REPORTER", "SAILOR", "SALESMAN", "SCIENTIST", "SCULPTOR", "SECRETARY", "SINGER", "SOLDIER", "SURGEON", "TAILOR", "TEACHER", "THERAPIST", "TRAINER", "TRANSLATOR", "TUTOR", "VETERINARIAN", "WAITER", "WELDER", "WRITER", "ZOOLOGIST"],
     difficulty: 1
   },
-  
+
   // MYTHOLOGY & FANTASY
   greekGods: {
     name: "Greek Gods",
@@ -239,21 +239,21 @@ export const wordCategories = {
     words: ["BASILISK", "CENTAUR", "CERBERUS", "CHIMERA", "CYCLOPS", "DRAGON", "DWARF", "ELF", "FAIRY", "GHOST", "GIANT", "GNOME", "GOBLIN", "GOLEM", "GORGON", "GRIFFIN", "HARPY", "HYDRA", "KRAKEN", "LEPRECHAUN", "MERMAID", "MINOTAUR", "NYMPH", "OGRE", "PEGASUS", "PHOENIX", "PIXIE", "SASQUATCH", "SATYR", "SIREN", "SPHINX", "SPRITE", "TITAN", "TROLL", "UNICORN", "VAMPIRE", "WEREWOLF", "WITCH", "WIZARD", "YETI", "ZOMBIE"],
     difficulty: 2
   },
-  
+
   // EMOTIONS & STATES
   emotions: {
     name: "Emotions",
     words: ["ANGER", "ANXIETY", "AWE", "BLISS", "BOREDOM", "CALM", "CONFUSION", "CONTEMPT", "CURIOSITY", "DESPAIR", "DISGUST", "DREAD", "ECSTASY", "EMBARRASSMENT", "ENVY", "EUPHORIA", "EXCITEMENT", "FEAR", "FRUSTRATION", "GRATITUDE", "GRIEF", "GUILT", "HAPPINESS", "HATRED", "HOPE", "HORROR", "JEALOUSY", "JOY", "LONELINESS", "LOVE", "NOSTALGIA", "PANIC", "PASSION", "PEACE", "PITY", "PRIDE", "RAGE", "REGRET", "RELIEF", "RESENTMENT", "SADNESS", "SATISFACTION", "SHAME", "SHOCK", "SORROW", "SURPRISE", "SYMPATHY", "TERROR", "TRUST", "WONDER", "WORRY"],
     difficulty: 2
   },
-  
+
   // BODY
   bodyParts: {
     name: "Body Parts",
     words: ["ANKLE", "ARM", "BACK", "BELLY", "BRAIN", "CALF", "CHEEK", "CHEST", "CHIN", "EAR", "ELBOW", "EYE", "EYEBROW", "FACE", "FINGER", "FIST", "FOOT", "FOREHEAD", "HAIR", "HAND", "HEAD", "HEART", "HEEL", "HIP", "JAW", "KIDNEY", "KNEE", "LEG", "LIP", "LIVER", "LUNG", "MOUTH", "MUSCLE", "NECK", "NOSE", "PALM", "RIB", "SHOULDER", "SKIN", "SKULL", "SPINE", "STOMACH", "THIGH", "THROAT", "THUMB", "TOE", "TONGUE", "TOOTH", "WAIST", "WRIST"],
     difficulty: 1
   },
-  
+
   // GAMES & ENTERTAINMENT
   boardGames: {
     name: "Board Games",
@@ -270,14 +270,14 @@ export const wordCategories = {
     words: ["ACTION", "ADVENTURE", "ANIMATION", "BIOGRAPHY", "COMEDY", "CRIME", "DOCUMENTARY", "DRAMA", "FAMILY", "FANTASY", "FILM", "HISTORICAL", "HORROR", "INDIE", "MARTIAL", "MUSICAL", "MYSTERY", "NOIR", "ROMANCE", "SCIFI", "SPORTS", "SUPERHERO", "THRILLER", "WAR", "WESTERN"],
     difficulty: 2
   },
-  
+
   // TECHNOLOGY
   technology: {
     name: "Technology Terms",
     words: ["ALGORITHM", "APP", "BANDWIDTH", "BINARY", "BITCOIN", "BLOG", "BLUETOOTH", "BROWSER", "BYTE", "CACHE", "CLOUD", "CODE", "COOKIE", "CPU", "CURSOR", "DATABASE", "DEBUG", "DESKTOP", "DOWNLOAD", "EMAIL", "ENCRYPTION", "FIREWALL", "FLASH", "FOLDER", "GIGABYTE", "GPS", "HACKER", "HARDWARE", "HASHTAG", "HTML", "ICON", "INTERNET", "JAVA", "KEYBOARD", "LAPTOP", "LINK", "LOGIN", "MALWARE", "MEGABYTE", "MEMORY", "MODEM", "MONITOR", "MOUSE", "NETWORK", "OFFLINE", "ONLINE", "PASSWORD", "PIXEL", "PLUGIN", "PODCAST", "PRINTER", "PROCESSOR", "PROGRAM", "RAM", "ROUTER", "SCREENSHOT", "SERVER", "SOFTWARE", "SPAM", "STREAMING", "TABLET", "UPLOAD", "URL", "USB", "VIRUS", "WEBCAM", "WEBSITE", "WIFI", "WINDOW", "WIRELESS", "ZOOM"],
     difficulty: 2
   },
-  
+
   // TIME
   months: {
     name: "Months",
@@ -313,9 +313,9 @@ export function getAllCategories() {
 export function getRandomCategory(excludeIds = []) {
   const available = Object.entries(wordCategories)
     .filter(([key]) => !excludeIds.includes(key));
-  
+
   if (available.length === 0) return null;
-  
+
   const [key, category] = available[Math.floor(Math.random() * available.length)];
   return { id: key, ...category };
 }
@@ -324,33 +324,33 @@ export function getRandomCategory(excludeIds = []) {
 export function getRandomWordsFromCategory(categoryId, count = 4, maxLength = null) {
   const category = wordCategories[categoryId];
   if (!category) return [];
-  
+
   let words = [...category.words];
-  
+
   // Filter by max length if specified
   if (maxLength) {
     words = words.filter(w => w.length <= maxLength);
   }
-  
+
   // Shuffle and return requested count
   for (let i = words.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [words[i], words[j]] = [words[j], words[i]];
   }
-  
+
   return words.slice(0, count);
 }
 
 // Helper function to find which category a word belongs to
 export function findCategoryForWord(word) {
   const upperWord = word.toUpperCase();
-  
+
   for (const [key, category] of Object.entries(wordCategories)) {
     if (category.words.includes(upperWord)) {
       return { id: key, ...category };
     }
   }
-  
+
   return null;
 }
 
@@ -359,34 +359,34 @@ export function getNonOverlappingCategories(count = 4, wordsPerCategory = 4, max
   const result = [];
   const usedWords = new Set();
   const categoryKeys = Object.keys(wordCategories);
-  
+
   // Shuffle category keys
   for (let i = categoryKeys.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [categoryKeys[i], categoryKeys[j]] = [categoryKeys[j], categoryKeys[i]];
   }
-  
+
   for (const key of categoryKeys) {
     if (result.length >= count) break;
-    
+
     const category = wordCategories[key];
     let availableWords = category.words.filter(w => !usedWords.has(w));
-    
+
     // Filter by max length if specified
     if (maxWordLength) {
       availableWords = availableWords.filter(w => w.length <= maxWordLength);
     }
-    
+
     if (availableWords.length >= wordsPerCategory) {
       // Shuffle and pick words
       for (let i = availableWords.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [availableWords[i], availableWords[j]] = [availableWords[j], availableWords[i]];
       }
-      
+
       const selectedWords = availableWords.slice(0, wordsPerCategory);
       selectedWords.forEach(w => usedWords.add(w));
-      
+
       result.push({
         id: key,
         name: category.name,
@@ -395,7 +395,7 @@ export function getNonOverlappingCategories(count = 4, wordsPerCategory = 4, max
       });
     }
   }
-  
+
   return result;
 }
 

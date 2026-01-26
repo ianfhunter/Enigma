@@ -26,6 +26,7 @@ import netslideIcon from '../../assets/icons/netslide.svg';
 import pentominoIcon from '../../assets/icons/pentomino.svg';
 import jigsawIcon from '../../assets/icons/jigsaw.svg';
 import congestionIcon from '../../assets/icons/congestion.svg';
+import shisenshoIcon from '../../assets/icons/shisensho.svg';
 
 /**
  * Pack metadata
@@ -253,6 +254,17 @@ export const categories = [
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         component: () => import('../../pages/Pentomino'),
+      },
+      {
+        title: 'Shisen-Sho',
+        slug: 'shisen-sho',
+        aliases: ['Four Rivers', 'Shisen', 'Sho'],
+        description: 'Match identical Mahjong tiles by connecting them with a path of at most 2 turns.',
+        icon: shisenshoIcon,
+        emojiIcon: '🀄',
+        colors: { primary: '#f97316', secondary: '#ea580c' },
+        gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+        component: () => import('../../pages/ShisenSho'),
       },
     ],
   },

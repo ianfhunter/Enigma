@@ -290,8 +290,9 @@ function tryPlaceThemeWord(grid, word, usedCells, random) {
 function generatePuzzleGrid(puzzle, random, maxAttempts = 100) {
   const totalNeeded = puzzle.spangram.length + puzzle.themeWords.reduce((s, w) => s + w.length, 0);
 
-  if (totalNeeded !== TOTAL_CELLS) {
-    console.warn(`Threads: Word letters (${totalNeeded}) don't match grid cells (${TOTAL_CELLS}), will have gaps`);
+  if (totalNeeded > TOTAL_CELLS) {
+    console.error(`Threads: Too many letters (${totalNeeded}) for grid (${TOTAL_CELLS})`);
+    throw new Error('Puzzle has too many letters for grid');
   }
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -322,17 +323,39 @@ function generatePuzzleGrid(puzzle, random, maxAttempts = 100) {
 
     if (!success) continue;
 
-    // 4. Check if all cells are filled
-    const emptyCellCount = TOTAL_CELLS - usedCells.size;
-    if (emptyCellCount === 0) {
-      console.log(`Threads: Successfully generated grid on attempt ${attempt + 1}`);
-      return { grid, wordPositions };
+    // 4. Fill any remaining empty cells with random letters
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for (let r = 0; r < GRID_ROWS; r++) {
+      for (let c = 0; c < GRID_COLS; c++) {
+        if (grid[r][c] === '') {
+          grid[r][c] = letters[Math.floor(random() * letters.length)];
+        }
+      }
+    }
+
+    console.log(`Threads: Successfully generated grid on attempt ${attempt + 1}`);
+    return { grid, wordPositions };
+  }
+
+  // Fallback: If we couldn't generate after max attempts, try with different word order
+  console.warn(`Threads: Could not generate puzzle after ${maxAttempts} attempts, trying fallback with different orderings`);
+
+  // Try fallback with retries
+  for (let fallbackAttempt = 0; fallbackAttempt < 50; fallbackAttempt++) {
+    const fallbackResult = generateFallbackGrid(puzzle, random);
+    if (fallbackResult) {
+      // Validate all words are placed
+      const allWordsPlaced = puzzle.themeWords.every(word => fallbackResult.wordPositions[word]);
+      if (allWordsPlaced && fallbackResult.wordPositions[puzzle.spangram]) {
+        console.log(`Threads: Fallback succeeded on attempt ${fallbackAttempt + 1}`);
+        return fallbackResult;
+      }
     }
   }
 
-  // Fallback: If we couldn't fill the grid perfectly, return best effort with random fill
-  console.warn(`Threads: Could not generate perfect puzzle after ${maxAttempts} attempts, using fallback`);
-  return generateFallbackGrid(puzzle, random);
+  // Last resort: Generate with different word selection
+  console.error('Threads: All generation attempts failed, puzzle may be unsolvable with current words');
+  throw new Error('Failed to generate valid Threads puzzle');
 }
 
 // Fallback grid generation if perfect placement fails
@@ -343,15 +366,23 @@ function generateFallbackGrid(puzzle, random) {
 
   // Place spangram
   const spangramPath = placeSpangram(grid, puzzle.spangram, usedCells, random);
-  if (spangramPath) {
-    wordPositions[puzzle.spangram] = spangramPath;
+  if (!spangramPath) {
+    console.error('Threads: Failed to place spangram in fallback');
+    return null;
   }
+  wordPositions[puzzle.spangram] = spangramPath;
 
-  // Place as many theme words as possible
-  for (const word of puzzle.themeWords) {
+  // Try to place theme words, but be more flexible
+  // Try placing them in different orders to increase success rate
+  const wordOrder = [...puzzle.themeWords].sort(() => random() - 0.5);
+
+  for (const word of wordOrder) {
     const path = tryPlaceThemeWord(grid, word, usedCells, random);
     if (path) {
       wordPositions[word] = path;
+    } else {
+      // If we can't place a word, this fallback attempt failed
+      return null;
     }
   }
 
@@ -393,6 +424,13 @@ function selectWordsForGrid(categoryWords, spangram, random) {
         return null;
       }
 
+      const word = words[idx];
+
+      // Safety check: word might be undefined
+      if (!word) {
+        return null;
+      }
+
       // Pruning: if remaining letters can't be filled with remaining words, skip
       const minPossible = (maxWords - selected.length) * 3;
       const maxPossible = (maxWords - selected.length) * 8;
@@ -400,8 +438,6 @@ function selectWordsForGrid(categoryWords, spangram, random) {
         // Try without this word
         return backtrack(idx + 1, remaining, selected);
       }
-
-      const word = words[idx];
 
       // Try including this word
       if (word.length <= remaining) {
@@ -418,98 +454,198 @@ function selectWordsForGrid(categoryWords, spangram, random) {
     return backtrack(0, target, []);
   }
 
-  // Try different word counts from 6 to 10 words (typical for Strands)
-  for (let wordCount = 6; wordCount <= 10; wordCount++) {
+  // Try different word counts from 5 to 12 words (typical for Threads)
+  for (let wordCount = 5; wordCount <= 12; wordCount++) {
     const result = findExactSubset(shuffled.slice(0, 30), targetLetters, wordCount, wordCount);
     if (result) {
       return result;
     }
   }
 
-  // More flexible: try range of word counts
-  const result = findExactSubset(shuffled.slice(0, 40), targetLetters, 5, 12);
+  // More flexible: try range of word counts with more words
+  const result = findExactSubset(shuffled.slice(0, 50), targetLetters, 4, 15);
   if (result) {
     return result;
   }
 
-  // Last resort: greedy fill to get as close as possible
-  console.warn(`Could not find exact word combination for ${targetLetters} letters, using greedy approach`);
-  let sum = 0;
-  const selected = [];
-
-  // Sort by length descending, then fill
-  const sortedByLen = [...shuffled].sort((a, b) => b.length - a.length);
-
-  for (const word of sortedByLen) {
-    if (sum + word.length <= targetLetters) {
-      selected.push(word);
-      sum += word.length;
-    }
-    if (sum === targetLetters) break;
+  // Try with ALL available words
+  const finalResult = findExactSubset(shuffled, targetLetters, 3, 20);
+  if (finalResult) {
+    return finalResult;
   }
 
-  // If we're short, try to find small words to fill gap
-  const gap = targetLetters - sum;
-  if (gap > 0 && gap <= 8) {
-    const filler = shuffled.find(w => w.length === gap && !selected.includes(w));
-    if (filler) {
-      selected.push(filler);
-    }
-  }
-
-  return selected;
+  // Return null if we can't find an exact match
+  return null;
 }
 
-// Generate a puzzle from word categories with proper letter count
-function generatePuzzleFromCategories(seed) {
+// Generate complete puzzle with words that can actually be placed
+function generateCompletePuzzle(seed) {
   const random = createSeededRandom(seed);
 
   // Get category keys that have MegaThreads defined and shuffle
   const categoryKeys = Object.keys(wordCategories).filter(key => CATEGORY_MEGATHREADS[key]);
   const shuffledKeys = seededShuffleArray(categoryKeys, random);
 
-  // Try each category until we find one that works
-  for (const categoryKey of shuffledKeys) {
+  // Try multiple attempts to find a valid puzzle
+  const maxAttempts = 50; // Increased since we need exact matches
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    // Pick a category (rotate through them with attempts for variety)
+    const categoryKey = shuffledKeys[attempt % shuffledKeys.length];
     const category = wordCategories[categoryKey];
     const spangram = CATEGORY_MEGATHREADS[categoryKey];
 
-    // Select words that sum to exactly TOTAL_CELLS
+    // Try to select words for this category
     const themeWords = selectWordsForGrid(category.words, spangram, random);
+
+    // Skip if we couldn't find an exact match
+    if (!themeWords) {
+      continue;
+    }
+
     const totalLetters = spangram.length + themeWords.reduce((sum, w) => sum + w.length, 0);
 
-    if (totalLetters === TOTAL_CELLS) {
-      console.log(`Threads: Selected ${themeWords.length} words for category "${category.name}": ${themeWords.join(', ')} (${totalLetters} letters)`);
-      return {
-        theme: category.name,
-        hint: `Find the ${category.name.toLowerCase()}`,
-        spangram: spangram,
-        themeWords: themeWords,
-      };
-    } else {
-      console.warn(`Threads: Category "${category.name}" - letters don't match: ${totalLetters} vs ${TOTAL_CELLS}`);
+    // MUST be exactly TOTAL_CELLS letters (no random filler allowed)
+    if (totalLetters !== TOTAL_CELLS) {
+      console.warn(`Threads: Category "${category.name}" - wrong letter count: ${totalLetters} vs ${TOTAL_CELLS}`);
+      continue;
+    }
+
+    const basePuzzle = {
+      theme: category.name,
+      hint: `Find the ${category.name.toLowerCase()}`,
+      spangram: spangram,
+      themeWords: themeWords,
+    };
+
+    // Try to generate grid with these words (use fewer attempts per word set)
+    try {
+      const gridResult = tryGenerateGrid(basePuzzle, random, 30);
+      if (gridResult) {
+        console.log(`Threads: Successfully generated puzzle for "${category.name}" on attempt ${attempt + 1} with ${themeWords.length} words`);
+        return {
+          ...basePuzzle,
+          grid: gridResult.grid,
+          wordPositions: gridResult.wordPositions
+        };
+      }
+    } catch (e) {
+      // This word set didn't work, try next
+      continue;
     }
   }
 
-  // Fallback: try harder with combined categories
-  console.warn('Threads: Primary selection failed, trying combined word pool');
+  // If we still can't generate, try with combined word pool
+  console.warn('Threads: Standard generation failed, trying combined categories');
 
-  // Combine words from multiple categories
-  const firstCategory = wordCategories[shuffledKeys[0]];
-  const spangram = CATEGORY_MEGATHREADS[shuffledKeys[0]];
-  const allWords = shuffledKeys.slice(0, 5).flatMap(key => wordCategories[key].words);
-  const uniqueWords = [...new Set(allWords)];
+  for (let fallbackAttempt = 0; fallbackAttempt < 20; fallbackAttempt++) {
+    const firstCategory = wordCategories[shuffledKeys[0]];
+    const spangram = CATEGORY_MEGATHREADS[shuffledKeys[0]];
+    const allWords = shuffledKeys.slice(0, 5).flatMap(key => wordCategories[key].words);
+    const uniqueWords = [...new Set(allWords)];
 
-  const themeWords = selectWordsForGrid(uniqueWords, spangram, random);
-  const totalLetters = spangram.length + themeWords.reduce((sum, w) => sum + w.length, 0);
+    const themeWords = selectWordsForGrid(uniqueWords, spangram, random);
 
-  console.log(`Threads fallback: ${themeWords.length} words, ${totalLetters} letters (need ${TOTAL_CELLS})`);
+    if (!themeWords) continue;
 
-  return {
-    theme: firstCategory.name,
-    hint: `Find the ${firstCategory.name.toLowerCase()}`,
-    spangram: spangram,
-    themeWords: themeWords,
-  };
+    const totalLetters = spangram.length + themeWords.reduce((sum, w) => sum + w.length, 0);
+
+    if (totalLetters !== TOTAL_CELLS) continue;
+
+    const basePuzzle = {
+      theme: firstCategory.name,
+      hint: `Find the ${firstCategory.name.toLowerCase()}`,
+      spangram: spangram,
+      themeWords: themeWords,
+    };
+
+    const gridResult = tryGenerateGrid(basePuzzle, random, 30);
+    if (gridResult) {
+      console.log(`Threads: Fallback succeeded with ${themeWords.length} words`);
+      return {
+        ...basePuzzle,
+        grid: gridResult.grid,
+        wordPositions: gridResult.wordPositions
+      };
+    }
+  }
+
+  throw new Error('Failed to generate valid Threads puzzle with exact letter count after all attempts');
+}
+
+// Try to generate a grid for a specific puzzle (returns null if can't place all words)
+function tryGenerateGrid(puzzle, random, maxAttempts = 25) {
+  const totalNeeded = puzzle.spangram.length + puzzle.themeWords.reduce((s, w) => s + w.length, 0);
+
+  if (totalNeeded > TOTAL_CELLS) {
+    return null;
+  }
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const grid = Array(GRID_ROWS).fill(null).map(() => Array(GRID_COLS).fill(''));
+    const usedCells = new Set();
+    const wordPositions = {};
+    let success = true;
+
+    // 1. Place spangram first (edge-to-edge)
+    const spangramPath = placeSpangram(grid, puzzle.spangram, usedCells, random);
+    if (!spangramPath) {
+      continue;
+    }
+    wordPositions[puzzle.spangram] = spangramPath;
+
+    // 2. Sort theme words by length (longer first - they're harder to place)
+    const sortedWords = [...puzzle.themeWords].sort((a, b) => b.length - a.length);
+
+    // 3. Place theme words in remaining space
+    for (const word of sortedWords) {
+      const path = tryPlaceThemeWord(grid, word, usedCells, random);
+      if (!path) {
+        success = false;
+        break;
+      }
+      wordPositions[word] = path;
+    }
+
+    if (!success) continue;
+
+    // 4. Validate all words are connected and reachable
+    const allWordsValid = [puzzle.spangram, ...puzzle.themeWords].every(word => {
+      const path = wordPositions[word];
+      if (!path || path.length !== word.length) return false;
+
+      // Check path is contiguous
+      for (let i = 0; i < path.length - 1; i++) {
+        const [r1, c1] = path[i];
+        const [r2, c2] = path[i + 1];
+        const rowDiff = Math.abs(r1 - r2);
+        const colDiff = Math.abs(c1 - c2);
+        if (rowDiff > 1 || colDiff > 1) {
+          console.error(`Threads: Word ${word} has non-adjacent cells at positions ${i}-${i+1}`);
+          return false;
+        }
+      }
+
+      // Check letters match
+      const letters = path.map(([r, c]) => grid[r][c]).join('');
+      if (letters !== word) {
+        console.error(`Threads: Word ${word} mismatch: expected "${word}", got "${letters}"`);
+        return false;
+      }
+
+      return true;
+    });
+
+    if (!allWordsValid) {
+      console.warn('Threads: Grid validation failed, retrying');
+      continue;
+    }
+
+    // Success! All cells should now be filled with word letters (no random filler needed)
+    return { grid, wordPositions };
+  }
+
+  return null;
 }
 
 // Check if two cells are adjacent (including diagonals)
@@ -519,22 +655,9 @@ function areAdjacent(cell1, cell2) {
   return rowDiff <= 1 && colDiff <= 1 && !(rowDiff === 0 && colDiff === 0);
 }
 
-// Get puzzle for a specific date
-function getPuzzleForDate(dateStr) {
-  const seed = stringToSeed(`threads-${dateStr}`);
-  const random = createSeededRandom(seed);
-
-  // Always generate puzzle from categories
-  const basePuzzle = generatePuzzleFromCategories(seed);
-
-  // Generate the grid
-  const { grid, wordPositions } = generatePuzzleGrid(basePuzzle, random);
-
-  return {
-    ...basePuzzle,
-    grid,
-    wordPositions
-  };
+// Get puzzle for a specific seed
+function getPuzzleForSeed(seed) {
+  return generateCompletePuzzle(seed);
 }
 
 // Export helpers for testing
@@ -550,9 +673,8 @@ export {
   isOnEdge,
   getOppositeEdge,
   areAdjacent,
-  getPuzzleForDate,
-  generatePuzzleGrid,
-  generatePuzzleFromCategories,
+  getPuzzleForSeed,
+  generateCompletePuzzle,
 };
 
 export default function Threads() {
@@ -561,6 +683,7 @@ export default function Threads() {
   const [selectedCells, setSelectedCells] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [foundWords, setFoundWords] = useState(new Set());
+  const [foundNonThemeWords, setFoundNonThemeWords] = useState(new Set());
   const [foundSpangram, setFoundSpangram] = useState(false);
   const [hintCount, setHintCount] = useState(0);
   const [nonThemeWordCount, setNonThemeWordCount] = useState(0);
@@ -575,11 +698,12 @@ export default function Threads() {
   const initGame = useCallback((customSeed = null) => {
     const today = getTodayDateString();
     const gameSeed = customSeed ?? stringToSeed(`threads-${today}`);
-    const newPuzzle = getPuzzleForDate(today);
+    const newPuzzle = getPuzzleForSeed(gameSeed);
     setSeed(gameSeed);
     setPuzzle(newPuzzle);
     setSelectedCells([]);
     setFoundWords(new Set());
+    setFoundNonThemeWords(new Set());
     setFoundSpangram(false);
     setHintCount(0);
     setNonThemeWordCount(0);
@@ -658,6 +782,10 @@ export default function Threads() {
     if (gameWon || gaveUp) return;
     setIsDragging(true);
     setSelectedCells([[row, col]]);
+    // Clear revealed cells hint animation on user input
+    if (revealedCells.size > 0) {
+      setRevealedCells(new Set());
+    }
   };
 
   const handleMove = (row, col) => {
@@ -711,8 +839,11 @@ export default function Threads() {
     }
     // Check if it's a valid non-theme word (4+ letters)
     else if (selectedWord.length >= 4 && isValidWord(selectedWord)) {
-      if (!foundWords.has(selectedWord) && selectedWord !== puzzle.spangram &&
+      if (!foundNonThemeWords.has(selectedWord) && selectedWord !== puzzle.spangram &&
           !puzzle.themeWords.includes(selectedWord)) {
+        // Add the non-theme word to foundNonThemeWords to prevent duplicate submissions
+        setFoundNonThemeWords(new Set([...foundNonThemeWords, selectedWord]));
+
         const newCount = nonThemeWordCount + 1;
         setNonThemeWordCount(newCount);
 
@@ -816,14 +947,14 @@ export default function Threads() {
       // Check spangram
       if (puzzle.wordPositions[puzzle.spangram]) {
         if (puzzle.wordPositions[puzzle.spangram].some(([r, c]) => r === row && c === col)) {
-          return 'spangram';
+          return { type: 'spangram', word: puzzle.spangram };
         }
       }
       // Check all theme words
       for (const word of puzzle.themeWords) {
         if (puzzle.wordPositions[word]) {
           if (puzzle.wordPositions[word].some(([r, c]) => r === row && c === col)) {
-            return 'theme';
+            return { type: 'theme', word: word };
           }
         }
       }
@@ -833,7 +964,7 @@ export default function Threads() {
     // Check spangram
     if (foundSpangram && puzzle.wordPositions[puzzle.spangram]) {
       if (puzzle.wordPositions[puzzle.spangram].some(([r, c]) => r === row && c === col)) {
-        return 'spangram';
+        return { type: 'spangram', word: puzzle.spangram };
       }
     }
 
@@ -841,12 +972,20 @@ export default function Threads() {
     for (const word of foundWords) {
       if (puzzle.wordPositions[word]) {
         if (puzzle.wordPositions[word].some(([r, c]) => r === row && c === col)) {
-          return 'theme';
+          return { type: 'theme', word: word };
         }
       }
     }
 
     return false;
+  };
+
+  // Get a consistent color for a word based on its index
+  const getWordColor = (word) => {
+    if (!puzzle) return 0;
+    const index = puzzle.themeWords.indexOf(word);
+    if (index === -1) return 0;
+    return (index % 6); // Cycle through 6 colors
   };
 
   const isRevealed = (row, col) => {
@@ -890,7 +1029,7 @@ export default function Threads() {
       <div className={styles.gameArea}>
         {/* Theme hint */}
         <div className={styles.themeArea}>
-          <div className={styles.themeLabel}>TODAY&apos;S THEME</div>
+          <div className={styles.themeLabel}>THEME</div>
           <div className={styles.themeDisplay}>
             &ldquo;{puzzle.theme}&rdquo;
           </div>
@@ -942,14 +1081,14 @@ export default function Threads() {
         >
           {puzzle.grid.map((row, rowIndex) =>
             row.map((letter, colIndex) => {
-              const foundType = isFoundCell(rowIndex, colIndex);
+              const foundInfo = isFoundCell(rowIndex, colIndex);
               return (
                 <div
                   key={`${rowIndex}-${colIndex}`}
                   className={`${styles.cell}
                     ${isSelected(rowIndex, colIndex) ? styles.selected : ''}
-                    ${foundType === 'spangram' ? styles.spangramFound : ''}
-                    ${foundType === 'theme' ? styles.themeFound : ''}
+                    ${foundInfo && foundInfo.type === 'spangram' ? styles.spangramFound : ''}
+                    ${foundInfo && foundInfo.type === 'theme' ? styles[`themeFound${getWordColor(foundInfo.word)}`] : ''}
                     ${isRevealed(rowIndex, colIndex) ? styles.revealed : ''}
                   `}
                   onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
@@ -994,7 +1133,7 @@ export default function Threads() {
         {gameWon && (
           <GameResult
             state="won"
-            title="You completed today's Threads!"
+            title="You completed the puzzle!"
             message={`Theme: ${puzzle.theme}`}
           />
         )}

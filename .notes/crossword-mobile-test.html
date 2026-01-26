@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crossword Grid Mobile Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a1a2e;
+      color: #fff;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      --cell-size: 32px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .screen-size {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #42a5f5;
+      font-size: 0.9rem;
+    }
+
+    .grid-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1px;
+      background: #666;
+      border: 2px solid #666;
+      border-radius: 4px;
+      padding: 2px;
+      max-width: 100%;
+      max-height: 80vh;
+      width: fit-content;
+      margin: 0 auto;
+      grid-template-columns: repeat(20, 1fr);
+      grid-template-rows: repeat(20, 1fr);
+    }
+
+    .cell {
+      position: relative;
+      width: var(--cell-size);
+      height: var(--cell-size);
+      background: #2a2a3e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(var(--cell-size) * 0.55);
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .cell.black {
+      background: #444;
+    }
+
+    .info {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .status {
+      text-align: center;
+      margin: 1rem 0;
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .status.fits {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+    }
+
+    .status.overflow {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    /* Tablet and below */
+    @media (max-width: 768px) {
+      .container {
+        --cell-size: min(30px, calc((100vw - 3rem) / 20));
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 500px) {
+      .container {
+        --cell-size: min(26px, calc((100vw - 3rem) / 20));
+        padding: 0 0.5rem;
+      }
+
+      body {
+        padding: 0.5rem;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 380px) {
+      .container {
+        --cell-size: min(22px, calc((100vw - 2rem) / 20));
+        padding: 0 0.25rem;
+      }
+
+      .grid {
+        gap: 0px;
+      }
+
+      body {
+        padding: 0.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Crossword Grid Mobile Responsiveness Test</h1>
+    <div class="screen-size">Screen Width: <span id="width">-</span>px</div>
+    <div class="status" id="status"></div>
+
+    <div class="grid-wrapper">
+      <div class="grid" id="grid">
+        <!-- Generate 20x20 grid -->
+      </div>
+    </div>
+
+    <div class="info">
+      <p>✅ <strong>Fixed:</strong> Grid now uses dynamic sizing</p>
+      <p>Formula: <code>min(base-size, calc((100vw - padding) / 20))</code></p>
+      <p>Resize your browser to test different screen sizes!</p>
+    </div>
+  </div>
+
+  <script>
+    // Generate grid cells
+    const grid = document.getElementById('grid');
+    const pattern = [
+      [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0],
+      [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0],
+      [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0],
+      [1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
+      [0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0],
+      [0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,0,0],
+      [0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,0,0],
+      [1,1,0,0,0,1,0,0,1,1,1,1,1,0,0,0,1,0,0,1],
+      [0,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0],
+      [0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1,0,0,0,0],
+      [1,0,0,1,0,0,0,1,1,1,1,1,0,0,1,0,0,0,1,1],
+      [0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0],
+      [0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0],
+      [0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0],
+      [1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
+      [0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0],
+      [0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0],
+      [0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0]
+    ];
+
+    for (let row = 0; row < 20; row++) {
+      for (let col = 0; col < 20; col++) {
+        const cell = document.createElement('div');
+        cell.className = pattern[row][col] === 1 ? 'cell black' : 'cell';
+        if (pattern[row][col] === 0 && Math.random() > 0.7) {
+          cell.textContent = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+        }
+        grid.appendChild(cell);
+      }
+    }
+
+    // Update screen width and check overflow
+    function updateStatus() {
+      const width = window.innerWidth;
+      document.getElementById('width').textContent = width;
+
+      const gridElement = document.getElementById('grid');
+      const hasOverflow = gridElement.scrollWidth > gridElement.clientWidth;
+      const status = document.getElementById('status');
+
+      if (hasOverflow) {
+        status.textContent = '❌ Grid is overflowing (scroll needed)';
+        status.className = 'status overflow';
+      } else {
+        status.textContent = '✅ Grid fits perfectly within viewport';
+        status.className = 'status fits';
+      }
+    }
+
+    window.addEventListener('resize', updateStatus);
+    window.addEventListener('load', updateStatus);
+    updateStatus();
+  </script>
+</body>
+</html>

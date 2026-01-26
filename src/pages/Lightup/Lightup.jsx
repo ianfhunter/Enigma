@@ -315,6 +315,9 @@ export default function Lightup() {
   }, [base, bulbs]);
 
   const allLit = useMemo(() => {
+    // If no puzzle loaded yet, not solved
+    if (base.cells.length === 0) return false;
+
     for (let i = 0; i < base.cells.length; i++) {
       if (isWall(base.cells[i])) continue;
       if (!lit.has(i)) return false;
@@ -322,7 +325,8 @@ export default function Lightup() {
     return true;
   }, [base.cells, lit]);
 
-  const solved = allLit && bulbConflicts.size === 0 && numberedErrors.size === 0;
+  // Only mark as solved if puzzle is loaded (has cells) and all conditions met
+  const solved = base.cells.length > 0 && allLit && bulbConflicts.size === 0 && numberedErrors.size === 0;
 
   // Update game state when solved
   useEffect(() => {

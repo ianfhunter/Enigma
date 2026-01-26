@@ -904,6 +904,8 @@
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  overscroll-behavior-y: contain;
 }
 
 body {
@@ -913,6 +915,8 @@ body {
   line-height: 1.5;
   position: relative;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overscroll-behavior: none;
+  overscroll-behavior-y: contain;
 }
 
 body::before {
@@ -984,6 +988,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 #root {
   isolation: isolate;
+  overscroll-behavior: none;
 }
 
 /* Custom scrollbar */

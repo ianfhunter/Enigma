@@ -362,8 +362,7 @@ export default function Nurikabe() {
           className={styles.grid}
           style={{
             gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
-            width: `${Math.min(gridSize * 40, 600)}px`,
-            height: `${Math.min(gridSize * 40, 600)}px`,
+            '--grid-size': gridSize,
           }}
         >
           {puzzleData.grid.map((row, r) =>

@@ -115,6 +115,7 @@ const slugToFolder = {
   'naval-battle': 'NavalBattle',
   'norinori': 'Norinori',
   'shiritori': 'Shiritori',
+  'shisen-sho': 'ShisenSho',
   'signpost': 'Signpost',
   'sixteen': 'Sixteen',
   'skyscraper': 'Skyscraper',

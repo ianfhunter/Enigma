@@ -144,6 +144,9 @@
   background: rgba(59, 130, 246, 0.3);
   padding: 2px;
   border-radius: 8px;
+  width: min(600px, calc(var(--grid-size, 10) * 40px));
+  height: min(600px, calc(var(--grid-size, 10) * 40px));
+  max-width: 100%;
 }
 
 .cell {
@@ -403,13 +406,55 @@
   border: 1px solid rgba(59, 130, 246, 0.4);
 }
 
-@media (max-width: 450px) {
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
   .grid {
-    width: 100% !important;
-    max-width: 300px;
+    width: calc(100vw - 2rem) !important;
+    max-width: 400px;
+    height: auto !important;
   }
 
   .value {
     font-size: 1rem;
+  }
+
+  .cell.marked::after {
+    font-size: 1rem;
+  }
+
+  .buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .grid {
+    width: calc(100vw - 2rem) !important;
+    max-width: 340px;
+  }
+
+  .value {
+    font-size: 0.9rem;
+  }
+
+  .cell.marked::after {
+    font-size: 0.9rem;
+  }
+
+  .sizeSelector {
+    flex-wrap: wrap;
+  }
+
+  .difficultySelector {
+    flex-wrap: wrap;
   }
 }

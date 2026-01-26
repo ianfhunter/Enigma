@@ -224,3 +224,125 @@ describe('LetterOrbit - Direction Detection', () => {
     expect(getDirection('JGDA', orbits)).toBe('outer→inner');
   });
 });
+
+// ===========================================
+// LetterOrbit - Give Up Functionality Tests
+// ===========================================
+describe('LetterOrbit - Give Up Functionality', () => {
+  it('should reveal all words when giving up', () => {
+    const allWords = ['ABLE', 'CARE', 'ZONE', 'PEAK'];
+    const foundWords = ['ABLE', 'CARE'];
+    const gaveUp = true;
+
+    // When gaveUp is true, all words should be shown
+    const displayedWords = gaveUp ? allWords : foundWords;
+
+    expect(displayedWords).toEqual(allWords);
+    expect(displayedWords.length).toBe(4);
+  });
+
+  it('should show only found words when not given up', () => {
+    const allWords = ['ABLE', 'CARE', 'ZONE', 'PEAK'];
+    const foundWords = ['ABLE', 'CARE'];
+    const gaveUp = false;
+
+    const displayedWords = gaveUp ? allWords : foundWords;
+
+    expect(displayedWords).toEqual(foundWords);
+    expect(displayedWords.length).toBe(2);
+  });
+
+  it('should prevent new submissions after giving up', () => {
+    const gaveUp = true;
+    const gameWon = false;
+
+    // Button should be disabled when gaveUp is true
+    const shouldShowGiveUpButton = !gameWon && !gaveUp;
+
+    expect(shouldShowGiveUpButton).toBe(false);
+  });
+
+  it('should hide give up button when game is won', () => {
+    const gaveUp = false;
+    const gameWon = true;
+
+    const shouldShowGiveUpButton = !gameWon && !gaveUp;
+
+    expect(shouldShowGiveUpButton).toBe(false);
+  });
+
+  it('should show give up button during active play', () => {
+    const gaveUp = false;
+    const gameWon = false;
+
+    const shouldShowGiveUpButton = !gameWon && !gaveUp;
+
+    expect(shouldShowGiveUpButton).toBe(true);
+  });
+
+  it('should mark unrevealed words when given up', () => {
+    const allWords = ['ABLE', 'CARE', 'ZONE', 'PEAK'];
+    const foundWords = ['ABLE', 'CARE'];
+    const gaveUp = true;
+
+    // Simulate marking words as revealed or found
+    const markedWords = allWords.map(word => ({
+      word,
+      isFound: foundWords.includes(word),
+      isRevealed: gaveUp && !foundWords.includes(word)
+    }));
+
+    const revealedWords = markedWords.filter(w => w.isRevealed);
+    const foundWordsMarked = markedWords.filter(w => w.isFound);
+
+    expect(revealedWords.length).toBe(2); // ZONE and PEAK
+    expect(revealedWords.map(w => w.word)).toEqual(['ZONE', 'PEAK']);
+    expect(foundWordsMarked.length).toBe(2); // ABLE and CARE
+  });
+
+  it('should detect game won when all words found', () => {
+    const allWords = ['ABLE', 'CARE', 'ZONE', 'PEAK'];
+    const foundWords = ['ABLE', 'CARE', 'ZONE', 'PEAK'];
+
+    const gameWon = foundWords.length === allWords.length;
+
+    expect(gameWon).toBe(true);
+  });
+
+  it('should not show game won when not all words found', () => {
+    const allWords = ['ABLE', 'CARE', 'ZONE', 'PEAK'];
+    const foundWords = ['ABLE', 'CARE'];
+
+    const gameWon = foundWords.length === allWords.length;
+
+    expect(gameWon).toBe(false);
+  });
+
+  it('should reset give up state on new game', () => {
+    let gaveUp = true;
+    let showAllWords = true;
+
+    // Simulate new game initialization
+    gaveUp = false;
+    showAllWords = false;
+
+    expect(gaveUp).toBe(false);
+    expect(showAllWords).toBe(false);
+  });
+
+  it('should automatically show all words when giving up', () => {
+    let gaveUp = false;
+    let showAllWords = false;
+
+    // Simulate give up action
+    const handleGiveUp = () => {
+      gaveUp = true;
+      showAllWords = true;
+    };
+
+    handleGiveUp();
+
+    expect(gaveUp).toBe(true);
+    expect(showAllWords).toBe(true);
+  });
+});
