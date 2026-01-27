@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatTime } from '../../data/wordUtils';
+import { formatTime, createSeededRandom } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
@@ -198,7 +198,8 @@ export default function Calcudoku() {
       // Fallback to any puzzle of this size
       const fallback = kenkenPuzzles.puzzles.filter(p => p.rows === newSize);
       if (fallback.length > 0) {
-        const selected = fallback[Math.floor(Math.random() * fallback.length)];
+        const random = createSeededRandom(Date.now());
+        const selected = fallback[Math.floor(random() * fallback.length)];
         const newPuzzle = parseDatasetPuzzle(selected);
         setPuzzle(newPuzzle);
         setPlayerGrid(Array(newSize).fill(null).map(() => Array(newSize).fill(0)));
@@ -212,7 +213,8 @@ export default function Calcudoku() {
       }
     }
 
-    const selected = filtered[Math.floor(Math.random() * filtered.length)];
+    const random = createSeededRandom(Date.now());
+    const selected = filtered[Math.floor(random() * filtered.length)];
     const newPuzzle = parseDatasetPuzzle(selected);
 
     setPuzzle(newPuzzle);

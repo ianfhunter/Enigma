@@ -4,12 +4,13 @@ import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Constellations.module.css';
 
 const TOTAL_ROUNDS = 12;
 
 // Shuffle array helper
-const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+const shuffle = (arr, random = Math.random) => [...arr].sort(() => random() - 0.5);
 
 const MIN_OPTION_COUNT = 4;
 
@@ -62,7 +63,7 @@ const FALLBACK_SEMANTICS = [
   'beast',
 ];
 
-const buildOptionSet = ({ answer, pool, fallbackPool = [], desiredTotal = MIN_OPTION_COUNT }) => {
+const buildOptionSet = ({ answer, pool, fallbackPool = [], desiredTotal = MIN_OPTION_COUNT, random = Math.random }) => {
   const desiredWrong = Math.max(desiredTotal - 1, 0);
   const cleanedPool = [...new Set(pool.filter(Boolean))].filter(opt => opt !== answer);
   const cleanedFallback = [...new Set(fallbackPool.filter(Boolean))]
@@ -73,18 +74,19 @@ const buildOptionSet = ({ answer, pool, fallbackPool = [], desiredTotal = MIN_OP
     basePool.push(`Option ${basePool.length + 1}`);
   }
 
-  const selectedWrong = shuffle(basePool).slice(0, desiredWrong);
-  return shuffle([answer, ...selectedWrong]);
+  const selectedWrong = shuffle(basePool, random).slice(0, desiredWrong);
+  return shuffle([answer, ...selectedWrong], random);
 };
 
 // Get constellation options for multiple choice
-const getConstellationOptions = (data, correct, count = 3) => {
+const getConstellationOptions = (data, correct, count = 3, random = Math.random) => {
   const allConstellations = data.map(c => c.names[0].english);
   return buildOptionSet({
     answer: correct,
     pool: allConstellations,
     fallbackPool: allConstellations,
     desiredTotal: count + 1,
+    random,
   });
 };
 
@@ -95,17 +97,18 @@ const QUESTION_TYPES = [
     question: () => `Identify this constellation:`,
     showStars: true,
     getAnswer: (c) => c.names[0].english,
-    getOptions: (data, c) => getConstellationOptions(data, c.names[0].english),
+    getOptions: (data, c, random) => getConstellationOptions(data, c.names[0].english, 3, random),
   },
   {
     id: 'abbreviation',
     question: (c) => `What is the IAU abbreviation for ${c.names[0].english}?`,
     showStars: false,
     getAnswer: (c) => c.IAU,
-    getOptions: (data, c) => buildOptionSet({
+    getOptions: (data, c, random) => buildOptionSet({
       answer: c.IAU,
       pool: data.map(con => con.IAU),
       fallbackPool: FALLBACK_ABBREVIATIONS,
+      random,
     }),
   },
   {
@@ -113,20 +116,21 @@ const QUESTION_TYPES = [
     question: (c) => `${c.names[0].english} represents which type of figure?`,
     showStars: false,
     getAnswer: (c) => c.semantics?.[0] || 'unknown',
-    getOptions: (data, c) => buildOptionSet({
+    getOptions: (data, c, random) => buildOptionSet({
       answer: c.semantics?.[0] || 'unknown',
       pool: data.flatMap(con => con.semantics || []),
       fallbackPool: FALLBACK_SEMANTICS,
+      random,
     }),
     valid: (c) => c.semantics && c.semantics.length > 0,
   },
 ];
 
 // Export helpers for testing
-export { CONSTELLATION_STARS, QUESTION_TYPES, getConstellationOptions, shuffle };
+export { CONSTELLATION_STARS, QUESTION_TYPES, getConstellationOptions, shuffle, buildOptionSet };
 
 // Draw constellation on canvas
-const ConstellationCanvas = ({ constellation, revealed }) => {
+const ConstellationCanvas = ({ constellation, revealed, seed = Date.now() }) => {
   const canvasRef = useRef(null);
   const abbrev = constellation?.IAU;
   const starData = CONSTELLATION_STARS[abbrev];
@@ -135,6 +139,7 @@ const ConstellationCanvas = ({ constellation, revealed }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const random = createSeededRandom(seed);
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
@@ -145,10 +150,10 @@ const ConstellationCanvas = ({ constellation, revealed }) => {
 
     // Draw background stars
     for (let i = 0; i < 50; i++) {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      const size = Math.random() * 1.5;
-      ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`;
+      const x = random() * width;
+      const y = random() * height;
+      const size = random() * 1.5;
+      ctx.fillStyle = `rgba(255, 255, 255, ${random() * 0.3 + 0.1})`;
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.fill();
@@ -158,7 +163,7 @@ const ConstellationCanvas = ({ constellation, revealed }) => {
       // Fallback: draw random pattern
       const fallbackStars = [];
       for (let i = 0; i < 6; i++) {
-        fallbackStars.push([0.2 + Math.random() * 0.6, 0.2 + Math.random() * 0.6]);
+        fallbackStars.push([0.2 + random() * 0.6, 0.2 + random() * 0.6]);
       }
 
       // Draw constellation stars
@@ -203,7 +208,7 @@ const ConstellationCanvas = ({ constellation, revealed }) => {
     starData.stars.forEach(([px, py], i) => {
       const x = px * width;
       const y = py * height;
-      const size = i === 0 ? 5 : 3 + Math.random() * 2;
+      const size = i === 0 ? 5 : 3 + random() * 2;
 
       // Glow
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 4);
@@ -222,7 +227,7 @@ const ConstellationCanvas = ({ constellation, revealed }) => {
       ctx.fill();
     });
 
-  }, [starData, revealed]);
+  }, [starData, revealed, seed]);
 
   return (
     <canvas
@@ -276,25 +281,26 @@ export default function Constellations() {
   }, []);
 
   const setupRound = useCallback(() => {
+    const random = createSeededRandom(Date.now() + round);
     const available = constellations.filter(c => !usedConstellations.includes(c.id));
     if (available.length === 0) {
       setUsedConstellations([]);
       return;
     }
 
-    const constellation = available[Math.floor(Math.random() * available.length)];
+    const constellation = available[Math.floor(random() * available.length)];
 
     // Pick valid question type
     const validTypes = QUESTION_TYPES.filter(qt => !qt.valid || qt.valid(constellation));
-    const qType = validTypes[Math.floor(Math.random() * validTypes.length)];
+    const qType = validTypes[Math.floor(random() * validTypes.length)];
 
     setCurrentConstellation(constellation);
     setQuestionType(qType);
-    setOptions(qType.getOptions(constellations, constellation));
+    setOptions(qType.getOptions(constellations, constellation, random));
     setSelectedAnswer(null);
     setIsCorrect(null);
     setUsedConstellations(prev => [...prev, constellation.id]);
-  }, [constellations, usedConstellations]);
+  }, [constellations, usedConstellations, round]);
 
   const startGame = (selectedMode) => {
     setMode(selectedMode);
@@ -494,6 +500,7 @@ export default function Constellations() {
             <ConstellationCanvas
               constellation={currentConstellation}
               revealed={selectedAnswer !== null}
+              seed={round * 12345 + (currentConstellation?.id || 0)}
             />
           </div>
         )}

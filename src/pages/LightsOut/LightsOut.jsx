@@ -6,6 +6,7 @@ import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './LightsOut.module.css';
 
 const SIZES = {
@@ -15,7 +16,8 @@ const SIZES = {
 };
 
 // Generate a solvable puzzle by working backwards from solved state
-function generatePuzzle(size, moves = null) {
+function generatePuzzle(size, moves = null, seed = null) {
+  const random = seed !== null ? createSeededRandom(seed) : Math.random;
   // Start with all lights off (solved state)
   const grid = Array(size).fill(null).map(() => Array(size).fill(false));
 
@@ -23,15 +25,15 @@ function generatePuzzle(size, moves = null) {
   const numMoves = moves || Math.floor(size * size * 0.4) + 3;
 
   for (let i = 0; i < numMoves; i++) {
-    const row = Math.floor(Math.random() * size);
-    const col = Math.floor(Math.random() * size);
+    const row = Math.floor(random() * size);
+    const col = Math.floor(random() * size);
     toggleCell(grid, row, col, size);
   }
 
   // Make sure at least some lights are on
   const litCount = grid.flat().filter(Boolean).length;
   if (litCount < 3) {
-    return generatePuzzle(size, moves);
+    return generatePuzzle(size, moves, seed);
   }
 
   return grid;
@@ -69,7 +71,8 @@ export default function LightsOut() {
   const [bestScores, setBestScores] = usePersistedState('lights-out-best', {});
 
   const initGame = useCallback(() => {
-    setGrid(generatePuzzle(size));
+    const seed = Date.now();
+    setGrid(generatePuzzle(size, null, seed));
     setMoves(0);
     resetGameState();
   }, [size, resetGameState]);

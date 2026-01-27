@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
+import GiveUpButton from '../../components/GiveUpButton/GiveUpButton';
+import GameResult from '../../components/GameResult';
 import {
   isValidWord,
   findAllWordsFromLetters,
@@ -210,6 +212,7 @@ export default function LetterOrbit() {
   const [message, setMessage] = useState({ text: '', type: '' });
   const [seed, setSeed] = useState(null);
   const [showAllWords, setShowAllWords] = useState(false);
+  const [gaveUp, setGaveUp] = useState(false);
 
   const initGame = useCallback((customSeed = null) => {
     const today = getTodayDateString();
@@ -232,6 +235,7 @@ export default function LetterOrbit() {
     setCurrentWord('');
     setMessage({ text: '', type: '' });
     setShowAllWords(false);
+    setGaveUp(false);
   }, []);
 
   useEffect(() => {
@@ -290,6 +294,14 @@ export default function LetterOrbit() {
   const calculateScore = () => {
     return foundWords.length * 10; // Simple scoring - 10 points per word
   };
+
+  const handleGiveUp = () => {
+    setGaveUp(true);
+    setShowAllWords(true);
+    setMessage({ text: '', type: '' });
+  };
+
+  const gameWon = foundWords.length === puzzle?.allWords.length;
 
   if (!puzzle) return null;
 
@@ -433,15 +445,17 @@ export default function LetterOrbit() {
           <div className={styles.wordsList}>
             <div className={styles.wordsHeader}>
               <h3>{t('common.foundWords')}</h3>
-              <button
-                className={styles.toggleBtn}
-                onClick={() => setShowAllWords(!showAllWords)}
-              >
-                {showAllWords ? 'Hide' : 'Show'} All Words
-              </button>
+              {!gaveUp && (
+                <button
+                  className={styles.toggleBtn}
+                  onClick={() => setShowAllWords(!showAllWords)}
+                >
+                  {showAllWords ? 'Hide' : 'Show'} All Words
+                </button>
+              )}
             </div>
             <div className={styles.words}>
-              {(showAllWords ? puzzle.allWords : foundWords).map((word, idx) => {
+              {(showAllWords || gaveUp ? puzzle.allWords : foundWords).map((word, idx) => {
                 const isFound = foundWords.includes(word);
                 const isInnerOuter = puzzle.orbits.every((orbit, i) => orbit.includes(word[i]));
                 const direction = isInnerOuter ? '→' : '←';
@@ -449,7 +463,7 @@ export default function LetterOrbit() {
                 return (
                   <div
                     key={idx}
-                    className={`${styles.word} ${isFound ? styles.found : ''} ${styles.spanning}`}
+                    className={`${styles.word} ${isFound ? styles.found : ''} ${gaveUp && !isFound ? styles.revealed : ''} ${styles.spanning}`}
                   >
                     <WordWithDefinition word={word} /> <span className={styles.direction}>{direction}</span>
                   </div>
@@ -458,6 +472,28 @@ export default function LetterOrbit() {
             </div>
           </div>
         </div>
+      </div>
+
+      {gameWon && (
+        <GameResult
+          state="won"
+          title={t('gameStatus.congratulations')}
+          message={t('common.allWordsFound', `You found all ${puzzle.allWords.length} words!`)}
+        />
+      )}
+
+      {gaveUp && !gameWon && (
+        <GameResult
+          state="gaveup"
+          title={t('common.solutionRevealed', 'Solution Revealed')}
+          message={t('common.tryAnotherPuzzle', 'All words are now shown. Try another puzzle!')}
+        />
+      )}
+
+      <div className={styles.bottomControls}>
+        {!gameWon && !gaveUp && (
+          <GiveUpButton onGiveUp={handleGiveUp} />
+        )}
       </div>
     </div>
   );

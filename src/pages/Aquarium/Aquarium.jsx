@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Aquarium.module.css';
 
 const GRID_SIZES = {
@@ -138,7 +139,7 @@ function solvePuzzle(tanks, rowClues, colClues, maxSolutions = 2) {
   return solutions.length;
 }
 
-function generateTanks(size) {
+function generateTanks(size, random = Math.random) {
   const tanks = Array(size).fill(null).map(() => Array(size).fill(-1));
   const numTanks = Math.floor(size * 1.2);
 
@@ -152,7 +153,7 @@ function generateTanks(size) {
 
   // Shuffle
   for (let i = positions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [positions[i], positions[j]] = [positions[j], positions[i]];
   }
 
@@ -176,7 +177,7 @@ function generateTanks(size) {
           .filter(([nr, nc]) => nr >= 0 && nr < size && nc >= 0 && nc < size && tanks[nr][nc] !== -1);
 
         if (neighbors.length > 0) {
-          const [nr, nc] = neighbors[Math.floor(Math.random() * neighbors.length)];
+          const [nr, nc] = neighbors[Math.floor(random() * neighbors.length)];
           tanks[r][c] = tanks[nr][nc];
           changed = true;
         }
@@ -187,7 +188,7 @@ function generateTanks(size) {
   return tanks;
 }
 
-function generateSolutionForTanks(tanks) {
+function generateSolutionForTanks(tanks, random = Math.random) {
   const size = tanks.length;
   const tankInfo = analyzeTanks(tanks);
   const tankWaterLevels = {};
@@ -197,7 +198,7 @@ function generateSolutionForTanks(tanks) {
     const info = tankInfo[tankId];
     const tankHeight = info.bottomRow - info.topRow + 1;
     // Water level can be from topRow (full) to bottomRow+1 (empty)
-    tankWaterLevels[tankId] = info.topRow + Math.floor(Math.random() * (tankHeight + 1));
+    tankWaterLevels[tankId] = info.topRow + Math.floor(random() * (tankHeight + 1));
   }
 
   // Create solution grid
@@ -214,15 +215,15 @@ function generateSolutionForTanks(tanks) {
   return solution;
 }
 
-function generatePuzzle(size) {
+function generatePuzzle(size, random = Math.random) {
   const maxAttempts = 100;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     // Generate tank layout
-    const tanks = generateTanks(size);
+    const tanks = generateTanks(size, random);
 
     // Generate a random solution
-    const solution = generateSolutionForTanks(tanks);
+    const solution = generateSolutionForTanks(tanks, random);
 
     // Calculate row and column clues
     const rowClues = Array(size).fill(0);
@@ -247,8 +248,8 @@ function generatePuzzle(size) {
 
   // Fallback: return a puzzle even if not unique (shouldn't happen often)
   console.warn('Could not generate unique puzzle after', maxAttempts, 'attempts');
-  const tanks = generateTanks(size);
-  const solution = generateSolutionForTanks(tanks);
+  const tanks = generateTanks(size, random);
+  const solution = generateSolutionForTanks(tanks, random);
   const rowClues = Array(size).fill(0);
   const colClues = Array(size).fill(0);
   for (let r = 0; r < size; r++) {
@@ -373,7 +374,7 @@ export default function Aquarium() {
   const size = GRID_SIZES[sizeKey];
 
   const initGame = useCallback(() => {
-    const data = generatePuzzle(size);
+    const data = generatePuzzle(size, createSeededRandom(Date.now()));
     setPuzzleData(data);
     setWater(Array(size).fill(null).map(() => Array(size).fill(false)));
     resetGameState();

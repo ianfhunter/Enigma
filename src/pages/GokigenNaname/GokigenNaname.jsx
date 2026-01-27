@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './GokigenNaname.module.css';
 import gokigenPuzzles from '../../../public/datasets/gokigennanamePuzzles.json';
 
@@ -137,7 +138,8 @@ export default function GokigenNaname() {
       // Fallback to any puzzle of this difficulty
       const fallback = gokigenPuzzles.puzzles.filter(p => p.difficulty === difficulty);
       if (fallback.length > 0) {
-        const selected = fallback[Math.floor(Math.random() * fallback.length)];
+        const random = createSeededRandom(Date.now());
+        const selected = fallback[Math.floor(random() * fallback.length)];
         setPuzzleData(selected);
         setGrid(Array(selected.rows).fill(null).map(() => Array(selected.cols).fill(null)));
         resetGameState();
@@ -146,7 +148,8 @@ export default function GokigenNaname() {
       }
     }
 
-    const selected = filtered[Math.floor(Math.random() * filtered.length)];
+    const random = createSeededRandom(Date.now());
+    const selected = filtered[Math.floor(random() * filtered.length)];
     setPuzzleData(selected);
     setGrid(Array(selected.rows).fill(null).map(() => Array(selected.cols).fill(null)));
     resetGameState();

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './GodsQuiz.module.css';
 
 // Helper to check if guessed domains match exactly the deity's domains
@@ -26,6 +28,8 @@ export default function GodsQuiz() {
   const [current, setCurrent] = useState(null);
   const [guessDomains, setGuessDomains] = useState(() => new Set());
   const [result, setResult] = useState(null);
+  const [seed, setSeed] = useState(() => stringToSeed(`gods-quiz-${getTodayDateString()}`));
+  const [roundNumber, setRoundNumber] = useState(0);
 
   const { stats, recordWin, recordLoss, winRate } = useGameStats('gods-quiz', {
     trackBestTime: false,
@@ -52,9 +56,10 @@ export default function GodsQuiz() {
 
   const pickRandom = useCallback(() => {
     if (!gods.length) return null;
-    const idx = Math.floor(Math.random() * gods.length);
+    const random = createSeededRandom(seed + roundNumber);
+    const idx = Math.floor(random() * gods.length);
     return gods[idx];
-  }, [gods]);
+  }, [gods, seed, roundNumber]);
 
   const startRound = useCallback(() => {
     const next = pickRandom();
@@ -62,6 +67,7 @@ export default function GodsQuiz() {
     setCurrent(next);
     setGuessDomains(new Set());
     setResult(null);
+    setRoundNumber(prev => prev + 1);
   }, [pickRandom]);
 
   useEffect(() => {
@@ -99,6 +105,22 @@ export default function GodsQuiz() {
         title="Gods & Domains Quiz"
         instructions="Select all the domains associated with each deity from Greek, Roman, Norse, and Egyptian mythology."
       />
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+          onSeedChange={(newSeed) => {
+            const seedNum = typeof newSeed === 'string'
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            setSeed(seedNum);
+            setRoundNumber(0);
+          }}
+        />
+      )}
 
       <div className={styles.controls}>
         <label className={styles.label}>

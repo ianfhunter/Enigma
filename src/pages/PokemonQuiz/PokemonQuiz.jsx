@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './PokemonQuiz.module.css';
 
 function titleCase(s) {
@@ -19,6 +21,8 @@ export default function PokemonQuiz() {
   const [guessGen, setGuessGen] = useState(1);
   const [guessTypes, setGuessTypes] = useState(() => new Set());
   const [result, setResult] = useState(null); // { correct, genOk, typesOk, correctGen, correctTypes }
+  const [seed, setSeed] = useState(() => stringToSeed(`pokemon-quiz-${getTodayDateString()}`));
+  const [roundNumber, setRoundNumber] = useState(0);
 
   const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('pokemon-quiz', {
     trackBestTime: false,
@@ -56,12 +60,15 @@ export default function PokemonQuiz() {
 
   const pickRandomPokemon = useCallback(() => {
     if (!data?.generations?.length) return null;
+    // Use seeded random based on current seed and round number
+    const random = createSeededRandom(seed + roundNumber);
+
     // Pick a random generation, then a random pokemon from it
-    const g = data.generations[Math.floor(Math.random() * data.generations.length)];
+    const g = data.generations[Math.floor(random() * data.generations.length)];
     if (!g || !g.pokemon?.length) return null;
-    const idx = Math.floor(Math.random() * g.pokemon.length);
+    const idx = Math.floor(random() * g.pokemon.length);
     return { gen: g.gen, pokemon: g.pokemon[idx] };
-  }, [data]);
+  }, [data, seed, roundNumber]);
 
   const startRound = useCallback(() => {
     const next = pickRandomPokemon();
@@ -135,6 +142,7 @@ export default function PokemonQuiz() {
   };
 
   const onNext = () => {
+    setRoundNumber(prev => prev + 1);
     startRound();
   };
 
@@ -146,6 +154,22 @@ export default function PokemonQuiz() {
         title="Pokémon Quiz"
         instructions="For the shown Pokémon, pick its generation and its type(s)."
       />
+
+      {seed !== null && (
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+          onSeedChange={(newSeed) => {
+            const seedNum = typeof newSeed === 'string'
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            setSeed(seedNum);
+            setRoundNumber(0);
+          }}
+        />
+      )}
 
       {!data && <div className={styles.card}>Loading Pokémon...</div>}
 

@@ -11,7 +11,8 @@ import {
 describe('Hitori - generation basics', () => {
   it('generates puzzle grid and solution with matching size', () => {
     const size = DIFFICULTY_SIZES.easy.max; // 8
-    const { grid, solution } = generatePuzzle(size);
+    const seed = 12345;
+    const { grid, solution } = generatePuzzle(size, seed);
     expect(grid.length).toBe(size);
     expect(solution.length).toBe(size);
     grid.forEach(row => expect(row.length).toBe(size));

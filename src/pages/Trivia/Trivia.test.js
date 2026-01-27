@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { createSeededRandom } from '../../data/wordUtils';
 import { parseTrivia, CATEGORIES, getAllTrivia, shuffle, TOTAL_ROUNDS } from './Trivia.jsx';
 
 describe('Trivia - helpers', () => {
@@ -29,6 +30,7 @@ D 4
 
   it('shuffle preserves items', () => {
     const arr = [1, 2, 3];
-    expect(shuffle(arr).sort()).toEqual(arr.sort());
+    const random = createSeededRandom(12345);
+    expect(shuffle(arr, random).sort()).toEqual(arr.sort());
   });
 });

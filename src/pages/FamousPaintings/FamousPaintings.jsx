@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import ModeSelector from '../../components/ModeSelector';
 import StatsPanel from '../../components/StatsPanel';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './FamousPaintings.module.css';
 
 // Import all local painting images using Vite's glob import
@@ -24,22 +25,22 @@ const getImageUrl = (painting) => {
 const TOTAL_ROUNDS = 10;
 
 // Shuffle array helper
-const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+const shuffle = (arr, random = Math.random) => [...arr].sort(() => random() - 0.5);
 
 // Generate wrong options for a field
-const getRandomOptions = (data, correct, field, count = 3) => {
+const getRandomOptions = (data, correct, field, count = 3, random = Math.random) => {
   const allValues = [...new Set(data.map(p => p[field]).filter(Boolean))];
   const wrongOptions = allValues.filter(v => v !== correct);
-  const selected = shuffle(wrongOptions).slice(0, count);
-  const options = shuffle([correct, ...selected]);
+  const selected = shuffle(wrongOptions, random).slice(0, count);
+  const options = shuffle([correct, ...selected], random);
   return options;
 };
 
 // Get a random painting
-const getRandomPainting = (data, exclude = []) => {
+const getRandomPainting = (data, exclude = [], random = Math.random) => {
   const available = data.filter(p => !exclude.includes(p.title));
   if (available.length === 0) return null;
-  return available[Math.floor(Math.random() * available.length)];
+  return available[Math.floor(random() * available.length)];
 };
 
 // Question types
@@ -48,24 +49,24 @@ const QUESTION_TYPES = [
     id: 'artist',
     question: (p) => `Who painted "${p.title}"?`,
     answer: (p) => p.artist,
-    options: (data, p) => getRandomOptions(data, p.artist, 'artist'),
+    options: (data, p, random = Math.random) => getRandomOptions(data, p.artist, 'artist', 3, random),
     showImage: true
   },
   {
     id: 'title',
     question: (_p) => `What is the name of this painting?`,
     answer: (p) => p.title,
-    options: (data, p) => getRandomOptions(data, p.title, 'title'),
+    options: (data, p, random = Math.random) => getRandomOptions(data, p.title, 'title', 3, random),
     showImage: true
   },
   {
     id: 'year',
     question: (p) => `When was "${p.title}" by ${p.artist} created?`,
     answer: (p) => p.year,
-    options: (data, p) => {
+    options: (data, p, random = Math.random) => {
       const years = data.map(p => p.year).filter(Boolean);
-      const shuffled = shuffle(years.filter(y => y !== p.year)).slice(0, 3);
-      return shuffle([p.year, ...shuffled]);
+      const shuffled = shuffle(years.filter(y => y !== p.year), random).slice(0, 3);
+      return shuffle([p.year, ...shuffled], random);
     },
     showImage: true
   },
@@ -73,14 +74,14 @@ const QUESTION_TYPES = [
     id: 'style',
     question: (p) => `What art style/movement is "${p.title}" associated with?`,
     answer: (p) => p.style,
-    options: (data, p) => getRandomOptions(data, p.style, 'style'),
+    options: (data, p, random = Math.random) => getRandomOptions(data, p.style, 'style', 3, random),
     showImage: true
   },
   {
     id: 'location',
     question: (p) => `Where is "${p.title}" currently housed?`,
     answer: (p) => p.location,
-    options: (data, p) => getRandomOptions(data, p.location, 'location'),
+    options: (data, p, random = Math.random) => getRandomOptions(data, p.location, 'location', 3, random),
     showImage: false
   }
 ];
@@ -110,6 +111,8 @@ export default function FamousPaintings() {
   const [streak, setStreak] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [seed] = useState(() => Math.floor(Math.random() * 1000000));
+  const [roundNumber, setRoundNumber] = useState(0);
   const { stats, updateStats, recordWin, recordLoss, winRate } = useGameStats('famous-paintings', {
     trackBestTime: false,
     trackBestScore: true,
@@ -138,23 +141,25 @@ export default function FamousPaintings() {
   }, []);
 
   const setupRound = useCallback(() => {
-    const painting = getRandomPainting(paintings, usedPaintings);
+    const random = createSeededRandom(seed + roundNumber);
+    const painting = getRandomPainting(paintings, usedPaintings, random);
     if (!painting) {
       setGameOver(true);
       return;
     }
     // Pick a random question type
-    const qType = QUESTION_TYPES[Math.floor(Math.random() * QUESTION_TYPES.length)];
+    const qType = QUESTION_TYPES[Math.floor(random() * QUESTION_TYPES.length)];
 
     setCurrentPainting(painting);
     setQuestionType(qType);
-    setOptions(qType.options(paintings, painting));
+    setOptions(qType.options(paintings, painting, random));
     setSelectedAnswer(null);
     setIsCorrect(null);
     setUsedPaintings(prev => [...prev, painting.title]);
     setImageLoaded(false);
     setImageError(false);
-  }, [usedPaintings, paintings]);
+    setRoundNumber(prev => prev + 1);
+  }, [usedPaintings, paintings, seed, roundNumber]);
 
   const startGame = (selectedMode) => {
     setMode(selectedMode);
@@ -165,6 +170,7 @@ export default function FamousPaintings() {
     setUsedPaintings([]);
     setSelectedAnswer(null);
     setIsCorrect(null);
+    setRoundNumber(0);
   };
 
   useEffect(() => {

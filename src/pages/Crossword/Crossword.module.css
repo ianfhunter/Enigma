@@ -135,6 +135,10 @@
   border-radius: 4px;
   padding: 2px;
   box-shadow: var(--shadow-card);
+  max-width: 100%;
+  max-height: 80vh;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 .cell {
@@ -526,9 +530,21 @@
   }
 }
 
+@media (max-width: 768px) {
+  .container {
+    --cell-size: min(30px, calc((100vw - 3rem) / 20));
+  }
+
+  .gridSection {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 500px) {
   .container {
-    --cell-size: 26px;
+    --cell-size: min(26px, calc((100vw - 3rem) / 20));
+    padding: 0 0.5rem;
   }
 
   .controls {
@@ -553,16 +569,40 @@
   .statValue {
     font-size: 1rem;
   }
+
+  .toolButtons {
+    max-width: 100%;
+  }
+
+  .toolBtn {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .currentClue {
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+  }
 }
 
 /* Very small grids */
 @media (max-width: 380px) {
   .container {
-    --cell-size: 22px;
+    --cell-size: min(22px, calc((100vw - 2rem) / 20));
+    padding: 0 0.25rem;
   }
 
   .cellNumber {
     font-size: 7px;
+  }
+
+  .grid {
+    gap: 0px;
+  }
+
+  .toolBtn {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.5rem;
   }
 }
 

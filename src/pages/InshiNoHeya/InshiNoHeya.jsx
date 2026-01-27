@@ -5,8 +5,10 @@ import SizeSelector from '../../components/SizeSelector';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './InshiNoHeya.module.css';
 
 const GRID_SIZES = {
@@ -29,7 +31,7 @@ const DIFFICULTY = {
 // - Each room has a clue showing the product of all numbers in that room
 
 // Generate random rooms covering the grid
-function generateRooms(size, minRoomSize, maxRoomSize) {
+function generateRooms(size, minRoomSize, maxRoomSize, random) {
   const roomGrid = Array(size).fill(null).map(() => Array(size).fill(-1));
   let roomId = 0;
   const rooms = [];
@@ -44,7 +46,7 @@ function generateRooms(size, minRoomSize, maxRoomSize) {
 
   // Shuffle
   for (let i = unassigned.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [unassigned[i], unassigned[j]] = [unassigned[j], unassigned[i]];
   }
 
@@ -58,13 +60,13 @@ function generateRooms(size, minRoomSize, maxRoomSize) {
     roomGrid[startR][startC] = roomId;
 
     // Grow room randomly
-    const targetSize = minRoomSize + Math.floor(Math.random() * (maxRoomSize - minRoomSize + 1));
+    const targetSize = minRoomSize + Math.floor(random() * (maxRoomSize - minRoomSize + 1));
 
     let attempts = 0;
     while (roomCells.length < targetSize && attempts < 50) {
       attempts++;
       // Pick a random cell in the room
-      const [r, c] = roomCells[Math.floor(Math.random() * roomCells.length)];
+      const [r, c] = roomCells[Math.floor(random() * roomCells.length)];
 
       // Get unassigned neighbors
       const neighbors = [
@@ -74,7 +76,7 @@ function generateRooms(size, minRoomSize, maxRoomSize) {
       );
 
       if (neighbors.length > 0) {
-        const [nr, nc] = neighbors[Math.floor(Math.random() * neighbors.length)];
+        const [nr, nc] = neighbors[Math.floor(random() * neighbors.length)];
         roomGrid[nr][nc] = roomId;
         roomCells.push([nr, nc]);
       }
@@ -92,7 +94,7 @@ function generateRooms(size, minRoomSize, maxRoomSize) {
 }
 
 // Generate a valid Latin square
-function generateLatinSquare(size) {
+function generateLatinSquare(size, random) {
   const grid = Array(size).fill(null).map(() => Array(size).fill(0));
 
   // Simple shifted pattern
@@ -104,15 +106,15 @@ function generateLatinSquare(size) {
 
   // Shuffle rows within the grid
   for (let i = 0; i < size * 3; i++) {
-    const r1 = Math.floor(Math.random() * size);
-    const r2 = Math.floor(Math.random() * size);
+    const r1 = Math.floor(random() * size);
+    const r2 = Math.floor(random() * size);
     [grid[r1], grid[r2]] = [grid[r2], grid[r1]];
   }
 
   // Shuffle columns
   for (let i = 0; i < size * 3; i++) {
-    const c1 = Math.floor(Math.random() * size);
-    const c2 = Math.floor(Math.random() * size);
+    const c1 = Math.floor(random() * size);
+    const c2 = Math.floor(random() * size);
     for (let r = 0; r < size; r++) {
       [grid[r][c1], grid[r][c2]] = [grid[r][c2], grid[r][c1]];
     }
@@ -121,7 +123,7 @@ function generateLatinSquare(size) {
   // Shuffle symbols
   const perm = Array.from({ length: size }, (_, i) => i + 1);
   for (let i = perm.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [perm[i], perm[j]] = [perm[j], perm[i]];
   }
 
@@ -135,14 +137,15 @@ function generateLatinSquare(size) {
 }
 
 // Generate complete puzzle
-function generatePuzzle(size, difficultyKey) {
+function generatePuzzle(size, difficultyKey, seed) {
+  const random = createSeededRandom(seed);
   const { minRoomSize, maxRoomSize } = DIFFICULTY[difficultyKey];
 
   // Generate Latin square solution
-  const solution = generateLatinSquare(size);
+  const solution = generateLatinSquare(size, random);
 
   // Generate rooms
-  const { roomGrid, rooms } = generateRooms(size, minRoomSize, maxRoomSize);
+  const { roomGrid, rooms } = generateRooms(size, minRoomSize, maxRoomSize, random);
 
   // Calculate products for each room
   for (const room of rooms) {
@@ -272,6 +275,7 @@ export default function InshiNoHeya() {
   const { t } = useTranslation();
   const [sizeKey, setSizeKey] = useState('5×5');
   const [difficultyKey, setDifficultyKey] = useState('Medium');
+  const [seed, setSeed] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState(null);
@@ -281,8 +285,11 @@ export default function InshiNoHeya() {
 
   const size = GRID_SIZES[sizeKey];
 
-  const initGame = useCallback(() => {
-    const data = generatePuzzle(size, difficultyKey);
+  const initGame = useCallback((customSeed = null) => {
+    const today = getTodayDateString();
+    const gameSeed = customSeed ?? stringToSeed(`inshinoheya-${today}-${size}-${difficultyKey}`);
+    const data = generatePuzzle(size, difficultyKey, gameSeed);
+    setSeed(gameSeed);
     setPuzzleData(data);
     setGrid(Array(size).fill(null).map(() => Array(size).fill(0)));
     setSelectedCell(null);
@@ -445,6 +452,21 @@ export default function InshiNoHeya() {
       </div>
 
       <div className={styles.gameArea}>
+        {seed && (
+          <SeedDisplay
+            seed={seed}
+            variant="compact"
+            showNewButton={false}
+            showShare={false}
+            onSeedChange={(newSeed) => {
+              const seedNum = typeof newSeed === 'string'
+                ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+                : newSeed;
+              initGame(seedNum);
+            }}
+          />
+        )}
+
         <div
           className={styles.grid}
           style={{

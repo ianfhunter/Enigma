@@ -3,6 +3,7 @@ import { useState, useCallback, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './NQueens.module.css';
 
 // Check if a queen placement is valid
@@ -53,7 +54,8 @@ function getAttackedSquares(queens, size) {
 }
 
 // Generate a partial puzzle (some queens pre-placed)
-function generatePuzzle(size, preplacedCount) {
+function generatePuzzle(size, preplacedCount, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   // Use backtracking to find a valid solution
   const solution = [];
 
@@ -62,7 +64,7 @@ function generatePuzzle(size, preplacedCount) {
     const rows = [...Array(size).keys()];
     // Shuffle for randomness
     for (let i = rows.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [rows[i], rows[j]] = [rows[j], rows[i]];
     }
 
@@ -81,7 +83,7 @@ function generatePuzzle(size, preplacedCount) {
   // Pick random queens to pre-place
   const indices = [...Array(size).keys()];
   for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [indices[i], indices[j]] = [indices[j], indices[i]];
   }
 

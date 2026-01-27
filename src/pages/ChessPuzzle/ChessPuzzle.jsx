@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import GameHeader from '../../components/GameHeader';
+import SeedDisplay from '../../components/SeedDisplay';
+import GiveUpButton from '../../components/GiveUpButton';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
 import { parseFEN, applyMove, indexToAlgebraic, PIECE_CHARS, getPieceColor } from './chessUtils';
@@ -423,8 +425,8 @@ export default function ChessPuzzle() {
     return (
       <div className={styles.container} style={themeStyle}>
         <GameHeader
-          title="Chess Puzzles"
-          instructions="Find the best move to win material or deliver checkmate!"
+          title={t('chessPuzzle.title', 'Chess Puzzles')}
+          instructions={t('chessPuzzle.instructions', 'Find the best move to win material or deliver checkmate!')}
         />
         <div className={styles.gameArea}>{t('common.loadingPuzzles')}</div>
       </div>
@@ -435,8 +437,8 @@ export default function ChessPuzzle() {
     return (
       <div className={styles.container} style={themeStyle}>
         <GameHeader
-          title="Chess Puzzles"
-          instructions="Find the best move to win material or deliver checkmate!"
+          title={t('chessPuzzle.title', 'Chess Puzzles')}
+          instructions={t('chessPuzzle.instructions', 'Find the best move to win material or deliver checkmate!')}
         />
         <div className={styles.gameArea}>{t('common.noPuzzlesAvailable')}</div>
       </div>
@@ -446,9 +448,21 @@ export default function ChessPuzzle() {
   return (
     <div className={styles.container} style={themeStyle}>
       <GameHeader
-        title="Chess Puzzles"
-        instructions="Find the best move to win material or deliver checkmate!"
+        title={t('chessPuzzle.title', 'Chess Puzzles')}
+        instructions={t('chessPuzzle.instructions', 'Find the best move to win material or deliver checkmate!')}
       />
+
+      {puzzle && (
+        <SeedDisplay
+          seed={puzzle.id}
+          variant="compact"
+          showNewButton={false}
+          showShare={true}
+          onSeedChange={(newId) => {
+            loadPuzzleById(String(newId));
+          }}
+        />
+      )}
 
       <div className={styles.gameArea}>
         {/* Turn indicator */}
@@ -459,7 +473,7 @@ export default function ChessPuzzle() {
                 {puzzle.playerColor === 'white' ? '♔' : '♚'}
               </span>
               <span className={styles.turnText}>
-                {puzzle.playerColor === 'white' ? 'White' : 'Black'} to move
+                {puzzle.playerColor === 'white' ? t('chessPuzzle.whiteToMove', 'White to move') : t('chessPuzzle.blackToMove', 'Black to move')}
               </span>
             </div>
             {puzzle.themes && puzzle.themes.length > 0 && (
@@ -489,7 +503,7 @@ export default function ChessPuzzle() {
           <div className={styles.stat}>
             <span className={styles.statIcon}>⭐</span>
             <span className={styles.statValue}>{puzzlesSolved}</span>
-            <span className={styles.statLabel}>Solved</span>
+            <span className={styles.statLabel}>{t('chessPuzzle.solved', 'Solved')}</span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statIcon}>🔥</span>
@@ -500,7 +514,7 @@ export default function ChessPuzzle() {
             <div className={styles.stat}>
               <span className={styles.statIcon}>📊</span>
               <span className={styles.statValue}>{puzzle.rating}</span>
-              <span className={styles.statLabel}>Rating</span>
+              <span className={styles.statLabel}>{t('chessPuzzle.rating', 'Rating')}</span>
             </div>
           )}
         </div>
@@ -515,7 +529,7 @@ export default function ChessPuzzle() {
         {/* Wrong move indicator */}
         {wrongMove && isPlaying && (
           <div className={styles.wrongMoveIndicator}>
-            That's not right — try again!
+            {t('chessPuzzle.notRight', "That's not right — try again!")}
           </div>
         )}
 
@@ -523,23 +537,23 @@ export default function ChessPuzzle() {
         {gameStatus === 'correct' && (
           <div className={`${styles.statusMessage} ${styles.success}`}>
             <span className={styles.statusIcon}>✓</span>
-            Excellent! Puzzle solved.
+            {t('chessPuzzle.excellent', 'Excellent! Puzzle solved.')}
           </div>
         )}
 
         {gameStatus === 'wrong' && (
           <div className={`${styles.statusMessage} ${styles.error}`}>
             <span className={styles.statusIcon}>✗</span>
-            You gave up on this one.
+            {t('chessPuzzle.gaveUpMessage', 'You gave up on this one.')}
           </div>
         )}
 
         {gameStatus === 'solution' && solutionStates.length > 0 && (
           <div className={styles.solutionPanel}>
             <div className={styles.solutionHeader}>
-              <span className={styles.solutionTitle}>📖 Solution</span>
+              <span className={styles.solutionTitle}>📖 {t('chessPuzzle.solution', 'Solution')}</span>
               <span className={styles.solutionStepInfo}>
-                Step {solutionStep} of {solutionStates.length - 1}
+                {t('chessPuzzle.stepOf', 'Step {{current}} of {{total}}', { current: solutionStep, total: solutionStates.length - 1 })}
               </span>
             </div>
 
@@ -558,7 +572,7 @@ export default function ChessPuzzle() {
                 onClick={prevSolutionStep}
                 disabled={solutionStep === 0}
               >
-                ← Back
+                ← {t('common.back', 'Back')}
               </button>
               <div className={styles.stepIndicators}>
                 {solutionStates.map((_, i) => (
@@ -566,7 +580,7 @@ export default function ChessPuzzle() {
                     key={i}
                     className={`${styles.stepDot} ${i === solutionStep ? styles.activeDot : ''} ${i <= solutionStep ? styles.visitedDot : ''}`}
                     onClick={() => goToSolutionStep(i)}
-                    title={`Step ${i}`}
+                    title={t('chessPuzzle.step', 'Step {{num}}', { num: i })}
                   />
                 ))}
               </div>
@@ -575,7 +589,7 @@ export default function ChessPuzzle() {
                 onClick={nextSolutionStep}
                 disabled={solutionStep >= solutionStates.length - 1}
               >
-                Next →
+                {t('common.next', 'Next')} →
               </button>
             </div>
           </div>
@@ -590,14 +604,12 @@ export default function ChessPuzzle() {
                 onClick={handleHint}
                 disabled={hintLevel >= 2}
               >
-                💡 {hintLevel === 0 ? 'Hint' : hintLevel === 1 ? 'Show Move' : 'Hint'}
+                💡 {hintLevel === 0 ? t('chessPuzzle.hint', 'Hint') : hintLevel === 1 ? t('chessPuzzle.showMove', 'Show Move') : t('chessPuzzle.hint', 'Hint')}
               </button>
-              <button
-                className={styles.giveUpBtn}
-                onClick={giveUp}
-              >
-                🏳️ Give Up
-              </button>
+              <GiveUpButton
+                onGiveUp={giveUp}
+                disabled={!isPlaying}
+              />
             </>
           )}
 
@@ -607,13 +619,13 @@ export default function ChessPuzzle() {
                 className={styles.retryBtn}
                 onClick={retryPuzzle}
               >
-                🔄 Retry
+                🔄 {t('chessPuzzle.retry', 'Retry')}
               </button>
               <button
                 className={styles.solutionBtn}
                 onClick={showSolution}
               >
-                📖 Show Solution
+                📖 {t('chessPuzzle.showSolution', 'Show Solution')}
               </button>
             </>
           )}
@@ -622,21 +634,21 @@ export default function ChessPuzzle() {
             className={styles.newPuzzleBtn}
             onClick={() => loadPuzzle()}
           >
-            {isPlaying ? '⏭️ Skip' : '➡️ Next Puzzle'}
+            {isPlaying ? t('chessPuzzle.skip', '⏭️ Skip') : t('common.nextPuzzle', '➡️ Next Puzzle')}
           </button>
 
           <button
             className={styles.flipBtn}
             onClick={() => setIsFlipped(!isFlipped)}
           >
-            🔄 Flip Board
+            🔄 {t('chessPuzzle.flipBoard', 'Flip Board')}
           </button>
         </div>
 
         {/* Themes */}
         {puzzle?.themes && puzzle.themes.length > 0 && (
           <div className={styles.themes}>
-            <span className={styles.themesLabel}>Themes:</span>
+            <span className={styles.themesLabel}>{t('chessPuzzle.themes', 'Themes')}:</span>
             {puzzle.themes.map(theme => (
               <span key={theme} className={styles.theme}>
                 {theme.replace(/([A-Z])/g, ' $1').trim()}
@@ -701,11 +713,11 @@ export default function ChessPuzzle() {
                   type="text"
                   value={puzzleIdInput}
                   onChange={(e) => setPuzzleIdInput(e.target.value)}
-                  placeholder="Enter puzzle ID"
+                  placeholder={t('chessPuzzle.enterPuzzleId', 'Enter puzzle ID')}
                   className={styles.puzzleIdInputField}
                   autoFocus
                 />
-                <button type="submit" className={styles.puzzleIdSubmit}>Go</button>
+                <button type="submit" className={styles.puzzleIdSubmit}>{t('common.go', 'Go')}</button>
                 <button
                   type="button"
                   className={styles.puzzleIdCancel}
@@ -722,13 +734,13 @@ export default function ChessPuzzle() {
                 className={styles.loadPuzzleBtn}
                 onClick={() => setShowPuzzleIdInput(true)}
               >
-                Load specific puzzle
+                {t('chessPuzzle.loadSpecific', 'Load specific puzzle')}
               </button>
             )}
           </div>
 
           <span className={styles.puzzleCount}>
-            {puzzleList.length} puzzles available
+            {t('chessPuzzle.puzzlesAvailable', '{{count}} puzzles available', { count: puzzleList.length })}
           </span>
         </div>
       </div>

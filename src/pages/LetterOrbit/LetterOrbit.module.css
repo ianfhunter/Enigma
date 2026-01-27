@@ -4,6 +4,12 @@
   padding: 2rem;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+
 .headerActions {
   display: flex;
   align-items: center;
@@ -11,6 +17,15 @@
   gap: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .headerActions {
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 .newGameBtn {
@@ -65,6 +80,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .orbitsContainer {
+    width: min(350px, calc(100vw - 2rem));
+    height: min(350px, calc(100vw - 2rem));
+  }
+}
+
+@media (max-width: 480px) {
+  .orbitsContainer {
+    width: min(280px, calc(100vw - 2rem));
+    height: min(280px, calc(100vw - 2rem));
+  }
+}
+
+@media (max-width: 360px) {
+  .orbitsContainer {
+    width: min(260px, calc(100vw - 2rem));
+    height: min(260px, calc(100vw - 2rem));
+  }
 }
 
 .orbit {
@@ -79,6 +116,30 @@
   animation: rotate 20s linear infinite;
   animation-direction: reverse;
   animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+  .orbit {
+    width: calc(70px + var(--orbit-index) * 52px);
+    height: calc(70px + var(--orbit-index) * 52px);
+    border-width: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orbit {
+    width: calc(56px + var(--orbit-index) * 42px);
+    height: calc(56px + var(--orbit-index) * 42px);
+    border-width: 2px;
+  }
+}
+
+@media (max-width: 360px) {
+  .orbit {
+    width: calc(52px + var(--orbit-index) * 39px);
+    height: calc(52px + var(--orbit-index) * 39px);
+    border-width: 2px;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -139,14 +200,77 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 768px) {
+  .letter {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(35px + var(--orbit-index) * 26px)) rotate(calc(-1 * var(--angle) - 0deg));
+  }
+}
+
+@media (max-width: 480px) {
+  .letter {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(28px + var(--orbit-index) * 21px)) rotate(calc(-1 * var(--angle) - 0deg));
+  }
+}
+
+@media (max-width: 360px) {
+  .letter {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(26px + var(--orbit-index) * 19.5px)) rotate(calc(-1 * var(--angle) - 0deg));
+  }
+}
+
 .letter:hover {
   transform: rotate(calc(var(--angle) + 0deg)) translate(calc(40px + var(--orbit-index) * 30px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
 }
 
+@media (max-width: 768px) {
+  .letter:hover {
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(35px + var(--orbit-index) * 26px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(1.1);
+  }
+}
+
+@media (max-width: 480px) {
+  .letter:hover {
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(28px + var(--orbit-index) * 21px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(1.1);
+  }
+}
+
+@media (max-width: 360px) {
+  .letter:hover {
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(26px + var(--orbit-index) * 19.5px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(1.1);
+  }
+}
+
 .letter:active {
   transform: rotate(calc(var(--angle) + 0deg)) translate(calc(40px + var(--orbit-index) * 30px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .letter:active {
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(35px + var(--orbit-index) * 26px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(0.95);
+  }
+}
+
+@media (max-width: 480px) {
+  .letter:active {
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(28px + var(--orbit-index) * 21px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(0.95);
+  }
+}
+
+@media (max-width: 360px) {
+  .letter:active {
+    transform: rotate(calc(var(--angle) + 0deg)) translate(calc(26px + var(--orbit-index) * 19.5px)) rotate(calc(-1 * var(--angle) - 0deg)) scale(0.95);
+  }
 }
 
 .letter.selected {
@@ -190,6 +314,14 @@
   box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.15);
 }
 
+@media (max-width: 480px) {
+  .currentWord {
+    font-size: 1.3rem;
+    padding: 0.75rem 1rem;
+    min-height: 50px;
+  }
+}
+
 .currentWord:focus {
   border-color: #667eea;
   background: rgba(102, 126, 234, 0.12);
@@ -230,6 +362,13 @@
   display: flex;
   gap: 0.75rem;
   justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .buttons {
+    gap: 0.5rem;
+  }
 }
 
 .btn {
@@ -242,6 +381,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 
 .btn:hover {
@@ -369,6 +515,20 @@
   background: rgba(102, 126, 234, 0.25);
 }
 
+.word.revealed {
+  color: var(--color-text);
+  background: rgba(255, 193, 7, 0.15);
+  border-left: 3px solid rgba(255, 193, 7, 0.6);
+}
+
 .spanningBadge {
   font-size: 1.2rem;
+}
+
+.bottomControls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
 }

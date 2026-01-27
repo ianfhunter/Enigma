@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Nurikabe.module.css';
 
 const GRID_SIZES = {
@@ -236,7 +237,8 @@ export default function Nurikabe() {
       return;
     }
 
-    const puzzle = available[Math.floor(Math.random() * available.length)];
+    const random = createSeededRandom(Date.now());
+    const puzzle = available[Math.floor(random() * available.length)];
     const puzzleSize = puzzle.rows;
 
     setPuzzleData({
@@ -362,8 +364,7 @@ export default function Nurikabe() {
           className={styles.grid}
           style={{
             gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
-            width: `${Math.min(gridSize * 40, 600)}px`,
-            height: `${Math.min(gridSize * 40, 600)}px`,
+            '--grid-size': gridSize,
           }}
         >
           {puzzleData.grid.map((row, r) =>

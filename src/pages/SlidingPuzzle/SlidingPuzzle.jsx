@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './SlidingPuzzle.module.css';
 import sampleImage from '../../assets/sample_image.png';
 
@@ -74,11 +75,12 @@ export default function SlidingPuzzle() {
   };
 
   const shufflePuzzle = useCallback(() => {
+    const random = createSeededRandom(Date.now());
     const solved = createSolvedPuzzle();
     let shuffled;
 
     do {
-      shuffled = [...solved].sort(() => Math.random() - 0.5);
+      shuffled = [...solved].sort(() => random() - 0.5);
     } while (!isSolvable(shuffled) || JSON.stringify(shuffled) === JSON.stringify(solved));
 
     return shuffled;

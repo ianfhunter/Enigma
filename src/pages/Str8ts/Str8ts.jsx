@@ -4,8 +4,10 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Str8ts.module.css';
 
 const GRID_SIZE = 9;
@@ -89,11 +91,11 @@ function datasetPuzzleToGameFormat(puzzle) {
 }
 
 // Generate a valid Str8ts puzzle
-function generatePuzzle(difficulty = 'medium', attempt = 0) {
+function generatePuzzle(difficulty = 'medium', attempt = 0, random = Math.random) {
   // Prevent infinite recursion - after a few attempts, fall back to pre-made puzzle
   if (attempt > 3) {
     // Fall back to a simpler pattern with known-good solution
-    return generateSimplePuzzle(difficulty);
+    return generateSimplePuzzle(difficulty, random);
   }
 
   // Create a solved grid first
@@ -108,8 +110,8 @@ function generatePuzzle(difficulty = 'medium', attempt = 0) {
     let r, c;
     let tries = 0;
     do {
-      r = Math.floor(Math.random() * GRID_SIZE);
-      c = Math.floor(Math.random() * GRID_SIZE);
+      r = Math.floor(random() * GRID_SIZE);
+      c = Math.floor(random() * GRID_SIZE);
       tries++;
       if (tries > 100) break; // Prevent infinite loop in black cell placement
     } while (placed.has(`${r},${c}`) || placed.has(`${GRID_SIZE - 1 - r},${GRID_SIZE - 1 - c}`));
@@ -217,7 +219,7 @@ function generatePuzzle(difficulty = 'medium', attempt = 0) {
     // Try numbers 1-9 in random order
     const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     for (let i = nums.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [nums[i], nums[j]] = [nums[j], nums[i]];
     }
 
@@ -241,7 +243,7 @@ function generatePuzzle(difficulty = 'medium', attempt = 0) {
 
   // Try to solve, regenerate if stuck
   if (!solve(0)) {
-    return generatePuzzle(difficulty, attempt + 1);
+    return generatePuzzle(difficulty, attempt + 1, random);
   }
 
   // Create solution copy
@@ -259,7 +261,7 @@ function generatePuzzle(difficulty = 'medium', attempt = 0) {
 
   // Shuffle and remove cells
   for (let i = whiteCells.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [whiteCells[i], whiteCells[j]] = [whiteCells[j], whiteCells[i]];
   }
 
@@ -273,7 +275,7 @@ function generatePuzzle(difficulty = 'medium', attempt = 0) {
   // Add some numbers to black cells as clues
   for (let r = 0; r < GRID_SIZE; r++) {
     for (let c = 0; c < GRID_SIZE; c++) {
-      if (isBlack[r][c] && Math.random() < 0.3) {
+      if (isBlack[r][c] && random() < 0.3) {
         // Put a number that's used in the row or column
         const used = new Set();
         for (let i = 0; i < GRID_SIZE; i++) {
@@ -282,7 +284,7 @@ function generatePuzzle(difficulty = 'medium', attempt = 0) {
         }
         const available = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(n => !used.has(n));
         if (available.length > 0) {
-          puzzle[r][c] = available[Math.floor(Math.random() * available.length)];
+          puzzle[r][c] = available[Math.floor(random() * available.length)];
           solution[r][c] = puzzle[r][c];
         }
       }
@@ -293,7 +295,7 @@ function generatePuzzle(difficulty = 'medium', attempt = 0) {
 }
 
 // Fallback: generate a simpler puzzle with a known-good pattern using pre-made templates
-function generateSimplePuzzle(difficulty = 'medium') {
+function generateSimplePuzzle(difficulty = 'medium', random = Math.random) {
   // Pre-defined valid Str8ts solutions with black cell patterns
   // These are known to be valid and solvable
   const templates = [
@@ -342,7 +344,7 @@ function generateSimplePuzzle(difficulty = 'medium') {
   ];
 
   // Pick a random template
-  const template = templates[Math.floor(Math.random() * templates.length)];
+  const template = templates[Math.floor(random() * templates.length)];
 
   const isBlack = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(false));
   for (const [r, c] of template.blacks) {
@@ -399,7 +401,7 @@ function generateSimplePuzzle(difficulty = 'medium') {
 
   // Shuffle
   for (let i = whiteCells.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [whiteCells[i], whiteCells[j]] = [whiteCells[j], whiteCells[i]];
   }
 
@@ -458,6 +460,7 @@ export default function Str8ts() {
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [seed, setSeed] = useState(() => stringToSeed(`str8ts-${getTodayDateString()}`));
   const datasetRef = useRef(null);
 
   // Load dataset on mount
@@ -476,25 +479,26 @@ export default function Str8ts() {
   }, []);
 
   const initGame = useCallback(() => {
+    const random = createSeededRandom(seed);
     // Try to use dataset first
     if (datasetRef.current && datasetRef.current.length > 0) {
       // Filter by difficulty
       const filtered = datasetRef.current.filter(p => p.difficulty === difficulty);
       const puzzleList = filtered.length > 0 ? filtered : datasetRef.current;
-      const puzzle = puzzleList[Math.floor(Math.random() * puzzleList.length)];
+      const puzzle = puzzleList[Math.floor(random() * puzzleList.length)];
       const data = datasetPuzzleToGameFormat(puzzle);
       setPuzzleData(data);
       setGrid(data.puzzle.map(row => [...row]));
     } else {
-      // Fallback to generator
-      const data = generatePuzzle(difficulty);
+      // Fallback to generator (pass random function)
+      const data = generatePuzzle(difficulty, 0, random);
       setPuzzleData(data);
       setGrid(data.puzzle.map(row => [...row]));
     }
     setSelectedCell(null);
     resetGameState();
     setErrors(new Set());
-  }, [difficulty, resetGameState]);
+  }, [difficulty, seed, resetGameState]);
 
   useEffect(() => {
     if (!loading) {
@@ -723,16 +727,24 @@ export default function Str8ts() {
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
-            Reset
+            {t('common.reset', 'Reset')}
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
             disabled={!isPlaying}
           />
-          <button className={styles.newGameBtn} onClick={initGame}>
-            New Puzzle
+          <button className={styles.newGameBtn} onClick={() => setSeed(stringToSeed(getTodayDateString() + Date.now()))}>
+            {t('common.newPuzzle', 'New Puzzle')}
           </button>
         </div>
+
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={true}
+          onSeedChange={(newSeed) => setSeed(newSeed)}
+        />
       </div>
     </div>
   );

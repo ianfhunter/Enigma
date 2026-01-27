@@ -109,17 +109,28 @@ export default function DropQuotes() {
   useEffect(() => {
     if (!puzzleData || !isPlaying) return;
 
-    // Check if solved
+    // Check if solved - all non-space cells must be correctly filled
     let solved = true;
+    let hasAnyFilled = false;
+
     for (let r = 0; r < puzzleData.height; r++) {
       for (let c = 0; c < puzzleData.width; c++) {
-        if (puzzleData.solution[r][c] !== ' ' && grid[r][c] !== puzzleData.solution[r][c]) {
-          solved = false;
+        if (puzzleData.solution[r][c] !== ' ') {
+          if (grid[r][c] === '') {
+            // Non-space cell is empty, not solved yet
+            solved = false;
+          } else if (grid[r][c] !== puzzleData.solution[r][c]) {
+            // Non-space cell has wrong letter
+            solved = false;
+          } else {
+            hasAnyFilled = true;
+          }
         }
       }
     }
 
-    if (solved && grid.some(row => row.some(cell => cell !== ''))) {
+    // Only trigger win if solved AND at least one cell was filled (prevent empty grid win)
+    if (solved && hasAnyFilled) {
       checkWin(true);
     }
   }, [grid, puzzleData, isPlaying, checkWin]);

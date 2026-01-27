@@ -12,7 +12,6 @@ import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import { allGames } from './data/gameRegistry';
 import { getGameBySlug } from './packs/registry';
-const logo = '/branding/logo-animated-e.svg';
 import './index.css';
 
 /**
@@ -49,6 +48,7 @@ const slugToFolder = {
   'drop-quotes': 'DropQuotes',
   'einstein': 'Einstein',
   'entanglement': 'Entanglement',
+  'eulero': 'Eulero',
   'famous-paintings': 'FamousPaintings',
   'fifteen': 'Fifteen',
   'fillomino': 'Fillomino',
@@ -87,6 +87,7 @@ const slugToFolder = {
   'chimp-test': 'ChimpTest',
   'memorize-items': 'MemorizeItems',
   'minesweeper': 'Minesweeper',
+  'mochikoro': 'Mochikoro',
   'mosaic': 'Mosaic',
   'netgame': 'Netgame',
   'netslide': 'Netslide',
@@ -96,6 +97,7 @@ const slugToFolder = {
   'nurikabe': 'Nurikabe',
   'pearl': 'Pearl',
   'pegs': 'Pegs',
+  'pentomino': 'Pentomino',
   'periodic-table-quiz': 'PeriodicTableQuiz',
   'phrase-guess': 'PhraseGuess',
   'pipe-puzzle': 'PipePuzzle',
@@ -115,6 +117,7 @@ const slugToFolder = {
   'naval-battle': 'NavalBattle',
   'norinori': 'Norinori',
   'shiritori': 'Shiritori',
+  'shisen-sho': 'ShisenSho',
   'signpost': 'Signpost',
   'sixteen': 'Sixteen',
   'skyscraper': 'Skyscraper',

@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import SizeSelector from '../../components/SizeSelector';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Nonogram.module.css';
 
 // Import all images from each folder
@@ -174,7 +175,8 @@ export default function Nonogram() {
     setGameState('loading');
 
     // Pick a random image
-    const randomIdx = Math.floor(Math.random() * availableImages.length);
+    const random = createSeededRandom(Date.now());
+    const randomIdx = Math.floor(random() * availableImages.length);
     const image = availableImages[randomIdx];
     setCurrentImage(image);
 

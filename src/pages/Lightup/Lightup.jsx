@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Lightup.module.css';
 import akariPuzzles from '../../../public/datasets/akariPuzzles.json';
 
@@ -212,11 +213,13 @@ export default function Lightup() {
       // Fallback to any puzzle of this difficulty
       const fallback = akariPuzzles.puzzles.filter(p => p.difficulty === difficulty);
       if (fallback.length > 0) {
-        const puzzle = fallback[Math.floor(Math.random() * fallback.length)];
+        const random = createSeededRandom(Date.now());
+        const puzzle = fallback[Math.floor(random() * fallback.length)];
         setBase(parseDatasetPuzzle(puzzle));
       }
     } else {
-      const puzzle = filtered[Math.floor(Math.random() * filtered.length)];
+      const random = createSeededRandom(Date.now());
+      const puzzle = filtered[Math.floor(random() * filtered.length)];
       setBase(parseDatasetPuzzle(puzzle));
     }
 
@@ -315,6 +318,9 @@ export default function Lightup() {
   }, [base, bulbs]);
 
   const allLit = useMemo(() => {
+    // If no puzzle loaded yet, not solved
+    if (base.cells.length === 0) return false;
+
     for (let i = 0; i < base.cells.length; i++) {
       if (isWall(base.cells[i])) continue;
       if (!lit.has(i)) return false;
@@ -322,7 +328,8 @@ export default function Lightup() {
     return true;
   }, [base.cells, lit]);
 
-  const solved = allLit && bulbConflicts.size === 0 && numberedErrors.size === 0;
+  // Only mark as solved if puzzle is loaded (has cells) and all conditions met
+  const solved = base.cells.length > 0 && allLit && bulbConflicts.size === 0 && numberedErrors.size === 0;
 
   // Update game state when solved
   useEffect(() => {

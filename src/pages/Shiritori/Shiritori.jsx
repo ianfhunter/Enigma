@@ -5,6 +5,7 @@ import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import {
   getLastKana,
   endsInN,
@@ -76,9 +77,9 @@ const TEXT = {
   },
 };
 
-function getRandomStartWord() {
+function getRandomStartWord(random = Math.random) {
   const safeWords = getSafeStartWords();
-  const shuffled = [...safeWords].sort(() => Math.random() - 0.5);
+  const shuffled = [...safeWords].sort(() => random() - 0.5);
   return shuffled[0];
 }
 
@@ -138,7 +139,8 @@ export default function Shiritori() {
   const wordStats = getWordStats();
 
   const initGame = useCallback(() => {
-    const startWord = getRandomStartWord();
+    const random = createSeededRandom(Date.now());
+    const startWord = getRandomStartWord(random);
     setChain([{ ...startWord, player: 'ai' }]);
     setUsedWords(new Set([startWord.hiragana]));
     setCurrentInput('');

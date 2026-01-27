@@ -4,6 +4,7 @@ import GameHeader from '../../components/GameHeader';
 import DifficultySelector from '../../components/DifficultySelector';
 import Timer, { formatTime } from '../../components/Timer/Timer';
 import GameResult from '../../components/GameResult';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Minesweeper.module.css';
 
 const DIFFICULTIES = {
@@ -59,12 +60,13 @@ export default function Minesweeper() {
   }, [gameState]);
 
   const placeMines = (excludeRow, excludeCol) => {
+    const random = createSeededRandom(Date.now());
     const newBoard = createEmptyBoard();
     let placed = 0;
 
     while (placed < mines) {
-      const r = Math.floor(Math.random() * rows);
-      const c = Math.floor(Math.random() * cols);
+      const r = Math.floor(random() * rows);
+      const c = Math.floor(random() * cols);
 
       // Don't place mine on first click or adjacent cells
       const isExcluded = Math.abs(r - excludeRow) <= 1 && Math.abs(c - excludeCol) <= 1;

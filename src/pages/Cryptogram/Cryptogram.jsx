@@ -234,8 +234,9 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
 
     if (wrongLetters.length === 0) return;
 
-    // Reveal one random wrong letter
-    const randomIndex = Math.floor(Math.random() * wrongLetters.length);
+    // Use seeded random for hint selection to make it deterministic
+    const random = createSeededRandom(seed + hintsUsed + 1000);
+    const randomIndex = Math.floor(random() * wrongLetters.length);
     const letterToReveal = wrongLetters[randomIndex];
     const correctAnswer = cipher.decrypt[letterToReveal];
 
@@ -424,11 +425,11 @@ export default function Cryptogram({ startingHints = DEFAULT_STARTING_HINTS }) {
             onGiveUp={handleGiveUp}
             disabled={!isPlaying}
           />
-          <button className={styles.newGameBtn} onClick={() => initGame(Math.floor(Math.random() * 2147483647))}>
-            New Random Puzzle
+          <button className={styles.newGameBtn} onClick={() => initGame(stringToSeed(getTodayDateString() + Date.now()))}>
+            {t('cryptogram.newRandomPuzzle', 'New Random Puzzle')}
           </button>
           <button className={styles.dailyBtn} onClick={() => initGame(null)}>
-            Today's Puzzle
+            {t('cryptogram.todaysPuzzle', "Today's Puzzle")}
           </button>
         </div>
       </div>

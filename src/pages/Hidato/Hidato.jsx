@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Hidato.module.css';
 import hidokuPuzzles from '../../../public/datasets/hidokuPuzzles.json';
 
@@ -142,7 +143,8 @@ export default function Hidato() {
     }
 
     // Pick a random puzzle
-    const puzzle = matching[Math.floor(Math.random() * matching.length)];
+    const random = createSeededRandom(Date.now());
+    const puzzle = matching[Math.floor(random() * matching.length)];
 
     // Calculate maxNum from solution
     let maxNum = 0;

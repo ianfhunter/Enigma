@@ -11,7 +11,8 @@ describe('FloodIt - board generation', () => {
   it('creates a square board with allowed color indexes', () => {
     const { size } = SIZES['10×10'];
     const colorCount = 4;
-    const board = generateBoard(size, colorCount);
+    const seed = 12345;
+    const board = generateBoard(size, colorCount, seed);
     expect(board.length).toBe(size);
     board.forEach(row => {
       expect(row.length).toBe(size);

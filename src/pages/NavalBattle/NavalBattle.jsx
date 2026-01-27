@@ -7,6 +7,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './NavalBattle.module.css';
 
 // Load puzzles from dataset
@@ -300,7 +301,8 @@ export default function NavalBattle() {
       return;
     }
 
-    const puzzle = availablePuzzles[Math.floor(Math.random() * availablePuzzles.length)];
+    const random = createSeededRandom(Date.now());
+    const puzzle = availablePuzzles[Math.floor(random() * availablePuzzles.length)];
     const hints = parseHints(puzzle.hints);
 
     const data = {

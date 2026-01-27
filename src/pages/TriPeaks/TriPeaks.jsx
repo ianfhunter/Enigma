@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
-import { getTodayDateString, stringToSeed } from '../../data/wordUtils';
+import { getTodayDateString, stringToSeed, createSeededRandom } from '../../data/wordUtils';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import SeedDisplay from '../../components/SeedDisplay';
 import styles from './TriPeaks.module.css';
@@ -32,15 +32,6 @@ function parseCardCode(code) {
     rank,
     suit: SUIT_SYMBOLS[suitCode],
     value: CARD_VALUES[rank]
-  };
-}
-
-// Create seeded random number generator
-function createSeededRandom(seed) {
-  let s = seed;
-  return function() {
-    s = (s * 9301 + 49297) % 233280;
-    return s / 233280;
   };
 }
 
@@ -332,7 +323,8 @@ export default function TriPeaks() {
   // New game
   const newGame = useCallback(() => {
     // Generate a truly random seed for a new puzzle
-    const newSeed = stringToSeed(`tri-peaks-${Date.now()}-${Math.random()}`);
+    const random = createSeededRandom(Date.now());
+    const newSeed = stringToSeed(`tri-peaks-${Date.now()}-${random()}`);
     initGame(newSeed);
   }, [initGame]);
 

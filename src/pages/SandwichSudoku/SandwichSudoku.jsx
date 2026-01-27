@@ -6,10 +6,11 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './SandwichSudoku.module.css';
 
 // Generate a valid solved Sudoku grid
-function generateSolvedGrid() {
+function generateSolvedGrid(random = Math.random) {
   const grid = Array(9).fill(null).map(() => Array(9).fill(0));
 
   function isValid(grid, row, col, num) {
@@ -32,7 +33,7 @@ function generateSolvedGrid() {
         if (grid[row][col] === 0) {
           const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
           for (let i = nums.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
+            const j = Math.floor(random() * (i + 1));
             [nums[i], nums[j]] = [nums[j], nums[i]];
           }
           for (const num of nums) {
@@ -210,16 +211,17 @@ function generateClues(solution) {
 }
 
 // Shuffle array in place
-function shuffle(array) {
+function shuffle(array, random = Math.random) {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
 
-function generatePuzzle() {
-  const solution = generateSolvedGrid();
+function generatePuzzle(seed = Date.now()) {
+  const random = createSeededRandom(seed);
+  const solution = generateSolvedGrid(random);
   const { rowClues, colClues } = generateClues(solution);
 
   // Create puzzle starting with full solution

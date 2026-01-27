@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Hashi.module.css';
 
 const GRID_SIZES = {
@@ -15,19 +16,19 @@ const GRID_SIZES = {
 };
 
 // Generate a guaranteed-solvable Hashi puzzle
-function generatePuzzle(gridSize, numIslands) {
+function generatePuzzle(gridSize, numIslands, random = Math.random) {
   // Try multiple times to generate a valid puzzle
   for (let attempt = 0; attempt < 20; attempt++) {
-    const result = tryGeneratePuzzle(gridSize, numIslands);
+    const result = tryGeneratePuzzle(gridSize, numIslands, random);
     if (result && result.islands.length >= Math.floor(numIslands * 0.7)) {
       return result;
     }
   }
   // Fallback to a simpler guaranteed puzzle
-  return generateSimplePuzzle(gridSize);
+  return generateSimplePuzzle(gridSize, random);
 }
 
-function tryGeneratePuzzle(gridSize, numIslands) {
+function tryGeneratePuzzle(gridSize, numIslands, random = Math.random) {
   const islands = [];
   const bridges = new Map();
 
@@ -43,7 +44,7 @@ function tryGeneratePuzzle(gridSize, numIslands) {
 
   // Shuffle candidates
   for (let i = candidates.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
   }
 
@@ -193,7 +194,7 @@ function tryGeneratePuzzle(gridSize, numIslands) {
 
     if (find(i1) !== find(i2)) {
       const key = getBridgeKey(i1, i2);
-      const count = Math.random() > 0.5 ? 2 : 1;
+      const count = random() > 0.5 ? 2 : 1;
       bridges.set(key, count);
       islands[i1].value += count;
       islands[i2].value += count;
@@ -212,7 +213,7 @@ function tryGeneratePuzzle(gridSize, numIslands) {
   // Second pass: add some extra bridges for variety
   const shuffledConnections = [...possibleConnections];
   for (let i = shuffledConnections.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [shuffledConnections[i], shuffledConnections[j]] = [shuffledConnections[j], shuffledConnections[i]];
   }
 
@@ -227,8 +228,8 @@ function tryGeneratePuzzle(gridSize, numIslands) {
     if (islands[i1].value >= 8 || islands[i2].value >= 8) continue;
 
     // Add 1 or 2 bridges with some probability
-    if (Math.random() < 0.3) {
-      const add = existing === 0 ? (Math.random() > 0.6 ? 2 : 1) : 1;
+    if (random() < 0.3) {
+      const add = existing === 0 ? (random() > 0.6 ? 2 : 1) : 1;
       bridges.set(key, existing + add);
       islands[i1].value += add;
       islands[i2].value += add;
@@ -246,7 +247,7 @@ function tryGeneratePuzzle(gridSize, numIslands) {
 }
 
 // Generate a simple fallback puzzle that's always solvable
-function generateSimplePuzzle(gridSize) {
+function generateSimplePuzzle(gridSize, random = Math.random) {
   const islands = [];
   const bridges = new Map();
 
@@ -273,7 +274,7 @@ function generateSimplePuzzle(gridSize) {
       const key1 = `${island1.r},${island1.c}`;
       const key2 = `${island2.r},${island2.c}`;
       const key = key1 < key2 ? `${key1}-${key2}` : `${key2}-${key1}`;
-      const count = Math.random() > 0.5 ? 2 : 1;
+      const count = random() > 0.5 ? 2 : 1;
       bridges.set(key, count);
       islands[i].value += count;
       islands[next].value += count;
@@ -386,7 +387,7 @@ export default function Hashi() {
   const { size: gridSize, islands: numIslands } = GRID_SIZES[sizeKey];
 
   const initGame = useCallback(() => {
-    const data = generatePuzzle(gridSize, numIslands);
+    const data = generatePuzzle(gridSize, numIslands, createSeededRandom(Date.now()));
     setPuzzleData(data);
     setBridges(new Map());
     resetGameState();

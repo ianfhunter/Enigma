@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Thermometers.module.css';
 import { ThermometerBulb, ThermometerTube } from './ThermometerSVG';
 
@@ -23,18 +24,18 @@ const DIRECTIONS = [
   { dr: 0, dc: 1, name: 'right' },  // bulb at left, fills rightward
 ];
 
-function generatePuzzle(size) {
+function generatePuzzle(size, random = Math.random) {
   const maxAttempts = 100;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const result = tryGeneratePuzzle(size);
+    const result = tryGeneratePuzzle(size, random);
     if (result) return result;
   }
 
-  return tryGeneratePuzzle(size) || generateSimplePuzzle(size);
+  return tryGeneratePuzzle(size, random) || generateSimplePuzzle(size, random);
 }
 
-function tryGeneratePuzzle(size) {
+function tryGeneratePuzzle(size, random = Math.random) {
   // Grid to track which cells belong to which thermometer
   const thermoGrid = Array(size).fill(null).map(() => Array(size).fill(-1));
   const thermometers = [];
@@ -50,7 +51,7 @@ function tryGeneratePuzzle(size) {
 
   // Shuffle positions
   for (let i = positions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [positions[i], positions[j]] = [positions[j], positions[i]];
   }
 
@@ -61,12 +62,12 @@ function tryGeneratePuzzle(size) {
     // Shuffle directions
     const dirs = [...DIRECTIONS];
     for (let i = dirs.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [dirs[i], dirs[j]] = [dirs[j], dirs[i]];
     }
 
     for (const dir of dirs) {
-      const length = 2 + Math.floor(Math.random() * (Math.min(4, size - 1)));
+      const length = 2 + Math.floor(random() * (Math.min(4, size - 1)));
       const cells = [];
       let valid = true;
 
@@ -105,7 +106,7 @@ function tryGeneratePuzzle(size) {
   let totalFilled = 0;
   for (const thermo of thermometers) {
     // Random fill level (0 to length)
-    const fillLevel = Math.floor(Math.random() * (thermo.cells.length + 1));
+    const fillLevel = Math.floor(random() * (thermo.cells.length + 1));
     for (let i = 0; i < fillLevel; i++) {
       const [r, c] = thermo.cells[i];
       solution[r][c] = true;
@@ -146,7 +147,7 @@ function tryGeneratePuzzle(size) {
   };
 }
 
-function generateSimplePuzzle(size) {
+function generateSimplePuzzle(size, random = Math.random) {
   const thermoGrid = Array(size).fill(null).map(() => Array(size).fill(-1));
   const thermometers = [];
 
@@ -162,7 +163,7 @@ function generateSimplePuzzle(size) {
 
   const solution = Array(size).fill(null).map(() => Array(size).fill(false));
   for (const thermo of thermometers) {
-    const fillLevel = 1 + Math.floor(Math.random() * thermo.cells.length);
+    const fillLevel = 1 + Math.floor(random() * thermo.cells.length);
     for (let i = 0; i < fillLevel; i++) {
       const [r, c] = thermo.cells[i];
       solution[r][c] = true;
@@ -281,7 +282,7 @@ export default function Thermometers() {
   const size = GRID_SIZES[sizeKey];
 
   const initGame = useCallback(() => {
-    const data = generatePuzzle(size);
+    const data = generatePuzzle(size, createSeededRandom(Date.now()));
     setPuzzleData(data);
     setFilled(Array(size).fill(null).map(() => Array(size).fill(false)));
     resetGameState();

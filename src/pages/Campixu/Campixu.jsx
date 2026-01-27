@@ -6,6 +6,7 @@ import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Campixu.module.css';
 
 const GRID_SIZES = {
@@ -52,7 +53,7 @@ function generateSolution(size) {
 
     // Shuffle neighbors
     for (let i = neighbors.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [neighbors[i], neighbors[j]] = [neighbors[j], neighbors[i]];
     }
 
@@ -125,8 +126,8 @@ function generateClues(grid, size) {
   return { rowClues, colClues };
 }
 
-function generatePuzzle(size) {
-  const { grid, trees, tents } = generateSolution(size);
+function generatePuzzle(size, seed = Date.now()) {
+  const { grid, trees, tents } = generateSolution(size, seed);
   const { rowClues, colClues } = generateClues(grid, size);
 
   // Create the puzzle grid (only show trees)

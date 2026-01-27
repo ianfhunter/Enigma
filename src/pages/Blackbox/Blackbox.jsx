@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Blackbox.module.css';
 
 const DIRS = [
@@ -142,11 +143,12 @@ function simulateShot(entryPort, ballsSet, w, h) {
   return { kind: 'R', entry: entryPort, exit: entryPort };
 }
 
-function randomBalls(w, h, n) {
+function randomBalls(w, h, n, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   const cells = [];
   for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) cells.push({ r, c });
   for (let i = cells.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [cells[i], cells[j]] = [cells[j], cells[i]];
   }
   const set = new Set();

@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { createSeededRandom } from '../../data/wordUtils';
 import { getWordPool, generateSnakePath, generatePuzzle } from './WordSnake.jsx';
 
 describe('WordSnake - helpers', () => {
@@ -7,17 +8,15 @@ describe('WordSnake - helpers', () => {
   });
 
   it('generateSnakePath builds path covering word', () => {
-    const rand = vi.spyOn(Math, 'random').mockReturnValue(0.1);
-    const res = generateSnakePath('SNAKE', 5);
-    rand.mockRestore();
+    const random = createSeededRandom(12345);
+    const res = generateSnakePath('SNAKE', 5, random);
     expect(res.path.length).toBe(5);
     expect(res.grid.length).toBe(5);
   });
 
   it('generatePuzzle returns grid/path/word', () => {
-    const rand = vi.spyOn(Math, 'random').mockReturnValue(0.2);
-    const puz = generatePuzzle();
-    rand.mockRestore();
+    const seed = 12345;
+    const puz = generatePuzzle(seed);
     expect(puz.word.length).toBeGreaterThan(0);
     expect(puz.grid.length).toBeGreaterThan(0);
   });

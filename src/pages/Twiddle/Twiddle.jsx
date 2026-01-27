@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Twiddle.module.css';
 
 function makeSolved(w, h) {
@@ -37,12 +38,13 @@ function rotateBlock(board, w, h, top, left, k, dir) {
   return next;
 }
 
-function scramble(w, h, k, moves = 60) {
+function scramble(w, h, k, moves = 60, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   let b = makeSolved(w, h);
   for (let i = 0; i < moves; i++) {
-    const top = Math.floor(Math.random() * (h - k + 1));
-    const left = Math.floor(Math.random() * (w - k + 1));
-    const dir = Math.random() < 0.5 ? 'ccw' : 'cw';
+    const top = Math.floor(random() * (h - k + 1));
+    const left = Math.floor(random() * (w - k + 1));
+    const dir = random() < 0.5 ? 'ccw' : 'cw';
     b = rotateBlock(b, w, h, top, left, k, dir);
   }
   if (isSolved(b)) return scramble(w, h, k, moves);

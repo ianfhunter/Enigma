@@ -6,6 +6,7 @@ import GameResult from '../../components/GameResult';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './PipePuzzle.module.css';
 
 // Pipe types: each pipe has openings in certain directions
@@ -84,7 +85,8 @@ function findConnected(grid, startRow, startCol) {
 }
 
 // Generate a solvable puzzle
-function generatePuzzle(size) {
+function generatePuzzle(size, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   // Create a solved grid first by building a path
   const grid = Array(size).fill(null).map(() =>
     Array(size).fill(null).map(() => ({ type: 'straight', rotation: 0 }))
@@ -103,7 +105,7 @@ function generatePuzzle(size) {
       [r, c + 1, 1, 3], // right
       [r + 1, c, 2, 0], // bottom
       [r, c - 1, 3, 1], // left
-    ].sort(() => Math.random() - 0.5);
+    ].sort(() => random() - 0.5);
 
     for (const [nr, nc, myDir, theirDir] of neighbors) {
       if (nr >= 0 && nr < size && nc >= 0 && nc < size && !visited.has(`${nr},${nc}`)) {
@@ -140,7 +142,7 @@ function generatePuzzle(size) {
   // Scramble rotations
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      grid[r][c].rotation = Math.floor(Math.random() * 4);
+      grid[r][c].rotation = Math.floor(random() * 4);
     }
   }
 

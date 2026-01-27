@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GiveUpButton from '../../components/GiveUpButton';
 import GameResult from '../../components/GameResult';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Slant.module.css';
 
 function vIdx(r, c, w) {
@@ -41,7 +42,8 @@ class DSU {
   }
 }
 
-function generateAcyclicSolution(w, h) {
+function generateAcyclicSolution(w, h, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   const cells = Array.from({ length: h }, () => Array(w).fill(null));
   const nVerts = (w + 1) * (h + 1);
   for (let attempt = 0; attempt < 200; attempt++) {
@@ -50,7 +52,7 @@ function generateAcyclicSolution(w, h) {
     const order = [];
     for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) order.push([r, c]);
     for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [order[i], order[j]] = [order[j], order[i]];
     }
 
@@ -60,7 +62,7 @@ function generateAcyclicSolution(w, h) {
       const aFwd = vIdx(r, c + 1, w);
       const bFwd = vIdx(r + 1, c, w);
 
-      const first = Math.random() < 0.5 ? '\\' : '/';
+      const first = random() < 0.5 ? '\\' : '/';
       const tryOrder = first === '\\' ? ['\\', '/'] : ['/', '\\'];
       let placed = false;
       for (const ch of tryOrder) {

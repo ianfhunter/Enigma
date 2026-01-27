@@ -309,8 +309,8 @@ export default function Inertia() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Inertia"
-        instructions="Move the ball in any of 8 directions. Once it starts moving, it keeps going until a wall stops it or it lands on a stop square (S). Collect all gems (*) and avoid mines (X)."
+        title={t('inertia.title', 'Inertia')}
+        instructions={t('inertia.instructions', 'Move the ball in any of 8 directions. Once it starts moving, it keeps going until a wall stops it or it lands on a stop square (S). Collect all gems (*) and avoid mines (X).')}
       />
 
       <div className={styles.toolbar}>
@@ -343,16 +343,16 @@ export default function Inertia() {
           ))}
         </div>
         <div className={styles.group}>
-          <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
+          <button className={styles.generateBtn} onClick={generateNew}>{t('common.newPuzzle', 'New Puzzle')}</button>
           <button className={styles.button} onClick={reset}>{t('common.reset')}</button>
           <button className={styles.button} onClick={undo} disabled={cursor === 0}>{t('common.undo')}</button>
-          <button className={styles.button} onClick={redo} disabled={cursor === history.length - 1}>Redo</button>
+          <button className={styles.button} onClick={redo} disabled={cursor === history.length - 1}>{t('common.redo', 'Redo')}</button>
         </div>
 
         <div className={styles.status}>
           {won && <span className={styles.win}>{t('gameStatus.solved')}</span>}
-          {!won && state.dead && <span className={styles.dead}>Boom. (Undo to continue)</span>}
-          {!won && !state.dead && <span>Gems remaining: {remaining}</span>}
+          {!won && state.dead && <span className={styles.dead}>{t('inertia.boom', 'Boom. (Undo to continue)')}</span>}
+          {!won && !state.dead && <span>{t('inertia.gemsRemaining', 'Gems remaining: {{count}}', { count: remaining })}</span>}
         </div>
       </div>
 

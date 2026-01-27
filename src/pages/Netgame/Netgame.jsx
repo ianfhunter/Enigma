@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Netgame.module.css';
 
 // Bitmask directions
@@ -50,25 +51,25 @@ function opposite(dir) {
   return E;
 }
 
-function shuffled(arr) {
+function shuffled(arr, random = Math.random) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
 
-function makeTreeMasks(w, h) {
+function makeTreeMasks(w, h, random = Math.random) {
   const n = w * h;
   const masks = Array(n).fill(0);
   const visited = Array(n).fill(false);
-  const stack = [Math.floor(Math.random() * n)];
+  const stack = [Math.floor(random() * n)];
   visited[stack[0]] = true;
 
   while (stack.length) {
     const cur = stack[stack.length - 1];
-    const ns = shuffled(neighbors(cur, w, h).filter((x) => !visited[x.idx]));
+    const ns = shuffled(neighbors(cur, w, h).filter((x) => !visited[x.idx]), random);
     if (!ns.length) {
       stack.pop();
       continue;
@@ -84,8 +85,8 @@ function makeTreeMasks(w, h) {
   return masks;
 }
 
-function scrambleMasks(masks) {
-  return masks.map((m) => rotateMask(m, Math.floor(Math.random() * 4)));
+function scrambleMasks(masks, random = Math.random) {
+  return masks.map((m) => rotateMask(m, Math.floor(random() * 4)));
 }
 
 function edgeCountAndConnectivity(masks, w, h, startIdx) {
@@ -167,10 +168,12 @@ export {
 
 export default function Netgame() {
   const { t } = useTranslation();
+  const [seed] = useState(() => Math.floor(Math.random() * 1000000));
   const [size, setSize] = useState({ w: 7, h: 7 });
   const [locked, setLocked] = useState(() => Array(49).fill(false));
-  const [solution] = useState(() => makeTreeMasks(7, 7));
-  const [masks, setMasks] = useState(() => scrambleMasks(solution));
+  const random = createSeededRandom(seed);
+  const [solution] = useState(() => makeTreeMasks(7, 7, random));
+  const [masks, setMasks] = useState(() => scrambleMasks(solution, random));
 
   const centerIdx = Math.floor((size.h * size.w) / 2);
   const conn = useMemo(() => edgeCountAndConnectivity(masks, size.w, size.h, centerIdx), [masks, size.w, size.h, centerIdx]);
@@ -178,8 +181,9 @@ export default function Netgame() {
   const solved = conn.connectedCount === total && conn.edges === total - 1;
 
   const newGame = useCallback((w = size.w, h = size.h) => {
-    const sol = makeTreeMasks(w, h);
-    setMasks(scrambleMasks(sol));
+    const newRandom = createSeededRandom(Date.now());
+    const sol = makeTreeMasks(w, h, newRandom);
+    setMasks(scrambleMasks(sol, newRandom));
     setLocked(Array(w * h).fill(false));
     // Keep `solution` as initial state only; correctness is checked structurally (connected + acyclic)
   }, [size.w, size.h]);

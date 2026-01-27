@@ -5,7 +5,7 @@ import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
-import { isValidWord } from '../../data/wordUtils';
+import { isValidWord, createSeededRandom } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordTiles.module.css';
 
@@ -31,7 +31,7 @@ export function getNextAutoSlot(placedTiles) {
   return null;
 }
 
-function createTileBag() {
+function createTileBag(randomFn = Math.random) {
   const bag = [];
   for (const [letter, count] of Object.entries(TILE_DISTRIBUTION)) {
     for (let i = 0; i < count; i++) {
@@ -40,7 +40,7 @@ function createTileBag() {
   }
   // Shuffle
   for (let i = bag.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(randomFn() * (i + 1));
     [bag[i], bag[j]] = [bag[j], bag[i]];
   }
   return bag;
@@ -157,12 +157,13 @@ export default function WordTiles() {
   const [isNewHighScore, setIsNewHighScore] = useState(false);
 
   const initGame = useCallback(() => {
-    const newBag = createTileBag();
+    const random = createSeededRandom(Date.now());
+    const newBag = createTileBag(random);
     const newTiles = drawTiles(newBag, NUM_TILES);
     setBag(newBag);
     setTiles(newTiles);
     setPlacedTiles([]);
-    setDoubleWordSlot(Math.floor(Math.random() * WORD_SLOTS));
+    setDoubleWordSlot(Math.floor(random() * WORD_SLOTS));
     setScore(0);
     setWordsPlayed([]);
     resetGameState();
@@ -284,7 +285,8 @@ export default function WordTiles() {
     setPlacedTiles([]);
 
     // Move double word slot
-    setDoubleWordSlot(Math.floor(Math.random() * WORD_SLOTS));
+    const random = createSeededRandom(Date.now());
+    setDoubleWordSlot(Math.floor(random() * WORD_SLOTS));
 
     // Check if game over
     const remainingTiles = newTiles.filter(t => t !== null).length;
@@ -394,11 +396,12 @@ export default function WordTiles() {
   }, [gameState, tiles, placedTiles]);
 
   const handleShuffle = () => {
+    const random = createSeededRandom(Date.now());
     setTiles(prev => {
       const nonNull = prev.filter(t => t !== null);
       // Shuffle
       for (let i = nonNull.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(random() * (i + 1));
         [nonNull[i], nonNull[j]] = [nonNull[j], nonNull[i]];
       }
       // Rebuild with nulls in same positions

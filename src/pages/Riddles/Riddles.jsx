@@ -72,8 +72,8 @@ export default function Riddles() {
     setRevealed(false);
     setShowHint(false);
 
-    // Use custom seed or generate a unique seed using timestamp + random
-    const uniqueSeed = customSeed ?? (Date.now() + Math.random() * 1000000);
+    // Use custom seed or generate a unique seed using timestamp
+    const uniqueSeed = customSeed ?? Date.now();
     setSeed(uniqueSeed);
     const riddle = selectRiddle(riddles, uniqueSeed);
     setCurrentRiddle(riddle);

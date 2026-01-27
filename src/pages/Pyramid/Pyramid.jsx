@@ -159,14 +159,17 @@ function findNonOverlappingSolution(wordPaths) {
   const allPaths = [];
   for (const [word, paths] of wordPaths) {
     const weight = getWordWeight(word);
+    const isCommon = isCommonWord(word);
     for (const path of paths) {
-      allPaths.push({ word, path, cells: new Set(path), weight });
+      allPaths.push({ word, path, cells: new Set(path), weight, isCommon });
     }
   }
 
-  // Sort by: weight (common words first), then path length descending
+  // Sort by: common words first, then weight, then path length descending
   allPaths.sort((a, b) => {
-    // Prioritize common words
+    // Prioritize common words (boolean comparison)
+    if (a.isCommon !== b.isCommon) return b.isCommon - a.isCommon;
+    // Then by weight
     const weightDiff = b.weight - a.weight;
     if (weightDiff !== 0) return weightDiff;
     // Then prefer longer words
@@ -174,10 +177,14 @@ function findNonOverlappingSolution(wordPaths) {
   });
 
   // Recursive backtracking to find non-overlapping solution
-  function backtrack(used, solution) {
+  // Returns the best solution found (prioritizing common words)
+  function backtrack(used, solution, depth = 0) {
     if (used.size === TOTAL_CELLS) {
       return [...solution]; // Found a valid solution
     }
+
+    // Try to limit search depth to avoid performance issues
+    if (depth > 20) return null;
 
     // Find paths that only use unused cells
     for (const pathInfo of allPaths) {
@@ -197,8 +204,8 @@ function findNonOverlappingSolution(wordPaths) {
           newUsed.add(cell);
         }
 
-        const result = backtrack(newUsed, [...solution, pathInfo]);
-        if (result) return result;
+        const result = backtrack(newUsed, [...solution, pathInfo], depth + 1);
+        if (result) return result; // Return first valid solution (already sorted by commonality)
       }
     }
 
@@ -760,9 +767,11 @@ export default function Pyramid() {
             <h3>One Possible Solution</h3>
             <div className={styles.solutionWords}>
               {solutionHint.map((item, i) => (
-                <span key={i} className={styles.solutionWord}>
-                  {item.word}
-                </span>
+                <WordWithDefinition
+                  key={i}
+                  word={item.word}
+                  className={styles.solutionWord}
+                />
               ))}
             </div>
           </div>

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
+import { createSeededRandom } from '../../data/wordUtils';
 import styles from './Untangle.module.css';
 
-function randBetween(a, b) {
-  return a + Math.random() * (b - a);
+function randBetween(a, b, random = Math.random) {
+  return a + random() * (b - a);
 }
 
 function chordCross(a, b, c, d) {
@@ -15,7 +16,8 @@ function chordCross(a, b, c, d) {
   return a < d && c < b;
 }
 
-function makeOuterPlanarGraph(n, extraEdges = Math.floor(n / 2)) {
+function makeOuterPlanarGraph(n, extraEdges = Math.floor(n / 2), seed = Date.now()) {
+  const random = createSeededRandom(seed);
   const edges = new Set();
   const add = (u, v) => {
     const a = Math.min(u, v);
@@ -44,8 +46,8 @@ function makeOuterPlanarGraph(n, extraEdges = Math.floor(n / 2)) {
   let tries = 0;
   while (tries < 5000 && edges.size < n + extraEdges) {
     tries++;
-    const u = Math.floor(Math.random() * n);
-    const v = Math.floor(Math.random() * n);
+    const u = Math.floor(random() * n);
+    const v = Math.floor(random() * n);
     add(u, v);
   }
 
@@ -84,8 +86,9 @@ export default function Untangle() {
   const svgRef = useRef(null);
 
   const reset = (nextN = n) => {
+    const random = createSeededRandom(Date.now());
     setEdges(makeOuterPlanarGraph(nextN));
-    setPoints(Array.from({ length: nextN }, () => ({ x: randBetween(60, 540), y: randBetween(80, 520) })));
+    setPoints(Array.from({ length: nextN }, () => ({ x: randBetween(60, 540, random), y: randBetween(80, 520, random) })));
     setDragIdx(null);
   };
 
