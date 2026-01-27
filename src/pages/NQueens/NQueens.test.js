@@ -31,7 +31,8 @@ describe('NQueens - helpers', () => {
 
   it('generatePuzzle produces solvable placement with preplaced queens', () => {
     const { size, preplaced } = DIFFICULTIES.easy;
-    const { solution, preplaced: pre } = generatePuzzle(size, preplaced);
+    const seed = 12345;
+    const { solution, preplaced: pre } = generatePuzzle(size, preplaced, seed);
     expect(solution).toHaveLength(size);
     expect(pre.length).toBe(preplaced);
     // All queens should be non-conflicting

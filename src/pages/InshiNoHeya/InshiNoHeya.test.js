@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { createSeededRandom } from '../../data/wordUtils';
 import {
   GRID_SIZES,
   DIFFICULTY,
@@ -20,7 +21,8 @@ describe('InshiNoHeya - metadata', () => {
 describe('InshiNoHeya - generation basics', () => {
   it('generates rooms covering the grid', () => {
     const size = GRID_SIZES['4×4'];
-    const { roomGrid, rooms } = generateRooms(size, 2, 3);
+    const random = createSeededRandom(12345);
+    const { roomGrid, rooms } = generateRooms(size, 2, 3, random);
     expect(roomGrid.length).toBe(size);
     roomGrid.forEach(row => expect(row.length).toBe(size));
     // All cells assigned
@@ -30,7 +32,8 @@ describe('InshiNoHeya - generation basics', () => {
 
   it('generates a Latin square with unique rows/cols of 1..N', () => {
     const size = 4;
-    const grid = generateLatinSquare(size);
+    const random = createSeededRandom(12345);
+    const grid = generateLatinSquare(size, random);
     const digits = new Set([...Array(size).keys()].map(n => n + 1));
     grid.forEach(row => expect(new Set(row)).toEqual(digits));
     for (let c = 0; c < size; c++) {
@@ -41,7 +44,8 @@ describe('InshiNoHeya - generation basics', () => {
 
   it('generatePuzzle wires products into rooms', () => {
     const size = 4;
-    const { solution, rooms, roomGrid } = generatePuzzle(size, 'Easy');
+    const seed = 12345;
+    const { solution, rooms, roomGrid } = generatePuzzle(size, 'Easy', seed);
     expect(solution.length).toBe(size);
     expect(rooms.length).toBeGreaterThan(0);
     rooms.forEach(room => {

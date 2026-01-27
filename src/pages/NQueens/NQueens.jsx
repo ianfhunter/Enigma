@@ -54,7 +54,8 @@ function getAttackedSquares(queens, size) {
 }
 
 // Generate a partial puzzle (some queens pre-placed)
-function generatePuzzle(size, preplacedCount) {
+function generatePuzzle(size, preplacedCount, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   // Use backtracking to find a valid solution
   const solution = [];
 
@@ -63,7 +64,7 @@ function generatePuzzle(size, preplacedCount) {
     const rows = [...Array(size).keys()];
     // Shuffle for randomness
     for (let i = rows.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(random() * (i + 1));
       [rows[i], rows[j]] = [rows[j], rows[i]];
     }
 

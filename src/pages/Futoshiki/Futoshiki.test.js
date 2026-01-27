@@ -10,7 +10,8 @@ import {
 describe('Futoshiki - puzzle generation', () => {
   it('generates puzzle/solution with matching dimensions and inequalities', () => {
     const size = GRID_SIZES['4×4'];
-    const { puzzle, solution, horizontal, vertical } = generatePuzzle(size);
+    const seed = 12345;
+    const { puzzle, solution, horizontal, vertical } = generatePuzzle(size, seed);
 
     expect(puzzle.length).toBe(size);
     expect(solution.length).toBe(size);
@@ -70,7 +71,8 @@ describe('Futoshiki - error detection and solved check', () => {
 
   it('checkSolved returns true when grid matches solution', () => {
     const size = GRID_SIZES['4×4'];
-    const { solution } = generatePuzzle(size);
+    const seed = 12345;
+    const { solution } = generatePuzzle(size, seed);
     const grid = solution.map(row => [...row]);
     expect(checkSolved(grid, solution)).toBe(true);
   });

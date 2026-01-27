@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { createSeededRandom } from '../../data/wordUtils';
 import {
   rcToIdx,
   idxToRC,
@@ -27,24 +28,21 @@ describe('Tracks - helpers', () => {
   });
 
   it('generatePath builds a path to target', () => {
-    vi.spyOn(Math, 'random').mockReturnValue(0.1);
-    const path = generatePath(4, 4, 0, 0, 3, 3);
-    vi.restoreAllMocks();
+    const random = createSeededRandom(12345);
+    const path = generatePath(4, 4, 0, 0, 3, 3, random);
     expect(path?.[0]).toEqual([0, 0]);
   });
 
   it('generatePuzzle returns puzzle data', () => {
-    const rand = vi.spyOn(Math, 'random').mockReturnValue(0.2);
-    const puz = generatePuzzle(6, 'easy');
-    rand.mockRestore();
+    const seed = 12345;
+    const puz = generatePuzzle(6, 'easy', seed);
     expect(puz.w).toBe(6);
     expect(puz.rowClues.length).toBe(6);
   });
 
   it('returns a puzzle even when generation fails, preserving size', () => {
-    const rand = vi.spyOn(Math, 'random').mockReturnValue(0.9); // bias against easy path finding
-    const puz = generatePuzzle(5, 'hard');
-    rand.mockRestore();
+    const seed = 99999; // Use a seed that might be difficult
+    const puz = generatePuzzle(5, 'hard', seed);
     expect(puz.w).toBe(5);
     expect(puz.h).toBe(5);
     expect(puz.a).toBeDefined();

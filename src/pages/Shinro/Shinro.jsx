@@ -38,7 +38,8 @@ const ARROW_DELTAS = {
   'SW': [1, -1],
 };
 
-function generatePuzzle(size) {
+function generatePuzzle(size, seed = Date.now()) {
+  const random = createSeededRandom(seed);
   // Place gems randomly
   const numGems = Math.floor(size * 1.5); // Roughly 1.5 gems per row
   const gems = new Set();
@@ -53,7 +54,7 @@ function generatePuzzle(size) {
 
   // Shuffle positions
   for (let i = positions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [positions[i], positions[j]] = [positions[j], positions[i]];
   }
 

@@ -414,7 +414,7 @@ export default function Crossword() {
 
   // Reveal random letter
   const revealRandomLetter = useCallback(() => {
-    const random = createSeededRandom(puzzleSeed + 1);
+    const random = createSeededRandom(_puzzleSeed + 1);
     if (gameState !== 'playing' || !puzzle || !puzzle.grid) return;
 
     const emptyCells = getEmptyCells(puzzle, userGrid);
@@ -434,7 +434,7 @@ export default function Crossword() {
 
     // Select the revealed cell
     setSelectedCell({ row: randomCell.row, col: randomCell.col });
-  }, [puzzle, userGrid, gameState, puzzleSeed]);
+  }, [puzzle, userGrid, gameState, _puzzleSeed]);
 
   // Reveal word
   const revealWord = useCallback(() => {

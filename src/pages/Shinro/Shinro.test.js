@@ -18,9 +18,8 @@ describe('Shinro - metadata', () => {
 
 describe('Shinro - generation and validation', () => {
   it('generatePuzzle builds counts consistent with gems', () => {
-    const rand = vi.spyOn(Math, 'random').mockReturnValue(0.2);
-    const puz = generatePuzzle(6);
-    rand.mockRestore();
+    const seed = 12345;
+    const puz = generatePuzzle(6, seed);
     const gemCount = puz.gems.size;
     expect(puz.rowCounts.reduce((a, b) => a + b, 0)).toBe(gemCount);
     expect(puz.colCounts.reduce((a, b) => a + b, 0)).toBe(gemCount);
