@@ -3,31 +3,14 @@
  *
  * Tests for plugin database isolation, core API security, size limits, and error handling
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-
-// Try to load better-sqlite3, skip tests if unavailable
-let Database;
-let dbAvailable = false;
-try {
-  const betterSqlite3Module = await import('better-sqlite3');
-  Database = betterSqlite3Module.default;
-  // Test that we can actually create a database
-  const testDb = new Database(':memory:');
-  testDb.close();
-  dbAvailable = true;
-} catch (e) {
-  console.warn('Skipping loader tests: better-sqlite3 not available in this environment');
-  if (process.env.DEBUG) {
-    console.warn('Error details:', e.message);
-    console.warn('Stack:', e.stack);
-  }
-}
-
-const describeFn = dbAvailable ? describe : describe.skip;
-
+import { describe, it, expect, beforeEach, afterEach, vi, beforeAll } from 'vitest';
 import { mkdirSync, rmSync, existsSync, statSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
+
+// Lazy load better-sqlite3 to avoid worker fork issues
+let Database;
+let dbAvailable = false;
 
 // Configuration matching the real implementation
 const MAX_PLUGIN_DB_SIZE = 50 * 1024 * 1024; // 50MB
@@ -123,11 +106,39 @@ function createIsolatedContext(packName, coreDb, pluginDataDir, options = {}) {
 // ===========================================
 // Test Setup
 // ===========================================
-describeFn('Plugin Database Isolation', () => {
+describe('Plugin Database Isolation', () => {
   let coreDb;
   let testDir;
 
-  beforeEach(() => {
+  // Lazy load better-sqlite3 before running any tests
+  beforeAll(async () => {
+    try {
+      const betterSqlite3Module = await import('better-sqlite3');
+      Database = betterSqlite3Module.default;
+      // Test that we can actually create a database
+      const testDb = new Database(':memory:');
+      testDb.close();
+      dbAvailable = true;
+    } catch (e) {
+      console.warn('Skipping loader tests: better-sqlite3 not available in this environment');
+      if (process.env.DEBUG) {
+        console.warn('Error details:', e.message);
+        console.warn('Stack:', e.stack);
+      }
+    }
+
+    // Skip all tests if DB not available
+    if (!dbAvailable) {
+      return;
+    }
+  });
+
+  beforeEach(function() {
+    // Skip individual tests if DB not available
+    if (!dbAvailable) {
+      this.skip();
+      return;
+    }
     // Create temp directory for test databases
     testDir = join(tmpdir(), `enigma-test-${Date.now()}`);
     mkdirSync(testDir, { recursive: true });

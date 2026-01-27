@@ -4,32 +4,44 @@
  * Tests for plugin loading, reloading, and uninstalling scenarios.
  * Tests the PluginManager class behavior.
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi, beforeAll } from 'vitest';
 import { mkdirSync, rmSync, existsSync, writeFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
-// Try to load better-sqlite3, skip tests if unavailable
+// Lazy load better-sqlite3 to avoid worker fork issues
 let Database;
 let dbAvailable = false;
-try {
-  Database = (await import('better-sqlite3')).default;
-  const testDb = new Database(':memory:');
-  testDb.close();
-  dbAvailable = true;
-} catch (e) {
-  console.warn('Skipping lifecycle tests: better-sqlite3 not available');
-}
 
-const describeFn = dbAvailable ? describe : describe.skip;
-
-describeFn('Plugin Lifecycle', () => {
+describe('Plugin Lifecycle', () => {
   let testDir;
   let pluginsDir;
   let dataDir;
   let coreDb;
 
-  beforeEach(() => {
+  // Lazy load better-sqlite3 before running any tests
+  beforeAll(async () => {
+    try {
+      Database = (await import('better-sqlite3')).default;
+      const testDb = new Database(':memory:');
+      testDb.close();
+      dbAvailable = true;
+    } catch (e) {
+      console.warn('Skipping lifecycle tests: better-sqlite3 not available');
+      if (process.env.DEBUG) {
+        console.warn('Error details:', e.message);
+        console.warn('Stack:', e.stack);
+      }
+    }
+  });
+
+  beforeEach(function() {
+    // Skip individual tests if DB not available
+    if (!dbAvailable) {
+      this.skip();
+      return;
+    }
+
     testDir = join(tmpdir(), `enigma-lifecycle-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
     pluginsDir = join(testDir, '.plugins');
     dataDir = join(testDir, 'data', 'plugins');
