@@ -13,6 +13,8 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:ui:coverage": "vitest --ui --coverage",
+    "test:backend-standalone": "node backend/test-scripts/test-plugin-isolation.js",
+    "test:backend-integration": "vitest run tests/integration/backend-plugins.test.js",
     "generate:community-packs": "node scripts/generate-community-packs.js"
   },
   "dependencies": {

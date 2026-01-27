@@ -237,12 +237,45 @@ enigma/
 
 ### Testing
 
-#### Unit and Integration Tests
+#### Run All Tests
+
+```bash
+# Frontend tests (3,425+ tests)
+npm run test:run
+
+# Backend plugin tests (6 tests)
+npm run test:backend-standalone
+
+# Or run both
+npm run test:run && npm run test:backend-standalone
+```
+
+#### Run Tests in Watch Mode
+
+```bash
+npm test
+```
+
+#### Run Specific Test Files
+
+```bash
+npm test -- src/pages/Sudoku/Sudoku.test.js
+```
+
+#### Test Coverage
+
+```bash
+npm run test:coverage
+```
+
+See [_docs/TESTING.md](_docs/TESTING.md) for detailed testing documentation.
+
+#### Unit and Integration Tests in Docker
 
 Run tests inside Docker to match CI:
 
 ```bash
-docker run --rm -v "$PWD":/workspace -w /workspace node:22-bookworm bash -lc "npm ci && npm run test:run"
+docker run --rm -v "$PWD":/workspace -w /workspace node:22-bookworm bash -lc "npm ci && npm run test:run && npm run test:backend-standalone"
 ```
 
 #### Docker Image Tests

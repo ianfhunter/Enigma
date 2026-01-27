@@ -38,5 +38,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run integration tests
+      - name: Run Backend Plugin Standalone Tests
+        run: npm run test:backend-standalone
+
+      - name: Run Integration Tests
         run: npm run test:run -- tests/integration
+        # Note: Backend plugin integration tests will be skipped if backend server is not running
+        # These tests are placeholders for future HTTP API testing
