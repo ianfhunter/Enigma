@@ -187,12 +187,33 @@ function Card({ card, isSelected, onClick, isHinted, setColorIndices }) {
     };
   };
 
+  // Enhanced selection styling that works with found set styling
+  const getSelectionStyle = () => {
+    if (isSelected && isPartOfFoundSet) {
+      // Selected card that's part of a found set - add a strong outline
+      return {
+        outline: '3px solid #ffffff',
+        outlineOffset: '-3px',
+        zIndex: 10,
+      };
+    } else if (isSelected) {
+      // Regular selected card
+      return {
+        backgroundColor: '#e3f2fd',
+        borderColor: '#2196f3',
+        boxShadow: '0 0 15px rgba(33, 150, 243, 0.5)',
+        transform: 'scale(1.05)',
+        zIndex: 10,
+      };
+    }
+    return {};
+  };
+
   return (
     <button
       className={`${styles.card} ${isSelected ? styles.selected : ''} ${isHinted ? styles.hinted : ''} ${isPartOfFoundSet ? styles.found : ''} ${setColors.length > 1 ? styles.multiSet : ''}`}
       onClick={onClick}
-      disabled={isPartOfFoundSet}
-      style={getMultiBorderStyle()}
+      style={{ ...getMultiBorderStyle(), ...getSelectionStyle() }}
     >
       <div className={styles.cardContent}>
         {Array.from({ length: card.count }, (_, i) => (
@@ -272,7 +293,7 @@ export default function Sets() {
   }, [cardToSetIndices]);
 
   const handleCardClick = (index) => {
-    if (!isPlaying || foundSetIndices.has(index)) return;
+    if (!isPlaying) return;
 
     setHintIndices([]);
     setMessage('');

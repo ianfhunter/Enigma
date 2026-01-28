@@ -1,13 +1,15 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import GameCard from '../../components/GameCard';
+import SortToolbar from '../../components/SortToolbar/SortToolbar';
 import { categories, allGames } from '../../data/gameRegistry';
 import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import { communityPacks, isCommunityPack } from '../../packs/registry';
 import { getFilteredCategories, officialPacks } from '../../data/packageRegistry';
 import { useFavourites } from '../../context/SettingsContext';
+import { sortCategories, sortGames, SORT_OPTIONS } from '../../utils/sortUtils';
 import styles from './Home.module.css';
 
 export default function Home() {
@@ -16,20 +18,26 @@ export default function Home() {
   const { customPacks } = useCustomPacks();
   const { favourites } = useFavourites();
 
+  // State for sorting
+  const [sortOption, setSortOption] = useState(SORT_OPTIONS.DEFAULT);
+  const [sortOrder, setSortOrder] = useState('normal'); // 'normal' or 'reverse'
+
   // Filter categories and games based on installed packages
   // This handles includeGames/excludeGames for proper game filtering
   // Exclude community packs - they're rendered separately via communityCategories
   const filteredCategories = useMemo(() => {
     const officialPackageIds = installedPackages.filter(id => !isCommunityPack(id));
-    return getFilteredCategories(officialPackageIds, categories);
-  }, [installedPackages]);
+    const unsortedCategories = getFilteredCategories(officialPackageIds, categories);
+    return sortCategories(unsortedCategories, sortOption, sortOrder);
+  }, [installedPackages, sortOption, sortOrder]);
 
   // Get favourite games with their full data
   const favouriteGames = useMemo(() => {
-    return favourites
+    const unsortedFavourites = favourites
       .map(slug => allGames.find(game => game.slug === slug))
       .filter(Boolean); // Filter out any games that no longer exist
-  }, [favourites]);
+    return sortGames(unsortedFavourites, sortOption, sortOrder);
+  }, [favourites, sortOption, sortOrder]);
 
   // Get community pack categories from the registry (loaded at build time)
   const communityCategories = useMemo(() => {
@@ -51,6 +59,14 @@ export default function Home() {
 
   return (
     <div className={styles.home}>
+      {/* Sort Toolbar */}
+      <SortToolbar
+        currentSort={sortOption}
+        onSortChange={setSortOption}
+        sortOrder={sortOrder}
+        onSortOrderChange={setSortOrder}
+      />
+
       {/* Favourites Section */}
       {favouriteGames.length > 0 && (
         <section className={`${styles.category} ${styles.favouritesSection}`}>
