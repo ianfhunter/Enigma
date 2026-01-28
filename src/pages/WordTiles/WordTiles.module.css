@@ -79,6 +79,16 @@
   color: #c084fc;
 }
 
+.swapPenalty {
+  font-size: 0.9rem;
+  color: #f87171;
+  font-weight: 600;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
 .tilesLeft {
   font-size: 0.85rem;
   color: var(--color-text-tertiary);
