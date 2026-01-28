@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import {
   NUM_TILES,
@@ -11,9 +10,6 @@ import {
   computeSwapResult,
   getNextAutoSlot,
 } from './WordTiles.jsx';
-import WordTiles from './WordTiles.jsx';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi as mock } from 'vitest';
 
 describe('WordTiles - helpers', () => {
   it('creates tile bag of expected size', () => {
