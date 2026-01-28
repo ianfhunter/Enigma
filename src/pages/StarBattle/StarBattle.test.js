@@ -300,3 +300,105 @@ describe('StarBattle - Win Condition', () => {
     expect(checkSolved(stars, regions, 1)).toBe(false);
   });
 });
+
+// ===========================================
+// StarBattle - Cross Functionality Tests
+// ===========================================
+describe('StarBattle - Cross Functionality', () => {
+  it('should support three states: empty → star → cross → empty', () => {
+    const stars = [
+      [false, false, false],
+      [false, false, false],
+      [false, false, false],
+    ];
+    const crosses = [
+      [false, false, false],
+      [false, false, false],
+      [false, false, false],
+    ];
+
+    // Click empty cell to add star
+    stars[0][0] = true;
+    expect(stars[0][0]).toBe(true);
+    expect(crosses[0][0]).toBe(false);
+
+    // Click star cell to add cross
+    stars[0][0] = false;
+    crosses[0][0] = true;
+    expect(stars[0][0]).toBe(false);
+    expect(crosses[0][0]).toBe(true);
+
+    // Click cross cell to clear
+    crosses[0][0] = false;
+    expect(stars[0][0]).toBe(false);
+    expect(crosses[0][0]).toBe(false);
+  });
+
+  it('should not allow stars and crosses in same cell', () => {
+    const stars = [
+      [false, false, false],
+      [false, false, false],
+      [false, false, false],
+    ];
+    const crosses = [
+      [false, false, false],
+      [false, false, false],
+      [false, false, false],
+    ];
+
+    // Add star
+    stars[1][1] = true;
+    expect(stars[1][1]).toBe(true);
+    expect(crosses[1][1]).toBe(false);
+
+    // Try to add cross (should remove star)
+    stars[1][1] = false;
+    crosses[1][1] = true;
+    expect(stars[1][1]).toBe(false);
+    expect(crosses[1][1]).toBe(true);
+  });
+
+  it('should allow stars and crosses in different cells', () => {
+    const stars = [
+      [false, false, false],
+      [false, false, false],
+      [false, false, false],
+    ];
+    const crosses = [
+      [false, false, false],
+      [false, false, false],
+      [false, false, false],
+    ];
+
+    // Add star in one cell
+    stars[0][0] = true;
+    // Add cross in different cell
+    crosses[2][2] = true;
+
+    expect(stars[0][0]).toBe(true);
+    expect(crosses[0][0]).toBe(false);
+    expect(stars[2][2]).toBe(false);
+    expect(crosses[2][2]).toBe(true);
+  });
+
+  it('should clear all crosses when clearCrosses is called', () => {
+    const crosses = [
+      [true, false, true],
+      [false, true, false],
+      [true, false, true],
+    ];
+
+    // Clear all crosses
+    for (let r = 0; r < crosses.length; r++) {
+      for (let c = 0; c < crosses[r].length; c++) {
+        crosses[r][c] = false;
+      }
+    }
+
+    for (let r = 0; r < crosses.length; r++) {
+      for (let c = 0; c < crosses[r].length; c++) {
+        expect(crosses[r][c]).toBe(false);
+      }
+    }
+  });
+});

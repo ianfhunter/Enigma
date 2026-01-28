@@ -156,10 +156,21 @@
   background: rgba(239, 68, 68, 0.5) !important;
 }
 
+.cell.cross {
+  background: rgba(107, 114, 128, 0.2) !important;
+}
+
 .star {
   font-size: 1.5rem;
   color: #fbbf24;
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+  animation: popIn 0.2s ease;
+}
+
+.crossIcon {
+  font-size: 1.5rem;
+  color: #6b7280;
+  opacity: 0.8;
   animation: popIn 0.2s ease;
 }
 

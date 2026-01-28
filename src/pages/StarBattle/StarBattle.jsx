@@ -18,7 +18,7 @@ const GRID_SIZES = {
 };
 
 // Check validity
-function checkValidity(stars, regions, starsPerUnit) {
+function checkValidity(stars, regions, starsPerUnit, crosses = null) {
   const size = stars.length;
   const errors = new Set();
 
@@ -126,6 +126,7 @@ export default function StarBattle() {
   const [allPuzzles, setAllPuzzles] = useState([]);
   const [puzzleData, setPuzzleData] = useState(null);
   const [stars, setStars] = useState([]);
+  const [crosses, setCrosses] = useState([]);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
@@ -177,6 +178,7 @@ export default function StarBattle() {
       size: puzzleSize
     });
     setStars(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
+    setCrosses(Array(puzzleSize).fill(null).map(() => Array(puzzleSize).fill(false)));
     resetGameState();
     setErrors(new Set());
   }, [allPuzzles, size, difficulty, resetGameState]);
@@ -199,9 +201,25 @@ export default function StarBattle() {
   const handleCellClick = (r, c) => {
     if (!isPlaying) return;
 
-    setStars(prev => {
-      const newStars = prev.map(row => [...row]);
-      newStars[r][c] = !newStars[r][c];
+    setStars(prevStars => {
+      const newStars = prevStars.map(row => [...row]);
+      const newCrosses = crosses.map(row => [...row]);
+
+      // If there's already a star, remove it and add a cross
+      if (newStars[r][c]) {
+        newStars[r][c] = false;
+        newCrosses[r][c] = true;
+      }
+      // If there's already a cross, remove it (go back to empty)
+      else if (newCrosses[r][c]) {
+        newCrosses[r][c] = false;
+      }
+      // If empty, add a star
+      else {
+        newStars[r][c] = true;
+      }
+
+      setCrosses(newCrosses);
       return newStars;
     });
   };
@@ -209,6 +227,7 @@ export default function StarBattle() {
   const handleReset = () => {
     const gridSize = puzzleData?.size || size;
     setStars(Array(gridSize).fill(null).map(() => Array(gridSize).fill(false)));
+    setCrosses(Array(gridSize).fill(null).map(() => Array(gridSize).fill(false)));
     resetGameState();
   };
 
@@ -275,6 +294,7 @@ export default function StarBattle() {
           {stars.map((row, r) =>
             row.map((hasStar, c) => {
               const hasError = errors.has(`${r},${c}`);
+              const hasCross = crosses[r][c];
               const region = puzzleData.regions[r][c];
               const bgColor = REGION_COLORS[(region - 1) % REGION_COLORS.length];
 
@@ -285,12 +305,14 @@ export default function StarBattle() {
                     ${styles.cell}
                     ${getBorderClasses(r, c)}
                     ${hasStar ? styles.star : ''}
+                    ${hasCross ? styles.cross : ''}
                     ${hasError ? styles.error : ''}
                   `}
                   style={{ backgroundColor: bgColor }}
                   onClick={() => handleCellClick(r, c)}
                 >
                   {hasStar && <span className={styles.starIcon}>⭐</span>}
+                  {hasCross && <span className={styles.crossIcon}>❌</span>}
                 </button>
               );
             })

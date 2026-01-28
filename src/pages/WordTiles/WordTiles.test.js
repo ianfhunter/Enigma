@@ -116,7 +116,3 @@ describe('WordTiles auto slot selection', () => {
     expect(getNextAutoSlot(placed)).toBe(null);
   });
 });
-
-// Note: The success/error message is fixed-position to prevent layout shift
-// and keyboard movement on mobile devices (see WordTiles.module.css).
-// This is a CSS-only feature and cannot be unit tested here.

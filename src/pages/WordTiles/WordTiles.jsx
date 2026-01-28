@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+    import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import GameResult from '../../components/GameResult';
@@ -149,6 +149,7 @@ export default function WordTiles() {
   const [placedTiles, setPlacedTiles] = useState([]); // Array of {letter, index}
   const [doubleWordSlot, setDoubleWordSlot] = useState(2); // Which slot has 2x
   const [score, setScore] = useState(0);
+  const [swapPenalty, setSwapPenalty] = useState(0);
   const [wordsPlayed, setWordsPlayed] = useState([]);
   const { gameState, setGameState, reset: resetGameState, isPlaying, isFinished } = useGameState();
   const [message, setMessage] = useState('');
@@ -431,12 +432,12 @@ export default function WordTiles() {
     setTiles(swapResult.nextTiles);
     setBag(swapResult.nextBag);
     setPlacedTiles([]);
+    setSwapPenalty(prev => prev + 10);
     setMessage(
       swapResult.partial
         ? `Swapped ${swapResult.swapCount} tile${swapResult.swapCount === 1 ? '' : 's'} (bag low) -10 points`
         : 'Tiles swapped! -10 points'
     );
-    setScore(prev => Math.max(0, prev - 10));
   };
 
   const handleSubmitFinalScore = () => {
@@ -472,6 +473,11 @@ export default function WordTiles() {
       <div className={styles.scoreBoard}>
         <div className={styles.scoreLabel}>Score</div>
         <div className={styles.scoreValue}>{score}</div>
+        {swapPenalty > 0 && (
+          <div className={styles.swapPenalty}>
+            Swap Penalty: -{swapPenalty}
+          </div>
+        )}
         <div className={styles.highScoreRow}>
           <span className={styles.highScoreLabel}>Best:</span>
           <span className={styles.highScoreValue}>{highScore}</span>
@@ -577,7 +583,7 @@ export default function WordTiles() {
           <GameResult
             state="won"
             title={isNewHighScore ? '🏆 New High Score!' : 'Game Over!'}
-            message={`Final Score: ${score} • ${wordsPlayed.length} words played${finalPenalty > 0 ? ` • -${finalPenalty} pts for unused tiles` : ''}`}
+            message={`Final Score: ${score} • ${wordsPlayed.length} words played${swapPenalty > 0 ? ` • -${swapPenalty} pts for swaps` : ''}${finalPenalty > 0 ? ` • -${finalPenalty} pts for unused tiles` : ''}`}
           />
         )}
 
