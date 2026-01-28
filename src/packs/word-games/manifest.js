@@ -65,6 +65,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         component: () => import('../../pages/WordGuess'),
+        lastModified: 1738079200000, // 2025-01-28
       },
       {
         title: 'Word Wheel',
