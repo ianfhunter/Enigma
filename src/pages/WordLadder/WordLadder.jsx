@@ -103,6 +103,25 @@ export default function WordLadder() {
       } else {
         setMessage({ text: '✓ You made it!', type: 'success' });
       }
+    } else {
+      // Check if the current word can reach the end word in one step
+      const currentWord = word;
+      const canReachEnd = differsByOneLetter(currentWord, puzzle.endWord) && isValidWord(puzzle.endWord);
+
+      if (canReachEnd) {
+        // User has reached the step before the final word - they've solved it!
+        setGameWon(true);
+        const optimalSteps = puzzle.solution.length - 1;
+        const userStepsCount = userSteps.length + 1;
+
+        if (userStepsCount === optimalSteps) {
+          setMessage({ text: '🎉 Perfect! You found the optimal path!', type: 'success' });
+        } else if (userStepsCount <= optimalSteps + 2) {
+          setMessage({ text: '✨ Excellent work!', type: 'success' });
+        } else {
+          setMessage({ text: '✓ You made it!', type: 'success' });
+        }
+      }
     }
   };
 
@@ -137,7 +156,7 @@ export default function WordLadder() {
     <div className={styles.container}>
       <GameHeader
         title="Word Ladder"
-        instructions={`Transform ${puzzle.startWord} into ${puzzle.endWord} by changing one letter at a time. Each step must be a valid word.`}
+        instructions={`Transform ${puzzle.startWord} into ${puzzle.endWord} by changing one letter at a time. Each step must be a valid word. You don't need to type the final word!`}
       />
 
       <div className={styles.gameArea}>
@@ -215,16 +234,14 @@ export default function WordLadder() {
             )}
 
             {/* End word (target) */}
-            {!gameWon && (
-              <div className={`${styles.rung} ${styles.targetRung}`}>
-                <div className={styles.rungLabel}>{t('common.goal')}</div>
-                <div className={styles.word}>
-                  {puzzle.endWord.split('').map((letter, i) => (
-                    <span key={i} className={styles.letter}>{letter}</span>
-                  ))}
-                </div>
+            <div className={`${styles.rung} ${gameWon ? styles.endRung : styles.targetRung}`}>
+              <div className={styles.rungLabel}>{gameWon ? t('common.complete') : t('common.goal')}</div>
+              <div className={styles.word}>
+                {puzzle.endWord.split('').map((letter, i) => (
+                  <span key={i} className={styles.letter}>{letter}</span>
+                ))}
               </div>
-            )}
+            </div>
           </div>
 
           {message.text && (
