@@ -293,23 +293,6 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
-.clearCrossesBtn {
-  padding: 0.75rem 1.5rem;
-  background: rgba(107, 114, 128, 0.2);
-  border: 1px solid rgba(107, 114, 128, 0.4);
-  border-radius: 10px;
-  color: #6b7280;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.clearCrossesBtn:hover {
-  background: rgba(107, 114, 128, 0.3);
-  border-color: rgba(107, 114, 128, 0.6);
-}
-
 .newGameBtn {
   padding: 0.75rem 2rem;
   background: linear-gradient(135deg, #fbbf24, #f59e0b);

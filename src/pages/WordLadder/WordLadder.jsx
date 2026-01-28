@@ -156,7 +156,7 @@ export default function WordLadder() {
     <div className={styles.container}>
       <GameHeader
         title="Word Ladder"
-        instructions={`Transform ${puzzle.startWord} into ${puzzle.endWord} by changing one letter at a time. Each step must be a valid word. You don't need to type the final word!`}
+        instructions={`Transform ${puzzle.startWord} into ${puzzle.endWord} by changing one letter at a time. Each step must be a valid word.`}
       />
 
       <div className={styles.gameArea}>

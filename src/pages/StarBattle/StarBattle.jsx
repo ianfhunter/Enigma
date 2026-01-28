@@ -231,10 +231,6 @@ export default function StarBattle() {
     resetGameState();
   };
 
-  const handleClearCrosses = () => {
-    setCrosses(Array(crosses.length).fill(null).map(() => Array(crosses[0]?.length || 0).fill(false)));
-  };
-
   const handleGiveUp = () => {
     if (!puzzleData || !isPlaying) return;
     setStars(puzzleData.solution.map(row => [...row]));
@@ -356,9 +352,6 @@ export default function StarBattle() {
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
             Reset
-          </button>
-          <button className={styles.clearCrossesBtn} onClick={handleClearCrosses}>
-            Clear Crosses
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
