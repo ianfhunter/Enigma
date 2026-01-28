@@ -156,10 +156,21 @@
   background: rgba(239, 68, 68, 0.5) !important;
 }
 
+.cell.cross {
+  background: rgba(107, 114, 128, 0.2) !important;
+}
+
 .star {
   font-size: 1.5rem;
   color: #fbbf24;
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+  animation: popIn 0.2s ease;
+}
+
+.crossIcon {
+  font-size: 1.5rem;
+  color: #6b7280;
+  opacity: 0.8;
   animation: popIn 0.2s ease;
 }
 
@@ -280,6 +291,23 @@
 
 .resetBtn:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.clearCrossesBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(107, 114, 128, 0.2);
+  border: 1px solid rgba(107, 114, 128, 0.4);
+  border-radius: 10px;
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearCrossesBtn:hover {
+  background: rgba(107, 114, 128, 0.3);
+  border-color: rgba(107, 114, 128, 0.6);
 }
 
 .newGameBtn {
