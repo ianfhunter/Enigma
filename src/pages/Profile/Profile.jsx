@@ -6,6 +6,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { users, games, admin } from '../../api/client';
 import { allGames } from '../../data/gameRegistry';
 import { supportedLanguages, getI18nCode } from '../../i18n';
+import { detectSystemWarnings, dismissWarning, WARNING_TYPES } from '../../utils/systemWarnings';
 import styles from './Profile.module.css';
 
 export default function Profile() {
@@ -18,6 +19,7 @@ export default function Profile() {
     { id: 'settings', label: t('common.settings'), icon: '⚙️' },
     { id: 'games', label: t('common.games'), icon: '🎮' },
     { id: 'security', label: t('profile.security'), icon: '🔒' },
+    { id: 'actionItems', label: t('profile.actionItems'), icon: '📋' },
     { id: 'admin', label: t('profile.admin'), icon: '🔧', adminOnly: true },
   ];
 
@@ -72,6 +74,7 @@ export default function Profile() {
           {activeTab === 'settings' && <SettingsTab />}
           {activeTab === 'games' && <GamesTab />}
           {activeTab === 'security' && <SecurityTab />}
+          {activeTab === 'actionItems' && <ActionItemsTab />}
           {activeTab === 'admin' && isAdmin && <AdminTab />}
         </main>
       </div>
@@ -950,6 +953,84 @@ function SecurityTab() {
           )}
         </div>
       </section>
+    </div>
+  );
+}
+
+function ActionItemsTab() {
+  const { t } = useTranslation();
+  const [systemWarnings, setSystemWarnings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadSystemWarnings();
+  }, []);
+
+  const loadSystemWarnings = async () => {
+    setLoading(true);
+    try {
+      // Use the shared system warnings utility
+      const warnings = await detectSystemWarnings();
+      setSystemWarnings(warnings);
+    } catch (err) {
+      console.error('Failed to load system warnings:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const dismissWarning = (warningId) => {
+    dismissWarning(warningId);
+    setSystemWarnings(prev => prev.filter(w => w.id !== warningId));
+  };
+
+  if (loading) {
+    return <div className={styles.loading}>{t('actionItems.loading')}</div>;
+  }
+
+  if (systemWarnings.length === 0) {
+    return (
+      <div className={styles.tabContent}>
+        <h2 className={styles.pageTitle}>{t('profile.actionItems')}</h2>
+        <div className={styles.emptyState}>
+          <span className={styles.emptyIcon}>✅</span>
+          <p className={styles.emptyText}>
+            No system warnings or action items at this time.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.tabContent}>
+      <h2 className={styles.pageTitle}>{t('profile.actionItems')}</h2>
+
+      <div className={styles.systemWarningsList}>
+        {systemWarnings.map(warning => (
+          <div key={warning.id} className={`${styles.systemWarning} ${styles[`warning-${warning.type}`]}`}>
+            <div className={styles.warningContent}>
+              <span className={styles.warningIcon}>{warning.icon}</span>
+              <div className={styles.warningText}>
+                <strong>{warning.title}</strong>
+                <p>{warning.message}</p>
+                {warning.action && (
+                  <span className={styles.warningAction}>
+                    Action: <code>{warning.action}</code>
+                  </span>
+                )}
+              </div>
+            </div>
+            <button
+              className={styles.dismissButton}
+              onClick={() => dismissWarning(warning.id)}
+              title="Dismiss this warning"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

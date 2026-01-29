@@ -10,6 +10,7 @@ import { setEnglishVariant } from '../../data/wordFrequency';
 import { supportedLanguages, getEnglishVariant } from '../../i18n';
 import { fuzzySearchGames } from '../../utils/fuzzySearch';
 import AuthModal from '../AuthModal';
+import DismissibleAlert from '../DismissibleAlert';
 const logo = '/branding/logo-simple-e.svg';
 import styles from './Layout.module.css';
 
@@ -323,6 +324,9 @@ export default function Layout() {
           <span>{t('footer.viewOnGithub')}</span>
         </a>
       </footer>
+
+      {/* Dismissible alert for System Alerts*/}
+      <DismissibleAlert />
 
       {/* Auth modal - cannot be closed when not authenticated */}
       <AuthModal

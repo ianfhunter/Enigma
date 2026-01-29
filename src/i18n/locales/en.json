@@ -246,7 +246,8 @@
     "deleteAccountWarning": "Permanently delete your account and all associated data. This action cannot be undone.",
     "deleteMyAccount": "Delete My Account",
     "yesDeleteMyAccount": "Yes, Delete My Account",
-    "enterPasswordToConfirm": "Enter your password to confirm"
+    "enterPasswordToConfirm": "Enter your password to confirm",
+    "actionItems": "Action Items"
   },
   "settings": {
     "title": "Settings",
@@ -590,5 +591,28 @@
     "gaveUpMessage": "Study the pattern and try another puzzle!",
     "howItWorks": "How It Works",
     "explanation": "Each column has a value (1, 2, 3... from left). When you fill a cell, its column value is added to that row's sum. Similarly, each row has a value that contributes to column sums. Match all targets to win!"
+  },
+  "actionItems": {
+    "loading": "Loading action items...",
+    "failedToLoad": "Failed to load action items",
+    "updated": "Action item updated!",
+    "deleted": "Action item deleted!",
+    "added": "Action item added!",
+    "overview": "Overview",
+    "addNew": "Add New Item",
+    "myItems": "My Items",
+    "noItems": "No action items yet. Add your first task above!",
+    "placeholder": "What needs to be done?",
+    "add": "Add Item",
+    "created": "Created",
+    "delete": "Delete",
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "total": "Total",
+    "completed": "Completed",
+    "completionRate": "Completion Rate"
   }
 }
