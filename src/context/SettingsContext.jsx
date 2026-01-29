@@ -15,6 +15,7 @@ const defaultSettings = {
   gamePreferences: {},
   searchEngine: 'google',
   language: 'en-US', // Language (includes English variant for word games)
+  recentlyPlayed: [], // Array of game slugs with timestamps
 };
 
 // Load settings from localStorage
@@ -234,5 +235,36 @@ export function useFavourites() {
     addFavourite,
     removeFavourite,
     toggleFavourite,
+  };
+}
+
+// Convenience hook for recently played games
+export function useRecentlyPlayed() {
+  const { settings, updateSetting } = useSettings();
+  const recentlyPlayed = settings.recentlyPlayed || [];
+
+  const addRecentlyPlayed = (slug) => {
+    const now = Date.now();
+    const newEntry = { slug, timestamp: now };
+
+    // Remove existing entry if present
+    const filtered = recentlyPlayed.filter(entry => entry.slug !== slug);
+    // Add new entry to beginning
+    const updated = [newEntry, ...filtered];
+
+    updateSetting('recentlyPlayed', updated);
+  };
+
+  const getRecentlyPlayedGames = (limit = 10) => {
+    return recentlyPlayed
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, limit)
+      .map(entry => entry.slug);
+  };
+
+  return {
+    recentlyPlayed,
+    addRecentlyPlayed,
+    getRecentlyPlayedGames,
   };
 }

@@ -8,7 +8,8 @@
 export const SORT_OPTIONS = {
   DEFAULT: 'default',
   ALPHABETICAL: 'alphabetical',
-  RECENTLY_UPDATED: 'recentlyUpdated'
+  RECENTLY_UPDATED: 'recentlyUpdated',
+  RECENTLY_PLAYED: 'recentlyPlayed'
 };
 
 /**
@@ -41,6 +42,25 @@ export function sortGames(games, sortOption, sortOrder = 'normal') {
           result = timeB - timeA;
         } else {
           // If modification times are the same, sort alphabetically
+          result = a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+        }
+
+        return sortOrder === 'reverse' ? -result : result;
+      });
+
+    case SORT_OPTIONS.RECENTLY_PLAYED:
+      // Sort by recently played order (most recent first)
+      // If not in recently played list, treat as older
+      return gamesCopy.sort((a, b) => {
+        const indexA = a.recentlyPlayedIndex ?? Infinity;
+        const indexB = b.recentlyPlayedIndex ?? Infinity;
+
+        let result;
+        // Lower index = more recent
+        if (indexA !== indexB) {
+          result = indexA - indexB;
+        } else {
+          // If same recently played status, sort alphabetically
           result = a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
         }
 

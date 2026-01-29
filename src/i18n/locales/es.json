@@ -198,8 +198,11 @@
       "alphabetical": "Alfabético",
       "alphabeticalReverse": "Alfabético (Inverso)",
       "recentlyUpdated": "Recientemente Actualizado",
-      "recentlyUpdatedReverse": "Recientemente Actualizado (Inverso)"
-    }
+      "recentlyUpdatedReverse": "Recientemente Actualizado (Inverso)",
+      "recentlyPlayed": "Jugados Recientemente",
+      "groupInPacks": "Agrupar por Paquetes"
+    },
+    "allGames": "Todos los Juegos"
   },
   "search": {
     "backToAllGames": "← Volver a todos los juegos",

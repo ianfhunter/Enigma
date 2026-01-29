@@ -8,7 +8,7 @@ import { useInstalledPackages } from '../../hooks/useInstalledPackages';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import { communityPacks, isCommunityPack } from '../../packs/registry';
 import { getFilteredCategories, officialPacks } from '../../data/packageRegistry';
-import { useFavourites } from '../../context/SettingsContext';
+import { useFavourites, useRecentlyPlayed } from '../../context/SettingsContext';
 import { sortCategories, sortGames, SORT_OPTIONS } from '../../utils/sortUtils';
 import styles from './Home.module.css';
 
@@ -17,10 +17,12 @@ export default function Home() {
   const { installedPackages } = useInstalledPackages();
   const { customPacks } = useCustomPacks();
   const { favourites } = useFavourites();
+  const { recentlyPlayed, addRecentlyPlayed } = useRecentlyPlayed();
 
   // State for sorting
   const [sortOption, setSortOption] = useState(SORT_OPTIONS.DEFAULT);
   const [sortOrder, setSortOrder] = useState('normal'); // 'normal' or 'reverse'
+  const [groupInPacks, setGroupInPacks] = useState(false); // Group games by pack
 
   // Filter categories and games based on installed packages
   // This handles includeGames/excludeGames for proper game filtering
@@ -28,16 +30,55 @@ export default function Home() {
   const filteredCategories = useMemo(() => {
     const officialPackageIds = installedPackages.filter(id => !isCommunityPack(id));
     const unsortedCategories = getFilteredCategories(officialPackageIds, categories);
-    return sortCategories(unsortedCategories, sortOption, sortOrder);
-  }, [installedPackages, sortOption, sortOrder]);
+
+    // Add recently played index to games for recently played sorting
+    const categoriesWithRecentlyPlayed = unsortedCategories.map(category => ({
+      ...category,
+      games: category.games.map(game => {
+        const index = recentlyPlayed.findIndex(entry => entry.slug === game.slug);
+        return {
+          ...game,
+          recentlyPlayedIndex: index === -1 ? Infinity : index
+        };
+      })
+    }));
+
+    return sortCategories(categoriesWithRecentlyPlayed, sortOption, sortOrder);
+  }, [installedPackages, sortOption, sortOrder, recentlyPlayed]);
+
+  // Get all games flattened for ungrouped mode sorting
+  const allGamesFlattened = useMemo(() => {
+    const allGamesList = filteredCategories.flatMap(category => category.games);
+
+    // Add recently played index to all games for sorting
+    const gamesWithRecentlyPlayed = allGamesList.map(game => {
+      const index = recentlyPlayed.findIndex(entry => entry.slug === game.slug);
+      return {
+        ...game,
+        recentlyPlayedIndex: index === -1 ? Infinity : index
+      };
+    });
+
+    return sortGames(gamesWithRecentlyPlayed, sortOption, sortOrder);
+  }, [filteredCategories, sortOption, sortOrder, recentlyPlayed]);
 
   // Get favourite games with their full data
   const favouriteGames = useMemo(() => {
     const unsortedFavourites = favourites
       .map(slug => allGames.find(game => game.slug === slug))
       .filter(Boolean); // Filter out any games that no longer exist
-    return sortGames(unsortedFavourites, sortOption, sortOrder);
-  }, [favourites, sortOption, sortOrder]);
+
+    // Add recently played index to favourite games
+    const favouritesWithRecentlyPlayed = unsortedFavourites.map(game => {
+      const index = recentlyPlayed.findIndex(entry => entry.slug === game.slug);
+      return {
+        ...game,
+        recentlyPlayedIndex: index === -1 ? Infinity : index
+      };
+    });
+
+    return sortGames(favouritesWithRecentlyPlayed, sortOption, sortOrder);
+  }, [favourites, sortOption, sortOrder, recentlyPlayed]);
 
   // Get community pack categories from the registry (loaded at build time)
   const communityCategories = useMemo(() => {
@@ -65,6 +106,8 @@ export default function Home() {
         onSortChange={setSortOption}
         sortOrder={sortOrder}
         onSortOrderChange={setSortOrder}
+        groupInPacks={groupInPacks}
+        onGroupInPacksChange={setGroupInPacks}
       />
 
       {/* Favourites Section */}
@@ -91,18 +134,45 @@ export default function Home() {
         </section>
       )}
 
-      {filteredCategories.map((category) => {
-        if (category.games.length === 0) return null;
+      {groupInPacks ? (
+        // Grouped mode: show categories with headers
+        filteredCategories.map((category) => {
+          if (category.games.length === 0) return null;
 
-        return (
-          <section key={category.name} className={styles.category}>
+          return (
+            <section key={category.name} className={styles.category}>
+              <h2 className={styles.categoryTitle}>
+                <span className={styles.categoryIcon}>{category.icon}</span>
+                {category.name}
+                <span className={styles.gameCount}>{category.games.length}</span>
+              </h2>
+              <div className={styles.grid}>
+                {category.games.map((game) => (
+                  <GameCard
+                    key={game.slug}
+                    title={game.title}
+                    slug={game.slug}
+                    description={game.description}
+                    disabled={game.disabled}
+                    tag={game.tag}
+                    version={game.version}
+                  />
+                ))}
+              </div>
+            </section>
+          );
+        })
+      ) : (
+        // Ungrouped mode: show all games in one big list
+        allGamesFlattened.length > 0 && (
+          <section className={styles.category}>
             <h2 className={styles.categoryTitle}>
-              <span className={styles.categoryIcon}>{category.icon}</span>
-              {category.name}
-              <span className={styles.gameCount}>{category.games.length}</span>
+              <span className={styles.categoryIcon}>🎮</span>
+              {t('home.allGames')}
+              <span className={styles.gameCount}>{allGamesFlattened.length}</span>
             </h2>
             <div className={styles.grid}>
-              {category.games.map((game) => (
+              {allGamesFlattened.map((game) => (
                 <GameCard
                   key={game.slug}
                   title={game.title}
@@ -115,8 +185,8 @@ export default function Home() {
               ))}
             </div>
           </section>
-        );
-      })}
+        )
+      )}
 
       {/* External Packs (iframe-based external games) */}
       {packsWithGames.map((pack) => (

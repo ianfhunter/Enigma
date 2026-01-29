@@ -10,14 +10,24 @@ import styles from './SortToolbar.module.css';
  * @param {Function} props.onSortChange - Callback when sort option changes
  * @param {string} props.sortOrder - Current sort order ('normal' or 'reverse')
  * @param {Function} props.onSortOrderChange - Callback when sort order changes
+ * @param {boolean} props.groupInPacks - Current group in packs state
+ * @param {Function} props.onGroupInPacksChange - Callback when group in packs changes
  */
-export default function SortToolbar({ currentSort, onSortChange, sortOrder, onSortOrderChange }) {
+export default function SortToolbar({
+  currentSort,
+  onSortChange,
+  sortOrder,
+  onSortOrderChange,
+  groupInPacks,
+  onGroupInPacksChange
+}) {
   const { t } = useTranslation();
 
   const sortOptions = [
     { value: SORT_OPTIONS.DEFAULT, label: t('home.sort.default'), icon: '🔀' },
     { value: SORT_OPTIONS.ALPHABETICAL, label: t('home.sort.alphabetical'), icon: '🔤' },
     { value: SORT_OPTIONS.RECENTLY_UPDATED, label: t('home.sort.recentlyUpdated'), icon: '🆕' },
+    { value: SORT_OPTIONS.RECENTLY_PLAYED, label: t('home.sort.recentlyPlayed'), icon: '🕒' },
   ];
 
   const handleSortClick = (optionValue) => {
@@ -34,6 +44,10 @@ export default function SortToolbar({ currentSort, onSortChange, sortOrder, onSo
       onSortChange(optionValue);
       onSortOrderChange('normal');
     }
+  };
+
+  const handleGroupInPacksToggle = () => {
+    onGroupInPacksChange(!groupInPacks);
   };
 
   return (
@@ -59,6 +73,16 @@ export default function SortToolbar({ currentSort, onSortChange, sortOrder, onSo
             </button>
           );
         })}
+
+        {/* Group in Packs Toggle */}
+        <button
+          className={`${styles.button} ${groupInPacks ? styles.active : ''}`}
+          onClick={handleGroupInPacksToggle}
+          title={t('home.sort.groupInPacks')}
+        >
+          <span className={styles.icon}>📦</span>
+          <span className={styles.text}>{t('home.sort.groupInPacks')}</span>
+        </button>
       </div>
     </div>
   );
