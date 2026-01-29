@@ -10,6 +10,7 @@
 export const WARNING_TYPES = {
   GIT_LFS: 'git-lfs-issue',
   NEW_VERSION_AVAILABLE: 'new-version-available',
+  SAMPLE_WARNING: 'sample-warning',
   // Add more warning types as needed
 };
 
@@ -17,14 +18,24 @@ export const WARNING_TYPES = {
  * System warning definitions
  */
 const WARNING_DEFINITIONS = {
+  [WARNING_TYPES.SAMPLE_WARNING]: {
+    id: WARNING_TYPES.SAMPLE_WARNING,
+    type: 'warning',
+    title: 'Sample Warning',
+    message: 'This is a sample warning. It is used to test the system warnings utility.',
+    icon: '⚠️',
+    action: 'Sample action',
+    fileCheck: "BUG"
+  },
   [WARNING_TYPES.GIT_LFS]: {
     id: WARNING_TYPES.GIT_LFS,
     type: 'warning',
     title: 'Git LFS Issue Detected',
-    message: 'Some files may not have been downloaded properly. Run "git lfs pull" to fix this.',
+    message: 'Some files may not have been downloaded properly.',
     icon: '⚠️',
-    action: 'git lfs pull',
-    fileCheck: '/BUG'
+    action: 'verify installation. Run `git lfs install` and `git lfs pull` or reinstall your app.',
+    fileCheck: null,
+    customCheck: checkGitLfsIssues
   },
   [WARNING_TYPES.NEW_VERSION_AVAILABLE]: {
     id: WARNING_TYPES.NEW_VERSION_AVAILABLE,
@@ -33,7 +44,8 @@ const WARNING_DEFINITIONS = {
     message: 'A new version of the game is available. Please update to the latest version.',
     icon: '🔄',
     action: 'Update to the latest version',
-    fileCheck: null // Could check for package-lock.json or node_modules
+    fileCheck: null,
+    customCheck: checkNewVersionAvailable
   }
 };
 
@@ -93,6 +105,124 @@ async function checkFileExists(filePath) {
 }
 
 /**
+ * Check for Git LFS issues by looking for unexpanded LFS files
+ * @returns {Promise<boolean>} True if Git LFS issues are detected
+ */
+async function checkGitLfsIssues() {
+  try {
+
+    // Check for common LFS file patterns that might be unexpanded
+    const lfsPatterns = [
+      '/public/audio/classical/Beethoven_Symphony_No_5.mp3',
+      '/public/audio/classical/Mozart_Symphony_No_40.mp3',
+      '/public/audio/classical/Bach_Goldberg_Variations.mp3',
+      '/public/audio/classical/Chopin_Nocturne_Op_9_No_2.mp3',
+      '/public/audio/classical/Vivaldi_Four_Seasons_Spring.mp3'
+    ];
+
+    for (const pattern of lfsPatterns) {
+      try {
+        const response = await fetch(pattern, { method: 'HEAD' });
+        if (response.ok) {
+          // Check if the file is actually an LFS pointer file
+          const contentResponse = await fetch(pattern);
+          if (contentResponse.ok) {
+            const text = await contentResponse.text();
+            // LFS pointer files typically start with "version https://git-lfs.github.com/spec/v1"
+            if (text.includes('version https://git-lfs.github.com/spec/v1') ||
+                text.includes('oid sha256:') ||
+                text.includes('size ')) {
+              return true;
+            }
+          }
+        }
+      } catch (error) {
+        // Continue checking other patterns
+        continue;
+      }
+    }
+
+    return false;
+  } catch (error) {
+    console.warn('Failed to check Git LFS issues:', error);
+    return false;
+  }
+}
+
+/**
+ * Check for new Docker image versions
+ * @returns {Promise<boolean>} True if a new version is available
+ */
+async function checkNewVersionAvailable() {
+  try {
+    // Check if we're running in Docker by looking for Docker-specific environment
+    const isDocker = navigator.userAgent.includes('Docker') ||
+                     window.location.hostname === 'localhost' ||
+                     window.location.hostname === 'ian-2014.local';
+
+    if (!isDocker) {
+      return false;
+    }
+
+    // Try to get current image info from environment or API
+    let currentImageHash = null;
+
+    try {
+      // Check for environment variable or API endpoint that provides current image info
+      const envResponse = await fetch('/api/system/info');
+      if (envResponse.ok) {
+        const systemInfo = await envResponse.json();
+        currentImageHash = systemInfo.dockerImageHash || systemInfo.imageHash;
+      }
+    } catch (error) {
+      // Fallback: try to get from meta tags or other sources
+      const metaTag = document.querySelector('meta[name="docker-image-hash"]');
+      if (metaTag) {
+        currentImageHash = metaTag.getAttribute('content');
+      }
+    }
+
+    if (!currentImageHash) {
+      return false;
+    }
+
+    // Check for latest available version
+    let latestImageHash = null;
+
+    try {
+      // Try to fetch latest version from a version endpoint
+      const versionResponse = await fetch('/api/system/latest-version');
+      if (versionResponse.ok) {
+        const versionInfo = await versionResponse.json();
+        latestImageHash = versionInfo.dockerImageHash || versionInfo.imageHash;
+      }
+    } catch (error) {
+      // Fallback: check Docker Hub or registry API
+      try {
+        // This would need to be configured with your specific registry
+        const registryResponse = await fetch('https://registry.hub.docker.com/v2/repositories/ianfhunter/enigma/tags/latest/');
+        if (registryResponse.ok) {
+          const registryData = await registryResponse.json();
+          latestImageHash = registryData.images?.[0]?.digest;
+        }
+      } catch (registryError) {
+        // Registry check failed, assume no update needed
+      }
+    }
+
+    if (!latestImageHash) {
+      return false;
+    }
+
+    // Compare hashes
+    return currentImageHash !== latestImageHash;
+  } catch (error) {
+    console.warn('Failed to check for new version:', error);
+    return false;
+  }
+}
+
+/**
  * Detect system warnings by checking for specific conditions
  * @param {string[]} warningTypes - Array of warning types to check (optional, checks all if not provided)
  * @returns {Promise<Array>} Array of active warnings
@@ -123,9 +253,23 @@ export async function detectSystemWarnings(warningTypes = null) {
       }
     }
 
-    // Additional custom checks can be added here based on warning type
-    // For now, we'll assume file existence is the main check
-    warnings.push(definition);
+    // Custom checks based on warning type
+    let shouldShowWarning = true;
+
+    if (definition.customCheck) {
+      shouldShowWarning = await definition.customCheck();
+    } else if (definition.fileCheck) {
+      shouldShowWarning = await checkFileExists(definition.fileCheck);
+    } else {
+        // This should never happen, but at least
+        // it will be obvious if it does.
+      shouldShowWarning = true;
+    }
+
+
+    if (shouldShowWarning) {
+      warnings.push(definition);
+    }
   }
 
   return warnings;
@@ -197,6 +341,3 @@ export function useSystemWarnings(warningTypes = null) {
     hasWarnings: warnings.length > 0
   };
 }
-
-// Export the hook for React components
-export { useSystemWarnings };
