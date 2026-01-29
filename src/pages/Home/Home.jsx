@@ -80,6 +80,11 @@ export default function Home() {
     return sortGames(favouritesWithRecentlyPlayed, sortOption, sortOrder);
   }, [favourites, sortOption, sortOrder, recentlyPlayed]);
 
+  // Track recently played games when navigating to a game
+  const handleGameClick = (gameSlug) => {
+    addRecentlyPlayed(gameSlug);
+  };
+
   // Get community pack categories from the registry (loaded at build time)
   const communityCategories = useMemo(() => {
     return communityPacks.flatMap(pack =>
@@ -128,6 +133,7 @@ export default function Home() {
                 disabled={game.disabled}
                 tag={game.tag}
                 version={game.version}
+                onClick={() => handleGameClick(game.slug)}
               />
             ))}
           </div>
@@ -156,6 +162,7 @@ export default function Home() {
                     disabled={game.disabled}
                     tag={game.tag}
                     version={game.version}
+                    onClick={() => handleGameClick(game.slug)}
                   />
                 ))}
               </div>
@@ -181,6 +188,7 @@ export default function Home() {
                   disabled={game.disabled}
                   tag={game.tag}
                   version={game.version}
+                  onClick={() => handleGameClick(game.slug)}
                 />
               ))}
             </div>

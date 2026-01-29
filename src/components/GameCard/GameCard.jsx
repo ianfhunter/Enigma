@@ -31,6 +31,7 @@ export default function GameCard({
   customColors = null,
   typeBadge = null,
   showFavouriteButton = true,
+  onClick = null,
 }) {
   const { t } = useTranslation();
   const icon = customIcon || getGameIcon(slug);
@@ -71,6 +72,7 @@ export default function GameCard({
         '--card-primary': colors.primary,
         '--card-secondary': colors.secondary,
       }}
+      onClick={onClick}
     >
       {showFavouriteButton && !disabled && (
         <button
