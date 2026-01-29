@@ -1,0 +1,98 @@
+name: Pre-Release
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  update-versions:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Update version numbers
+      run: node scripts/update-versions.js
+
+    - name: Check for changes
+      id: changes
+      run: |
+        if git diff --quiet; then
+          echo "changes=false" >> $GITHUB_OUTPUT
+        else
+          echo "changes=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create Pull Request
+      if: steps.changes.outputs.changes == 'true'
+      uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: Update version numbers with unix timestamps'
+        title: 'Version Update: Automated Version Bump'
+        body: |
+          This PR automatically updates version numbers in all manifest.js files with unix timestamps.
+
+          **Changes:**
+          - Updated version numbers to ensure cache invalidation
+          - Unix timestamp format: `${timestamp}`
+
+          **Note:** This is an automated PR. Please review and merge if the changes look correct.
+        branch: auto-version-update
+        delete-branch: true
+
+  create-release:
+    needs: update-versions
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Update version numbers
+      run: node scripts/update-versions.js
+
+    - name: Build project
+      run: npm run build
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v$(date +%Y%m%d)-$(git rev-parse --short HEAD)
+        name: Pre-release $(date +%Y-%m-%d)
+        body: |
+          Automated pre-release with updated version numbers.
+
+          **Changes:**
+          - Updated all game pack versions with unix timestamps
+          - Ensures cache invalidation for users
+
+          **Build artifacts:**
+          - dist/
+        files: |
+          dist/**
+        draft: false
+        prerelease: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

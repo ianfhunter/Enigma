@@ -34,7 +34,7 @@ export const packInfo = {
   description: 'Shade cells to reveal pictures or satisfy clues. Nonogram, Minesweeper, Nurikabe, and more.',
   icon: '⬛',
   color: '#f472b6',
-  version: '1.0.0',
+  version: '1769688178',
   default: true,
   removable: true,
 };
@@ -58,6 +58,7 @@ export const categories = [
         colors: { primary: '#f472b6', secondary: '#db2777' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #db2777 100%)',
         component: () => import('../../pages/Nonogram'),
+        lastModified: 1769688178000
       },
       {
         title: 'Minesweeper',
@@ -69,6 +70,7 @@ export const categories = [
         colors: { primary: '#ef4444', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
         component: () => import('../../pages/Minesweeper'),
+        lastModified: 1769688178000
       },
       {
         title: 'Nurikabe',
@@ -80,6 +82,7 @@ export const categories = [
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         component: () => import('../../pages/Nurikabe'),
+        lastModified: 1769688178000
       },
       {
         title: 'Hitori',
@@ -91,6 +94,7 @@ export const categories = [
         colors: { primary: '#71717a', secondary: '#52525b' },
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
         component: () => import('../../pages/Hitori'),
+        lastModified: 1769688178000
       },
       {
         title: 'Aquarium',
@@ -102,6 +106,7 @@ export const categories = [
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         component: () => import('../../pages/Aquarium'),
+        lastModified: 1769688178000
       },
       {
         title: 'Star Battle',
@@ -113,6 +118,7 @@ export const categories = [
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         component: () => import('../../pages/StarBattle'),
+        lastModified: 1769688178000
       },
       {
         title: 'Campixu',
@@ -123,6 +129,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#84cc16' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #84cc16 100%)',
         component: () => import('../../pages/Campixu'),
+        lastModified: 1769688178000
       },
       {
         title: 'Takuzu',
@@ -134,6 +141,7 @@ export const categories = [
         colors: { primary: '#0ea5e9', secondary: '#0284c7' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
         component: () => import('../../pages/Takuzu'),
+        lastModified: 1769688178000
       },
       {
         title: 'Yin-Yang',
@@ -145,6 +153,7 @@ export const categories = [
         colors: { primary: '#1a1a1a', secondary: '#666666' },
         gradient: 'linear-gradient(135deg, #1a1a1a 0%, #666666 100%)',
         component: () => import('../../pages/YinYang'),
+        lastModified: 1769688178000
       },
       {
         title: 'Creek',
@@ -155,6 +164,7 @@ export const categories = [
         colors: { primary: '#06b6d4', secondary: '#22d3ee' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)',
         component: () => import('../../pages/Creek'),
+        lastModified: 1769688178000
       },
       {
         title: 'Kurotto',
@@ -165,6 +175,7 @@ export const categories = [
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         component: () => import('../../pages/Kurotto'),
+        lastModified: 1769688178000
       },
       {
         title: 'Thermometers',
@@ -176,6 +187,7 @@ export const categories = [
         colors: { primary: '#ef4444', secondary: '#f97316' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #f97316 100%)',
         component: () => import('../../pages/Thermometers'),
+        lastModified: 1769688178000
       },
       {
         title: 'Lights Out',
@@ -187,6 +199,7 @@ export const categories = [
         colors: { primary: '#facc15', secondary: '#eab308' },
         gradient: 'linear-gradient(135deg, #facc15 0%, #eab308 100%)',
         component: () => import('../../pages/LightsOut'),
+        lastModified: 1769688178000
       },
       {
         title: 'Light Up',
@@ -198,6 +211,7 @@ export const categories = [
         colors: { primary: '#fde047', secondary: '#facc15' },
         gradient: 'linear-gradient(135deg, #fde047 0%, #facc15 100%)',
         component: () => import('../../pages/Lightup'),
+        lastModified: 1769688178000
       },
       {
         title: 'Mosaic',
@@ -208,6 +222,7 @@ export const categories = [
         colors: { primary: '#71717a', secondary: '#52525b' },
         gradient: 'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
         component: () => import('../../pages/Mosaic'),
+        lastModified: 1769688178000
       },
       {
         title: 'Tapa',
@@ -219,6 +234,7 @@ export const categories = [
         colors: { primary: '#a855f7', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
         component: () => import('../../pages/Tapa'),
+        lastModified: 1769688178000
       },
       {
         title: 'Mochikoro',
@@ -230,6 +246,7 @@ export const categories = [
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         component: () => import('../../pages/Mochikoro'),
+        lastModified: 1769688178000
       },
     ],
   },
