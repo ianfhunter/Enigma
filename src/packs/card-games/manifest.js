@@ -15,7 +15,7 @@ const cardGamesPack = {
   description: 'Classic solitaire and card-based puzzles. Clear the pyramid, build foundations, and more.',
   icon: '🃏',
   color: '#16a34a',
-  version: '1.0.0',
+  version: '1769688178',
   default: true,
   removable: true,
 
@@ -35,6 +35,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/PyramidCards'),
+          lastModified: 1769688178000
         },
         {
           slug: 'tri-peaks',
@@ -46,6 +47,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
+          lastModified: 1769688178000
         },
       ],
     },

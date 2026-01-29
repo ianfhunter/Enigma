@@ -191,7 +191,18 @@
     "browseStore": "¡Explora la Tienda de Juegos para instalar paquetes adicionales!",
     "visitStore": "Visitar Tienda",
     "custom": "Personalizado",
-    "community": "Comunidad"
+    "community": "Comunidad",
+    "sort": {
+      "label": "Ordenar",
+      "default": "Por Defecto",
+      "alphabetical": "Alfabético",
+      "alphabeticalReverse": "Alfabético (Inverso)",
+      "recentlyUpdated": "Recientemente Actualizado",
+      "recentlyUpdatedReverse": "Recientemente Actualizado (Inverso)",
+      "recentlyPlayed": "Jugados Recientemente",
+      "groupInPacks": "Agrupar por Paquetes"
+    },
+    "allGames": "Todos los Juegos"
   },
   "search": {
     "backToAllGames": "← Volver a todos los juegos",

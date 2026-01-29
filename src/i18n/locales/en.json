@@ -191,7 +191,18 @@
     "browseStore": "Browse the Game Store to install additional puzzle packs!",
     "visitStore": "Visit Store",
     "custom": "Custom",
-    "community": "Community"
+    "community": "Community",
+    "sort": {
+      "label": "Sort",
+      "default": "Default",
+      "alphabetical": "Alphabetical",
+      "alphabeticalReverse": "Alphabetical (Reverse)",
+      "recentlyUpdated": "Recently Updated",
+      "recentlyUpdatedReverse": "Recently Updated (Reverse)",
+      "recentlyPlayed": "Recently Played",
+      "groupInPacks": "Group in Packs"
+    },
+    "allGames": "All Games"
   },
   "search": {
     "backToAllGames": "← Back to all games",

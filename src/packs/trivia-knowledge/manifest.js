@@ -29,7 +29,7 @@ const triviaKnowledgePack = {
   description: 'Test your knowledge! Geography, flags, capitals, science, history, and more.',
   icon: '🌍',
   color: '#10b981',
-  version: '1.0.0',
+  version: '1769688178',
   default: true,
   removable: true,
 
@@ -48,6 +48,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#2dd4bf', secondary: '#14b8a6' },
           gradient: 'linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%)',
           component: () => import('../../pages/FlagGuesser'),
+          lastModified: 1769688178000
         },
         {
           slug: 'capital-guesser',
@@ -58,6 +59,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#f472b6', secondary: '#ec4899' },
           gradient: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
           component: () => import('../../pages/CapitalGuesser'),
+          lastModified: 1769688178000
         },
         {
           slug: 'world-map-fill',
@@ -68,6 +70,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#22d3ee', secondary: '#06b6d4' },
           gradient: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)',
           component: () => import('../../pages/WorldMapFill'),
+          lastModified: 1769688178000
         },
         {
           slug: 'provincial-map-fill',
@@ -78,6 +81,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#14b8a6', secondary: '#0d9488' },
           gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
           component: () => import('../../pages/ProvincialMapFill'),
+          lastModified: 1769688178000
         },
         {
           slug: 'famous-paintings',
@@ -88,6 +92,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#b45309', secondary: '#d97706' },
           gradient: 'linear-gradient(135deg, #b45309 0%, #d97706 100%)',
           component: () => import('../../pages/FamousPaintings'),
+          lastModified: 1769688178000
         },
         {
           slug: 'trivia',
@@ -98,6 +103,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#7c3aed', secondary: '#8b5cf6' },
           gradient: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)',
           component: () => import('../../pages/Trivia'),
+          lastModified: 1769688178000
         },
         {
           slug: 'anatomy-quiz',
@@ -108,6 +114,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#ec4899', secondary: '#be185d' },
           gradient: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
           component: () => import('../../pages/AnatomyQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'constellations',
@@ -118,6 +125,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#0f172a', secondary: '#1e293b' },
           gradient: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
           component: () => import('../../pages/Constellations'),
+          lastModified: 1769688178000
         },
         {
           slug: 'pokemon-quiz',
@@ -128,6 +136,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#ef4444', secondary: '#dc2626' },
           gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
           component: () => import('../../pages/PokemonQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'pokemon-gen-blitz',
@@ -138,6 +147,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#3b82f6', secondary: '#2563eb' },
           gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
           component: () => import('../../pages/PokemonGenBlitz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'periodic-table-quiz',
@@ -148,6 +158,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#06b6d4', secondary: '#0891b2' },
           gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
           component: () => import('../../pages/PeriodicTableQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'language-quiz',
@@ -158,6 +169,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
           gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
           component: () => import('../../pages/LanguageQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'currency-quiz',
@@ -168,6 +180,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#22c55e', secondary: '#16a34a' },
           gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
           component: () => import('../../pages/CurrencyQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'gods-quiz',
@@ -178,6 +191,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#f59e0b', secondary: '#d97706' },
           gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
           component: () => import('../../pages/GodsQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'classical-music-quiz',
@@ -188,6 +202,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#a855f7', secondary: '#6366f1' },
           gradient: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
           component: () => import('../../pages/ClassicalMusicQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'national-anthem-quiz',
@@ -198,6 +213,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#10b981', secondary: '#059669' },
           gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
           component: () => import('../../pages/NationalAnthemQuiz'),
+          lastModified: 1769688178000
         },
         {
           slug: 'riddles',
@@ -208,6 +224,7 @@ const triviaKnowledgePack = {
           colors: { primary: '#f59e0b', secondary: '#d97706' },
           gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
           component: () => import('../../pages/Riddles'),
+          lastModified: 1769688178000
         },
       ],
     },

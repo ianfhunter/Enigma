@@ -37,14 +37,18 @@ jobs:
       - name: Compute game count
         run: node scripts/count-games.js
 
-      - name: Commit badge
+      - name: Update last-modified fields
+        run: node scripts/update-versions.js
+
+      - name: Commit changes
         run: |
           if git status --short badge.json | grep -q .; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add badge.json
-            git commit -m "chore: update game badge"
+            git add src/packs/**/manifest.js
+            git commit -m "chore: update game count and last-modified fields"
             git push origin HEAD:${GITHUB_REF_NAME}
           else
-            echo "No badge changes";
+            echo "No changes to commit";
           fi
