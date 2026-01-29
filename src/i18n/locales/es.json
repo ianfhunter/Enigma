@@ -246,7 +246,8 @@
     "deleteAccountWarning": "Eliminar permanentemente tu cuenta y todos los datos asociados. Esta acción no se puede deshacer.",
     "deleteMyAccount": "Eliminar Mi Cuenta",
     "yesDeleteMyAccount": "Sí, Eliminar Mi Cuenta",
-    "enterPasswordToConfirm": "Ingresa tu contraseña para confirmar"
+    "enterPasswordToConfirm": "Ingresa tu contraseña para confirmar",
+    "actionItems": "Elementos de Acción"
   },
   "settings": {
     "title": "Configuración",
@@ -590,5 +591,28 @@
     "gaveUpMessage": "¡Estudia el patrón e intenta otro puzzle!",
     "howItWorks": "Cómo Funciona",
     "explanation": "Cada columna tiene un valor (1, 2, 3... desde la izquierda). Cuando rellenas una celda, el valor de su columna se añade a la suma de esa fila. De manera similar, cada fila tiene un valor que contribuye a las sumas de columna. ¡Haz que todos los objetivos coincidan para ganar!"
+  },
+  "actionItems": {
+    "loading": "Cargando elementos de acción...",
+    "failedToLoad": "Error al cargar elementos de acción",
+    "updated": "Elemento de acción actualizado!",
+    "deleted": "Elemento de acción eliminado!",
+    "added": "Elemento de acción añadido!",
+    "overview": "Resumen",
+    "addNew": "Añadir Nuevo Elemento",
+    "myItems": "Mis Elementos",
+    "noItems": "No hay elementos de acción aún. ¡Añade tu primera tarea arriba!",
+    "placeholder": "¿Qué necesita hacerse?",
+    "add": "Añadir Elemento",
+    "created": "Creado",
+    "delete": "Eliminar",
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "total": "Total",
+    "completed": "Completado",
+    "completionRate": "Tasa de Completitud"
   }
 }
