@@ -325,7 +325,7 @@ export default function Layout() {
         </a>
       </footer>
 
-      {/* Dismissible alert for Git LFS issues */}
+      {/* Dismissible alert for System Alerts*/}
       <DismissibleAlert />
 
       {/* Auth modal - cannot be closed when not authenticated */}
