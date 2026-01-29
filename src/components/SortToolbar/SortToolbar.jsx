@@ -76,10 +76,11 @@ export default function SortToolbar({
 
         {/* Group in Packs Toggle */}
         <button
-          className={`${styles.button} ${groupInPacks ? styles.active : ''}`}
+          className={`${styles.groupToggle} ${groupInPacks ? styles.active : ''}`}
           onClick={handleGroupInPacksToggle}
           title={t('home.sort.groupInPacks')}
         >
+          <span className={styles.checkmark}></span>
           <span className={styles.icon}>📦</span>
           <span className={styles.text}>{t('home.sort.groupInPacks')}</span>
         </button>
