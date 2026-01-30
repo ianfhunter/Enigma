@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -15,6 +15,7 @@ export default function CurrencyQuiz() {
   const [result, setResult] = useState(null);
   const [seed, setSeed] = useState(() => stringToSeed(`currency-quiz-${getTodayDateString()}`));
   const [roundNumber, setRoundNumber] = useState(0);
+  const roundNumberRef = useRef(0);
 
   const { stats, recordWin, recordLoss, winRate } = useGameStats('currency-quiz', {
     trackBestTime: false,
@@ -38,14 +39,14 @@ export default function CurrencyQuiz() {
 
   const pickRandom = useCallback(() => {
     if (!countries.length) return null;
-    const random = createSeededRandom(seed + roundNumber);
+    const random = createSeededRandom(seed + roundNumberRef.current);
     const idx = Math.floor(random() * countries.length);
     return countries[idx];
-  }, [countries, seed, roundNumber]);
+  }, [countries, seed]);
 
   const generateOptions = useCallback((correct) => {
     if (!countries.length) return [];
-    const random = createSeededRandom(seed + roundNumber + 1000); // Different offset for options
+    const random = createSeededRandom(seed + roundNumberRef.current + 1000); // Different offset for options
     const correctCurrency = correct.currency;
 
     // Currency types to detect (check longer/multi-word ones first)
@@ -109,6 +110,15 @@ export default function CurrencyQuiz() {
       }
 
       distractors = otherCurrencies.slice(0, 3);
+
+      // If we don't have enough unique currencies, fill with some common ones
+      const commonFallbacks = ['Euro', 'US Dollar', 'British Pound', 'Japanese Yen', 'Chinese Yuan'];
+      while (distractors.length < 3) {
+        const fallback = commonFallbacks[Math.floor(random() * commonFallbacks.length)];
+        if (fallback !== correctCurrency && !distractors.includes(fallback)) {
+          distractors.push(fallback);
+        }
+      }
     }
 
     // Final shuffle of all options
@@ -119,7 +129,7 @@ export default function CurrencyQuiz() {
     }
 
     return allOptions;
-  }, [countries, seed, roundNumber]);
+  }, [countries, seed]);
 
   const startRound = useCallback(() => {
     const next = pickRandom();
@@ -128,8 +138,11 @@ export default function CurrencyQuiz() {
     setOptions(generateOptions(next));
     setSelected(null);
     setResult(null);
-    setRoundNumber(prev => prev + 1);
-  }, [pickRandom, generateOptions]);
+    setRoundNumber(prev => {
+      roundNumberRef.current = prev + 1;
+      return prev + 1;
+    });
+  }, [pickRandom, generateOptions, seed]);
 
   useEffect(() => {
     if (countries.length) {

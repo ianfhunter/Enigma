@@ -31,8 +31,9 @@ function generateSolution(size) {
       positions.push([r, c]);
     }
   }
+  const random = createSeededRandom(Date.now())
   for (let i = positions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [positions[i], positions[j]] = [positions[j], positions[i]];
   }
 

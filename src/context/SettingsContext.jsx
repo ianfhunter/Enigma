@@ -93,6 +93,12 @@ export function SettingsProvider({ children }) {
 
   // Update a single setting
   const updateSetting = useCallback(async (key, value) => {
+    // Validate the value before sending to server
+    if (value === undefined || value === null || value === '') {
+      console.warn(`Skipping update for setting '${key}' - invalid value:`, value);
+      return;
+    }
+
     // Optimistically update local state
     setSettings(prev => {
       const newSettings = { ...prev, [key]: value };
@@ -116,9 +122,25 @@ export function SettingsProvider({ children }) {
 
   // Update multiple settings at once
   const updateSettings = useCallback(async (updates) => {
+    // Filter out invalid values before sending to server
+    const validUpdates = {};
+    for (const [key, value] of Object.entries(updates)) {
+      if (value !== undefined && value !== null && value !== '') {
+        validUpdates[key] = value;
+      } else {
+        console.warn(`Skipping update for setting '${key}' - invalid value:`, value);
+      }
+    }
+
+    // Only proceed if we have valid updates
+    if (Object.keys(validUpdates).length === 0) {
+      console.warn('No valid settings to update');
+      return;
+    }
+
     // Optimistically update local state
     setSettings(prev => {
-      const newSettings = { ...prev, ...updates };
+      const newSettings = { ...prev, ...validUpdates };
       // Save to localStorage for unauthenticated users
       if (!isAuthenticated) {
         saveLocalSettings(newSettings);
@@ -129,7 +151,7 @@ export function SettingsProvider({ children }) {
     // Persist to server if authenticated
     if (isAuthenticated) {
       try {
-        await users.updateSettings(updates);
+        await users.updateSettings(validUpdates);
       } catch (err) {
         console.error('Failed to save settings:', err);
       }

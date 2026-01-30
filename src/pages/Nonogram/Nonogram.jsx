@@ -67,6 +67,8 @@ async function imageToBinaryGrid(imageUrl) {
 
       const imageData = ctx.getImageData(0, 0, img.width, img.height);
       const grid = [];
+      let totalCells = 0;
+      let filledCells = 0;
 
       for (let y = 0; y < img.height; y++) {
         const row = [];
@@ -82,8 +84,22 @@ async function imageToBinaryGrid(imageUrl) {
           const brightness = (r + g + b) / 3;
           const isFilled = a > 128 && brightness < 128;
           row.push(isFilled);
+
+          totalCells++;
+          if (isFilled) filledCells++;
         }
         grid.push(row);
+      }
+
+      // Check if we need to invert the grid (if less than 50% are filled)
+      const fillPercentage = filledCells / totalCells;
+      if (fillPercentage < 0.5) {
+        // Invert the grid: filled becomes empty, empty becomes filled
+        for (let y = 0; y < grid.length; y++) {
+          for (let x = 0; x < grid[0].length; x++) {
+            grid[y][x] = !grid[y][x];
+          }
+        }
       }
 
       resolve(grid);
