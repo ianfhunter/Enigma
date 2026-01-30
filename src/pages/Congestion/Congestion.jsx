@@ -429,6 +429,26 @@ export default function Congestion() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [undo, reset, goNext, goPrev]);
 
+  // Get current cell size from the board
+  const getCellSize = useCallback(() => {
+    const viewportWidth = window.innerWidth;
+
+    // Force scaling based on viewport width - direct approach
+    if (viewportWidth <= 480) {
+      // Very small screens (like Pixel 7)
+      console.log('Very small screen detected, using 48px cell size');
+      return 48; // Match CSS mobile grid size
+    } else if (viewportWidth <= 768) {
+      // Small screens/tablets
+      console.log('Small screen detected, using 48px cell size');
+      return 48; // Match CSS mobile grid size
+    } else {
+      // Desktop/large screens
+      console.log('Large screen detected, using 60px cell size');
+      return 60; // Match CSS desktop grid size
+    }
+  }, []);
+
   // Click handler for vehicles
   const handleCellClick = useCallback((row, col, e) => {
     if (won) return;
@@ -490,9 +510,9 @@ export default function Congestion() {
     const deltaX = clientX - dragState.startX;
     const deltaY = clientY - dragState.startY;
 
-    // Cell size (approximate)
-    const cellSize = 60;
-    const threshold = cellSize * 0.5;
+    // Cell size (dynamic based on current grid size)
+    const cellSize = getCellSize();
+    const threshold = cellSize * 0.3; // Lower threshold for more responsive movement
 
     let delta = 0;
     if (vehicle.isHorizontal) {
@@ -506,20 +526,30 @@ export default function Congestion() {
     }
 
     if (delta !== 0) {
+      // Try to move one cell at a time, but allow multiple moves per drag
       const newVehicles = tryMoveVehicle(vehicles, dragState.letter, delta);
       if (newVehicles) {
         setHistory(prev => [...prev, vehicles]);
         setVehicles(newVehicles);
         setMoves(m => m + 1);
+
+        // Update drag state to track the new position
         setDragState(prev => ({
           ...prev,
           startX: clientX,
           startY: clientY,
-          moved: prev.moved + 1,
+          moved: prev.moved + delta,
+        }));
+      } else {
+        // Can't move further in this direction, reset start position to prevent stuck state
+        setDragState(prev => ({
+          ...prev,
+          startX: clientX,
+          startY: clientY,
         }));
       }
     }
-  }, [dragState, vehicles]);
+  }, [dragState, vehicles, getCellSize]);
 
   const handleDragEnd = useCallback(() => {
     setDragState(null);
@@ -634,7 +664,8 @@ export default function Congestion() {
                   // Calculate vehicle dimensions for first cell
                   let vehicleStyle = {};
                   if (isFirstCell && vehicle) {
-                    const cellSize = 60;
+                    const cellSize = getCellSize();
+                    console.log('Rendering vehicle with cell size:', cellSize, 'for vehicle:', vehicle);
                     const gap = 4;
                     if (vehicle.isHorizontal) {
                       vehicleStyle = {

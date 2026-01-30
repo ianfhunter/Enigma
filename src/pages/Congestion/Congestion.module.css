@@ -231,8 +231,8 @@
 .exitIndicator {
   position: absolute;
   right: -40px;
-  /* Position at row 3 (index 2): padding(8px) + 2 rows*(60px + 4px gap) + half row height(30px) */
-  top: calc(8px + 2 * 64px + 30px);
+  /* Dynamic positioning based on grid layout */
+  top: 50%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
@@ -374,7 +374,7 @@
 }
 
 /* Mobile adjustments */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .board {
     grid-template-columns: repeat(6, 48px);
     grid-template-rows: repeat(6, 48px);
@@ -402,8 +402,9 @@
 
   .exitIndicator {
     right: -30px;
-    /* Mobile: padding(6px) + 2 rows*(48px + 3px gap) + half row height(24px) */
-    top: calc(6px + 2 * 51px + 24px);
+    /* Dynamic positioning for mobile */
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .exitArrow {
