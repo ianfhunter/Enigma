@@ -304,3 +304,22 @@
   color: var(--color-text-secondary);
   font-size: 13px;
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .cell {
+    width: 32px;
+    height: 32px;
+  }
+
+  .clueValue {
+    font-size: 0.95rem;
+  }
+
+  .grid {
+    padding: 4px;
+  }
+}

@@ -84,6 +84,7 @@
 }
 
 .board {
+  --blackbox-cell-size: 42px;
   display: grid;
   gap: 6px;
   justify-content: center;
@@ -91,8 +92,8 @@
 }
 
 .cell {
-  width: 42px;
-  height: 42px;
+  width: var(--blackbox-cell-size);
+  height: var(--blackbox-cell-size);
   border-radius: 10px;
   border: 1px solid var(--blackbox-cell-border);
   background: var(--blackbox-cell-bg);
@@ -132,4 +133,16 @@
 .small {
   font-size: 0.85rem;
   opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  .board {
+    --blackbox-cell-size: 32px;
+    gap: 4px;
+  }
+
+  .cell {
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
 }

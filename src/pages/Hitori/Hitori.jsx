@@ -406,8 +406,7 @@ export default function Hitori() {
           className={styles.grid}
           style={{
             gridTemplateColumns: `repeat(${size}, 1fr)`,
-            width: `${size * 50}px`,
-            height: `${size * 50}px`,
+            '--grid-size': size,
           }}
         >
           {puzzleData.grid.map((row, r) =>
