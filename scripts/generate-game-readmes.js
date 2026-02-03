@@ -1375,21 +1375,6 @@ const games = [
 - Avoid creating paths that quickly exit`
   },
   {
-    folder: 'StainedGlass',
-    title: 'Stained Glass',
-    icon: '🎨',
-    description: 'Color each region so no two adjacent regions share the same color.',
-    category: 'Tile & Spatial',
-    rules: `1. Color every region in the design
-2. Adjacent regions cannot have the same color
-3. Use the minimum number of colors possible
-4. Most puzzles can be solved with 3-4 colors
-5. Complete the coloring to finish`,
-    tips: `- Start with regions that border the most other regions
-- Four colors are sufficient for any map (Four Color Theorem)
-- Work systematically through constrained regions first`
-  },
-  {
     folder: 'TowerOfHanoi',
     title: 'Tower of Hanoi',
     icon: '🗼',

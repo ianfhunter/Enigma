@@ -20,7 +20,7 @@ import memorymatchIcon from '../../assets/icons/memorymatch.svg';
 import chimptestIcon from '../../assets/icons/chimptest.svg';
 import navalbattleIcon from '../../assets/icons/navalbattle.svg';
 import undeadIcon from '../../assets/icons/undead.svg';
-import mapIcon from '../../assets/icons/map.svg';
+import stainedGlassIcon from '../../assets/icons/stained-glass.svg';
 import setsIcon from '../../assets/icons/sets.svg';
 import tetravexIcon from '../../assets/icons/tetravex.svg';
 import kakurasuIcon from '../../assets/icons/kakurasu.svg';
@@ -189,7 +189,7 @@ export const categories = [
         title: 'Map',
         slug: 'map',
         description: 'Color regions on a map so adjacent regions have different colors.',
-        icon: mapIcon,
+        icon: stainedGlassIcon,
         emojiIcon: '🗺️',
         colors: { primary: '#22d3ee', secondary: '#06b6d4' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)',

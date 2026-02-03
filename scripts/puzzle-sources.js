@@ -112,7 +112,6 @@ export const puzzleSources = {
   FloodIt: { type: 'generator', source: 'Random color grid generation' },
   ColorCube: { type: 'n/a', source: 'Classic 3×3×3 cube - user scrambles' },
   Entanglement: { type: 'generator', source: 'Random hex tile generation' },
-  StainedGlass: { type: 'generator', source: 'Generated graph coloring puzzles' },
   TowerOfHanoi: { type: 'n/a', source: 'Classic Tower of Hanoi - configurable disk count' },
   Fifteen: { type: 'generator', source: 'Scrambled with solvability guarantee' },
   Sixteen: { type: 'generator', source: 'Scrambled tile arrangement' },

@@ -7,7 +7,6 @@
 
 // Custom SVG icons used by games in this pack
 import pipePuzzleIcon from '../../assets/icons/pipe-puzzle.svg';
-import stainedGlassIcon from '../../assets/icons/stained-glass.svg';
 import towerOfHanoiIcon from '../../assets/icons/tower-of-hanoi.svg';
 import CirkitzIcon from '../../pages/Cirkitz/CirkitzIcon';
 import untangleIcon from '../../assets/icons/untangle.svg';
@@ -150,17 +149,6 @@ export const categories = [
         colors: { primary: '#22d3ee', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #a855f7 100%)',
         component: () => import('../../pages/Entanglement'),
-        lastModified: 1769688178000
-      },
-      {
-        title: 'Stained Glass',
-        slug: 'stained-glass',
-        description: 'Color each region so no two adjacent regions share the same color.',
-        icon: stainedGlassIcon,
-        emojiIcon: '🎨',
-        colors: { primary: '#f472b6', secondary: '#c084fc' },
-        gradient: 'linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #60a5fa 100%)',
-        component: () => import('../../pages/StainedGlass'),
         lastModified: 1769688178000
       },
       {
