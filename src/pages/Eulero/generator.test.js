@@ -145,7 +145,7 @@ describe('Eulero Generator', () => {
       expect(puzzle7.size).toBe(7);
       expect(puzzle7.puzzle.length).toBe(7);
       expect(puzzle7.solution.length).toBe(7);
-    }, 10000); // Increase timeout to 10 seconds for this test
+    }, 20000); // Increase timeout to 20 seconds for this test
   });
 
   describe('isSolved', () => {

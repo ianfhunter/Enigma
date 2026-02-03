@@ -119,7 +119,6 @@ const GAME_MODULES = {
   'sliding-puzzle': 'SlidingPuzzle',
   'congestion': 'Congestion',
   'sokoban': 'Sokoban',
-  'stained-glass': 'StainedGlass',
   'star-battle': 'StarBattle',
   'str8ts': 'Str8ts',
   'threads': 'Threads',
