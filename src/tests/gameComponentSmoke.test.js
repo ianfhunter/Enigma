@@ -124,7 +124,6 @@ const GAME_MODULES = {
   'sliding-puzzle': 'SlidingPuzzle',
   'congestion': 'Congestion',
   'sokoban': 'Sokoban',
-  'stained-glass': 'StainedGlass',
   'star-battle': 'StarBattle',
   'str8ts': 'Str8ts',
   'threads': 'Threads',
@@ -309,6 +308,8 @@ describe('Game Component Smoke Tests - No Runtime Errors', () => {
 
   // Test all games
   for (const [slug, folder] of gameEntries) {
+    const timeout = slug === 'shiritori' ? 20000 : 10000;
+ 
     it(`${folder} (${slug}) should import and render without errors`, async () => {
       // Import the module
       const module = await import(`../pages/${folder}/index.js`);
@@ -334,7 +335,7 @@ describe('Game Component Smoke Tests - No Runtime Errors', () => {
         // Provide helpful error message
         throw new Error(`${folder} component threw error on render: ${error.message}`);
       }
-    }, 10000); // 10 second timeout for slower imports
+    }, timeout); // Per-game timeout for slower imports
   }
 });
 

@@ -14,7 +14,7 @@ const internationalWordsPack = {
   description: 'Word games from around the world. Currently featuring Shiritori (しりとり) - the Japanese word chain game.',
   icon: '🌐',
   color: '#dc2626',
-  version: '1769688178',
+  version: '1770119929',
   default: true,
   removable: true,
 
@@ -35,7 +35,7 @@ const internationalWordsPack = {
           gradient: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
           tag: 'JP',
           component: () => import('../../pages/Shiritori'),
-          lastModified: 1769688178000
+          lastModified: 1770119929000
         },
       ],
     },
