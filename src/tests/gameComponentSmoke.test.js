@@ -309,7 +309,7 @@ describe('Game Component Smoke Tests - No Runtime Errors', () => {
   // Test all games
   for (const [slug, folder] of gameEntries) {
     const timeout = slug === 'shiritori' ? 20000 : 10000;
-
+ 
     it(`${folder} (${slug}) should import and render without errors`, async () => {
       // Import the module
       const module = await import(`../pages/${folder}/index.js`);
