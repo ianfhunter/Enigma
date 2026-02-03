@@ -10,6 +10,7 @@ import {
   getCellConnections,
   validateLoop,
   hasAdjacentShaded,
+  getCellSizeForWidth,
 } from './Yajilin.jsx';
 
 describe('Yajilin - clue parsing', () => {
@@ -25,6 +26,17 @@ describe('Yajilin - clue parsing', () => {
     expect(parseClue('')).toBe(null);
     expect(parseClue('abc')).toBe(null);
     expect(parseClue('1x')).toBe(null);
+  });
+});
+
+describe('Yajilin - getCellSizeForWidth', () => {
+  it('clamps cell size to min and max bounds', () => {
+    expect(getCellSizeForWidth(10, 10, 100)).toBe(26);
+    expect(getCellSizeForWidth(5, 5, 300)).toBe(50);
+  });
+
+  it('scales cell size based on available width', () => {
+    expect(getCellSizeForWidth(10, 10, 400)).toBe(40);
   });
 });
 
