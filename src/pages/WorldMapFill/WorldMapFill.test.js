@@ -13,4 +13,21 @@ describe('WorldMapFill - helpers', () => {
     const filtered = countries.filter(c => europeCodes.has(c.code));
     expect(filtered.length).toBeGreaterThan(0);
   });
+
+  it('includes Greenland in the country list', () => {
+    const greenland = countries.find(c => c.code === 'GL');
+    expect(greenland).toEqual({
+      code: 'GL',
+      name: 'Greenland',
+      flag: '🇬🇱',
+    });
+  });
+
+  it('covers all region codes in the country list', () => {
+    const countryCodes = new Set(countries.map(country => country.code));
+    const missing = Object.values(REGIONS)
+      .flatMap(region => region.countries ?? [])
+      .filter(code => !countryCodes.has(code));
+    expect(missing).toEqual([]);
+  });
 });
