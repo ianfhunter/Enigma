@@ -350,3 +350,30 @@
 .attribution a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .cell {
+    width: 28px;
+    height: 28px;
+  }
+
+  .vertex,
+  .edge {
+    width: 10px;
+    height: 10px;
+  }
+
+  .clue {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+
+  .board {
+    padding: 2px;
+  }
+}

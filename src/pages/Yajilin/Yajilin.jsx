@@ -577,7 +577,9 @@ export default function Yajilin() {
   if (!puzzleData || shaded.length !== puzzleData.rows) return null;
 
   const { rows, cols, clues, solutionShaded, solutionPath } = puzzleData;
-  const cellSize = Math.max(30, Math.min(50, 400 / Math.max(rows, cols)));
+  const viewportWidth = typeof window === 'undefined' ? 400 : window.innerWidth;
+  const maxGridPx = Math.min(400, Math.max(240, viewportWidth - 48));
+  const cellSize = Math.max(26, Math.min(50, maxGridPx / Math.max(rows, cols)));
   const displayShaded = showSolution ? solutionShaded : shaded;
   const displayPath = showSolution ? solutionPath : pathSegments;
 

@@ -109,11 +109,14 @@
 }
 
 .grid {
+  --hitori-cell-size: 50px;
   display: grid;
   gap: 2px;
   background: rgba(129, 140, 248, 0.3);
   padding: 2px;
   border-radius: 8px;
+  width: min(100%, calc(var(--grid-size) * var(--hitori-cell-size)));
+  aspect-ratio: 1;
 }
 
 :global([data-theme="light"]) .grid {
@@ -433,8 +436,7 @@
 /* Responsive */
 @media (max-width: 450px) {
   .grid {
-    width: 100% !important;
-    max-width: 300px;
+    --hitori-cell-size: 36px;
   }
 
   .number {

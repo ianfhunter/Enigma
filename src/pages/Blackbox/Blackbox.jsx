@@ -396,7 +396,7 @@ export default function Blackbox() {
 
       <div
         className={styles.board}
-        style={{ gridTemplateColumns: `repeat(${w + 2}, 42px)` }}
+        style={{ gridTemplateColumns: `repeat(${w + 2}, var(--blackbox-cell-size, 42px))` }}
       >
         {Array.from({ length: (h + 2) * (w + 2) }, (_, idx) => {
           const rr = Math.floor(idx / (w + 2));
