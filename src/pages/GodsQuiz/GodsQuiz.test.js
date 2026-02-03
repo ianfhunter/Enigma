@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { evaluateDomains, filterGodsByMythology } from './GodsQuiz.jsx';
+import { createSeededRandom } from '../../data/wordUtils';
+import { buildDomainOptions, evaluateDomains, filterGodsByMythology } from './GodsQuiz.jsx';
 
 describe('GodsQuiz - domain evaluation', () => {
   const domains = ['sky', 'thunder', 'justice'];
@@ -39,5 +40,34 @@ describe('GodsQuiz - mythology filtering', () => {
   it('handles empty or missing data gracefully', () => {
     expect(filterGodsByMythology(undefined, 'Greek')).toEqual([]);
     expect(filterGodsByMythology([], 'Greek')).toEqual([]);
+  });
+});
+
+describe('GodsQuiz - domain option builder', () => {
+  it('includes all correct domains and fills to the requested size', () => {
+    const allDomains = ['sky', 'thunder', 'justice', 'war', 'sea', 'love', 'hunt'];
+    const correct = ['sky', 'thunder'];
+    const random = createSeededRandom(123);
+    const options = buildDomainOptions(allDomains, correct, 5, random);
+    expect(options.length).toBe(5);
+    expect(options).toEqual(expect.arrayContaining(correct));
+    expect(new Set(options).size).toBe(options.length);
+  });
+
+  it('returns all correct domains if they exceed the target count', () => {
+    const allDomains = ['sky', 'thunder', 'justice', 'war', 'sea'];
+    const correct = ['sky', 'thunder', 'justice', 'war', 'sea', 'underworld'];
+    const random = createSeededRandom(42);
+    const options = buildDomainOptions(allDomains, correct, 4, random);
+    expect(options.length).toBe(correct.length);
+    expect(options).toEqual(expect.arrayContaining(correct));
+  });
+
+  it('handles missing domain pools gracefully', () => {
+    const correct = ['sky', 'thunder'];
+    const random = createSeededRandom(7);
+    const options = buildDomainOptions(undefined, correct, 5, random);
+    expect(options).toEqual(expect.arrayContaining(correct));
+    expect(new Set(options).size).toBe(options.length);
   });
 });
