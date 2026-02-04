@@ -89,6 +89,7 @@ ENV PORT=3000
 ENV DB_PATH=/app/data/enigma.db
 ENV SERVE_STATIC=true
 ENV STATIC_PATH=/app/public
+ENV NO_AUTH=0
 
 # Expose port
 EXPOSE 3000
