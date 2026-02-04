@@ -14,7 +14,7 @@ import {
   getSafeStartWords,
   startsWithKana,
   setCommonOnlyFilter,
-  getWordStats,
+  getWordStatsForFilter,
 } from '@datasets/japaneseWords';
 import styles from './Shiritori.module.css';
 
@@ -128,17 +128,13 @@ export default function Shiritori() {
   const [suggestions, setSuggestions] = useState([]);
   const [commonOnly, setCommonOnly] = usePersistedState('shiritori-common-only', false);
 
-  // Sync commonOnlyFilter with persisted state
-  useEffect(() => {
-    setCommonOnlyFilter(commonOnly);
-  }, [commonOnly]);
-
   const inputRef = useRef(null);
   const chainRef = useRef(null);
   const text = TEXT[lang];
-  const wordStats = getWordStats();
+  const wordStats = getWordStatsForFilter(commonOnly);
 
   const initGame = useCallback(() => {
+    setCommonOnlyFilter(commonOnly);
     const random = createSeededRandom(Date.now());
     const startWord = getRandomStartWord(random);
     setChain([{ ...startWord, player: 'ai' }]);
@@ -148,7 +144,7 @@ export default function Shiritori() {
     resetGameState();
     setIsAIThinking(false);
     setSuggestions([]);
-  }, [resetGameState]);
+  }, [commonOnly, resetGameState]);
 
   useEffect(() => {
     initGame();
@@ -179,8 +175,6 @@ export default function Shiritori() {
 
   const toggleCommonOnly = () => {
     setCommonOnly(prev => !prev);
-    // Restart game with new word set
-    initGame();
   };
 
   const handleSubmit = (e) => {
