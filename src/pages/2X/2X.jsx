@@ -5,10 +5,9 @@ import SeedDisplay from '../../components/SeedDisplay';
 import GiveUpButton from '../../components/GiveUpButton';
 import { createSeededRandom, stringToSeed } from '../../data/wordUtils';
 import { useGameState } from '../../hooks/useGameState';
-import styles from './TwentyFortyEight.module.css';
+import styles from './2X.module.css';
 
 const BOARD_SIZE = 4;
-const TARGET_TILE = 2048;
 const START_TILES = 2;
 const CHANCE_OF_FOUR = 0.1;
 
@@ -116,12 +115,6 @@ function getMaxTile(board) {
   return board.reduce((max, value) => (value > max ? value : max), 0);
 }
 
-function getGiveUpBoard(size) {
-  const board = createEmptyBoard(size);
-  board[0] = TARGET_TILE;
-  return board;
-}
-
 // Export helpers for tests
 export {
   createEmptyBoard,
@@ -131,11 +124,10 @@ export {
   slideAndMergeLine,
   applyMove,
   hasMoves,
-  getMaxTile,
-  getGiveUpBoard,
+  getMaxTile
 };
 
-export default function TwentyFortyEight() {
+export default function TwoX() {
   const { t } = useTranslation();
   const [board, setBoard] = useState(() => createEmptyBoard(BOARD_SIZE));
   const [score, setScore] = useState(0);
@@ -149,7 +141,7 @@ export default function TwentyFortyEight() {
   const initGame = useCallback((nextSeed) => {
     const seedValue = typeof nextSeed === 'string'
       ? (isNaN(parseInt(nextSeed, 10)) ? stringToSeed(nextSeed) : parseInt(nextSeed, 10))
-      : (nextSeed ?? stringToSeed(`2048-${Date.now()}`));
+      : (nextSeed ?? stringToSeed(`2X-${Date.now()}`));
     const random = createSeededRandom(seedValue);
     rngRef.current = random;
     setBoard(initializeBoard(BOARD_SIZE, random));
@@ -165,7 +157,6 @@ export default function TwentyFortyEight() {
 
   useEffect(() => {
     if (!isPlaying) return;
-    checkWin(board.some((value) => value >= TARGET_TILE));
     if (!hasMoves(board, BOARD_SIZE)) {
       lose();
     }
@@ -203,15 +194,9 @@ export default function TwentyFortyEight() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [handleMove, isPlaying]);
 
-  const handleGiveUp = () => {
-    if (!isPlaying) return;
-    setBoard(getGiveUpBoard(BOARD_SIZE));
-    giveUp();
-  };
-
   const statusMessage = useMemo(() => {
     if (gameState === 'won') return t('gameStatus.puzzleSolved');
-    if (gameState === 'lost') return t('twentyFortyEight.gameOver');
+    if (gameState === 'lost') return t('2X.gameOver');
     if (gameState === 'gaveUp') return t('gameStatus.solutionRevealed');
     return null;
   }, [gameState, t]);
@@ -225,8 +210,8 @@ export default function TwentyFortyEight() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title={t('twentyFortyEight.title')}
-        instructions={t('twentyFortyEight.instructions')}
+        title={t('2X.title')}
+        instructions={t('2X.instructions')}
       />
 
       {seed !== null && (
@@ -249,7 +234,7 @@ export default function TwentyFortyEight() {
             <span className={styles.statValue}>{moves}</span>
           </div>
           <div>
-            <span className={styles.statLabel}>{t('twentyFortyEight.bestTile')}</span>
+            <span className={styles.statLabel}>{t('2X.bestTile')}</span>
             <span className={styles.statValue}>{maxTile}</span>
           </div>
         </div>
@@ -257,11 +242,10 @@ export default function TwentyFortyEight() {
           <button className={styles.button} onClick={() => initGame()}>
             {t('common.newGame')}
           </button>
-          <GiveUpButton onGiveUp={handleGiveUp} disabled={!isPlaying} requireConfirm />
         </div>
       </div>
 
-      <div className={styles.board} role="grid" aria-label={t('twentyFortyEight.title')}>
+      <div className={styles.board} role="grid" aria-label={t('2X.title')}>
         {board.map((value, idx) => (
           <div
             key={idx}
@@ -274,8 +258,8 @@ export default function TwentyFortyEight() {
               ...(value ? { backgroundColor: TILE_COLORS[value] || '#3c3a32' } : {}),
             }}
             aria-label={value === 0
-              ? t('twentyFortyEight.emptyTile')
-              : t('twentyFortyEight.tileLabel', { value })}
+              ? t('2X.emptyTile')
+              : t('2X.tileLabel', { value })}
           >
             {value === 0 ? '' : value}
           </div>
@@ -283,7 +267,6 @@ export default function TwentyFortyEight() {
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.target}>{t('twentyFortyEight.target', { value: TARGET_TILE })}</div>
         <div className={styles.status}>
           {statusMessage && <span className={statusClassName}>{statusMessage}</span>}
         </div>
@@ -293,15 +276,24 @@ export default function TwentyFortyEight() {
 }
 
 const TILE_COLORS = {
-  2: '#eee4da',
-  4: '#ede0c8',
-  8: '#f2b179',
-  16: '#f59563',
-  32: '#f67c5f',
-  64: '#f65e3b',
-  128: '#edcf72',
-  256: '#edcc61',
-  512: '#edc850',
-  1024: '#edc53f',
-  2048: '#edc22e',
+  2: '#e8f4f8',
+  4: '#b8e0f0',
+  8: '#7ec8e3',
+  16: '#4fb3d6',
+  32: '#3aa7cc',
+  64: '#2196f3',
+  128: '#42c896',
+  256: '#2eb87c',
+  512: '#1fa862',
+  1024: '#109648',
+  2048: '#ff9800',
+  4096: '#ff6f00',
+  8192: '#f44336',
+  16384: '#e91e63',
+  32768: '#9c27b0',
+  65536: '#673ab7',
+  131072: '#3f51b5',
+  262144: '#2c3e50',
+  524288: '#34495e',
+  1048576: '#1a252f',
 };

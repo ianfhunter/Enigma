@@ -21,7 +21,7 @@ import cubeIcon from '../../assets/icons/cube.svg';
 import flooditIcon from '../../assets/icons/floodit.svg';
 import fifteenIcon from '../../assets/icons/fifteen.svg';
 import sixteenIcon from '../../assets/icons/sixteen.svg';
-import twentyFortyEightIcon from '../../assets/icons/2048.svg';
+import twoXIcon from '../../assets/icons/2x.svg';
 import netslideIcon from '../../assets/icons/netslide.svg';
 import pentominoIcon from '../../assets/icons/pentomino.svg';
 import jigsawIcon from '../../assets/icons/jigsaw.svg';
@@ -188,14 +188,14 @@ export const categories = [
         lastModified: 1770136707000
       },
       {
-        title: '2048',
-        slug: '2048',
-        description: 'Combine matching tiles to reach the 2048 tile.',
-        icon: twentyFortyEightIcon,
+        title: '2X',
+        slug: '2X',
+        description: 'Combine matching tiles to reach as high a score as possible.',
+        icon: twoXIcon,
         emojiIcon: '🔢',
         colors: { primary: '#f59e0b', secondary: '#f97316' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
-        component: () => import('../../pages/TwentyFortyEight'),
+        component: () => import('../../pages/2X'),
         lastModified: 1770136707000
       },
       {

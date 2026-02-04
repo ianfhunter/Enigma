@@ -9,7 +9,7 @@ import {
   hasMoves,
   initializeBoard,
   slideAndMergeLine,
-} from './TwentyFortyEight.jsx';
+} from './2X.jsx';
 
 const randomWithSequence = (values) => {
   let idx = 0;
@@ -20,7 +20,7 @@ const randomWithSequence = (values) => {
   };
 };
 
-describe('TwentyFortyEight - board helpers', () => {
+describe('2X - board helpers', () => {
   it('creates an empty board of the right size', () => {
     const board = createEmptyBoard(4);
     expect(board).toHaveLength(16);
@@ -47,7 +47,7 @@ describe('TwentyFortyEight - board helpers', () => {
   });
 });
 
-describe('TwentyFortyEight - merging logic', () => {
+describe('2X - merging logic', () => {
   it('merges matching tiles once per move', () => {
     const { line, gained } = slideAndMergeLine([2, 2, 2, 0]);
     expect(line).toEqual([4, 2, 0, 0]);
@@ -61,7 +61,7 @@ describe('TwentyFortyEight - merging logic', () => {
   });
 });
 
-describe('TwentyFortyEight - move application', () => {
+describe('2X - move application', () => {
   it('slides tiles left and merges appropriately', () => {
     const board = [
       2, 0, 2, 0,
@@ -92,7 +92,7 @@ describe('TwentyFortyEight - move application', () => {
   });
 });
 
-describe('TwentyFortyEight - end state checks', () => {
+describe('2X - end state checks', () => {
   it('detects available moves when merges exist', () => {
     const board = [
       2, 4, 8, 16,
@@ -113,11 +113,4 @@ describe('TwentyFortyEight - end state checks', () => {
     expect(hasMoves(board, 4)).toBe(false);
   });
 
-  it('reports the max tile and give-up board state', () => {
-    const board = [0, 2, 4, 8];
-    expect(getMaxTile(board)).toBe(8);
-    const giveUp = getGiveUpBoard(4);
-    expect(getMaxTile(giveUp)).toBe(2048);
-    expect(giveUp.filter((value) => value === 2048)).toHaveLength(1);
-  });
 });

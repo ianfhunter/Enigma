@@ -1,6 +1,6 @@
-# 🔢 2048
+# 🔢 2x
 
-Combine matching tiles to reach the 2048 tile.
+Combine matching tiles to reach as high as score as possible.
 
 ## Category
 
@@ -11,7 +11,7 @@ Tile & Spatial
 1. Use arrow keys (or swipe) to move all tiles in one direction.
 2. Tiles of the same value merge when they collide.
 3. Each move spawns a new tile.
-4. Reach the 2048 tile to win.
+4. Get the highest score.
 5. The game ends when no moves remain.
 
 ## Puzzle Source
@@ -28,9 +28,9 @@ Boards are generated on-the-fly with a seeded random generator for reproducibili
 
 ## Issues & Bugs
 
-🔍 [Search existing issues for "2048"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+2048)
+🔍 [Search existing issues for "2X"](https://github.com/ianfhunter/Enigma/issues?q=is%3Aissue+2X)
 
-📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5B2048%5D+)
+📝 [Report a new bug](https://github.com/ianfhunter/Enigma/issues/new?labels=bug&title=%5B2X%5D+)
 
 ---
 
