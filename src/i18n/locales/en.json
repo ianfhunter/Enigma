@@ -218,6 +218,13 @@
     "solutionRevealed": "🏳️ Solution Revealed",
     "theAnswerWas": "The answer was: <strong>{{answer}}</strong>"
   },
+  "yinYang": {
+    "title": "Yin-Yang",
+    "instructions": "Fill cells black or white. Each color must be connected. No 2×2 squares of the same color allowed. Tap to cycle black, white, and empty.",
+    "winTitle": "☯️ Balance Achieved!",
+    "winMessage": "Yin and Yang in harmony!",
+    "legendCycle": "Click: Cycle black → white → empty"
+  },
   "profile": {
     "title": "Profile",
     "security": "Security",
