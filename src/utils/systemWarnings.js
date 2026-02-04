@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useState } from 'react';
+
 /**
  * System warnings utility functions
  * Provides centralized logic for detecting and managing system warnings
@@ -25,7 +27,7 @@ const WARNING_DEFINITIONS = {
     message: 'This is a sample warning. It is used to test the system warnings utility.',
     icon: '⚠️',
     action: 'Sample action',
-    fileCheck: "BUG"
+    fileCheck: 'BUG'
   },
   [WARNING_TYPES.GIT_LFS]: {
     id: WARNING_TYPES.GIT_LFS,
