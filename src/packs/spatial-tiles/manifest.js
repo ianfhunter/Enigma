@@ -21,6 +21,7 @@ import cubeIcon from '../../assets/icons/cube.svg';
 import flooditIcon from '../../assets/icons/floodit.svg';
 import fifteenIcon from '../../assets/icons/fifteen.svg';
 import sixteenIcon from '../../assets/icons/sixteen.svg';
+import twentyFortyEightIcon from '../../assets/icons/2048.svg';
 import netslideIcon from '../../assets/icons/netslide.svg';
 import pentominoIcon from '../../assets/icons/pentomino.svg';
 import jigsawIcon from '../../assets/icons/jigsaw.svg';
@@ -37,7 +38,7 @@ export const packInfo = {
   description: 'Jigsaws, sliding puzzles, and tile manipulation games.',
   icon: '🧩',
   color: '#f97316',
-  version: '1770136707',
+  version: '1770136708',
   default: true,
   removable: true,
 };
@@ -184,6 +185,17 @@ export const categories = [
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         component: () => import('../../pages/Sixteen'),
+        lastModified: 1770136707000
+      },
+      {
+        title: '2048',
+        slug: '2048',
+        description: 'Combine matching tiles to reach the 2048 tile.',
+        icon: twentyFortyEightIcon,
+        emojiIcon: '🔢',
+        colors: { primary: '#f59e0b', secondary: '#f97316' },
+        gradient: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
+        component: () => import('../../pages/TwentyFortyEight'),
         lastModified: 1770136707000
       },
       {

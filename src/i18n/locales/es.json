@@ -554,6 +554,15 @@
     "rule3": "Escribe tu respuesta y envíala antes de que se acabe el tiempo",
     "rule4": "Usa \"Mezclar\" para reorganizar la visualización"
   },
+  "twentyFortyEight": {
+    "title": "2048",
+    "instructions": "Combina fichas iguales para llegar a 2048. Usa las flechas o desliza para mover.",
+    "bestTile": "Mejor ficha",
+    "target": "Objetivo {{value}}",
+    "gameOver": "Fin del juego",
+    "emptyTile": "Ficha vacía",
+    "tileLabel": "Ficha {{value}}"
+  },
   "nQueens": {
     "rule1": "Las reinas atacan horizontal, vertical y diagonalmente",
     "rule2": "Ninguna reina puede estar en la misma fila, columna o diagonal",

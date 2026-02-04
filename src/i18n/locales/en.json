@@ -554,6 +554,15 @@
     "rule3": "Type your answer and submit before time runs out",
     "rule4": "Use \"Shuffle\" to rearrange the display"
   },
+  "twentyFortyEight": {
+    "title": "2048",
+    "instructions": "Combine matching tiles to reach 2048. Use arrow keys or swipe to move.",
+    "bestTile": "Best Tile",
+    "target": "Target {{value}}",
+    "gameOver": "Game Over",
+    "emptyTile": "Empty tile",
+    "tileLabel": "Tile {{value}}"
+  },
   "nQueens": {
     "rule1": "Queens attack horizontally, vertically, and diagonally",
     "rule2": "No two queens can be on the same row, column, or diagonal",
