@@ -599,6 +599,20 @@
     "howItWorks": "Cómo Funciona",
     "explanation": "Cada columna tiene un valor (1, 2, 3... desde la izquierda). Cuando rellenas una celda, el valor de su columna se añade a la suma de esa fila. De manera similar, cada fila tiene un valor que contribuye a las sumas de columna. ¡Haz que todos los objetivos coincidan para ganar!"
   },
+  "crazyQuilt": {
+    "title": "Crazy Quilt",
+    "instructions": "Intercambia cartas para restaurar cada fila a su palo objetivo desde As hasta Rey.",
+    "reset": "Reiniciar diseño",
+    "moves": "Movimientos: {{count}}",
+    "solved": "¡Resuelto en {{count}} intercambios!",
+    "solutionRevealed": "Solución revelada.",
+    "suits": {
+      "spades": "Picas",
+      "hearts": "Corazones",
+      "diamonds": "Diamantes",
+      "clubs": "Tréboles"
+    }
+  },
   "actionItems": {
     "loading": "Cargando elementos de acción...",
     "failedToLoad": "Error al cargar elementos de acción",

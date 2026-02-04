@@ -599,6 +599,20 @@
     "howItWorks": "How It Works",
     "explanation": "Each column has a value (1, 2, 3... from left). When you fill a cell, its column value is added to that row's sum. Similarly, each row has a value that contributes to column sums. Match all targets to win!"
   },
+  "crazyQuilt": {
+    "title": "Crazy Quilt",
+    "instructions": "Swap cards to restore each row to its target suit from Ace to King.",
+    "reset": "Reset Layout",
+    "moves": "Moves: {{count}}",
+    "solved": "Solved in {{count}} swaps!",
+    "solutionRevealed": "Solution revealed.",
+    "suits": {
+      "spades": "Spades",
+      "hearts": "Hearts",
+      "diamonds": "Diamonds",
+      "clubs": "Clubs"
+    }
+  },
   "actionItems": {
     "loading": "Loading action items...",
     "failedToLoad": "Failed to load action items",

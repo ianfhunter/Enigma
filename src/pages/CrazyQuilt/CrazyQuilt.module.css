@@ -1,0 +1,150 @@
+.container {
+  padding: 24px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.button {
+  background: #111827;
+  color: #f9fafb;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #1f2937;
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.solved {
+  color: #16a34a;
+}
+
+.giveUp {
+  color: #dc2626;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rowLabel {
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.rowSuit {
+  font-size: 20px;
+}
+
+.rowName {
+  font-size: 14px;
+}
+
+.rowCards {
+  display: grid;
+  grid-template-columns: repeat(13, minmax(42px, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+
+.card {
+  border: 2px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: 52px;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  border-color: #9ca3af;
+}
+
+.selected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.rank {
+  font-size: 12px;
+}
+
+.suit {
+  font-size: 16px;
+}
+
+.red {
+  color: #dc2626;
+}
+
+.black {
+  color: #111827;
+}
+
+@media (max-width: 900px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rowLabel {
+    min-width: auto;
+  }
+
+  .rowCards {
+    grid-template-columns: repeat(13, minmax(32px, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .rowCards {
+    grid-template-columns: repeat(7, minmax(32px, 1fr));
+  }
+}
