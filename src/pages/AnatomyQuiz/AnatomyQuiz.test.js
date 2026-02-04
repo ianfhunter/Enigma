@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { getDisplaySystemIds } from './anatomyQuizUtils';
 
 // ===========================================
 // AnatomyQuiz - Stats Calculation Tests
@@ -17,6 +18,29 @@ describe('AnatomyQuiz - Stats Calculation', () => {
 
   it('should handle zero plays', () => {
     expect(calculateAccuracy(0, 0)).toBe(0);
+  });
+});
+
+// ===========================================
+// AnatomyQuiz - Display System Logic Tests
+// ===========================================
+describe('AnatomyQuiz - Display System Logic', () => {
+  it('returns all systems when selected system is all', () => {
+    const result = getDisplaySystemIds('all', 'skeletal');
+    expect(result).toContain('skeletal');
+    expect(result).toContain('organs');
+    expect(result.length).toBeGreaterThan(1);
+  });
+
+  it('keeps selected system when current part matches', () => {
+    const result = getDisplaySystemIds('skeletal', 'skeletal');
+    expect(result).toEqual(['skeletal']);
+  });
+
+  it('includes current part system when different from selected system', () => {
+    const result = getDisplaySystemIds('skeletal', 'organs');
+    expect(result).toContain('skeletal');
+    expect(result).toContain('organs');
   });
 });
 

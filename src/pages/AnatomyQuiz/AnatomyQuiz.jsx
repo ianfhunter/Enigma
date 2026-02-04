@@ -5,14 +5,15 @@
  * on a human body diagram.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
 import { useGameStats } from '../../hooks/useGameStats';
-import { BODY_SYSTEMS, getPartsBySystem, getRandomPart, SYSTEM_IDS } from '../../data/anatomyData';
+import { ALL_PARTS, BODY_SYSTEMS, getPartsBySystem, SYSTEM_IDS } from '../../data/anatomyData';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import BodySVG from './BodySVG';
+import { getDisplaySystemIds } from './anatomyQuizUtils';
 import styles from './AnatomyQuiz.module.css';
 
 const FEEDBACK_DURATION = 1500;
@@ -37,21 +38,24 @@ export default function AnatomyQuiz() {
   });
 
   // Get parts for current system
-  const getActiveParts = useCallback(() => {
-    if (selectedSystem === 'all') {
-      return SYSTEM_IDS.flatMap(id =>
-        getPartsBySystem(id).map(p => ({ ...p, systemId: id }))
-      );
-    }
-    return getPartsBySystem(selectedSystem).map(p => ({
-      ...p,
-      systemId: selectedSystem
-    }));
-  }, [selectedSystem]);
+  const getQuizParts = useCallback(() => {
+    return ALL_PARTS;
+  }, []);
+
+  const displaySystemIds = useMemo(
+    () => getDisplaySystemIds(selectedSystem, currentPart?.systemId),
+    [selectedSystem, currentPart?.systemId]
+  );
+
+  const displayParts = useMemo(() => {
+    return displaySystemIds.flatMap(id =>
+      getPartsBySystem(id).map(part => ({ ...part, systemId: id }))
+    );
+  }, [displaySystemIds]);
 
   // Pick a new random part
   const pickNewPart = useCallback(() => {
-    const parts = getActiveParts();
+    const parts = getQuizParts();
     if (parts.length === 0) return;
 
     const random = createSeededRandom(seed + roundNumber);
@@ -72,7 +76,7 @@ export default function AnatomyQuiz() {
     setShowHints(false);
     setIsTransitioning(false);
     setRoundNumber(prev => prev + 1);
-  }, [getActiveParts, currentPart, seed, roundNumber]);
+  }, [getQuizParts, currentPart, seed, roundNumber]);
 
   // Initialize on mount only - never change target when switching systems
   useEffect(() => {
@@ -86,7 +90,7 @@ export default function AnatomyQuiz() {
     if (!clickedPart) {
       // Clicked on body but not a hotspot
       setWrongAttempts(prev => prev + 1);
-      setMessage({ text: 'Click on a highlighted region!', type: 'hint' });
+      setMessage({ text: t('anatomyQuiz.clickHighlight', 'Click on a highlighted region!'), type: 'hint' });
 
       // Show hints after 2 wrong attempts
       if (wrongAttempts >= 1) {
@@ -102,7 +106,7 @@ export default function AnatomyQuiz() {
 
     if (isCorrect) {
       // Correct answer
-      setMessage({ text: '✓ Correct!', type: 'success' });
+      setMessage({ text: t('anatomyQuiz.correct', '✓ Correct!'), type: 'success' });
       setIsTransitioning(true);
 
       // Update stats
@@ -124,7 +128,7 @@ export default function AnatomyQuiz() {
       const newWrongAttempts = wrongAttempts + 1;
       setWrongAttempts(newWrongAttempts);
       setMessage({
-        text: `✗ That's the ${clickedPart.name}`,
+        text: t('anatomyQuiz.incorrect', "✗ That's the {{name}}", { name: clickedPart.name }),
         type: 'error'
       });
 
@@ -139,7 +143,16 @@ export default function AnatomyQuiz() {
         setHighlightType(null);
       }, 800);
     }
-  }, [currentPart, wrongAttempts, isTransitioning, selectedSystem, updateStats, recordWin, pickNewPart]);
+  }, [
+    currentPart,
+    wrongAttempts,
+    isTransitioning,
+    selectedSystem,
+    updateStats,
+    recordWin,
+    pickNewPart,
+    t,
+  ]);
 
   // Handle giving up / skip
   const handleSkip = () => {
@@ -148,7 +161,10 @@ export default function AnatomyQuiz() {
     // Show the correct answer
     setHighlightedPart(currentPart);
     setHighlightType('correct');
-    setMessage({ text: `The answer was: ${currentPart.name}`, type: 'reveal' });
+    setMessage({
+      text: t('anatomyQuiz.giveUpReveal', 'The answer was: {{name}}', { name: currentPart.name }),
+      type: 'reveal'
+    });
     setIsTransitioning(true);
 
     // Update stats (count as played but not correct)
@@ -170,9 +186,6 @@ export default function AnatomyQuiz() {
     if (selectedSystem === 'all') return '#a78bfa';
     return BODY_SYSTEMS[selectedSystem]?.color || '#666';
   };
-
-  // Get current system display parts
-  const displayParts = getActiveParts();
 
   return (
     <div className={styles.container}>
@@ -205,7 +218,7 @@ export default function AnatomyQuiz() {
           style={{ '--system-color': '#a78bfa' }}
         >
           <span className={styles.systemIcon}>🧬</span>
-          <span>All Systems</span>
+          <span>{t('anatomyQuiz.allSystems', 'All Systems')}</span>
         </button>
         {SYSTEM_IDS.map(id => {
           const system = BODY_SYSTEMS[id];
@@ -217,7 +230,12 @@ export default function AnatomyQuiz() {
               style={{ '--system-color': system.color }}
             >
               <span className={styles.systemIcon}>{system.icon}</span>
-              <span>{system.name.replace(' System', '').replace('Internal ', '')}</span>
+              <span>
+                {t(
+                  `anatomyQuiz.systems.${id}`,
+                  system.name.replace(' System', '').replace('Internal ', '')
+                )}
+              </span>
             </button>
           );
         })}
@@ -240,7 +258,7 @@ export default function AnatomyQuiz() {
           {/* Hint display */}
           {currentPart && showHints && !isTransitioning && (
             <div className={styles.hintBox}>
-              <span className={styles.hintLabel}>Hint:</span> {currentPart.hint}
+              <span className={styles.hintLabel}>{t('common.hint', 'Hint')}:</span> {currentPart.hint}
             </div>
           )}
         </div>
@@ -257,7 +275,7 @@ export default function AnatomyQuiz() {
           {/* Current target info */}
           {currentPart && (
             <div className={styles.targetCard}>
-              <div className={styles.targetLabel}>Find:</div>
+              <div className={styles.targetLabel}>{t('anatomyQuiz.find', 'Find')}:</div>
               <div className={styles.targetName}>{currentPart.name}</div>
               {currentPart.systemId && (
                 <div className={styles.targetSystem}>
@@ -274,14 +292,14 @@ export default function AnatomyQuiz() {
               onClick={() => setShowHints(true)}
               disabled={showHints || isTransitioning}
             >
-              💡 Show Hint
+              💡 {t('anatomyQuiz.showHint', 'Show Hint')}
             </button>
             <button
               className={styles.skipBtn}
               onClick={handleSkip}
               disabled={isTransitioning}
             >
-              ⏭️ Skip
+              ⏭️ {t('common.giveUp', 'Give Up')}
             </button>
           </div>
 
@@ -293,7 +311,7 @@ export default function AnatomyQuiz() {
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{winRate}%</span>
-              <span className={styles.statLabel}>Accuracy</span>
+              <span className={styles.statLabel}>{t('anatomyQuiz.accuracy', 'Accuracy')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.currentStreak}</span>
@@ -301,15 +319,20 @@ export default function AnatomyQuiz() {
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.maxStreak}</span>
-              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statLabel}>{t('common.best', 'Best')}</span>
             </div>
           </div>
 
           {/* Wrong attempts indicator */}
           {wrongAttempts > 0 && !isTransitioning && (
             <div className={styles.attemptsInfo}>
-              {wrongAttempts} wrong {wrongAttempts === 1 ? 'attempt' : 'attempts'}
-              {wrongAttempts >= 2 && ' • Hint revealed!'}
+              {t('anatomyQuiz.wrongAttempts', '{{count}} wrong {{label}}', {
+                count: wrongAttempts,
+                label: wrongAttempts === 1
+                  ? t('anatomyQuiz.attemptSingle', 'attempt')
+                  : t('anatomyQuiz.attemptPlural', 'attempts'),
+              })}
+              {wrongAttempts >= 2 && ` • ${t('anatomyQuiz.hintRevealed', 'Hint revealed!')}`}
             </div>
           )}
         </div>
