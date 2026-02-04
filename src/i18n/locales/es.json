@@ -218,6 +218,13 @@
     "solutionRevealed": "🏳️ Solución Revelada",
     "theAnswerWas": "La respuesta era: <strong>{{answer}}</strong>"
   },
+  "yinYang": {
+    "title": "Yin-Yang",
+    "instructions": "Rellena las celdas en blanco o negro. Cada color debe estar conectado. No se permiten cuadrados de 2×2 del mismo color. Toca para alternar entre negro, blanco y vacío.",
+    "winTitle": "☯️ ¡Equilibrio logrado!",
+    "winMessage": "¡Yin y Yang en armonía!",
+    "legendCycle": "Clic: alterna negro → blanco → vacío"
+  },
   "profile": {
     "title": "Perfil",
     "security": "Seguridad",

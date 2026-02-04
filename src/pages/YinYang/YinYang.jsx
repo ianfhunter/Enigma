@@ -155,6 +155,12 @@ function checkSolved(grid, solution, size) {
   return true;
 }
 
+function getNextCellState(current) {
+  if (current === null) return true;
+  if (current === true) return false;
+  return null;
+}
+
 // Export helpers for testing
 export {
   DIFFICULTIES,
@@ -164,6 +170,7 @@ export {
   has2x2Square,
   checkValidity,
   checkSolved,
+  getNextCellState,
 };
 
 export default function YinYang() {
@@ -175,7 +182,6 @@ export default function YinYang() {
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const [errors, setErrors] = useState(new Set());
   const [showErrors, setShowErrors] = useState(false);
-  const [whiteMode, setWhiteMode] = useState(false); // Mobile white mode
 
   const availableSizes = useMemo(() => getAvailableSizes(difficulty), [difficulty]);
 
@@ -231,24 +237,13 @@ export default function YinYang() {
     if (!isPlaying) return;
     if (puzzleData.puzzle[r][c] !== null) return; // Can't change given cells
 
-    const isWhiteAction = e.type === 'contextmenu' || e.ctrlKey || whiteMode;
+    if (e.type === 'contextmenu') e.preventDefault();
 
-    if (isWhiteAction) {
-      if (e.type === 'contextmenu') e.preventDefault();
-      // Place white
-      setGrid(prev => {
-        const newGrid = prev.map(row => [...row]);
-        newGrid[r][c] = newGrid[r][c] === false ? null : false;
-        return newGrid;
-      });
-    } else {
-      // Place black
-      setGrid(prev => {
-        const newGrid = prev.map(row => [...row]);
-        newGrid[r][c] = newGrid[r][c] === true ? null : true;
-        return newGrid;
-      });
-    }
+    setGrid(prev => {
+      const newGrid = prev.map(row => [...row]);
+      newGrid[r][c] = getNextCellState(newGrid[r][c]);
+      return newGrid;
+    });
   };
 
   const handleReset = () => {
@@ -267,8 +262,11 @@ export default function YinYang() {
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Yin-Yang"
-        instructions="Fill cells black or white. Each color must be connected. No 2×2 squares of the same color allowed. Tap for black, use white mode for white."
+        title={t('yinYang.title', 'Yin-Yang')}
+        instructions={t(
+          'yinYang.instructions',
+          'Fill cells black or white. Each color must be connected. No 2×2 squares of the same color allowed. Tap to cycle black, white, and empty.'
+        )}
       />
 
       <DifficultySelector
@@ -286,14 +284,6 @@ export default function YinYang() {
       />
 
       <div className={styles.gameArea}>
-        {/* Mobile White Toggle */}
-        <button
-          className={`${styles.whiteToggle} ${whiteMode ? styles.whiteModeActive : ''}`}
-          onClick={() => setWhiteMode(!whiteMode)}
-        >
-          ○ {whiteMode ? 'White Mode ON' : 'White Mode'}
-        </button>
-
         <div
           className={styles.grid}
           style={{ gridTemplateColumns: `repeat(${size}, 1fr)` }}
@@ -327,17 +317,17 @@ export default function YinYang() {
         {gameState === 'won' && (
           <GameResult
             state="won"
-            title="☯️ Balance Achieved!"
-            message="Yin and Yang in harmony!"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            title={t('yinYang.winTitle', '☯️ Balance Achieved!')}
+            message={t('yinYang.winMessage', 'Yin and Yang in harmony!')}
+            actions={[{ label: t('common.newPuzzle', 'New Puzzle'), onClick: initGame, primary: true }]}
           />
         )}
 
         {gameState === 'gaveUp' && (
           <GameResult
             state="gaveup"
-            message="Better luck next time!"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            message={t('common.betterLuckNextTime', 'Better luck next time!')}
+            actions={[{ label: t('common.newPuzzle', 'New Puzzle'), onClick: initGame, primary: true }]}
           />
         )}
 
@@ -349,26 +339,25 @@ export default function YinYang() {
               onChange={(e) => setShowErrors(e.target.checked)}
             />
             <span className={styles.toggleSlider}></span>
-            Show errors
+            {t('common.showErrors', 'Show errors')}
           </label>
         </div>
 
         <div className={styles.buttons}>
           <button className={styles.resetBtn} onClick={handleReset}>
-            Reset
+            {t('common.reset', 'Reset')}
           </button>
           <GiveUpButton
             onGiveUp={handleGiveUp}
             disabled={!isPlaying}
           />
           <button className={styles.newGameBtn} onClick={initGame}>
-            New Puzzle
+            {t('common.newPuzzle', 'New Puzzle')}
           </button>
         </div>
 
         <div className={styles.legend}>
-          <span>Click: Black</span>
-          <span>Right-click: White</span>
+          <span>{t('yinYang.legendCycle', 'Click: Cycle black → white → empty')}</span>
         </div>
       </div>
     </div>
