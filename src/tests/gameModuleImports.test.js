@@ -68,6 +68,7 @@ const GAME_MODULES = {
   'knights-tour': 'KnightsTour',
   'kropki': 'Kropki',
   'kurotto': 'Kurotto',
+  'klondike': 'Klondike',
   'language-quiz': 'LanguageQuiz',
   'letter-web': 'LetterWeb',
   'letter-orbit': 'LetterOrbit',

@@ -105,6 +105,7 @@ const slugToFolder = {
   'pokemon-quiz': 'PokemonQuiz',
   'provincial-map-fill': 'ProvincialMapFill',
   'pyramid': 'Pyramid',
+  'klondike': 'Klondike',
   'pyramid-cards': 'PyramidCards',
   'riddles': 'Riddles',
   'range': 'Range',

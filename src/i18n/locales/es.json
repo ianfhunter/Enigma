@@ -630,5 +630,22 @@
     "total": "Total",
     "completed": "Completado",
     "completionRate": "Tasa de Completitud"
+  },
+  "klondike": {
+    "title": "Klondike",
+    "instructions": "Mueve las cartas a las bases en orden ascendente por palo. Construye columnas alternando colores de Rey hacia abajo.",
+    "winTitle": "¡Has ganado!",
+    "winMessage": "¡Resolviste Klondike en {{moves}} movimientos!",
+    "stockLabel": "Mazo",
+    "wasteLabel": "Descarte",
+    "foundationLabel": "Bases",
+    "emptyColumn": "Columna vacía",
+    "stockEmpty": "No quedan cartas para robar.",
+    "recycleMessage": "Reciclaste el descarte al mazo.",
+    "invalidFoundationMove": "Esa carta no puede ir a la base.",
+    "invalidTableauMove": "Esa carta no puede ir ahí.",
+    "cardFaceDown": "Esa carta está boca abajo.",
+    "foundationTopOnly": "Solo la carta superior puede ir a la base.",
+    "gaveUpMessage": "Solución revelada. ¡Prueba otra baraja!"
   }
 }
