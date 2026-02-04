@@ -7,6 +7,7 @@ import {
   has2x2Square,
   checkValidity,
   checkSolved,
+  getNextCellState,
 } from './YinYang.jsx';
 
 describe('YinYang - helpers', () => {
@@ -50,5 +51,11 @@ describe('YinYang - helpers', () => {
       [false, true],
     ];
     expect(checkSolved(solution, solution, 2)).toBe(true);
+  });
+
+  it('cycles cells from empty to black to white to empty', () => {
+    expect(getNextCellState(null)).toBe(true);
+    expect(getNextCellState(true)).toBe(false);
+    expect(getNextCellState(false)).toBe(null);
   });
 });

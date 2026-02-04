@@ -5,33 +5,6 @@
   color: var(--color-text);
 }
 
-/* Mobile White Toggle */
-.whiteToggle {
-  padding: 0.6rem 1.25rem;
-  background: var(--btn-secondary-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: 8px;
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.whiteToggle:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.whiteToggle.whiteModeActive {
-  background: var(--btn-secondary-hover-bg);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: var(--color-text);
-}
-
 .header {
   text-align: center;
   margin-bottom: 20px;
