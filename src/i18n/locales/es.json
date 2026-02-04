@@ -608,6 +608,15 @@
     "howItWorks": "Cómo Funciona",
     "explanation": "Cada columna tiene un valor (1, 2, 3... desde la izquierda). Cuando rellenas una celda, el valor de su columna se añade a la suma de esa fila. De manera similar, cada fila tiene un valor que contribuye a las sumas de columna. ¡Haz que todos los objetivos coincidan para ganar!"
   },
+  "mahjongSolitaire": {
+    "title": "Mahjong Solitaire",
+    "instructions": "Empareja fichas idénticas. Una ficha está libre si no hay nada encima y al menos un lado está abierto.",
+    "tilesRemaining": "Fichas restantes",
+    "layers": "Capas",
+    "tileAria": "Ficha de mahjong",
+    "winMessage": "¡Tablero despejado!",
+    "giveUpMessage": "Solución revelada."
+  },
   "actionItems": {
     "loading": "Cargando elementos de acción...",
     "failedToLoad": "Error al cargar elementos de acción",

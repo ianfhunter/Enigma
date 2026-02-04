@@ -608,6 +608,15 @@
     "howItWorks": "How It Works",
     "explanation": "Each column has a value (1, 2, 3... from left). When you fill a cell, its column value is added to that row's sum. Similarly, each row has a value that contributes to column sums. Match all targets to win!"
   },
+  "mahjongSolitaire": {
+    "title": "Mahjong Solitaire",
+    "instructions": "Match pairs of identical tiles. A tile is free if nothing is on top and at least one side is open.",
+    "tilesRemaining": "Tiles remaining",
+    "layers": "Layers",
+    "tileAria": "Mahjong tile",
+    "winMessage": "Board cleared!",
+    "giveUpMessage": "Solution revealed."
+  },
   "actionItems": {
     "loading": "Loading action items...",
     "failedToLoad": "Failed to load action items",

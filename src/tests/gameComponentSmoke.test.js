@@ -82,6 +82,7 @@ const GAME_MODULES = {
   'loopy': 'Loopy',
   'magnets': 'Magnets',
   'map': 'Map',
+  'mahjong-solitaire': 'MahjongSolitaire',
   'maze': 'Maze',
   'memory-match': 'MemoryMatch',
   'chimp-test': 'ChimpTest',

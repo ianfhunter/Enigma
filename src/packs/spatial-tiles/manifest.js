@@ -27,6 +27,7 @@ import pentominoIcon from '../../assets/icons/pentomino.svg';
 import jigsawIcon from '../../assets/icons/jigsaw.svg';
 import congestionIcon from '../../assets/icons/congestion.svg';
 import shisenshoIcon from '../../assets/icons/shisensho.svg';
+import mahjongSolitaireIcon from '../../assets/icons/mahjongsolitaire.svg';
 
 /**
  * Pack metadata
@@ -275,6 +276,17 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
         component: () => import('../../pages/ShisenSho'),
         lastModified: 1770205599000
+      },
+      {
+        title: 'Mahjong Solitaire',
+        slug: 'mahjong-solitaire',
+        description: 'Clear a stacked layout by matching identical free tiles.',
+        icon: mahjongSolitaireIcon,
+        emojiIcon: '🀄',
+        colors: { primary: '#38bdf8', secondary: '#0ea5e9' },
+        gradient: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
+        component: () => import('../../pages/MahjongSolitaire'),
+        lastModified: 1770136707000
       },
     ],
   },
