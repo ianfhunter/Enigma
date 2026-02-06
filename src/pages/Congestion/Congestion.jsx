@@ -7,13 +7,15 @@ import styles from './Congestion.module.css';
 const GRID_SIZE = 6;
 const EXIT_ROW = 2; // 0-indexed, the row where 'AA' needs to exit (row 3)
 
-// Difficulty packs based on minimum moves to solve
+// Difficulty packs: index ranges into dataset (after reversing to easiest-first).
+// Distribution is skewed (most puzzles ~11 moves; hard rare), so hard/expert use the tail.
+const TOTAL_PUZZLES = 33583;
 const DIFFICULTY_PACKS = [
-  { id: 'beginner', label: 'Beginner', range: [0, 1000], description: '1-10 moves' },
-  { id: 'easy', label: 'Easy', range: [1000, 5000], description: '10-15 moves' },
-  { id: 'medium', label: 'Medium', range: [5000, 15000], description: '15-25 moves' },
-  { id: 'hard', label: 'Hard', range: [15000, 25000], description: '25-35 moves' },
-  { id: 'expert', label: 'Expert', range: [25000, 33583], description: '35+ moves' },
+  { id: 'beginner', label: 'Beginner', range: [0, 5000], description: '1-10 moves' },
+  { id: 'easy', label: 'Easy', range: [5000, 12000], description: '10-15 moves' },
+  { id: 'medium', label: 'Medium', range: [12000, 25000], description: '15-25 moves' },
+  { id: 'hard', label: 'Hard', range: [25000, 31000], description: '25-35 moves' },
+  { id: 'expert', label: 'Expert', range: [31000, TOTAL_PUZZLES], description: '35+ moves' },
 ];
 
 // Vehicle colors - vibrant, distinct colors for each letter
@@ -313,14 +315,15 @@ export default function Congestion() {
 
   const [dragState, setDragState] = useState(null);
 
-  // Load puzzles
+  // Load puzzles. Source dataset is sorted hardest-first (descending move count);
+  // reverse so index 0 = easiest and our difficulty ranges match intended move counts.
   useEffect(() => {
     async function loadPuzzles() {
       try {
         const res = await fetch('/datasets/rushhour/puzzles.json');
         if (!res.ok) throw new Error('Failed to load puzzles');
         const data = await res.json();
-        setAllPuzzles(data);
+        setAllPuzzles([...data].reverse());
         setLoading(false);
       } catch (e) {
         setError(e.message);
@@ -334,7 +337,8 @@ export default function Congestion() {
   const puzzlesForDifficulty = useMemo(() => {
     const pack = DIFFICULTY_PACKS.find(p => p.id === difficulty);
     if (!pack || !allPuzzles.length) return [];
-    return allPuzzles.slice(pack.range[0], pack.range[1]);
+    const end = Math.min(pack.range[1], allPuzzles.length);
+    return allPuzzles.slice(pack.range[0], end);
   }, [allPuzzles, difficulty]);
 
   // Initialize level

@@ -114,24 +114,46 @@ export default function Untangle() {
   const solved = crossings === 0;
 
   useEffect(() => {
-    const onMove = (e) => {
-      if (dragIdx == null) return;
+    const getPointerPos = (e) => {
       const svg = svgRef.current;
-      if (!svg) return;
+      if (!svg) return null;
       const rect = svg.getBoundingClientRect();
-      // Convert screen coordinates to SVG viewBox coordinates (600x600)
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+      const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+      if (clientX == null || clientY == null) return null;
       const scaleX = 600 / rect.width;
       const scaleY = 600 / rect.height;
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
-      setPoints((prev) => prev.map((p, i) => (i === dragIdx ? { x, y } : p)));
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY,
+      };
     };
+
+    const onMove = (e) => {
+      if (dragIdx == null) return;
+      const pos = getPointerPos(e);
+      if (!pos) return;
+
+      // Constrain position to SVG bounds (with padding for node radius)
+      const padding = 20; // Extra padding to ensure nodes don't get stuck at edges
+      const constrainedX = Math.max(padding, Math.min(600 - padding, pos.x));
+      const constrainedY = Math.max(padding, Math.min(600 - padding, pos.y));
+
+      setPoints((prev) => prev.map((p, i) => (i === dragIdx ? { x: constrainedX, y: constrainedY } : p)));
+    };
+
     const onUp = () => setDragIdx(null);
+
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onUp);
+
     return () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onUp);
     };
   }, [dragIdx]);
 
@@ -181,7 +203,7 @@ export default function Untangle() {
           ))}
 
           {points.map((p, i) => (
-            <g key={i} onMouseDown={() => setDragIdx(i)} className={styles.nodeGroup}>
+            <g key={i} onMouseDown={() => setDragIdx(i)} onTouchStart={(e) => { e.preventDefault(); setDragIdx(i); }} className={styles.nodeGroup}>
               <circle cx={p.x} cy={p.y} r="14" className={styles.node} />
               <text x={p.x} y={p.y + 5} textAnchor="middle" className={styles.nodeLabel}>
                 {i + 1}

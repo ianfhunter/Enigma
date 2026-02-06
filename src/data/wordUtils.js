@@ -171,6 +171,28 @@ export function isValidWord(word) {
 }
 
 /**
+ * Check if a word is valid for WordTiles (includes 2-letter words)
+ * @param {string} word - The word to check (case-insensitive)
+ * @returns {boolean} - True if the word is valid
+ */
+export function isValidWordTilesWord(word) {
+  const upperWord = word.toUpperCase();
+  // For WordTiles, we need to include 2-letter words
+  // Create a separate set that includes 2-letter words
+  if (!window.WORD_TILES_SET) {
+    // Load the word list synchronously using the imported raw text
+    window.WORD_TILES_SET = new Set(
+      wordListRaw
+        .split('\n')
+        .map(word => word.trim().toUpperCase())
+        .filter(word => word.length >= 1) // Allow 1+ letter words for WordTiles
+    );
+  }
+
+  return window.WORD_TILES_SET.has(upperWord);
+}
+
+/**
  * Get all words in the dictionary
  * @returns {string[]} - Array of all words (uppercase)
  */

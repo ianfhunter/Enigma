@@ -33,7 +33,7 @@ The goal is to slide vehicles horizontally (for horizontal vehicles) or vertical
 ## Stats
 
 - **Total puzzles**: 33,583
-- **Difficulty**: Sorted by minimum moves required to solve
+- **Difficulty**: The source database is sorted by minimum moves required to solve, **hardest first** (descending). The Congestion game reverses this array at load so that index 0 = easiest and difficulty bands (beginner → expert) match the intended move ranges.
 
 
 

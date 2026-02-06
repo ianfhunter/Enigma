@@ -5,7 +5,7 @@ import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
-import { isValidWord, createSeededRandom } from '../../data/wordUtils';
+import { isValidWordTilesWord, createSeededRandom } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordTiles.module.css';
 
@@ -256,7 +256,7 @@ export default function WordTiles() {
     }
 
     // Check if word is valid
-    const valid = await isValidWord(word);
+    const valid = await isValidWordTilesWord(word);
     if (!valid) {
       setMessage(`"${word}" is not a valid word!`);
       return;
