@@ -554,6 +554,15 @@
     "rule3": "Type your answer and submit before time runs out",
     "rule4": "Use \"Shuffle\" to rearrange the display"
   },
+  "2X": {
+    "title": "2X",
+    "instructions": "Combine matching tiles to reach as high a score as possible. Use arrow keys or swipe to move.",
+    "bestTile": "Best Tile",
+    "target": "Target {{value}}",
+    "gameOver": "Game Over",
+    "emptyTile": "Empty Tile",
+    "tileLabel": "Tile {{value}}"
+  },
   "nQueens": {
     "rule1": "Queens attack horizontally, vertically, and diagonally",
     "rule2": "No two queens can be on the same row, column, or diagonal",
