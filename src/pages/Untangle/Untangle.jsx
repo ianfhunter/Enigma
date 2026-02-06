@@ -133,7 +133,13 @@ export default function Untangle() {
       if (dragIdx == null) return;
       const pos = getPointerPos(e);
       if (!pos) return;
-      setPoints((prev) => prev.map((p, i) => (i === dragIdx ? pos : p)));
+
+      // Constrain position to SVG bounds (with padding for node radius)
+      const padding = 20; // Extra padding to ensure nodes don't get stuck at edges
+      const constrainedX = Math.max(padding, Math.min(600 - padding, pos.x));
+      const constrainedY = Math.max(padding, Math.min(600 - padding, pos.y));
+
+      setPoints((prev) => prev.map((p, i) => (i === dragIdx ? { x: constrainedX, y: constrainedY } : p)));
     };
 
     const onUp = () => setDragIdx(null);
