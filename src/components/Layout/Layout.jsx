@@ -112,7 +112,7 @@ export default function Layout() {
     return (
       <div className={styles.layout}>
         <div className={styles.loadingContainer}>
-          <img src={branding.logoSimple} alt="Loading" className={styles.loadingLogo} />
+          <img src={branding.logoAnimated} alt="Loading" className={styles.loadingLogo} />
           <p className={styles.loadingText}>{t('common.loading')}</p>
         </div>
       </div>
