@@ -79,6 +79,7 @@ describe('fuzzySearchGames', () => {
     { slug: 'memory', title: 'Memory Match', description: 'Match pairs of cards' },
     { slug: 'maze', title: 'Maze', description: 'Navigate the labyrinth' },
     { slug: 'minesweeper', title: 'Minesweeper', description: 'Avoid the mines' },
+    { slug: 'wordtiles', title: 'WordTiles', description: 'Tile-based word game' },
   ];
 
   it('should return empty array for empty query', () => {
@@ -144,5 +145,24 @@ describe('fuzzySearchGames', () => {
     expect(results[0].slug).toBe('sudoku');
     expect(results[0].title).toBe('Sudoku');
     expect(results[0].description).toBe('Classic number puzzle');
+  });
+
+  it('should match queries with spaces against titles without spaces', () => {
+    // "Word Tiles" (with space) should match "WordTiles" (no space)
+    const results = fuzzySearchGames(testGames, 'Word Tiles');
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].slug).toBe('wordtiles');
+  });
+
+  it('should still prefer exact matches over space-removed matches', () => {
+    const gamesWithSpace = [
+      { slug: 'word-tiles', title: 'Word Tiles', description: 'With space' },
+      { slug: 'wordtiles', title: 'WordTiles', description: 'No space' },
+    ];
+    const results = fuzzySearchGames(gamesWithSpace, 'Word Tiles');
+    expect(results.length).toBe(2);
+    // Exact match should rank higher
+    expect(results[0].slug).toBe('word-tiles');
+    expect(results[1].slug).toBe('wordtiles');
   });
 });
