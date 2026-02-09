@@ -5,6 +5,14 @@
   padding: 16px;
 }
 
+.topControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .gameInfo {
   display: flex;
   gap: 16px;

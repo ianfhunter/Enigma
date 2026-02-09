@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
-import GiveUpButton from '../../components/GiveUpButton';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
@@ -455,18 +454,37 @@ export default function Klondike() {
         instructions={t('klondike.instructions')}
       />
 
-      <SeedDisplay
-        seed={seed}
-        variant="compact"
-        showNewButton={false}
-        showShare={false}
-        onSeedChange={(newSeed) => {
-          const seedNum = typeof newSeed === 'string'
-            ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
-            : newSeed;
-          initGame(seedNum);
-        }}
-      />
+      <div className={styles.topControls}>
+        <SeedDisplay
+          seed={seed}
+          variant="compact"
+          showNewButton={false}
+          showShare={false}
+          onSeedChange={(newSeed) => {
+            const seedNum = typeof newSeed === 'string'
+              ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
+              : newSeed;
+            initGame(seedNum);
+          }}
+        />
+        <div className={styles.controls}>
+          <button
+            type="button"
+            className={styles.controlButton}
+            onClick={undo}
+            disabled={history.length === 0 || !isPlaying}
+          >
+            {t('common.undo')}
+          </button>
+          <button
+            type="button"
+            className={styles.controlButton}
+            onClick={newGame}
+          >
+            {t('common.newGame')}
+          </button>
+        </div>
+      </div>
 
       <div className={styles.gameInfo}>
         <span>{t('gameStatus.moves')}: {moves}</span>
@@ -534,30 +552,6 @@ export default function Klondike() {
         <div className={styles.tableauArea}>
           {tableauColumns}
         </div>
-      </div>
-
-      <div className={styles.controls}>
-        <button
-          type="button"
-          className={styles.controlButton}
-          onClick={undo}
-          disabled={history.length === 0 || !isPlaying}
-        >
-          {t('common.undo')}
-        </button>
-        <button
-          type="button"
-          className={styles.controlButton}
-          onClick={newGame}
-        >
-          {t('common.newGame')}
-        </button>
-        <GiveUpButton
-          onGiveUp={handleGiveUp}
-          disabled={!isPlaying}
-          requireConfirm
-          variant="compact"
-        />
       </div>
 
       {gameState === 'won' && (
