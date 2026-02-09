@@ -38,7 +38,7 @@ export const packInfo = {
   description: 'Jigsaws, sliding puzzles, and tile manipulation games.',
   icon: '🧩',
   color: '#f97316',
-  version: '1770205493',
+  version: '1770205599',
   default: true,
   removable: true,
 };
@@ -61,7 +61,7 @@ export const categories = [
         colors: { primary: '#fb923c', secondary: '#f97316' },
         gradient: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
         component: () => import('../../pages/Jigsaw'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Sliding Puzzle',
@@ -72,7 +72,7 @@ export const categories = [
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
         component: () => import('../../pages/SlidingPuzzle'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Congestion',
@@ -84,7 +84,7 @@ export const categories = [
         colors: { primary: '#ef4444', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
         component: () => import('../../pages/Congestion'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Tile Swap',
@@ -95,7 +95,7 @@ export const categories = [
         colors: { primary: '#818cf8', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #818cf8 0%, #6366f1 100%)',
         component: () => import('../../pages/TileSwap'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Cirkitz',
@@ -105,7 +105,7 @@ export const categories = [
         colors: { primary: '#38bdf8', secondary: '#f472b6' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #38bdf8 33%, #fbbf24 66%, #34d399 100%)',
         component: () => import('../../pages/Cirkitz'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Pipe Puzzle',
@@ -116,7 +116,7 @@ export const categories = [
         colors: { primary: '#2dd4bf', secondary: '#14b8a6' },
         gradient: 'linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%)',
         component: () => import('../../pages/PipePuzzle'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Flood It',
@@ -128,7 +128,7 @@ export const categories = [
         colors: { primary: '#38bdf8', secondary: '#0ea5e9' },
         gradient: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
         component: () => import('../../pages/FloodIt'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Color Cube 3×3×3',
@@ -139,7 +139,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#3b82f6' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #3b82f6 100%)',
         component: () => import('../../pages/ColorCube'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Entanglement',
@@ -150,7 +150,7 @@ export const categories = [
         colors: { primary: '#22d3ee', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #a855f7 100%)',
         component: () => import('../../pages/Entanglement'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Tower of Hanoi',
@@ -162,7 +162,7 @@ export const categories = [
         colors: { primary: '#84cc16', secondary: '#65a30d' },
         gradient: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)',
         component: () => import('../../pages/TowerOfHanoi'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Fifteen',
@@ -174,7 +174,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         component: () => import('../../pages/Fifteen'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Sixteen',
@@ -185,18 +185,7 @@ export const categories = [
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         component: () => import('../../pages/Sixteen'),
-        lastModified: 1770205493000
-      },
-      {
-        title: '2X',
-        slug: '2X',
-        description: 'Combine matching tiles to reach as high a score as possible.',
-        icon: twoXIcon,
-        emojiIcon: '🔢',
-        colors: { primary: '#f59e0b', secondary: '#f97316' },
-        gradient: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
-        component: () => import('../../pages/2X'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Twiddle',
@@ -207,7 +196,7 @@ export const categories = [
         colors: { primary: '#14b8a6', secondary: '#0d9488' },
         gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
         component: () => import('../../pages/Twiddle'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Netgame',
@@ -218,7 +207,7 @@ export const categories = [
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         component: () => import('../../pages/Netgame'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Netslide',
@@ -229,7 +218,7 @@ export const categories = [
         colors: { primary: '#4ade80', secondary: '#22c55e' },
         gradient: 'linear-gradient(135deg, #4ade80 0%, #22c55e 100%)',
         component: () => import('../../pages/Netslide'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Cube',
@@ -240,7 +229,7 @@ export const categories = [
         colors: { primary: '#38bdf8', secondary: '#0ea5e9' },
         gradient: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
         component: () => import('../../pages/Cube'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Untangle',
@@ -251,7 +240,7 @@ export const categories = [
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         component: () => import('../../pages/Untangle'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Samegame',
@@ -262,7 +251,7 @@ export const categories = [
         colors: { primary: '#f97316', secondary: '#ea580c' },
         gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
         component: () => import('../../pages/Samegame'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Pentomino',
@@ -273,7 +262,7 @@ export const categories = [
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         component: () => import('../../pages/Pentomino'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
       {
         title: 'Shisen-Sho',
@@ -285,7 +274,7 @@ export const categories = [
         colors: { primary: '#f97316', secondary: '#ea580c' },
         gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
         component: () => import('../../pages/ShisenSho'),
-        lastModified: 1770205493000
+        lastModified: 1770205599000
       },
     ],
   },

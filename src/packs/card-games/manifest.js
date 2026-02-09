@@ -7,6 +7,7 @@
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
+import klondikeIcon from '../../assets/icons/klondike.svg';
 
 const cardGamesPack = {
   id: 'card-games',
@@ -15,7 +16,7 @@ const cardGamesPack = {
   description: 'Classic solitaire and card-based puzzles. Clear the pyramid, build foundations, and more.',
   icon: '🃏',
   color: '#16a34a',
-  version: '1770205493',
+  version: '1770205599',
   default: true,
   removable: true,
 
@@ -26,6 +27,18 @@ const cardGamesPack = {
       description: 'Classic solitaire and card-based puzzles',
       games: [
         {
+          slug: 'klondike',
+          title: 'Klondike',
+          aliases: ['Klondike Solitaire', 'Classic Solitaire'],
+          description: 'Build the foundations from Ace to King while stacking alternating colors in the tableau.',
+          icon: klondikeIcon,
+          emojiIcon: '🃏',
+          colors: { primary: '#16a34a', secondary: '#15803d' },
+          gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+          component: () => import('../../pages/Klondike'),
+          lastModified: 1770205599000
+        },
+        {
           slug: 'pyramid-cards',
           title: 'Pyramid Cards',
           aliases: ['Pyramid Solitaire', 'Tut\'s Tomb'],
@@ -35,7 +48,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/PyramidCards'),
-          lastModified: 1770205493000
+          lastModified: 1770205599000
         },
         {
           slug: 'tri-peaks',
@@ -47,7 +60,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
-          lastModified: 1770205493000
+          lastModified: 1770205599000
         },
       ],
     },

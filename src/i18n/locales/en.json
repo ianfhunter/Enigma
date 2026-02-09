@@ -630,5 +630,24 @@
     "total": "Total",
     "completed": "Completed",
     "completionRate": "Completion Rate"
+  },
+  "klondike": {
+    "title": "Klondike",
+    "instructions": "Move cards to the foundations in ascending suit order. Build tableau stacks in alternating colors from King down.",
+    "winTitle": "You Won!",
+    "winMessage": "You solved Klondike in {{moves}} moves!",
+    "stockLabel": "Stock",
+    "wasteLabel": "Waste",
+    "foundationLabel": "Foundations",
+    "newGame1Card": "New Game (1 card)",
+    "newGame3Card": "New Game (3 cards)",
+    "emptyColumn": "Empty column",
+    "stockEmpty": "No cards left to draw.",
+    "recycleMessage": "Recycled the waste back into the stock.",
+    "invalidFoundationMove": "That card cannot move to the foundation.",
+    "invalidTableauMove": "That card cannot move there.",
+    "cardFaceDown": "That card is face down.",
+    "foundationTopOnly": "Only the top card can move to a foundation.",
+    "gaveUpMessage": "Solution revealed. Try another shuffle!"
   }
 }
