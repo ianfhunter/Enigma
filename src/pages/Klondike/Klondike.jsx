@@ -489,7 +489,11 @@ export default function Klondike() {
               onClick={drawFromStock}
               disabled={!isPlaying}
             >
-              {remainingStock > 0 ? <span className={styles.cardBack}>🂠</span> : <span>∅</span>}
+              {remainingStock > 0 ? (
+                <div className={`${styles.card} ${styles.faceDown}`}>
+                  <span className={styles.cardBack}>🂠</span>
+                </div>
+              ) : <span>∅</span>}
             </button>
           </div>
 
