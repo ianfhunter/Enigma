@@ -639,6 +639,8 @@
     "stockLabel": "Mazo",
     "wasteLabel": "Descarte",
     "foundationLabel": "Bases",
+    "newGame1Card": "Nuevo Juego (1 carta)",
+    "newGame3Card": "Nuevo Juego (3 cartas)",
     "emptyColumn": "Columna vacía",
     "stockEmpty": "No quedan cartas para robar.",
     "recycleMessage": "Reciclaste el descarte al mazo.",

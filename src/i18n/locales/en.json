@@ -639,6 +639,8 @@
     "stockLabel": "Stock",
     "wasteLabel": "Waste",
     "foundationLabel": "Foundations",
+    "newGame1Card": "New Game (1 card)",
+    "newGame3Card": "New Game (3 cards)",
     "emptyColumn": "Empty column",
     "stockEmpty": "No cards left to draw.",
     "recycleMessage": "Recycled the waste back into the stock.",

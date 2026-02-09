@@ -348,7 +348,6 @@ export default function Klondike() {
       setWaste([]);
       setMoves(prev => prev + 1);
       setSelected(null);
-      setMessage(t('klondike.recycleMessage'));
       return;
     }
 
