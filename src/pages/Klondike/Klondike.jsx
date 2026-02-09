@@ -436,6 +436,7 @@ export default function Klondike() {
             type="button"
             key={card.id}
             className={styles.cardButton}
+            style={{ top: cardIndex * 25, zIndex: cardIndex + 1 }}
             onClick={() => handleTableauCardClick(columnIndex, cardIndex)}
           >
             {renderCard(card, selected?.type === 'tableau'
