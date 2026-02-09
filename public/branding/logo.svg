@@ -1,17 +1,33 @@
-<svg data-logo="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 41">
-  <g id="logogram" transform="translate(29, 20.5)">
-    <!-- Four-point star outline -->
-    <path d="M 0 -22 L 7 -7 L 22 0 L 7 7 L 0 22 L -7 7 L -22 0 L -7 -7 Z" fill="#3B1A5E"/>
-    
-    <!-- Iris (single layer for clarity) -->
-    <ellipse cx="0" cy="0" rx="11" ry="8.5" fill="#8046FD"/>
-    
-    <!-- Pupil (larger and more prominent) -->
-    <ellipse cx="0" cy="0" rx="6.5" ry="5" fill="#1a0d33"/>
-    
-    <!-- Reflection glint (larger and more visible) -->
-    <ellipse cx="3" cy="-4" rx="4" ry="3" fill="#FFFFFF" opacity="0.95"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <style>
+      :root {
+        --enigma-primary: #8046FD;
+        --enigma-secondary: #a855f7;
+      }
+      .stroke-primary { stroke: var(--enigma-primary); }
+      .fill-primary { fill: var(--enigma-primary); }
+    </style>
+    <mask id="e-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect x="0" y="0" width="64" height="64" fill="white"/>
+      <path d="M 38 33.5 A 7 7 0 0 1 34.5 39.6" fill="none" stroke="black" stroke-width="5"/>
+    </mask>
+  </defs>
+
+  <!-- Single outer ring - thicker, fewer dashes -->
+  <circle cx="32" cy="32" r="24" fill="none" class="stroke-primary" stroke-width="3"
+          stroke-dasharray="12 6" stroke-linecap="round"/>
+
+  <!-- Only 4 cardinal notches - larger -->
+  <circle cx="32" cy="8" r="3" class="fill-primary"/>
+  <circle cx="56" cy="32" r="3" class="fill-primary"/>
+  <circle cx="32" cy="56" r="3" class="fill-primary"/>
+  <circle cx="8" cy="32" r="3" class="fill-primary"/>
+
+  <!-- Center "e" - same as original -->
+  <g mask="url(#e-mask)">
+    <circle cx="32" cy="32" r="7" fill="none" class="stroke-primary" stroke-width="3"
+            stroke-linecap="round"/>
+    <line x1="25" y1="32" x2="39" y2="32" class="stroke-primary" stroke-width="3" stroke-linecap="round"/>
   </g>
-  <g id="logotype" transform="translate(58, 20.5)"></g>
 </svg>
-    
