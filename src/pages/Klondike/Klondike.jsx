@@ -150,9 +150,150 @@ export default function Klondike() {
   const [waste, setWaste] = useState([]);
   const [foundations, setFoundations] = useState({});
   const [selected, setSelected] = useState(null);
+  const [dragging, setDragging] = useState(null);
   const [moves, setMoves] = useState(0);
   const [message, setMessage] = useState('');
   const [history, setHistory] = useState([]);
+
+  const remainingStock = stock.length;
+  const topWasteCard = waste[waste.length - 1] || null;
+
+  const saveHistory = useCallback(() => {
+    setHistory(prev => [
+      ...prev,
+      {
+        tableau: cloneTableau(tableau),
+        stock: stock.map(card => ({ ...card })),
+        waste: waste.map(card => ({ ...card })),
+        foundations: cloneFoundations(foundations),
+        moves,
+      },
+    ]);
+  }, [tableau, stock, waste, foundations, moves]);
+
+  const selectCard = useCallback((selection) => {
+    setSelected(selection);
+    setMessage('');
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelected(null);
+    setMessage('');
+  }, []);
+
+  // Drag and drop handlers
+  const handleDragStart = useCallback((e, dragData) => {
+    if (!isPlaying) return;
+    e.dataTransfer.setData('application/json', JSON.stringify(dragData));
+    e.dataTransfer.effectAllowed = 'move';
+    setDragging(dragData);
+    clearSelection();
+  }, [isPlaying, clearSelection]);
+
+  const handleDragEnd = useCallback(() => {
+    setDragging(null);
+  }, []);
+
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const handleDropOnTableau = useCallback((e, targetColumnIndex) => {
+    e.preventDefault();
+    if (!isPlaying || !dragging) return;
+
+    try {
+      const dragData = JSON.parse(e.dataTransfer.getData('application/json'));
+
+      if (dragging.type === 'waste') {
+        const card = topWasteCard;
+        if (!card) return;
+        if (!canMoveToTableau(card, tableau[targetColumnIndex])) {
+          setMessage(t('klondike.invalidTableauMove'));
+          return;
+        }
+        saveHistory();
+        const newTableau = cloneTableau(tableau);
+        newTableau[targetColumnIndex] = [...newTableau[targetColumnIndex], { ...card, faceUp: true }];
+        setTableau(newTableau);
+        setWaste(waste.slice(0, -1));
+        setMoves(prev => prev + 1);
+        setMessage('');
+      } else if (dragging.type === 'tableau') {
+        const sourceColumn = tableau[dragging.columnIndex];
+        const movingStack = sourceColumn.slice(dragging.cardIndex);
+        if (movingStack.some(card => !card.faceUp)) {
+          setMessage(t('klondike.invalidTableauMove'));
+          return;
+        }
+        if (!canMoveToTableau(movingStack[0], tableau[targetColumnIndex])) {
+          setMessage(t('klondike.invalidTableauMove'));
+          return;
+        }
+        saveHistory();
+        const newTableau = cloneTableau(tableau);
+        newTableau[targetColumnIndex] = [...newTableau[targetColumnIndex], ...movingStack.map(card => ({ ...card }))];
+        newTableau[dragging.columnIndex] = newTableau[dragging.columnIndex].slice(0, dragging.cardIndex);
+        newTableau[dragging.columnIndex] = revealTopCard(newTableau[dragging.columnIndex]);
+        setTableau(newTableau);
+        setMoves(prev => prev + 1);
+        setMessage('');
+      }
+    } finally {
+      setDragging(null);
+    }
+  }, [isPlaying, dragging, tableau, topWasteCard, waste, saveHistory, t]);
+
+  const handleDropOnFoundation = useCallback((e, suit) => {
+    e.preventDefault();
+    if (!isPlaying || !dragging) return;
+
+    try {
+      const foundation = foundations[suit] || [];
+      let card = null;
+      let source = null;
+
+      if (dragging.type === 'waste') {
+        card = topWasteCard;
+        source = { type: 'waste' };
+      } else if (dragging.type === 'tableau') {
+        // Can only move top card to foundation
+        const sourceColumn = tableau[dragging.columnIndex];
+        if (dragging.cardIndex !== sourceColumn.length - 1) {
+          setMessage(t('klondike.foundationTopOnly'));
+          return;
+        }
+        card = sourceColumn[dragging.cardIndex];
+        source = { type: 'tableau', columnIndex: dragging.columnIndex, cardIndex: dragging.cardIndex };
+      }
+
+      if (!card) return;
+      if (!canMoveToFoundation(card, foundation)) {
+        setMessage(t('klondike.invalidFoundationMove'));
+        return;
+      }
+
+      saveHistory();
+      const newFoundations = cloneFoundations(foundations);
+      newFoundations[card.suit].push({ ...card, faceUp: true });
+      setFoundations(newFoundations);
+
+      if (dragging.type === 'waste') {
+        setWaste(waste.slice(0, -1));
+      } else if (dragging.type === 'tableau') {
+        const newTableau = cloneTableau(tableau);
+        newTableau[dragging.columnIndex] = newTableau[dragging.columnIndex].slice(0, dragging.cardIndex);
+        newTableau[dragging.columnIndex] = revealTopCard(newTableau[dragging.columnIndex]);
+        setTableau(newTableau);
+      }
+
+      setMoves(prev => prev + 1);
+      setMessage('');
+    } finally {
+      setDragging(null);
+    }
+  }, [isPlaying, dragging, tableau, topWasteCard, foundations, saveHistory, t]);
 
   const initGame = useCallback((newSeed = null) => {
     const gameSeed = newSeed ?? seed;
@@ -183,22 +324,6 @@ export default function Klondike() {
       setMessage(t('klondike.winMessage', { moves }));
     }
   }, [foundations, isPlaying, checkWin, moves, t]);
-
-  const remainingStock = stock.length;
-  const topWasteCard = waste[waste.length - 1] || null;
-
-  const saveHistory = useCallback(() => {
-    setHistory(prev => [
-      ...prev,
-      {
-        tableau: cloneTableau(tableau),
-        stock: stock.map(card => ({ ...card })),
-        waste: waste.map(card => ({ ...card })),
-        foundations: cloneFoundations(foundations),
-        moves,
-      },
-    ]);
-  }, [tableau, stock, waste, foundations, moves]);
 
   const drawFromStock = useCallback(() => {
     if (!isPlaying) return;
@@ -240,16 +365,6 @@ export default function Klondike() {
     setSelected(null);
     setMessage('');
   }, [history, isPlaying]);
-
-  const selectCard = useCallback((selection) => {
-    setSelected(selection);
-    setMessage('');
-  }, []);
-
-  const clearSelection = useCallback(() => {
-    setSelected(null);
-    setMessage('');
-  }, []);
 
   const moveToFoundation = useCallback((card, source) => {
     const foundation = foundations[card.suit] || [];
@@ -431,7 +546,12 @@ export default function Klondike() {
   };
 
   const tableauColumns = useMemo(() => tableau.map((column, columnIndex) => (
-    <div key={columnIndex} className={styles.tableauColumn}>
+    <div
+      key={columnIndex}
+      className={styles.tableauColumn}
+      onDragOver={handleDragOver}
+      onDrop={(e) => handleDropOnTableau(e, columnIndex)}
+    >
       {column.length === 0 ? (
         <button
           type="button"
@@ -442,21 +562,23 @@ export default function Klondike() {
         </button>
       ) : (
         column.map((card, cardIndex) => (
-          <button
-            type="button"
+          <div
             key={card.id}
             className={styles.cardButton}
             style={{ top: cardIndex * 25, zIndex: cardIndex + 1 }}
+            draggable={card.faceUp}
+            onDragStart={(e) => handleDragStart(e, { type: 'tableau', columnIndex, cardIndex })}
+            onDragEnd={handleDragEnd}
             onClick={() => handleTableauCardClick(columnIndex, cardIndex)}
           >
             {renderCard(card, selected?.type === 'tableau'
               && selected.columnIndex === columnIndex
               && selected.cardIndex === cardIndex)}
-          </button>
+          </div>
         ))
       )}
     </div>
-  )), [tableau, handleTableauCardClick, handleEmptyTableauClick, selected, t]);
+  )), [tableau, handleTableauCardClick, handleEmptyTableauClick, handleDragOver, handleDropOnTableau, handleDragStart, handleDragEnd, selected, t]);
 
   return (
     <div className={styles.container}>
@@ -534,7 +656,16 @@ export default function Klondike() {
               onClick={handleWasteClick}
               disabled={!isPlaying || !topWasteCard}
             >
-              {topWasteCard ? renderCard(topWasteCard, selected?.type === 'waste') : <span>∅</span>}
+              {topWasteCard ? (
+                <div
+                  className={styles.cardWrapper}
+                  draggable={isPlaying}
+                  onDragStart={(e) => handleDragStart(e, { type: 'waste' })}
+                  onDragEnd={handleDragEnd}
+                >
+                  {renderCard(topWasteCard, selected?.type === 'waste')}
+                </div>
+              ) : <span>∅</span>}
             </button>
           </div>
 
@@ -550,6 +681,8 @@ export default function Klondike() {
                     type="button"
                     className={`${styles.pile} ${styles.foundationPile}`}
                     onClick={() => handleFoundationClick(suit)}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDropOnFoundation(e, suit)}
                     disabled={!isPlaying || !selected}
                   >
                     {top ? renderCard(top, false) : <span className={styles.foundationSuit}>{suit}</span>}

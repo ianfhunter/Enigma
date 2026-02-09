@@ -122,6 +122,14 @@
   height: 120px;
 }
 
+.cardWrapper {
+  cursor: grab;
+}
+
+.cardWrapper:active {
+  cursor: grabbing;
+}
+
 .card {
   flex-shrink: 0;
   width: 90px;
