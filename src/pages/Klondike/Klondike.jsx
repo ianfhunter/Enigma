@@ -344,7 +344,11 @@ export default function Klondike() {
         clearSelection();
         return;
       }
-      moveToTableau(columnIndex);
+      // Try to move - if fails, select this card instead
+      const moved = moveToTableau(columnIndex);
+      if (!moved) {
+        selectCard({ type: 'tableau', columnIndex, cardIndex });
+      }
       return;
     }
 
@@ -367,19 +371,26 @@ export default function Klondike() {
       ? topWasteCard
       : tableau[selected.columnIndex][selected.cardIndex];
 
-    if (!card) return;
+    if (!card) {
+      clearSelection();
+      return;
+    }
     if (selected.type === 'tableau') {
       const isTopCard = selected.cardIndex === tableau[selected.columnIndex].length - 1;
       if (!isTopCard) {
         setMessage(t('klondike.foundationTopOnly'));
+        clearSelection();
         return;
       }
     }
 
-    moveToFoundation(card, selected.type === 'waste'
+    const moved = moveToFoundation(card, selected.type === 'waste'
       ? { type: 'waste' }
       : { type: 'tableau', columnIndex: selected.columnIndex, cardIndex: selected.cardIndex });
-  }, [isPlaying, selected, topWasteCard, tableau, moveToFoundation, t]);
+    if (!moved) {
+      clearSelection();
+    }
+  }, [isPlaying, selected, topWasteCard, tableau, moveToFoundation, clearSelection, t]);
 
   const handleEmptyTableauClick = useCallback((columnIndex) => {
     if (!isPlaying || !selected) return;
