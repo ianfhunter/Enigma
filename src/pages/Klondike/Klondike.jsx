@@ -154,9 +154,11 @@ export default function Klondike() {
   const [moves, setMoves] = useState(0);
   const [message, setMessage] = useState('');
   const [history, setHistory] = useState([]);
+  const [drawMode, setDrawMode] = usePersistedState('klondike-draw-mode', 1);
 
   const remainingStock = stock.length;
-  const topWasteCard = waste[waste.length - 1] || null;
+  const topWasteCard = waste.length > 0 ? waste[waste.length - 1] : null;
+  const visibleWasteCards = waste.slice(-drawMode);
 
   const saveHistory = useCallback(() => {
     setHistory(prev => [
@@ -317,6 +319,13 @@ export default function Klondike() {
     initGame();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const startNewGame = useCallback((mode) => {
+    const random = createSeededRandom(Date.now());
+    const newSeed = stringToSeed(`klondike-${Date.now()}-${random()}`);
+    setDrawMode(mode);
+    initGame(newSeed);
+  }, [initGame, setDrawMode]);
+
   useEffect(() => {
     const total = SUITS.reduce((acc, suit) => acc + (foundations[suit]?.length ?? 0), 0);
     if (total === 52 && isPlaying) {
@@ -345,13 +354,17 @@ export default function Klondike() {
 
     saveHistory();
     const newStock = [...stock];
-    const drawn = { ...newStock.pop(), faceUp: true };
+    const cardsToDraw = Math.min(drawMode, newStock.length);
+    const drawn = [];
+    for (let i = 0; i < cardsToDraw; i++) {
+      drawn.push({ ...newStock.pop(), faceUp: true });
+    }
     setStock(newStock);
-    setWaste(prev => [...prev, drawn]);
+    setWaste(prev => [...prev, ...drawn]);
     setMoves(prev => prev + 1);
     setSelected(null);
     setMessage('');
-  }, [stock, waste, isPlaying, saveHistory, t]);
+  }, [stock, drawMode, isPlaying, saveHistory, t]);
 
   const undo = useCallback(() => {
     if (history.length === 0 || !isPlaying) return;
@@ -612,9 +625,16 @@ export default function Klondike() {
           <button
             type="button"
             className={styles.controlButton}
-            onClick={newGame}
+            onClick={() => startNewGame(1)}
           >
-            {t('common.newGame')}
+            {t('klondike.newGame1Card')}
+          </button>
+          <button
+            type="button"
+            className={styles.controlButton}
+            onClick={() => startNewGame(3)}
+          >
+            {t('klondike.newGame3Card')}
           </button>
         </div>
       </div>
@@ -650,23 +670,25 @@ export default function Klondike() {
 
           <div className={styles.wasteArea}>
             <span className={styles.pileLabel}>{t('klondike.wasteLabel')}</span>
-            <button
-              type="button"
-              className={`${styles.pile} ${styles.wastePile}`}
-              onClick={handleWasteClick}
-              disabled={!isPlaying || !topWasteCard}
-            >
-              {topWasteCard ? (
-                <div
-                  className={styles.cardWrapper}
-                  draggable={isPlaying}
-                  onDragStart={(e) => handleDragStart(e, { type: 'waste' })}
-                  onDragEnd={handleDragEnd}
-                >
-                  {renderCard(topWasteCard, selected?.type === 'waste')}
+            <div className={`${styles.pile} ${styles.wastePile}`}>
+              {visibleWasteCards.length > 0 ? (
+                <div className={styles.wasteStack}>
+                  {visibleWasteCards.map((card, index) => (
+                    <div
+                      key={card.id}
+                      className={`${styles.wasteCard} ${index === visibleWasteCards.length - 1 ? styles.wasteTopCard : ''}`}
+                      style={{ left: index * 25 }}
+                      draggable={index === visibleWasteCards.length - 1 && isPlaying}
+                      onDragStart={(e) => index === visibleWasteCards.length - 1 && handleDragStart(e, { type: 'waste' })}
+                      onDragEnd={handleDragEnd}
+                      onClick={index === visibleWasteCards.length - 1 ? handleWasteClick : undefined}
+                    >
+                      {renderCard(card, selected?.type === 'waste' && index === visibleWasteCards.length - 1)}
+                    </div>
+                  ))}
                 </div>
               ) : <span>∅</span>}
-            </button>
+            </div>
           </div>
 
           <div className={styles.foundationArea}>

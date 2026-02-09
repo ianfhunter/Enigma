@@ -75,6 +75,26 @@
   border-style: solid;
 }
 
+.wasteStack {
+  position: relative;
+  width: 150px;
+  height: 120px;
+}
+
+.wasteCard {
+  position: absolute;
+  top: 0;
+  transition: transform 0.1s ease;
+}
+
+.wasteTopCard {
+  cursor: pointer;
+}
+
+.wasteTopCard:hover {
+  transform: translateY(-2px);
+}
+
 .emptyPile {
   opacity: 0.6;
 }
