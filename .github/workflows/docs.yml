@@ -6,6 +6,7 @@ on:
     paths:
       - "src/pages/**/README.md"
       - "_docs/**/*.md"
+      - "public/branding/**"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
@@ -42,6 +43,11 @@ jobs:
           if [ -d "_docs" ]; then
             cp _docs/*.md docs/ 2>/dev/null || true
           fi
+          
+          # Copy branding documentation
+          if [ -f "public/branding/README.md" ]; then
+            cp public/branding/README.md docs/branding.md
+          fi
 
       - name: Generate index
         run: |
@@ -63,6 +69,10 @@ jobs:
             done
             fi
 
+            echo "" >> docs/index.md
+            echo "## Customization" >> docs/index.md
+            echo "" >> docs/index.md
+            echo "- [Custom Branding](branding.md)" >> docs/index.md
             echo "" >> docs/index.md
             echo "## Available Games" >> docs/index.md
             echo "" >> docs/index.md

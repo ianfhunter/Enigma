@@ -30,7 +30,7 @@ describe('Layout header markup', () => {
 
 describe('Layout footer', () => {
   it('contains a GitHub link pointing to the repository', () => {
-    expect(layoutJsx).toContain('href="https://github.com/ianfhunter/enigma"');
+    expect(layoutJsx).toContain('href={branding.githubUrl || \'https://github.com/ianfhunter/enigma\'');
   });
 
   it('renders the GitHub link with proper accessibility attributes', () => {

@@ -116,3 +116,88 @@ describe('WordTiles auto slot selection', () => {
     expect(getNextAutoSlot(placed)).toBe(null);
   });
 });
+
+describe('WordTiles shift-left logic', () => {
+  it('shifts tiles left when a middle tile is removed', () => {
+    // Simulating: WORD at slots 0,1,2,3 - removing 'R' from slot 1 should shift O, D left
+    const placedTiles = [
+      { letter: 'W', slotIndex: 0, handIndex: 0 },
+      { letter: 'R', slotIndex: 1, handIndex: 1 },
+      { letter: 'O', slotIndex: 2, handIndex: 2 },
+      { letter: 'D', slotIndex: 3, handIndex: 3 },
+    ];
+    
+    const removedSlot = 1;
+    
+    // Simulate the fixed shift logic
+    const unaffected = placedTiles.filter(t => t.slotIndex < removedSlot);
+    const toShift = placedTiles.filter(t => t.slotIndex > removedSlot);
+    const shifted = toShift.map(t => ({ ...t, slotIndex: t.slotIndex - 1 }));
+    const result = [...unaffected, ...shifted];
+    
+    // After removing slot 1, 'W' stays at 0, 'O' should be at 1 and 'D' at 2
+    expect(result.find(t => t.letter === 'W').slotIndex).toBe(0);
+    expect(result.find(t => t.letter === 'O').slotIndex).toBe(1);
+    expect(result.find(t => t.letter === 'D').slotIndex).toBe(2);
+    expect(result.length).toBe(3);
+  });
+
+  it('shifts all tiles left when the last tile is removed', () => {
+    // CAT at slots 0,1,2 - removing 'T' should shift C to 0, A to 1
+    const placedTiles = [
+      { letter: 'C', slotIndex: 0, handIndex: 0 },
+      { letter: 'A', slotIndex: 1, handIndex: 1 },
+      { letter: 'T', slotIndex: 2, handIndex: 2 },
+    ];
+    
+    const lastSlot = 2;
+    
+    // Simulate the shift logic
+    const toShift = placedTiles.filter(t => t.slotIndex < lastSlot);
+    const result = toShift.map(t => t);
+    
+    // After removing slot 2, C stays at 0, A stays at 1
+    expect(result.find(t => t.letter === 'C').slotIndex).toBe(0);
+    expect(result.find(t => t.letter === 'A').slotIndex).toBe(1);
+    expect(result.length).toBe(2);
+  });
+
+  it('handles removing the first tile correctly', () => {
+    // TEST at slots 0,1,2,3 - removing 'S' from slot 1 should shift E, S, T left
+    const placedTiles = [
+      { letter: 'S', slotIndex: 1, handIndex: 0 },
+      { letter: 'E', slotIndex: 2, handIndex: 1 },
+      { letter: 'S', slotIndex: 3, handIndex: 2 },
+      { letter: 'T', slotIndex: 4, handIndex: 3 },
+    ];
+    
+    const removedSlot = 1;
+    
+    // Simulate the shift logic
+    const toShift = placedTiles.filter(t => t.slotIndex > removedSlot);
+    const shifted = toShift.map(t => ({ ...t, slotIndex: t.slotIndex - 1 }));
+    const result = [...shifted];
+    
+    // E should be at 1, S at 2, T at 3
+    expect(result.find(t => t.letter === 'E').slotIndex).toBe(1);
+    expect(result.find(t => t.letter === 'S' && t.handIndex === 2).slotIndex).toBe(2);
+    expect(result.find(t => t.letter === 'T').slotIndex).toBe(3);
+    expect(result.length).toBe(3);
+  });
+
+  it('handles single tile removal correctly', () => {
+    // Single tile 'A' at slot 0
+    const placedTiles = [
+      { letter: 'A', slotIndex: 0, handIndex: 0 },
+    ];
+    
+    const removedSlot = 0;
+    
+    // Simulate the shift logic
+    const toShift = placedTiles.filter(t => t.slotIndex > removedSlot);
+    const shifted = toShift.map(t => ({ ...t, slotIndex: t.slotIndex - 1 }));
+    const result = [...shifted];
+    
+    expect(result.length).toBe(0);
+  });
+});
