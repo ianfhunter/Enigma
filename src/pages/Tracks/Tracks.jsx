@@ -104,9 +104,21 @@ function findRenderablePath(puz, marks) {
   return bestPath;
 }
 
-function getRenderableTrackConnections(puz, marks, i, renderablePathSet = null) {
-  const pathSet = renderablePathSet ?? new Set(findRenderablePath(puz, marks));
-  if (!pathSet.has(i)) {
+function buildRenderableEdgeSet(renderablePath) {
+  const edgeSet = new Set();
+  for (let k = 1; k < renderablePath.length; k++) {
+    const a = renderablePath[k - 1];
+    const b = renderablePath[k];
+    const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+    edgeSet.add(key);
+  }
+  return edgeSet;
+}
+
+function getRenderableTrackConnections(puz, marks, i, renderableEdgeSet = null) {
+  const renderPath = findRenderablePath(puz, marks);
+  const edgeSet = renderableEdgeSet ?? buildRenderableEdgeSet(renderPath);
+  if (!puz || marks[i] !== 1) {
     return {
       up: false,
       right: false,
@@ -121,11 +133,17 @@ function getRenderableTrackConnections(puz, marks, i, renderablePathSet = null) 
   const downIdx = inBounds(r + 1, c, puz.h, puz.w) ? rcToIdx(r + 1, c, puz.w) : -1;
   const leftIdx = inBounds(r, c - 1, puz.h, puz.w) ? rcToIdx(r, c - 1, puz.w) : -1;
 
+  const hasEdge = (a, b) => {
+    if (a < 0 || b < 0) return false;
+    const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+    return edgeSet.has(key);
+  };
+
   return {
-    up: upIdx >= 0 && pathSet.has(upIdx),
-    right: rightIdx >= 0 && pathSet.has(rightIdx),
-    down: downIdx >= 0 && pathSet.has(downIdx),
-    left: leftIdx >= 0 && pathSet.has(leftIdx),
+    up: hasEdge(i, upIdx),
+    right: hasEdge(i, rightIdx),
+    down: hasEdge(i, downIdx),
+    left: hasEdge(i, leftIdx),
   };
 }
 
@@ -373,6 +391,7 @@ export {
   analyze,
   getTrackConnections,
   findRenderablePath,
+  buildRenderableEdgeSet,
   getRenderableTrackConnections,
 };
 
@@ -415,7 +434,8 @@ export default function Tracks() {
     return analyze(puz, marks);
   }, [puz, marks]);
 
-  const renderablePathSet = useMemo(() => new Set(findRenderablePath(puz, marks)), [puz, marks]);
+  const renderablePath = useMemo(() => findRenderablePath(puz, marks), [puz, marks]);
+  const renderableEdgeSet = useMemo(() => buildRenderableEdgeSet(renderablePath), [renderablePath]);
 
   const toggle = (i) => {
     if (i === a || i === b) return;
@@ -503,7 +523,7 @@ export default function Tracks() {
                   const isTrack = marks[i] === 1;
                   const isEnd = i === a || i === b;
                   const isFixed = puz.fixed.has(i);
-                  const connections = getRenderableTrackConnections(puz, marks, i, renderablePathSet);
+                  const connections = getRenderableTrackConnections(puz, marks, i, renderableEdgeSet);
                   const cls = [
                     styles.cell,
                     isTrack ? styles.track : '',

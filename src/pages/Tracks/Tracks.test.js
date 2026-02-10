@@ -12,6 +12,7 @@ import {
   analyze,
   getTrackConnections,
   findRenderablePath,
+  buildRenderableEdgeSet,
   getRenderableTrackConnections,
 } from './Tracks.jsx';
 
@@ -119,9 +120,9 @@ describe('Tracks - helpers', () => {
       1, 1, 1, 1,
     ];
 
-    const pathSet = new Set(findRenderablePath(puz, marks));
+    const edgeSet = buildRenderableEdgeSet(findRenderablePath(puz, marks));
 
-    expect(getRenderableTrackConnections(puz, marks, 8, pathSet)).toEqual({
+    expect(getRenderableTrackConnections(puz, marks, 8, edgeSet)).toEqual({
       up: false,
       right: false,
       down: false,
@@ -129,12 +130,31 @@ describe('Tracks - helpers', () => {
     });
 
     // index 2 connects left to 1 and down to 6 on the rendered A→B path
-    expect(getRenderableTrackConnections(puz, marks, 2, pathSet)).toEqual({
+    expect(getRenderableTrackConnections(puz, marks, 2, edgeSet)).toEqual({
       up: false,
       right: false,
       down: true,
       left: true,
     });
+  });
+
+
+  it('getRenderableTrackConnections never renders more than two connections per tile', () => {
+    const puz = { w: 3, h: 3, a: 0, b: 8 };
+    const marks = [
+      1, 1, 1,
+      1, 1, 1,
+      0, 1, 1,
+    ];
+
+    const renderablePath = findRenderablePath(puz, marks);
+    const edgeSet = buildRenderableEdgeSet(renderablePath);
+
+    for (const i of renderablePath) {
+      const c = getRenderableTrackConnections(puz, marks, i, edgeSet);
+      const degree = Number(c.up) + Number(c.right) + Number(c.down) + Number(c.left);
+      expect(degree).toBeLessThanOrEqual(2);
+    }
   });
 
   it('analyze checks counts and connectivity', () => {
