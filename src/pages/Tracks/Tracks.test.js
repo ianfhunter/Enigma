@@ -11,6 +11,7 @@ import {
   DIFFICULTIES,
   analyze,
   getTrackConnections,
+  getRenderableTrackConnections,
 } from './Tracks.jsx';
 
 describe('Tracks - helpers', () => {
@@ -74,6 +75,35 @@ describe('Tracks - helpers', () => {
       up: false,
       right: false,
       down: false,
+      left: false,
+    });
+  });
+
+
+  it('getRenderableTrackConnections limits branch/cross tiles to two exits', () => {
+    const puz = { w: 3, h: 3 };
+    const marks = [
+      0, 1, 0,
+      1, 1, 1,
+      0, 1, 0,
+    ];
+
+    expect(getRenderableTrackConnections(puz, marks, 4)).toEqual({
+      up: true,
+      right: false,
+      down: true,
+      left: false,
+    });
+
+    const tJunctionMarks = [
+      0, 1, 0,
+      0, 1, 1,
+      0, 1, 0,
+    ];
+    expect(getRenderableTrackConnections(puz, tJunctionMarks, 4)).toEqual({
+      up: true,
+      right: false,
+      down: true,
       left: false,
     });
   });

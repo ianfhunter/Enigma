@@ -38,6 +38,47 @@ function getTrackConnections(puz, marks, i) {
   return { up, right, down, left };
 }
 
+function getRenderableTrackConnections(puz, marks, i) {
+  const connections = getTrackConnections(puz, marks, i);
+  const directions = ['up', 'right', 'down', 'left'];
+  const active = directions.filter((dir) => connections[dir]);
+
+  if (active.length <= 2) {
+    return connections;
+  }
+
+  const selected = new Set();
+  const pickPair = (aDir, bDir) => {
+    if (connections[aDir] && connections[bDir]) {
+      selected.add(aDir);
+      selected.add(bDir);
+      return true;
+    }
+    return false;
+  };
+
+  // Prefer classic track pieces first: straight segments, then corners.
+  const picked =
+    pickPair('up', 'down') ||
+    pickPair('left', 'right') ||
+    pickPair('up', 'right') ||
+    pickPair('right', 'down') ||
+    pickPair('down', 'left') ||
+    pickPair('left', 'up');
+
+  if (!picked) {
+    selected.add(active[0]);
+    selected.add(active[1]);
+  }
+
+  return {
+    up: selected.has('up'),
+    right: selected.has('right'),
+    down: selected.has('down'),
+    left: selected.has('left'),
+  };
+}
+
 const DIRS = [
   { dr: -1, dc: 0 },
   { dr: 1, dc: 0 },
@@ -281,6 +322,7 @@ export {
   DIFFICULTIES,
   analyze,
   getTrackConnections,
+  getRenderableTrackConnections,
 };
 
 export default function Tracks() {
@@ -408,7 +450,7 @@ export default function Tracks() {
                   const isTrack = marks[i] === 1;
                   const isEnd = i === a || i === b;
                   const isFixed = puz.fixed.has(i);
-                  const connections = getTrackConnections(puz, marks, i);
+                  const connections = getRenderableTrackConnections(puz, marks, i);
                   const cls = [
                     styles.cell,
                     isTrack ? styles.track : '',
