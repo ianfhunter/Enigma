@@ -184,7 +184,7 @@ function MahjongSolitaire() {
   const { t } = useTranslation();
   const gameKey = 'mahjong-solitaire';
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
-  const { stats, recordGamePlayed } = useGameStats(gameKey);
+  const { stats, recordWin, recordGiveUp } = useGameStats(gameKey);
 
   const [seed, setSeed] = useState(getTodayDateString());
   const [resetCounter, setResetCounter] = useState(0);
@@ -192,6 +192,7 @@ function MahjongSolitaire() {
   const [solutionSequence, setSolutionSequence] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [autoSolveIndex, setAutoSolveIndex] = useState(null);
+  const [hintIndices, setHintIndices] = useState(null);
 
   const { boardWidth, boardHeight, baseOffset, maxZ } = useMemo(() => {
     const maxX = Math.max(...LAYOUT.map(pos => pos.x));
@@ -215,12 +216,15 @@ function MahjongSolitaire() {
 
   useEffect(() => {
     if (!isPlaying) return;
+    // Only check for win when tiles have been initialized (not empty initial state)
+    const hasTiles = tiles.length > 0;
+    if (!hasTiles) return;
     const remaining = tiles.some(tile => tile !== null);
     if (!remaining) {
       checkWin(true);
-      recordGamePlayed(true);
+      recordWin({});
     }
-  }, [tiles, checkWin, recordGamePlayed, isPlaying]);
+  }, [tiles, checkWin, recordWin, isPlaying]);
 
   useEffect(() => {
     if (autoSolveIndex === null || !solutionSequence.length) return;
@@ -298,9 +302,45 @@ function MahjongSolitaire() {
   const handleGiveUp = useCallback(() => {
     if (!isPlaying) return;
     giveUp();
-    recordGamePlayed(false);
+    recordGiveUp({});
     setAutoSolveIndex(0);
-  }, [giveUp, isPlaying, recordGamePlayed]);
+  }, [giveUp, isPlaying, recordGiveUp]);
+
+  // Clear hint when player makes a move
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      setHintIndices(null);
+    }
+  }, [selectedIndex]);
+
+  const handleHint = useCallback(() => {
+    if (!isPlaying || freeIndices.size < 2) return;
+
+    const freeArray = Array.from(freeIndices);
+    const tileGroups = {};
+
+    // Group free tiles by their tileKey
+    freeArray.forEach(index => {
+      const tile = tiles[index];
+      if (tile) {
+        if (!tileGroups[tile.tileKey]) {
+          tileGroups[tile.tileKey] = [];
+        }
+        tileGroups[tile.tileKey].push(index);
+      }
+    });
+
+    // Find a pair with matching tiles
+    for (const tileKey in tileGroups) {
+      if (tileGroups[tileKey].length >= 2) {
+        const [first, second] = tileGroups[tileKey];
+        setHintIndices([first, second]);
+        // Clear hint after 3 seconds
+        setTimeout(() => setHintIndices(null), 3000);
+        return;
+      }
+    }
+  }, [freeIndices, isPlaying, tiles]);
 
   const normalizedState = gameState === 'gaveUp' ? 'gaveup' : gameState;
 
@@ -334,6 +374,7 @@ function MahjongSolitaire() {
           const tile = tiles[index];
           if (!tile) return null;
           const isFree = freeIndices.has(index);
+          const isHint = hintIndices && hintIndices.includes(index);
           const isSelected = selectedIndex === index;
           const left = pos.x * TILE_GAP + pos.z * LAYER_OFFSET + baseOffset;
           const top = pos.y * TILE_GAP - pos.z * LAYER_OFFSET + baseOffset;
@@ -341,7 +382,7 @@ function MahjongSolitaire() {
             <button
               key={pos.key}
               type="button"
-              className={`${styles.tileButton} ${isFree ? styles.free : ''} ${isSelected ? styles.selected : ''}`}
+              className={`${styles.tileButton} ${isFree ? styles.free : ''} ${isSelected ? styles.selected : ''} ${isHint ? styles.hint : ''}`}
               style={{
                 left: `${left}px`,
                 top: `${top}px`,
@@ -361,6 +402,9 @@ function MahjongSolitaire() {
       <div className={styles.controls}>
         <button className={styles.resetButton} onClick={handleReset} type="button">
           {t('common.reset', 'Reset')}
+        </button>
+        <button onClick={handleHint} disabled={!isPlaying || freeIndices.size < 2} className={styles.hintButton} type="button">
+          💡 {t('common.hint', 'Hint')}
         </button>
         <GiveUpButton onGiveUp={handleGiveUp} disabled={!isPlaying} />
         <button className={styles.newGameButton} onClick={handleNewGame} type="button">

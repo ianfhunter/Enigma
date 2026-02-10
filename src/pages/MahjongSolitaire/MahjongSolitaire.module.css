@@ -62,6 +62,20 @@
   box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.75);
 }
 
+.hint {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.8);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.5);
+  }
+}
+
 .controls {
   display: flex;
   gap: 12px;
@@ -81,6 +95,25 @@
 .resetButton {
   background: rgba(148, 163, 184, 0.2);
   color: #e2e8f0;
+}
+
+.hintButton {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hintButton:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.35);
+}
+
+.hintButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .newGameButton {

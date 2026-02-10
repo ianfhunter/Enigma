@@ -610,7 +610,7 @@
   },
   "mahjongSolitaire": {
     "title": "Mahjong Solitaire",
-    "instructions": "Match pairs of identical tiles. A tile is free if nothing is on top and at least one side is open.",
+    "instructions": "Match pairs of identical tiles. A tile is free if nothing is on top and at least one of the left or right sides is open.",
     "tilesRemaining": "Tiles remaining",
     "layers": "Layers",
     "tileAria": "Mahjong tile",

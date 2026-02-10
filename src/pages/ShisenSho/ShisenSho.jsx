@@ -157,7 +157,7 @@ function ShisenSho() {
   const { t } = useTranslation();
   const gameKey = 'shisen-sho';
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
-  const { stats, recordGamePlayed } = useGameStats(gameKey);
+  const { stats, recordWin, recordGiveUp } = useGameStats(gameKey);
 
   const [seed, setSeed] = useState(getTodayDateString());
   const [grid, setGrid] = useState(null);
@@ -180,9 +180,9 @@ function ShisenSho() {
     const hasRemainingTiles = grid.some(row => row.some(cell => cell !== null));
     if (!hasRemainingTiles) {
       checkWin(true);
-      recordGamePlayed(true);
+      recordWin({});
     }
-  }, [grid, isPlaying, checkWin, recordGamePlayed]);
+  }, [grid, isPlaying, checkWin, recordWin]);
 
   const handleCellClick = useCallback((row, col) => {
     if (!isPlaying || !grid) return;
@@ -219,8 +219,8 @@ function ShisenSho() {
   const handleGiveUp = useCallback(() => {
     if (!isPlaying) return;
     giveUp();
-    recordGamePlayed(false);
-  }, [isPlaying, giveUp, recordGamePlayed]);
+    recordGiveUp({});
+  }, [isPlaying, giveUp, recordGiveUp]);
 
   const handleHint = useCallback(() => {
     if (!isPlaying || !grid) return;
