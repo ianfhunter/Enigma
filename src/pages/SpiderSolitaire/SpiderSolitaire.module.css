@@ -1,0 +1,194 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.gameInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.success {
+  background: rgba(22, 163, 74, 0.15);
+  color: #15803d;
+}
+
+.tableau {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(80px, 1fr));
+  gap: 12px;
+  min-height: 420px;
+}
+
+.column {
+  position: relative;
+  min-height: 360px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px dashed rgba(15, 23, 42, 0.15);
+  cursor: pointer;
+}
+
+.emptySlot {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: rgba(15, 23, 42, 0.45);
+  border-radius: 10px;
+  border: 1px dashed rgba(15, 23, 42, 0.2);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.cardSlot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  position: relative;
+  width: 72px;
+  height: 96px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  background: white;
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #111827;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faceDown {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: #e2e8f0;
+}
+
+.faceUp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.16);
+}
+
+.selected {
+  outline: 3px solid #16a34a;
+  transform: translateY(-4px);
+}
+
+.cardSuitTopLeft {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.cardRankTopRight {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.cardSuitCenter {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.cardBack {
+  font-size: 1.4rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.controlButton {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #111827;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.controlButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.giveUp {
+  background: #b91c1c;
+}
+
+.winOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.winModal {
+  background: white;
+  padding: 24px 32px;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.playAgain {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: #16a34a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+  .tableau {
+    grid-template-columns: repeat(5, minmax(80px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .tableau {
+    grid-template-columns: repeat(2, minmax(80px, 1fr));
+  }
+
+  .card {
+    width: 64px;
+    height: 88px;
+  }
+}
