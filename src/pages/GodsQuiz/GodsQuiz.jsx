@@ -47,6 +47,10 @@ export function getRoundInitSignature(seed, mythology, godsLength) {
   return `${seed}|${mythology}|${godsLength}`;
 }
 
+export function shouldDisableClearSelection(selectedCount, hasResult) {
+  return selectedCount === 0 || Boolean(hasResult);
+}
+
 export default function GodsQuiz() {
   const { t } = useTranslation();
   const [data, setData] = useState(null);
@@ -127,6 +131,11 @@ export default function GodsQuiz() {
     }
   };
 
+  const clearSelections = () => {
+    if (result) return;
+    setGuessDomains(new Set());
+  };
+
   const domainOptions = useMemo(() => {
     if (!current) return [];
     const random = createSeededRandom(roundSeed);
@@ -190,30 +199,45 @@ export default function GodsQuiz() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.sectionTitle}>{t('Domains')}</div>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionTitle}>{t('Domains')}</div>
+              <div className={styles.selectionMeta}>
+                {t('{{selected}} selected', { selected: guessDomains.size })}
+                <button
+                  type="button"
+                  className={styles.clearBtn}
+                  onClick={clearSelections}
+                  disabled={shouldDisableClearSelection(guessDomains.size, result)}
+                >
+                  {t('Clear')}
+                </button>
+              </div>
+            </div>
             <div className={styles.domainsGrid}>
               {domainOptions.map(domain => {
                 let btnClass = styles.domainBtn;
+                const isSelected = guessDomains.has(domain);
                 if (result) {
                   const isCorrectDomain = current.domains.includes(domain);
-                  const wasSelected = guessDomains.has(domain);
-                  if (isCorrectDomain && wasSelected) {
+                  if (isCorrectDomain && isSelected) {
                     btnClass += ` ${styles.correctSelected}`;
-                  } else if (isCorrectDomain && !wasSelected) {
+                  } else if (isCorrectDomain && !isSelected) {
                     btnClass += ` ${styles.missed}`;
-                  } else if (!isCorrectDomain && wasSelected) {
+                  } else if (!isCorrectDomain && isSelected) {
                     btnClass += ` ${styles.wrong}`;
                   }
-                } else if (guessDomains.has(domain)) {
+                } else if (isSelected) {
                   btnClass += ` ${styles.selected}`;
                 }
                 return (
                   <button
+                    type="button"
                     key={domain}
                     className={btnClass}
                     onClick={() => toggleDomain(domain)}
                     disabled={!!result}
                   >
+                    <span className={styles.domainCheck} aria-hidden="true">{isSelected ? '✓' : ''}</span>
                     {domain}
                   </button>
                 );

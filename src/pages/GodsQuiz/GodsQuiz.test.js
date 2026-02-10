@@ -5,6 +5,7 @@ import {
   evaluateDomains,
   filterGodsByMythology,
   getRoundInitSignature,
+  shouldDisableClearSelection,
 } from './GodsQuiz.jsx';
 
 describe('GodsQuiz - domain evaluation', () => {
@@ -88,5 +89,19 @@ describe('GodsQuiz - round init signature', () => {
 
   it('changes when available gods length changes', () => {
     expect(getRoundInitSignature(1, 'all', 10)).not.toBe(getRoundInitSignature(1, 'all', 11));
+  });
+});
+
+describe('GodsQuiz - clear selection disable state', () => {
+  it('disables clear when nothing is selected', () => {
+    expect(shouldDisableClearSelection(0, null)).toBe(true);
+  });
+
+  it('disables clear after answer is submitted', () => {
+    expect(shouldDisableClearSelection(2, { correct: true })).toBe(true);
+  });
+
+  it('enables clear when there are selections and no result yet', () => {
+    expect(shouldDisableClearSelection(3, null)).toBe(false);
   });
 });
