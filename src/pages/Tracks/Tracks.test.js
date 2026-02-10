@@ -10,6 +10,7 @@ import {
   SIZES,
   DIFFICULTIES,
   analyze,
+  getTrackConnections,
 } from './Tracks.jsx';
 
 describe('Tracks - helpers', () => {
@@ -50,6 +51,31 @@ describe('Tracks - helpers', () => {
     expect(puz.rowClues).toHaveLength(5);
     expect(puz.colClues).toHaveLength(5);
     expect(puz.solution instanceof Set).toBe(true);
+  });
+
+
+
+  it('getTrackConnections returns orthogonal connections for track cells', () => {
+    const puz = { w: 3, h: 3 };
+    const marks = [
+      0, 1, 0,
+      1, 1, 1,
+      0, 1, 0,
+    ];
+
+    expect(getTrackConnections(puz, marks, 4)).toEqual({
+      up: true,
+      right: true,
+      down: true,
+      left: true,
+    });
+
+    expect(getTrackConnections(puz, marks, 0)).toEqual({
+      up: false,
+      right: false,
+      down: false,
+      left: false,
+    });
   });
 
   it('analyze checks counts and connectivity', () => {

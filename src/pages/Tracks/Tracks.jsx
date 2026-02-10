@@ -19,6 +19,25 @@ function inBounds(r, c, h, w) {
   return r >= 0 && r < h && c >= 0 && c < w;
 }
 
+function getTrackConnections(puz, marks, i) {
+  if (!puz || marks[i] !== 1) {
+    return {
+      up: false,
+      right: false,
+      down: false,
+      left: false,
+    };
+  }
+
+  const { r, c } = idxToRC(i, puz.w);
+  const up = inBounds(r - 1, c, puz.h, puz.w) && marks[rcToIdx(r - 1, c, puz.w)] === 1;
+  const right = inBounds(r, c + 1, puz.h, puz.w) && marks[rcToIdx(r, c + 1, puz.w)] === 1;
+  const down = inBounds(r + 1, c, puz.h, puz.w) && marks[rcToIdx(r + 1, c, puz.w)] === 1;
+  const left = inBounds(r, c - 1, puz.h, puz.w) && marks[rcToIdx(r, c - 1, puz.w)] === 1;
+
+  return { up, right, down, left };
+}
+
 const DIRS = [
   { dr: -1, dc: 0 },
   { dr: 1, dc: 0 },
@@ -261,6 +280,7 @@ export {
   SIZES,
   DIFFICULTIES,
   analyze,
+  getTrackConnections,
 };
 
 export default function Tracks() {
@@ -388,6 +408,7 @@ export default function Tracks() {
                   const isTrack = marks[i] === 1;
                   const isEnd = i === a || i === b;
                   const isFixed = puz.fixed.has(i);
+                  const connections = getTrackConnections(puz, marks, i);
                   const cls = [
                     styles.cell,
                     isTrack ? styles.track : '',
@@ -399,6 +420,14 @@ export default function Tracks() {
                   if (isEnd) text = i === a ? 'A' : 'B';
                   return (
                     <button key={i} className={cls} onClick={() => toggle(i)}>
+                      {isTrack && (
+                        <svg className={styles.trackSvg} viewBox="0 0 100 100" aria-hidden="true">
+                          {connections.up && <line className={styles.trackLine} x1="50" y1="50" x2="50" y2="0" />}
+                          {connections.right && <line className={styles.trackLine} x1="50" y1="50" x2="100" y2="50" />}
+                          {connections.down && <line className={styles.trackLine} x1="50" y1="50" x2="50" y2="100" />}
+                          {connections.left && <line className={styles.trackLine} x1="50" y1="50" x2="0" y2="50" />}
+                        </svg>
+                      )}
                       {text}
                     </button>
                   );
