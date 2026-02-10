@@ -43,6 +43,10 @@ export function buildDomainOptions(allDomains, correctDomains, totalOptions, ran
   return selections;
 }
 
+export function getRoundInitSignature(seed, mythology, godsLength) {
+  return `${seed}|${mythology}|${godsLength}`;
+}
+
 export default function GodsQuiz() {
   const { t } = useTranslation();
   const [data, setData] = useState(null);
@@ -53,6 +57,7 @@ export default function GodsQuiz() {
   const [seed, setSeed] = useState(() => stringToSeed(`gods-quiz-${getTodayDateString()}`));
   const [roundSeed, setRoundSeed] = useState(() => seed);
   const roundNumberRef = useRef(0);
+  const lastRoundInitSignatureRef = useRef('');
 
   const { stats, recordWin, recordLoss, winRate } = useGameStats('gods-quiz', {
     trackBestTime: false,
@@ -92,10 +97,12 @@ export default function GodsQuiz() {
   }, [gods, seed]);
 
   useEffect(() => {
-    if (gods.length) {
-      startRound();
-    }
-  }, [gods, startRound]);
+    const signature = getRoundInitSignature(seed, mythology, gods.length);
+    if (!gods.length || lastRoundInitSignatureRef.current === signature) return;
+    lastRoundInitSignatureRef.current = signature;
+    roundNumberRef.current = 0;
+    startRound();
+  }, [gods.length, mythology, seed, startRound]);
 
   const toggleDomain = (domain) => {
     if (result) return;
@@ -146,6 +153,7 @@ export default function GodsQuiz() {
             setSeed(seedNum);
             setRoundSeed(seedNum);
             roundNumberRef.current = 0;
+            lastRoundInitSignatureRef.current = '';
           }}
         />
       )}

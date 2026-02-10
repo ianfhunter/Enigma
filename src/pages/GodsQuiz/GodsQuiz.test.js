@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { createSeededRandom } from '../../data/wordUtils';
-import { buildDomainOptions, evaluateDomains, filterGodsByMythology } from './GodsQuiz.jsx';
+import {
+  buildDomainOptions,
+  evaluateDomains,
+  filterGodsByMythology,
+  getRoundInitSignature,
+} from './GodsQuiz.jsx';
 
 describe('GodsQuiz - domain evaluation', () => {
   const domains = ['sky', 'thunder', 'justice'];
@@ -69,5 +74,19 @@ describe('GodsQuiz - domain option builder', () => {
     const options = buildDomainOptions(undefined, correct, 5, random);
     expect(options).toEqual(expect.arrayContaining(correct));
     expect(new Set(options).size).toBe(options.length);
+  });
+});
+
+describe('GodsQuiz - round init signature', () => {
+  it('changes when seed changes', () => {
+    expect(getRoundInitSignature(1, 'all', 10)).not.toBe(getRoundInitSignature(2, 'all', 10));
+  });
+
+  it('changes when mythology changes', () => {
+    expect(getRoundInitSignature(1, 'Greek', 10)).not.toBe(getRoundInitSignature(1, 'Norse', 10));
+  });
+
+  it('changes when available gods length changes', () => {
+    expect(getRoundInitSignature(1, 'all', 10)).not.toBe(getRoundInitSignature(1, 'all', 11));
   });
 });
