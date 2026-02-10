@@ -903,9 +903,9 @@ describe('PackLoader', () => {
       expect(cardGamesPack.categories[0].name).toBe('Card Games');
     });
 
-    it('should have 3 games (klondike, pyramid-cards, and tri-peaks)', () => {
-      expect(cardGamesPack.gameCount).toBe(3);
-      expect(cardGamesPack.allGames.length).toBe(3);
+    it('should have 4 games', () => {
+      expect(cardGamesPack.gameCount).toBe(4);
+      expect(cardGamesPack.allGames.length).toBe(4);
     });
 
     it('should have klondike, pyramid-cards and tri-peaks games', () => {
@@ -936,7 +936,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('card-games');
-      expect(games.length).toBe(3);
+      expect(games.length).toBe(4);
       expect(games.some(g => g.slug === 'klondike')).toBe(true);
       expect(games.some(g => g.slug === 'pyramid-cards')).toBe(true);
       expect(games.some(g => g.slug === 'tri-peaks')).toBe(true);

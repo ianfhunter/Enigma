@@ -8,6 +8,7 @@
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
 import klondikeIcon from '../../assets/icons/klondike.svg';
+import spiderSolitaireIcon from '../../assets/icons/spidersolitaire.svg';
 
 const cardGamesPack = {
   id: 'card-games',
@@ -16,7 +17,7 @@ const cardGamesPack = {
   description: 'Classic solitaire and card-based puzzles. Clear the pyramid, build foundations, and more.',
   icon: '🃏',
   color: '#16a34a',
-  version: '1770735011',
+  version: '1770746539',
   default: true,
   removable: true,
 
@@ -36,7 +37,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/Klondike'),
-          lastModified: 1770735011000
+          lastModified: 1770746539000
         },
         {
           slug: 'pyramid-cards',
@@ -48,7 +49,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/PyramidCards'),
-          lastModified: 1770735011000
+          lastModified: 1770746539000
         },
         {
           slug: 'tri-peaks',
@@ -60,7 +61,19 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
-          lastModified: 1770735011000
+          lastModified: 1770746539000
+        },
+        {
+          slug: 'spider-solitaire',
+          title: 'Spider Solitaire',
+          aliases: ['Spider'],
+          description: 'Build descending sequences from King to Ace and complete all eight runs.',
+          icon: spiderSolitaireIcon,
+          emojiIcon: '🕷️',
+          colors: { primary: '#0f172a', secondary: '#38bdf8' },
+          gradient: 'linear-gradient(135deg, #0f172a 0%, #38bdf8 100%)',
+          component: () => import('../../pages/SpiderSolitaire'),
+          lastModified: 1770746539000
         },
       ],
     },
