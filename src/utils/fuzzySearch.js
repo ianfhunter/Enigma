@@ -88,6 +88,25 @@ export function fuzzyMatch(query, text) {
 }
 
 /**
+ * Get the best match score from multiple queries against a text
+ * Tries the original query first, then falls back to query with spaces removed
+ *
+ * @param {string} text - The text to search in
+ * @param {string} originalQuery - The original search query
+ * @param {string} queryNoSpaces - The query with spaces removed
+ * @returns {object|null} - Best match result
+ */
+function getBestMatch(text, originalQuery, queryNoSpaces) {
+  const originalMatch = fuzzyMatch(originalQuery, text);
+  const noSpacesMatch = fuzzyMatch(queryNoSpaces, text);
+
+  // Return the better match, preferring original if scores are equal
+  if (!originalMatch) return noSpacesMatch;
+  if (!noSpacesMatch) return originalMatch;
+  return originalMatch.score >= noSpacesMatch.score ? originalMatch : noSpacesMatch;
+}
+
+/**
  * Search games with fuzzy matching, sorted by relevance
  *
  * @param {Array} games - Array of game objects with title, description, and optional aliases
@@ -98,18 +117,20 @@ export function fuzzySearchGames(games, query) {
   if (!query || !query.trim()) return [];
 
   const trimmedQuery = query.trim();
+  // Also try with spaces removed (e.g., "Word Tiles" → "WordTiles")
+  const queryNoSpaces = trimmedQuery.replace(/\s+/g, '');
 
   const results = games
     .map(game => {
-      const titleMatch = fuzzyMatch(trimmedQuery, game.title);
-      const descMatch = fuzzyMatch(trimmedQuery, game.description);
+      const titleMatch = getBestMatch(game.title, trimmedQuery, queryNoSpaces);
+      const descMatch = getBestMatch(game.description, trimmedQuery, queryNoSpaces);
 
       // Check aliases - find the best matching alias
       let aliasMatch = null;
       let matchedAlias = null;
       if (game.aliases && Array.isArray(game.aliases)) {
         for (const alias of game.aliases) {
-          const match = fuzzyMatch(trimmedQuery, alias);
+          const match = getBestMatch(alias, trimmedQuery, queryNoSpaces);
           if (match && (!aliasMatch || match.score > aliasMatch.score)) {
             aliasMatch = match;
             matchedAlias = alias;

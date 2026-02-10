@@ -99,11 +99,14 @@
 }
 
 .grid {
+  --takuzu-cell-size: 45px;
   display: grid;
   gap: 2px;
   background: var(--game-accent-blue-border);
   padding: 2px;
   border-radius: 8px;
+  width: min(100%, calc(var(--grid-size) * var(--takuzu-cell-size)));
+  aspect-ratio: 1;
 }
 
 .cell {
@@ -351,8 +354,7 @@
 
 @media (max-width: 450px) {
   .grid {
-    width: 100% !important;
-    max-width: 300px;
+    --takuzu-cell-size: 34px;
   }
 
   .value {

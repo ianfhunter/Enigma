@@ -4,6 +4,9 @@
 
 import wordsData from './shiritori_words.json';
 
+const totalWordCount = wordsData.length;
+const commonWordCount = wordsData.filter(w => w.common).length;
+
 // Current filter state - can be changed at runtime
 let commonOnlyFilter = false;
 
@@ -57,11 +60,15 @@ export function getCommonOnlyFilter() {
 
 // Get word count stats
 export function getWordStats() {
+  return getWordStatsForFilter(commonOnlyFilter);
+}
+
+export function getWordStatsForFilter(commonOnly = commonOnlyFilter) {
   return {
-    total: wordsData.length,
-    common: wordsData.filter(w => w.common).length,
-    current: cachedWords.length,
-    commonOnly: commonOnlyFilter,
+    total: totalWordCount,
+    common: commonWordCount,
+    current: commonOnly ? commonWordCount : totalWordCount,
+    commonOnly,
   };
 }
 

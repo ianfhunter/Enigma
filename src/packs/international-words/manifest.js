@@ -14,7 +14,7 @@ const internationalWordsPack = {
   description: 'Word games from around the world. Currently featuring Shiritori (しりとり) - the Japanese word chain game.',
   icon: '🌐',
   color: '#dc2626',
-  version: '1770119929',
+  version: '1770735011',
   default: true,
   removable: true,
 
@@ -27,7 +27,7 @@ const internationalWordsPack = {
         {
           slug: 'shiritori',
           title: 'しりとり',
-          aliases: ['Word Chain', 'Last Letter Game'],
+          aliases: ['Word Chain', 'Last Letter Game', 'Shiritori'],
           description: 'Word chain game! Each word starts with the last letter of the previous.',
           icon: shiritoriIcon,
           emojiIcon: '🔗',
@@ -35,7 +35,7 @@ const internationalWordsPack = {
           gradient: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
           tag: 'JP',
           component: () => import('../../pages/Shiritori'),
-          lastModified: 1770119929000
+          lastModified: 1770735011000
         },
       ],
     },

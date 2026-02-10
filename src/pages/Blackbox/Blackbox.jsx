@@ -62,8 +62,62 @@ function exitToPort(r, c, w, h) {
   return null;
 }
 
+// Match Blackbox.module.css: --blackbox-cell-size 42px, gap 6px
+const LASER_CELL = 42;
+const LASER_GAP = 6;
+
+/** Logical position of cell center (row/col index + 0.5) in gap-aware pixel-like units for SVG. */
+function logicalPos(unitCoord, cellSize, gap) {
+  return unitCoord * (cellSize + gap) - gap / 2;
+}
+
+/** Port id to display coords in gap-aware units (for SVG viewBox that matches the grid). */
+function portToDisplay(port, w, h, cellSize = LASER_CELL, gap = LASER_GAP) {
+  const [side, idxStr] = port.split(':');
+  const i = Number(idxStr);
+  let x, y;
+  if (side === 'T') {
+    x = i + 1.5;
+    y = 0.5;
+  } else if (side === 'B') {
+    x = i + 1.5;
+    y = h + 1.5;
+  } else if (side === 'L') {
+    x = 0.5;
+    y = i + 1.5;
+  } else {
+    x = w + 1.5;
+    y = i + 1.5;
+  }
+  return { x: logicalPos(x, cellSize, gap), y: logicalPos(y, cellSize, gap) };
+}
+
+/** Inner grid (r,c) to display coords in gap-aware units. */
+function cellToDisplay(r, c, cellSize = LASER_CELL, gap = LASER_GAP) {
+  const x = c + 1.5;
+  const y = r + 1.5;
+  return { x: logicalPos(x, cellSize, gap), y: logicalPos(y, cellSize, gap) };
+}
+
+/** SVG viewBox dimensions so laser overlay aligns with grid (cells + gaps). */
+function laserViewBoxSize(n, cellSize = LASER_CELL, gap = LASER_GAP) {
+  return n * cellSize + (n - 1) * gap;
+}
+
+/** True if this port is the border cell adjacent to inner cell (r, c). */
+function isPortAdjacentToCell(port, r, c, w, h) {
+  const [side, idxStr] = port.split(':');
+  const i = Number(idxStr);
+  if (side === 'T') return r === 0 && c === i;
+  if (side === 'B') return r === h - 1 && c === i;
+  if (side === 'L') return r === i && c === 0;
+  if (side === 'R') return r === i && c === w - 1;
+  return false;
+}
+
 function simulateShot(entryPort, ballsSet, w, h) {
   const { r: sr, c: sc, dir: sdir } = portToStart(entryPort, w, h);
+  const path = []; // inner grid cells (r, c) the beam passes through
 
   // Pre-entry reflection: diagonal adjacency to first rank
   {
@@ -76,7 +130,7 @@ function simulateShot(entryPort, ballsSet, w, h) {
     const fl = inBounds(flr, flc, h, w) && ballsSet.has(keyRC(flr, flc));
     const fr = inBounds(frr, frc, h, w) && ballsSet.has(keyRC(frr, frc));
     if (fl || fr) {
-      return { kind: 'R', entry: entryPort, exit: entryPort };
+      return { kind: 'R', entry: entryPort, exit: entryPort, path: [] };
     }
   }
 
@@ -91,8 +145,7 @@ function simulateShot(entryPort, ballsSet, w, h) {
   for (let steps = 0; steps < stepLimit; steps++) {
     const stateKey = `${r},${c},${dir.name}`;
     if (seen.has(stateKey)) {
-      // Treat as reflection fallback
-      return { kind: 'R', entry: entryPort, exit: entryPort };
+      return { kind: 'R', entry: entryPort, exit: entryPort, path };
     }
     seen.add(stateKey);
 
@@ -102,14 +155,15 @@ function simulateShot(entryPort, ballsSet, w, h) {
     // Leaving the arena
     if (!inBounds(nr, nc, h, w)) {
       const exit = exitToPort(nr, nc, w, h);
-      if (!exit) return { kind: 'R', entry: entryPort, exit: entryPort };
-      if (exit === entryPort) return { kind: 'R', entry: entryPort, exit };
-      return { kind: 'X', entry: entryPort, exit };
+      if (!exit) return { kind: 'R', entry: entryPort, exit: entryPort, path };
+      if (exit === entryPort) return { kind: 'R', entry: entryPort, exit, path };
+      return { kind: 'X', entry: entryPort, exit, path };
     }
 
     // Head-on hit
     if (ballsSet.has(keyRC(nr, nc))) {
-      return { kind: 'H', entry: entryPort, exit: null };
+      path.push({ r: nr, c: nc });
+      return { kind: 'H', entry: entryPort, exit: null, path };
     }
 
     const L = leftOf(dir);
@@ -135,12 +189,12 @@ function simulateShot(entryPort, ballsSet, w, h) {
       continue;
     }
 
-    // Move forward one square (beam passes through square centres in this simplified model)
+    path.push({ r: nr, c: nc });
     r = nr;
     c = nc;
   }
 
-  return { kind: 'R', entry: entryPort, exit: entryPort };
+  return { kind: 'R', entry: entryPort, exit: entryPort, path };
 }
 
 function randomBalls(w, h, n, seed = Date.now()) {
@@ -394,11 +448,12 @@ export default function Blackbox() {
         </div>
       </div>
 
-      <div
-        className={styles.board}
-        style={{ gridTemplateColumns: `repeat(${w + 2}, 42px)` }}
-      >
-        {Array.from({ length: (h + 2) * (w + 2) }, (_, idx) => {
+      <div className={styles.boardWrapper}>
+        <div
+          className={styles.board}
+          style={{ gridTemplateColumns: `repeat(${w + 2}, var(--blackbox-cell-size, 42px))` }}
+        >
+          {Array.from({ length: (h + 2) * (w + 2) }, (_, idx) => {
           const rr = Math.floor(idx / (w + 2));
           const cc = idx % (w + 2);
           const t = cellType(rr, cc);
@@ -441,6 +496,47 @@ export default function Blackbox() {
             </button>
           );
         })}
+        </div>
+        <svg
+          className={styles.laserOverlay}
+          viewBox={`0 0 ${laserViewBoxSize(w + 2)} ${laserViewBoxSize(h + 2)}`}
+          preserveAspectRatio="none"
+        >
+          {Array.from(fired.entries())
+            .filter(([port, shot]) => {
+              if (shot.entry !== port) return false;
+              if (shot.kind !== 'X') return true;
+              const path = shot.path ?? [];
+              return path.length > 0 && isPortAdjacentToCell(shot.entry, path[0].r, path[0].c, w, h);
+            })
+            .map(([port, shot]) => {
+              const path = shot.path ?? [];
+              const start = portToDisplay(shot.entry, w, h);
+              const pts = [{ x: start.x, y: start.y }];
+              for (const { r, c } of path) {
+                const d = cellToDisplay(r, c);
+                pts.push(d);
+              }
+              if (shot.kind === 'R') {
+                pts.push({ x: start.x, y: start.y });
+              } else if (shot.kind === 'X' && shot.exit) {
+                const end = portToDisplay(shot.exit, w, h);
+                pts.push(end);
+              }
+              const d = pts.map((p) => `${p.x},${p.y}`).join(' ');
+              return (
+                <polyline
+                  key={port}
+                  points={d}
+                  fill="none"
+                  stroke="rgba(245,158,11,0.85)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              );
+            })}
+        </svg>
       </div>
     </div>
   );

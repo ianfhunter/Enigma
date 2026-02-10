@@ -3,38 +3,73 @@
 /**
  * Script to update version numbers in all manifest.js files with unix timestamps
  * This ensures that any changes to game packs will trigger updates for users
+ * Each game pack gets a timestamp based on the last modification time of files in its folder
  */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Get current unix timestamp
-const currentTimestamp = Math.floor(Date.now() / 1000).toString();
-
-console.log(`Updating all manifest.js files with version: ${currentTimestamp}`);
+console.log(`Updating all manifest.js files with individual timestamps`);
 
 // Get __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/**
+ * Get the latest modification time of all files in a directory (recursively)
+ * @param {string} dir - Directory path to scan
+ * @returns {number} - Unix timestamp in seconds of the most recent file modification
+ */
+function getLatestModificationTime(dir) {
+  let latestTime = 0;
+
+  function walk(currentDir) {
+    const items = fs.readdirSync(currentDir);
+
+    for (const item of items) {
+      const fullPath = path.join(currentDir, item);
+      const stat = fs.statSync(fullPath);
+
+      if (stat.isDirectory()) {
+        walk(fullPath);
+      } else {
+        const fileTime = Math.floor(stat.mtimeMs / 1000);
+        if (fileTime > latestTime) {
+          latestTime = fileTime;
+        }
+      }
+    }
+  }
+
+  walk(dir);
+  return latestTime;
+}
+
 // Function to update version in a manifest file
 function updateManifestVersion(filePath) {
   try {
+    // Get the game pack directory (parent of manifest.js)
+    const packDir = path.dirname(filePath);
+
+    // Get the latest modification time for this game pack
+    const packTimestamp = getLatestModificationTime(packDir);
+    const packTimestampStr = packTimestamp.toString();
+
     let content = fs.readFileSync(filePath, 'utf8');
     let updated = false;
 
     // Update pack version
     const packVersionRegex = /(version:\s*['"])\d+(\.\d+)*(['"])/;
-    let newContent = content.replace(packVersionRegex, `$1${currentTimestamp}$3`);
+    let newContent = content.replace(packVersionRegex, `$1${packTimestampStr}$3`);
     if (newContent !== content) {
       updated = true;
-      console.log(`Updated pack version in: ${filePath}`);
+      console.log(`Updated pack version to ${packTimestampStr} in: ${filePath}`);
     }
 
     // Update individual game lastModified fields
     const lastModifiedRegex = /(lastModified:\s*)\d+/g;
-    newContent = newContent.replace(lastModifiedRegex, `$1${currentTimestamp * 1000}`);
+    newContent = newContent.replace(lastModifiedRegex, `$1${packTimestamp * 1000}`);
     if (newContent !== content) {
       updated = true;
       console.log(`Updated game lastModified fields in: ${filePath}`);
@@ -42,7 +77,7 @@ function updateManifestVersion(filePath) {
 
     // Update individual game version fields (if they exist)
     const gameVersionRegex = /(version:\s*['"])\d+(\.\d+)*(['"])/g;
-    newContent = newContent.replace(gameVersionRegex, `$1${currentTimestamp}$3`);
+    newContent = newContent.replace(gameVersionRegex, `$1${packTimestampStr}$3`);
     if (newContent !== content) {
       updated = true;
       console.log(`Updated game version fields in: ${filePath}`);
@@ -96,4 +131,4 @@ for (const manifestFile of manifestFiles) {
   }
 }
 
-console.log(`\nUpdated ${updatedCount} manifest files with version ${currentTimestamp}`);
+console.log(`\nUpdated ${updatedCount} manifest files with individual timestamps`);

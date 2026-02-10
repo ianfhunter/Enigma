@@ -235,8 +235,7 @@ export default function Takuzu() {
           className={styles.grid}
           style={{
             gridTemplateColumns: `repeat(${size}, 1fr)`,
-            width: `${size * 45}px`,
-            height: `${size * 45}px`,
+            '--grid-size': size,
           }}
         >
           {grid.map((row, r) =>

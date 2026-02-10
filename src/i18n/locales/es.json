@@ -218,6 +218,13 @@
     "solutionRevealed": "🏳️ Solución Revelada",
     "theAnswerWas": "La respuesta era: <strong>{{answer}}</strong>"
   },
+  "yinYang": {
+    "title": "Yin-Yang",
+    "instructions": "Rellena las celdas en blanco o negro. Cada color debe estar conectado. No se permiten cuadrados de 2×2 del mismo color. Toca para alternar entre negro, blanco y vacío.",
+    "winTitle": "☯️ ¡Equilibrio logrado!",
+    "winMessage": "¡Yin y Yang en armonía!",
+    "legendCycle": "Clic: alterna negro → blanco → vacío"
+  },
   "profile": {
     "title": "Perfil",
     "security": "Seguridad",
@@ -547,6 +554,15 @@
     "rule3": "Escribe tu respuesta y envíala antes de que se acabe el tiempo",
     "rule4": "Usa \"Mezclar\" para reorganizar la visualización"
   },
+  "2X": {
+    "title": "2X",
+    "instructions": "Combina fichas iguales para llegar a la puntuación más alta posible. Usa las flechas o desliza para mover.",
+    "bestTile": "Mejor ficha",
+    "target": "Objetivo {{value}}",
+    "gameOver": "Fin del juego",
+    "emptyTile": "Ficha vacía",
+    "tileLabel": "Ficha {{value}}"
+  },
   "nQueens": {
     "rule1": "Las reinas atacan horizontal, vertical y diagonalmente",
     "rule2": "Ninguna reina puede estar en la misma fila, columna o diagonal",
@@ -592,6 +608,27 @@
     "howItWorks": "Cómo Funciona",
     "explanation": "Cada columna tiene un valor (1, 2, 3... desde la izquierda). Cuando rellenas una celda, el valor de su columna se añade a la suma de esa fila. De manera similar, cada fila tiene un valor que contribuye a las sumas de columna. ¡Haz que todos los objetivos coincidan para ganar!"
   },
+  "mahjongSolitaire": {
+    "title": "Mahjong Solitaire",
+    "instructions": "Empareja fichas idénticas. Una ficha está libre si no hay nada encima y al menos un lado está abierto.",
+    "tilesRemaining": "Fichas restantes",
+    "layers": "Capas",
+    "tileAria": "Ficha de mahjong",
+    "winMessage": "¡Tablero despejado!",
+    "giveUpMessage": "Solución revelada.",
+    "currentShape": "Figura",
+    "nextGameShape": "Figura para la siguiente partida",
+    "shapes": {
+      "classic": "Clásica",
+      "turtle": "Tortuga",
+      "spider": "Araña",
+      "pyramid": "Pirámide",
+      "tiger": "Tigre",
+      "rooster": "Gallo",
+      "hourglass": "Reloj de arena",
+      "butterfly": "Mariposa"
+    }
+  },
   "actionItems": {
     "loading": "Cargando elementos de acción...",
     "failedToLoad": "Error al cargar elementos de acción",
@@ -614,5 +651,24 @@
     "total": "Total",
     "completed": "Completado",
     "completionRate": "Tasa de Completitud"
+  },
+  "klondike": {
+    "title": "Klondike",
+    "instructions": "Mueve las cartas a las bases en orden ascendente por palo. Construye columnas alternando colores de Rey hacia abajo.",
+    "winTitle": "¡Has ganado!",
+    "winMessage": "¡Resolviste Klondike en {{moves}} movimientos!",
+    "stockLabel": "Mazo",
+    "wasteLabel": "Descarte",
+    "foundationLabel": "Bases",
+    "newGame1Card": "Nuevo Juego (1 carta)",
+    "newGame3Card": "Nuevo Juego (3 cartas)",
+    "emptyColumn": "Columna vacía",
+    "stockEmpty": "No quedan cartas para robar.",
+    "recycleMessage": "Reciclaste el descarte al mazo.",
+    "invalidFoundationMove": "Esa carta no puede ir a la base.",
+    "invalidTableauMove": "Esa carta no puede ir ahí.",
+    "cardFaceDown": "Esa carta está boca abajo.",
+    "foundationTopOnly": "Solo la carta superior puede ir a la base.",
+    "gaveUpMessage": "Solución revelada. ¡Prueba otra baraja!"
   }
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import GameHeader from '../../components/GameHeader';
@@ -18,6 +18,19 @@ const DIRECTIONS = {
   w: { dr: 0, dc: -1, symbol: '←' },
   e: { dr: 0, dc: 1, symbol: '→' },
 };
+
+const GRID_MIN_PX = 240;
+const GRID_MAX_PX = 400;
+const CELL_MIN_PX = 26;
+const CELL_MAX_PX = 50;
+
+function getCellSizeForWidth(rows, cols, availableWidth) {
+  const boundedWidth = Math.min(GRID_MAX_PX, Math.max(GRID_MIN_PX, availableWidth));
+  return Math.max(
+    CELL_MIN_PX,
+    Math.min(CELL_MAX_PX, boundedWidth / Math.max(rows, cols))
+  );
+}
 
 // Path segment codes map to connections: which sides of the cell the path passes through
 const PATH_CONNECTIONS = {
@@ -315,6 +328,7 @@ export {
   getCellConnections,
   validateLoop,
   hasAdjacentShaded,
+  getCellSizeForWidth,
 };
 
 export default function Yajilin() {
@@ -332,6 +346,32 @@ export default function Yajilin() {
   const [lastDragCell, setLastDragCell] = useState(null);
   const datasetRef = useRef(null);
   const gridRef = useRef(null);
+  const containerRef = useRef(null);
+  const [cellSize, setCellSize] = useState(36);
+
+  useLayoutEffect(() => {
+    if (!containerRef.current || !puzzleData) return;
+    const element = containerRef.current;
+    const updateSize = () => {
+      const width = element.clientWidth || GRID_MIN_PX;
+      setCellSize(getCellSizeForWidth(puzzleData.rows, puzzleData.cols, width - 16));
+    };
+
+    updateSize();
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(() => updateSize());
+      observer.observe(element);
+      return () => observer.disconnect();
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', updateSize);
+      return () => window.removeEventListener('resize', updateSize);
+    }
+
+    return undefined;
+  }, [puzzleData]);
 
   // Load dataset on mount
   useEffect(() => {
@@ -577,7 +617,6 @@ export default function Yajilin() {
   if (!puzzleData || shaded.length !== puzzleData.rows) return null;
 
   const { rows, cols, clues, solutionShaded, solutionPath } = puzzleData;
-  const cellSize = Math.max(30, Math.min(50, 400 / Math.max(rows, cols)));
   const displayShaded = showSolution ? solutionShaded : shaded;
   const displayPath = showSolution ? solutionPath : pathSegments;
 
@@ -610,7 +649,7 @@ export default function Yajilin() {
         onSelect={setDifficulty}
       />
 
-      <div className={styles.gameArea}>
+      <div className={styles.gameArea} ref={containerRef}>
         <div
           ref={gridRef}
           className={styles.grid}

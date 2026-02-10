@@ -218,6 +218,13 @@
     "solutionRevealed": "🏳️ Solution Revealed",
     "theAnswerWas": "The answer was: <strong>{{answer}}</strong>"
   },
+  "yinYang": {
+    "title": "Yin-Yang",
+    "instructions": "Fill cells black or white. Each color must be connected. No 2×2 squares of the same color allowed. Tap to cycle black, white, and empty.",
+    "winTitle": "☯️ Balance Achieved!",
+    "winMessage": "Yin and Yang in harmony!",
+    "legendCycle": "Click: Cycle black → white → empty"
+  },
   "profile": {
     "title": "Profile",
     "security": "Security",
@@ -547,6 +554,15 @@
     "rule3": "Type your answer and submit before time runs out",
     "rule4": "Use \"Shuffle\" to rearrange the display"
   },
+  "2X": {
+    "title": "2X",
+    "instructions": "Combine matching tiles to reach as high a score as possible. Use arrow keys or swipe to move.",
+    "bestTile": "Best Tile",
+    "target": "Target {{value}}",
+    "gameOver": "Game Over",
+    "emptyTile": "Empty Tile",
+    "tileLabel": "Tile {{value}}"
+  },
   "nQueens": {
     "rule1": "Queens attack horizontally, vertically, and diagonally",
     "rule2": "No two queens can be on the same row, column, or diagonal",
@@ -592,6 +608,27 @@
     "howItWorks": "How It Works",
     "explanation": "Each column has a value (1, 2, 3... from left). When you fill a cell, its column value is added to that row's sum. Similarly, each row has a value that contributes to column sums. Match all targets to win!"
   },
+  "mahjongSolitaire": {
+    "title": "Mahjong Solitaire",
+    "instructions": "Match pairs of identical tiles. A tile is free if nothing is on top and at least one side is open.",
+    "tilesRemaining": "Tiles remaining",
+    "layers": "Layers",
+    "tileAria": "Mahjong tile",
+    "winMessage": "Board cleared!",
+    "giveUpMessage": "Solution revealed.",
+    "currentShape": "Shape",
+    "nextGameShape": "Shape for next game",
+    "shapes": {
+      "classic": "Classic",
+      "turtle": "Turtle",
+      "spider": "Spider",
+      "pyramid": "Pyramid",
+      "tiger": "Tiger",
+      "rooster": "Rooster",
+      "hourglass": "Hourglass",
+      "butterfly": "Butterfly"
+    }
+  },
   "actionItems": {
     "loading": "Loading action items...",
     "failedToLoad": "Failed to load action items",
@@ -614,5 +651,24 @@
     "total": "Total",
     "completed": "Completed",
     "completionRate": "Completion Rate"
+  },
+  "klondike": {
+    "title": "Klondike",
+    "instructions": "Move cards to the foundations in ascending suit order. Build tableau stacks in alternating colors from King down.",
+    "winTitle": "You Won!",
+    "winMessage": "You solved Klondike in {{moves}} moves!",
+    "stockLabel": "Stock",
+    "wasteLabel": "Waste",
+    "foundationLabel": "Foundations",
+    "newGame1Card": "New Game (1 card)",
+    "newGame3Card": "New Game (3 cards)",
+    "emptyColumn": "Empty column",
+    "stockEmpty": "No cards left to draw.",
+    "recycleMessage": "Recycled the waste back into the stock.",
+    "invalidFoundationMove": "That card cannot move to the foundation.",
+    "invalidTableauMove": "That card cannot move there.",
+    "cardFaceDown": "That card is face down.",
+    "foundationTopOnly": "Only the top card can move to a foundation.",
+    "gaveUpMessage": "Solution revealed. Try another shuffle!"
   }
 }
