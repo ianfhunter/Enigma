@@ -30,7 +30,7 @@ export const packInfo = {
   description: 'Sudoku and all its brilliant variants - Killer Sudoku, Sandwich Sudoku, Calcudoku, and more.',
   icon: '🔢',
   color: '#3b82f6',
-  version: '1770734819',
+  version: '1770735011',
   default: true,
   removable: true,
 };
@@ -54,7 +54,7 @@ export const categories = [
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         component: () => import('../../pages/Sudoku'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Killer Sudoku',
@@ -65,7 +65,7 @@ export const categories = [
         colors: { primary: '#8b5cf6', secondary: '#ec4899' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
         component: () => import('../../pages/KillerSudoku'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Sandwich Sudoku',
@@ -76,7 +76,7 @@ export const categories = [
         colors: { primary: '#f59e0b', secondary: '#84cc16' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #84cc16 100%)',
         component: () => import('../../pages/SandwichSudoku'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Calcudoku',
@@ -88,7 +88,7 @@ export const categories = [
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
         component: () => import('../../pages/Calcudoku'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Kakuro',
@@ -100,7 +100,7 @@ export const categories = [
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         component: () => import('../../pages/Kakuro'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Futoshiki',
@@ -112,7 +112,7 @@ export const categories = [
         colors: { primary: '#fb7185', secondary: '#f43f5e' },
         gradient: 'linear-gradient(135deg, #fb7185 0%, #f43f5e 100%)',
         component: () => import('../../pages/Futoshiki'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Str8ts',
@@ -123,7 +123,7 @@ export const categories = [
         colors: { primary: '#60a5fa', secondary: '#3b82f6' },
         gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
         component: () => import('../../pages/Str8ts'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Kropki',
@@ -134,7 +134,7 @@ export const categories = [
         colors: { primary: '#64748b', secondary: '#334155' },
         gradient: 'linear-gradient(135deg, #64748b 0%, #334155 100%)',
         component: () => import('../../pages/Kropki'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Sujiko',
@@ -145,7 +145,7 @@ export const categories = [
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         component: () => import('../../pages/Sujiko'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Suko',
@@ -156,7 +156,7 @@ export const categories = [
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         component: () => import('../../pages/Suko'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Skyscraper',
@@ -166,7 +166,7 @@ export const categories = [
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
         gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
         component: () => import('../../pages/Skyscraper'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'ABC End View',
@@ -177,7 +177,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         component: () => import('../../pages/ABCEndView'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Eulero',
@@ -189,7 +189,7 @@ export const categories = [
         colors: { primary: '#8b5cf6', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         component: () => import('../../pages/Eulero'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
       {
         title: 'Japanese Sums',
@@ -201,7 +201,7 @@ export const categories = [
         colors: { primary: '#ec4899', secondary: '#f472b6' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)',
         component: () => import('../../pages/JapaneseSums'),
-        lastModified: 1770734819000
+        lastModified: 1770735011000
       },
     ],
   },
