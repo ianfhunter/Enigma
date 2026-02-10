@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -21,6 +21,36 @@ export function filterGodsByMythology(gods, mythology) {
   return gods.filter(g => g.mythology === mythology);
 }
 
+export function buildDomainOptions(allDomains, correctDomains, totalOptions, random) {
+  const safeAll = Array.isArray(allDomains) ? allDomains : [];
+  const safeCorrect = Array.isArray(correctDomains) ? correctDomains : [];
+  const uniqueCorrect = Array.from(new Set(safeCorrect));
+  const uniqueAll = Array.from(new Set(safeAll));
+  const optionCount = Math.max(totalOptions, uniqueCorrect.length);
+  const pool = uniqueAll.filter(domain => !uniqueCorrect.includes(domain));
+  const selections = [...uniqueCorrect];
+
+  while (selections.length < optionCount && pool.length > 0) {
+    const idx = Math.floor(random() * pool.length);
+    selections.push(pool.splice(idx, 1)[0]);
+  }
+
+  for (let i = selections.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
+    [selections[i], selections[j]] = [selections[j], selections[i]];
+  }
+
+  return selections;
+}
+
+export function getRoundInitSignature(seed, mythology, godsLength) {
+  return `${seed}|${mythology}|${godsLength}`;
+}
+
+export function shouldDisableClearSelection(selectedCount, hasResult) {
+  return selectedCount === 0 || Boolean(hasResult);
+}
+
 export default function GodsQuiz() {
   const { t } = useTranslation();
   const [data, setData] = useState(null);
@@ -29,7 +59,9 @@ export default function GodsQuiz() {
   const [guessDomains, setGuessDomains] = useState(() => new Set());
   const [result, setResult] = useState(null);
   const [seed, setSeed] = useState(() => stringToSeed(`gods-quiz-${getTodayDateString()}`));
-  const [roundNumber, setRoundNumber] = useState(0);
+  const [roundSeed, setRoundSeed] = useState(() => seed);
+  const roundNumberRef = useRef(0);
+  const lastRoundInitSignatureRef = useRef('');
 
   const { stats, recordWin, recordLoss, winRate } = useGameStats('gods-quiz', {
     trackBestTime: false,
@@ -54,27 +86,27 @@ export default function GodsQuiz() {
   const mythologies = useMemo(() => data?.mythologies || [], [data]);
   const allDomains = useMemo(() => data?.allDomains || [], [data]);
 
-  const pickRandom = useCallback(() => {
-    if (!gods.length) return null;
-    const random = createSeededRandom(seed + roundNumber);
-    const idx = Math.floor(random() * gods.length);
-    return gods[idx];
-  }, [gods, seed, roundNumber]);
-
   const startRound = useCallback(() => {
-    const next = pickRandom();
+    if (!gods.length) return;
+    const nextSeed = seed + roundNumberRef.current;
+    const random = createSeededRandom(nextSeed);
+    const idx = Math.floor(random() * gods.length);
+    const next = gods[idx];
     if (!next) return;
     setCurrent(next);
+    setRoundSeed(nextSeed);
     setGuessDomains(new Set());
     setResult(null);
-    setRoundNumber(prev => prev + 1);
-  }, [pickRandom]);
+    roundNumberRef.current += 1;
+  }, [gods, seed]);
 
   useEffect(() => {
-    if (gods.length) {
-      startRound();
-    }
-  }, [gods, startRound]);
+    const signature = getRoundInitSignature(seed, mythology, gods.length);
+    if (!gods.length || lastRoundInitSignatureRef.current === signature) return;
+    lastRoundInitSignatureRef.current = signature;
+    roundNumberRef.current = 0;
+    startRound();
+  }, [gods.length, mythology, seed, startRound]);
 
   const toggleDomain = (domain) => {
     if (result) return;
@@ -99,11 +131,22 @@ export default function GodsQuiz() {
     }
   };
 
+  const clearSelections = () => {
+    if (result) return;
+    setGuessDomains(new Set());
+  };
+
+  const domainOptions = useMemo(() => {
+    if (!current) return [];
+    const random = createSeededRandom(roundSeed);
+    return buildDomainOptions(allDomains, current.domains, 9, random);
+  }, [allDomains, current, roundSeed]);
+
   return (
     <div className={styles.container}>
       <GameHeader
-        title="Gods & Domains Quiz"
-        instructions="Select all the domains associated with each deity from Greek, Roman, Norse, and Egyptian mythology."
+        title={t('Gods & Domains Quiz')}
+        instructions={t('Select all the domains associated with each deity from Greek, Roman, Norse, and Egyptian mythology.')}
       />
 
       {seed !== null && (
@@ -117,20 +160,22 @@ export default function GodsQuiz() {
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             setSeed(seedNum);
-            setRoundNumber(0);
+            setRoundSeed(seedNum);
+            roundNumberRef.current = 0;
+            lastRoundInitSignatureRef.current = '';
           }}
         />
       )}
 
       <div className={styles.controls}>
         <label className={styles.label}>
-          Mythology
+          {t('Mythology')}
           <select
             className={styles.select}
             value={mythology}
             onChange={(e) => setMythology(e.target.value)}
           >
-            <option value="all">All Mythologies</option>
+            <option value="all">{t('All Mythologies')}</option>
             {mythologies.map(m => (
               <option key={m} value={m}>{m}</option>
             ))}
@@ -138,43 +183,61 @@ export default function GodsQuiz() {
         </label>
       </div>
 
-      {!data && <div className={styles.card}>Loading gods...</div>}
+      {!data && <div className={styles.card}>{t('Loading gods...')}</div>}
 
       {data && current && (
         <>
           <div className={styles.promptCard}>
-            <div className={styles.promptLabel}>{current.mythology} Mythology</div>
+            <div className={styles.promptLabel}>{t('{{mythology}} Mythology', { mythology: current.mythology })}</div>
             <div className={styles.prompt}>{current.name}</div>
             <div className={styles.subtle}>
-              Select all domains ({current.domains.length} total)
+              {t('Pick {{count}} from {{total}}', {
+                count: current.domains.length,
+                total: domainOptions.length,
+              })}
             </div>
           </div>
 
           <div className={styles.card}>
-            <div className={styles.sectionTitle}>Domains</div>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionTitle}>{t('Domains')}</div>
+              <div className={styles.selectionMeta}>
+                {t('{{selected}} selected', { selected: guessDomains.size })}
+                <button
+                  type="button"
+                  className={styles.clearBtn}
+                  onClick={clearSelections}
+                  disabled={shouldDisableClearSelection(guessDomains.size, result)}
+                >
+                  {t('Clear')}
+                </button>
+              </div>
+            </div>
             <div className={styles.domainsGrid}>
-              {allDomains.map(domain => {
+              {domainOptions.map(domain => {
                 let btnClass = styles.domainBtn;
+                const isSelected = guessDomains.has(domain);
                 if (result) {
                   const isCorrectDomain = current.domains.includes(domain);
-                  const wasSelected = guessDomains.has(domain);
-                  if (isCorrectDomain && wasSelected) {
+                  if (isCorrectDomain && isSelected) {
                     btnClass += ` ${styles.correctSelected}`;
-                  } else if (isCorrectDomain && !wasSelected) {
+                  } else if (isCorrectDomain && !isSelected) {
                     btnClass += ` ${styles.missed}`;
-                  } else if (!isCorrectDomain && wasSelected) {
+                  } else if (!isCorrectDomain && isSelected) {
                     btnClass += ` ${styles.wrong}`;
                   }
-                } else if (guessDomains.has(domain)) {
+                } else if (isSelected) {
                   btnClass += ` ${styles.selected}`;
                 }
                 return (
                   <button
+                    type="button"
                     key={domain}
                     className={btnClass}
                     onClick={() => toggleDomain(domain)}
                     disabled={!!result}
                   >
+                    <span className={styles.domainCheck} aria-hidden="true">{isSelected ? '✓' : ''}</span>
                     {domain}
                   </button>
                 );
@@ -184,11 +247,11 @@ export default function GodsQuiz() {
             <div className={styles.actions}>
               {!result ? (
                 <button className={styles.primaryBtn} onClick={submit}>
-                  Check Answer
+                  {t('Check Answer')}
                 </button>
               ) : (
                 <button className={styles.primaryBtn} onClick={startRound}>
-                  Next God →
+                  {t('Next God →')}
                 </button>
               )}
             </div>
@@ -196,10 +259,14 @@ export default function GodsQuiz() {
             {result && (
               <div className={`${styles.result} ${result.correct ? styles.ok : styles.nope}`}>
                 <div className={styles.resultTitle}>
-                  {result.correct ? '✓ Correct!' : '✗ Incorrect'}
+                  {result.correct ? t('✓ Correct!') : t('✗ Incorrect')}
                 </div>
                 <div className={styles.resultBody}>
-                  {current.name} ({current.mythology}): <strong>{result.correctDomains.join(', ')}</strong>
+                  {t('{{name}} ({{mythology}}): {{domains}}', {
+                    name: current.name,
+                    mythology: current.mythology,
+                    domains: result.correctDomains.join(', '),
+                  })}
                 </div>
               </div>
             )}
@@ -208,19 +275,19 @@ export default function GodsQuiz() {
           <div className={styles.statsPanel}>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.played}</span>
-              <span className={styles.statLabel}>Played</span>
+              <span className={styles.statLabel}>{t('Played')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{winRate}%</span>
-              <span className={styles.statLabel}>Accuracy</span>
+              <span className={styles.statLabel}>{t('Accuracy')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.currentStreak}</span>
-              <span className={styles.statLabel}>Streak</span>
+              <span className={styles.statLabel}>{t('Streak')}</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statValue}>{stats.maxStreak}</span>
-              <span className={styles.statLabel}>Best</span>
+              <span className={styles.statLabel}>{t('Best')}</span>
             </div>
           </div>
         </>
