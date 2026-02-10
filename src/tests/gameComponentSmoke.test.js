@@ -82,6 +82,7 @@ const GAME_MODULES = {
   'loopy': 'Loopy',
   'magnets': 'Magnets',
   'map': 'Map',
+  'mahjong-solitaire': 'MahjongSolitaire',
   'maze': 'Maze',
   'memory-match': 'MemoryMatch',
   'chimp-test': 'ChimpTest',
@@ -288,6 +289,10 @@ vi.mock('../context/SettingsContext', () => ({
     theme: 'dark',
     setTheme: vi.fn(),
     toggleTheme: vi.fn(),
+  }),
+  useSoundEnabled: () => ({
+    soundEnabled: false,
+    setSoundEnabled: vi.fn(),
   }),
 }));
 
