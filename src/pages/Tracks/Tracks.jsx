@@ -45,13 +45,14 @@ function findRenderablePath(puz, marks) {
 
   const visited = new Set([puz.a]);
   const path = [puz.a];
+  let bestPath = [];
+  let searchSteps = 0;
+  const MAX_SEARCH_STEPS = 30000;
 
-  const dfs = (current) => {
-    if (current === puz.b) {
-      return true;
-    }
+  const getNeighbors = (cell) => {
+    const { r, c } = idxToRC(cell, puz.w);
+    const neighbors = [];
 
-    const { r, c } = idxToRC(current, puz.w);
     for (const { dr, dc } of DIRS) {
       const nr = r + dr;
       const nc = c + dc;
@@ -59,19 +60,48 @@ function findRenderablePath(puz, marks) {
       const next = rcToIdx(nr, nc, puz.w);
       if (marks[next] !== 1 || visited.has(next)) continue;
 
-      visited.add(next);
-      path.push(next);
-      if (dfs(next)) {
-        return true;
+      // Prefer exploring candidates with more onward options first.
+      let onward = 0;
+      const { r: rr, c: cc } = idxToRC(next, puz.w);
+      for (const { dr: ddr, dc: ddc } of DIRS) {
+        const ar = rr + ddr;
+        const ac = cc + ddc;
+        if (!inBounds(ar, ac, puz.h, puz.w)) continue;
+        const adj = rcToIdx(ar, ac, puz.w);
+        if (marks[adj] === 1 && !visited.has(adj)) onward++;
       }
-      path.pop();
-      visited.delete(next);
+      neighbors.push({ next, onward });
     }
 
-    return false;
+    neighbors.sort((a, b) => b.onward - a.onward);
+    return neighbors.map((n) => n.next);
   };
 
-  return dfs(puz.a) ? path : [];
+  const dfs = (current) => {
+    if (searchSteps > MAX_SEARCH_STEPS) {
+      return;
+    }
+    searchSteps++;
+
+    if (current === puz.b && path.length > bestPath.length) {
+      bestPath = path.slice();
+    }
+
+    for (const next of getNeighbors(current)) {
+      visited.add(next);
+      path.push(next);
+      dfs(next);
+      path.pop();
+      visited.delete(next);
+
+      if (searchSteps > MAX_SEARCH_STEPS) {
+        break;
+      }
+    }
+  };
+
+  dfs(puz.a);
+  return bestPath;
 }
 
 function getRenderableTrackConnections(puz, marks, i, renderablePathSet = null) {

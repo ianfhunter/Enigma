@@ -95,6 +95,22 @@ describe('Tracks - helpers', () => {
     expect(path).not.toContain(8);
   });
 
+
+  it('findRenderablePath prefers a longer valid A→B path when multiple exist', () => {
+    const puz = { w: 3, h: 3, a: 0, b: 8 };
+    const marks = [
+      1, 1, 1,
+      1, 1, 1,
+      0, 1, 1,
+    ];
+
+    const path = findRenderablePath(puz, marks);
+    // A shorter path exists (length 5), but render path should use the longer route.
+    expect(path.length).toBeGreaterThanOrEqual(7);
+    expect(path[0]).toBe(0);
+    expect(path[path.length - 1]).toBe(8);
+  });
+
   it('getRenderableTrackConnections only connects tiles on the chosen A→B path', () => {
     const puz = { w: 4, h: 3, a: 0, b: 11 };
     const marks = [
