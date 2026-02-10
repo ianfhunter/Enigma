@@ -38,44 +38,64 @@ function getTrackConnections(puz, marks, i) {
   return { up, right, down, left };
 }
 
-function getRenderableTrackConnections(puz, marks, i) {
-  const connections = getTrackConnections(puz, marks, i);
-  const directions = ['up', 'right', 'down', 'left'];
-  const active = directions.filter((dir) => connections[dir]);
-
-  if (active.length <= 2) {
-    return connections;
+function findRenderablePath(puz, marks) {
+  if (!puz || marks[puz.a] !== 1 || marks[puz.b] !== 1) {
+    return [];
   }
 
-  const selected = new Set();
-  const pickPair = (aDir, bDir) => {
-    if (connections[aDir] && connections[bDir]) {
-      selected.add(aDir);
-      selected.add(bDir);
+  const visited = new Set([puz.a]);
+  const path = [puz.a];
+
+  const dfs = (current) => {
+    if (current === puz.b) {
       return true;
     }
+
+    const { r, c } = idxToRC(current, puz.w);
+    for (const { dr, dc } of DIRS) {
+      const nr = r + dr;
+      const nc = c + dc;
+      if (!inBounds(nr, nc, puz.h, puz.w)) continue;
+      const next = rcToIdx(nr, nc, puz.w);
+      if (marks[next] !== 1 || visited.has(next)) continue;
+
+      visited.add(next);
+      path.push(next);
+      if (dfs(next)) {
+        return true;
+      }
+      path.pop();
+      visited.delete(next);
+    }
+
     return false;
   };
 
-  // Prefer classic track pieces first: straight segments, then corners.
-  const picked =
-    pickPair('up', 'down') ||
-    pickPair('left', 'right') ||
-    pickPair('up', 'right') ||
-    pickPair('right', 'down') ||
-    pickPair('down', 'left') ||
-    pickPair('left', 'up');
+  return dfs(puz.a) ? path : [];
+}
 
-  if (!picked) {
-    selected.add(active[0]);
-    selected.add(active[1]);
+function getRenderableTrackConnections(puz, marks, i, renderablePathSet = null) {
+  const pathSet = renderablePathSet ?? new Set(findRenderablePath(puz, marks));
+  if (!pathSet.has(i)) {
+    return {
+      up: false,
+      right: false,
+      down: false,
+      left: false,
+    };
   }
 
+  const { r, c } = idxToRC(i, puz.w);
+  const upIdx = inBounds(r - 1, c, puz.h, puz.w) ? rcToIdx(r - 1, c, puz.w) : -1;
+  const rightIdx = inBounds(r, c + 1, puz.h, puz.w) ? rcToIdx(r, c + 1, puz.w) : -1;
+  const downIdx = inBounds(r + 1, c, puz.h, puz.w) ? rcToIdx(r + 1, c, puz.w) : -1;
+  const leftIdx = inBounds(r, c - 1, puz.h, puz.w) ? rcToIdx(r, c - 1, puz.w) : -1;
+
   return {
-    up: selected.has('up'),
-    right: selected.has('right'),
-    down: selected.has('down'),
-    left: selected.has('left'),
+    up: upIdx >= 0 && pathSet.has(upIdx),
+    right: rightIdx >= 0 && pathSet.has(rightIdx),
+    down: downIdx >= 0 && pathSet.has(downIdx),
+    left: leftIdx >= 0 && pathSet.has(leftIdx),
   };
 }
 
@@ -322,6 +342,7 @@ export {
   DIFFICULTIES,
   analyze,
   getTrackConnections,
+  findRenderablePath,
   getRenderableTrackConnections,
 };
 
@@ -363,6 +384,8 @@ export default function Tracks() {
     if (!puz) return { bad: new Set(), rowOk: false, colOk: false, connectedPath: false, solved: false };
     return analyze(puz, marks);
   }, [puz, marks]);
+
+  const renderablePathSet = useMemo(() => new Set(findRenderablePath(puz, marks)), [puz, marks]);
 
   const toggle = (i) => {
     if (i === a || i === b) return;
@@ -450,7 +473,7 @@ export default function Tracks() {
                   const isTrack = marks[i] === 1;
                   const isEnd = i === a || i === b;
                   const isFixed = puz.fixed.has(i);
-                  const connections = getRenderableTrackConnections(puz, marks, i);
+                  const connections = getRenderableTrackConnections(puz, marks, i, renderablePathSet);
                   const cls = [
                     styles.cell,
                     isTrack ? styles.track : '',

@@ -11,6 +11,7 @@ import {
   DIFFICULTIES,
   analyze,
   getTrackConnections,
+  findRenderablePath,
   getRenderableTrackConnections,
 } from './Tracks.jsx';
 
@@ -79,32 +80,44 @@ describe('Tracks - helpers', () => {
     });
   });
 
-
-  it('getRenderableTrackConnections limits branch/cross tiles to two exits', () => {
-    const puz = { w: 3, h: 3 };
+  it('findRenderablePath returns a continuous A→B path only', () => {
+    const puz = { w: 4, h: 3, a: 0, b: 11 };
     const marks = [
-      0, 1, 0,
-      1, 1, 1,
-      0, 1, 0,
+      1, 1, 1, 0,
+      0, 0, 1, 0,
+      1, 1, 1, 1,
     ];
 
-    expect(getRenderableTrackConnections(puz, marks, 4)).toEqual({
-      up: true,
+    const path = findRenderablePath(puz, marks);
+    expect(path[0]).toBe(0);
+    expect(path[path.length - 1]).toBe(11);
+    // disconnected bottom-left island (index 8) must not be part of rendered path
+    expect(path).not.toContain(8);
+  });
+
+  it('getRenderableTrackConnections only connects tiles on the chosen A→B path', () => {
+    const puz = { w: 4, h: 3, a: 0, b: 11 };
+    const marks = [
+      1, 1, 1, 0,
+      0, 0, 1, 0,
+      1, 1, 1, 1,
+    ];
+
+    const pathSet = new Set(findRenderablePath(puz, marks));
+
+    expect(getRenderableTrackConnections(puz, marks, 8, pathSet)).toEqual({
+      up: false,
       right: false,
-      down: true,
+      down: false,
       left: false,
     });
 
-    const tJunctionMarks = [
-      0, 1, 0,
-      0, 1, 1,
-      0, 1, 0,
-    ];
-    expect(getRenderableTrackConnections(puz, tJunctionMarks, 4)).toEqual({
-      up: true,
+    // index 2 connects left to 1 and down to 6 on the rendered A→B path
+    expect(getRenderableTrackConnections(puz, marks, 2, pathSet)).toEqual({
+      up: false,
       right: false,
       down: true,
-      left: false,
+      left: true,
     });
   });
 
