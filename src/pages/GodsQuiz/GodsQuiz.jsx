@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
@@ -51,8 +51,8 @@ export default function GodsQuiz() {
   const [guessDomains, setGuessDomains] = useState(() => new Set());
   const [result, setResult] = useState(null);
   const [seed, setSeed] = useState(() => stringToSeed(`gods-quiz-${getTodayDateString()}`));
-  const [roundNumber, setRoundNumber] = useState(0);
   const [roundSeed, setRoundSeed] = useState(() => seed);
+  const roundNumberRef = useRef(0);
 
   const { stats, recordWin, recordLoss, winRate } = useGameStats('gods-quiz', {
     trackBestTime: false,
@@ -79,7 +79,7 @@ export default function GodsQuiz() {
 
   const startRound = useCallback(() => {
     if (!gods.length) return;
-    const nextSeed = seed + roundNumber;
+    const nextSeed = seed + roundNumberRef.current;
     const random = createSeededRandom(nextSeed);
     const idx = Math.floor(random() * gods.length);
     const next = gods[idx];
@@ -88,8 +88,8 @@ export default function GodsQuiz() {
     setRoundSeed(nextSeed);
     setGuessDomains(new Set());
     setResult(null);
-    setRoundNumber(prev => prev + 1);
-  }, [gods, seed, roundNumber]);
+    roundNumberRef.current += 1;
+  }, [gods, seed]);
 
   useEffect(() => {
     if (gods.length) {
@@ -144,8 +144,8 @@ export default function GodsQuiz() {
               ? (isNaN(parseInt(newSeed, 10)) ? stringToSeed(newSeed) : parseInt(newSeed, 10))
               : newSeed;
             setSeed(seedNum);
-            setRoundNumber(0);
             setRoundSeed(seedNum);
+            roundNumberRef.current = 0;
           }}
         />
       )}
