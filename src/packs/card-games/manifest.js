@@ -7,6 +7,7 @@
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
+import klondikeIcon from '../../assets/icons/klondike.svg';
 import spiderSolitaireIcon from '../../assets/icons/spidersolitaire.svg';
 
 const cardGamesPack = {
