@@ -383,6 +383,7 @@ function MahjongSolitaire() {
               key={pos.key}
               type="button"
               className={`${styles.tileButton} ${isFree ? styles.free : ''} ${isSelected ? styles.selected : ''} ${isHint ? styles.hint : ''}`}
+              data-z={pos.z}
               style={{
                 left: `${left}px`,
                 top: `${top}px`,
@@ -406,7 +407,6 @@ function MahjongSolitaire() {
         <button onClick={handleHint} disabled={!isPlaying || freeIndices.size < 2} className={styles.hintButton} type="button">
           💡 {t('common.hint', 'Hint')}
         </button>
-        <GiveUpButton onGiveUp={handleGiveUp} disabled={!isPlaying} />
         <button className={styles.newGameButton} onClick={handleNewGame} type="button">
           {t('common.newGame', 'New Game')}
         </button>
