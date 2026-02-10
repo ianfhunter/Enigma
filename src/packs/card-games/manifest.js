@@ -7,6 +7,7 @@
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
+import spiderSolitaireIcon from '../../assets/icons/spidersolitaire.svg';
 
 const cardGamesPack = {
   id: 'card-games',
@@ -47,6 +48,18 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
+          lastModified: 1770136707000
+        },
+        {
+          slug: 'spider-solitaire',
+          title: 'Spider Solitaire',
+          aliases: ['Spider'],
+          description: 'Build descending sequences from King to Ace and complete all eight runs.',
+          icon: spiderSolitaireIcon,
+          emojiIcon: '🕷️',
+          colors: { primary: '#0f172a', secondary: '#38bdf8' },
+          gradient: 'linear-gradient(135deg, #0f172a 0%, #38bdf8 100%)',
+          component: () => import('../../pages/SpiderSolitaire'),
           lastModified: 1770136707000
         },
       ],
