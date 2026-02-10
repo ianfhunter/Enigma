@@ -186,8 +186,8 @@ function MahjongSolitaire() {
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const { stats, recordWin, recordGiveUp } = useGameStats(gameKey);
 
-  const [seed, setSeed] = useState(getTodayDateString());
-  const [resetCounter, setResetCounter] = useState(0);
+  const [gameId, setGameId] = useState(0);
+  const [seed, setSeed] = useState(() => stringToSeed(`${getTodayDateString()}-${Date.now()}`));
   const [tiles, setTiles] = useState([]);
   const [solutionSequence, setSolutionSequence] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -204,15 +204,22 @@ function MahjongSolitaire() {
     return { boardWidth: width + offset * 2, boardHeight: height + offset * 2, baseOffset: offset, maxZ: maxLayer };
   }, []);
 
+  // Reset everything when gameId changes
   useEffect(() => {
-    const random = createSeededRandom(stringToSeed(seed));
+    setTiles([]);
+    setSolutionSequence([]);
+    setSelectedIndex(null);
+    setAutoSolveIndex(null);
+    setHintIndices(null);
+    resetGameState();
+
+    // Generate new puzzle with unique seed
+    const newSeed = stringToSeed(`${getTodayDateString()}-${gameId}-${Date.now()}`);
+    const random = createSeededRandom(newSeed);
     const { tiles: newTiles, solutionSequence: newSolution } = generateSolvablePuzzle(random);
     setTiles(newTiles);
     setSolutionSequence(newSolution);
-    setSelectedIndex(null);
-    setAutoSolveIndex(null);
-    resetGameState();
-  }, [seed, resetCounter, resetGameState]);
+  }, [gameId, resetGameState]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -292,11 +299,13 @@ function MahjongSolitaire() {
   }, [freeIndices, isPlaying, selectedIndex, tiles]);
 
   const handleNewGame = useCallback(() => {
-    setSeed(stringToSeed(`${getTodayDateString()}-${Date.now()}`));
+    // Increment gameId to force complete reset
+    setGameId(id => id + 1);
   }, []);
 
   const handleReset = useCallback(() => {
-    setResetCounter(counter => counter + 1);
+    // Reset to same game to replay the same puzzle
+    setGameId(id => id);
   }, []);
 
   const handleGiveUp = useCallback(() => {
@@ -356,7 +365,7 @@ function MahjongSolitaire() {
       />
 
       <div className={styles.metaRow}>
-        <SeedDisplay seed={seed} onSeedChange={setSeed} />
+        <SeedDisplay key={gameId} seed={seed} onSeedChange={setSeed} />
         <div className={styles.stats}>
           <span>{t('mahjongSolitaire.tilesRemaining', 'Tiles remaining')}: {tileCount}</span>
           <span>{t('mahjongSolitaire.layers', 'Layers')}: {maxZ + 1}</span>
@@ -364,6 +373,7 @@ function MahjongSolitaire() {
       </div>
 
       <div
+        key={gameId}
         className={styles.board}
         style={{
           width: `${boardWidth}px`,
