@@ -905,7 +905,7 @@ describe('PackLoader', () => {
 
     it('should have 4 games', () => {
       expect(cardGamesPack.gameCount).toBe(4);
-      expect(cardGamesPack.allGames.length).toBe(3);
+      expect(cardGamesPack.allGames.length).toBe(4);
     });
 
     it('should have klondike, pyramid-cards and tri-peaks games', () => {
