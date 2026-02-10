@@ -14,6 +14,41 @@ function sortTypes(types) {
   return [...types].sort((a, b) => a.localeCompare(b));
 }
 
+export function evaluatePokemonQuizGuess({ guessGen, guessTypes, current, gaveUp = false }) {
+  const correctGen = current.gen;
+  const correctTypes = current.pokemon.types;
+  const guessedTypes = Array.from(guessTypes);
+
+  const genOk = !gaveUp && guessGen === correctGen;
+  const correctGuessedTypes = gaveUp
+    ? []
+    : guessedTypes.filter((type) => correctTypes.includes(type));
+  const typesOk =
+    !gaveUp
+    && guessedTypes.length === correctTypes.length
+    && guessedTypes.every((type) => correctTypes.includes(type));
+
+  const genPoints = genOk ? 1 : 0;
+  const typePoints = correctGuessedTypes.length;
+  const earnedPoints = genPoints + typePoints;
+  const maxPoints = 1 + correctTypes.length;
+  const correct = genOk && typesOk;
+
+  return {
+    correct,
+    genOk,
+    typesOk,
+    correctGen,
+    correctTypes,
+    correctGuessedTypes,
+    earnedPoints,
+    maxPoints,
+    genPoints,
+    typePoints,
+    gaveUp,
+  };
+}
+
 export default function PokemonQuiz() {
   const { t } = useTranslation();
   const [data, setData] = useState(null); // loaded pokemon_min.json
@@ -95,50 +130,37 @@ export default function PokemonQuiz() {
 
   const submit = () => {
     if (!current) return;
-    const correctGen = current.gen;
-    const correctTypes = current.pokemon.types;
-
-    const genOk = guessGen === correctGen;
-    const guessedTypes = Array.from(guessTypes);
-
-    // Calculate which types are correct
-    const correctGuessedTypes = guessedTypes.filter(t => correctTypes.includes(t));
-    const typesOk =
-      guessedTypes.length === correctTypes.length &&
-      guessedTypes.every(t => correctTypes.includes(t));
-
-    // Points: 1 for generation, 1 for each correct type
-    const genPoints = genOk ? 1 : 0;
-    const typePoints = correctGuessedTypes.length;
-    const earnedPoints = genPoints + typePoints;
-    const maxPoints = 1 + correctTypes.length; // gen + all types
-
-    const correct = genOk && typesOk;
-    setResult({
-      correct,
-      genOk,
-      typesOk,
-      correctGen,
-      correctTypes,
-      correctGuessedTypes,
-      earnedPoints,
-      maxPoints,
-      genPoints,
-      typePoints
-    });
+    const roundResult = evaluatePokemonQuizGuess({ guessGen, guessTypes, current });
+    setResult(roundResult);
 
     // Track points in custom stats
     updateStats(prev => ({
       ...prev,
-      points: (prev.points || 0) + earnedPoints,
-      totalPossible: (prev.totalPossible || 0) + maxPoints,
+      points: (prev.points || 0) + roundResult.earnedPoints,
+      totalPossible: (prev.totalPossible || 0) + roundResult.maxPoints,
     }));
     // Record win/loss based on whether they got the Pokemon exactly right
-    if (correct) {
+    if (roundResult.correct) {
       recordWin();
     } else {
       recordLoss();
     }
+  };
+
+  const revealAnswer = () => {
+    if (!current) return;
+    const roundResult = evaluatePokemonQuizGuess({
+      guessGen,
+      guessTypes,
+      current,
+      gaveUp: true,
+    });
+    setResult(roundResult);
+    updateStats(prev => ({
+      ...prev,
+      totalPossible: (prev.totalPossible || 0) + roundResult.maxPoints,
+    }));
+    recordLoss();
   };
 
   const onNext = () => {
@@ -200,6 +222,7 @@ export default function PokemonQuiz() {
             </div>
 
             <div className={styles.sectionTitle}>Types</div>
+            <div className={styles.subtle}>{t('pokemonQuiz.typesSelected', { count: guessTypes.size })}</div>
             <div className={styles.typesGrid}>
               {allTypes.map(t => (
                 <button
@@ -215,9 +238,17 @@ export default function PokemonQuiz() {
 
             <div className={styles.actions}>
               {!result ? (
-                <button className={styles.primaryBtn} onClick={submit}>
-                  Check
-                </button>
+                <>
+                  <button className={styles.secondaryBtn} onClick={() => setGuessTypes(new Set())}>
+                    {t('pokemonQuiz.clearTypes')}
+                  </button>
+                  <button className={styles.secondaryBtn} onClick={revealAnswer}>
+                    {t('common.giveUp')}
+                  </button>
+                  <button className={styles.primaryBtn} onClick={submit}>
+                    Check
+                  </button>
+                </>
               ) : (
                 <button className={styles.primaryBtn} onClick={onNext}>
                   Next
@@ -228,7 +259,9 @@ export default function PokemonQuiz() {
             {result && (
               <div className={`${styles.result} ${result.correct ? styles.ok : styles.nope}`}>
                 <div className={styles.resultTitle}>
-                  {result.correct ? 'Perfect!' : `${result.earnedPoints}/${result.maxPoints} points`}
+                  {result.gaveUp
+                    ? t('pokemonQuiz.answerRevealed')
+                    : (result.correct ? 'Perfect!' : `${result.earnedPoints}/${result.maxPoints} points`)}
                 </div>
                 <div className={styles.resultBreakdown}>
                   <span className={result.genOk ? styles.pointOk : styles.pointMiss}>

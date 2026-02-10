@@ -670,5 +670,26 @@
     "cardFaceDown": "Esa carta está boca abajo.",
     "foundationTopOnly": "Solo la carta superior puede ir a la base.",
     "gaveUpMessage": "Solución revelada. ¡Prueba otra baraja!"
+  },
+  "pokemonQuiz": {
+    "typesSelected": "{{count}} tipo seleccionado",
+    "typesSelected_other": "{{count}} tipos seleccionados",
+    "clearTypes": "Borrar tipos",
+    "answerRevealed": "Respuesta revelada"
+  },
+  "pokemonGenBlitz": {
+    "timeUp": "¡Tiempo!",
+    "invalidForGeneration": "Nope (para esta generación).",
+    "alreadyFound": "Ese ya lo tenías.",
+    "answerRevealed": "Detenido. Respuesta revelada.",
+    "progressMessage": "Encontrados {{count}} de {{total}} Pokémon.",
+    "inputPlaceholder": "Escribe un nombre de Pokémon… (p. ej., Mr Mime, Farfetchd, Nidoran F)",
+    "pressStart": "Pulsa Iniciar",
+    "add": "Añadir",
+    "matchHint": "Solo texto. Las coincidencias toleran espacios/guiones/puntuación.",
+    "found": "Encontrados",
+    "noNamesYet": "Aún no hay nombres.",
+    "missingPokemon": "Pokémon faltantes",
+    "foundAll": "¡Los encontraste todos!"
   }
 }

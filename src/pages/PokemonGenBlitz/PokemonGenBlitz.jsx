@@ -38,6 +38,7 @@ export default function PokemonGenBlitz() {
   const [input, setInput] = useState('');
   const [found, setFound] = useState(() => new Set());
   const [message, setMessage] = useState('');
+  const [showAllAnswers, setShowAllAnswers] = useState(false);
 
   const inputRef = useRef(null);
 
@@ -89,6 +90,7 @@ export default function PokemonGenBlitz() {
     setFound(new Set());
     setInput('');
     setMessage('');
+    setShowAllAnswers(false);
   }, [seconds]);
 
   useEffect(() => {
@@ -99,13 +101,14 @@ export default function PokemonGenBlitz() {
     setFound(new Set());
     setInput('');
     setMessage('');
+    setShowAllAnswers(false);
   }, [data, availableGens]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!running) return;
     if (timeLeft <= 0) {
       setRunning(false);
-      setMessage('Time!');
+      setMessage(t('pokemonGenBlitz.timeUp'));
       const count = found.size;
       setBest(prev => {
         const prevBest = Number(prev?.[gen] || 0);
@@ -114,9 +117,9 @@ export default function PokemonGenBlitz() {
       });
       return;
     }
-    const t = setTimeout(() => setTimeLeft(x => x - 1), 1000);
-    return () => clearTimeout(t);
-  }, [running, timeLeft, found, gen, setBest]);
+    const timerId = setTimeout(() => setTimeLeft(x => x - 1), 1000);
+    return () => clearTimeout(timerId);
+  }, [running, timeLeft, found, gen, setBest, t]);
 
   const start = () => {
     reset();
@@ -130,11 +133,11 @@ export default function PokemonGenBlitz() {
     if (!n) return;
 
     if (!answerSet.has(n)) {
-      setMessage('Nope (for this generation).');
+      setMessage(t('pokemonGenBlitz.invalidForGeneration'));
       return;
     }
     if (found.has(n)) {
-      setMessage('Already got that one.');
+      setMessage(t('pokemonGenBlitz.alreadyFound'));
       return;
     }
 
@@ -145,11 +148,13 @@ export default function PokemonGenBlitz() {
     });
     setInput('');
     setMessage('');
+    setShowAllAnswers(false);
   };
 
   const giveUp = () => {
     setRunning(false);
-    setMessage('Stopped.');
+    setMessage(t('pokemonGenBlitz.answerRevealed'));
+    setShowAllAnswers(true);
     const count = found.size;
     setBest(prev => {
       const prevBest = Number(prev?.[gen] || 0);
@@ -161,6 +166,12 @@ export default function PokemonGenBlitz() {
   const bestForGen = Number(best?.[gen] || 0);
   const foundCount = found.size;
 
+  const canonicalDisplay = useMemo(() => {
+    return genList
+      .map((p) => ({ key: normalize(p.name), value: titleCaseName(p.name) }))
+      .sort((a, b) => a.value.localeCompare(b.value));
+  }, [genList]);
+
   const foundDisplay = useMemo(() => {
     if (!foundCount) return [];
     // Map normalized -> canonical API name by scanning genList once
@@ -170,6 +181,13 @@ export default function PokemonGenBlitz() {
       .sort((a, b) => a.localeCompare(b))
       .map(titleCaseName);
   }, [found, genList, foundCount]);
+
+  const missingDisplay = useMemo(() => {
+    if (!showAllAnswers) return [];
+    return canonicalDisplay
+      .filter(({ key }) => !found.has(key))
+      .map(({ value }) => value);
+  }, [canonicalDisplay, found, showAllAnswers]);
 
   return (
     <div className={styles.container}>
@@ -238,6 +256,7 @@ export default function PokemonGenBlitz() {
           </div>
 
           <div className={styles.card}>
+            <div className={styles.subtle}>{t('pokemonGenBlitz.progressMessage', { count: foundCount, total })}</div>
             <div className={styles.inputRow}>
               <input
                 ref={inputRef}
@@ -248,21 +267,36 @@ export default function PokemonGenBlitz() {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') submit();
                 }}
-                placeholder={running ? 'Type a Pokémon name… (e.g., Mr Mime, Farfetchd, Nidoran F)' : 'Press Start'}
+                placeholder={running ? t('pokemonGenBlitz.inputPlaceholder') : t('pokemonGenBlitz.pressStart')}
               />
               <button className={styles.primaryBtn} onClick={submit} disabled={!running}>
-                Add
+                {t('pokemonGenBlitz.add')}
               </button>
             </div>
 
             {message && <div className={styles.message}>{message}</div>}
-            <div className={styles.subtle}>Text-only. Matches are forgiving about spaces/hyphens/punctuation.</div>
+            <div className={styles.subtle}>{t('pokemonGenBlitz.matchHint')}</div>
           </div>
 
+          {showAllAnswers && (
+            <div className={styles.card}>
+              <div className={styles.sectionTitle}>{t('pokemonGenBlitz.missingPokemon')}</div>
+              {missingDisplay.length === 0 ? (
+                <div className={styles.subtle}>{t('pokemonGenBlitz.foundAll')}</div>
+              ) : (
+                <div className={styles.chips}>
+                  {missingDisplay.map((name) => (
+                    <span key={name} className={styles.chip}>{name}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           <div className={styles.card}>
-            <div className={styles.sectionTitle}>Found</div>
+            <div className={styles.sectionTitle}>{t('pokemonGenBlitz.found')}</div>
             {foundCount === 0 ? (
-              <div className={styles.subtle}>No names yet.</div>
+              <div className={styles.subtle}>{t('pokemonGenBlitz.noNamesYet')}</div>
             ) : (
               <div className={styles.chips}>
                 {foundDisplay.map((n) => (

@@ -670,5 +670,26 @@
     "cardFaceDown": "That card is face down.",
     "foundationTopOnly": "Only the top card can move to a foundation.",
     "gaveUpMessage": "Solution revealed. Try another shuffle!"
+  },
+  "pokemonQuiz": {
+    "typesSelected": "{{count}} type selected",
+    "typesSelected_other": "{{count}} types selected",
+    "clearTypes": "Clear types",
+    "answerRevealed": "Answer revealed"
+  },
+  "pokemonGenBlitz": {
+    "timeUp": "Time!",
+    "invalidForGeneration": "Nope (for this generation).",
+    "alreadyFound": "Already got that one.",
+    "answerRevealed": "Stopped. Answer revealed.",
+    "progressMessage": "Found {{count}} of {{total}} Pokémon.",
+    "inputPlaceholder": "Type a Pokémon name… (e.g., Mr Mime, Farfetchd, Nidoran F)",
+    "pressStart": "Press Start",
+    "add": "Add",
+    "matchHint": "Text-only. Matches are forgiving about spaces/hyphens/punctuation.",
+    "found": "Found",
+    "noNamesYet": "No names yet.",
+    "missingPokemon": "Missing Pokémon",
+    "foundAll": "You found them all!"
   }
 }
