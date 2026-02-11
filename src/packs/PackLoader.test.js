@@ -546,9 +546,9 @@ describe('PackLoader', () => {
       expect(strategyMovementPack.categories[0].name).toBe('Chess & Movement');
     });
 
-    it('should have 8 games', () => {
-      expect(strategyMovementPack.gameCount).toBe(8);
-      expect(strategyMovementPack.allGames.length).toBe(8);
+    it('should have 9 games', () => {
+      expect(strategyMovementPack.gameCount).toBe(9);
+      expect(strategyMovementPack.allGames.length).toBe(9);
     });
 
     it('should have expected games', () => {
@@ -583,7 +583,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('strategy-movement');
-      expect(games.length).toBe(8);
+      expect(games.length).toBe(9);
       expect(games.some(g => g.slug === 'chess-puzzle')).toBe(true);
       expect(games.some(g => g.slug === 'sokoban')).toBe(true);
     });
