@@ -59,6 +59,7 @@ describe('Game README Files', () => {
     'galaxies': 'Galaxies',
     'gods-quiz': 'GodsQuiz',
     'gokigen-naname': 'GokigenNaname',
+  'grand-tour': 'GrandTour',
     'hangman': 'Hangman',
     'hashi': 'Hashi',
     'hidato': 'Hidato',

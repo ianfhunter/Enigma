@@ -11,6 +11,7 @@ import sokobanIcon from '../../assets/icons/sokoban.svg';
 import inertiaIcon from '../../assets/icons/inertia.svg';
 import chesspuzzleIcon from '../../assets/icons/chesspuzzle.svg';
 import knightstourIcon from '../../assets/icons/knightstour.svg';
+import grandtourIcon from '../../assets/icons/grandtour.svg';
 import nqueensIcon from '../../assets/icons/nqueens.svg';
 import chessmazeIcon from '../../assets/icons/chessmaze.svg';
 import theseusminotaurIcon from '../../assets/icons/theseusminotaur.svg';
@@ -62,6 +63,20 @@ export const categories = [
         component: () => import('../../pages/KnightsTour'),
         lastModified: 1770746539000
       },
+
+      {
+        title: 'Grand Tour',
+        slug: 'grand-tour',
+        aliases: ['Knight Path Logic', 'Grand Knights Tour'],
+        description: 'Fill 1-25 so each consecutive pair forms a legal knight jump.',
+        icon: grandtourIcon,
+        emojiIcon: '🌍',
+        colors: { primary: '#8b5cf6', secondary: '#06b6d4' },
+        gradient: 'linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)',
+        component: () => import('../../pages/GrandTour'),
+        lastModified: 1770746539000
+      },
+
       {
         title: 'N-Queens',
         slug: 'n-queens',
