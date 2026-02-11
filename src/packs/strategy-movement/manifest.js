@@ -11,6 +11,7 @@ import sokobanIcon from '../../assets/icons/sokoban.svg';
 import inertiaIcon from '../../assets/icons/inertia.svg';
 import chesspuzzleIcon from '../../assets/icons/chesspuzzle.svg';
 import knightstourIcon from '../../assets/icons/knightstour.svg';
+import grandtourIcon from '../../assets/icons/grandtour.svg';
 import nqueensIcon from '../../assets/icons/nqueens.svg';
 import chessmazeIcon from '../../assets/icons/chessmaze.svg';
 import theseusminotaurIcon from '../../assets/icons/theseusminotaur.svg';
@@ -25,7 +26,7 @@ export const packInfo = {
   description: 'Chess puzzles, Sokoban, and strategic pathfinding challenges.',
   icon: '♟️',
   color: '#6366f1',
-  version: '1770746539',
+  version: '1770822879',
   default: true,
   removable: true,
 };
@@ -48,7 +49,7 @@ export const categories = [
         colors: { primary: '#b58863', secondary: '#8b6914' },
         gradient: 'linear-gradient(135deg, #b58863 0%, #8b6914 100%)',
         component: () => import('../../pages/ChessPuzzle'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
       {
         title: "Knight's Tour",
@@ -60,8 +61,22 @@ export const categories = [
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
         gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
         component: () => import('../../pages/KnightsTour'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
+
+      {
+        title: 'Grand Tour',
+        slug: 'grand-tour',
+        aliases: ['Knight Path Logic', 'Grand Knights Tour'],
+        description: 'Fill 1-25 so each consecutive pair forms a legal knight jump.',
+        icon: grandtourIcon,
+        emojiIcon: '🌍',
+        colors: { primary: '#8b5cf6', secondary: '#06b6d4' },
+        gradient: 'linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)',
+        component: () => import('../../pages/GrandTour'),
+        lastModified: 1770822879000
+      },
+
       {
         title: 'N-Queens',
         slug: 'n-queens',
@@ -72,7 +87,7 @@ export const categories = [
         colors: { primary: '#ec4899', secondary: '#db2777' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
         component: () => import('../../pages/NQueens'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
       {
         title: 'Chess Maze',
@@ -83,7 +98,7 @@ export const categories = [
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         component: () => import('../../pages/ChessMaze'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
       {
         title: 'Theseus & the Minotaur',
@@ -94,7 +109,7 @@ export const categories = [
         colors: { primary: '#f59e0b', secondary: '#dc2626' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #dc2626 100%)',
         component: () => import('../../pages/TheseusMinotaur'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
       {
         title: 'Pegs',
@@ -106,7 +121,7 @@ export const categories = [
         colors: { primary: '#f472b6', secondary: '#ec4899' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
         component: () => import('../../pages/Pegs'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
       {
         title: 'Sokoban',
@@ -118,7 +133,7 @@ export const categories = [
         colors: { primary: '#22d3ee', secondary: '#0ea5e9' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #0ea5e9 100%)',
         component: () => import('../../pages/Sokoban'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
       {
         title: 'Inertia',
@@ -129,7 +144,7 @@ export const categories = [
         colors: { primary: '#0ea5e9', secondary: '#0284c7' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
         component: () => import('../../pages/Inertia'),
-        lastModified: 1770746539000
+        lastModified: 1770822879000
       },
     ],
   },

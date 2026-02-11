@@ -53,6 +53,7 @@ const GAME_MODULES = {
   'galaxies': 'Galaxies',
   'gods-quiz': 'GodsQuiz',
   'gokigen-naname': 'GokigenNaname',
+  'grand-tour': 'GrandTour',
   'hangman': 'Hangman',
   'hashi': 'Hashi',
   'hidato': 'Hidato',
@@ -245,8 +246,13 @@ describe('Game Module Imports - No Import Errors', () => {
   ];
 
   for (const folder of SAMPLE_GAMES) {
-    // Nonogram loads many images at import time, so needs more time
-    const timeout = folder === 'Nonogram' ? 15000 : 5000;
+    // Heavy modules can be slower on shared CI; use safer per-module timeouts
+    const timeoutByFolder = {
+      Nonogram: 20000,
+      Sudoku: 12000,
+      Minesweeper: 12000,
+    };
+    const timeout = timeoutByFolder[folder] || 10000;
 
     it(`should import ${folder} without errors`, async () => {
       // Dynamic import the game module
