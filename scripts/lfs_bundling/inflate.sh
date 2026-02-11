@@ -46,7 +46,11 @@ echo "Downloading asset: $asset_url"
 curl -L -o "$ZIP_TMP" "$asset_url"
 
 echo "Unzipping and overwriting in place..."
-unzip -o "$ZIP_TMP" -d . && mv __lfs_bundle/* ./ && rm -rf __lfs_bundle
+unzip -o "$ZIP_TMP" -d __lfs_bundle
+# overwrites the existing LFS files, preserves non-LFS files
+rsync -a __lfs_bundle/ ./ 
+rm -rf __lfs_bundle
+
 
 echo "Cleanup temp file"
 rm -f "$ZIP_TMP"
