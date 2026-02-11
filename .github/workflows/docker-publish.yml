@@ -40,8 +40,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          lfs: true
+
+      - name: Inflate LFS Files
+        run: ./scripts/lfs_bundling/inflate.sh
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
