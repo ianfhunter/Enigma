@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Inflate LFS Files
-        run: ./scripts/lfs_bundling/inflate.sh ianfhunter Engima lfs_files.zip
+        run: ./scripts/lfs_bundling/inflate.sh ianfhunter Enigma lfs_files.zip
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
