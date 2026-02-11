@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# inflate-lfs.sh
-# Usage: inflate-lfs.sh <owner> <repo> <asset_filename>
-# Example: inflate-lfs.sh ianfhunter Enigma lfs_files.zip
+# inflate-lfs-all.sh
+# Usage: inflate-lfs-all.sh <owner> <repo> <asset_filename>
 
 set -e
 
@@ -15,30 +14,37 @@ if [ -z "$OWNER" ] || [ -z "$REPO" ] || [ -z "$ASSET_NAME" ]; then
     exit 1
 fi
 
-# Query GitHub API for latest release info
-API_URL="https://api.github.com/repos/${OWNER}/${REPO}/releases/latest"
-echo "Fetching latest release metadata from $OWNER/$REPO..."
-release_json=$(curl -s "$API_URL")
+PAGE=1
+asset_url=""
+while :; do
+    echo "Fetching release metadata page $PAGE..."
+    releases_json=$(curl -s "https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=100&page=${PAGE}")
 
-# Extract latest tag (optional if you want to print it)
-TAG=$(echo "$release_json" | grep -oP '"tag_name": "\K(.*)(?=")' || true)
-echo "Latest release: $TAG"
+    # Check if empty
+    if [ "$(echo "$releases_json" | jq length)" -eq 0 ]; then
+        break
+    fi
 
-# Find the asset download URL for our named file
-asset_url=$(echo "$release_json" \
-    | grep -oP '"browser_download_url": "\K([^"]+)' \
-    | grep "/${ASSET_NAME}$" \
-    || true)
+    # Search for asset in this page
+    asset_url=$(echo "$releases_json" | jq -r ".[] | .assets[]? | select(.name==\"$ASSET_NAME\") | .browser_download_url")
+    
+    if [ -n "$asset_url" ]; then
+        TAG=$(echo "$releases_json" | jq -r ".[] | select(.assets[]?.name==\"$ASSET_NAME\") | .tag_name")
+        echo "Found asset in release: $TAG"
+        break
+    fi
+
+    PAGE=$((PAGE + 1))
+done
 
 if [ -z "$asset_url" ]; then
-    echo "Error: Asset '$ASSET_NAME' not found in latest release."
+    echo "Error: Asset '$ASSET_NAME' not found in any release."
     exit 2
 fi
 
 echo "Downloading asset: $asset_url"
 curl -L -o "$ZIP_TMP" "$asset_url"
 
-# Unzip over the current paths
 echo "Unzipping and overwriting in place..."
 unzip -o "$ZIP_TMP" -d .
 
