@@ -9,6 +9,7 @@ import {
   generatePuzzle,
   SIZES,
   DIFFICULTIES,
+  createNextPuzzleSeed,
   analyze,
   getTrackConnections,
   findRenderablePath,
@@ -193,6 +194,17 @@ describe('Tracks - helpers', () => {
 
     expect(degree).toBeLessThanOrEqual(2);
     expect(degree).toBeGreaterThan(0);
+  });
+
+
+  it('createNextPuzzleSeed returns a deterministic new seed for entropy input', () => {
+    const seed1 = createNextPuzzleSeed(12345, 111);
+    const seed2 = createNextPuzzleSeed(12345, 111);
+    const seed3 = createNextPuzzleSeed(12345, 222);
+
+    expect(seed1).toBe(seed2);
+    expect(seed1).not.toBe(12345);
+    expect(seed1).not.toBe(seed3);
   });
 
   it('analyze checks counts and connectivity', () => {

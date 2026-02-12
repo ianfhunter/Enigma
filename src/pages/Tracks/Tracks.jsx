@@ -352,6 +352,10 @@ function generatePuzzle(size, difficulty, seed) {
 const SIZES = [6, 8, 10];
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
 
+function createNextPuzzleSeed(seed, entropy = Date.now()) {
+  return stringToSeed(`tracks-${seed}-${entropy}`);
+}
+
 function analyze(puz, marks) {
   // marks: 0 empty, 1 track
   const n = puz.w * puz.h;
@@ -431,6 +435,7 @@ export {
   generatePuzzle,
   SIZES,
   DIFFICULTIES,
+  createNextPuzzleSeed,
   analyze,
   getTrackConnections,
   findRenderablePath,
@@ -457,9 +462,13 @@ export default function Tracks() {
     setMarks(m);
   }, [size, difficulty, seed]);
 
+  const requestNewPuzzle = useCallback(() => {
+    setSeed((prevSeed) => createNextPuzzleSeed(prevSeed));
+  }, []);
+
   useEffect(() => {
     generateNew();
-  }, []);
+  }, [generateNew]);
 
   const reset = useCallback(() => {
     if (!puz) return;
@@ -524,7 +533,7 @@ export default function Tracks() {
           ))}
         </div>
         <div className={styles.group}>
-          <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
+          <button className={styles.generateBtn} onClick={requestNewPuzzle}>New Puzzle</button>
           <button className={styles.button} onClick={reset}>{t('common.reset')}</button>
           {puz && (
             <button
@@ -602,7 +611,7 @@ export default function Tracks() {
         <button className={styles.button} onClick={reset}>
           {t('common.reset', 'Reset')}
         </button>
-        <button className={styles.button} onClick={() => setSeed(stringToSeed(getTodayDateString() + Date.now()))}>
+        <button className={styles.button} onClick={requestNewPuzzle}>
           {t('common.newPuzzle', 'New Puzzle')}
         </button>
       </div>
