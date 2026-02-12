@@ -26,6 +26,11 @@ const spaLimiter = rateLimit({
 });
 
 const app = express();
+
+// Trust proxy if an environment variable is set, default to false
+const trustProxy = process.env.TRUST_PROXY || 0;
+app.set('trust proxy', trustProxy);
+
 const PORT = process.env.PORT || 3000;
 const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-secret-change-in-production';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
