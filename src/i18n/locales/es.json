@@ -683,7 +683,7 @@
     "alreadyFound": "Ese ya lo tenías.",
     "answerRevealed": "Detenido. Respuesta revelada.",
     "progressMessage": "Encontrados {{count}} de {{total}} Pokémon.",
-    "inputPlaceholder": "Escribe un nombre de Pokémon… (p. ej., Mr Mime, Farfetchd, Nidoran F)",
+    "inputPlaceholder": "Escribe un nombre de Pokémon… )",
     "pressStart": "Pulsa Iniciar",
     "add": "Añadir",
     "matchHint": "Solo texto. Las coincidencias toleran espacios/guiones/puntuación.",

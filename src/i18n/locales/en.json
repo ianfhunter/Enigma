@@ -683,7 +683,7 @@
     "alreadyFound": "Already got that one.",
     "answerRevealed": "Stopped. Answer revealed.",
     "progressMessage": "Found {{count}} of {{total}} Pokémon.",
-    "inputPlaceholder": "Type a Pokémon name… (e.g., Mr Mime, Farfetchd, Nidoran F)",
+    "inputPlaceholder": "Type a Pokémon name… ",
     "pressStart": "Press Start",
     "add": "Add",
     "matchHint": "Text-only. Matches are forgiving about spaces/hyphens/punctuation.",
