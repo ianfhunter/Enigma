@@ -133,6 +133,7 @@
   display: grid;
   place-items: center;
   cursor: pointer;
+  position: relative;
   transition: all 0.15s ease;
 }
 
@@ -150,6 +151,20 @@
 .track:hover {
   background: rgba(245, 158, 11, 0.35);
   border-color: rgba(245, 158, 11, 0.6);
+}
+
+.trackSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.trackLine {
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 12;
+  stroke-linecap: round;
 }
 
 /* Endpoint cells (A and B) */
@@ -203,6 +218,10 @@
 :global([data-theme="light"]) .track:hover {
   background: rgba(245, 158, 11, 0.3);
   border-color: rgba(180, 100, 0, 0.6);
+}
+
+:global([data-theme="light"]) .trackLine {
+  stroke: rgba(120, 53, 15, 0.9);
 }
 
 :global([data-theme="light"]) .endpoint {
