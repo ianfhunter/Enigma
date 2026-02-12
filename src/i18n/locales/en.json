@@ -691,5 +691,14 @@
     "noNamesYet": "No names yet.",
     "missingPokemon": "Missing Pokémon",
     "foundAll": "You found them all!"
+  },
+  "grandTour": {
+    "title": "Grand Tour",
+    "instructions": "Fill numbers 1-25 so consecutive numbers are a knight move apart. Use the given clues to complete the full tour.",
+    "showErrors": "Show errors",
+    "won": "Tour Completed!",
+    "wonMessage": "Perfect! You found the full knight route.",
+    "gaveUp": "Solution Revealed",
+    "gaveUpMessage": "Review the route and try a new seed."
   }
 }

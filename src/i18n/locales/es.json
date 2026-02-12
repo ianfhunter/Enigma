@@ -691,5 +691,15 @@
     "noNamesYet": "Aún no hay nombres.",
     "missingPokemon": "Pokémon faltantes",
     "foundAll": "¡Los encontraste todos!"
+  },
+  "grandTour": {
+    "title": "Gran Recorrido",
+    "instructions": "Coloca los números del 1 al 25 de modo que los números consecutivos estén separados por un movimiento de caballo. Usa las pistas dadas para completar el recorrido completo.",
+    "showErrors": "Mostrar errores",
+    "won": "¡Recorrido completado!",
+    "wonMessage": "¡Perfecto! Encontraste la ruta completa del caballo.",
+    "gaveUp": "Solución revelada",
+    "gaveUpMessage": "Revisa la ruta e intenta con una nueva semilla."
   }
+
 }
