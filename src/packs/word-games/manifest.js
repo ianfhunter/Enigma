@@ -41,7 +41,7 @@ export const packInfo = {
   description: 'Create, guess, and decode words. From Wordle-likes to crosswords to cryptograms.',
   icon: '📝',
   color: '#22c55e',
-  version: '1770822879',
+  version: '1770904684',
   default: true,
   removable: true,
 };
@@ -65,7 +65,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         component: () => import('../../pages/WordGuess'),
-        lastModified: 1770822879000, // 2025-01-28
+        lastModified: 1770904684000, // 2025-01-28
       },
       {
         title: 'Word Wheel',
@@ -77,7 +77,7 @@ export const categories = [
         colors: { primary: '#ff6b6b', secondary: '#ee5a5a' },
         gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%)',
         component: () => import('../../pages/WordWheel'),
-        lastModified: 1770822879000,
+        lastModified: 1770904684000,
       },
       {
         title: 'Word Ladder',
@@ -89,7 +89,7 @@ export const categories = [
         colors: { primary: '#4ecdc4', secondary: '#3dbdb5' },
         gradient: 'linear-gradient(135deg, #4ecdc4 0%, #3dbdb5 100%)',
         component: () => import('../../pages/WordLadder'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Conundrum',
@@ -100,7 +100,7 @@ export const categories = [
         colors: { primary: '#a855f7', secondary: '#9333ea' },
         gradient: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)',
         component: () => import('../../pages/Conundrum'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Hangman',
@@ -111,7 +111,7 @@ export const categories = [
         colors: { primary: '#64748b', secondary: '#475569' },
         gradient: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
         component: () => import('../../pages/Hangman'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Anagrams',
@@ -122,7 +122,7 @@ export const categories = [
         colors: { primary: '#ec4899', secondary: '#db2777' },
         gradient: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
         component: () => import('../../pages/Anagrams'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Countdown Letters',
@@ -133,7 +133,7 @@ export const categories = [
         colors: { primary: '#3b82f6', secondary: '#2563eb' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         component: () => import('../../pages/CountdownLetters'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'WordShuffle',
@@ -144,7 +144,7 @@ export const categories = [
         colors: { primary: '#f97316', secondary: '#ea580c' },
         gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
         component: () => import('../../pages/WordShuffle'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Longest Word',
@@ -155,7 +155,7 @@ export const categories = [
         colors: { primary: '#7dd3fc', secondary: '#38bdf8' },
         gradient: 'linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%)',
         component: () => import('../../pages/LongestWord'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Pyramid',
@@ -166,7 +166,7 @@ export const categories = [
         colors: { primary: '#c084fc', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #c084fc 0%, #a855f7 100%)',
         component: () => import('../../pages/Pyramid'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'WordTiles',
@@ -177,7 +177,7 @@ export const categories = [
         colors: { primary: '#b45309', secondary: '#92400e' },
         gradient: 'linear-gradient(135deg, #b45309 0%, #92400e 100%)',
         component: () => import('../../pages/WordTiles'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
     ],
   },
@@ -195,7 +195,7 @@ export const categories = [
         colors: { primary: '#1e88e5', secondary: '#1565c0' },
         gradient: 'linear-gradient(135deg, #1e88e5 0%, #1565c0 100%)',
         component: () => import('../../pages/Crossword'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Squar-ish',
@@ -206,7 +206,7 @@ export const categories = [
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         component: () => import('../../pages/Squarish'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Letter Web',
@@ -217,7 +217,7 @@ export const categories = [
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
         gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
         component: () => import('../../pages/LetterWeb'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Letter Orbit',
@@ -228,7 +228,7 @@ export const categories = [
         colors: { primary: '#667eea', secondary: '#764ba2' },
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         component: () => import('../../pages/LetterOrbit'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Word Search',
@@ -239,7 +239,7 @@ export const categories = [
         colors: { primary: '#10b981', secondary: '#059669' },
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         component: () => import('../../pages/WordSearch'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Threads',
@@ -250,7 +250,7 @@ export const categories = [
         colors: { primary: '#a78bfa', secondary: '#6366f1' },
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #6366f1 100%)',
         component: () => import('../../pages/Threads'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Categories',
@@ -262,7 +262,7 @@ export const categories = [
         colors: { primary: '#f9df6d', secondary: '#ba81c5' },
         gradient: 'linear-gradient(135deg, #f9df6d 0%, #a0c35a 33%, #b0c4ef 66%, #ba81c5 100%)',
         component: () => import('../../pages/Categories'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'FlipQuotes',
@@ -273,7 +273,7 @@ export const categories = [
         colors: { primary: '#f472b6', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #f472b6 0%, #a855f7 100%)',
         component: () => import('../../pages/FlipQuotes'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
     ],
   },
@@ -292,7 +292,7 @@ export const categories = [
         colors: { primary: '#fbbf24', secondary: '#f59e0b' },
         gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
         component: () => import('../../pages/Cryptogram'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'PhraseGuess',
@@ -303,7 +303,7 @@ export const categories = [
         colors: { primary: '#34d399', secondary: '#10b981' },
         gradient: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)',
         component: () => import('../../pages/PhraseGuess'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Word Arithmetic',
@@ -314,7 +314,7 @@ export const categories = [
         colors: { primary: '#f59e0b', secondary: '#d97706' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         component: () => import('../../pages/WordArithmetic'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Drop Quotes',
@@ -325,7 +325,7 @@ export const categories = [
         colors: { primary: '#a78bfa', secondary: '#8b5cf6' },
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)',
         component: () => import('../../pages/DropQuotes'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
       {
         title: 'Word Snake',
@@ -336,7 +336,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         component: () => import('../../pages/WordSnake'),
-        lastModified: 1770822879000
+        lastModified: 1770904684000
       },
     ],
   },

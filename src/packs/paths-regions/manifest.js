@@ -36,7 +36,7 @@ export const packInfo = {
   description: 'Draw loops, connect paths, and divide grids. Hashi, Loopy, Numberlink, Shikaku, and more.',
   icon: '🔗',
   color: '#a855f7',
-  version: '1770822879',
+  version: '1770904684',
   default: true,
   removable: true,
 };
