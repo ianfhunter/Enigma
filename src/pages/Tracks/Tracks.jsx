@@ -152,8 +152,7 @@ function limitConnectionsToTwo(connections) {
 }
 
 function getRenderableTrackConnections(puz, marks, i, renderableEdgeSet = null) {
-  const renderPath = findRenderablePath(puz, marks);
-  const edgeSet = renderableEdgeSet ?? buildRenderableEdgeSet(renderPath);
+  const edgeSet = renderableEdgeSet ?? buildRenderableEdgeSet(findRenderablePath(puz, marks));
   if (!puz || marks[i] !== 1) {
     return {
       up: false,
