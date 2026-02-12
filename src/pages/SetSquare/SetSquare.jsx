@@ -118,7 +118,7 @@ export default function SetSquare() {
       <GameHeader
         title={t('games.setSquare.title', { defaultValue: 'Set Square' })}
         instructions={t('games.setSquare.instructions', {
-          defaultValue: 'Each row is shown as NUM OP NUM OP NUM = result. Fill the number cells with digits 1–9 once each. Column math is evaluated top-to-bottom and left-to-right.',
+          defaultValue: 'Fill the number cells with digits 1–9 once each. Column math is evaluated top-to-bottom and left-to-right.',
         })}
       />
 
