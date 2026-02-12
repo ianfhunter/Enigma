@@ -64,21 +64,21 @@ export default function Home() {
 
   // Get favourite games with their full data
   const favouriteGames = useMemo(() => {
+    const gamesBySlug = new Map(allGames.map(game => [game.slug, game]));
+    const recentlyPlayedMap = new Map(recentlyPlayed.map((entry, index) => [entry.slug, index]));
+
     const unsortedFavourites = favourites
-      .map(slug => allGames.find(game => game.slug === slug))
+      .map(slug => gamesBySlug.get(slug))
       .filter(Boolean); // Filter out any games that no longer exist
 
-    // Add recently played index to favourite games
-    const favouritesWithRecentlyPlayed = unsortedFavourites.map(game => {
-      const index = recentlyPlayed.findIndex(entry => entry.slug === game.slug);
-      return {
-        ...game,
-        recentlyPlayedIndex: index === -1 ? Infinity : index
-      };
-    });
+    // Add recently played index to favourite games using O(1) Map lookup
+    const favouritesWithRecentlyPlayed = unsortedFavourites.map(game => ({
+      ...game,
+      recentlyPlayedIndex: recentlyPlayedMap.get(game.slug) ?? Infinity
+    }));
 
     return sortGames(favouritesWithRecentlyPlayed, sortOption, sortOrder);
-  }, [favourites, sortOption, sortOrder, recentlyPlayed]);
+  }, [favourites, allGames, recentlyPlayed, sortOption, sortOrder]);
 
   // Track recently played games when navigating to a game
   const handleGameClick = (gameSlug) => {

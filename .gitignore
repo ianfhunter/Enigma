@@ -66,3 +66,7 @@ __pycache__/
 
 .notes/
 .TODO/
+
+# LFS bundle
+__lfs_bundle/
+*.zip
