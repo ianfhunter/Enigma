@@ -19,6 +19,7 @@ import euleroIcon from '../../assets/icons/eulero.svg';
 import japaneseSumsIcon from '../../assets/icons/japanesesums.svg';
 import killersudokuIcon from '../../assets/icons/killersudoku.svg';
 import sandwichsudokuIcon from '../../assets/icons/sandwichsudoku.svg';
+import setSquareIcon from '../../assets/icons/setsquare.svg';
 
 /**
  * Pack metadata
@@ -30,7 +31,7 @@ export const packInfo = {
   description: 'Sudoku and all its brilliant variants - Killer Sudoku, Sandwich Sudoku, Calcudoku, and more.',
   icon: '🔢',
   color: '#3b82f6',
-  version: '1770822879',
+  version: '1770822880',
   default: true,
   removable: true,
 };
@@ -190,6 +191,18 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
         component: () => import('../../pages/Eulero'),
         lastModified: 1770822879000
+      },
+
+      {
+        title: 'Set Square',
+        slug: 'set-square',
+        description: 'Place digits 1-9 so row and column arithmetic clues are all true, evaluated left-to-right.',
+        icon: setSquareIcon,
+        emojiIcon: '📐',
+        colors: { primary: '#06b6d4', secondary: '#2563eb' },
+        gradient: 'linear-gradient(135deg, #06b6d4 0%, #2563eb 100%)',
+        component: () => import('../../pages/SetSquare'),
+        lastModified: 1770822880000
       },
       {
         title: 'Japanese Sums',

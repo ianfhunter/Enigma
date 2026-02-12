@@ -138,6 +138,7 @@ describe('Game README Files', () => {
     'suguru': 'Suguru',
     'sujiko': 'Sujiko',
     'suko': 'Suko',
+    'set-square': 'SetSquare',
     'takuzu': 'Takuzu',
     'tapa': 'Tapa',
     'cirkitz': 'Cirkitz',
