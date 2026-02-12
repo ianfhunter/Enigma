@@ -19,6 +19,177 @@ function inBounds(r, c, h, w) {
   return r >= 0 && r < h && c >= 0 && c < w;
 }
 
+function getTrackConnections(puz, marks, i) {
+  if (!puz || marks[i] !== 1) {
+    return {
+      up: false,
+      right: false,
+      down: false,
+      left: false,
+    };
+  }
+
+  const { r, c } = idxToRC(i, puz.w);
+  const up = inBounds(r - 1, c, puz.h, puz.w) && marks[rcToIdx(r - 1, c, puz.w)] === 1;
+  const right = inBounds(r, c + 1, puz.h, puz.w) && marks[rcToIdx(r, c + 1, puz.w)] === 1;
+  const down = inBounds(r + 1, c, puz.h, puz.w) && marks[rcToIdx(r + 1, c, puz.w)] === 1;
+  const left = inBounds(r, c - 1, puz.h, puz.w) && marks[rcToIdx(r, c - 1, puz.w)] === 1;
+
+  return { up, right, down, left };
+}
+
+function findRenderablePath(puz, marks) {
+  if (!puz || marks[puz.a] !== 1 || marks[puz.b] !== 1) {
+    return [];
+  }
+
+  const visited = new Set([puz.a]);
+  const path = [puz.a];
+  let bestPath = [];
+  let searchSteps = 0;
+  const MAX_SEARCH_STEPS = 30000;
+
+  const getNeighbors = (cell) => {
+    const { r, c } = idxToRC(cell, puz.w);
+    const neighbors = [];
+
+    for (const { dr, dc } of DIRS) {
+      const nr = r + dr;
+      const nc = c + dc;
+      if (!inBounds(nr, nc, puz.h, puz.w)) continue;
+      const next = rcToIdx(nr, nc, puz.w);
+      if (marks[next] !== 1 || visited.has(next)) continue;
+
+      // Prefer exploring candidates with more onward options first.
+      let onward = 0;
+      const { r: rr, c: cc } = idxToRC(next, puz.w);
+      for (const { dr: ddr, dc: ddc } of DIRS) {
+        const ar = rr + ddr;
+        const ac = cc + ddc;
+        if (!inBounds(ar, ac, puz.h, puz.w)) continue;
+        const adj = rcToIdx(ar, ac, puz.w);
+        if (marks[adj] === 1 && !visited.has(adj)) onward++;
+      }
+      neighbors.push({ next, onward, isEndpoint: next === puz.b });
+    }
+
+    neighbors.sort((a, b) => {
+      if (a.isEndpoint !== b.isEndpoint) return Number(a.isEndpoint) - Number(b.isEndpoint);
+      return b.onward - a.onward;
+    });
+    return neighbors.map((n) => n.next);
+  };
+
+  const dfs = (current) => {
+    if (searchSteps > MAX_SEARCH_STEPS) {
+      return;
+    }
+    searchSteps++;
+
+    if (current === puz.b) {
+      if (path.length > bestPath.length) {
+        bestPath = path.slice();
+      }
+      return;
+    }
+
+    for (const next of getNeighbors(current)) {
+      visited.add(next);
+      path.push(next);
+      dfs(next);
+      path.pop();
+      visited.delete(next);
+
+      if (searchSteps > MAX_SEARCH_STEPS) {
+        break;
+      }
+    }
+  };
+
+  dfs(puz.a);
+  return bestPath;
+}
+
+function buildRenderableEdgeSet(renderablePath) {
+  const edgeSet = new Set();
+  for (let k = 1; k < renderablePath.length; k++) {
+    const a = renderablePath[k - 1];
+    const b = renderablePath[k];
+    const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+    edgeSet.add(key);
+  }
+  return edgeSet;
+}
+
+function limitConnectionsToTwo(connections) {
+  const directions = ['up', 'right', 'down', 'left'];
+  const active = directions.filter((dir) => connections[dir]);
+  if (active.length <= 2) return connections;
+
+  const selected = new Set();
+  const pickPair = (aDir, bDir) => {
+    if (connections[aDir] && connections[bDir]) {
+      selected.add(aDir);
+      selected.add(bDir);
+      return true;
+    }
+    return false;
+  };
+
+  pickPair('up', 'down') ||
+    pickPair('left', 'right') ||
+    pickPair('up', 'right') ||
+    pickPair('right', 'down') ||
+    pickPair('down', 'left') ||
+    pickPair('left', 'up');
+
+  return {
+    up: selected.has('up'),
+    right: selected.has('right'),
+    down: selected.has('down'),
+    left: selected.has('left'),
+  };
+}
+
+function getRenderableTrackConnections(puz, marks, i, renderableEdgeSet = null) {
+  const edgeSet = renderableEdgeSet ?? buildRenderableEdgeSet(findRenderablePath(puz, marks));
+  if (!puz || marks[i] !== 1) {
+    return {
+      up: false,
+      right: false,
+      down: false,
+      left: false,
+    };
+  }
+
+  const { r, c } = idxToRC(i, puz.w);
+  const upIdx = inBounds(r - 1, c, puz.h, puz.w) ? rcToIdx(r - 1, c, puz.w) : -1;
+  const rightIdx = inBounds(r, c + 1, puz.h, puz.w) ? rcToIdx(r, c + 1, puz.w) : -1;
+  const downIdx = inBounds(r + 1, c, puz.h, puz.w) ? rcToIdx(r + 1, c, puz.w) : -1;
+  const leftIdx = inBounds(r, c - 1, puz.h, puz.w) ? rcToIdx(r, c - 1, puz.w) : -1;
+
+  const hasEdge = (a, b) => {
+    if (a < 0 || b < 0) return false;
+    const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+    return edgeSet.has(key);
+  };
+
+  const edgeConnections = {
+    up: hasEdge(i, upIdx),
+    right: hasEdge(i, rightIdx),
+    down: hasEdge(i, downIdx),
+    left: hasEdge(i, leftIdx),
+  };
+
+  const degree = Number(edgeConnections.up) + Number(edgeConnections.right) + Number(edgeConnections.down) + Number(edgeConnections.left);
+  if (degree > 0) {
+    return edgeConnections;
+  }
+
+  // If tile is marked but not in the chosen A→B render path, still show a capped local track hint.
+  return limitConnectionsToTwo(getTrackConnections(puz, marks, i));
+}
+
 const DIRS = [
   { dr: -1, dc: 0 },
   { dr: 1, dc: 0 },
@@ -181,6 +352,10 @@ function generatePuzzle(size, difficulty, seed) {
 const SIZES = [6, 8, 10];
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
 
+function createNextPuzzleSeed(seed, entropy = Date.now()) {
+  return stringToSeed(`tracks-${seed}-${entropy}`);
+}
+
 function analyze(puz, marks) {
   // marks: 0 empty, 1 track
   const n = puz.w * puz.h;
@@ -260,7 +435,13 @@ export {
   generatePuzzle,
   SIZES,
   DIFFICULTIES,
+  createNextPuzzleSeed,
   analyze,
+  getTrackConnections,
+  findRenderablePath,
+  buildRenderableEdgeSet,
+  limitConnectionsToTwo,
+  getRenderableTrackConnections,
 };
 
 export default function Tracks() {
@@ -281,9 +462,13 @@ export default function Tracks() {
     setMarks(m);
   }, [size, difficulty, seed]);
 
+  const requestNewPuzzle = useCallback(() => {
+    setSeed((prevSeed) => createNextPuzzleSeed(prevSeed));
+  }, []);
+
   useEffect(() => {
     generateNew();
-  }, []);
+  }, [generateNew]);
 
   const reset = useCallback(() => {
     if (!puz) return;
@@ -301,6 +486,9 @@ export default function Tracks() {
     if (!puz) return { bad: new Set(), rowOk: false, colOk: false, connectedPath: false, solved: false };
     return analyze(puz, marks);
   }, [puz, marks]);
+
+  const renderablePath = useMemo(() => findRenderablePath(puz, marks), [puz, marks]);
+  const renderableEdgeSet = useMemo(() => buildRenderableEdgeSet(renderablePath), [renderablePath]);
 
   const toggle = (i) => {
     if (i === a || i === b) return;
@@ -345,7 +533,7 @@ export default function Tracks() {
           ))}
         </div>
         <div className={styles.group}>
-          <button className={styles.generateBtn} onClick={generateNew}>New Puzzle</button>
+          <button className={styles.generateBtn} onClick={requestNewPuzzle}>New Puzzle</button>
           <button className={styles.button} onClick={reset}>{t('common.reset')}</button>
           {puz && (
             <button
@@ -388,6 +576,7 @@ export default function Tracks() {
                   const isTrack = marks[i] === 1;
                   const isEnd = i === a || i === b;
                   const isFixed = puz.fixed.has(i);
+                  const connections = getRenderableTrackConnections(puz, marks, i, renderableEdgeSet);
                   const cls = [
                     styles.cell,
                     isTrack ? styles.track : '',
@@ -399,6 +588,14 @@ export default function Tracks() {
                   if (isEnd) text = i === a ? 'A' : 'B';
                   return (
                     <button key={i} className={cls} onClick={() => toggle(i)}>
+                      {isTrack && (
+                        <svg className={styles.trackSvg} viewBox="0 0 100 100" aria-hidden="true">
+                          {connections.up && <line className={styles.trackLine} x1="50" y1="50" x2="50" y2="0" />}
+                          {connections.right && <line className={styles.trackLine} x1="50" y1="50" x2="100" y2="50" />}
+                          {connections.down && <line className={styles.trackLine} x1="50" y1="50" x2="50" y2="100" />}
+                          {connections.left && <line className={styles.trackLine} x1="50" y1="50" x2="0" y2="50" />}
+                        </svg>
+                      )}
                       {text}
                     </button>
                   );
@@ -414,7 +611,7 @@ export default function Tracks() {
         <button className={styles.button} onClick={reset}>
           {t('common.reset', 'Reset')}
         </button>
-        <button className={styles.button} onClick={() => setSeed(stringToSeed(getTodayDateString() + Date.now()))}>
+        <button className={styles.button} onClick={requestNewPuzzle}>
           {t('common.newPuzzle', 'New Puzzle')}
         </button>
       </div>
