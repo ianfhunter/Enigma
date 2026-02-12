@@ -1,0 +1,158 @@
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.boardWrap {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.expressionBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  background: var(--panel-bg);
+}
+
+.expressionRow,
+.columnOperatorRow,
+.footerRow {
+  display: grid;
+  grid-template-columns: repeat(5, 64px) minmax(120px, auto);
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.numberCell,
+.operatorCell,
+.equalsCell,
+.columnTarget,
+.footerOperator {
+  min-height: 52px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.numberCell {
+  border: 1px solid var(--game-cell-border);
+  background: var(--game-cell-bg);
+  color: var(--color-text);
+  font-size: 1.45rem;
+}
+
+.operatorCell,
+.footerOperator {
+  border: 1px dashed var(--panel-border);
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--color-primary);
+  font-size: 1.2rem;
+}
+
+
+.columnOperatorCell,
+.columnSpacerCell {
+  min-height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.columnOperatorCell {
+  border: 1px dashed var(--panel-border);
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--color-primary);
+  font-size: 1.1rem;
+}
+
+.columnSpacerCell {
+  border: 1px dashed transparent;
+  color: transparent;
+}
+
+.equalsCell,
+.columnTarget {
+  border: 1px solid var(--panel-border);
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--color-text);
+  font-family: monospace;
+}
+
+.footerHint {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  padding-left: 0.4rem;
+}
+
+.given {
+  background: rgba(34, 197, 94, 0.16);
+}
+
+.selected {
+  outline: 2px solid var(--color-primary);
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+.numberPad {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 56px));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.numberButton,
+.controlButton {
+  border: 1px solid var(--btn-secondary-border);
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border-radius: 10px;
+  height: 44px;
+  font-weight: 600;
+}
+
+.controls {
+  margin-bottom: 0.8rem;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+@media (max-width: 780px) {
+  .expressionRow,
+  .columnOperatorRow,
+  .footerRow {
+    grid-template-columns: repeat(5, 48px) minmax(90px, auto);
+    gap: 0.3rem;
+  }
+
+  .numberCell,
+  .operatorCell,
+  .equalsCell,
+  .columnTarget,
+  .footerOperator,
+  .columnOperatorCell,
+  .columnSpacerCell {
+    min-height: 44px;
+  }
+
+  .numberPad {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

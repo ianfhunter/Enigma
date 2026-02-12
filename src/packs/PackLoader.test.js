@@ -695,9 +695,9 @@ describe('PackLoader', () => {
       expect(sudokuFamilyPack.categories[0].name).toBe('Sudoku Family');
     });
 
-    it('should have 14 games', () => {
-      expect(sudokuFamilyPack.gameCount).toBe(14);
-      expect(sudokuFamilyPack.allGames.length).toBe(14);
+    it('should have 15 games', () => {
+      expect(sudokuFamilyPack.gameCount).toBe(15);
+      expect(sudokuFamilyPack.allGames.length).toBe(15);
     });
 
     it('should have expected games', () => {
@@ -709,6 +709,7 @@ describe('PackLoader', () => {
       expect(slugs).toContain('kakuro');
       expect(slugs).toContain('futoshiki');
       expect(slugs).toContain('skyscraper');
+      expect(slugs).toContain('set-square');
     });
 
     it('should have getGameBySlug function', () => {
@@ -732,7 +733,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('sudoku-family');
-      expect(games.length).toBe(14);
+      expect(games.length).toBe(15);
       expect(games.some(g => g.slug === 'sudoku')).toBe(true);
       expect(games.some(g => g.slug === 'killer-sudoku')).toBe(true);
     });
