@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { createSeededRandom } from '../../data/wordUtils';
 
+import { parseCluesIntoCages, parseDatasetPuzzle } from './Calcudoku';
+import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
+
 // ===========================================
 // Calcudoku - Grid Creation Tests
 // ===========================================
@@ -353,5 +356,45 @@ describe('Calcudoku - Difficulty', () => {
 
   it('should have increasing operation complexity', () => {
     expect(DIFFICULTY_SETTINGS.easy.operations.length).toBeLessThan(DIFFICULTY_SETTINGS.expert.operations.length);
+  });
+});
+
+
+describe('Calcudoku - Dataset cage reconstruction', () => {
+  it('should cover every cell in sampled dataset puzzles', () => {
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      const allCells = new Set();
+      parsed.cages.forEach((cage) => {
+        cage.cells.forEach(([row, col]) => {
+          allCells.add(`${row}-${col}`);
+        });
+      });
+
+      expect(parsed.cages.length).toBeGreaterThan(0);
+      expect(allCells.size).toBe(puzzle.rows * puzzle.cols);
+    });
+  });
+
+  it('should keep every operation marker attached to its own clue cell', () => {
+    const puzzle = kenkenPuzzles.puzzles[214];
+    const cages = parseCluesIntoCages(puzzle.clues, puzzle.rows, puzzle.cols);
+
+    const clueCells = [];
+    for (let row = 0; row < puzzle.rows; row++) {
+      for (let col = 0; col < puzzle.cols; col++) {
+        if (puzzle.clues[row][col] !== '.' && puzzle.clues[row][col] !== null) {
+          clueCells.push(`${row}-${col}`);
+        }
+      }
+    }
+
+    const cageAnchors = cages.map((cage) => `${cage.cells[0][0]}-${cage.cells[0][1]}`);
+
+    expect(new Set(cageAnchors)).toEqual(new Set(clueCells));
   });
 });

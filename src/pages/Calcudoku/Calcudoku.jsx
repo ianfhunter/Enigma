@@ -34,83 +34,57 @@ function getAvailableSizes(difficulty) {
   return Array.from(sizes).sort((a, b) => a - b);
 }
 
+function parseCageLabel(cellValue) {
+  if (typeof cellValue === 'number') {
+    return { target: cellValue, operation: '' };
+  }
+
+  const match = String(cellValue).match(/^(\d+)([+\-*/])$/);
+  if (match) {
+    return { target: parseInt(match[1], 10), operation: OP_MAP[match[2]] || match[2] };
+  }
+
+  const target = parseInt(cellValue, 10);
+  if (Number.isNaN(target)) return null;
+  return { target, operation: '' };
+}
+
 // Parse the dataset clues grid into cages structure
-function parseCluesIntoCages(clues, rows, cols) {
+export function parseCluesIntoCages(clues, rows, cols) {
   const cages = [];
-  const visited = Array(rows).fill(null).map(() => Array(cols).fill(false));
+  const cageByCell = Array.from({ length: rows }, () => Array(cols).fill(-1));
+  const queue = [];
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      if (visited[r][c]) continue;
-
       const cellValue = clues[r][c];
       if (cellValue === '.' || cellValue === null) continue;
 
-      // Parse the cage info from the cell
-      let target, operation;
+      const parsed = parseCageLabel(cellValue);
+      if (!parsed) continue;
 
-      if (typeof cellValue === 'number') {
-        // Single-cell cage with just a number
-        target = cellValue;
-        operation = '';
-        visited[r][c] = true;
-        cages.push({
-          cells: [[r, c]],
-          target,
-          operation,
-        });
-        continue;
-      }
+      const cageIndex = cages.length;
+      cages.push({ cells: [[r, c]], ...parsed });
+      cageByCell[r][c] = cageIndex;
+      queue.push([r, c, cageIndex]);
+    }
+  }
 
-      // Parse string like '24*', '7+', '3-', '2/'
-      const match = cellValue.match(/^(\d+)([+\-*/])$/);
-      if (match) {
-        target = parseInt(match[1]);
-        operation = OP_MAP[match[2]] || match[2];
-      } else {
-        // Might be a single digit - treat as single-cell cage
-        target = parseInt(cellValue);
-        operation = '';
-        if (isNaN(target)) continue;
+  let pointer = 0;
+  while (pointer < queue.length) {
+    const [row, col, cageIndex] = queue[pointer++];
 
-        visited[r][c] = true;
-        cages.push({
-          cells: [[r, c]],
-          target,
-          operation,
-        });
-        continue;
-      }
+    for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const nr = row + dr;
+      const nc = col + dc;
 
-      // Flood fill to find all cells in this cage (all adjacent '.' cells)
-      const cageCells = [[r, c]];
-      visited[r][c] = true;
+      if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+      if (clues[nr][nc] !== '.' && clues[nr][nc] !== null) continue;
+      if (cageByCell[nr][nc] !== -1) continue;
 
-      const queue = [[r, c]];
-      while (queue.length > 0) {
-        const [cr, cc] = queue.shift();
-
-        // Check all 4 neighbors
-        for (const [dr, dc] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
-          const nr = cr + dr;
-          const nc = cc + dc;
-
-          if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && !visited[nr][nc]) {
-            const neighborValue = clues[nr][nc];
-            if (neighborValue === '.') {
-              visited[nr][nc] = true;
-              cageCells.push([nr, nc]);
-              queue.push([nr, nc]);
-            }
-          }
-        }
-      }
-
-      cages.push({
-        cells: cageCells,
-        target,
-        operation,
-      });
+      cageByCell[nr][nc] = cageIndex;
+      cages[cageIndex].cells.push([nr, nc]);
+      queue.push([nr, nc, cageIndex]);
     }
   }
 
@@ -118,7 +92,7 @@ function parseCluesIntoCages(clues, rows, cols) {
 }
 
 // Parse dataset puzzle into our format
-function parseDatasetPuzzle(puzzle) {
+export function parseDatasetPuzzle(puzzle) {
   const { rows, cols, clues, solution } = puzzle;
   const cages = parseCluesIntoCages(clues, rows, cols);
 
