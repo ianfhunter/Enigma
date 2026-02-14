@@ -164,6 +164,7 @@ function sanitizeCages(cages, solution) {
       ...cage,
       target: values[0],
       operation: '',
+      anchor: cage.anchor,
     };
   });
 }
@@ -182,7 +183,7 @@ function parseCluesIntoCagesFallback(clues, rows, cols) {
       if (!parsed) continue;
 
       const cageIndex = cages.length;
-      cages.push({ cells: [[r, c]], ...parsed });
+      cages.push({ cells: [[r, c]], anchor: [r, c], ...parsed });
       cageByCell[r][c] = cageIndex;
       queue.push([r, c, cageIndex]);
     }
@@ -199,6 +200,9 @@ function parseCluesIntoCagesFallback(clues, rows, cols) {
       if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
       if (clues[nr][nc] !== '.' && clues[nr][nc] !== null) continue;
       if (cageByCell[nr][nc] !== -1) continue;
+
+      const [anchorRow, anchorCol] = cages[cageIndex].anchor;
+      if (nr < anchorRow || nc < anchorCol) continue;
 
       cageByCell[nr][nc] = cageIndex;
       cages[cageIndex].cells.push([nr, nc]);
@@ -227,7 +231,7 @@ export function parseCluesIntoCages(clues, rows, cols, solution, allowSingleOper
       if (!parsed) continue;
 
       const cageIndex = cages.length;
-      cages.push({ cells: [[r, c]], ...parsed });
+      cages.push({ cells: [[r, c]], anchor: [r, c], ...parsed });
       cageByCell[r][c] = cageIndex;
     }
   }
@@ -239,7 +243,10 @@ export function parseCluesIntoCages(clues, rows, cols, solution, allowSingleOper
       const nc = col + dc;
       if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
       const cageIndex = cageByCell[nr][nc];
-      if (cageIndex !== -1) candidates.add(cageIndex);
+      if (cageIndex === -1) continue;
+      const [anchorRow, anchorCol] = cages[cageIndex].anchor;
+      if (row < anchorRow || col < anchorCol) continue;
+      candidates.add(cageIndex);
     }
     return Array.from(candidates);
   };
@@ -296,10 +303,10 @@ export function parseCluesIntoCages(clues, rows, cols, solution, allowSingleOper
       return parseCluesIntoCages(clues, rows, cols, solution, true);
     }
 
-    return sanitizeCages(parseCluesIntoCagesFallback(clues, rows, cols), solution);
+    return sanitizeCages(parseCluesIntoCagesFallback(clues, rows, cols), solution).map(({ anchor, ...cage }) => cage);
   }
 
-  return sanitizeCages(cages, solution);
+  return sanitizeCages(cages, solution).map(({ anchor, ...cage }) => cage);
 }
 
 // Parse dataset puzzle into our format

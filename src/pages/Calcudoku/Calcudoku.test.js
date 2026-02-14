@@ -444,4 +444,25 @@ describe('Calcudoku - Dataset cage reconstruction', () => {
     });
   });
 
+
+  it('should keep each clue anchor as the top-left cell of its parsed cage', () => {
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        const minRow = Math.min(...cage.cells.map(([row]) => row));
+        const minColInTopRow = Math.min(
+          ...cage.cells.filter(([row]) => row === minRow).map(([, col]) => col)
+        );
+        const [anchorRow, anchorCol] = cage.cells[0];
+
+        expect(anchorRow).toBe(minRow);
+        expect(anchorCol).toBe(minColInTopRow);
+      });
+    });
+  });
+
 });
