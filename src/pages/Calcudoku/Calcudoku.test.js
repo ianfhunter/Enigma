@@ -1,9 +1,45 @@
 import { describe, it, expect } from 'vitest';
 import { createSeededRandom } from '../../data/wordUtils';
 
-import { parseCluesIntoCages, parseDatasetPuzzle } from './Calcudoku';
+import { parseCluesIntoCages, parseDatasetPuzzle, countPuzzleSolutions } from './Calcudoku';
 import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
 
+
+
+describe('Calcudoku - Uniqueness', () => {
+  it('should detect a uniquely solvable cage set', () => {
+    const cages = [
+      { cells: [[0, 0]], target: 1, operation: '' },
+      { cells: [[0, 1]], target: 2, operation: '' },
+      { cells: [[1, 0]], target: 2, operation: '' },
+      { cells: [[1, 1]], target: 1, operation: '' },
+    ];
+
+    expect(countPuzzleSolutions(cages, 2)).toBe(1);
+  });
+
+  it('should detect a non-unique cage set', () => {
+    const cages = [
+      { cells: [[0, 0], [0, 1]], target: 3, operation: '+' },
+      { cells: [[1, 0], [1, 1]], target: 3, operation: '+' },
+    ];
+
+    expect(countPuzzleSolutions(cages, 2)).toBe(2);
+  });
+
+  it('should enforce unique solutions when requested', () => {
+    const ambiguousPuzzle = {
+      rows: 2,
+      cols: 2,
+      clues: [['3+', '.'], ['3+', '.']],
+      solution: [[1, 2], [2, 1]],
+    };
+
+    const parsed = parseDatasetPuzzle(ambiguousPuzzle, true);
+    expect(countPuzzleSolutions(parsed.cages, 2)).toBe(1);
+  });
+
+});
 // ===========================================
 // Calcudoku - Grid Creation Tests
 // ===========================================

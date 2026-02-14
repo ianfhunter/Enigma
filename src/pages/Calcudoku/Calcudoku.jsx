@@ -318,10 +318,155 @@ export function parseCluesIntoCages(clues, rows, cols, solution, allowSingleOper
   return sanitizeCages(cages, solution).map(({ anchor, ...cage }) => cage);
 }
 
+
+function buildCageLookup(cages, size) {
+  const lookup = Array.from({ length: size }, () => Array(size).fill(null));
+
+  cages.forEach((cage) => {
+    cage.cells.forEach(([row, col]) => {
+      lookup[row][col] = cage;
+    });
+  });
+
+  return lookup;
+}
+
+function isCagePlacementValid(grid, cage, size) {
+  const values = cage.cells.map(([row, col]) => grid[row][col]);
+  const filled = values.filter((value) => value !== 0);
+  const emptyCount = values.length - filled.length;
+
+  if (filled.length === 0) return true;
+
+  switch (cage.operation) {
+    case '+': {
+      const sum = filled.reduce((acc, value) => acc + value, 0);
+      return sum <= cage.target && sum + emptyCount * size >= cage.target;
+    }
+    case '×': {
+      const product = filled.reduce((acc, value) => acc * value, 1);
+      if (product > cage.target || cage.target % product !== 0) return false;
+      return true;
+    }
+    case '-': {
+      if (filled.length < 2) return true;
+      const [a, b] = filled;
+      return Math.abs(a - b) === cage.target;
+    }
+    case '÷': {
+      if (filled.length < 2) return true;
+      const [a, b] = filled;
+      const [max, min] = a > b ? [a, b] : [b, a];
+      return min !== 0 && max / min === cage.target;
+    }
+    default:
+      return filled.length === 1 && emptyCount === 0 && filled[0] === cage.target;
+  }
+}
+
+export function countPuzzleSolutions(cages, size, limit = 2) {
+  const grid = Array.from({ length: size }, () => Array(size).fill(0));
+  const cageLookup = buildCageLookup(cages, size);
+  let solutions = 0;
+
+  const getCandidates = (row, col) => {
+    const candidates = [];
+
+    for (let value = 1; value <= size; value++) {
+      let valid = true;
+
+      for (let c = 0; c < size; c++) {
+        if (grid[row][c] === value) {
+          valid = false;
+          break;
+        }
+      }
+      if (!valid) continue;
+
+      for (let r = 0; r < size; r++) {
+        if (grid[r][col] === value) {
+          valid = false;
+          break;
+        }
+      }
+      if (!valid) continue;
+
+      grid[row][col] = value;
+      const cage = cageLookup[row][col];
+      if (cage && isCagePlacementValid(grid, cage, size)) {
+        candidates.push(value);
+      }
+      grid[row][col] = 0;
+    }
+
+    return candidates;
+  };
+
+  const pickNextCell = () => {
+    let best = null;
+    let bestCandidates = null;
+
+    for (let row = 0; row < size; row++) {
+      for (let col = 0; col < size; col++) {
+        if (grid[row][col] !== 0) continue;
+
+        const candidates = getCandidates(row, col);
+        if (candidates.length === 0) return { row, col, candidates };
+
+        if (!best || candidates.length < bestCandidates.length) {
+          best = { row, col, candidates };
+          bestCandidates = candidates;
+          if (candidates.length === 1) return best;
+        }
+      }
+    }
+
+    return best;
+  };
+
+  const search = () => {
+    if (solutions >= limit) return;
+
+    const next = pickNextCell();
+    if (!next) {
+      solutions += 1;
+      return;
+    }
+
+    const { row, col, candidates } = next;
+    if (candidates.length === 0) return;
+
+    for (const value of candidates) {
+      grid[row][col] = value;
+      search();
+      grid[row][col] = 0;
+
+      if (solutions >= limit) return;
+    }
+  };
+
+  search();
+  return solutions;
+}
+
+function createSingletonCages(solution) {
+  return solution.flatMap((row, rowIndex) =>
+    row.map((value, colIndex) => ({
+      cells: [[rowIndex, colIndex]],
+      target: value,
+      operation: '',
+    }))
+  );
+}
+
 // Parse dataset puzzle into our format
-export function parseDatasetPuzzle(puzzle) {
+export function parseDatasetPuzzle(puzzle, enforceUnique = false) {
   const { rows, cols, clues, solution } = puzzle;
-  const cages = parseCluesIntoCages(clues, rows, cols, solution);
+  let cages = parseCluesIntoCages(clues, rows, cols, solution);
+
+  if (enforceUnique && countPuzzleSolutions(cages, rows, 2) !== 1) {
+    cages = createSingletonCages(solution);
+  }
 
   return {
     solution,
@@ -401,7 +546,7 @@ export default function Calcudoku() {
       if (fallback.length > 0) {
         const random = createSeededRandom(Date.now());
         const selected = fallback[Math.floor(random() * fallback.length)];
-        const newPuzzle = parseDatasetPuzzle(selected);
+        const newPuzzle = parseDatasetPuzzle(selected, true);
         setPuzzle(newPuzzle);
         setPlayerGrid(Array(newSize).fill(null).map(() => Array(newSize).fill(0)));
         setNotes({});
@@ -416,7 +561,7 @@ export default function Calcudoku() {
 
     const random = createSeededRandom(Date.now());
     const selected = filtered[Math.floor(random() * filtered.length)];
-    const newPuzzle = parseDatasetPuzzle(selected);
+    const newPuzzle = parseDatasetPuzzle(selected, true);
 
     setPuzzle(newPuzzle);
     setPlayerGrid(Array(newSize).fill(null).map(() => Array(newSize).fill(0)));
