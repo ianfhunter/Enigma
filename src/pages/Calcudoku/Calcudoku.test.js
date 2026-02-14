@@ -413,4 +413,35 @@ describe('Calcudoku - Dataset cage reconstruction', () => {
       });
     });
   });
+
+  it('should keep every displayed cage clue consistent with the puzzle solution', () => {
+    const evaluate = (cage, solution) => {
+      const values = cage.cells.map(([row, col]) => solution[row][col]);
+
+      switch (cage.operation) {
+        case '+':
+          return values.reduce((acc, value) => acc + value, 0);
+        case '×':
+          return values.reduce((acc, value) => acc * value, 1);
+        case '-':
+          return Math.abs(values[0] - values[1]);
+        case '÷':
+          return Math.max(...values) / Math.min(...values);
+        default:
+          return values[0];
+      }
+    };
+
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        expect(evaluate(cage, puzzle.solution)).toBe(cage.target);
+      });
+    });
+  });
+
 });

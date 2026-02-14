@@ -114,15 +114,57 @@ function sanitizeCages(cages, solution) {
       };
     }
 
-    if ((cage.operation === '-' || cage.operation === '÷') && cage.cells.length > 2) {
+    if (cage.operation === '+') {
       return {
         ...cage,
         target: values.reduce((acc, value) => acc + value, 0),
-        operation: '+',
       };
     }
 
-    return cage;
+    if (cage.operation === '×') {
+      return {
+        ...cage,
+        target: values.reduce((acc, value) => acc * value, 1),
+      };
+    }
+
+    if (cage.operation === '-') {
+      if (cage.cells.length > 2) {
+        return {
+          ...cage,
+          operation: '+',
+          target: values.reduce((acc, value) => acc + value, 0),
+        };
+      }
+
+      return {
+        ...cage,
+        target: Math.abs(values[0] - values[1]),
+      };
+    }
+
+    if (cage.operation === '÷') {
+      if (cage.cells.length > 2) {
+        return {
+          ...cage,
+          operation: '+',
+          target: values.reduce((acc, value) => acc + value, 0),
+        };
+      }
+
+      const [a, b] = values;
+      const [max, min] = a > b ? [a, b] : [b, a];
+      return {
+        ...cage,
+        target: max / min,
+      };
+    }
+
+    return {
+      ...cage,
+      target: values[0],
+      operation: '',
+    };
   });
 }
 
