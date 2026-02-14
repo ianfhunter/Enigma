@@ -8,6 +8,7 @@ import GameStore from './pages/GameStore';
 import IframeGame from './pages/IframeGame';
 import CommunityGame from './pages/CommunityGame';
 import NotFound from './pages/NotFound';
+import GamePageErrorBoundary from './components/GamePageErrorBoundary';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import { allGames } from './data/gameRegistry';
@@ -302,11 +303,15 @@ function GameLoading() {
 }
 
 // Wrapper for lazy-loaded game components
-function GameRoute({ component: Component }) {
+function GameRoute({ component, slug }) {
+  const GameComponent = component;
+
   return (
-    <Suspense fallback={<GameLoading />}>
-      <Component />
-    </Suspense>
+    <GamePageErrorBoundary slug={slug}>
+      <Suspense fallback={<GameLoading />}>
+        <GameComponent />
+      </Suspense>
+    </GamePageErrorBoundary>
   );
 }
 
@@ -324,7 +329,7 @@ function generateGameRoutes() {
         <Route
           key={game.slug}
           path={game.slug}
-          element={<GameRoute component={Component} />}
+          element={<GameRoute component={Component} slug={game.slug} />}
         />
       );
     }
