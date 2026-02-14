@@ -160,6 +160,15 @@ function sanitizeCages(cages, solution) {
       };
     }
 
+    if (cage.cells.length > 1) {
+      return {
+        ...cage,
+        target: values.reduce((acc, value) => acc + value, 0),
+        operation: '+',
+        anchor: cage.anchor,
+      };
+    }
+
     return {
       ...cage,
       target: values[0],
@@ -664,6 +673,7 @@ export default function Calcudoku() {
           className={styles.board}
           style={{
             gridTemplateColumns: `repeat(${size}, 1fr)`,
+            gridTemplateRows: `repeat(${size}, 1fr)`,
           }}
         >
           {playerGrid.map((row, rowIndex) =>

@@ -465,4 +465,20 @@ describe('Calcudoku - Dataset cage reconstruction', () => {
     });
   });
 
+
+  it('should always show an operation for multi-cell cages', () => {
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        if (cage.cells.length > 1) {
+          expect(cage.operation).not.toBe('');
+        }
+      });
+    });
+  });
+
 });
