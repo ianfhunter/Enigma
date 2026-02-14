@@ -15,6 +15,8 @@ A clear and concise description of what the bug is.
 3. Scroll down to '...'
 4. See error
 
+(Note: please make sure you are on the latest release / development version. Old releases will not be patched)
+
 ## Expected Behavior
 A clear and concise description of what you expected to happen.
 
@@ -41,6 +43,7 @@ Add any other context about the problem here.
 
 ## Possible Solution
 If you have ideas on how to fix this, please share them here.
+
 
 
 
