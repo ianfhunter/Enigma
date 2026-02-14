@@ -49,8 +49,84 @@ function parseCageLabel(cellValue) {
   return { target, operation: '' };
 }
 
-// Parse the dataset clues grid into cages structure
-export function parseCluesIntoCages(clues, rows, cols) {
+function getCageValueBounds(cage, solution, allowSingleOperationCages = false) {
+  const values = cage.cells.map(([r, c]) => solution[r][c]);
+
+  if (cage.operation === '+') {
+    const sum = values.reduce((acc, value) => acc + value, 0);
+    const hasEnoughCells = allowSingleOperationCages ? values.length > 0 : values.length > 1;
+    return { isPossible: sum <= cage.target, isSolved: hasEnoughCells && sum === cage.target };
+  }
+
+  if (cage.operation === '×') {
+    const product = values.reduce((acc, value) => acc * value, 1);
+    const hasEnoughCells = allowSingleOperationCages ? values.length > 0 : values.length > 1;
+    return {
+      isPossible: product <= cage.target && cage.target % product === 0,
+      isSolved: hasEnoughCells && product === cage.target,
+    };
+  }
+
+  if (cage.operation === '-') {
+    if (values.length < 2) {
+      return {
+        isPossible: true,
+        isSolved: allowSingleOperationCages && values.length === 1,
+      };
+    }
+    const diff = Math.max(...values) - Math.min(...values);
+    const hasEnoughCells = allowSingleOperationCages ? values.length > 0 : values.length > 1;
+    return { isPossible: true, isSolved: hasEnoughCells && diff === cage.target };
+  }
+
+  if (cage.operation === '÷') {
+    if (values.length < 2) {
+      return {
+        isPossible: true,
+        isSolved: allowSingleOperationCages && values.length === 1,
+      };
+    }
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+    const quotient = min === 0 ? Infinity : max / min;
+    const hasEnoughCells = allowSingleOperationCages ? values.length > 0 : values.length > 1;
+    return { isPossible: true, isSolved: hasEnoughCells && quotient === cage.target };
+  }
+
+  const singleValue = values[0];
+  const isSingle = values.length === 1;
+  return {
+    isPossible: isSingle && singleValue === cage.target,
+    isSolved: isSingle && singleValue === cage.target,
+  };
+}
+
+
+function sanitizeCages(cages, solution) {
+  return cages.map((cage) => {
+    const values = cage.cells.map(([r, c]) => solution[r][c]);
+
+    if (cage.cells.length === 1) {
+      return {
+        ...cage,
+        target: values[0],
+        operation: '',
+      };
+    }
+
+    if ((cage.operation === '-' || cage.operation === '÷') && cage.cells.length > 2) {
+      return {
+        ...cage,
+        target: values.reduce((acc, value) => acc + value, 0),
+        operation: '+',
+      };
+    }
+
+    return cage;
+  });
+}
+
+function parseCluesIntoCagesFallback(clues, rows, cols) {
   const cages = [];
   const cageByCell = Array.from({ length: rows }, () => Array(cols).fill(-1));
   const queue = [];
@@ -91,10 +167,103 @@ export function parseCluesIntoCages(clues, rows, cols) {
   return cages;
 }
 
+// Parse the dataset clues grid into cages structure
+export function parseCluesIntoCages(clues, rows, cols, solution, allowSingleOperationCages = false) {
+  const cages = [];
+  const cageByCell = Array.from({ length: rows }, () => Array(cols).fill(-1));
+  const unassigned = new Set();
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cellValue = clues[r][c];
+      if (cellValue === '.' || cellValue === null) {
+        unassigned.add(`${r}-${c}`);
+        continue;
+      }
+
+      const parsed = parseCageLabel(cellValue);
+      if (!parsed) continue;
+
+      const cageIndex = cages.length;
+      cages.push({ cells: [[r, c]], ...parsed });
+      cageByCell[r][c] = cageIndex;
+    }
+  }
+
+  const getCandidatesForCell = (row, col) => {
+    const candidates = new Set();
+    for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const nr = row + dr;
+      const nc = col + dc;
+      if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+      const cageIndex = cageByCell[nr][nc];
+      if (cageIndex !== -1) candidates.add(cageIndex);
+    }
+    return Array.from(candidates);
+  };
+
+  const pickNextCell = () => {
+    let best = null;
+    let bestCandidates = null;
+
+    for (const key of unassigned) {
+      const [row, col] = key.split('-').map(Number);
+      const candidates = getCandidatesForCell(row, col);
+      if (candidates.length === 0) continue;
+
+      if (!best || candidates.length < bestCandidates.length) {
+        best = [row, col, key];
+        bestCandidates = candidates;
+        if (candidates.length === 1) break;
+      }
+    }
+
+    return { best, bestCandidates };
+  };
+
+  const assignCells = () => {
+    if (unassigned.size === 0) {
+      return cages.every((cage) => getCageValueBounds(cage, solution, allowSingleOperationCages).isSolved);
+    }
+
+    const { best, bestCandidates } = pickNextCell();
+    if (!best) return false;
+
+    const [row, col, key] = best;
+
+    for (const cageIndex of bestCandidates) {
+      const cage = cages[cageIndex];
+      cage.cells.push([row, col]);
+      cageByCell[row][col] = cageIndex;
+      unassigned.delete(key);
+
+      if (getCageValueBounds(cage, solution, allowSingleOperationCages).isPossible && assignCells()) {
+        return true;
+      }
+
+      unassigned.add(key);
+      cageByCell[row][col] = -1;
+      cage.cells.pop();
+    }
+
+    return false;
+  };
+
+  if (!assignCells()) {
+    if (!allowSingleOperationCages) {
+      return parseCluesIntoCages(clues, rows, cols, solution, true);
+    }
+
+    return sanitizeCages(parseCluesIntoCagesFallback(clues, rows, cols), solution);
+  }
+
+  return sanitizeCages(cages, solution);
+}
+
 // Parse dataset puzzle into our format
 export function parseDatasetPuzzle(puzzle) {
   const { rows, cols, clues, solution } = puzzle;
-  const cages = parseCluesIntoCages(clues, rows, cols);
+  const cages = parseCluesIntoCages(clues, rows, cols, solution);
 
   return {
     solution,

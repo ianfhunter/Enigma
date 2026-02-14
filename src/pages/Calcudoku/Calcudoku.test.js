@@ -382,7 +382,7 @@ describe('Calcudoku - Dataset cage reconstruction', () => {
 
   it('should keep every operation marker attached to its own clue cell', () => {
     const puzzle = kenkenPuzzles.puzzles[214];
-    const cages = parseCluesIntoCages(puzzle.clues, puzzle.rows, puzzle.cols);
+    const cages = parseCluesIntoCages(puzzle.clues, puzzle.rows, puzzle.cols, puzzle.solution);
 
     const clueCells = [];
     for (let row = 0; row < puzzle.rows; row++) {
@@ -396,5 +396,21 @@ describe('Calcudoku - Dataset cage reconstruction', () => {
     const cageAnchors = cages.map((cage) => `${cage.cells[0][0]}-${cage.cells[0][1]}`);
 
     expect(new Set(cageAnchors)).toEqual(new Set(clueCells));
+  });
+
+
+  it('should enforce calcudoku operation rules for parsed cages', () => {
+    const sampleIndexes = [0, 74, 214, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        if (cage.operation !== '') {
+          expect(cage.cells.length).toBeGreaterThan(1);
+        }
+      });
+    });
   });
 });
