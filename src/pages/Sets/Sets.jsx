@@ -97,13 +97,12 @@ function getSetKey(indices) {
   return normalizeSetIndices(indices).join('-');
 }
 
-function getHintCardIndex(allSets, foundSetKeys, foundCardIndices) {
+function getHintCardIndex(allSets, foundSetKeys) {
   const remainingSet = allSets.find(set => !foundSetKeys.has(getSetKey(set)));
 
   if (!remainingSet) return null;
 
-  const unseenCardIndex = remainingSet.find(idx => !foundCardIndices.has(idx));
-  return unseenCardIndex ?? remainingSet[0];
+  return remainingSet[0];
 }
 
 /**
@@ -232,9 +231,12 @@ function Card({ card, isSelected, onClick, isHinted, setColorIndices }) {
     if (!isHinted) return {};
 
     return {
-      outline: '3px solid #fbbf24',
-      outlineOffset: '-3px',
-      zIndex: 11,
+      outline: '4px solid #fbbf24',
+      outlineOffset: '-2px',
+      borderColor: '#fde68a',
+      boxShadow: '0 0 0 3px rgba(251, 191, 36, 0.9), 0 0 24px rgba(251, 191, 36, 0.85)',
+      transform: 'scale(1.06)',
+      zIndex: 20,
     };
   };
 
@@ -384,7 +386,7 @@ export default function Sets() {
   const handleHint = () => {
     if (!puzzleData || !isPlaying) return;
 
-    const hintCardIndex = getHintCardIndex(puzzleData.allSets, foundSetKeys, foundSetIndices);
+    const hintCardIndex = getHintCardIndex(puzzleData.allSets, foundSetKeys);
 
     if (hintCardIndex !== null) {
       setHintIndices([hintCardIndex]);

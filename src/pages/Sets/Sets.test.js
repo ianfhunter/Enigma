@@ -297,35 +297,24 @@ describe('Sets - Unique Set Tracking Helpers', () => {
 
 
 describe('Sets - Hint Selection', () => {
-  it('selects a card from a set that has not been found yet', () => {
+  it('selects the first card from a set that has not been found yet', () => {
     const allSets = [[0, 1, 2], [3, 4, 5]];
     const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
-    const foundCardIndices = new Set([0, 1, 2]);
 
-    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBe(3);
+    expect(getHintCardIndex(allSets, foundSetKeys)).toBe(3);
   });
 
-  it('prefers a card not yet highlighted as found when sets overlap', () => {
+  it('can still hint a card that appears in previously found sets', () => {
     const allSets = [[0, 1, 2], [0, 3, 6]];
     const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
-    const foundCardIndices = new Set([0, 1, 2]);
 
-    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBe(3);
-  });
-
-  it('falls back to first card when every card in remaining set is already in found cards', () => {
-    const allSets = [[0, 1, 2], [0, 1, 3]];
-    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
-    const foundCardIndices = new Set([0, 1, 3]);
-
-    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBe(0);
+    expect(getHintCardIndex(allSets, foundSetKeys)).toBe(0);
   });
 
   it('returns null when all available sets were already found', () => {
     const allSets = [[0, 1, 2]];
     const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
-    const foundCardIndices = new Set([0, 1, 2]);
 
-    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBeNull();
+    expect(getHintCardIndex(allSets, foundSetKeys)).toBeNull();
   });
 });
