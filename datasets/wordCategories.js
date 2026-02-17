@@ -278,6 +278,83 @@ export const wordCategories = {
     difficulty: 2
   },
 
+  // HOBBIES & SCIENCE
+  musicalInstruments: {
+    name: "Musical Instruments",
+    words: ["ACCORDION", "BANJO", "BASS", "BONGO", "CELLO", "CLARINET", "DRUM", "FLUTE", "GONG", "GUITAR", "HARMONICA", "HARP", "MANDOLIN", "OBOE", "ORGAN", "PIANO", "PICCOLO", "SAXOPHONE", "SITAR", "TAMBORINE", "TROMBONE", "TRUMPET", "TUBA", "UKULELE", "VIOLA", "VIOLIN", "XYLOPHONE"],
+    difficulty: 2
+  },
+  gemstones: {
+    name: "Gemstones",
+    words: ["AGATE", "AMBER", "AMETHYST", "AQUAMARINE", "DIAMOND", "EMERALD", "GARNET", "JADE", "JASPER", "MOONSTONE", "ONYX", "OPAL", "PEARL", "PERIDOT", "QUARTZ", "RUBY", "SAPPHIRE", "SPINEL", "TOPAZ", "TURQUOISE", "ZIRCON"],
+    difficulty: 2
+  },
+  weather: {
+    name: "Weather Terms",
+    words: ["OVERCAST", "BLIZZARD", "BREEZE", "CLOUD", "CYCLONE", "DROUGHT", "DRIZZLE", "FOG", "FROST", "GALE", "HAIL", "HEATWAVE", "HUMIDITY", "HURRICANE", "LIGHTNING", "MIST", "MONSOON", "RAIN", "RAINBOW", "SLEET", "SNOW", "STORM", "SUNSHINE", "THUNDER", "TORNADO", "WIND"],
+    difficulty: 1
+  },
+  astronomy: {
+    name: "Astronomy Terms",
+    words: ["ASTEROID", "AURORA", "COMET", "CONSTELLATION", "COSMOS", "CRATER", "ECLIPSE", "GALAXY", "GRAVITY", "METEOR", "NEBULA", "ORBIT", "PLANET", "PULSAR", "QUASAR", "ROCKET", "SATELLITE", "SOLSTICE", "STAR", "SUNSPOT", "TELESCOPE", "UNIVERSE"],
+    difficulty: 3
+  },
+  photography: {
+    name: "Photography",
+    words: ["APERTURE", "BOKEH", "CAMERA", "CAPTURE", "CONTRAST", "EXPOSURE", "FILTER", "DARKROOM", "FOCUS", "FRAME", "GRAIN", "HISTOGRAM", "ISO", "LENS", "LIGHT", "MACRO", "NEGATIVE", "PORTRAIT", "RAW", "SHUTTER", "SNAPSHOT", "TRIPOD", "ZOOM"],
+    difficulty: 2
+  },
+  sewing: {
+    name: "Sewing Terms",
+    words: ["APPLIQUE", "BOBBIN", "BUTTON", "EMBROIDERY", "FABRIC", "HEM", "INTERFACING", "LINING", "NEEDLE", "PATCHWORK", "PATTERN", "PIN", "PLEAT", "QUILT", "SCISSORS", "SEAM", "SERGER", "STITCH", "THIMBLE", "THREAD", "TRIM", "ZIPPER"],
+    difficulty: 3
+  },
+  bakingTerms: {
+    name: "Baking Terms",
+    words: ["BATTER", "BLEND", "CREAM", "DOUGH", "FERMENT", "FOLD", "FROSTING", "GLAZE", "KNEAD", "LEAVEN", "MIX", "PROOF", "ROLL", "SIFT", "WHIP", "YEAST"],
+    difficulty: 2
+  },
+  martialArts: {
+    name: "Martial Arts",
+    words: ["AIKIDO", "BOXING", "CAPOEIRA", "FENCING", "HAPKIDO", "JUDO", "JUJUTSU", "KARATE", "KENDO", "KICKBOXING", "KRAVMAGA", "KUNGFU", "MUAYTHAI", "NINJUTSU", "SAMBO", "SUMO", "TAEKWONDO", "WRESTLING"],
+    difficulty: 2
+  },
+  currencies: {
+    name: "Currencies",
+    words: ["BAHT", "BOLIVAR", "COLON", "DINAR", "DIRHAM", "DOLLAR", "DRACHMA", "EURO", "FLORIN", "FORINT", "FRANC", "GOURDE", "KIP", "KRONA", "KRONE", "KWACHA", "LARI", "LIRA", "PESO", "POUND", "REAL", "RIYAL", "RUBLE", "RUPEE", "SHEKEL", "TENGE", "WON", "YEN", "ZLOTY"],
+    difficulty: 2
+  },
+  treeSpecies: {
+    name: "Tree Species",
+    words: ["ALDER", "ASH", "ASPEN", "BEECH", "BIRCH", "CEDAR", "CYPRESS", "ELM", "FIR", "HAWTHORN", "HEMLOCK", "LARCH", "MAPLE", "OAK", "PALM", "PINE", "POPLAR", "REDWOOD", "SEQUOIA", "SPRUCE", "SYCAMORE", "WALNUT", "WILLOW", "YEW"],
+    difficulty: 2
+  },
+  cloudTypes: {
+    name: "Cloud Types",
+    words: ["ALTOCUMULUS", "ALTOSTRATUS", "ANVIL", "CIRROCUMULUS", "CIRROSTRATUS", "CIRRUS", "CUMULONIMBUS", "CUMULUS", "LENTICULAR", "MAMMATUS", "NIMBOSTRATUS", "NOCTILUCENT", "PILEUS", "SCUD", "STRATOCUMULUS", "STRATUS", "VIRGA"],
+    difficulty: 3
+  },
+  chessTerms: {
+    name: "Chess Terms",
+    words: ["BISHOP", "BLITZ", "CASTLE", "CHECK", "CHECKMATE", "DRAW", "ENDGAME", "FEN", "FORK", "GAMBIT", "KING", "KNIGHT", "MIDDLEGAME", "PAWN", "ZUGZWANG", "PROMOTION", "QUEEN", "RESIGN", "ROOK", "SKEWER", "STALEMATE"],
+    difficulty: 3
+  },
+  circusActs: {
+    name: "Circus Acts",
+    words: ["ACROBAT", "BALANCING", "CLOWN", "CONTORTION", "ESCAPOLOGY", "FIREBREATH", "JUGGLING", "MAGIC", "MIME", "MONOCYCLE", "RINGMASTER", "SILKS", "STILTS", "STRONGMAN", "TIGHTROPE", "TRAPEZE", "UNICYCLE", "VENTRILOQUISM"],
+    difficulty: 2
+  },
+  poetryForms: {
+    name: "Poetry Forms",
+    words: ["BALLAD", "CINQUAIN", "COUPLET", "ELEGY", "EPIC", "FREEVERSE", "GHAZAL", "HAIKU", "LIMERICK", "LYRIC", "ODE", "PANTOUM", "RONDEAU", "SESTINA", "SONNET", "TANKA", "TERCET", "VILLANELLE"],
+    difficulty: 3
+  },
+  architectureStyles: {
+    name: "Architecture Styles",
+    words: ["ARTDECO", "ARTNOUVEAU", "BAUHAUS", "BRUTALIST", "COLONIAL", "DECONSTRUCTIVIST", "GOTHIC", "MODERNIST", "NEOCLASSICAL", "PALLADIAN", "POSTMODERN", "ROCOCO", "ROMANESQUE", "SKYSCRAPER", "TUDOR", "VICTORIAN"],
+    difficulty: 3
+  },
+
   // TIME
   months: {
     name: "Months",
