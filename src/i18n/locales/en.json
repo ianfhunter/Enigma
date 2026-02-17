@@ -599,6 +599,23 @@
     "howItWorks": "How It Works",
     "explanation": "Each column has a value (1, 2, 3... from left). When you fill a cell, its column value is added to that row's sum. Similarly, each row has a value that contributes to column sums. Match all targets to win!"
   },
+  "crazyQuilt": {
+    "title": "Crazy Quilt",
+    "instructions": "Build all four suit foundations by moving cards from the quilt and waste. The quilt alternates vertical/horizontal cards like a checkerboard.",
+    "reset": "Reset Layout",
+    "moves": "Moves: {{count}}",
+    "remaining": "Cards Remaining: {{count}}",
+    "solved": "All foundations completed!",
+    "solutionRevealed": "Solution revealed.",
+    "stock": "Stock",
+    "waste": "Waste",
+    "suits": {
+      "spades": "Spades",
+      "hearts": "Hearts",
+      "diamonds": "Diamonds",
+      "clubs": "Clubs"
+    }
+  },
   "actionItems": {
     "loading": "Loading action items...",
     "failedToLoad": "Failed to load action items",

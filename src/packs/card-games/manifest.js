@@ -7,6 +7,7 @@
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
+import crazyquiltIcon from '../../assets/icons/crazyquilt.svg';
 
 const cardGamesPack = {
   id: 'card-games',
@@ -47,6 +48,18 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
+          lastModified: 1770136707000
+        },
+        {
+          slug: 'crazy-quilt',
+          title: 'Crazy Quilt',
+          aliases: ['Crazy Quilt Solitaire', 'Crazy Quilt Solitare'],
+          description: 'Play the Crazy Quilt layout with stock, waste, and suit foundations in a classic solitaire flow.',
+          icon: crazyquiltIcon,
+          emojiIcon: '🧵',
+          colors: { primary: '#f97316', secondary: '#ea580c' },
+          gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+          component: () => import('../../pages/CrazyQuilt'),
           lastModified: 1770136707000
         },
       ],

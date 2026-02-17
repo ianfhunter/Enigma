@@ -599,6 +599,23 @@
     "howItWorks": "Cómo Funciona",
     "explanation": "Cada columna tiene un valor (1, 2, 3... desde la izquierda). Cuando rellenas una celda, el valor de su columna se añade a la suma de esa fila. De manera similar, cada fila tiene un valor que contribuye a las sumas de columna. ¡Haz que todos los objetivos coincidan para ganar!"
   },
+  "crazyQuilt": {
+    "title": "Crazy Quilt",
+    "instructions": "Completa las cuatro bases por palo moviendo cartas desde el tapete y el descarte. El tapete alterna cartas verticales y horizontales como un tablero.",
+    "reset": "Reiniciar diseño",
+    "moves": "Movimientos: {{count}}",
+    "remaining": "Cartas restantes: {{count}}",
+    "solved": "¡Todas las bases completadas!",
+    "solutionRevealed": "Solución revelada.",
+    "stock": "Mazo",
+    "waste": "Descarte",
+    "suits": {
+      "spades": "Picas",
+      "hearts": "Corazones",
+      "diamonds": "Diamantes",
+      "clubs": "Tréboles"
+    }
+  },
   "actionItems": {
     "loading": "Cargando elementos de acción...",
     "failedToLoad": "Error al cargar elementos de acción",

@@ -1,0 +1,174 @@
+.container {
+  padding: 24px 16px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.button {
+  background: #111827;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.solved {
+  color: #15803d;
+}
+
+.giveUp {
+  color: #b91c1c;
+}
+
+.tableauArea {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+}
+
+.sidePiles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pile,
+.foundationPile {
+  border: 2px solid #d1d5db;
+  background: #f9fafb;
+  border-radius: 10px;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+}
+
+.pile {
+  cursor: pointer;
+}
+
+.pile:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.pileLabel {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #4b5563;
+}
+
+.foundationGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.selectedPile {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.quiltBoard {
+  background: linear-gradient(135deg, #0b6623, #166534);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(48px, 1fr));
+  gap: 8px;
+  align-items: center;
+}
+
+.card,
+.emptySpot {
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.horizontal {
+  min-height: 50px;
+}
+
+.vertical {
+  min-height: 50px;
+  transform: rotate(90deg);
+}
+
+.selected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.emptySpot {
+  min-height: 50px;
+  opacity: 0.35;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.red {
+  color: #dc2626;
+}
+
+.black {
+  color: #111827;
+}
+
+@media (max-width: 1100px) {
+  .tableauArea {
+    grid-template-columns: 1fr;
+  }
+
+  .sidePiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .row {
+    grid-template-columns: repeat(4, minmax(36px, 1fr));
+  }
+}
