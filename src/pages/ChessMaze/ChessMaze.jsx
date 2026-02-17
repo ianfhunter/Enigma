@@ -257,6 +257,10 @@ const DIFFICULTIES = {
   hard: { size: 8, difficulty: 7, label: 'Hard' },
 };
 
+export function getChessMazeSeed(piece, diff, puzzleIndex = 0, today = getTodayDateString()) {
+  return stringToSeed(`chessmaze-${today}-${piece}-${diff}-${puzzleIndex}`);
+}
+
 export default function ChessMaze() {
   const { t } = useTranslation();
   const [pieceType, setPieceType] = useState('knight');
@@ -271,14 +275,14 @@ export default function ChessMaze() {
   const [showDanger, setShowDanger] = useState(false);
   const [showMoves, setShowMoves] = useState(true);
   const [puzzlesSolved, setPuzzlesSolved] = useState(0);
+  const [puzzleIndex, setPuzzleIndex] = useState(0);
 
   const { size, difficulty: _difficulty } = DIFFICULTIES[difficultyLevel];
 
   // Initialize puzzle
-  const initializePuzzle = useCallback((piece = pieceType, diff = difficultyLevel, customSeed = null) => {
-    const today = getTodayDateString();
+  const initializePuzzle = useCallback((piece = pieceType, diff = difficultyLevel, customSeed = null, index = puzzleIndex) => {
     const { size: newSize, difficulty: newDiff } = DIFFICULTIES[diff];
-    const gameSeed = customSeed ?? stringToSeed(`chessmaze-${today}-${piece}-${diff}`);
+    const gameSeed = customSeed ?? getChessMazeSeed(piece, diff, index);
     const newPuzzle = generatePuzzle(piece, newSize, newDiff, gameSeed);
     setSeed(gameSeed);
     setPuzzle(newPuzzle);
@@ -287,7 +291,7 @@ export default function ChessMaze() {
     setMoveCount(0);
     resetGameState();
     setValidMoves(getValidMoves(piece, newPuzzle.start.row, newPuzzle.start.col, newSize, newPuzzle.enemies, new Set()));
-  }, [pieceType, difficultyLevel, resetGameState]);
+  }, [pieceType, difficultyLevel, puzzleIndex, resetGameState]);
 
   useEffect(() => {
     initializePuzzle();
@@ -336,13 +340,15 @@ export default function ChessMaze() {
   // Handle piece type change
   const handlePieceChange = useCallback((newPiece) => {
     setPieceType(newPiece);
-    initializePuzzle(newPiece, difficultyLevel);
+    setPuzzleIndex(0);
+    initializePuzzle(newPiece, difficultyLevel, null, 0);
   }, [initializePuzzle, difficultyLevel]);
 
   // Handle difficulty change
   const handleDifficultyChange = useCallback((newDiff) => {
     setDifficultyLevel(newDiff);
-    initializePuzzle(pieceType, newDiff);
+    setPuzzleIndex(0);
+    initializePuzzle(pieceType, newDiff, null, 0);
   }, [initializePuzzle, pieceType]);
 
   // Computed values
@@ -523,7 +529,11 @@ export default function ChessMaze() {
 
           <button
             className={styles.newPuzzleBtn}
-            onClick={() => initializePuzzle()}
+            onClick={() => {
+              const nextPuzzleIndex = puzzleIndex + 1;
+              setPuzzleIndex(nextPuzzleIndex);
+              initializePuzzle(pieceType, difficultyLevel, null, nextPuzzleIndex);
+            }}
           >
             🔄 New Maze
           </button>

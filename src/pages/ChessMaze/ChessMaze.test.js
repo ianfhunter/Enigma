@@ -1,5 +1,23 @@
 import { describe, it, expect } from 'vitest';
+import { getChessMazeSeed } from './ChessMaze';
 
+
+
+describe('ChessMaze - Seed generation', () => {
+  it('generates different seeds for different puzzle indexes', () => {
+    const first = getChessMazeSeed('knight', 'medium', 0, '2026-01-01');
+    const second = getChessMazeSeed('knight', 'medium', 1, '2026-01-01');
+
+    expect(first).not.toBe(second);
+  });
+
+  it('is deterministic for same inputs', () => {
+    const first = getChessMazeSeed('queen', 'hard', 3, '2026-01-01');
+    const second = getChessMazeSeed('queen', 'hard', 3, '2026-01-01');
+
+    expect(first).toBe(second);
+  });
+});
 // ===========================================
 // ChessMaze - Piece Attack Tests
 // ===========================================
