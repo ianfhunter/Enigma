@@ -7,6 +7,7 @@ import {
   canPlaceSequence,
   removeCompletedRuns,
   moveSequence,
+  isSameSuitDescendingSequence,
   CARD_VALUES,
 } from './SpiderSolitaire.jsx';
 
@@ -29,6 +30,26 @@ describe('SpiderSolitaire - Deck generation', () => {
     const deck = createSpiderDeck();
     expect(deck.every(card => card.suit === '♠')).toBe(true);
     expect(deck.every(card => card.faceUp === false)).toBe(true);
+  });
+
+  it('supports 2-suit and 4-suit deck generation', () => {
+    const twoSuitDeck = createSpiderDeck(2);
+    const fourSuitDeck = createSpiderDeck(4);
+
+    expect(twoSuitDeck.length).toBe(104);
+    expect(fourSuitDeck.length).toBe(104);
+
+    const twoSuitCounts = twoSuitDeck.reduce((acc, card) => {
+      acc[card.suit] = (acc[card.suit] || 0) + 1;
+      return acc;
+    }, {});
+    expect(twoSuitCounts).toEqual({ '♠': 52, '♥': 52 });
+
+    const fourSuitCounts = fourSuitDeck.reduce((acc, card) => {
+      acc[card.suit] = (acc[card.suit] || 0) + 1;
+      return acc;
+    }, {});
+    expect(fourSuitCounts).toEqual({ '♠': 26, '♥': 26, '♦': 26, '♣': 26 });
   });
 });
 
@@ -59,6 +80,14 @@ describe('SpiderSolitaire - Deal and shuffle', () => {
     expect(gameA.columns[0][0].rank).toBe(gameB.columns[0][0].rank);
     expect(gameA.columns[9][0].rank).toBe(gameB.columns[9][0].rank);
   });
+
+  it('same seed and suit level generate same layout', () => {
+    const gameA = generateSpiderGame(4321, 4);
+    const gameB = generateSpiderGame(4321, 4);
+
+    expect(gameA.columns).toEqual(gameB.columns);
+    expect(gameA.stock).toEqual(gameB.stock);
+  });
 });
 
 describe('SpiderSolitaire - Move validation', () => {
@@ -78,6 +107,22 @@ describe('SpiderSolitaire - Move validation', () => {
       { rank: '10', value: 10, faceUp: true },
     ];
     expect(isDescendingSequence(column, 0)).toBe(false);
+  });
+
+  it('requires same-suit descending sequences for moving stacks', () => {
+    const sameSuit = [
+      { rank: 'K', value: 13, suit: '♠', faceUp: true },
+      { rank: 'Q', value: 12, suit: '♠', faceUp: true },
+      { rank: 'J', value: 11, suit: '♠', faceUp: true },
+    ];
+    const mixedSuit = [
+      { rank: 'K', value: 13, suit: '♠', faceUp: true },
+      { rank: 'Q', value: 12, suit: '♥', faceUp: true },
+      { rank: 'J', value: 11, suit: '♥', faceUp: true },
+    ];
+
+    expect(isSameSuitDescendingSequence(sameSuit, 0)).toBe(true);
+    expect(isSameSuitDescendingSequence(mixedSuit, 0)).toBe(false);
   });
 
   it('allows placement on higher card or empty column', () => {
@@ -127,6 +172,28 @@ describe('SpiderSolitaire - Completed runs', () => {
     const { columns, completedRuns } = removeCompletedRuns([column]);
     expect(completedRuns).toBe(0);
     expect(columns[0].length).toBe(3);
+  });
+
+  it('does not remove mixed-suit king-to-ace run', () => {
+    const column = [
+      { rank: 'K', value: 13, suit: '♠', faceUp: true },
+      { rank: 'Q', value: 12, suit: '♥', faceUp: true },
+      { rank: 'J', value: 11, suit: '♥', faceUp: true },
+      { rank: '10', value: 10, suit: '♥', faceUp: true },
+      { rank: '9', value: 9, suit: '♥', faceUp: true },
+      { rank: '8', value: 8, suit: '♥', faceUp: true },
+      { rank: '7', value: 7, suit: '♥', faceUp: true },
+      { rank: '6', value: 6, suit: '♥', faceUp: true },
+      { rank: '5', value: 5, suit: '♥', faceUp: true },
+      { rank: '4', value: 4, suit: '♥', faceUp: true },
+      { rank: '3', value: 3, suit: '♥', faceUp: true },
+      { rank: '2', value: 2, suit: '♥', faceUp: true },
+      { rank: 'A', value: 1, suit: '♥', faceUp: true },
+    ];
+
+    const { columns, completedRuns } = removeCompletedRuns([column]);
+    expect(completedRuns).toBe(0);
+    expect(columns[0]).toHaveLength(13);
   });
 });
 

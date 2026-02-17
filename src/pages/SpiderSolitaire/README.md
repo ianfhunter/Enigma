@@ -10,10 +10,12 @@
 - Use **Give Up** to reveal the completed solution immediately.
 
 ## Controls
+- **Suit Level**: Choose 1 Suit, 2 Suits, or 4 Suits difficulty.
 - **Deal 10 Cards**: Adds one face-up card to each column.
 - **New Game**: Generates a new seed and reshuffles the deck.
 - **Give Up**: Ends the game and completes all runs.
 
 ## Notes
-- This Spider Solitaire variant uses a single suit for all cards.
+- Movable stacks must be descending and all in the same suit.
+- Completed runs are removed only when the full King-to-Ace run is in one suit.
 - The puzzle is fully reproducible with the displayed seed.

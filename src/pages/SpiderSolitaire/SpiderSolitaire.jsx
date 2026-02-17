@@ -26,19 +26,28 @@ const CARD_VALUES = {
 const TOTAL_RUNS = 8;
 const COLUMNS = 10;
 const INITIAL_COLUMN_COUNTS = [6, 6, 6, 6, 5, 5, 5, 5, 5, 5];
+const SUIT_SETS = {
+  1: ['♠'],
+  2: ['♠', '♥'],
+  4: ['♠', '♥', '♦', '♣'],
+};
 
-const createSpiderDeck = () => {
+const createSpiderDeck = (suitCount = 1) => {
+  const suits = SUIT_SETS[suitCount] || SUIT_SETS[1];
+  const copiesPerSuit = TOTAL_RUNS / suits.length;
   const deck = [];
   let id = 0;
-  for (let deckIndex = 0; deckIndex < 8; deckIndex++) {
-    for (const rank of RANKS) {
-      deck.push({
-        id: id++,
-        rank,
-        value: CARD_VALUES[rank],
-        suit: '♠',
-        faceUp: false,
-      });
+  for (const suit of suits) {
+    for (let copy = 0; copy < copiesPerSuit; copy++) {
+      for (const rank of RANKS) {
+        deck.push({
+          id: id++,
+          rank,
+          value: CARD_VALUES[rank],
+          suit,
+          faceUp: false,
+        });
+      }
     }
   }
   return deck;
@@ -63,9 +72,9 @@ const dealTableau = (deck) => {
   return { columns, stock };
 };
 
-const generateSpiderGame = (seed) => {
+const generateSpiderGame = (seed, suitCount = 1) => {
   const random = createSeededRandom(seed);
-  const shuffledDeck = seededShuffleArray(createSpiderDeck(), random);
+  const shuffledDeck = seededShuffleArray(createSpiderDeck(suitCount), random);
   return dealTableau(shuffledDeck);
 };
 
@@ -75,6 +84,20 @@ const isDescendingSequence = (column, startIndex) => {
     if (!card.faceUp) return false;
     if (i < column.length - 1 && card.value !== column[i + 1].value + 1) {
       return false;
+    }
+  }
+  return true;
+};
+
+const isSameSuitDescendingSequence = (column, startIndex) => {
+  for (let i = startIndex; i < column.length; i++) {
+    const card = column[i];
+    if (!card.faceUp) return false;
+    if (i < column.length - 1) {
+      const nextCard = column[i + 1];
+      if (card.value !== nextCard.value + 1 || card.suit !== nextCard.suit) {
+        return false;
+      }
     }
   }
   return true;
@@ -109,7 +132,8 @@ const removeCompletedRuns = (columns) => {
       const isCompleteRun = run[0].value === 13
         && run[run.length - 1].value === 1
         && run.every((card, idx) => card.faceUp
-          && (idx === run.length - 1 || card.value === run[idx + 1].value + 1));
+          && (idx === run.length - 1
+            || (card.value === run[idx + 1].value + 1 && card.suit === run[idx + 1].suit)));
 
       if (isCompleteRun) {
         completedRuns += 1;
@@ -163,6 +187,7 @@ export {
   canPlaceSequence,
   removeCompletedRuns,
   moveSequence,
+  isSameSuitDescendingSequence,
   CARD_VALUES,
 };
 
@@ -170,6 +195,7 @@ export default function SpiderSolitaire() {
   const { t } = useTranslation();
   const getDefaultSeed = () => stringToSeed(`spider-solitaire-${getTodayDateString()}`);
   const [seed, setSeed] = usePersistedState('spider-solitaire-seed', getDefaultSeed());
+  const [suitCount, setSuitCount] = usePersistedState('spider-solitaire-suit-count', 1);
   const [columns, setColumns] = useState([]);
   const [stock, setStock] = useState([]);
   const [completed, setCompleted] = useState(0);
@@ -179,9 +205,10 @@ export default function SpiderSolitaire() {
   const [selected, setSelected] = useState(null);
   const [dragging, setDragging] = useState(null);
 
-  const initGame = useCallback((newSeed = null) => {
+  const initGame = useCallback((newSeed = null, newSuitCount = null) => {
     const gameSeed = newSeed ?? seed;
-    const { columns: initialColumns, stock: initialStock } = generateSpiderGame(gameSeed);
+    const nextSuitCount = newSuitCount ?? suitCount;
+    const { columns: initialColumns, stock: initialStock } = generateSpiderGame(gameSeed, nextSuitCount);
     setColumns(initialColumns);
     setStock(initialStock);
     setCompleted(0);
@@ -190,7 +217,7 @@ export default function SpiderSolitaire() {
     setSelected(null);
     setSeed(gameSeed);
     setGameState('playing');
-  }, [seed, setSeed]);
+  }, [seed, setSeed, suitCount]);
 
   useEffect(() => {
     initGame();
@@ -228,6 +255,10 @@ export default function SpiderSolitaire() {
       setMessage(t('spiderSolitaire.invalidSequence', 'Select a fully descending face-up sequence.'));
       return;
     }
+    if (!isSameSuitDescendingSequence(column, cardIndex)) {
+      setMessage(t('spiderSolitaire.sameSuitSequence', 'You can only move descending sequences of the same suit.'));
+      return;
+    }
     if (selected && selected.columnIndex === columnIndex && selected.cardIndex === cardIndex) {
       setSelected(null);
       return;
@@ -243,7 +274,11 @@ export default function SpiderSolitaire() {
   const handleDragStart = (event, columnIndex, cardIndex) => {
     if (gameState !== 'playing') return;
     const column = columns[columnIndex];
-    if (!column[cardIndex]?.faceUp || !isDescendingSequence(column, cardIndex)) return;
+    if (
+      !column[cardIndex]?.faceUp
+      || !isDescendingSequence(column, cardIndex)
+      || !isSameSuitDescendingSequence(column, cardIndex)
+    ) return;
 
     const payload = JSON.stringify({ columnIndex, cardIndex });
     event.dataTransfer.effectAllowed = 'move';
@@ -373,7 +408,7 @@ export default function SpiderSolitaire() {
         title={t('spiderSolitaire.title', 'Spider Solitaire')}
         instructions={t(
           'spiderSolitaire.instructions',
-          'Build descending sequences from King to Ace. Move any face-up descending sequence onto the next higher card or an empty column. Complete all eight runs to win.'
+          'Build descending sequences from King to Ace. Move same-suit descending sequences onto the next higher card or an empty column. Complete all eight runs to win.'
         )}
       />
 
@@ -396,6 +431,26 @@ export default function SpiderSolitaire() {
         <span>{t('common.moves', 'Moves')}: {moves}</span>
         <span>{completedLabel}: {completed}/{TOTAL_RUNS}</span>
         <span>{t('spiderSolitaire.stock', 'Stock')}: {stockRemaining}</span>
+        <span>{t('spiderSolitaire.level', 'Level')}: {t(`spiderSolitaire.levels.${suitCount}`, '{{count}} Suit{{plural}}', { count: suitCount, plural: suitCount === 1 ? '' : 's' })}</span>
+      </div>
+
+      <div className={styles.levelSelector}>
+        {[1, 2, 4].map((levelSuitCount) => (
+          <button
+            key={levelSuitCount}
+            className={`${styles.levelButton} ${suitCount === levelSuitCount ? styles.levelButtonActive : ''}`}
+            onClick={() => {
+              setSuitCount(levelSuitCount);
+            initGame(seed, levelSuitCount);
+            }}
+            type="button"
+          >
+            {t(`spiderSolitaire.levels.${levelSuitCount}`, '{{count}} Suit{{plural}}', {
+              count: levelSuitCount,
+              plural: levelSuitCount === 1 ? '' : 's',
+            })}
+          </button>
+        ))}
       </div>
 
       {message && (
