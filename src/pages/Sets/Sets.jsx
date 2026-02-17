@@ -37,6 +37,8 @@ const BOARD_SIZES = {
   '18 cards': 18,
 };
 
+const TARGET_UNIQUE_SETS = 3;
+
 /**
  * Generate a full deck of 81 unique cards
  */
@@ -85,6 +87,22 @@ function findAllSets(cards) {
     }
   }
   return sets;
+}
+
+function normalizeSetIndices(indices) {
+  return [...indices].sort((a, b) => a - b);
+}
+
+function getSetKey(indices) {
+  return normalizeSetIndices(indices).join('-');
+}
+
+function getHintCardIndex(allSets, foundSetKeys) {
+  const remainingSet = allSets.find(set => !foundSetKeys.has(getSetKey(set)));
+
+  if (!remainingSet) return null;
+
+  return remainingSet[0];
 }
 
 /**
@@ -209,11 +227,24 @@ function Card({ card, isSelected, onClick, isHinted, setColorIndices }) {
     return {};
   };
 
+  const getHintStyle = () => {
+    if (!isHinted) return {};
+
+    return {
+      outline: '4px solid #fbbf24',
+      outlineOffset: '-2px',
+      borderColor: '#fde68a',
+      boxShadow: '0 0 0 3px rgba(251, 191, 36, 0.9), 0 0 24px rgba(251, 191, 36, 0.85)',
+      transform: 'scale(1.06)',
+      zIndex: 20,
+    };
+  };
+
   return (
     <button
       className={`${styles.card} ${isSelected ? styles.selected : ''} ${isHinted ? styles.hinted : ''} ${isPartOfFoundSet ? styles.found : ''} ${setColors.length > 1 ? styles.multiSet : ''}`}
       onClick={onClick}
-      style={{ ...getMultiBorderStyle(), ...getSelectionStyle() }}
+      style={{ ...getMultiBorderStyle(), ...getSelectionStyle(), ...getHintStyle() }}
     >
       <div className={styles.cardContent}>
         {Array.from({ length: card.count }, (_, i) => (
@@ -230,7 +261,20 @@ function Card({ card, isSelected, onClick, isHinted, setColorIndices }) {
 }
 
 // Export helpers for testing
-export { isValidSet, findAllSets, generatePuzzle, COLORS, SHAPES, FILLS, COUNTS, SET_COLORS };
+export {
+  isValidSet,
+  findAllSets,
+  generatePuzzle,
+  normalizeSetIndices,
+  getSetKey,
+  getHintCardIndex,
+  COLORS,
+  SHAPES,
+  FILLS,
+  COUNTS,
+  SET_COLORS,
+  TARGET_UNIQUE_SETS,
+};
 
 export default function Sets() {
   const { t } = useTranslation();
@@ -267,8 +311,8 @@ export default function Sets() {
   useEffect(() => {
     if (!puzzleData || !isPlaying) return;
 
-    // Win when all sets are found
-    if (foundSets.length === puzzleData.totalSets && puzzleData.totalSets > 0) {
+    // Win when the player finds the target number of unique sets
+    if (foundSets.length >= TARGET_UNIQUE_SETS) {
       checkWin(true);
     }
   }, [foundSets, puzzleData, isPlaying, checkWin]);
@@ -292,6 +336,10 @@ export default function Sets() {
     return new Set(cardToSetIndices.keys());
   }, [cardToSetIndices]);
 
+  const foundSetKeys = useMemo(() => {
+    return new Set(foundSets.map(getSetKey));
+  }, [foundSets]);
+
   const handleCardClick = (index) => {
     if (!isPlaying) return;
 
@@ -311,8 +359,16 @@ export default function Sets() {
         const cards = puzzleData.cards;
 
         if (isValidSet(cards[i], cards[j], cards[k])) {
-          // Valid set found!
-          setFoundSets(prev => [...prev, newSelected.sort((a, b) => a - b)]);
+          const normalizedSet = normalizeSetIndices(newSelected);
+
+          if (foundSetKeys.has(getSetKey(normalizedSet))) {
+            setMessage(t('sets.duplicateSet', 'You already found that Set'));
+            setSelectedIndices([]);
+            return;
+          }
+
+          // Valid and unique set found
+          setFoundSets(prev => [...prev, normalizedSet]);
           setSelectedIndices([]);
           setMessage(t('sets.validSet', 'Valid Set! 🎉'));
         } else {
@@ -330,19 +386,10 @@ export default function Sets() {
   const handleHint = () => {
     if (!puzzleData || !isPlaying) return;
 
-    // Find a set that hasn't been found yet
-    const remainingIndices = puzzleData.cards
-      .map((_, i) => i)
-      .filter(i => !foundSetIndices.has(i));
+    const hintCardIndex = getHintCardIndex(puzzleData.allSets, foundSetKeys);
 
-    // Find sets among remaining cards
-    for (const set of puzzleData.allSets) {
-      const isRemaining = set.every(idx => !foundSetIndices.has(idx));
-      if (isRemaining) {
-        // Show first card of the hint
-        setHintIndices([set[0]]);
-        return;
-      }
+    if (hintCardIndex !== null) {
+      setHintIndices([hintCardIndex]);
     }
   };
 
@@ -365,7 +412,7 @@ export default function Sets() {
 
   if (!puzzleData) return null;
 
-  const remainingSets = puzzleData.totalSets - foundSets.length;
+  const remainingSets = Math.max(TARGET_UNIQUE_SETS - foundSets.length, 0);
 
   return (
     <div className={styles.container}>
@@ -390,7 +437,7 @@ export default function Sets() {
 
       <div className={styles.stats}>
         <span className={styles.stat}>
-          {t('sets.found', 'Found')}: {foundSets.length} / {puzzleData.totalSets}
+          {t('sets.found', 'Found')}: {Math.min(foundSets.length, TARGET_UNIQUE_SETS)} / {TARGET_UNIQUE_SETS}
         </span>
         {remainingSets > 0 && isPlaying && (
           <span className={styles.stat}>
@@ -428,7 +475,7 @@ export default function Sets() {
           <GameResult
             state="won"
             title={t('sets.won', 'All Sets Found!')}
-            message={t('sets.wonMessage', 'You found all {{count}} sets!', { count: puzzleData.totalSets })}
+            message={t('sets.wonMessage', 'You found {{count}} unique sets!', { count: TARGET_UNIQUE_SETS })}
             actions={[{ label: t('common.newGame'), onClick: handleNewGame, primary: true }]}
           />
         )}
