@@ -16,6 +16,7 @@ import {
   buildRenderableEdgeSet,
   limitConnectionsToTwo,
   getRenderableTrackConnections,
+  getTracksResultState,
 } from './Tracks.jsx';
 
 describe('Tracks - helpers', () => {
@@ -197,6 +198,12 @@ describe('Tracks - helpers', () => {
   });
 
 
+
+
+  it('getTracksResultState exposes won state only when solved', () => {
+    expect(getTracksResultState(true)).toBe('won');
+    expect(getTracksResultState(false)).toBeNull();
+  });
   it('createNextPuzzleSeed returns a deterministic new seed for entropy input', () => {
     const seed1 = createNextPuzzleSeed(12345, 111);
     const seed2 = createNextPuzzleSeed(12345, 111);
