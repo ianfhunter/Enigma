@@ -671,6 +671,15 @@
     "foundationTopOnly": "Solo la carta superior puede ir a la base.",
     "gaveUpMessage": "Solución revelada. ¡Prueba otra baraja!"
   },
+  "tracks": {
+    "won": "¡Ganaste!",
+    "wonMessage": "Construiste una vía A→B válida."
+  },
+  "cirkitz": {
+    "won": "⚡ ¡Circuito completo!",
+    "wonMessage": "¡Todas las conexiones están activas!",
+    "gaveUpMessage": "¡Así es como se conecta!"
+  },
   "grandTour": {
     "title": "Gran Recorrido",
     "instructions": "Coloca los números del 1 al 25 de modo que los números consecutivos estén separados por un movimiento de caballo. Usa las pistas dadas para completar el recorrido completo.",
