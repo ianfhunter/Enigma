@@ -15,7 +15,7 @@
  * - Goal: Fill the board with all 12 pieces
  */
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay/SeedDisplay';
@@ -544,7 +544,7 @@ export default function Pentomino() {
   if (!puzzleData) {
     return (
       <div className={styles.container}>
-        <div className={styles.error}>{t('common.failedToLoadPuzzle')}</div>
+        <div className={styles.error}><Trans i18nKey="common.failedToLoadPuzzle" components={{ link: <a href="https://github.com/ianfhunter/Enigma/issues" target="_blank" rel="noopener noreferrer" /> }} /></div>
       </div>
     );
   }
