@@ -16,7 +16,7 @@ const cardGamesPack = {
   description: 'Classic solitaire and card-based puzzles. Clear the pyramid, build foundations, and more.',
   icon: '🃏',
   color: '#16a34a',
-  version: '1770136707',
+  version: '1771346091',
   default: true,
   removable: true,
 
@@ -36,7 +36,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/PyramidCards'),
-          lastModified: 1770136707000
+          lastModified: 1771346091000
         },
         {
           slug: 'tri-peaks',
@@ -48,7 +48,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
-          lastModified: 1770136707000
+          lastModified: 1771346091000
         },
         {
           slug: 'crazy-quilt',
@@ -60,7 +60,7 @@ const cardGamesPack = {
           colors: { primary: '#f97316', secondary: '#ea580c' },
           gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
           component: () => import('../../pages/CrazyQuilt'),
-          lastModified: 1770136707000
+          lastModified: 1771346091000
         },
       ],
     },
