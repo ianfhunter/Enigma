@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay';
+import GameResult from '../../components/GameResult';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
 import styles from './Tracks.module.css';
 
@@ -352,6 +353,10 @@ function generatePuzzle(size, difficulty, seed) {
 const SIZES = [6, 8, 10];
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
 
+function getTracksResultState(solved) {
+  return solved ? 'won' : null;
+}
+
 function createNextPuzzleSeed(seed, entropy = Date.now()) {
   return stringToSeed(`tracks-${seed}-${entropy}`);
 }
@@ -442,6 +447,7 @@ export {
   buildRenderableEdgeSet,
   limitConnectionsToTwo,
   getRenderableTrackConnections,
+  getTracksResultState,
 };
 
 export default function Tracks() {
@@ -605,6 +611,15 @@ export default function Tracks() {
             ))}
           </div>
         </div>
+      )}
+
+      {getTracksResultState(solved) === 'won' && (
+        <GameResult
+          state="won"
+          title={t('tracks.won', 'You Won!')}
+          message={t('tracks.wonMessage', 'You built a valid A→B track.')}
+          actions={[{ label: t('common.newPuzzle', 'New Puzzle'), onClick: requestNewPuzzle, primary: true }]}
+        />
       )}
 
       <div className={styles.controls}>

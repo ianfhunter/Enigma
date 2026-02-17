@@ -691,7 +691,15 @@
       "1": "1 Suit",
       "2": "2 Suits",
       "4": "4 Suits"
-    }
+  },
+  "tracks": {
+    "won": "You Won!",
+    "wonMessage": "You built a valid A→B track."
+  },
+  "cirkitz": {
+    "won": "⚡ Circuit Complete!",
+    "wonMessage": "All connections are live!",
+    "gaveUpMessage": "Here's how it connects!"
   },
   "grandTour": {
     "title": "Grand Tour",
