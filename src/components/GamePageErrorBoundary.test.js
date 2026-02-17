@@ -68,7 +68,8 @@ describe('gamePageErrorReporter', () => {
 
 describe('GamePageErrorBoundaryInner', () => {
   it('switches to fallback state after an error and reports details', () => {
-    const fallback = { type: 'fallback-view' };
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const fallback = vi.fn(() => ({ type: 'fallback-view' }));
     const instance = new GamePageErrorBoundaryInner({
       slug: 'sudoku',
       fallback,
@@ -78,7 +79,11 @@ describe('GamePageErrorBoundaryInner', () => {
     expect(instance.render()).toEqual({ type: 'children-view' });
 
     const setStateSpy = vi.spyOn(instance, 'setState');
-    const reporterSpy = vi.spyOn(reporter, 'reportGamePageError');
+    const reporterSpy = vi.spyOn(reporter, 'reportGamePageError').mockReturnValue({
+      timestamp: 123,
+      error: { message: 'boom' },
+      componentStack: 'at Sudoku',
+    });
     const derivedState = GamePageErrorBoundaryInner.getDerivedStateFromError(new Error('boom'));
     expect(derivedState).toEqual({ hasError: true });
 
@@ -92,7 +97,22 @@ describe('GamePageErrorBoundaryInner', () => {
       error,
       errorInfo,
     });
-    expect(setStateSpy).not.toHaveBeenCalled();
-    expect(instance.render()).toEqual(fallback);
+    expect(setStateSpy).toHaveBeenCalledWith({
+      errorPayload: {
+        timestamp: 123,
+        error: { message: 'boom' },
+        componentStack: 'at Sudoku',
+      },
+    });
+
+    instance.state = {
+      ...derivedState,
+      errorPayload: {
+        timestamp: 123,
+      },
+    };
+    expect(instance.render()).toEqual({ type: 'fallback-view' });
+    expect(fallback).toHaveBeenCalledWith({ timestamp: 123 });
+    consoleErrorSpy.mockRestore();
   });
 });
