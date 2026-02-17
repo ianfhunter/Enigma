@@ -5,6 +5,7 @@ import {
   generatePuzzle,
   normalizeSetIndices,
   getSetKey,
+  getHintCardIndex,
   TARGET_UNIQUE_SETS,
   COLORS,
   SHAPES,
@@ -291,5 +292,40 @@ describe('Sets - Unique Set Tracking Helpers', () => {
 
   it('enforces a fixed unique-set win target of 3', () => {
     expect(TARGET_UNIQUE_SETS).toBe(3);
+  });
+});
+
+
+describe('Sets - Hint Selection', () => {
+  it('selects a card from a set that has not been found yet', () => {
+    const allSets = [[0, 1, 2], [3, 4, 5]];
+    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
+    const foundCardIndices = new Set([0, 1, 2]);
+
+    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBe(3);
+  });
+
+  it('prefers a card not yet highlighted as found when sets overlap', () => {
+    const allSets = [[0, 1, 2], [0, 3, 6]];
+    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
+    const foundCardIndices = new Set([0, 1, 2]);
+
+    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBe(3);
+  });
+
+  it('falls back to first card when every card in remaining set is already in found cards', () => {
+    const allSets = [[0, 1, 2], [0, 1, 3]];
+    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
+    const foundCardIndices = new Set([0, 1, 3]);
+
+    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBe(0);
+  });
+
+  it('returns null when all available sets were already found', () => {
+    const allSets = [[0, 1, 2]];
+    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
+    const foundCardIndices = new Set([0, 1, 2]);
+
+    expect(getHintCardIndex(allSets, foundSetKeys, foundCardIndices)).toBeNull();
   });
 });

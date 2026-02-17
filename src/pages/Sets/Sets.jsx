@@ -97,6 +97,15 @@ function getSetKey(indices) {
   return normalizeSetIndices(indices).join('-');
 }
 
+function getHintCardIndex(allSets, foundSetKeys, foundCardIndices) {
+  const remainingSet = allSets.find(set => !foundSetKeys.has(getSetKey(set)));
+
+  if (!remainingSet) return null;
+
+  const unseenCardIndex = remainingSet.find(idx => !foundCardIndices.has(idx));
+  return unseenCardIndex ?? remainingSet[0];
+}
+
 /**
  * Generate a puzzle with a guaranteed number of sets
  */
@@ -219,11 +228,21 @@ function Card({ card, isSelected, onClick, isHinted, setColorIndices }) {
     return {};
   };
 
+  const getHintStyle = () => {
+    if (!isHinted) return {};
+
+    return {
+      outline: '3px solid #fbbf24',
+      outlineOffset: '-3px',
+      zIndex: 11,
+    };
+  };
+
   return (
     <button
       className={`${styles.card} ${isSelected ? styles.selected : ''} ${isHinted ? styles.hinted : ''} ${isPartOfFoundSet ? styles.found : ''} ${setColors.length > 1 ? styles.multiSet : ''}`}
       onClick={onClick}
-      style={{ ...getMultiBorderStyle(), ...getSelectionStyle() }}
+      style={{ ...getMultiBorderStyle(), ...getSelectionStyle(), ...getHintStyle() }}
     >
       <div className={styles.cardContent}>
         {Array.from({ length: card.count }, (_, i) => (
@@ -246,6 +265,7 @@ export {
   generatePuzzle,
   normalizeSetIndices,
   getSetKey,
+  getHintCardIndex,
   COLORS,
   SHAPES,
   FILLS,
@@ -364,19 +384,10 @@ export default function Sets() {
   const handleHint = () => {
     if (!puzzleData || !isPlaying) return;
 
-    // Find a set that hasn't been found yet
-    const remainingIndices = puzzleData.cards
-      .map((_, i) => i)
-      .filter(i => !foundSetIndices.has(i));
+    const hintCardIndex = getHintCardIndex(puzzleData.allSets, foundSetKeys, foundSetIndices);
 
-    // Find sets among remaining cards
-    for (const set of puzzleData.allSets) {
-      const isRemaining = set.every(idx => !foundSetIndices.has(idx));
-      if (isRemaining) {
-        // Show first card of the hint
-        setHintIndices([set[0]]);
-        return;
-      }
+    if (hintCardIndex !== null) {
+      setHintIndices([hintCardIndex]);
     }
   };
 
