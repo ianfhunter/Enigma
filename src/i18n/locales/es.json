@@ -127,6 +127,8 @@
     "down": "Vertical",
     "complete": "Completo",
     "failedToLoadGame": "Error al cargar el juego",
+    "errorDebugHint": "Incluye los detalles de depuración de abajo al reportar un error.",
+    "errorDebugInfo": "Información de depuración del error",
     "country": "País",
     "region": "Región",
     "pegs": "Clavijas",
