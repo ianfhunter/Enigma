@@ -24,6 +24,16 @@ function generateSequence(length, seed) {
   }));
 }
 
+export function getBoxRenderState(gameState, clickedNumbers, number) {
+  const isClicked = clickedNumbers.includes(number);
+  const showNumber = gameState === 'showing' || isClicked;
+
+  return {
+    isClicked,
+    showNumber,
+  };
+}
+
 export default function ChimpTest() {
   const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState('medium');
@@ -187,14 +197,12 @@ export default function ChimpTest() {
         {gameState !== 'waiting' && (
           <div className={styles.grid}>
           {sortedSequence.map((item) => {
-            const isClicked = clickedNumbers.includes(item.number);
-            const showNumber = gameState === 'showing' || isClicked;
-            const isNext = gameState === 'playing' && !isClicked && clickedNumbers.length + 1 === item.number;
+            const { isClicked, showNumber } = getBoxRenderState(gameState, clickedNumbers, item.number);
 
             return (
               <button
                 key={item.index}
-                className={`${styles.box} ${isClicked ? styles.clicked : ''} ${isNext ? styles.next : ''}`}
+                className={`${styles.box} ${isClicked ? styles.clicked : ''}`}
                 onClick={() => handleBoxClick(item.number)}
                 disabled={gameState !== 'playing' || isClicked}
               >
