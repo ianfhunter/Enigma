@@ -10,7 +10,7 @@
   flex-wrap: wrap;
   gap: 16px;
   font-weight: 600;
-  color: var(--text-primary, #111827);
+  color: var(--color-text);
 }
 
 .levelSelector {
