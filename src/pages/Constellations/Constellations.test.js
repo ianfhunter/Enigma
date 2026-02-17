@@ -1,5 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
-import { QUESTION_TYPES, getConstellationOptions, shuffle } from './Constellations.jsx';
+import {
+  QUESTION_TYPES,
+  getConstellationOptions,
+  shuffle,
+  toFiniteNumber,
+  buildConstellationCanvasSeed,
+} from './Constellations.jsx';
 
 describe('Constellations - option generation', () => {
   const sampleData = [
@@ -78,5 +84,22 @@ describe('Constellations - question types', () => {
     expect(opts).toContain('hunter');
     expect(opts.length).toBe(4);
     expect(new Set(opts).size).toBe(4);
+  });
+});
+
+
+describe('Constellations - canvas seed safety', () => {
+  it('toFiniteNumber returns fallback for non-finite numeric values', () => {
+    expect(toFiniteNumber('12', 99)).toBe(12);
+    expect(toFiniteNumber(undefined, 99)).toBe(99);
+    expect(toFiniteNumber('abc', 99)).toBe(99);
+    expect(toFiniteNumber(Infinity, 99)).toBe(99);
+  });
+
+  it('buildConstellationCanvasSeed avoids NaN when ids are not numeric', () => {
+    expect(buildConstellationCanvasSeed(3, 7)).toBe(37042);
+    expect(buildConstellationCanvasSeed(3, 'ori')).toBe(37035);
+    expect(buildConstellationCanvasSeed(3, undefined)).toBe(37035);
+    expect(Number.isFinite(buildConstellationCanvasSeed('not-a-round', 'ori'))).toBe(true);
   });
 });

@@ -13,6 +13,16 @@ const TOTAL_ROUNDS = 12;
 const shuffle = (arr, random = Math.random) => [...arr].sort(() => random() - 0.5);
 
 const MIN_OPTION_COUNT = 4;
+const CANVAS_SEED_MULTIPLIER = 12345;
+
+const toFiniteNumber = (value, fallback = 0) => {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : fallback;
+};
+
+const buildConstellationCanvasSeed = (round, constellationId) => (
+  toFiniteNumber(round, 0) * CANVAS_SEED_MULTIPLIER + toFiniteNumber(constellationId, 0)
+);
 
 // Star data for drawing (simplified positions for common constellations)
 const CONSTELLATION_STARS = {
@@ -127,7 +137,15 @@ const QUESTION_TYPES = [
 ];
 
 // Export helpers for testing
-export { CONSTELLATION_STARS, QUESTION_TYPES, getConstellationOptions, shuffle, buildOptionSet };
+export {
+  CONSTELLATION_STARS,
+  QUESTION_TYPES,
+  getConstellationOptions,
+  shuffle,
+  buildOptionSet,
+  toFiniteNumber,
+  buildConstellationCanvasSeed,
+};
 
 // Draw constellation on canvas
 const ConstellationCanvas = ({ constellation, revealed, seed = Date.now() }) => {
@@ -139,7 +157,7 @@ const ConstellationCanvas = ({ constellation, revealed, seed = Date.now() }) => 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const random = createSeededRandom(seed);
+    const random = createSeededRandom(toFiniteNumber(seed, Date.now()));
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
@@ -170,6 +188,7 @@ const ConstellationCanvas = ({ constellation, revealed, seed = Date.now() }) => 
       fallbackStars.forEach(([px, py]) => {
         const x = px * width;
         const y = py * height;
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
 
         // Glow
         const gradient = ctx.createRadialGradient(x, y, 0, x, y, 12);
@@ -209,6 +228,7 @@ const ConstellationCanvas = ({ constellation, revealed, seed = Date.now() }) => 
       const x = px * width;
       const y = py * height;
       const size = i === 0 ? 5 : 3 + random() * 2;
+      if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(size) || size <= 0) return;
 
       // Glow
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 4);
@@ -500,7 +520,7 @@ export default function Constellations() {
             <ConstellationCanvas
               constellation={currentConstellation}
               revealed={selectedAnswer !== null}
-              seed={round * 12345 + (currentConstellation?.id || 0)}
+              seed={buildConstellationCanvasSeed(round, currentConstellation?.id)}
             />
           </div>
         )}
