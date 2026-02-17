@@ -10,7 +10,28 @@
   flex-wrap: wrap;
   gap: 16px;
   font-weight: 600;
-  color: var(--text-primary, #111827);
+  color: var(--color-text);
+}
+
+.levelSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.levelButton {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  background: white;
+  color: #111827;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.levelButtonActive {
+  background: #111827;
+  color: white;
 }
 
 .message {
@@ -83,6 +104,10 @@
 .faceDown {
   background: linear-gradient(135deg, #1e293b, #0f172a);
   color: #e2e8f0;
+}
+
+.redSuit {
+  color: #dc2626;
 }
 
 .faceUp:hover {

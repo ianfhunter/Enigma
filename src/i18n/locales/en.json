@@ -673,6 +673,28 @@
     "foundationTopOnly": "Only the top card can move to a foundation.",
     "gaveUpMessage": "Solution revealed. Try another shuffle!"
   },
+  "spiderSolitaire": {
+    "title": "Spider Solitaire",
+    "instructions": "Build descending sequences from King to Ace. Move same-suit descending sequences onto the next higher card or an empty column. Complete all eight runs to win.",
+    "invalidMove": "You can only place a sequence on the next higher card or an empty column.",
+    "invalidSequence": "Select a fully descending face-up sequence.",
+    "sameSuitSequence": "You can only move descending sequences of the same suit.",
+    "noStock": "No more cards to deal.",
+    "emptyColumnDeal": "Fill empty columns before dealing new cards.",
+    "gaveUpMessage": "You gave up. All runs have been completed.",
+    "winMessage": "You completed all eight runs!",
+    "completed": "Completed Runs",
+    "stock": "Stock",
+    "empty": "Empty",
+    "deal": "Deal 10 Cards",
+    "winDetail": "Completed all runs in {{count}} moves.",
+    "level": "Level",
+    "levels": {
+      "1": "1 Suit",
+      "2": "2 Suits",
+      "4": "4 Suits"
+    }
+  },
   "tracks": {
     "won": "You Won!",
     "wonMessage": "You built a valid A→B track."

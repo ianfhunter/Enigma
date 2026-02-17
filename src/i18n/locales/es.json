@@ -673,6 +673,28 @@
     "foundationTopOnly": "Solo la carta superior puede ir a la base.",
     "gaveUpMessage": "Solución revelada. ¡Prueba otra baraja!"
   },
+  "spiderSolitaire": {
+    "title": "Solitario Spider",
+    "instructions": "Construye secuencias descendentes de Rey a As. Mueve secuencias descendentes del mismo palo sobre la siguiente carta superior o a una columna vacía. Completa las ocho secuencias para ganar.",
+    "invalidMove": "Solo puedes colocar una secuencia sobre la siguiente carta superior o en una columna vacía.",
+    "invalidSequence": "Selecciona una secuencia descendente completa boca arriba.",
+    "sameSuitSequence": "Solo puedes mover secuencias descendentes del mismo palo.",
+    "noStock": "No quedan más cartas para repartir.",
+    "emptyColumnDeal": "Llena las columnas vacías antes de repartir nuevas cartas.",
+    "gaveUpMessage": "Te rendiste. Todas las secuencias se han completado.",
+    "winMessage": "¡Completaste las ocho secuencias!",
+    "completed": "Secuencias completadas",
+    "stock": "Mazo",
+    "empty": "Vacío",
+    "deal": "Repartir 10 cartas",
+    "winDetail": "Completaste todas las secuencias en {{count}} movimientos.",
+    "level": "Nivel",
+    "levels": {
+      "1": "1 palo",
+      "2": "2 palos",
+      "4": "4 palos"
+    }
+  },
   "tracks": {
     "won": "¡Ganaste!",
     "wonMessage": "Construiste una vía A→B válida."
