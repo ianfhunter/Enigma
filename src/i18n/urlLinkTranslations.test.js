@@ -4,14 +4,14 @@ import es from './locales/es.json';
 
 const ISSUE_URL = 'https://github.com/ianfhunter/Enigma/issues';
 
-describe('url translations renderable as links', () => {
-  it('failedToLoadGame translations include a link wrapper with the issue URL', () => {
-    expect(en.common.failedToLoadGame).toContain(`<link>${ISSUE_URL}</link>`);
-    expect(es.common.failedToLoadGame).toContain(`<link>${ISSUE_URL}</link>`);
+describe('url translations include issue urls', () => {
+  it('failedToLoadGame translations include issue url text', () => {
+    expect(en.common.failedToLoadGame).toContain(ISSUE_URL);
+    expect(es.common.failedToLoadGame).toContain(ISSUE_URL);
   });
 
-  it('failedToLoadPuzzle translations include a link wrapper with the issue URL', () => {
-    expect(en.common.failedToLoadPuzzle).toContain(`<link>${ISSUE_URL}</link>`);
-    expect(es.common.failedToLoadPuzzle).toContain(`<link>${ISSUE_URL}</link>`);
+  it('failedToLoadPuzzle translations include issue url text', () => {
+    expect(en.common.failedToLoadPuzzle).toContain(ISSUE_URL);
+    expect(es.common.failedToLoadPuzzle).toContain(ISSUE_URL);
   });
 });

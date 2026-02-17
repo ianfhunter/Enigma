@@ -1,9 +1,10 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import styles from './IframeGame.module.css';
 import { buildIframeGameDebugText } from '../../utils/gamePageDebugInfo';
+import { renderTranslationWithLinks } from '../../i18n/linkifyTranslation';
 
 /**
  * IframeGame - Renders an external game inside a sandboxed iframe
@@ -119,7 +120,7 @@ export default function IframeGame() {
         {hasError && (
           <div className={styles.loadError}>
             <span className={styles.errorIcon}>⚠️</span>
-            <h3><Trans i18nKey="common.failedToLoadGame" components={{ link: <a href="https://github.com/ianfhunter/Enigma/issues" target="_blank" rel="noopener noreferrer" /> }} /></h3>
+            <h3>{renderTranslationWithLinks(t('common.failedToLoadGame'))}</h3>
             <p>{t('common.gameBlockedOrInvalid')}</p>
             <p>{t('common.errorDebugHint')}</p>
             <textarea

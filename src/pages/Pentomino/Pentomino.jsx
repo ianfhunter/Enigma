@@ -15,7 +15,7 @@
  * - Goal: Fill the board with all 12 pieces
  */
 
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import GameHeader from '../../components/GameHeader';
 import SeedDisplay from '../../components/SeedDisplay/SeedDisplay';
@@ -26,6 +26,7 @@ import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom, getTodayDateString, stringToSeed } from '../../data/wordUtils';
 import { PENTOMINO_SHAPES, rotateShape, flipShape, normalizeShape } from './pentominoShapes';
 import styles from './Pentomino.module.css';
+import { renderTranslationWithLinks } from '../../i18n/linkifyTranslation';
 
 // Map piece numbers (1-12) from dataset to pentomino shapes
 // This is a standard mapping - the dataset uses numbers but we map to actual shapes
@@ -544,7 +545,7 @@ export default function Pentomino() {
   if (!puzzleData) {
     return (
       <div className={styles.container}>
-        <div className={styles.error}><Trans i18nKey="common.failedToLoadPuzzle" components={{ link: <a href="https://github.com/ianfhunter/Enigma/issues" target="_blank" rel="noopener noreferrer" /> }} /></div>
+        <div className={styles.error}>{renderTranslationWithLinks(t('common.failedToLoadPuzzle'))}</div>
       </div>
     );
   }

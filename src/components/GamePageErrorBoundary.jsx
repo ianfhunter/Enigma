@@ -1,7 +1,8 @@
 import { Component } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { reportGamePageError } from '../utils/gamePageErrorReporter';
 import { buildGamePageDebugText } from '../utils/gamePageDebugInfo';
+import { renderTranslationWithLinks } from '../i18n/linkifyTranslation';
 
 export class GamePageErrorBoundaryInner extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ export default function GamePageErrorBoundary({ children, slug }) {
 
   const renderFallback = errorPayload => (
     <div role="alert">
-      <p><Trans i18nKey="common.failedToLoadGame" components={{ link: <a href="https://github.com/ianfhunter/Enigma/issues" target="_blank" rel="noopener noreferrer" /> }} /></p>
+      <p>{renderTranslationWithLinks(t('common.failedToLoadGame'))}</p>
       <p>{t('common.errorDebugHint')}</p>
       <textarea
         aria-label={t('common.errorDebugInfo')}
