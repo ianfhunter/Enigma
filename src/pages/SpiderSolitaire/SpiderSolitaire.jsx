@@ -103,6 +103,8 @@ const isSameSuitDescendingSequence = (column, startIndex) => {
   return true;
 };
 
+const isRedSuit = (suit) => suit === '♥' || suit === '♦';
+
 const canPlaceSequence = (sequence, destination) => {
   if (destination.length === 0) return true;
   const destinationTop = destination[destination.length - 1];
@@ -188,6 +190,7 @@ export {
   removeCompletedRuns,
   moveSequence,
   isSameSuitDescendingSequence,
+  isRedSuit,
   CARD_VALUES,
 };
 
@@ -376,7 +379,7 @@ export default function SpiderSolitaire() {
     return (
       <button
         key={`${card.id}-${cardIndex}`}
-        className={`${styles.card} ${card.faceUp ? styles.faceUp : styles.faceDown} ${isSelected ? styles.selected : ''}`}
+        className={`${styles.card} ${card.faceUp ? styles.faceUp : styles.faceDown} ${isSelected ? styles.selected : ''} ${card.faceUp && isRedSuit(card.suit) ? styles.redSuit : ''}`}
         onClick={(event) => {
           event.stopPropagation();
           handleSelectCard(columnIndex, cardIndex);

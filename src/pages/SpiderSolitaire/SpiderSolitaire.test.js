@@ -8,6 +8,7 @@ import {
   removeCompletedRuns,
   moveSequence,
   isSameSuitDescendingSequence,
+  isRedSuit,
   CARD_VALUES,
 } from './SpiderSolitaire.jsx';
 
@@ -123,6 +124,13 @@ describe('SpiderSolitaire - Move validation', () => {
 
     expect(isSameSuitDescendingSequence(sameSuit, 0)).toBe(true);
     expect(isSameSuitDescendingSequence(mixedSuit, 0)).toBe(false);
+  });
+
+  it('identifies red suits correctly', () => {
+    expect(isRedSuit('♥')).toBe(true);
+    expect(isRedSuit('♦')).toBe(true);
+    expect(isRedSuit('♠')).toBe(false);
+    expect(isRedSuit('♣')).toBe(false);
   });
 
   it('allows placement on higher card or empty column', () => {

@@ -106,6 +106,10 @@
   color: #e2e8f0;
 }
 
+.redSuit {
+  color: #dc2626;
+}
+
 .faceUp:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(15, 23, 42, 0.16);
