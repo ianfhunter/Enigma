@@ -45,3 +45,19 @@ export function buildGamePageDebugText({ slug, errorPayload }) {
     errorPayload?.componentStack || 'unavailable',
   ].join('\n');
 }
+
+export function buildIframeGameDebugText({ packId, gameId, gameUrl, timestamp }) {
+  const baseText = buildGamePageDebugText({
+    slug: `custom/${packId || 'unknown'}/${gameId || 'unknown'}`,
+    errorPayload: {
+      timestamp,
+      error: {
+        name: 'IframeLoadError',
+        message: 'Iframe game failed to load or was blocked from embedding',
+      },
+      componentStack: null,
+    },
+  });
+
+  return `${baseText}\n\niframeUrl: ${gameUrl || 'unknown'}`;
+}

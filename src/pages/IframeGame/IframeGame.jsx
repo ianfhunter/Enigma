@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCustomPacks } from '../../hooks/useCustomPacks';
 import styles from './IframeGame.module.css';
+import { buildIframeGameDebugText } from '../../utils/gamePageDebugInfo';
 
 /**
  * IframeGame - Renders an external game inside a sandboxed iframe
@@ -17,6 +18,7 @@ export default function IframeGame() {
   const [hasError, setHasError] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
+  const [loadErrorDebugText, setLoadErrorDebugText] = useState('');
 
   const pack = getPackById(packId);
   const game = getGameFromPack(packId, gameId);
@@ -119,6 +121,14 @@ export default function IframeGame() {
             <span className={styles.errorIcon}>⚠️</span>
             <h3>{t('common.failedToLoadGame')}</h3>
             <p>{t('common.gameBlockedOrInvalid')}</p>
+            <p>{t('common.errorDebugHint')}</p>
+            <textarea
+              className={styles.errorDebugText}
+              aria-label={t('common.errorDebugInfo')}
+              readOnly
+              value={loadErrorDebugText}
+              rows={10}
+            />
             <a
               href={game.url}
               target="_blank"
@@ -141,6 +151,12 @@ export default function IframeGame() {
           onError={() => {
             setIsLoading(false);
             setHasError(true);
+            setLoadErrorDebugText(buildIframeGameDebugText({
+              packId,
+              gameId,
+              gameUrl: game.url,
+              timestamp: Date.now(),
+            }));
           }}
         />
       </div>

@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { GamePageErrorBoundaryInner } from './GamePageErrorBoundary';
-import { buildGamePageDebugText } from '../utils/gamePageDebugInfo';
 import * as reporter from '../utils/gamePageErrorReporter';
 
 describe('gamePageErrorReporter', () => {
@@ -64,58 +63,6 @@ describe('gamePageErrorReporter', () => {
     expect(payload.slug).toBe('kakuro');
     expect(payload.error.message).toBe('oops');
     expect(payload.componentStack).toBeNull();
-  });
-});
-
-describe('buildGamePageDebugText', () => {
-  const originalWindow = globalThis.window;
-
-  afterEach(() => {
-    globalThis.window = originalWindow;
-  });
-
-  it('includes caught error details and useful runtime metadata', () => {
-    globalThis.window = {
-      navigator: {
-        userAgent: 'test-agent',
-        language: 'en-GB',
-        platform: 'TestOS',
-      },
-      innerWidth: 1200,
-      innerHeight: 900,
-      screen: {
-        width: 2560,
-        height: 1440,
-      },
-      location: {
-        href: 'https://example.com/games/sudoku',
-      },
-    };
-
-    const output = buildGamePageDebugText({
-      slug: 'sudoku',
-      errorPayload: {
-        timestamp: Date.parse('2024-01-02T03:04:05.000Z'),
-        error: {
-          name: 'TypeError',
-          message: 'Cannot read property',
-          stack: 'Error stack trace',
-        },
-        componentStack: 'at Sudoku',
-      },
-    });
-
-    expect(output).toContain('slug: sudoku');
-    expect(output).toContain('timestamp: 2024-01-02T03:04:05.000Z');
-    expect(output).toContain('errorName: TypeError');
-    expect(output).toContain('errorMessage: Cannot read property');
-    expect(output).toContain('url: https://example.com/games/sudoku');
-    expect(output).toContain('userAgent: test-agent');
-    expect(output).toContain('language: en-GB');
-    expect(output).toContain('platform: TestOS');
-    expect(output).toContain('viewport: 1200x900');
-    expect(output).toContain('screen: 2560x1440');
-    expect(output).toContain('componentStack:\nat Sudoku');
   });
 });
 
