@@ -599,6 +599,28 @@
     "howItWorks": "How It Works",
     "explanation": "Each column has a value (1, 2, 3... from left). When you fill a cell, its column value is added to that row's sum. Similarly, each row has a value that contributes to column sums. Match all targets to win!"
   },
+  "crazyQuilt": {
+    "title": "Crazy Quilt",
+    "instructions": "Only exposed cards (a free short edge) can move. Move exposed quilt cards to waste or to suit foundations. Foundations that start at A build up; foundations that start at K build down.",
+    "reset": "Reset Layout",
+    "moves": "Moves: {{count}}",
+    "remaining": "Cards Remaining: {{count}}",
+    "solved": "All cards moved to foundations!",
+    "solutionRevealed": "Solution revealed.",
+    "stock": "Stock",
+    "waste": "Waste",
+    "toWaste": "To Waste",
+    "place": "Place selected card",
+    "foundationUp": "A → Up",
+    "foundationDown": "K → Down",
+    "suits": {
+      "spades": "Spades",
+      "hearts": "Hearts",
+      "diamonds": "Diamonds",
+      "clubs": "Clubs"
+    },
+    "recycleUsed": "Recycle used"
+  },
   "actionItems": {
     "loading": "Loading action items...",
     "failedToLoad": "Failed to load action items",
