@@ -74,7 +74,6 @@ const cardGamesPack = {
           colors: { primary: '#f97316', secondary: '#ea580c' },
           gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
           component: () => import('../../pages/CrazyQuilt'),
-          lastModified: 1771412675000
           lastModified: 1770906515000
         },
         {
