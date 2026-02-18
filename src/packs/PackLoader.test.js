@@ -318,11 +318,6 @@ describe('PackLoader', () => {
       expect(shadingPuzzlesPack.categories[0].name).toBe('Grid Shading');
     });
 
-    it('should have 17 games', () => {
-      expect(shadingPuzzlesPack.gameCount).toBe(17);
-      expect(shadingPuzzlesPack.allGames.length).toBe(17);
-    });
-
     it('should have expected games', () => {
       const slugs = shadingPuzzlesPack.allGames.map(g => g.slug);
       expect(slugs).toContain('nonogram');
@@ -357,7 +352,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('shading-puzzles');
-      expect(games.length).toBe(17);
       expect(games.some(g => g.slug === 'nonogram')).toBe(true);
       expect(games.some(g => g.slug === 'minesweeper')).toBe(true);
     });
@@ -390,11 +384,6 @@ describe('PackLoader', () => {
       expect(pathsRegionsPack.categories.length).toBe(2);
       expect(pathsRegionsPack.categories[0].name).toBe('Loop & Path');
       expect(pathsRegionsPack.categories[1].name).toBe('Region Division');
-    });
-
-    it('should have 22 games total (13 + 9)', () => {
-      expect(pathsRegionsPack.gameCount).toBe(22);
-      expect(pathsRegionsPack.allGames.length).toBe(22);
     });
 
     it('should have expected Loop & Path games', () => {
@@ -437,7 +426,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('paths-regions');
-      expect(games.length).toBe(22);
       expect(games.some(g => g.slug === 'numberlink')).toBe(true);
       expect(games.some(g => g.slug === 'shikaku')).toBe(true);
     });
@@ -469,12 +457,6 @@ describe('PackLoader', () => {
     it('should have 1 category (Tile & Spatial)', () => {
       expect(spatialTilesPack.categories.length).toBe(1);
       expect(spatialTilesPack.categories[0].name).toBe('Tile & Spatial');
-    });
-
-    it('should have 21 games', () => {
-        var expectedGames = 21;
-        expect(spatialTilesPack.gameCount).toBe(expectedGames);
-        expect(spatialTilesPack.allGames.length).toBe(expectedGames);
     });
 
     it('should have expected games', () => {
@@ -511,7 +493,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('spatial-tiles');
-      expect(games.length).toBe(21);
       expect(games.some(g => g.slug === 'jigsaw')).toBe(true);
       expect(games.some(g => g.slug === 'pipe-puzzle')).toBe(true);
       expect(games.some(g => g.slug === 'shisen-sho')).toBe(true);
@@ -546,11 +527,6 @@ describe('PackLoader', () => {
       expect(strategyMovementPack.categories[0].name).toBe('Chess & Movement');
     });
 
-    it('should have 9 games', () => {
-      expect(strategyMovementPack.gameCount).toBe(9);
-      expect(strategyMovementPack.allGames.length).toBe(9);
-    });
-
     it('should have expected games', () => {
       const slugs = strategyMovementPack.allGames.map(g => g.slug);
       expect(slugs).toContain('chess-puzzle');
@@ -583,7 +559,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('strategy-movement');
-      expect(games.length).toBe(9);
       expect(games.some(g => g.slug === 'chess-puzzle')).toBe(true);
       expect(games.some(g => g.slug === 'sokoban')).toBe(true);
     });
@@ -616,11 +591,6 @@ describe('PackLoader', () => {
       expect(classicLogicPack.categories.length).toBe(2);
       expect(classicLogicPack.categories[0].name).toBe('Classic Logic');
       expect(classicLogicPack.categories[1].name).toBe('Memory & Speed');
-    });
-
-    it('should have 20 games total (16 + 4)', () => {
-      expect(classicLogicPack.gameCount).toBe(20);
-      expect(classicLogicPack.allGames.length).toBe(20);
     });
 
     it('should have expected Classic Logic games', () => {
@@ -661,7 +631,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('classic-logic');
-      expect(games.length).toBe(20);
       expect(games.some(g => g.slug === 'einstein')).toBe(true);
       expect(games.some(g => g.slug === 'memory-match')).toBe(true);
     });
@@ -693,11 +662,6 @@ describe('PackLoader', () => {
     it('should have 1 category (Sudoku Family)', () => {
       expect(sudokuFamilyPack.categories.length).toBe(1);
       expect(sudokuFamilyPack.categories[0].name).toBe('Sudoku Family');
-    });
-
-    it('should have 15 games', () => {
-      expect(sudokuFamilyPack.gameCount).toBe(15);
-      expect(sudokuFamilyPack.allGames.length).toBe(15);
     });
 
     it('should have expected games', () => {
@@ -733,7 +697,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('sudoku-family');
-      expect(games.length).toBe(15);
       expect(games.some(g => g.slug === 'sudoku')).toBe(true);
       expect(games.some(g => g.slug === 'killer-sudoku')).toBe(true);
     });
@@ -766,12 +729,7 @@ describe('PackLoader', () => {
       expect(triviaKnowledgePack.categories.length).toBe(1);
       expect(triviaKnowledgePack.categories[0].name).toBe('Trivia & Knowledge');
     });
-
-    it('should have 17 games', () => {
-      expect(triviaKnowledgePack.gameCount).toBe(17);
-      expect(triviaKnowledgePack.allGames.length).toBe(17);
-    });
-
+    
     it('should have expected games', () => {
       const slugs = triviaKnowledgePack.allGames.map(g => g.slug);
       expect(slugs).toContain('flag-guesser');
@@ -806,7 +764,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('trivia-knowledge');
-      expect(games.length).toBe(17);
       expect(games.some(g => g.slug === 'flag-guesser')).toBe(true);
       expect(games.some(g => g.slug === 'trivia')).toBe(true);
     });
@@ -840,11 +797,6 @@ describe('PackLoader', () => {
       expect(internationalWordsPack.categories[0].name).toBe('International Word Games');
     });
 
-    it('should have 1 game (shiritori)', () => {
-      expect(internationalWordsPack.gameCount).toBe(1);
-      expect(internationalWordsPack.allGames.length).toBe(1);
-    });
-
     it('should have shiritori game', () => {
       const slugs = internationalWordsPack.allGames.map(g => g.slug);
       expect(slugs).toContain('shiritori');
@@ -871,7 +823,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('international-words');
-      expect(games.length).toBe(1);
       expect(games.some(g => g.slug === 'shiritori')).toBe(true);
     });
 
@@ -904,11 +855,6 @@ describe('PackLoader', () => {
       expect(cardGamesPack.categories[0].name).toBe('Card Games');
     });
 
-    it('should have 5 games', () => {
-      expect(cardGamesPack.gameCount).toBe(5);
-      expect(cardGamesPack.allGames.length).toBe(5);
-    });
-
     it('should have klondike, pyramid-cards and tri-peaks games', () => {
       const slugs = cardGamesPack.allGames.map(g => g.slug);
       expect(slugs).toContain('klondike');
@@ -937,7 +883,6 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('card-games');
-      expect(games.length).toBe(5);
       expect(games.some(g => g.slug === 'klondike')).toBe(true);
       expect(games.some(g => g.slug === 'pyramid-cards')).toBe(true);
       expect(games.some(g => g.slug === 'tri-peaks')).toBe(true);

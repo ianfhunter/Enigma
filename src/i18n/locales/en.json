@@ -178,6 +178,22 @@
     "gameStatistics": "Game statistics",
     "user": "User"
   },
+  "freecell": {
+    "title": "Freecell",
+    "instructions": "Move all cards to the foundations by suit from Ace to King. Build tableau columns down by alternating colors.",
+    "freeCells": "Free Cells",
+    "foundations": "Foundations",
+    "invalidSequence": "That stack is not ordered correctly.",
+    "invalidMove": "That move is not allowed.",
+    "invalidFoundationMove": "That card cannot go to the foundation yet.",
+    "singleCardOnly": "Only a single card can move there.",
+    "sequenceTooLarge": "You can only move up to {{count}} cards at once.",
+    "selectedCount": "Selected {{count}} card(s)",
+    "solutionRevealed": "Solution revealed.",
+    "win": "You won! All foundations are complete.",
+    "winTitle": "🎉 You Won!",
+    "winMessage": "Completed the deal in {{moves}} moves."
+  },
   "header": {
     "surpriseMe": "Surprise Me!",
     "store": "Store",

@@ -7,6 +7,7 @@
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
+import freecellIcon from '../../assets/icons/freecell.svg';
 import crazyquiltIcon from '../../assets/icons/crazyquilt.svg';
 import klondikeIcon from '../../assets/icons/klondike.svg';
 import spiderSolitaireIcon from '../../assets/icons/spidersolitaire.svg';
@@ -18,7 +19,7 @@ const cardGamesPack = {
   description: 'Classic solitaire and card-based puzzles. Clear the pyramid, build foundations, and more.',
   icon: '🃏',
   color: '#16a34a',
-  version: '1770906515',
+  version: '1771433543',
   default: true,
   removable: true,
 
@@ -29,6 +30,18 @@ const cardGamesPack = {
       description: 'Classic solitaire and card-based puzzles',
       games: [
         {
+          slug: 'freecell',
+          title: 'Freecell',
+          aliases: ['FreeCell'],
+          description: 'Move all cards to the foundations by suit while organizing the tableau in descending alternating colors.',
+          icon: freecellIcon,
+          emojiIcon: '🧩',
+          colors: { primary: '#16a34a', secondary: '#15803d' },
+          gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+          component: () => import('../../pages/Freecell'),
+          lastModified: 1771433543000
+       },
+       {
           slug: 'klondike',
           title: 'Klondike',
           aliases: ['Klondike Solitaire', 'Classic Solitaire', 'Patience'],
@@ -38,7 +51,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/Klondike'),
-          lastModified: 1770906515000
+          lastModified: 1771433543000
         },
         {
           slug: 'pyramid-cards',
@@ -50,7 +63,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/PyramidCards'),
-          lastModified: 1770906515000
+          lastModified: 1771433543000
         },
         {
           slug: 'tri-peaks',
@@ -62,7 +75,7 @@ const cardGamesPack = {
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
-          lastModified: 1771412675000
+          lastModified: 1771433543000
         },
         {
           slug: 'crazy-quilt',
@@ -74,7 +87,7 @@ const cardGamesPack = {
           colors: { primary: '#f97316', secondary: '#ea580c' },
           gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
           component: () => import('../../pages/CrazyQuilt'),
-          lastModified: 1770906515000
+          lastModified: 1771433543000
         },
         {
           slug: 'spider-solitaire',
@@ -86,7 +99,7 @@ const cardGamesPack = {
           colors: { primary: '#0f172a', secondary: '#38bdf8' },
           gradient: 'linear-gradient(135deg, #0f172a 0%, #38bdf8 100%)',
           component: () => import('../../pages/SpiderSolitaire'),
-          lastModified: 1770906515000
+          lastModified: 1771433543000
         },
       ],
     },

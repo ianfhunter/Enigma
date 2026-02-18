@@ -178,6 +178,22 @@
     "gameStatistics": "Estadísticas del juego",
     "user": "Usuario"
   },
+  "freecell": {
+    "title": "Freecell",
+    "instructions": "Mueve todas las cartas a las bases por palo desde As hasta Rey. Construye columnas en el tablero en orden descendente alternando colores.",
+    "freeCells": "Celdas Libres",
+    "foundations": "Bases",
+    "invalidSequence": "Esa pila no está ordenada correctamente.",
+    "invalidMove": "Ese movimiento no está permitido.",
+    "invalidFoundationMove": "Esa carta aún no puede ir a la base.",
+    "singleCardOnly": "Solo se puede mover una carta allí.",
+    "sequenceTooLarge": "Solo puedes mover hasta {{count}} cartas a la vez.",
+    "selectedCount": "{{count}} carta(s) seleccionada(s)",
+    "solutionRevealed": "Solución revelada.",
+    "win": "¡Ganaste! Todas las bases están completas.",
+    "winTitle": "🎉 ¡Ganaste!",
+    "winMessage": "Completaste la partida en {{moves}} movimientos."
+  },
   "header": {
     "surpriseMe": "¡Sorpréndeme!",
     "store": "Tienda",
