@@ -35,7 +35,7 @@ export const packInfo = {
   description: 'Einstein puzzles, deduction games, and pure logic challenges.',
   icon: '🧠',
   color: '#8b5cf6',
-  version: '1770136707',
+  version: '1771430361',
   default: true,
   removable: true,
 };
@@ -58,7 +58,7 @@ export const categories = [
         colors: { primary: '#c084fc', secondary: '#818cf8' },
         gradient: 'linear-gradient(135deg, #c084fc 0%, #818cf8 100%)',
         component: () => import('../../pages/Einstein'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Knights & Knaves',
@@ -69,7 +69,7 @@ export const categories = [
         colors: { primary: '#38bdf8', secondary: '#0284c7' },
         gradient: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
         component: () => import('../../pages/KnightsAndKnaves'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Countdown Math',
@@ -80,7 +80,7 @@ export const categories = [
         colors: { primary: '#f59e0b', secondary: '#d97706' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         component: () => import('../../pages/CountdownMath'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Water Pouring',
@@ -92,7 +92,7 @@ export const categories = [
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         component: () => import('../../pages/WaterPouring'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Black Box',
@@ -103,7 +103,7 @@ export const categories = [
         colors: { primary: '#f59e0b', secondary: '#d97706' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         component: () => import('../../pages/Blackbox'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'CodeBreaker',
@@ -115,7 +115,7 @@ export const categories = [
         colors: { primary: '#e879f9', secondary: '#d946ef' },
         gradient: 'linear-gradient(135deg, #e879f9 0%, #d946ef 100%)',
         component: () => import('../../pages/CodeBreaker'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Dominosa',
@@ -127,7 +127,7 @@ export const categories = [
         colors: { primary: '#a855f7', secondary: '#9333ea' },
         gradient: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)',
         component: () => import('../../pages/Dominosa'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Magnets',
@@ -139,7 +139,7 @@ export const categories = [
         colors: { primary: '#ef4444', secondary: '#b91c1c' },
         gradient: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
         component: () => import('../../pages/Magnets'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Range',
@@ -150,7 +150,7 @@ export const categories = [
         colors: { primary: '#60a5fa', secondary: '#3b82f6' },
         gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
         component: () => import('../../pages/Range'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Undead',
@@ -161,7 +161,7 @@ export const categories = [
         colors: { primary: '#22c55e', secondary: '#16a34a' },
         gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         component: () => import('../../pages/Undead'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Shinro',
@@ -172,7 +172,7 @@ export const categories = [
         colors: { primary: '#22d3ee', secondary: '#a855f7' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #a855f7 100%)',
         component: () => import('../../pages/Shinro'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Naval Battle',
@@ -183,7 +183,7 @@ export const categories = [
         colors: { primary: '#0ea5e9', secondary: '#1e3a5f' },
         gradient: 'linear-gradient(135deg, #0ea5e9 0%, #1e3a5f 100%)',
         component: () => import('../../pages/NavalBattle'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Map',
@@ -194,7 +194,7 @@ export const categories = [
         colors: { primary: '#22d3ee', secondary: '#06b6d4' },
         gradient: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)',
         component: () => import('../../pages/Map'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Sets',
@@ -206,7 +206,7 @@ export const categories = [
         colors: { primary: '#e53e3e', secondary: '#805ad5' },
         gradient: 'linear-gradient(135deg, #e53e3e 0%, #38a169 50%, #805ad5 100%)',
         component: () => import('../../pages/Sets'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
     },
       {
         title: 'Tetravex',
@@ -218,7 +218,7 @@ export const categories = [
         colors: { primary: '#3b82f6', secondary: '#8b5cf6' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
         component: () => import('../../pages/Tetravex'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Kakurasu',
@@ -230,7 +230,7 @@ export const categories = [
         colors: { primary: '#3b82f6', secondary: '#22c55e' },
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #22c55e 100%)',
         component: () => import('../../pages/Kakurasu'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
     ],
   },
@@ -249,7 +249,7 @@ export const categories = [
         colors: { primary: '#f43f5e', secondary: '#e11d48' },
         gradient: 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)',
         component: () => import('../../pages/Sequence'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Memory Match',
@@ -261,7 +261,7 @@ export const categories = [
         colors: { primary: '#fcd34d', secondary: '#fbbf24' },
         gradient: 'linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%)',
         component: () => import('../../pages/MemoryMatch'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Chimp Test',
@@ -272,7 +272,7 @@ export const categories = [
         colors: { primary: '#8b5cf6', secondary: '#7c3aed' },
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
         component: () => import('../../pages/ChimpTest'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
       {
         title: 'Memorize Items',
@@ -283,7 +283,7 @@ export const categories = [
         colors: { primary: '#06b6d4', secondary: '#0891b2' },
         gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
         component: () => import('../../pages/MemorizeItems'),
-        lastModified: 1770136707000
+        lastModified: 1771430361000
       },
     ],
   },
