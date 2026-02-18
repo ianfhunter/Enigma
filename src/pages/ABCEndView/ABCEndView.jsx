@@ -405,9 +405,9 @@ export default function ABCEndView() {
       />
 
       <SizeSelector
-        sizes={AVAILABLE_SIZES}
-        selectedSize={size}
-        onSizeChange={setSize}
+        options={AVAILABLE_SIZES}
+        value={size}
+        onChange={setSize}
       />
 
       <div className={styles.gameArea}>

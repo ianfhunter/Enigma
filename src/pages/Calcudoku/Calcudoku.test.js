@@ -1,6 +1,45 @@
 import { describe, it, expect } from 'vitest';
 import { createSeededRandom } from '../../data/wordUtils';
 
+import { parseCluesIntoCages, parseDatasetPuzzle, countPuzzleSolutions } from './Calcudoku';
+import kenkenPuzzles from '../../../public/datasets/kenkenPuzzles.json';
+
+
+
+describe('Calcudoku - Uniqueness', () => {
+  it('should detect a uniquely solvable cage set', () => {
+    const cages = [
+      { cells: [[0, 0]], target: 1, operation: '' },
+      { cells: [[0, 1]], target: 2, operation: '' },
+      { cells: [[1, 0]], target: 2, operation: '' },
+      { cells: [[1, 1]], target: 1, operation: '' },
+    ];
+
+    expect(countPuzzleSolutions(cages, 2)).toBe(1);
+  });
+
+  it('should detect a non-unique cage set', () => {
+    const cages = [
+      { cells: [[0, 0], [0, 1]], target: 3, operation: '+' },
+      { cells: [[1, 0], [1, 1]], target: 3, operation: '+' },
+    ];
+
+    expect(countPuzzleSolutions(cages, 2)).toBe(2);
+  });
+
+  it('should enforce unique solutions when requested', () => {
+    const ambiguousPuzzle = {
+      rows: 2,
+      cols: 2,
+      clues: [['3+', '.'], ['3+', '.']],
+      solution: [[1, 2], [2, 1]],
+    };
+
+    const parsed = parseDatasetPuzzle(ambiguousPuzzle, true);
+    expect(countPuzzleSolutions(parsed.cages, 2)).toBe(1);
+  });
+
+});
 // ===========================================
 // Calcudoku - Grid Creation Tests
 // ===========================================
@@ -354,4 +393,128 @@ describe('Calcudoku - Difficulty', () => {
   it('should have increasing operation complexity', () => {
     expect(DIFFICULTY_SETTINGS.easy.operations.length).toBeLessThan(DIFFICULTY_SETTINGS.expert.operations.length);
   });
+});
+
+
+describe('Calcudoku - Dataset cage reconstruction', () => {
+  it('should cover every cell in sampled dataset puzzles', () => {
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      const allCells = new Set();
+      parsed.cages.forEach((cage) => {
+        cage.cells.forEach(([row, col]) => {
+          allCells.add(`${row}-${col}`);
+        });
+      });
+
+      expect(parsed.cages.length).toBeGreaterThan(0);
+      expect(allCells.size).toBe(puzzle.rows * puzzle.cols);
+    });
+  });
+
+  it('should keep every operation marker attached to its own clue cell', () => {
+    const puzzle = kenkenPuzzles.puzzles[214];
+    const cages = parseCluesIntoCages(puzzle.clues, puzzle.rows, puzzle.cols, puzzle.solution);
+
+    const clueCells = [];
+    for (let row = 0; row < puzzle.rows; row++) {
+      for (let col = 0; col < puzzle.cols; col++) {
+        if (puzzle.clues[row][col] !== '.' && puzzle.clues[row][col] !== null) {
+          clueCells.push(`${row}-${col}`);
+        }
+      }
+    }
+
+    const cageAnchors = cages.map((cage) => `${cage.cells[0][0]}-${cage.cells[0][1]}`);
+
+    expect(new Set(cageAnchors)).toEqual(new Set(clueCells));
+  });
+
+
+  it('should enforce calcudoku operation rules for parsed cages', () => {
+    const sampleIndexes = [0, 74, 214, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        if (cage.operation !== '') {
+          expect(cage.cells.length).toBeGreaterThan(1);
+        }
+      });
+    });
+  });
+
+  it('should keep every displayed cage clue consistent with the puzzle solution', () => {
+    const evaluate = (cage, solution) => {
+      const values = cage.cells.map(([row, col]) => solution[row][col]);
+
+      switch (cage.operation) {
+        case '+':
+          return values.reduce((acc, value) => acc + value, 0);
+        case '×':
+          return values.reduce((acc, value) => acc * value, 1);
+        case '-':
+          return Math.abs(values[0] - values[1]);
+        case '÷':
+          return Math.max(...values) / Math.min(...values);
+        default:
+          return values[0];
+      }
+    };
+
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        expect(evaluate(cage, puzzle.solution)).toBe(cage.target);
+      });
+    });
+  });
+
+
+  it('should keep each clue anchor as the top-left cell of its parsed cage', () => {
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        const minRow = Math.min(...cage.cells.map(([row]) => row));
+        const minColInTopRow = Math.min(
+          ...cage.cells.filter(([row]) => row === minRow).map(([, col]) => col)
+        );
+        const [anchorRow, anchorCol] = cage.cells[0];
+
+        expect(anchorRow).toBe(minRow);
+        expect(anchorCol).toBe(minColInTopRow);
+      });
+    });
+  });
+
+
+  it('should always show an operation for multi-cell cages', () => {
+    const sampleIndexes = [0, 25, 74, 133, 214, 287, 356, 429];
+
+    sampleIndexes.forEach((index) => {
+      const puzzle = kenkenPuzzles.puzzles[index];
+      const parsed = parseDatasetPuzzle(puzzle);
+
+      parsed.cages.forEach((cage) => {
+        if (cage.cells.length > 1) {
+          expect(cage.operation).not.toBe('');
+        }
+      });
+    });
+  });
+
 });

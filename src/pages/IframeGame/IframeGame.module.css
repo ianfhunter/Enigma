@@ -263,6 +263,17 @@
   max-width: 400px;
 }
 
+
+.errorDebugText {
+  width: min(100%, 760px);
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
 .tryExternalLink {
   padding: 0.75rem 1.5rem;
   background: var(--color-primary);

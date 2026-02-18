@@ -412,6 +412,16 @@ export default function LetterWeb() {
   const handleLetterClick = (letter, sideIndex) => {
     if (isWon || isGaveUp) return;
 
+    // Check if this is the last selected letter - if so, delete it (tap to delete)
+    if (selectedLetters.length > 0) {
+      const lastSelected = selectedLetters[selectedLetters.length - 1];
+      if (lastSelected.letter === letter && lastSelected.side === sideIndex) {
+        setSelectedLetters(prev => prev.slice(0, -1));
+        setCurrentWord(prev => prev.slice(0, -1));
+        return;
+      }
+    }
+
     // Check if this is the first letter or comes from a different side
     if (selectedLetters.length > 0) {
       const lastSelected = selectedLetters[selectedLetters.length - 1];
@@ -650,7 +660,16 @@ export default function LetterWeb() {
         </div>
 
         <div className={styles.inputArea}>
-          <div className={styles.wordDisplay}>
+          <div 
+            className={`${styles.wordDisplay} ${currentWord ? styles.wordDisplayInteractive : ''}`}
+            onClick={() => {
+              if (currentWord.length > 0) {
+                setCurrentWord(prev => prev.slice(0, -1));
+                setSelectedLetters(prev => prev.slice(0, -1));
+              }
+            }}
+            title={currentWord ? 'Tap to delete last letter' : ''}
+          >
             {wordDisplayText}
           </div>
           <div className={styles.buttons}>

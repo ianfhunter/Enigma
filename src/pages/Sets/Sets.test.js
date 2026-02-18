@@ -1,5 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { isValidSet, findAllSets, generatePuzzle, COLORS, SHAPES, FILLS, COUNTS } from './Sets';
+import {
+  isValidSet,
+  findAllSets,
+  generatePuzzle,
+  normalizeSetIndices,
+  getSetKey,
+  getHintCardIndex,
+  TARGET_UNIQUE_SETS,
+  COLORS,
+  SHAPES,
+  FILLS,
+  COUNTS,
+} from './Sets';
 
 // ===========================================
 // Sets - Card Attribute Tests
@@ -260,5 +272,49 @@ describe('Sets - Combinatorial Properties', () => {
     expect(isValidSet(card2, card3, card1)).toBe(true);
     expect(isValidSet(card3, card1, card2)).toBe(true);
     expect(isValidSet(card3, card2, card1)).toBe(true);
+  });
+});
+
+
+// ===========================================
+// Sets - Unique Set Tracking Helpers
+// ===========================================
+describe('Sets - Unique Set Tracking Helpers', () => {
+  it('normalizes selected card indices into a deterministic order', () => {
+    expect(normalizeSetIndices([8, 2, 5])).toEqual([2, 5, 8]);
+    expect(normalizeSetIndices([0, 1, 2])).toEqual([0, 1, 2]);
+  });
+
+  it('builds identical keys for the same set regardless of selection order', () => {
+    expect(getSetKey([8, 2, 5])).toBe('2-5-8');
+    expect(getSetKey([2, 5, 8])).toBe('2-5-8');
+  });
+
+  it('enforces a fixed unique-set win target of 3', () => {
+    expect(TARGET_UNIQUE_SETS).toBe(3);
+  });
+});
+
+
+describe('Sets - Hint Selection', () => {
+  it('selects the first card from a set that has not been found yet', () => {
+    const allSets = [[0, 1, 2], [3, 4, 5]];
+    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
+
+    expect(getHintCardIndex(allSets, foundSetKeys)).toBe(3);
+  });
+
+  it('can still hint a card that appears in previously found sets', () => {
+    const allSets = [[0, 1, 2], [0, 3, 6]];
+    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
+
+    expect(getHintCardIndex(allSets, foundSetKeys)).toBe(0);
+  });
+
+  it('returns null when all available sets were already found', () => {
+    const allSets = [[0, 1, 2]];
+    const foundSetKeys = new Set([getSetKey([0, 1, 2])]);
+
+    expect(getHintCardIndex(allSets, foundSetKeys)).toBeNull();
   });
 });

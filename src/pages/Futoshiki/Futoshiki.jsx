@@ -420,7 +420,7 @@ export default function Futoshiki() {
             state="won"
             title={t('gameStatus.solved')}
             message={t('gameMessages.allInequalitiesSatisfied')}
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            actions={[{ label: 'New Puzzle', onClick: () => initGame(Date.now()), primary: true }]}
           />
         )}
 
@@ -428,7 +428,7 @@ export default function Futoshiki() {
           <GameResult
             state="gaveup"
             message="Better luck next time!"
-            actions={[{ label: 'New Puzzle', onClick: initGame, primary: true }]}
+            actions={[{ label: 'New Puzzle', onClick: () => initGame(Date.now()), primary: true }]}
           />
         )}
 
@@ -449,7 +449,7 @@ export default function Futoshiki() {
             onGiveUp={handleGiveUp}
             disabled={!isPlaying}
           />
-          <button className={styles.newGameBtn} onClick={initGame}>
+          <button className={styles.newGameBtn} onClick={() => initGame(Date.now())}>
             New Puzzle
           </button>
         </div>

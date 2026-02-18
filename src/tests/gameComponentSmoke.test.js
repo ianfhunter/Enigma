@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import { reportGamePageError, getGamePageErrorBucketKey } from '../utils/gamePageErrorReporter';
 
 // ===========================================
 // Game Component Smoke Tests
@@ -57,6 +58,7 @@ const GAME_MODULES = {
   'galaxies': 'Galaxies',
   'gods-quiz': 'GodsQuiz',
   'gokigen-naname': 'GokigenNaname',
+  'grand-tour': 'GrandTour',
   'hangman': 'Hangman',
   'hashi': 'Hashi',
   'hidato': 'Hidato',
@@ -82,6 +84,7 @@ const GAME_MODULES = {
   'loopy': 'Loopy',
   'magnets': 'Magnets',
   'map': 'Map',
+  'mahjong-solitaire': 'MahjongSolitaire',
   'maze': 'Maze',
   'memory-match': 'MemoryMatch',
   'chimp-test': 'ChimpTest',
@@ -166,6 +169,18 @@ let mockStorage = {};
 beforeEach(() => {
   mockStorage = {};
 
+  // Mock window for page error collection used by CI smoke checks
+  const mockLocation = {
+    search: '',
+    pathname: '/',
+    href: 'http://localhost:3000/',
+  };
+
+  vi.stubGlobal('window', {
+    dispatchEvent: vi.fn(),
+    location: mockLocation,
+  });
+
   // Mock localStorage
   vi.stubGlobal('localStorage', {
     getItem: vi.fn((key) => mockStorage[key] || null),
@@ -176,7 +191,7 @@ beforeEach(() => {
 
   // Mock sessionStorage
   vi.stubGlobal('sessionStorage', {
-    getItem: vi.fn((key) => null),
+    getItem: vi.fn((_key) => null),
     setItem: vi.fn(),
     removeItem: vi.fn(),
     clear: vi.fn(),
@@ -223,12 +238,8 @@ beforeEach(() => {
     text: vi.fn().mockResolvedValue(''),
   }));
 
-  // Mock window.location for URL parsing
-  vi.stubGlobal('location', {
-    search: '',
-    pathname: '/',
-    href: 'http://localhost:3000/',
-  });
+  // Mock location for URL parsing
+  vi.stubGlobal('location', mockLocation);
 
   // Mock navigator
   vi.stubGlobal('navigator', {
@@ -289,6 +300,10 @@ vi.mock('../context/SettingsContext', () => ({
     setTheme: vi.fn(),
     toggleTheme: vi.fn(),
   }),
+  useSoundEnabled: () => ({
+    soundEnabled: false,
+    setSoundEnabled: vi.fn(),
+  }),
 }));
 
 vi.mock('../context/AuthContext', () => ({
@@ -321,19 +336,29 @@ describe('Game Component Smoke Tests - No Runtime Errors', () => {
       // Actually render the component using server-side rendering - this catches
       // runtime errors like "t is not defined" that React.createElement alone
       // won't catch (createElement just creates an element descriptor, it doesn't
-      // invoke the component function until render)
-      let error = null;
+      // invoke the component function until render).
+      //
+      // When there is an error we route it through the shared page error reporter so
+      // CI verifies the same error-capture mechanism used by the app.
+      const bucketKey = getGamePageErrorBucketKey();
+      window[bucketKey] = [];
 
       try {
         renderToString(React.createElement(module.default));
-      } catch (e) {
-        error = e;
+      } catch (error) {
+        reportGamePageError({
+          slug,
+          error,
+          errorInfo: { componentStack: null },
+        });
       }
 
-      // Should not throw when rendering the component
-      if (error) {
-        // Provide helpful error message
-        throw new Error(`${folder} component threw error on render: ${error.message}`);
+      const collectedErrors = window[bucketKey];
+      if (collectedErrors.length > 0) {
+        const firstError = collectedErrors[0];
+        throw new Error(
+          `${folder} component reported page error: ${firstError.error?.message || 'unknown error'}`
+        );
       }
     }, timeout); // Per-game timeout for slower imports
   }

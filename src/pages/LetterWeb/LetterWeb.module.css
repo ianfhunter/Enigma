@@ -201,6 +201,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
+}
+
+.wordDisplayInteractive {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wordDisplayInteractive:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.wordDisplayInteractive:active {
+  transform: scale(0.98);
 }
 
 .buttons {

@@ -9,9 +9,9 @@ import { useSettings } from '../../context/SettingsContext';
 import { setEnglishVariant } from '../../data/wordFrequency';
 import { supportedLanguages, getEnglishVariant } from '../../i18n';
 import { fuzzySearchGames } from '../../utils/fuzzySearch';
+import { branding } from '../../utils/branding';
 import AuthModal from '../AuthModal';
 import DismissibleAlert from '../DismissibleAlert';
-const logo = '/branding/logo-simple-e.svg';
 import styles from './Layout.module.css';
 
 export default function Layout() {
@@ -112,7 +112,7 @@ export default function Layout() {
     return (
       <div className={styles.layout}>
         <div className={styles.loadingContainer}>
-          <img src={logo} alt="Loading" className={styles.loadingLogo} />
+          <img src={branding.logoAnimated} alt="Loading" className={styles.loadingLogo} />
           <p className={styles.loadingText}>{t('common.loading')}</p>
         </div>
       </div>
@@ -127,8 +127,8 @@ export default function Layout() {
             <div className={`${styles.homeHeader} ${isSearchFocused ? styles.searchActive : ''}`}>
               <div className={styles.logoSection}>
                 <Link to="/" className={styles.logo}>
-                  <img src={logo} alt="Enigma" className={styles.logoIcon} />
-                  <span className={styles.logoText} data-text="Enigma">Enigma</span>
+                  <img src={branding.logo} alt={branding.appName} className={styles.logoIcon} />
+                  <span className={styles.logoText} data-text={branding.appName}>{branding.appName}</span>
                 </Link>
               </div>
 
@@ -228,8 +228,8 @@ export default function Layout() {
           ) : (
             <div className={`${styles.gamePageHeader} ${isSearchFocused ? styles.searchActive : ''}`}>
               <Link to="/" className={styles.logo}>
-                <img src={logo} alt="Enigma" className={styles.logoIcon} />
-                <span className={styles.logoText}>Enigma</span>
+                <img src={branding.logo} alt={branding.appName} className={styles.logoIcon} />
+                <span className={styles.logoText}>{branding.appName}</span>
               </Link>
 
               <div className={`${styles.searchWrapper} ${isSearchFocused ? styles.searchFocused : ''}`} ref={searchWrapperRef}>
@@ -306,9 +306,25 @@ export default function Layout() {
         <Outlet context={{ settings }} />
       </main>
       <footer className={styles.footer}>
-        <p>{t('footer.selfHosted')}</p>
+        <p>
+          {branding.footerPrefix ? (
+            <>
+              {branding.footerPrefix} powered by{' '}
+              <a
+                href={branding.githubUrl || 'https://github.com/ianfhunter/enigma'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.githubLink}
+              >
+                Enigma
+              </a>
+            </>
+          ) : (
+            t('footer.selfHosted')
+          )}
+        </p>
         <a
-          href="https://github.com/ianfhunter/enigma"
+          href={branding.githubUrl || 'https://github.com/ianfhunter/enigma'}
           target="_blank"
           rel="noopener noreferrer"
           className={styles.githubLink}

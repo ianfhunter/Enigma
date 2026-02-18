@@ -346,6 +346,14 @@ export {
   checkMatches,
 };
 
+function getCirkitzResultState(gameState) {
+  if (gameState === 'won') return 'won';
+  if (gameState === 'gaveUp') return 'gaveup';
+  return null;
+}
+
+export { getCirkitzResultState };
+
 export default function Cirkitz() {
   const { t } = useTranslation();
   const [puzzleSize, setPuzzleSize] = useState(3);
@@ -402,6 +410,8 @@ export default function Cirkitz() {
   };
 
   if (!puzzleData) return null;
+
+  const gameResultState = getCirkitzResultState(gameState);
 
   const hexSize = 48;
   const hexWidth = hexSize * 2;
@@ -561,23 +571,21 @@ export default function Cirkitz() {
           )}
         </svg>
 
-        {gameState === 'won' && (
+        {gameResultState === 'won' && (
           <GameResult
-            status="won"
-            title="⚡ Circuit Complete!"
-            message="All connections are live!"
-            onNewGame={initGame}
-            newGameLabel="New Puzzle"
+            state="won"
+            title={t('cirkitz.won', '⚡ Circuit Complete!')}
+            message={t('cirkitz.wonMessage', 'All connections are live!')}
+            actions={[{ label: t('common.newPuzzle', 'New Puzzle'), onClick: initGame, primary: true }]}
           />
         )}
 
-        {gameState === 'gaveUp' && (
+        {gameResultState === 'gaveup' && (
           <GameResult
-            status="gaveUp"
-            title="Solution Revealed"
-            message="Here's how it connects!"
-            onNewGame={initGame}
-            newGameLabel="New Puzzle"
+            state="gaveup"
+            title={t('gameResult.solutionRevealed', 'Solution Revealed')}
+            message={t('cirkitz.gaveUpMessage', "Here's how it connects!")}
+            actions={[{ label: t('common.newPuzzle', 'New Puzzle'), onClick: initGame, primary: true }]}
           />
         )}
 

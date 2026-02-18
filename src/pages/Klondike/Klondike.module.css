@@ -1,0 +1,274 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.topControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.gameInfo {
+  display: flex;
+  gap: 16px;
+  font-weight: 600;
+}
+
+.message {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--game-panel-bg);
+  border: 1px solid var(--game-panel-border);
+}
+
+.success {
+  border-color: #16a34a;
+  color: #16a34a;
+}
+
+.playArea {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topRow {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.stockArea,
+.wasteArea,
+.foundationArea {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pileLabel {
+  font-size: 0.9rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.pile {
+  width: 90px;
+  height: 120px;
+  border-radius: 12px;
+  border: 2px dashed var(--game-panel-border);
+  background: var(--game-panel-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.stockPile,
+.foundationPile {
+  border-style: solid;
+}
+
+.wastePile {
+  border-style: solid;
+  width: 145px;
+}
+
+.wasteStack {
+  position: relative;
+  width: 170px;
+  height: 120px;
+}
+
+.wasteCard {
+  position: absolute;
+  top: 0;
+  transition: transform 0.1s ease;
+}
+
+.wasteTopCard {
+  cursor: pointer;
+}
+
+.wasteTopCard:hover {
+  transform: translateY(-2px);
+}
+
+.emptyPile {
+  opacity: 0.6;
+}
+
+.foundations {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.foundationSuit {
+  font-size: 1.4rem;
+}
+
+.tableauArea {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(90px, 1fr));
+  gap: 12px;
+}
+
+.tableauColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 250px;
+  position: relative;
+}
+
+.emptyColumn {
+  height: 120px;
+  border-radius: 12px;
+  border: 2px dashed var(--game-panel-border);
+  background: transparent;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.85rem;
+}
+
+.cardButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  width: 90px;
+  height: 120px;
+}
+
+.cardWrapper {
+  cursor: grab;
+}
+
+.cardWrapper:active {
+  cursor: grabbing;
+}
+
+.card {
+  flex-shrink: 0;
+  width: 90px;
+  height: 120px;
+  border-radius: 12px;
+  border: 1px solid #d4d4d8;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.faceDown {
+  background: repeating-linear-gradient(
+    45deg,
+    #1e293b,
+    #1e293b 8px,
+    #334155 8px,
+    #334155 16px
+  );
+  color: #e2e8f0;
+  align-items: center;
+  justify-content: center;
+}
+
+.faceUp {
+  background: #fff;
+}
+
+.selected {
+  outline: 3px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+.cardRank {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.cardSuit {
+  font-size: 1.2rem;
+}
+
+.cardBack {
+  font-size: 1.6rem;
+}
+
+.red {
+  color: #dc2626;
+}
+
+.black {
+  color: #0f172a;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.controlButton {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.controlButton:hover:not(:disabled) {
+  background: var(--color-bg-tertiary);
+  transform: translateY(-2px);
+}
+
+.controlButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.winOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.winModal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  max-width: 320px;
+}
+
+.playAgain {
+  margin-top: 12px;
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .tableauArea {
+    grid-template-columns: repeat(3, minmax(90px, 1fr));
+  }
+}

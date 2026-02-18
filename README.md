@@ -7,6 +7,8 @@
 [![Games](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ianfhunter/enigma/main/badge.json)](https://raw.githubusercontent.com/ianfhunter/enigma/main/badge.json)
 [![License](https://img.shields.io/badge/license-Custom-blue.svg)](LICENSE)
 
+[![Docker Publishing](https://github.com/ianfhunter/Enigma/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/ianfhunter/Enigma/actions/workflows/docker-publish.yml) [![Tests](https://github.com/ianfhunter/Enigma/actions/workflows/vitest.yml/badge.svg?branch=main)](https://github.com/ianfhunter/Enigma/actions/workflows/vitest.yml)
+
 <img width="1912" height="883" alt="image" src="https://github.com/user-attachments/assets/dae88e2f-673c-4294-b482-79967be085fc" />
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Documentation](https://www.ianhunter.ie/Enigma) • [Contributing](#-contributing)
