@@ -26,7 +26,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-i18next": "^16.5.3",
-    "react-konva": "^19.2.1",
+    "react-konva": "^19.2.2",
     "react-router-dom": "^6.30.3",
     "subtlex-word-frequencies": "^2.0.0",
     "wordnet": "^2.0.0"
