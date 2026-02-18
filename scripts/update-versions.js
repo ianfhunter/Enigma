@@ -10,8 +10,6 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-console.log(`Updating all manifest.js files with individual timestamps`);
-
 // Get __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,7 +19,7 @@ const __dirname = path.dirname(__filename);
  * @param {string} dir - Directory path to scan
  * @returns {number} - Unix timestamp in seconds of the most recent file modification
  */
-function getLatestModificationTime(dir) {
+export function getLatestModificationTime(dir) {
   let latestTime = 0;
 
   function walk(currentDir) {
@@ -46,8 +44,44 @@ function getLatestModificationTime(dir) {
   return latestTime;
 }
 
+function resolveImportPath(manifestPath, importPath) {
+  const resolvedPath = path.resolve(path.dirname(manifestPath), importPath);
+
+  if (fs.existsSync(resolvedPath)) {
+    return resolvedPath;
+  }
+
+  const extensionCandidates = ['.js', '.jsx', '.ts', '.tsx'];
+  for (const extension of extensionCandidates) {
+    if (fs.existsSync(`${resolvedPath}${extension}`)) {
+      return `${resolvedPath}${extension}`;
+    }
+  }
+
+  return null;
+}
+
+function getGameTimestampMs(manifestPath, importPath, currentLastModified) {
+  const resolvedPath = resolveImportPath(manifestPath, importPath);
+
+  if (!resolvedPath) {
+    return currentLastModified;
+  }
+
+  const stat = fs.statSync(resolvedPath);
+  const latestSeconds = stat.isDirectory()
+    ? getLatestModificationTime(resolvedPath)
+    : Math.floor(stat.mtimeMs / 1000);
+
+  if (!latestSeconds) {
+    return currentLastModified;
+  }
+
+  return latestSeconds * 1000;
+}
+
 // Function to update version in a manifest file
-function updateManifestVersion(filePath) {
+export function updateManifestVersion(filePath) {
   try {
     // Get the game pack directory (parent of manifest.js)
     const packDir = path.dirname(filePath);
@@ -67,13 +101,21 @@ function updateManifestVersion(filePath) {
       console.log(`Updated pack version to ${packTimestampStr} in: ${filePath}`);
     }
 
-    // Update individual game lastModified fields
-    const lastModifiedRegex = /(lastModified:\s*)\d+/g;
-    newContent = newContent.replace(lastModifiedRegex, `$1${packTimestamp * 1000}`);
-    if (newContent !== content) {
+    // Update individual game lastModified fields from each game's own component path
+    const gameLastModifiedRegex = /(component:\s*\(\)\s*=>\s*import\((['"])([^'"]+)\2\)[\s\S]*?lastModified:\s*)(\d+)/g;
+    const withGameLastModified = newContent.replace(
+      gameLastModifiedRegex,
+      (match, prefix, _quote, importPath, currentValue) => {
+        const nextValue = getGameTimestampMs(filePath, importPath, Number(currentValue));
+        return `${prefix}${nextValue}`;
+      }
+    );
+
+    if (withGameLastModified !== newContent) {
       updated = true;
       console.log(`Updated game lastModified fields in: ${filePath}`);
     }
+    newContent = withGameLastModified;
 
     // Update individual game version fields (if they exist)
     const gameVersionRegex = /(version:\s*['"])\d+(\.\d+)*(['"])/g;
@@ -99,7 +141,7 @@ function updateManifestVersion(filePath) {
 // Find all manifest.js files in src/packs directory
 const packsDir = path.join(__dirname, '../src/packs');
 
-function findManifestFiles(dir) {
+export function findManifestFiles(dir) {
   const files = [];
 
   function walk(currentDir) {
@@ -121,14 +163,22 @@ function findManifestFiles(dir) {
   return files;
 }
 
-// Update all manifest files
-const manifestFiles = findManifestFiles(packsDir);
-let updatedCount = 0;
+export function run() {
+  console.log(`Updating all manifest.js files with individual timestamps`);
 
-for (const manifestFile of manifestFiles) {
-  if (updateManifestVersion(manifestFile)) {
-    updatedCount++;
+  // Update all manifest files
+  const manifestFiles = findManifestFiles(packsDir);
+  let updatedCount = 0;
+
+  for (const manifestFile of manifestFiles) {
+    if (updateManifestVersion(manifestFile)) {
+      updatedCount++;
+    }
   }
+
+  console.log(`\nUpdated ${updatedCount} manifest files with individual timestamps`);
 }
 
-console.log(`\nUpdated ${updatedCount} manifest files with individual timestamps`);
+if (process.argv[1] === __filename) {
+  run();
+}
