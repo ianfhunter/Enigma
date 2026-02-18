@@ -284,3 +284,18 @@ describe('ABCEndView - Solution Check', () => {
     expect(checkSolved(lowercaseGrid, solution, 4)).toBe(true);
   });
 });
+
+
+// ===========================================
+// ABCEndView - Size Availability Tests
+// ===========================================
+describe('ABCEndView - Size Availability', () => {
+  it('should include 5x5, 6x6, and 7x7 puzzles in the dataset', async () => {
+    const puzzleDataset = await import('../../../public/datasets/abcendviewPuzzles.json');
+    const availableSizes = [...new Set(puzzleDataset.default.puzzles.map(p => p.rows))].sort((a, b) => a - b);
+
+    expect(availableSizes).toContain(5);
+    expect(availableSizes).toContain(6);
+    expect(availableSizes).toContain(7);
+  });
+});

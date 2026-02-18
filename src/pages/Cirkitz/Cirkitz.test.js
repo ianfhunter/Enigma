@@ -7,6 +7,7 @@ import {
   oppositeEdge,
   checkMatches,
   generatePuzzle,
+  getCirkitzResultState,
 } from './Cirkitz.jsx';
 
 // ===========================================
@@ -277,5 +278,18 @@ describe('Cirkitz - Wedge Rendering', () => {
       const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
       expect(dist).toBeCloseTo(size);
     }
+  });
+});
+
+
+describe('Cirkitz - Game result state mapping', () => {
+  it('maps won and gaveUp states to GameResult-compatible values', () => {
+    expect(getCirkitzResultState('won')).toBe('won');
+    expect(getCirkitzResultState('gaveUp')).toBe('gaveup');
+  });
+
+  it('returns null for non-terminal gameplay states', () => {
+    expect(getCirkitzResultState('playing')).toBeNull();
+    expect(getCirkitzResultState('setup')).toBeNull();
   });
 });

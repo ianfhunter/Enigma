@@ -5,7 +5,7 @@ import GameResult from '../../components/GameResult';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
-import { isValidWord, createSeededRandom } from '../../data/wordUtils';
+import { isValidWordTilesWord, createSeededRandom } from '../../data/wordUtils';
 import WordWithDefinition from '../../components/WordWithDefinition/WordWithDefinition';
 import styles from './WordTiles.module.css';
 
@@ -220,7 +220,24 @@ export default function WordTiles() {
     const tileInSlot = placedTiles.find(t => t.slotIndex === slotIndex);
     if (!tileInSlot) return;
 
-    setPlacedTiles(prev => prev.filter(t => t.slotIndex !== slotIndex));
+    // Shift remaining tiles left to fill gaps
+    setPlacedTiles(prev => {
+      const toRemove = prev.filter(t => t.slotIndex === slotIndex);
+      if (toRemove.length === 0) return prev;
+
+      // Keep tiles with slotIndex < removed slot (not affected)
+      const unaffected = prev.filter(t => t.slotIndex < slotIndex);
+      // Shift tiles with slotIndex > removed slot
+      const toShift = prev.filter(t => t.slotIndex > slotIndex);
+      const shifted = toShift.map(t => ({
+        ...t,
+        slotIndex: t.slotIndex - 1
+      }));
+
+      // Return the removed tile to hand and apply shifts
+      return [...unaffected, ...shifted];
+    });
+
     setTiles(prev => {
       const newTiles = [...prev];
       newTiles[tileInSlot.handIndex] = tileInSlot.letter;
@@ -256,7 +273,7 @@ export default function WordTiles() {
     }
 
     // Check if word is valid
-    const valid = await isValidWord(word);
+    const valid = await isValidWordTilesWord(word);
     if (!valid) {
       setMessage(`"${word}" is not a valid word!`);
       return;
@@ -365,11 +382,15 @@ export default function WordTiles() {
       if (e.key === 'Backspace') {
         e.preventDefault();
         if (placedTiles.length > 0) {
-          // Remove the last placed tile (rightmost)
+          // Remove the last placed tile (rightmost) and shift remaining tiles left
           const sortedTiles = [...placedTiles].sort((a, b) => a.slotIndex - b.slotIndex);
           const lastTile = sortedTiles[sortedTiles.length - 1];
 
-          setPlacedTiles(prev => prev.filter(t => t.slotIndex !== lastTile.slotIndex));
+          // Shift remaining tiles left to fill gaps
+          setPlacedTiles(prev => {
+            const toShift = prev.filter(t => t.slotIndex < lastTile.slotIndex);
+            return toShift.map(t => t);
+          });
           setTiles(prev => {
             const newTiles = [...prev];
             newTiles[lastTile.handIndex] = lastTile.letter;

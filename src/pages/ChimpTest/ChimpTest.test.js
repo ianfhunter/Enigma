@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { getBoxRenderState } from './ChimpTest';
 
 // ===========================================
 // ChimpTest - Sequence Generation Tests
@@ -194,5 +195,33 @@ describe('ChimpTest - Game State', () => {
 
   it('should stay playing on correct partial click', () => {
     expect(determineNextState('playing', true, false)).toBe('playing');
+  });
+});
+
+// ===========================================
+// ChimpTest - Box Visibility Tests
+// ===========================================
+describe('ChimpTest - Box Visibility', () => {
+  it('shows numbers for all boxes during showing phase', () => {
+    const unclicked = getBoxRenderState('showing', [], 3);
+    const clicked = getBoxRenderState('showing', [3], 3);
+
+    expect(unclicked.showNumber).toBe(true);
+    expect(clicked.showNumber).toBe(true);
+  });
+
+  it('hides unclicked numbers during playing phase so next box is not revealed', () => {
+    const nextTarget = getBoxRenderState('playing', [1, 2], 3);
+    const wrongTarget = getBoxRenderState('playing', [1, 2], 5);
+
+    expect(nextTarget.showNumber).toBe(false);
+    expect(wrongTarget.showNumber).toBe(false);
+  });
+
+  it('keeps already-clicked boxes visible during playing phase', () => {
+    const clicked = getBoxRenderState('playing', [1, 2], 2);
+
+    expect(clicked.isClicked).toBe(true);
+    expect(clicked.showNumber).toBe(true);
   });
 });

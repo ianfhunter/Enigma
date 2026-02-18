@@ -7,7 +7,7 @@
     "loadingMap": "Loading map data...",
     "loadingConstellation": "Loading constellation...",
     "loadingPainting": "Loading painting...",
-    "failedToLoadPuzzle": "Failed to load puzzle data.",
+    "failedToLoadPuzzle": "Failed to load puzzle data. File a bug here: https://github.com/ianfhunter/Enigma/issues",
     "wordsToFind": "Words to Find",
     "howToPlay": "How to Play",
     "cleared": "Cleared!",
@@ -126,7 +126,9 @@
     "across": "Across",
     "down": "Down",
     "complete": "Complete",
-    "failedToLoadGame": "Failed to load game",
+    "failedToLoadGame": "Failed to load game. File a bug here: https://github.com/ianfhunter/Enigma/issues",
+    "errorDebugHint": "Include the debug details below when filing a bug report.",
+    "errorDebugInfo": "Error debug information",
     "country": "Country",
     "region": "Region",
     "pegs": "Pegs",
@@ -554,6 +556,15 @@
     "rule3": "Type your answer and submit before time runs out",
     "rule4": "Use \"Shuffle\" to rearrange the display"
   },
+  "2X": {
+    "title": "2X",
+    "instructions": "Combine matching tiles to reach as high a score as possible. Use arrow keys or swipe to move.",
+    "bestTile": "Best Tile",
+    "target": "Target {{value}}",
+    "gameOver": "Game Over",
+    "emptyTile": "Empty Tile",
+    "tileLabel": "Tile {{value}}"
+  },
   "nQueens": {
     "rule1": "Queens attack horizontally, vertically, and diagonally",
     "rule2": "No two queens can be on the same row, column, or diagonal",
@@ -619,7 +630,27 @@
       "diamonds": "Diamonds",
       "clubs": "Clubs"
     },
-    "recycleUsed": "Recycle used"
+    "recycleUsed": "Recycle used"   
+  },
+  "mahjongSolitaire": {
+    "title": "Mahjong Solitaire",
+    "instructions": "Match pairs of identical tiles. A tile is free if nothing is on top and at least one side is open.",
+    "tilesRemaining": "Tiles remaining",
+    "layers": "Layers",
+    "tileAria": "Mahjong tile",
+    "winMessage": "Board cleared!",
+    "giveUpMessage": "Solution revealed.",
+    "currentShape": "Shape",
+    "nextGameShape": "Shape for next game",
+    "shapes": {
+      "classic": "Classic",
+      "turtle": "Turtle",
+      "spider": "Spider",
+      "pyramid": "Pyramid",
+      "tiger": "Tiger",
+      "rooster": "Rooster",
+      "hourglass": "Hourglass",
+      "butterfly": "Butterfly"
   },
   "actionItems": {
     "loading": "Loading action items...",
@@ -643,5 +674,64 @@
     "total": "Total",
     "completed": "Completed",
     "completionRate": "Completion Rate"
+  },
+  "klondike": {
+    "title": "Klondike",
+    "instructions": "Move cards to the foundations in ascending suit order. Build tableau stacks in alternating colors from King down.",
+    "winTitle": "You Won!",
+    "winMessage": "You solved Klondike in {{moves}} moves!",
+    "stockLabel": "Stock",
+    "wasteLabel": "Waste",
+    "foundationLabel": "Foundations",
+    "newGame1Card": "New Game (1 card)",
+    "newGame3Card": "New Game (3 cards)",
+    "emptyColumn": "Empty column",
+    "stockEmpty": "No cards left to draw.",
+    "recycleMessage": "Recycled the waste back into the stock.",
+    "invalidFoundationMove": "That card cannot move to the foundation.",
+    "invalidTableauMove": "That card cannot move there.",
+    "cardFaceDown": "That card is face down.",
+    "foundationTopOnly": "Only the top card can move to a foundation.",
+    "gaveUpMessage": "Solution revealed. Try another shuffle!"
+  },
+  "spiderSolitaire": {
+    "title": "Spider Solitaire",
+    "instructions": "Build descending sequences from King to Ace. Move same-suit descending sequences onto the next higher card or an empty column. Complete all eight runs to win.",
+    "invalidMove": "You can only place a sequence on the next higher card or an empty column.",
+    "invalidSequence": "Select a fully descending face-up sequence.",
+    "sameSuitSequence": "You can only move descending sequences of the same suit.",
+    "noStock": "No more cards to deal.",
+    "emptyColumnDeal": "Fill empty columns before dealing new cards.",
+    "gaveUpMessage": "You gave up. All runs have been completed.",
+    "winMessage": "You completed all eight runs!",
+    "completed": "Completed Runs",
+    "stock": "Stock",
+    "empty": "Empty",
+    "deal": "Deal 10 Cards",
+    "winDetail": "Completed all runs in {{count}} moves.",
+    "level": "Level",
+    "levels": {
+      "1": "1 Suit",
+      "2": "2 Suits",
+      "4": "4 Suits"
+    }
+  },
+  "tracks": {
+    "won": "You Won!",
+    "wonMessage": "You built a valid A→B track."
+  },
+  "cirkitz": {
+    "won": "⚡ Circuit Complete!",
+    "wonMessage": "All connections are live!",
+    "gaveUpMessage": "Here's how it connects!"
+  },
+  "grandTour": {
+    "title": "Grand Tour",
+    "instructions": "Fill numbers 1-25 so consecutive numbers are a knight move apart. Use the given clues to complete the full tour.",
+    "showErrors": "Show errors",
+    "won": "Tour Completed!",
+    "wonMessage": "Perfect! You found the full knight route.",
+    "gaveUp": "Solution Revealed",
+    "gaveUpMessage": "Review the route and try a new seed."
   }
 }

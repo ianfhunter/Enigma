@@ -471,9 +471,10 @@ describe('PackLoader', () => {
       expect(spatialTilesPack.categories[0].name).toBe('Tile & Spatial');
     });
 
-    it('should have 20 games', () => {
-      expect(spatialTilesPack.gameCount).toBe(20);
-      expect(spatialTilesPack.allGames.length).toBe(20);
+    it('should have 21 games', () => {
+        var expectedGames = 21;
+        expect(spatialTilesPack.gameCount).toBe(expectedGames);
+        expect(spatialTilesPack.allGames.length).toBe(expectedGames);
     });
 
     it('should have expected games', () => {
@@ -510,7 +511,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('spatial-tiles');
-      expect(games.length).toBe(20);
+      expect(games.length).toBe(21);
       expect(games.some(g => g.slug === 'jigsaw')).toBe(true);
       expect(games.some(g => g.slug === 'pipe-puzzle')).toBe(true);
       expect(games.some(g => g.slug === 'shisen-sho')).toBe(true);
@@ -545,9 +546,9 @@ describe('PackLoader', () => {
       expect(strategyMovementPack.categories[0].name).toBe('Chess & Movement');
     });
 
-    it('should have 8 games', () => {
-      expect(strategyMovementPack.gameCount).toBe(8);
-      expect(strategyMovementPack.allGames.length).toBe(8);
+    it('should have 9 games', () => {
+      expect(strategyMovementPack.gameCount).toBe(9);
+      expect(strategyMovementPack.allGames.length).toBe(9);
     });
 
     it('should have expected games', () => {
@@ -582,7 +583,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('strategy-movement');
-      expect(games.length).toBe(8);
+      expect(games.length).toBe(9);
       expect(games.some(g => g.slug === 'chess-puzzle')).toBe(true);
       expect(games.some(g => g.slug === 'sokoban')).toBe(true);
     });
@@ -694,9 +695,9 @@ describe('PackLoader', () => {
       expect(sudokuFamilyPack.categories[0].name).toBe('Sudoku Family');
     });
 
-    it('should have 14 games', () => {
-      expect(sudokuFamilyPack.gameCount).toBe(14);
-      expect(sudokuFamilyPack.allGames.length).toBe(14);
+    it('should have 15 games', () => {
+      expect(sudokuFamilyPack.gameCount).toBe(15);
+      expect(sudokuFamilyPack.allGames.length).toBe(15);
     });
 
     it('should have expected games', () => {
@@ -708,6 +709,7 @@ describe('PackLoader', () => {
       expect(slugs).toContain('kakuro');
       expect(slugs).toContain('futoshiki');
       expect(slugs).toContain('skyscraper');
+      expect(slugs).toContain('set-square');
     });
 
     it('should have getGameBySlug function', () => {
@@ -731,7 +733,7 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('sudoku-family');
-      expect(games.length).toBe(14);
+      expect(games.length).toBe(15);
       expect(games.some(g => g.slug === 'sudoku')).toBe(true);
       expect(games.some(g => g.slug === 'killer-sudoku')).toBe(true);
     });
@@ -902,13 +904,14 @@ describe('PackLoader', () => {
       expect(cardGamesPack.categories[0].name).toBe('Card Games');
     });
 
-    it('should have 2 games (pyramid-cards and tri-peaks)', () => {
-      expect(cardGamesPack.gameCount).toBe(2);
-      expect(cardGamesPack.allGames.length).toBe(2);
+    it('should have 4 games', () => {
+      expect(cardGamesPack.gameCount).toBe(4);
+      expect(cardGamesPack.allGames.length).toBe(4);
     });
 
-    it('should have pyramid-cards and tri-peaks games', () => {
+    it('should have klondike, pyramid-cards and tri-peaks games', () => {
       const slugs = cardGamesPack.allGames.map(g => g.slug);
+      expect(slugs).toContain('klondike');
       expect(slugs).toContain('pyramid-cards');
       expect(slugs).toContain('tri-peaks');
     });
@@ -934,7 +937,8 @@ describe('PackLoader', () => {
 
     it('should return games via PackLoader', () => {
       const games = getGamesForPack('card-games');
-      expect(games.length).toBe(2);
+      expect(games.length).toBe(4);
+      expect(games.some(g => g.slug === 'klondike')).toBe(true);
       expect(games.some(g => g.slug === 'pyramid-cards')).toBe(true);
       expect(games.some(g => g.slug === 'tri-peaks')).toBe(true);
     });

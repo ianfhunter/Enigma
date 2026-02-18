@@ -8,6 +8,7 @@ import GameStore from './pages/GameStore';
 import IframeGame from './pages/IframeGame';
 import CommunityGame from './pages/CommunityGame';
 import NotFound from './pages/NotFound';
+import GamePageErrorBoundary from './components/GamePageErrorBoundary';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import { allGames } from './data/gameRegistry';
@@ -59,6 +60,7 @@ const slugToFolder = {
   'galaxies': 'Galaxies',
   'gods-quiz': 'GodsQuiz',
   'gokigen-naname': 'GokigenNaname',
+  'grand-tour': 'GrandTour',
   'hangman': 'Hangman',
   'hashi': 'Hashi',
   'hidato': 'Hidato',
@@ -82,6 +84,7 @@ const slugToFolder = {
   'loopy': 'Loopy',
   'magnets': 'Magnets',
   'map': 'Map',
+  'mahjong-solitaire': 'MahjongSolitaire',
   'maze': 'Maze',
   'memory-match': 'MemoryMatch',
   'chimp-test': 'ChimpTest',
@@ -105,6 +108,7 @@ const slugToFolder = {
   'pokemon-quiz': 'PokemonQuiz',
   'provincial-map-fill': 'ProvincialMapFill',
   'pyramid': 'Pyramid',
+  'klondike': 'Klondike',
   'pyramid-cards': 'PyramidCards',
   'riddles': 'Riddles',
   'range': 'Range',
@@ -132,6 +136,7 @@ const slugToFolder = {
   'suguru': 'Suguru',
   'sujiko': 'Sujiko',
   'suko': 'Suko',
+  'set-square': 'SetSquare',
   'takuzu': 'Takuzu',
   'tapa': 'Tapa',
   'cirkitz': 'Cirkitz',
@@ -298,11 +303,15 @@ function GameLoading() {
 }
 
 // Wrapper for lazy-loaded game components
-function GameRoute({ component: Component }) {
+function GameRoute({ component, slug }) {
+  const GameComponent = component;
+
   return (
-    <Suspense fallback={<GameLoading />}>
-      <Component />
-    </Suspense>
+    <GamePageErrorBoundary slug={slug}>
+      <Suspense fallback={<GameLoading />}>
+        <GameComponent />
+      </Suspense>
+    </GamePageErrorBoundary>
   );
 }
 
@@ -320,7 +329,7 @@ function generateGameRoutes() {
         <Route
           key={game.slug}
           path={game.slug}
-          element={<GameRoute component={Component} />}
+          element={<GameRoute component={Component} slug={game.slug} />}
         />
       );
     }

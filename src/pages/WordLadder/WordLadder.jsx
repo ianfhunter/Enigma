@@ -10,8 +10,20 @@ import styles from './WordLadder.module.css';
 // Word ladder puzzles use 4-letter words; keep length centralized
 const WORD_LENGTH = 4;
 
+function getWinMessage(userStepsCount, optimalSteps) {
+  if (userStepsCount === optimalSteps) {
+    return '🎉 Perfect! You found the optimal path!';
+  }
+
+  if (userStepsCount <= optimalSteps + 2) {
+    return '✨ Excellent work!';
+  }
+
+  return '✓ You made it!';
+}
+
 // Export helpers for testing
-export { generateWordLadderPuzzle, differsByOneLetter, WORD_LENGTH };
+export { generateWordLadderPuzzle, differsByOneLetter, WORD_LENGTH, getWinMessage };
 
 export default function WordLadder() {
   const { t } = useTranslation();
@@ -93,16 +105,10 @@ export default function WordLadder() {
     // Check win condition
     if (word === puzzle.endWord) {
       setGameWon(true);
+      setShowSolution(true);
       const optimalSteps = puzzle.solution.length - 1;
       const userStepsCount = userSteps.length + 1;
-
-      if (userStepsCount === optimalSteps) {
-        setMessage({ text: '🎉 Perfect! You found the optimal path!', type: 'success' });
-      } else if (userStepsCount <= optimalSteps + 2) {
-        setMessage({ text: '✨ Excellent work!', type: 'success' });
-      } else {
-        setMessage({ text: '✓ You made it!', type: 'success' });
-      }
+      setMessage({ text: getWinMessage(userStepsCount, optimalSteps), type: 'success' });
     } else {
       // Check if the current word can reach the end word in one step
       const currentWord = word;
@@ -111,16 +117,10 @@ export default function WordLadder() {
       if (canReachEnd) {
         // User has reached the step before the final word - they've solved it!
         setGameWon(true);
+        setShowSolution(true);
         const optimalSteps = puzzle.solution.length - 1;
         const userStepsCount = userSteps.length + 1;
-
-        if (userStepsCount === optimalSteps) {
-          setMessage({ text: '🎉 Perfect! You found the optimal path!', type: 'success' });
-        } else if (userStepsCount <= optimalSteps + 2) {
-          setMessage({ text: '✨ Excellent work!', type: 'success' });
-        } else {
-          setMessage({ text: '✓ You made it!', type: 'success' });
-        }
+        setMessage({ text: getWinMessage(userStepsCount, optimalSteps), type: 'success' });
       }
     }
   };

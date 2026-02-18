@@ -145,3 +145,26 @@ describe('LetterWeb - helpers', () => {
     expect(chain).toBeNull();
   });
 });
+
+describe('LetterWeb - tap to delete', () => {
+  it('wordDisplayText returns the current word while typing', () => {
+    expect(getWordDisplayText('TEST', 'T', 'playing')).toBe('TEST');
+  });
+
+  it('wordDisplayText shows won state when empty', () => {
+    const result = getWordDisplayText('', 'D', 'won');
+    expect(result).toBe('Puzzle solved!');
+  });
+
+  it('wordDisplayText shows revealed state when empty', () => {
+    const result = getWordDisplayText('', 'L', 'revealed');
+    expect(result).toBe('Solution revealed');
+  });
+
+  it('wordDisplayText is interactive when user is typing (current word takes precedence)', () => {
+    // When user is actively typing, the word display shows the current word
+    // and is interactive for tap-to-delete
+    const result = getWordDisplayText('HELLO', 'O', 'playing');
+    expect(result).toBe('HELLO');
+  });
+});

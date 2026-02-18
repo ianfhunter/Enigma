@@ -57,27 +57,67 @@
 
 .sectionTitle {
   font-weight: 800;
-  margin: 0.25rem 0 0.75rem;
+  margin: 0;
   color: var(--color-text);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.selectionMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.clearBtn {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-text-secondary);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.clearBtn:hover:not(:disabled) {
+  border-color: var(--color-primary-border-hover);
+  color: var(--color-text);
+  background: var(--color-bg-hover);
+}
+
+.clearBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .domainsGrid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.45rem;
-  max-height: 280px;
-  overflow-y: auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
 }
 
 .domainBtn {
   border: 1px solid var(--color-border);
-  background: var(--color-bg-card);
+  background: color-mix(in srgb, var(--color-bg-card) 92%, var(--color-primary-bg) 8%);
   color: var(--color-text);
-  padding: 0.45rem 0.4rem;
-  border-radius: 10px;
+  padding: 0.6rem 0.55rem;
+  border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.86rem;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   transition: all 0.15s ease;
 }
 
@@ -88,7 +128,28 @@
 
 .selected {
   border-color: var(--color-primary-border);
+  background: color-mix(in srgb, var(--color-primary-bg) 60%, var(--color-bg-card) 40%);
+}
+
+.domainCheck {
+  width: 1.1rem;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-card);
+}
+
+.selected .domainCheck {
+  border-color: var(--color-primary-border);
   background: var(--color-primary-bg);
+  color: var(--color-text);
 }
 
 .correctSelected {
@@ -184,14 +245,24 @@
 
 @media (max-width: 900px) {
   .domainsGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 600px) {
-  .domainsGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .sectionHeader {
+    align-items: flex-start;
+    flex-direction: column;
   }
+
+  .domainsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .domainBtn {
+    font-size: 0.9rem;
+  }
+
   .statsPanel {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

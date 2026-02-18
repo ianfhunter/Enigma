@@ -7,7 +7,7 @@
     "loadingMap": "Cargando datos del mapa...",
     "loadingConstellation": "Cargando constelación...",
     "loadingPainting": "Cargando pintura...",
-    "failedToLoadPuzzle": "Error al cargar los datos del puzzle.",
+    "failedToLoadPuzzle": "Error al cargar los datos del puzzle. Reporta un error aquí: https://github.com/ianfhunter/Enigma/issues",
     "wordsToFind": "Palabras a Encontrar",
     "howToPlay": "Cómo Jugar",
     "cleared": "¡Despejado!",
@@ -126,7 +126,9 @@
     "across": "Horizontal",
     "down": "Vertical",
     "complete": "Completo",
-    "failedToLoadGame": "Error al cargar el juego",
+    "failedToLoadGame": "Error al cargar el juego. Reporta un error aquí: https://github.com/ianfhunter/Enigma/issues",
+    "errorDebugHint": "Incluye los detalles de depuración de abajo al reportar un error.",
+    "errorDebugInfo": "Información de depuración del error",
     "country": "País",
     "region": "Región",
     "pegs": "Clavijas",
@@ -554,6 +556,15 @@
     "rule3": "Escribe tu respuesta y envíala antes de que se acabe el tiempo",
     "rule4": "Usa \"Mezclar\" para reorganizar la visualización"
   },
+  "2X": {
+    "title": "2X",
+    "instructions": "Combina fichas iguales para llegar a la puntuación más alta posible. Usa las flechas o desliza para mover.",
+    "bestTile": "Mejor ficha",
+    "target": "Objetivo {{value}}",
+    "gameOver": "Fin del juego",
+    "emptyTile": "Ficha vacía",
+    "tileLabel": "Ficha {{value}}"
+  },
   "nQueens": {
     "rule1": "Las reinas atacan horizontal, vertical y diagonalmente",
     "rule2": "Ninguna reina puede estar en la misma fila, columna o diagonal",
@@ -621,6 +632,27 @@
     },
     "recycleUsed": "Reciclado usado"
   },
+  "mahjongSolitaire": {
+    "title": "Mahjong Solitaire",
+    "instructions": "Empareja fichas idénticas. Una ficha está libre si no hay nada encima y al menos un lado está abierto.",
+    "tilesRemaining": "Fichas restantes",
+    "layers": "Capas",
+    "tileAria": "Ficha de mahjong",
+    "winMessage": "¡Tablero despejado!",
+    "giveUpMessage": "Solución revelada.",
+    "currentShape": "Figura",
+    "nextGameShape": "Figura para la siguiente partida",
+    "shapes": {
+      "classic": "Clásica",
+      "turtle": "Tortuga",
+      "spider": "Araña",
+      "pyramid": "Pirámide",
+      "tiger": "Tigre",
+      "rooster": "Gallo",
+      "hourglass": "Reloj de arena",
+      "butterfly": "Mariposa"
+    }
+  },
   "actionItems": {
     "loading": "Cargando elementos de acción...",
     "failedToLoad": "Error al cargar elementos de acción",
@@ -643,5 +675,65 @@
     "total": "Total",
     "completed": "Completado",
     "completionRate": "Tasa de Completitud"
+  },
+  "klondike": {
+    "title": "Klondike",
+    "instructions": "Mueve las cartas a las bases en orden ascendente por palo. Construye columnas alternando colores de Rey hacia abajo.",
+    "winTitle": "¡Has ganado!",
+    "winMessage": "¡Resolviste Klondike en {{moves}} movimientos!",
+    "stockLabel": "Mazo",
+    "wasteLabel": "Descarte",
+    "foundationLabel": "Bases",
+    "newGame1Card": "Nuevo Juego (1 carta)",
+    "newGame3Card": "Nuevo Juego (3 cartas)",
+    "emptyColumn": "Columna vacía",
+    "stockEmpty": "No quedan cartas para robar.",
+    "recycleMessage": "Reciclaste el descarte al mazo.",
+    "invalidFoundationMove": "Esa carta no puede ir a la base.",
+    "invalidTableauMove": "Esa carta no puede ir ahí.",
+    "cardFaceDown": "Esa carta está boca abajo.",
+    "foundationTopOnly": "Solo la carta superior puede ir a la base.",
+    "gaveUpMessage": "Solución revelada. ¡Prueba otra baraja!"
+  },
+  "spiderSolitaire": {
+    "title": "Solitario Spider",
+    "instructions": "Construye secuencias descendentes de Rey a As. Mueve secuencias descendentes del mismo palo sobre la siguiente carta superior o a una columna vacía. Completa las ocho secuencias para ganar.",
+    "invalidMove": "Solo puedes colocar una secuencia sobre la siguiente carta superior o en una columna vacía.",
+    "invalidSequence": "Selecciona una secuencia descendente completa boca arriba.",
+    "sameSuitSequence": "Solo puedes mover secuencias descendentes del mismo palo.",
+    "noStock": "No quedan más cartas para repartir.",
+    "emptyColumnDeal": "Llena las columnas vacías antes de repartir nuevas cartas.",
+    "gaveUpMessage": "Te rendiste. Todas las secuencias se han completado.",
+    "winMessage": "¡Completaste las ocho secuencias!",
+    "completed": "Secuencias completadas",
+    "stock": "Mazo",
+    "empty": "Vacío",
+    "deal": "Repartir 10 cartas",
+    "winDetail": "Completaste todas las secuencias en {{count}} movimientos.",
+    "level": "Nivel",
+    "levels": {
+      "1": "1 palo",
+      "2": "2 palos",
+      "4": "4 palos"
+    }
+  },
+  "tracks": {
+    "won": "¡Ganaste!",
+    "wonMessage": "Construiste una vía A→B válida."
+  },
+  "cirkitz": {
+    "won": "⚡ ¡Circuito completo!",
+    "wonMessage": "¡Todas las conexiones están activas!",
+    "gaveUpMessage": "¡Así es como se conecta!"
+  },
+  "grandTour": {
+    "title": "Gran Recorrido",
+    "instructions": "Coloca los números del 1 al 25 de modo que los números consecutivos estén separados por un movimiento de caballo. Usa las pistas dadas para completar el recorrido completo.",
+    "showErrors": "Mostrar errores",
+    "won": "¡Recorrido completado!",
+    "wonMessage": "¡Perfecto! Encontraste la ruta completa del caballo.",
+    "gaveUp": "Solución revelada",
+    "gaveUpMessage": "Revisa la ruta e intenta con una nueva semilla."
   }
+
 }

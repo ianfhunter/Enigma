@@ -977,12 +977,15 @@
 .loadingLogo {
   width: 80px;
   height: auto;
-  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
-  animation: loadingPulse 2s ease-in-out infinite;
 }
 
 :global([data-theme="light"]) .loadingLogo {
   filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes loadingPulse {
