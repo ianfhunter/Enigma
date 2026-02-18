@@ -610,6 +610,28 @@
     "howItWorks": "Cómo Funciona",
     "explanation": "Cada columna tiene un valor (1, 2, 3... desde la izquierda). Cuando rellenas una celda, el valor de su columna se añade a la suma de esa fila. De manera similar, cada fila tiene un valor que contribuye a las sumas de columna. ¡Haz que todos los objetivos coincidan para ganar!"
   },
+  "crazyQuilt": {
+    "title": "Crazy Quilt",
+    "instructions": "Solo las cartas expuestas (con un lado corto libre) se pueden mover. Mueve cartas del tapete al descarte o a las bases por palo. Las bases que empiezan en A suben; las que empiezan en K bajan.",
+    "reset": "Reiniciar diseño",
+    "moves": "Movimientos: {{count}}",
+    "remaining": "Cartas restantes: {{count}}",
+    "solved": "¡Todas las cartas se movieron a las bases!",
+    "solutionRevealed": "Solución revelada.",
+    "stock": "Mazo",
+    "waste": "Descarte",
+    "toWaste": "Al descarte",
+    "place": "Colocar carta seleccionada",
+    "foundationUp": "A → Subir",
+    "foundationDown": "K → Bajar",
+    "suits": {
+      "spades": "Picas",
+      "hearts": "Corazones",
+      "diamonds": "Diamantes",
+      "clubs": "Tréboles"
+    },
+    "recycleUsed": "Reciclado usado"
+  },
   "mahjongSolitaire": {
     "title": "Mahjong Solitaire",
     "instructions": "Empareja fichas idénticas. Una ficha está libre si no hay nada encima y al menos un lado está abierto.",

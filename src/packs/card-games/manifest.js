@@ -7,6 +7,7 @@
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
+import crazyquiltIcon from '../../assets/icons/crazyquilt.svg';
 import klondikeIcon from '../../assets/icons/klondike.svg';
 import spiderSolitaireIcon from '../../assets/icons/spidersolitaire.svg';
 
@@ -30,7 +31,7 @@ const cardGamesPack = {
         {
           slug: 'klondike',
           title: 'Klondike',
-          aliases: ['Klondike Solitaire', 'Classic Solitaire'],
+          aliases: ['Klondike Solitaire', 'Classic Solitaire', 'Patience'],
           description: 'Build the foundations from Ace to King while stacking alternating colors in the tableau.',
           icon: klondikeIcon,
           emojiIcon: '🃏',
@@ -54,13 +55,25 @@ const cardGamesPack = {
         {
           slug: 'tri-peaks',
           title: 'Tri-Peaks',
-          aliases: ['Tri Peaks', 'Three Peaks'],
+          aliases: ['Tri Peaks', 'Three Peaks', 'Triple Peaks', 'Tri Towers'],
           description: 'Clear three peaks by removing cards adjacent to the waste card. Cards are adjacent if they differ by 1 rank (wrapping A-2-K).',
           icon: tripeaksIcon,
           emojiIcon: '⛰️',
           colors: { primary: '#16a34a', secondary: '#15803d' },
           gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
           component: () => import('../../pages/TriPeaks'),
+          lastModified: 1771412675000
+        },
+        {
+          slug: 'crazy-quilt',
+          title: 'Crazy Quilt',
+          aliases: ['Crazy Quilt Solitaire', 'Indian Carpet', 'Japanese Rug'],
+          description: 'Play Crazy Quilt with exposed-card rules, stock/waste play, and dual Ace-up + King-down suit foundations.',
+          icon: crazyquiltIcon,
+          emojiIcon: '🧵',
+          colors: { primary: '#f97316', secondary: '#ea580c' },
+          gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+          component: () => import('../../pages/CrazyQuilt'),
           lastModified: 1770906515000
         },
         {
