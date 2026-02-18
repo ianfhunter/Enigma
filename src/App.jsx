@@ -55,6 +55,7 @@ const slugToFolder = {
   'flag-guesser': 'FlagGuesser',
   'flipquotes': 'FlipQuotes',
   'flood-it': 'FloodIt',
+  'freecell': 'Freecell',
   'futoshiki': 'Futoshiki',
   'galaxies': 'Galaxies',
   'gods-quiz': 'GodsQuiz',
