@@ -7,6 +7,7 @@
 // Custom SVG icons used by games in this pack
 import pyramidcardsIcon from '../../assets/icons/pyramidcards.svg';
 import tripeaksIcon from '../../assets/icons/tripeaks.svg';
+import freecellIcon from '../../assets/icons/freecell.svg';
 
 const cardGamesPack = {
   id: 'card-games',
@@ -25,6 +26,18 @@ const cardGamesPack = {
       icon: '🃏',
       description: 'Classic solitaire and card-based puzzles',
       games: [
+        {
+          slug: 'freecell',
+          title: 'Freecell',
+          aliases: ['FreeCell'],
+          description: 'Move all cards to the foundations by suit while organizing the tableau in descending alternating colors.',
+          icon: freecellIcon,
+          emojiIcon: '🧩',
+          colors: { primary: '#16a34a', secondary: '#15803d' },
+          gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+          component: () => import('../../pages/Freecell'),
+          lastModified: 1770136707000
+        },
         {
           slug: 'pyramid-cards',
           title: 'Pyramid Cards',
