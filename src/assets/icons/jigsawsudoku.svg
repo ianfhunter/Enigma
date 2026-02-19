@@ -1,0 +1,7 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Jigsaw Sudoku icon">
+  <rect x="6" y="6" width="108" height="108" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="4"/>
+  <path d="M20 20h30c0 8 6 8 6 0h22v22c-8 0-8 6 0 6v24H56c0-8-6-8-6 0H20V20z" fill="#93c5fd" stroke="#1d4ed8" stroke-width="3"/>
+  <path d="M78 48h22v52H48V78h24c0 8 6 8 6 0V48z" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="3"/>
+  <circle cx="40" cy="40" r="5" fill="#1d4ed8"/>
+  <circle cx="88" cy="88" r="5" fill="#1d4ed8"/>
+</svg>

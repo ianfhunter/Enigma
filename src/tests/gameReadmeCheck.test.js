@@ -69,6 +69,7 @@ describe('Game README Files', () => {
     'inshi-no-heya': 'InshiNoHeya',
     'japanese-sums': 'JapaneseSums',
     'jigsaw': 'Jigsaw',
+  'jigsaw-sudoku': 'JigsawSudoku',
     'kakuro': 'Kakuro',
     'kakurasu': 'Kakurasu',
     'killer-sudoku': 'KillerSudoku',

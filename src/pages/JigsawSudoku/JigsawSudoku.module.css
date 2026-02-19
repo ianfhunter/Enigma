@@ -1,0 +1,21 @@
+.container { display: flex; flex-direction: column; gap: 1rem; align-items: center; }
+.controls { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+.newButton { border: 1px solid #334155; background: #1e293b; color: white; border-radius: 8px; padding: 0.4rem 0.8rem; cursor: pointer; }
+.topBar { display: flex; gap: 1rem; align-items: center; }
+.board { display: grid; grid-template-columns: repeat(9, 38px); gap: 2px; background: #0f172a; padding: 6px; border-radius: 10px; }
+.cell { width: 38px; height: 38px; border: none; border-radius: 4px; font-size: 1.1rem; font-weight: 600; cursor: pointer; color: #0f172a; }
+.fixed { font-weight: 700; }
+.selected { outline: 2px solid #3b82f6; }
+
+.region0 { background-color: #dbeafe; }
+.region1 { background-color: #dcfce7; }
+.region2 { background-color: #fee2e2; }
+.region3 { background-color: #fef3c7; }
+.region4 { background-color: #f3e8ff; }
+.region5 { background-color: #e0f2fe; }
+.region6 { background-color: #ecfccb; }
+.region7 { background-color: #fae8ff; }
+.region8 { background-color: #ffe4e6; }
+
+.keypad { display: grid; grid-template-columns: repeat(5, minmax(48px, auto)); gap: 0.5rem; }
+.key { border: 1px solid #94a3b8; background: white; border-radius: 8px; padding: 0.4rem 0.6rem; cursor: pointer; }
