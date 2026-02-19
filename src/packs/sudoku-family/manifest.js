@@ -19,6 +19,7 @@ import euleroIcon from '../../assets/icons/eulero.svg';
 import japaneseSumsIcon from '../../assets/icons/japanesesums.svg';
 import killersudokuIcon from '../../assets/icons/killersudoku.svg';
 import sandwichsudokuIcon from '../../assets/icons/sandwichsudoku.svg';
+import jigsawsudokuIcon from '../../assets/icons/jigsawsudoku.svg';
 import setSquareIcon from '../../assets/icons/setsquare.svg';
 
 /**
@@ -77,6 +78,17 @@ export const categories = [
         colors: { primary: '#f59e0b', secondary: '#84cc16' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #84cc16 100%)',
         component: () => import('../../pages/SandwichSudoku'),
+        lastModified: 1771433543000
+      },
+      {
+        title: 'Jigsaw Sudoku',
+        slug: 'jigsaw-sudoku',
+        description: 'Sudoku with irregular 9-cell regions instead of 3×3 boxes.',
+        icon: jigsawsudokuIcon,
+        emojiIcon: '🧩',
+        colors: { primary: '#0ea5e9', secondary: '#2563eb' },
+        gradient: 'linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)',
+        component: () => import('../../pages/JigsawSudoku'),
         lastModified: 1771433543000
       },
       {
