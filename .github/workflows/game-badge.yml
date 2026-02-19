@@ -2,13 +2,13 @@ name: Update game badge
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "src/packs/**/manifest.js"
       - "src/packs/registry.js"
       - "datasets/**"
       - ".github/workflows/game-badge.yml"
-  schedule:
-    - cron: "0 6 * * *"
   workflow_dispatch:
 
 permissions:
