@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "src/packs/**/manifest.js"
-      - "src/packs/registry.js"
-      - "datasets/**"
-      - ".github/workflows/game-badge.yml"
   workflow_dispatch:
 
 permissions:
