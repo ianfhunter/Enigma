@@ -669,6 +669,7 @@ describe('PackLoader', () => {
       expect(slugs).toContain('sudoku');
       expect(slugs).toContain('killer-sudoku');
       expect(slugs).toContain('sandwich-sudoku');
+      expect(slugs).toContain('jigsaw-sudoku');
       expect(slugs).toContain('calcudoku');
       expect(slugs).toContain('kakuro');
       expect(slugs).toContain('futoshiki');
@@ -699,6 +700,7 @@ describe('PackLoader', () => {
       const games = getGamesForPack('sudoku-family');
       expect(games.some(g => g.slug === 'sudoku')).toBe(true);
       expect(games.some(g => g.slug === 'killer-sudoku')).toBe(true);
+      expect(games.some(g => g.slug === 'jigsaw-sudoku')).toBe(true);
     });
 
     it('should return component loaders', () => {
