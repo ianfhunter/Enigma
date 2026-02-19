@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { BLACKBOX_DIFFICULTY_PRESETS, isBlackboxLayoutSolvable, generateSolvableBalls } from './Blackbox';
 
 // ===========================================
 // Blackbox - Direction Utilities Tests
@@ -297,5 +298,37 @@ describe('Blackbox - Scoring', () => {
     const missedBalls = 0;
     const penalty = (wrongGuesses + missedBalls) * WRONG_GUESS_PENALTY;
     expect(penalty).toBe(0);
+  });
+});
+
+
+// ===========================================
+// Blackbox - Solvable Layout Tests
+// ===========================================
+describe('Blackbox - Solvable Layouts', () => {
+  it('defines easy/medium/hard presets', () => {
+    expect(BLACKBOX_DIFFICULTY_PRESETS.easy).toEqual({ w: 6, h: 6, balls: 5 });
+    expect(BLACKBOX_DIFFICULTY_PRESETS.medium).toEqual({ w: 8, h: 8, balls: 10 });
+    expect(BLACKBOX_DIFFICULTY_PRESETS.hard).toEqual({ w: 10, h: 10, balls: 18 });
+  });
+
+  it('rejects layouts with fully blocked empty cells', () => {
+    const blocked = new Set(['0,1', '1,0', '1,2', '2,1']);
+    expect(isBlackboxLayoutSolvable(blocked, 3, 3)).toBe(false);
+  });
+
+  it('accepts layouts where every empty cell has line of sight to an edge', () => {
+    const solvable = new Set(['0,0', '2,2']);
+    expect(isBlackboxLayoutSolvable(solvable, 3, 3)).toBe(true);
+  });
+
+  it('generates a solvable layout for each preset', () => {
+    const presets = Object.values(BLACKBOX_DIFFICULTY_PRESETS);
+    presets.forEach(({ w, h, balls }, idx) => {
+      const layout = generateSolvableBalls(w, h, balls, 1337 + idx, 100);
+      expect(layout.size).toBeGreaterThan(0);
+      expect(layout.size).toBeLessThanOrEqual(w * h - 1);
+      expect(isBlackboxLayoutSolvable(layout, w, h)).toBe(true);
+    });
   });
 });

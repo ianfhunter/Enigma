@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GameHeader from '../../components/GameHeader';
 import { createSeededRandom } from '../../data/wordUtils';
@@ -10,6 +10,12 @@ const DIRS = [
   { name: 'S', dr: 1, dc: 0 },
   { name: 'W', dr: 0, dc: -1 },
 ];
+
+export const BLACKBOX_DIFFICULTY_PRESETS = {
+  easy: { w: 6, h: 6, balls: 5 },
+  medium: { w: 8, h: 8, balls: 10 },
+  hard: { w: 10, h: 10, balls: 18 },
+};
 
 function leftOf(dir) {
   if (dir.name === 'N') return DIRS[3];
@@ -210,6 +216,76 @@ function randomBalls(w, h, n, seed = Date.now()) {
   return set;
 }
 
+function hasLineOfSightToEdge(r, c, ballsSet, w, h) {
+  // Left
+  let blocked = false;
+  for (let cc = c - 1; cc >= 0; cc--) {
+    if (ballsSet.has(keyRC(r, cc))) {
+      blocked = true;
+      break;
+    }
+  }
+  if (!blocked) return true;
+
+  // Right
+  blocked = false;
+  for (let cc = c + 1; cc < w; cc++) {
+    if (ballsSet.has(keyRC(r, cc))) {
+      blocked = true;
+      break;
+    }
+  }
+  if (!blocked) return true;
+
+  // Up
+  blocked = false;
+  for (let rr = r - 1; rr >= 0; rr--) {
+    if (ballsSet.has(keyRC(rr, c))) {
+      blocked = true;
+      break;
+    }
+  }
+  if (!blocked) return true;
+
+  // Down
+  blocked = false;
+  for (let rr = r + 1; rr < h; rr++) {
+    if (ballsSet.has(keyRC(rr, c))) {
+      blocked = true;
+      break;
+    }
+  }
+  return !blocked;
+}
+
+export function isBlackboxLayoutSolvable(ballsSet, w, h) {
+  let emptyCount = 0;
+  for (let r = 0; r < h; r++) {
+    for (let c = 0; c < w; c++) {
+      const k = keyRC(r, c);
+      if (ballsSet.has(k)) continue;
+      emptyCount++;
+      if (!hasLineOfSightToEdge(r, c, ballsSet, w, h)) return false;
+    }
+  }
+  return emptyCount > 0;
+}
+
+export function generateSolvableBalls(w, h, n, seed = Date.now(), maxAttempts = 200) {
+  const maxBalls = Math.max(1, w * h - 1);
+  let targetBalls = Math.min(n, maxBalls);
+
+  while (targetBalls >= 1) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const candidate = randomBalls(w, h, targetBalls, seed + attempt);
+      if (isBlackboxLayoutSolvable(candidate, w, h)) return candidate;
+    }
+    targetBalls--;
+  }
+
+  return randomBalls(w, h, 1, seed);
+}
+
 function normalizePair(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
@@ -220,11 +296,13 @@ const WRONG_GUESS_PENALTY = 5;
 
 export default function Blackbox() {
   const { t } = useTranslation();
-  const [w, setW] = useState(8);
-  const [h, setH] = useState(8);
-  const [ballCount, setBallCount] = useState(4);
+  const [difficulty, setDifficulty] = useState('medium');
+  const currentPreset = BLACKBOX_DIFFICULTY_PRESETS[difficulty];
+  const w = currentPreset.w;
+  const h = currentPreset.h;
+  const ballCount = currentPreset.balls;
 
-  const [solution, setSolution] = useState(() => randomBalls(8, 8, 4));
+  const [solution, setSolution] = useState(() => generateSolvableBalls(w, h, ballCount));
   const [guesses, setGuesses] = useState(() => new Set());
   const [revealed, setRevealed] = useState(false);
 
@@ -240,7 +318,7 @@ export default function Blackbox() {
   const ports = useMemo(() => allPorts(w, h), [w, h]);
 
   const newGame = useCallback(() => {
-    setSolution(randomBalls(w, h, ballCount));
+    setSolution(generateSolvableBalls(w, h, ballCount));
     setGuesses(new Set());
     setRevealed(false);
     setFired(new Map());
@@ -250,6 +328,10 @@ export default function Blackbox() {
     setShotCount(0);
     setFinalScore(null);
   }, [w, h, ballCount]);
+
+  useEffect(() => {
+    newGame();
+  }, [newGame]);
 
   const toggleGuess = (r, c) => {
     // Don't allow guessing if game is already won
@@ -393,28 +475,12 @@ export default function Blackbox() {
       <div className={styles.toolbar}>
         <div className={styles.group}>
           <label className={styles.label}>
-            Width
-            <select className={styles.select} value={w} onChange={(e) => setW(Number(e.target.value))}>
-              {[6, 7, 8, 9, 10].map((n) => <option key={n} value={n}>{n}</option>)}
+            {t('common.difficulty', 'Difficulty')}
+            <select className={styles.select} value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+              {Object.keys(BLACKBOX_DIFFICULTY_PRESETS).map((key) => (
+                <option key={key} value={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>
+              ))}
             </select>
-          </label>
-          <label className={styles.label}>
-            Height
-            <select className={styles.select} value={h} onChange={(e) => setH(Number(e.target.value))}>
-              {[6, 7, 8, 9, 10].map((n) => <option key={n} value={n}>{n}</option>)}
-            </select>
-          </label>
-          <label className={styles.label}>
-            Balls
-            <input
-              className={styles.input}
-              type="number"
-              min={1}
-              max={Math.max(1, w * h - 1)}
-              value={ballCount}
-              onChange={(e) => setBallCount(Math.max(1, Math.min(w * h - 1, Number(e.target.value) || 1)))}
-              style={{ width: 70 }}
-            />
           </label>
           <button className={styles.button} onClick={newGame}>New</button>
           <button className={styles.button} onClick={() => setRevealed((v) => !v)}>
