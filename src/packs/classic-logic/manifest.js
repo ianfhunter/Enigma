@@ -103,7 +103,7 @@ export const categories = [
         colors: { primary: '#f59e0b', secondary: '#d97706' },
         gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         component: () => import('../../pages/Blackbox'),
-        lastModified: 1770397657000
+        lastModified: 1771501598000
       },
       {
         title: 'CodeBreaker',
