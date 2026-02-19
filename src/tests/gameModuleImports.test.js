@@ -63,6 +63,7 @@ const GAME_MODULES = {
   'inshi-no-heya': 'InshiNoHeya',
   'japanese-sums': 'JapaneseSums',
   'jigsaw': 'Jigsaw',
+  'jigsaw-sudoku': 'JigsawSudoku',
   'kakuro': 'Kakuro',
   'killer-sudoku': 'KillerSudoku',
   'knights-and-knaves': 'KnightsAndKnaves',
