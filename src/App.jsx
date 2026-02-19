@@ -70,6 +70,7 @@ const slugToFolder = {
   'inertia': 'Inertia',
   'inshi-no-heya': 'InshiNoHeya',
   'jigsaw': 'Jigsaw',
+  'jigsaw-sudoku': 'JigsawSudoku',
   'kakuro': 'Kakuro',
   'killer-sudoku': 'KillerSudoku',
   'knights-and-knaves': 'KnightsAndKnaves',
