@@ -2,13 +2,13 @@ name: Update game badge
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "src/packs/**/manifest.js"
       - "src/packs/registry.js"
       - "datasets/**"
       - ".github/workflows/game-badge.yml"
-  schedule:
-    - cron: "0 6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -40,15 +40,15 @@ jobs:
       - name: Update last-modified fields
         run: node scripts/update-versions.js
 
-      - name: Commit changes
-        run: |
-          if git status --short badge.json | grep -q .; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add badge.json
-            git add src/packs/**/manifest.js
-            git commit -m "chore: update game count and last-modified fields"
-            git push origin HEAD:${GITHUB_REF_NAME}
-          else
-            echo "No changes to commit";
-          fi
+      - name: Commit changes and create PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update game count and last-modified fields"
+          branch: badge-update
+          base: main
+          title: "Update game badge and counts"
+          body: "Automated update of badge.json and manifest last-modified fields."
+          committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          labels: automated, badge

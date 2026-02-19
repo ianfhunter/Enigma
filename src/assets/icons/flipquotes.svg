@@ -13,5 +13,5 @@
   <text x="19" y="13.5" font-family="Georgia, serif" font-size="5" font-weight="bold" fill="#fff" text-anchor="middle">B</text>
 
   <!-- Flip arc -->
-  <path d="M10 6 C12 4, 14 4, 16 6" stroke="#c084fc" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M10 6 C12 4, 14 4, 16 6" stroke="#c084fc" stroke-width="1.2" fill="none" stroke-linecap="round" transform="translate(-1,0)"/>
 </svg>
