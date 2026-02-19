@@ -36,6 +36,15 @@ jobs:
       - name: Generate community packs
         run: npm run generate:community-packs
 
+      - name: Restore file mtimes from git history
+        run: |
+          while IFS= read -r -d '' file; do
+            timestamp=$(git log -1 --format=%cI -- "$file")
+            if [ -n "$timestamp" ]; then
+              touch -d "$timestamp" "$file"
+            fi
+          done < <(git ls-files -z)
+
       - name: Compute game count
         run: node scripts/count-games.js
 
