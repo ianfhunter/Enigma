@@ -78,6 +78,29 @@ describe('update-versions script', () => {
       expect(updatedContent).toMatch(/version: "\d+"/);
     });
 
+
+
+    it('should not use manifest.js mtime when computing pack version', async () => {
+      const sourcePath = path.join(tempDir, 'game.js');
+      const manifestPath = path.join(tempDir, 'manifest.js');
+
+      fs.writeFileSync(sourcePath, 'export const game = true;');
+      const sourceTimestamp = Math.floor(fs.statSync(sourcePath).mtimeMs / 1000).toString();
+
+      await new Promise(resolve => setTimeout(resolve, 20));
+
+      const manifestContent = `export default {
+  version: "1.0.0",
+  name: "Test Pack"
+};`;
+      fs.writeFileSync(manifestPath, manifestContent);
+
+      const result = updateManifestVersion(manifestPath);
+      expect(result).toBe(true);
+
+      const updatedContent = fs.readFileSync(manifestPath, 'utf8');
+      expect(updatedContent).toContain(`version: "${sourceTimestamp}"`);
+    });
     it('should update game lastModified using the game component file only', async () => {
       const pagesDir = path.join(tempDir, 'src', 'pages', 'GameOne');
       const packsDir = path.join(tempDir, 'src', 'packs', 'test-pack');

@@ -19,7 +19,8 @@ const __dirname = path.dirname(__filename);
  * @param {string} dir - Directory path to scan
  * @returns {number} - Unix timestamp in seconds of the most recent file modification
  */
-export function getLatestModificationTime(dir) {
+export function getLatestModificationTime(dir, options = {}) {
+  const { excludePaths = new Set() } = options;
   let latestTime = 0;
 
   function walk(currentDir) {
@@ -27,6 +28,11 @@ export function getLatestModificationTime(dir) {
 
     for (const item of items) {
       const fullPath = path.join(currentDir, item);
+
+      if (excludePaths.has(fullPath)) {
+        continue;
+      }
+
       const stat = fs.statSync(fullPath);
 
       if (stat.isDirectory()) {
@@ -87,7 +93,9 @@ export function updateManifestVersion(filePath) {
     const packDir = path.dirname(filePath);
 
     // Get the latest modification time for this game pack
-    const packTimestamp = getLatestModificationTime(packDir);
+    const packTimestamp = getLatestModificationTime(packDir, {
+      excludePaths: new Set([filePath]),
+    });
     const packTimestampStr = packTimestamp.toString();
 
     let content = fs.readFileSync(filePath, 'utf8');
