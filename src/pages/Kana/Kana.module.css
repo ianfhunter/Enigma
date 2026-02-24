@@ -1,0 +1,101 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rules {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.newGameBtn {
+  background: var(--color-primary, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  width: fit-content;
+  border: 2px solid var(--color-border, #8b5cf6);
+  padding: 4px;
+  background: var(--color-surface-2, rgba(124, 58, 237, 0.1));
+}
+
+.cell {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--color-border, #8b5cf6);
+  background: var(--color-surface, #fff);
+  position: relative;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.active {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.clue {
+  font-weight: 700;
+}
+
+.symbol {
+  position: relative;
+  z-index: 2;
+}
+
+.centerDot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -4px;
+  border-radius: 999px;
+  background: #0f172a;
+  z-index: 1;
+}
+
+.link {
+  position: absolute;
+  background: #0f172a;
+}
+
+.up,
+.down {
+  width: 4px;
+  left: 2px;
+}
+
+.up {
+  height: 20px;
+  bottom: 6px;
+}
+
+.down {
+  height: 20px;
+  top: 6px;
+}
+
+.left,
+.right {
+  height: 4px;
+  top: 2px;
+}
+
+.left {
+  width: 20px;
+  right: 6px;
+}
+
+.right {
+  width: 20px;
+  left: 6px;
+}

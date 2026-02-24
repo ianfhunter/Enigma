@@ -317,7 +317,8 @@
     "invalidExportFormat": "Formato de archivo de exportación inválido",
     "failedToImport": "Error al importar",
     "progressDeleted": "¡Todo el progreso del juego eliminado!",
-    "deleteAllProgress": "Eliminar Todo el Progreso"
+    "deleteAllProgress": "Eliminar Todo el Progreso",
+    "kana": "Kana"
   },
   "security": {
     "failedToLoad": "Error al cargar los datos de seguridad",
@@ -750,6 +751,9 @@
     "wonMessage": "¡Perfecto! Encontraste la ruta completa del caballo.",
     "gaveUp": "Solución revelada",
     "gaveUpMessage": "Revisa la ruta e intenta con una nueva semilla."
+  },
+  "kana": {
+    "rules": "Dibuja un único bucle cerrado por celdas. Todas las pistas kana deben estar en el bucle. El mismo kana implica la misma dirección recta y la misma distancia hasta el siguiente giro; kana distintos deben diferir.",
+    "won": "¡Bucle perfecto! Resolviste Kana."
   }
-
 }

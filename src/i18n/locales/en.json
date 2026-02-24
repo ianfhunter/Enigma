@@ -317,7 +317,8 @@
     "invalidExportFormat": "Invalid export file format",
     "failedToImport": "Failed to import",
     "progressDeleted": "All game progress deleted!",
-    "deleteAllProgress": "Delete All Game Progress"
+    "deleteAllProgress": "Delete All Game Progress",
+    "kana": "Kana"
   },
   "security": {
     "failedToLoad": "Failed to load security data",
@@ -646,7 +647,7 @@
       "diamonds": "Diamonds",
       "clubs": "Clubs"
     },
-    "recycleUsed": "Recycle used"   
+    "recycleUsed": "Recycle used"
   },
   "mahjongSolitaire": {
     "title": "Mahjong Solitaire",
@@ -667,7 +668,7 @@
       "rooster": "Rooster",
       "hourglass": "Hourglass",
       "butterfly": "Butterfly"
-   }
+    }
   },
   "actionItems": {
     "loading": "Loading action items...",
@@ -750,5 +751,9 @@
     "wonMessage": "Perfect! You found the full knight route.",
     "gaveUp": "Solution Revealed",
     "gaveUpMessage": "Review the route and try a new seed."
+  },
+  "kana": {
+    "rules": "Draw one closed loop through cells. All kana clues must be on the loop. Same kana means same straight direction and same distance to the next turn; different kana must differ.",
+    "won": "Perfect loop! You solved Kana."
   }
 }
