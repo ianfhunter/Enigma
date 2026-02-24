@@ -334,7 +334,7 @@ export function getWordDisplayText(currentWord, lastLetter, gameState) {
   return 'Click letters...';
 }
 
-export function getBackspaceState(currentWord, selectedLetters, words) {
+export function getBackspaceState(currentWord, selectedLetters, words, sides) {
   if (currentWord.length > 0) {
     return {
       currentWord: currentWord.slice(0, -1),
@@ -344,9 +344,14 @@ export function getBackspaceState(currentWord, selectedLetters, words) {
   }
 
   if (words.length > 0) {
+    const previousWord = words[words.length - 1];
+    const trimmedWord = previousWord.slice(0, -1);
     return {
-      currentWord,
-      selectedLetters,
+      currentWord: trimmedWord,
+      selectedLetters: trimmedWord.split('').map(letter => ({
+        letter,
+        side: getLetterSide(letter, sides),
+      })),
       words: words.slice(0, -1),
     };
   }
@@ -494,11 +499,11 @@ export default function LetterWeb() {
   };
 
   const handleBackspace = useCallback(() => {
-    const nextState = getBackspaceState(currentWord, selectedLetters, words);
+    const nextState = getBackspaceState(currentWord, selectedLetters, words, sides);
     setCurrentWord(nextState.currentWord);
     setSelectedLetters(nextState.selectedLetters);
     setWords(nextState.words);
-  }, [currentWord, selectedLetters, words]);
+  }, [currentWord, selectedLetters, sides, words]);
 
   const handleKeyDown = useCallback((e) => {
     if (gameState === 'won' || gameState === 'revealed') return;
