@@ -754,6 +754,11 @@
   },
   "kana": {
     "rules": "Haz clic entre centros de celdas vecinas para dibujar un único bucle cerrado. Todas las pistas kana deben quedar sobre el bucle. Kana idénticos deben compartir la misma dirección y las mismas distancias hasta los siguientes giros; kana distintos deben diferir.",
-    "won": "¡Bucle perfecto! Resolviste Kana."
+    "won": "¡Bucle perfecto! Resolviste Kana.",
+    "hintButton": "Pista",
+    "hintTitle": "Reglas kana en este rompecabezas:",
+    "hintLine": "{{symbol}}: {{orientation}}, giros tras {{d1}} y {{d2}} celdas",
+    "horizontal": "horizontal",
+    "vertical": "vertical"
   }
 }

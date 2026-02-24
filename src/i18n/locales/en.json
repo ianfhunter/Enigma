@@ -754,6 +754,11 @@
   },
   "kana": {
     "rules": "Click between neighboring cell centers to draw one closed loop. All kana clues must lie on the loop. Identical kana must share the same direction and the same distances to the next turns; different kana must differ.",
-    "won": "Perfect loop! You solved Kana."
+    "won": "Perfect loop! You solved Kana.",
+    "hintButton": "Hint",
+    "hintTitle": "Kana rules in this puzzle:",
+    "hintLine": "{{symbol}}: {{orientation}}, turns after {{d1}} and {{d2}} cells",
+    "horizontal": "horizontal",
+    "vertical": "vertical"
   }
 }

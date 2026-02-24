@@ -8,7 +8,7 @@ import SeedDisplay from '../../components/SeedDisplay';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameStats } from '../../hooks/useGameStats';
 import { createSeededRandom, stringToSeed, getTodayDateString } from '../../data/wordUtils';
-import { generateKanaPuzzle, checkKanaConstraints } from './kanaLogic';
+import { generateKanaPuzzle, checkKanaConstraints, KANA_SYMBOLS } from './kanaLogic';
 import styles from './Kana.module.css';
 
 const SIZES = [6, 8, 10];
@@ -19,12 +19,18 @@ function edgeKey(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
 
+function parseRule(signature) {
+  const [orientation, d1, d2] = signature.split(':');
+  return { orientation, d1: Number(d1), d2: Number(d2) };
+}
+
 export default function Kana() {
   const { t } = useTranslation();
   const [size, setSize] = useState(6);
   const [seed, setSeed] = useState(() => stringToSeed(`kana-${getTodayDateString()}`));
   const [puzzle, setPuzzle] = useState(null);
   const [playerEdges, setPlayerEdges] = useState(new Set());
+  const [showHint, setShowHint] = useState(false);
   const { gameState, checkWin, giveUp, reset: resetGameState, isPlaying } = useGameState();
   const { recordWin, recordGiveUp } = useGameStats('kana');
 
@@ -32,6 +38,7 @@ export default function Kana() {
     const random = createSeededRandom(seed + size * 1009);
     setPuzzle(generateKanaPuzzle(size, random));
     setPlayerEdges(new Set());
+    setShowHint(false);
     resetGameState();
   }, [seed, size, resetGameState]);
 
@@ -53,6 +60,17 @@ export default function Kana() {
     if (!puzzle) return new Map();
     return new Map(puzzle.clues.map((c) => [`${c.r},${c.c}`, c.symbol]));
   }, [puzzle]);
+
+  const hintLines = useMemo(() => {
+    if (!puzzle) return [];
+    return KANA_SYMBOLS
+      .filter((symbol) => puzzle.symbolRules[symbol])
+      .map((symbol) => {
+        const { orientation, d1, d2 } = parseRule(puzzle.symbolRules[symbol]);
+        const orientationText = orientation === 'horizontal' ? t('kana.horizontal') : t('kana.vertical');
+        return t('kana.hintLine', { symbol, orientation: orientationText, d1, d2 });
+      });
+  }, [puzzle, t]);
 
   const toggleEdge = (a, b) => {
     if (!isPlaying) return;
@@ -98,11 +116,21 @@ export default function Kana() {
       <GameHeader title={t('games.kana')}>
         <SizeSelector options={SIZES} value={size} onChange={setSize} />
         <button type="button" onClick={() => setSeed((s) => s + 1)} className={styles.newGameBtn}>{t('common.newGame')}</button>
+        <button type="button" onClick={() => setShowHint((v) => !v)} className={styles.hintBtn}>{t('kana.hintButton')}</button>
         <GiveUpButton onGiveUp={reveal} disabled={!isPlaying || !puzzle} />
         <SeedDisplay seed={seed} gameId="kana" compact />
       </GameHeader>
 
       <p className={styles.rules}>{t('kana.rules')}</p>
+
+      {showHint && (
+        <div className={styles.hintBox}>
+          <strong>{t('kana.hintTitle')}</strong>
+          {hintLines.map((line) => (
+            <div key={line}>{line}</div>
+          ))}
+        </div>
+      )}
 
       {puzzle && (
         <svg className={styles.board} width={boardSize} height={boardSize} viewBox={`0 0 ${boardSize} ${boardSize}`}>
@@ -141,7 +169,7 @@ export default function Kana() {
             return (
               <g key={key}>
                 <circle cx={x} cy={y} r="4" className={styles.node} />
-                {symbol && <text x={x} y={y + 7} className={styles.clue}>{symbol}</text>}
+                {symbol && <text x={x} y={y} className={styles.clue}>{symbol}</text>}
               </g>
             );
           })}
