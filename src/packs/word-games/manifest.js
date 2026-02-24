@@ -217,7 +217,7 @@ export const categories = [
         colors: { primary: '#6366f1', secondary: '#4f46e5' },
         gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
         component: () => import('../../pages/LetterWeb'),
-        lastModified: 1770632722000
+        lastModified: 1771945675000
       },
       {
         title: 'Letter Orbit',
