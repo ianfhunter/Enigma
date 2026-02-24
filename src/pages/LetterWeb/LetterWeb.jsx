@@ -334,6 +334,31 @@ export function getWordDisplayText(currentWord, lastLetter, gameState) {
   return 'Click letters...';
 }
 
+export function getBackspaceState(currentWord, selectedLetters, words, sides) {
+  if (currentWord.length > 0) {
+    return {
+      currentWord: currentWord.slice(0, -1),
+      selectedLetters: selectedLetters.slice(0, -1),
+      words,
+    };
+  }
+
+  if (words.length > 0) {
+    const previousWord = words[words.length - 1];
+    const trimmedWord = previousWord.slice(0, -1);
+    return {
+      currentWord: trimmedWord,
+      selectedLetters: trimmedWord.split('').map(letter => ({
+        letter,
+        side: getLetterSide(letter, sides),
+      })),
+      words: words.slice(0, -1),
+    };
+  }
+
+  return { currentWord, selectedLetters, words };
+}
+
 // Export helpers for testing
 export {
   VOWELS,
@@ -473,19 +498,27 @@ export default function LetterWeb() {
     setWords(prev => prev.slice(0, -1));
   };
 
+  const handleBackspace = useCallback(() => {
+    const nextState = getBackspaceState(currentWord, selectedLetters, words, sides);
+    setCurrentWord(nextState.currentWord);
+    setSelectedLetters(nextState.selectedLetters);
+    setWords(nextState.words);
+  }, [currentWord, selectedLetters, sides, words]);
+
   const handleKeyDown = useCallback((e) => {
     if (gameState === 'won' || gameState === 'revealed') return;
 
     if (e.key === 'Enter') {
+      e.preventDefault();
       handleSubmit();
     } else if (e.key === 'Backspace') {
-      if (currentWord.length > 0) {
-        setCurrentWord(prev => prev.slice(0, -1));
-        setSelectedLetters(prev => prev.slice(0, -1));
-      }
+      e.preventDefault();
+      handleBackspace();
     } else if (e.key === 'Escape') {
+      e.preventDefault();
       handleClear();
     } else if (/^[a-zA-Z]$/.test(e.key)) {
+      e.preventDefault();
       const letter = e.key.toUpperCase();
       const sideIndex = getLetterSide(letter, sides);
 
@@ -493,7 +526,7 @@ export default function LetterWeb() {
         handleLetterClick(letter, sideIndex);
       }
     }
-  }, [gameState, currentWord, sides]);
+  }, [gameState, handleBackspace, sides]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);

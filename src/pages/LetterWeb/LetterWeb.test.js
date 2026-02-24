@@ -6,6 +6,7 @@ import {
   findSolution,
   hasSolution,
   getWordDisplayText,
+  getBackspaceState,
 } from './LetterWeb.jsx';
 
 describe('LetterWeb - getWordDisplayText', () => {
@@ -166,5 +167,39 @@ describe('LetterWeb - tap to delete', () => {
     // and is interactive for tap-to-delete
     const result = getWordDisplayText('HELLO', 'O', 'playing');
     expect(result).toBe('HELLO');
+  });
+
+  it('backspace removes the last typed letter before touching submitted words', () => {
+    const state = getBackspaceState('STAR', [
+      { letter: 'S', side: 0 },
+      { letter: 'T', side: 1 },
+      { letter: 'A', side: 2 },
+      { letter: 'R', side: 3 },
+    ], ['DOG'], [['S', 'X', 'Y'], ['T', 'Q', 'W'], ['A', 'B', 'C'], ['R', 'D', 'E']]);
+
+    expect(state.currentWord).toBe('STA');
+    expect(state.selectedLetters).toHaveLength(3);
+    expect(state.words).toEqual(['DOG']);
+  });
+
+  it('backspace reopens the previous submitted word and removes one character when current word is empty', () => {
+    const sides = [['G', 'D', 'L'], ['O', 'S', 'N'], ['A', 'B', 'C'], ['T', 'R', 'E']];
+    const state = getBackspaceState('', [], ['DOG', 'GOAT'], sides);
+
+    expect(state.currentWord).toBe('GOA');
+    expect(state.selectedLetters).toEqual([
+      { letter: 'G', side: 0 },
+      { letter: 'O', side: 1 },
+      { letter: 'A', side: 2 },
+    ]);
+    expect(state.words).toEqual(['DOG']);
+  });
+
+  it('backspace is a no-op when there is nothing to undo', () => {
+    const state = getBackspaceState('', [], [], [['A'], ['B'], ['C'], ['D']]);
+
+    expect(state.currentWord).toBe('');
+    expect(state.selectedLetters).toEqual([]);
+    expect(state.words).toEqual([]);
   });
 });
