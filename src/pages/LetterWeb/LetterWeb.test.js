@@ -6,6 +6,7 @@ import {
   findSolution,
   hasSolution,
   getWordDisplayText,
+  getBackspaceState,
 } from './LetterWeb.jsx';
 
 describe('LetterWeb - getWordDisplayText', () => {
@@ -166,5 +167,34 @@ describe('LetterWeb - tap to delete', () => {
     // and is interactive for tap-to-delete
     const result = getWordDisplayText('HELLO', 'O', 'playing');
     expect(result).toBe('HELLO');
+  });
+
+  it('backspace removes the last typed letter before touching submitted words', () => {
+    const state = getBackspaceState('STAR', [
+      { letter: 'S', side: 0 },
+      { letter: 'T', side: 1 },
+      { letter: 'A', side: 2 },
+      { letter: 'R', side: 3 },
+    ], ['DOG']);
+
+    expect(state.currentWord).toBe('STA');
+    expect(state.selectedLetters).toHaveLength(3);
+    expect(state.words).toEqual(['DOG']);
+  });
+
+  it('backspace undoes the previous submitted word when current word is empty', () => {
+    const state = getBackspaceState('', [], ['DOG', 'GOAT']);
+
+    expect(state.currentWord).toBe('');
+    expect(state.selectedLetters).toEqual([]);
+    expect(state.words).toEqual(['DOG']);
+  });
+
+  it('backspace is a no-op when there is nothing to undo', () => {
+    const state = getBackspaceState('', [], []);
+
+    expect(state.currentWord).toBe('');
+    expect(state.selectedLetters).toEqual([]);
+    expect(state.words).toEqual([]);
   });
 });
