@@ -11,6 +11,10 @@ function cellKey(r, c) {
   return `${r},${c}`;
 }
 
+function parseCellKey(key) {
+  return key.split(',').map(Number);
+}
+
 function edgeKey(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
@@ -182,10 +186,99 @@ export function generateKanaPuzzle(size, random) {
   throw new Error(`Failed to generate Kana puzzle for size ${size}`);
 }
 
-export function checkKanaConstraints(puzzle, playerEdges) {
-  if (playerEdges.size !== puzzle.solutionEdges.size) return false;
+function buildAdjacency(playerEdges) {
+  const adjacency = new Map();
+
   for (const edge of playerEdges) {
-    if (!puzzle.solutionEdges.has(edge)) return false;
+    const [a, b] = edge.split('|');
+    if (!a || !b) return null;
+    const [r1, c1] = parseCellKey(a);
+    const [r2, c2] = parseCellKey(b);
+    if (Math.abs(r1 - r2) + Math.abs(c1 - c2) !== 1) return null;
+
+    if (!adjacency.has(a)) adjacency.set(a, new Set());
+    if (!adjacency.has(b)) adjacency.set(b, new Set());
+    adjacency.get(a).add(b);
+    adjacency.get(b).add(a);
   }
+
+  return adjacency;
+}
+
+function traverseSingleLoop(adjacency) {
+  if (!adjacency || adjacency.size === 0) return null;
+
+  for (const neighbors of adjacency.values()) {
+    if (neighbors.size !== 2) return null;
+  }
+
+  const start = adjacency.keys().next().value;
+  const visitedNodes = new Set([start]);
+  const path = [parseCellKey(start)];
+  let prev = null;
+  let cur = start;
+
+  while (true) {
+    const nextOptions = [...adjacency.get(cur)].filter((n) => n !== prev);
+    if (nextOptions.length === 0 || nextOptions.length > 2) return null;
+    const next = prev === null ? nextOptions[0] : nextOptions[0];
+
+    if (next === start) break;
+    if (visitedNodes.has(next)) return null;
+
+    visitedNodes.add(next);
+    path.push(parseCellKey(next));
+    prev = cur;
+    cur = next;
+
+    if (path.length > adjacency.size) return null;
+  }
+
+  if (visitedNodes.size !== adjacency.size) return null;
+  return path;
+}
+
+export function checkKanaConstraints(puzzle, playerEdges) {
+  if (!puzzle || !playerEdges || playerEdges.size === 0) return false;
+
+  const adjacency = buildAdjacency(playerEdges);
+  if (!adjacency) return false;
+
+  const path = traverseSingleLoop(adjacency);
+  if (!path) return false;
+
+  for (const clue of puzzle.clues) {
+    const key = cellKey(clue.r, clue.c);
+    if (!adjacency.has(key) || adjacency.get(key).size !== 2) return false;
+  }
+
+  const symbolToSignature = new Map();
+  const clueByKey = new Map(puzzle.clues.map((clue) => [cellKey(clue.r, clue.c), clue]));
+
+  for (let i = 0; i < path.length; i++) {
+    const [r, c] = path[i];
+    const clue = clueByKey.get(cellKey(r, c));
+    if (!clue) continue;
+
+    const signature = signatureForIndex(path, i);
+    if (!signature) return false;
+
+    if (!symbolToSignature.has(clue.symbol)) {
+      symbolToSignature.set(clue.symbol, signature);
+    } else if (symbolToSignature.get(clue.symbol) !== signature) {
+      return false;
+    }
+
+    if (puzzle.symbolRules?.[clue.symbol] && puzzle.symbolRules[clue.symbol] !== signature) {
+      return false;
+    }
+  }
+
+  const presentSymbols = new Set(puzzle.clues.map((clue) => clue.symbol));
+  if (symbolToSignature.size !== presentSymbols.size) return false;
+
+  const distinctSignatures = new Set(symbolToSignature.values());
+  if (distinctSignatures.size !== symbolToSignature.size) return false;
+
   return true;
 }

@@ -30,12 +30,34 @@ describe('Kana puzzle generation', () => {
     expect(new Set(Object.values(puzzle.symbolRules)).size).toBe(KANA_SYMBOLS.length);
   });
 
-  it('accepts generated loop and rejects a broken loop', () => {
-    const puzzle = generateKanaPuzzle(6, createSeededRandom(55));
+  it('enforces full loop graph + kana equivalence constraints', () => {
+    const puzzle = generateKanaPuzzle(8, createSeededRandom(333));
+
     expect(checkKanaConstraints(puzzle, puzzle.solutionEdges)).toBe(true);
 
-    const broken = new Set(puzzle.solutionEdges);
-    broken.delete([...broken][0]);
-    expect(checkKanaConstraints(puzzle, broken)).toBe(false);
+    // Break graph degree/connectivity.
+    const brokenLoop = new Set(puzzle.solutionEdges);
+    brokenLoop.delete([...brokenLoop][0]);
+    expect(checkKanaConstraints(puzzle, brokenLoop)).toBe(false);
+
+    // Force identical-kana mismatch by relabeling one clue.
+    const sourceSymbol = puzzle.clues[0].symbol;
+    const targetSymbol = puzzle.clues.find((clue) => clue.symbol !== sourceSymbol).symbol;
+    const mismatchPuzzle = {
+      ...puzzle,
+      clues: puzzle.clues.map((clue, idx) => (idx === 0 ? { ...clue, symbol: targetSymbol } : clue)),
+    };
+    expect(checkKanaConstraints(mismatchPuzzle, puzzle.solutionEdges)).toBe(false);
+
+    // Force different-kana collision through symbol rule tampering.
+    const symbols = Object.keys(puzzle.symbolRules);
+    const collidePuzzle = {
+      ...puzzle,
+      symbolRules: {
+        ...puzzle.symbolRules,
+        [symbols[1]]: puzzle.symbolRules[symbols[0]],
+      },
+    };
+    expect(checkKanaConstraints(collidePuzzle, puzzle.solutionEdges)).toBe(false);
   });
 });
