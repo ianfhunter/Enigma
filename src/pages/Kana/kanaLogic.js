@@ -1,14 +1,11 @@
 export const KANA_SYMBOLS = ['あ', 'え', 'う', 'い', 'お'];
 
-const DIRS = [
-  [0, 1],
-  [1, 0],
-  [0, -1],
-  [-1, 0],
-];
+function cellKey(r, c) {
+  return `${r},${c}`;
+}
 
-function normalizePath(path) {
-  return path.map(([r, c]) => `${r},${c}`);
+function edgeKey(a, b) {
+  return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
 
 export function buildBaseLoop(size) {
@@ -64,30 +61,17 @@ export function transformLoop(path, size, variant) {
   });
 }
 
-export function getNeighborsInSet(cell, set, size) {
-  const [r, c] = cell;
-  const result = [];
-  for (const [dr, dc] of DIRS) {
-    const nr = r + dr;
-    const nc = c + dc;
-    if (nr < 0 || nr >= size || nc < 0 || nc >= size) continue;
-    if (set.has(`${nr},${nc}`)) result.push([nr, nc]);
-  }
-  return result;
-}
-
 function signatureForIndex(path, idx) {
   const n = path.length;
   const prev = path[(idx - 1 + n) % n];
   const cur = path[idx];
   const next = path[(idx + 1) % n];
-  const d = [cur[0] - prev[0], cur[1] - prev[1]];
-  const dNext = [next[0] - cur[0], next[1] - cur[1]];
+  const dIn = [cur[0] - prev[0], cur[1] - prev[1]];
+  const dOut = [next[0] - cur[0], next[1] - cur[1]];
 
-  // Symbol cells must be straight-through cells (not turns).
-  if (d[0] !== dNext[0] || d[1] !== dNext[1]) return null;
+  if (dIn[0] !== dOut[0] || dIn[1] !== dOut[1]) return null;
 
-  const orientation = d[0] === 0 ? 'h' : 'v';
+  const orientation = dIn[0] === 0 ? 'h' : 'v';
 
   let backward = 0;
   let i = idx;
@@ -95,7 +79,7 @@ function signatureForIndex(path, idx) {
     const a = path[(i - 1 + n) % n];
     const b = path[i];
     const vec = [b[0] - a[0], b[1] - a[1]];
-    if (vec[0] !== d[0] || vec[1] !== d[1]) break;
+    if (vec[0] !== dIn[0] || vec[1] !== dIn[1]) break;
     backward++;
     i = (i - 1 + n) % n;
   }
@@ -106,7 +90,7 @@ function signatureForIndex(path, idx) {
     const a = path[i];
     const b = path[(i + 1) % n];
     const vec = [b[0] - a[0], b[1] - a[1]];
-    if (vec[0] !== d[0] || vec[1] !== d[1]) break;
+    if (vec[0] !== dIn[0] || vec[1] !== dIn[1]) break;
     forward++;
     i = (i + 1) % n;
   }
@@ -126,13 +110,24 @@ export function buildSymbolMap(path) {
   return bySignature;
 }
 
+export function pathToEdgeSet(path) {
+  const edges = new Set();
+  for (let i = 0; i < path.length; i++) {
+    const a = path[i];
+    const b = path[(i + 1) % path.length];
+    const aKey = cellKey(a[0], a[1]);
+    const bKey = cellKey(b[0], b[1]);
+    edges.add(edgeKey(aKey, bKey));
+  }
+  return edges;
+}
+
 export function generateKanaPuzzle(size, random) {
   const variant = Math.floor(random() * 4);
   const solutionPath = transformLoop(buildBaseLoop(size), size, variant);
   const signatureMap = buildSymbolMap(solutionPath);
 
   const signatures = [...signatureMap.entries()]
-    .filter(([, cells]) => cells.length > 0)
     .sort((a, b) => b[1].length - a[1].length)
     .slice(0, KANA_SYMBOLS.length);
 
@@ -140,7 +135,7 @@ export function generateKanaPuzzle(size, random) {
   signatures.forEach(([signature, cells], idx) => {
     const picks = Math.min(3, cells.length);
     for (let i = 0; i < picks; i++) {
-      const [r, c] = cells[(i * 2) % cells.length];
+      const [r, c] = cells[Math.floor((i * cells.length) / picks)];
       clues.push({ r, c, symbol: KANA_SYMBOLS[idx], signature });
     }
   });
@@ -148,54 +143,16 @@ export function generateKanaPuzzle(size, random) {
   return {
     size,
     solutionPath,
-    solutionSet: new Set(normalizePath(solutionPath)),
+    solutionEdges: pathToEdgeSet(solutionPath),
     clues,
     symbolRules: Object.fromEntries(signatures.map(([sig], idx) => [KANA_SYMBOLS[idx], sig])),
   };
 }
 
-export function analyzePlayerLoop(size, selectedSet) {
-  const cells = [...selectedSet].map((key) => key.split(',').map(Number));
-  if (cells.length === 0) return { isSingleLoop: false, allDegreeTwo: false, signatures: new Map() };
-
-  let allDegreeTwo = true;
-  const adjacency = new Map();
-  for (const cell of cells) {
-    const key = `${cell[0]},${cell[1]}`;
-    const neighbors = getNeighborsInSet(cell, selectedSet, size);
-    adjacency.set(key, neighbors.map(([r, c]) => `${r},${c}`));
-    if (neighbors.length !== 2) allDegreeTwo = false;
-  }
-
-  let isSingleLoop = false;
-  if (allDegreeTwo) {
-    const start = `${cells[0][0]},${cells[0][1]}`;
-    const seen = new Set([start]);
-    const stack = [start];
-    while (stack.length) {
-      const cur = stack.pop();
-      for (const n of adjacency.get(cur) || []) {
-        if (!seen.has(n)) {
-          seen.add(n);
-          stack.push(n);
-        }
-      }
-    }
-    isSingleLoop = seen.size === cells.length;
-  }
-
-  const ordered = cells;
-  const signatures = buildSymbolMap(ordered);
-
-  return { isSingleLoop, allDegreeTwo, signatures };
-}
-
-export function checkKanaConstraints(puzzle, selectedSet) {
-  const allCluesIncluded = puzzle.clues.every(({ r, c }) => selectedSet.has(`${r},${c}`));
-  if (!allCluesIncluded) return false;
-  if (selectedSet.size !== puzzle.solutionSet.size) return false;
-  for (const key of selectedSet) {
-    if (!puzzle.solutionSet.has(key)) return false;
+export function checkKanaConstraints(puzzle, playerEdges) {
+  if (playerEdges.size !== puzzle.solutionEdges.size) return false;
+  for (const edge of playerEdges) {
+    if (!puzzle.solutionEdges.has(edge)) return false;
   }
   return true;
 }

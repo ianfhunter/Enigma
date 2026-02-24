@@ -7,6 +7,7 @@ describe('Kana puzzle generation', () => {
     const p1 = generateKanaPuzzle(8, createSeededRandom(1234));
     const p2 = generateKanaPuzzle(8, createSeededRandom(1234));
     expect(p1.solutionPath).toEqual(p2.solutionPath);
+    expect([...p1.solutionEdges]).toEqual([...p2.solutionEdges]);
     expect(p1.clues).toEqual(p2.clues);
   });
 
@@ -17,13 +18,12 @@ describe('Kana puzzle generation', () => {
     expect(new Set(Object.values(puzzle.symbolRules)).size).toBe(KANA_SYMBOLS.length);
   });
 
-  it('accepts only the exact generated loop as a solved state', () => {
+  it('accepts generated loop and rejects a broken loop', () => {
     const puzzle = generateKanaPuzzle(6, createSeededRandom(55));
-    expect(checkKanaConstraints(puzzle, puzzle.solutionSet)).toBe(true);
+    expect(checkKanaConstraints(puzzle, puzzle.solutionEdges)).toBe(true);
 
-    const altered = new Set(puzzle.solutionSet);
-    const first = [...altered][0];
-    altered.delete(first);
-    expect(checkKanaConstraints(puzzle, altered)).toBe(false);
+    const broken = new Set(puzzle.solutionEdges);
+    broken.delete([...broken][0]);
+    expect(checkKanaConstraints(puzzle, broken)).toBe(false);
   });
 });

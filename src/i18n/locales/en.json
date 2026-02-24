@@ -753,7 +753,7 @@
     "gaveUpMessage": "Review the route and try a new seed."
   },
   "kana": {
-    "rules": "Draw one closed loop through cells. All kana clues must be on the loop. Same kana means same straight direction and same distance to the next turn; different kana must differ.",
+    "rules": "Click between neighboring cell centers to draw one closed loop. All kana clues must lie on the loop. Identical kana must share the same direction and the same distances to the next turns; different kana must differ.",
     "won": "Perfect loop! You solved Kana."
   }
 }

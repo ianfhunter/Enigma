@@ -18,84 +18,39 @@
   cursor: pointer;
 }
 
-.grid {
-  display: grid;
-  gap: 2px;
-  width: fit-content;
-  border: 2px solid var(--color-border, #8b5cf6);
-  padding: 4px;
-  background: var(--color-surface-2, rgba(124, 58, 237, 0.1));
-}
-
-.cell {
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--color-border, #8b5cf6);
+.board {
   background: var(--color-surface, #fff);
-  position: relative;
-  cursor: pointer;
-  font-size: 24px;
+  border: 2px solid var(--color-border, #8b5cf6);
+  border-radius: 8px;
+  width: min(100%, 620px);
+  height: auto;
 }
 
-.active {
-  background: rgba(59, 130, 246, 0.15);
+.gridLine {
+  stroke: rgba(124, 58, 237, 0.35);
+  stroke-width: 1;
+}
+
+.node {
+  fill: rgba(15, 23, 42, 0.55);
 }
 
 .clue {
+  font-size: 30px;
   font-weight: 700;
+  text-anchor: middle;
+  fill: #111827;
+  user-select: none;
 }
 
-.symbol {
-  position: relative;
-  z-index: 2;
+.activeEdge {
+  stroke: #2563eb;
+  stroke-width: 7;
+  stroke-linecap: round;
 }
 
-.centerDot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  margin-top: -4px;
-  border-radius: 999px;
-  background: #0f172a;
-  z-index: 1;
-}
-
-.link {
-  position: absolute;
-  background: #0f172a;
-}
-
-.up,
-.down {
-  width: 4px;
-  left: 2px;
-}
-
-.up {
-  height: 20px;
-  bottom: 6px;
-}
-
-.down {
-  height: 20px;
-  top: 6px;
-}
-
-.left,
-.right {
-  height: 4px;
-  top: 2px;
-}
-
-.left {
-  width: 20px;
-  right: 6px;
-}
-
-.right {
-  width: 20px;
-  left: 6px;
+.hitEdge {
+  stroke: transparent;
+  stroke-width: 18;
+  cursor: pointer;
 }

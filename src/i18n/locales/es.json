@@ -753,7 +753,7 @@
     "gaveUpMessage": "Revisa la ruta e intenta con una nueva semilla."
   },
   "kana": {
-    "rules": "Dibuja un único bucle cerrado por celdas. Todas las pistas kana deben estar en el bucle. El mismo kana implica la misma dirección recta y la misma distancia hasta el siguiente giro; kana distintos deben diferir.",
+    "rules": "Haz clic entre centros de celdas vecinas para dibujar un único bucle cerrado. Todas las pistas kana deben quedar sobre el bucle. Kana idénticos deben compartir la misma dirección y las mismas distancias hasta los siguientes giros; kana distintos deben diferir.",
     "won": "¡Bucle perfecto! Resolviste Kana."
   }
 }
