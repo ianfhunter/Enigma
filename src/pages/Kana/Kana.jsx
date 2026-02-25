@@ -14,6 +14,10 @@ import styles from './Kana.module.css';
 const SIZES = [6, 8, 10];
 const CELL = 48;
 const PAD = 24;
+const DOT_OFFSET_X = 12;
+const DOT_OFFSET_Y = 10;
+const KANA_OFFSET_X = 12;
+const KANA_OFFSET_Y = 15;
 
 function edgeKey(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
@@ -169,8 +173,8 @@ export default function Kana() {
             const y = PAD + r * CELL;
             return (
               <g key={key}>
-                <circle cx={x} cy={y} r="4" className={styles.node} />
-                {symbol && <text x={x} y={y} className={styles.clue}>{symbol}</text>}
+                <circle cx={x + DOT_OFFSET_X} cy={y + DOT_OFFSET_Y} r="4" className={styles.node} />
+                {symbol && <text x={x + KANA_OFFSET_X} y={y + KANA_OFFSET_Y} className={styles.clue}>{symbol}</text>}
               </g>
             );
           })}
