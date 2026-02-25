@@ -753,7 +753,7 @@
     "gaveUpMessage": "Review the route and try a new seed."
   },
   "kana": {
-    "rules": "Click between neighboring cell centers to draw one closed loop. All kana clues must lie on the loop. Identical kana must share the same direction and the same distances to the next turns; different kana must differ.",
+    "rules": "Draw exactly one single closed loop by connecting centers of orthogonally adjacent cells.\n\nHow to play:\n1) Click between two neighboring cell centers to add/remove a segment.\n2) The final loop cannot branch or cross itself: every loop cell has exactly two connected segments.\n3) The loop is one continuous cycle (not multiple smaller loops).\n4) Every kana clue cell (あ, え, う, い, お) must be on the loop.\n5) If two clues show the same kana, the loop must pass straight through both in the same orientation (horizontal/vertical) and with the same distances to the next turn on each side.\n6) Different kana must have different orientation-and-distance patterns.\n\nTip: Use the Hint button to view each kana’s required orientation and turn distances for this puzzle.",
     "won": "Perfect loop! You solved Kana.",
     "hintButton": "Hint",
     "hintTitle": "Kana rules in this puzzle:",

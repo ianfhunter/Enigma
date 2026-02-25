@@ -753,7 +753,7 @@
     "gaveUpMessage": "Revisa la ruta e intenta con una nueva semilla."
   },
   "kana": {
-    "rules": "Haz clic entre centros de celdas vecinas para dibujar un único bucle cerrado. Todas las pistas kana deben quedar sobre el bucle. Kana idénticos deben compartir la misma dirección y las mismas distancias hasta los siguientes giros; kana distintos deben diferir.",
+    "rules": "Dibuja exactamente un único bucle cerrado conectando centros de celdas ortogonalmente adyacentes.\n\nCómo jugar:\n1) Haz clic entre dos centros vecinos para añadir o quitar un segmento.\n2) El bucle final no puede ramificarse ni cruzarse: cada celda del bucle tiene exactamente dos segmentos conectados.\n3) El bucle debe ser un solo ciclo continuo (no varios bucles pequeños).\n4) Todas las celdas con pistas kana (あ, え, う, い, お) deben pertenecer al bucle.\n5) Si dos pistas muestran el mismo kana, el bucle debe pasar recto por ambas con la misma orientación (horizontal/vertical) y con las mismas distancias hasta el siguiente giro a cada lado.\n6) Kana diferentes deben tener patrones distintos de orientación y distancias.\n\nConsejo: usa el botón de Pista para ver la orientación y las distancias de giro requeridas para cada kana en este rompecabezas.",
     "won": "¡Bucle perfecto! Resolviste Kana.",
     "hintButton": "Pista",
     "hintTitle": "Reglas kana en este rompecabezas:",
