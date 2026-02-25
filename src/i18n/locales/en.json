@@ -757,8 +757,9 @@
     "won": "Perfect loop! You solved Kana.",
     "hintButton": "Hint",
     "hintTitle": "Kana rules in this puzzle:",
-    "hintLine": "{{symbol}}: {{orientation}}, turns after {{d1}} and {{d2}} cells",
+    "hintLine": "{{symbol}}: {{orientation}}; from this clue, stay straight for {{d1}} cells in one direction and {{d2}} cells in the opposite direction before the loop makes its first turn.",
     "horizontal": "horizontal",
-    "vertical": "vertical"
+    "vertical": "vertical",
+    "hintExplain": "For each kana, these two distances describe how far the loop continues straight from that clue before turning on each side (order does not matter)."
   }
 }

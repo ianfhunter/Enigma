@@ -126,6 +126,7 @@ export default function Kana() {
       {showHint && (
         <div className={styles.hintBox}>
           <strong>{t('kana.hintTitle')}</strong>
+          <p className={styles.hintExplain}>{t('kana.hintExplain')}</p>
           {hintLines.map((line) => (
             <div key={line}>{line}</div>
           ))}
