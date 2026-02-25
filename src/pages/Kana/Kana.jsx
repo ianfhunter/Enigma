@@ -18,6 +18,8 @@ const DOT_OFFSET_X = 12;
 const DOT_OFFSET_Y = 10;
 const KANA_OFFSET_X = 12;
 const KANA_OFFSET_Y = 15;
+const BOARD_EXTRA_RIGHT = 36;
+const BOARD_EXTRA_BOTTOM = 36;
 
 function edgeKey(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
@@ -95,11 +97,11 @@ export default function Kana() {
         const a = `${r},${c}`;
         if (c + 1 < puzzle.size) {
           const b = `${r},${c + 1}`;
-          segments.push({ a, b, x1: PAD + c * CELL, y1: PAD + r * CELL, x2: PAD + (c + 1) * CELL, y2: PAD + r * CELL });
+          segments.push({ a, b, x1: PAD + DOT_OFFSET_X + c * CELL, y1: PAD + DOT_OFFSET_Y + r * CELL, x2: PAD + DOT_OFFSET_X + (c + 1) * CELL, y2: PAD + DOT_OFFSET_Y + r * CELL });
         }
         if (r + 1 < puzzle.size) {
           const b = `${r + 1},${c}`;
-          segments.push({ a, b, x1: PAD + c * CELL, y1: PAD + r * CELL, x2: PAD + c * CELL, y2: PAD + (r + 1) * CELL });
+          segments.push({ a, b, x1: PAD + DOT_OFFSET_X + c * CELL, y1: PAD + DOT_OFFSET_Y + r * CELL, x2: PAD + DOT_OFFSET_X + c * CELL, y2: PAD + DOT_OFFSET_Y + (r + 1) * CELL });
         }
       }
     }
@@ -113,7 +115,8 @@ export default function Kana() {
     recordGiveUp();
   };
 
-  const boardSize = puzzle ? PAD * 2 + (puzzle.size - 1) * CELL : 0;
+  const boardWidth = puzzle ? PAD * 2 + (puzzle.size - 1) * CELL + BOARD_EXTRA_RIGHT : 0;
+  const boardHeight = puzzle ? PAD * 2 + (puzzle.size - 1) * CELL + BOARD_EXTRA_BOTTOM : 0;
 
   return (
     <div className={styles.container}>
@@ -138,11 +141,11 @@ export default function Kana() {
       )}
 
       {puzzle && (
-        <svg className={styles.board} width={boardSize} height={boardSize} viewBox={`0 0 ${boardSize} ${boardSize}`}>
+        <svg className={styles.board} width={boardWidth} height={boardHeight} viewBox={`0 0 ${boardWidth} ${boardHeight}`}>
           {Array.from({ length: puzzle.size + 1 }, (_, i) => i).map((_, i) => (
             <g key={`grid-${i}`}>
-              <line x1={PAD / 2} y1={PAD / 2 + i * CELL} x2={boardSize - PAD / 2} y2={PAD / 2 + i * CELL} className={styles.gridLine} />
-              <line x1={PAD / 2 + i * CELL} y1={PAD / 2} x2={PAD / 2 + i * CELL} y2={boardSize - PAD / 2} className={styles.gridLine} />
+              <line x1={PAD / 2 + DOT_OFFSET_X} y1={PAD / 2 + DOT_OFFSET_Y + i * CELL} x2={PAD / 2 + DOT_OFFSET_X + puzzle.size * CELL} y2={PAD / 2 + DOT_OFFSET_Y + i * CELL} className={styles.gridLine} />
+              <line x1={PAD / 2 + DOT_OFFSET_X + i * CELL} y1={PAD / 2 + DOT_OFFSET_Y} x2={PAD / 2 + DOT_OFFSET_X + i * CELL} y2={PAD / 2 + DOT_OFFSET_Y + puzzle.size * CELL} className={styles.gridLine} />
             </g>
           ))}
 
@@ -169,12 +172,12 @@ export default function Kana() {
             const c = idx % puzzle.size;
             const key = `${r},${c}`;
             const symbol = clueMap.get(key);
-            const x = PAD + c * CELL;
-            const y = PAD + r * CELL;
+            const x = PAD + DOT_OFFSET_X + c * CELL;
+            const y = PAD + DOT_OFFSET_Y + r * CELL;
             return (
               <g key={key}>
-                <circle cx={x + DOT_OFFSET_X} cy={y + DOT_OFFSET_Y} r="4" className={styles.node} />
-                {symbol && <text x={x + KANA_OFFSET_X} y={y + KANA_OFFSET_Y} className={styles.clue}>{symbol}</text>}
+                <circle cx={x} cy={y} r="4" className={styles.node} />
+                {symbol && <text x={x + (KANA_OFFSET_X - DOT_OFFSET_X)} y={y + (KANA_OFFSET_Y - DOT_OFFSET_Y)} className={styles.clue}>{symbol}</text>}
               </g>
             );
           })}
