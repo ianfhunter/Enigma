@@ -122,7 +122,10 @@ export default function Kana() {
         <SeedDisplay seed={seed} gameId="kana" compact />
       </GameHeader>
 
-      <p className={styles.rules}>{t('kana.rules')}</p>
+      <details className={styles.rulesPanel}>
+        <summary className={styles.rulesSummary}>{t('kana.rulesTitle')}</summary>
+        <p className={styles.rules}>{t('kana.rules')}</p>
+      </details>
 
       {showHint && (
         <div className={styles.hintBox}>

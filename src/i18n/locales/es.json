@@ -760,6 +760,7 @@
     "hintLine": "{{symbol}}: {{orientation}}; desde esta pista, continúa recto {{d1}} celdas en una dirección y {{d2}} celdas en la dirección opuesta antes del primer giro del bucle.",
     "horizontal": "horizontal",
     "vertical": "vertical",
-    "hintExplain": "Para cada kana, estas dos distancias indican cuánto sigue recto el bucle desde esa pista antes de girar a cada lado (el orden no importa)."
+    "hintExplain": "Para cada kana, estas dos distancias indican cuánto sigue recto el bucle desde esa pista antes de girar a cada lado (el orden no importa).",
+    "rulesTitle": "Mostrar reglas de Kana"
   }
 }
