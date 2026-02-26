@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+}
+
+
+.rulesPanel {
+  width: min(100%, 900px);
+}
+
+.rulesSummary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.rules {
+  margin: 0;
+  opacity: 0.9;
+  white-space: pre-line;
+  line-height: 1.45;
+}
+
+.newGameBtn,
+.hintBtn {
+  background: var(--color-primary, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.hintBox {
+  width: min(100%, 900px);
+  border: 1px solid var(--color-border, #8b5cf6);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: rgba(124, 58, 237, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hintExplain {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.board {
+  align-self: center;
+  background: var(--color-surface, #fff);
+  border: 2px solid var(--color-border, #8b5cf6);
+  border-radius: 8px;
+  width: min(100%, 620px);
+  height: auto;
+}
+
+.gridLine {
+  stroke: rgba(124, 58, 237, 0.35);
+  stroke-width: 1;
+}
+
+.node {
+  fill: rgba(15, 23, 42, 0.55);
+}
+
+.clue {
+  font-size: 30px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: #111827;
+  user-select: none;
+  pointer-events: none;
+}
+
+.activeEdge {
+  stroke: #2563eb;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.hitEdge {
+  stroke: transparent;
+  stroke-width: 18;
+  cursor: pointer;
+}

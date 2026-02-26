@@ -25,6 +25,7 @@ import slantIcon from '../../assets/icons/slant.svg';
 import tracksIcon from '../../assets/icons/tracks.svg';
 import bagIcon from '../../assets/icons/bag.svg';
 import hashiIcon from '../../assets/icons/hashi.svg';
+import kanaIcon from '../../assets/icons/kana.svg';
 
 /**
  * Pack metadata
@@ -163,6 +164,16 @@ export const categories = [
         colors: { primary: '#84cc16', secondary: '#65a30d' },
         gradient: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)',
         component: () => import('../../pages/Tracks'),
+      },
+      {
+        title: 'Kana',
+        slug: 'kana',
+        description: 'Draw one closed loop through all kana symbols. Matching symbols share direction-and-segment patterns.',
+        icon: kanaIcon,
+        emojiIcon: 'かな',
+        colors: { primary: '#a78bfa', secondary: '#7c3aed' },
+        gradient: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)',
+        component: () => import('../../pages/Kana'),
       },
       {
         title: 'Maze',
