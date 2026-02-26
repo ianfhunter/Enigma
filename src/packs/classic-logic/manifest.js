@@ -24,6 +24,7 @@ import stainedGlassIcon from '../../assets/icons/stained-glass.svg';
 import setsIcon from '../../assets/icons/sets.svg';
 import tetravexIcon from '../../assets/icons/tetravex.svg';
 import kakurasuIcon from '../../assets/icons/kakurasu.svg';
+import ballsortIcon from '../../assets/icons/ballsort.svg';
 
 /**
  * Pack metadata
@@ -231,6 +232,18 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #22c55e 100%)',
         component: () => import('../../pages/Kakurasu'),
         lastModified: 1769540742000
+      },
+      {
+        title: 'Ball Sort',
+        slug: 'ball-sort',
+        aliases: ['Water Sort', 'Color Sort'],
+        description: 'Pour matching colors between bins until every tube is sorted.',
+        icon: ballsortIcon,
+        emojiIcon: '🟣',
+        colors: { primary: '#a855f7', secondary: '#06b6d4' },
+        gradient: 'linear-gradient(135deg, #a855f7 0%, #06b6d4 100%)',
+        component: () => import('../../pages/BallSort'),
+        lastModified: 1773000000000,
       },
     ],
   },

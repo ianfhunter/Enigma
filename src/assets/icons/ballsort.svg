@@ -1,0 +1,20 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ball Sort icon">
+  <rect x="18" y="16" width="220" height="224" rx="28" fill="#0f172a"/>
+  <rect x="48" y="42" width="48" height="164" rx="18" fill="#1e293b" stroke="#334155" stroke-width="6"/>
+  <rect x="104" y="42" width="48" height="164" rx="18" fill="#1e293b" stroke="#334155" stroke-width="6"/>
+  <rect x="160" y="42" width="48" height="164" rx="18" fill="#1e293b" stroke="#334155" stroke-width="6"/>
+
+  <circle cx="72" cy="186" r="14" fill="#ef4444"/>
+  <circle cx="72" cy="152" r="14" fill="#f59e0b"/>
+  <circle cx="72" cy="118" r="14" fill="#22c55e"/>
+
+  <circle cx="128" cy="186" r="14" fill="#ef4444"/>
+  <circle cx="128" cy="152" r="14" fill="#22c55e"/>
+  <circle cx="128" cy="118" r="14" fill="#f59e0b"/>
+
+  <circle cx="184" cy="186" r="14" fill="#22c55e"/>
+  <circle cx="184" cy="152" r="14" fill="#ef4444"/>
+
+  <path d="M171 64c17 0 31-14 31-31" stroke="#fde047" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <circle cx="216" cy="28" r="12" fill="#f59e0b"/>
+</svg>
