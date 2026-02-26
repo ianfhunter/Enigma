@@ -1,7 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect x="6" y="6" width="52" height="52" rx="8" stroke="#7C3AED" stroke-width="4"/>
-  <path d="M16 16H48M16 32H48M16 48H48M16 16V48M32 16V48M48 16V48" stroke="#A78BFA" stroke-width="2"/>
-  <path d="M16 16L48 16L48 28L34 28L34 40L20 40L20 48" stroke="#1F2937" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="24" y="26" font-size="9" fill="#7C3AED">あ</text>
-  <text x="36" y="44" font-size="9" fill="#7C3AED">え</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Kana puzzle icon">
+  <defs>
+    <linearGradient id="kanaBg" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F5F3FF"/>
+      <stop offset="1" stop-color="#EDE9FE"/>
+    </linearGradient>
+    <linearGradient id="kanaLoop" x1="14" y1="14" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="6" y="6" width="52" height="52" rx="10" fill="url(#kanaBg)" stroke="#7C3AED" stroke-width="3"/>
+
+  <path d="M18 18H46M18 26H46M18 34H46M18 42H46M18 50H46M18 18V50M26 18V50M34 18V50M42 18V50M50 18V50"
+        stroke="#C4B5FD" stroke-width="1.5"/>
+
+  <path d="M18 18H46V26H34V42H26V50H18V34H26V26H18V18Z"
+        stroke="url(#kanaLoop)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <circle cx="26" cy="26" r="2.3" fill="#374151"/>
+  <circle cx="34" cy="42" r="2.3" fill="#374151"/>
+
+  <text x="26" y="30" text-anchor="middle" font-size="8.5" font-weight="700" fill="#111827">あ</text>
+  <text x="34" y="46" text-anchor="middle" font-size="8.5" font-weight="700" fill="#111827">え</text>
 </svg>
