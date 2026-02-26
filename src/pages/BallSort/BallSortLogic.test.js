@@ -56,15 +56,24 @@ describe('BallSortLogic', () => {
       expect(puzzle.fullBins).toBeLessThanOrEqual(config.maxFullBins);
       expect(puzzle.bins.length).toBe(puzzle.fullBins + config.emptyBins);
 
+      const emptyBins = puzzle.bins.filter((bin) => bin.length === 0);
+      const nonEmptyBins = puzzle.bins.filter((bin) => bin.length > 0);
+      expect(emptyBins).toHaveLength(config.emptyBins);
+      expect(nonEmptyBins).toHaveLength(puzzle.fullBins);
+
       const counts = new Map();
       for (const bin of puzzle.bins) {
         expect(bin.length).toBeLessThanOrEqual(BIN_CAPACITY);
+        if (bin.length > 0) expect(bin.length).toBe(BIN_CAPACITY);
         for (const color of bin) counts.set(color, (counts.get(color) || 0) + 1);
       }
 
       for (let color = 0; color < puzzle.fullBins; color++) {
         expect(counts.get(color)).toBe(BIN_CAPACITY);
       }
+
+      const hasMixedBin = nonEmptyBins.some((bin) => new Set(bin).size > 1);
+      expect(hasMixedBin).toBe(true);
     }
   });
 
