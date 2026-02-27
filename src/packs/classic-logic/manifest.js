@@ -243,7 +243,7 @@ export const categories = [
         colors: { primary: '#a855f7', secondary: '#06b6d4' },
         gradient: 'linear-gradient(135deg, #a855f7 0%, #06b6d4 100%)',
         component: () => import('../../pages/BallSort'),
-        lastModified: 1773000000000,
+        lastModified: 1772198170000,
       },
     ],
   },
