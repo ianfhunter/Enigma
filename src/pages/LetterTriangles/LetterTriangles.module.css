@@ -28,6 +28,10 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  border: 2px solid #475569;
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: #0f172a;
 }
 
 .boardRow {
@@ -39,10 +43,15 @@
 .trayTile {
   width: 88px;
   height: 78px;
-  border: none;
+  border: 2px solid #64748b;
+  border-radius: 8px;
   background: transparent;
   cursor: pointer;
   padding: 0;
+}
+
+.cell {
+  background: rgba(148, 163, 184, 0.12);
 }
 
 .tileFace {
