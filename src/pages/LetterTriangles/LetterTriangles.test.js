@@ -70,6 +70,15 @@ describe('Letter Triangles generator', () => {
     expect(getTileLetterForLine(tile, 'B', 1, 2)).toBe('B');
   });
 
+  it('rotates letter positions without mutating source letter order', () => {
+    const tile = { letters: ['A', 'B', 'C'] };
+
+    expect(getTileLetterForLine(tile, 'A', 0, 0)).toBe('A');
+    expect(getTileLetterForLine(tile, 'A', 1, 0)).toBe('C');
+    expect(getTileLetterForLine(tile, 'A', 2, 0)).toBe('B');
+    expect(tile.letters).toEqual(['A', 'B', 'C']);
+  });
+
   it('unsolved placements or rotations are never falsely considered solved', () => {
     const placement = [0, 1, 2, 3, 4, 5, 6, 8, 7];
     expect(isSolvedPlacement(placement)).toBe(false);

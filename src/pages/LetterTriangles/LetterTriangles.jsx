@@ -10,6 +10,7 @@ import {
   buildLineWordsFromPlacement,
   isSolvedPlacement,
   isDownCell,
+  getTileLetterForLine,
 } from './letterTrianglesLogic';
 import styles from './LetterTriangles.module.css';
 
@@ -150,13 +151,14 @@ export default function LetterTriangles() {
   const renderTile = (tileId, cellIndex = null) => {
     if (tileId === null || tileId === undefined) return null;
     const tile = tileById.get(tileId);
-    const [a, b, c] = tile.letters;
     const rotation = rotations[tileId] ?? 0;
     const isDown = cellIndex !== null && isDownCell(cellIndex);
-    const angle = rotation * 120 + (isDown ? 180 : 0);
+    const a = getTileLetterForLine(tile, 'A', rotation, cellIndex);
+    const b = getTileLetterForLine(tile, 'B', rotation, cellIndex);
+    const c = getTileLetterForLine(tile, 'C', rotation, cellIndex);
 
     return (
-      <div className={`${styles.tileFace} ${isDown ? styles.down : ''}`} style={{ transform: `rotate(${angle}deg)` }}>
+      <div className={`${styles.tileFace} ${isDown ? styles.down : ''}`}>
         <span className={`${styles.letter} ${styles.top}`}>{a}</span>
         <span className={`${styles.letter} ${styles.left}`}>{b}</span>
         <span className={`${styles.letter} ${styles.right}`}>{c}</span>
