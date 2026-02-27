@@ -17,13 +17,14 @@ describe('Letter Triangles generator', () => {
     expect(a.shuffledTiles).toEqual(b.shuffledTiles);
   });
 
-  it('generates valid English words with strict 1..8 lengths', () => {
+  it('generates valid English words with configured line lengths', () => {
     const puzzle = generateLetterTrianglesPuzzle(99);
 
-    expect(puzzle.targetWords).toHaveLength(8);
+    const expectedLengths = [1, 2, 4, 5, 7, 8];
+    expect(puzzle.targetWords).toHaveLength(expectedLengths.length);
     puzzle.targetWords.forEach((word, index) => {
       expect(word).toMatch(/^[A-Z]+$/);
-      expect(word.length).toBe(index + 1);
+      expect(word.length).toBe(expectedLengths[index]);
 
       if (word.length >= 3) {
         expect(isValidWord(word)).toBe(true);

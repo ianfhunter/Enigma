@@ -87,6 +87,15 @@
   right: 25%;
 }
 
+.down .top {
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.down .left,
+.down .right {
+  transform: rotate(180deg);
+}
+
 .tray {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));

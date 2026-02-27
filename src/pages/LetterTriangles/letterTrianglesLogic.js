@@ -4,14 +4,18 @@ export const CELL_COUNT = 9;
 export const CORNERS = ['A', 'B', 'C'];
 
 export const LINE_DEFINITIONS = [
+  // Row 1 top (1)
   [{ cell: 0, corner: 'A' }],
-  [{ cell: 0, corner: 'A' }, { cell: 0, corner: 'B' }],
-  [{ cell: 0, corner: 'B' }, { cell: 0, corner: 'C' }, { cell: 1, corner: 'A' }],
-  [{ cell: 1, corner: 'A' }, { cell: 1, corner: 'B' }, { cell: 1, corner: 'C' }, { cell: 2, corner: 'A' }],
-  [{ cell: 2, corner: 'A' }, { cell: 2, corner: 'B' }, { cell: 2, corner: 'C' }, { cell: 3, corner: 'A' }, { cell: 3, corner: 'B' }],
-  [{ cell: 3, corner: 'B' }, { cell: 3, corner: 'C' }, { cell: 4, corner: 'A' }, { cell: 4, corner: 'B' }, { cell: 4, corner: 'C' }, { cell: 5, corner: 'A' }],
-  [{ cell: 5, corner: 'A' }, { cell: 5, corner: 'B' }, { cell: 5, corner: 'C' }, { cell: 6, corner: 'A' }, { cell: 6, corner: 'B' }, { cell: 6, corner: 'C' }, { cell: 7, corner: 'A' }],
-  [{ cell: 7, corner: 'A' }, { cell: 7, corner: 'B' }, { cell: 7, corner: 'C' }, { cell: 8, corner: 'A' }, { cell: 8, corner: 'B' }, { cell: 8, corner: 'C' }, { cell: 0, corner: 'C' }, { cell: 1, corner: 'B' }],
+  // Row 1 bottom edge (2)
+  [{ cell: 0, corner: 'B' }, { cell: 0, corner: 'C' }],
+  // Row 2 upper pattern (4)
+  [{ cell: 1, corner: 'A' }, { cell: 2, corner: 'B' }, { cell: 2, corner: 'C' }, { cell: 3, corner: 'A' }],
+  // Row 2 lower pattern (5)
+  [{ cell: 1, corner: 'B' }, { cell: 1, corner: 'C' }, { cell: 2, corner: 'A' }, { cell: 3, corner: 'B' }, { cell: 3, corner: 'C' }],
+  // Row 3 upper pattern (7)
+  [{ cell: 4, corner: 'A' }, { cell: 5, corner: 'B' }, { cell: 5, corner: 'C' }, { cell: 6, corner: 'A' }, { cell: 7, corner: 'B' }, { cell: 7, corner: 'C' }, { cell: 8, corner: 'A' }],
+  // Row 3 lower pattern (8)
+  [{ cell: 4, corner: 'B' }, { cell: 4, corner: 'C' }, { cell: 5, corner: 'A' }, { cell: 6, corner: 'B' }, { cell: 6, corner: 'C' }, { cell: 7, corner: 'A' }, { cell: 8, corner: 'B' }, { cell: 8, corner: 'C' }],
 ];
 
 const ONE_LETTER_WORDS = ['A', 'I'];
@@ -53,7 +57,7 @@ function compatibleWithPattern(word, pattern) {
 
 function generateAttempt(seed, preferCommon) {
   const random = createSeededRandom(seed);
-  const pools = LINE_DEFINITIONS.map((_, idx) => seededShuffleArray([...getWordPool(idx + 1)], random));
+  const pools = LINE_DEFINITIONS.map((line) => seededShuffleArray([...getWordPool(line.length)], random));
 
   const assignedSlots = new Map();
   const usedWords = new Set();

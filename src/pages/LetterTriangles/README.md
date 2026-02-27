@@ -14,6 +14,6 @@ Each tile has three letters. Place the tiles so that every line shown under the 
 ## Puzzle generation
 
 - Uses a seeded generator for reproducibility.
-- Chooses English words with lengths 1 through 8.
+- Chooses English words with lengths 1, 2, 4, 5, 7, and 8.
 - Writes those words into overlapping line definitions.
 - Builds tile letters from the solved layout and shuffles the tiles.
