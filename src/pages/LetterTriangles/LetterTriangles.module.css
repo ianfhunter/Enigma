@@ -2,6 +2,9 @@
   max-width: 980px;
   margin: 0 auto;
   padding: 1rem;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #dbe4ee;
 }
 
 .topBar {
@@ -11,9 +14,9 @@
 }
 
 .actionButton {
-  background: #334155;
-  color: white;
-  border: 1px solid #475569;
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
   padding: 0.45rem 0.8rem;
   cursor: pointer;
@@ -46,9 +49,9 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background: rgba(30, 41, 59, 0.85);
+  background: #ffffff;
   clip-path: polygon(50% 4%, 4% 96%, 96% 96%);
-  border: 2px solid rgba(148, 163, 184, 0.75);
+  border: 2px solid #94a3b8;
 }
 
 .down .tileFace {
@@ -57,7 +60,7 @@
 
 .letter {
   position: absolute;
-  color: #e2e8f0;
+  color: #0f172a;
   font-weight: 700;
   font-size: 1rem;
 }
@@ -92,14 +95,14 @@
 
 .selectionHint {
   margin-bottom: 0.75rem;
-  color: #93c5fd;
+  color: #1d4ed8;
 }
 
 .linesPanel {
-  border: 1px solid #334155;
+  border: 1px solid #cbd5e1;
   border-radius: 10px;
   padding: 0.75rem;
-  background: rgba(15, 23, 42, 0.6);
+  background: #f8fafc;
 }
 
 .lineRow {
@@ -110,8 +113,14 @@
   margin-bottom: 0.3rem;
 }
 
-.lineLabel { color: #94a3b8; }
-.currentWord { color: #e2e8f0; }
+.lineLabel { color: #475569; }
+.currentWord { color: #0f172a; }
 .correct { color: #22c55e; font-weight: 700; }
 .incorrect { color: #f97316; font-weight: 700; }
-.pending { color: #64748b; }
+.pending { color: #334155; }
+
+
+.cell:hover .tileFace,
+.trayTile:hover .tileFace {
+  border-color: #3b82f6;
+}
