@@ -1,0 +1,146 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.select,
+.button {
+  border: 1px solid var(--color-border, #334155);
+  border-radius: 8px;
+  background: var(--color-surface, #0f172a);
+  color: var(--color-text, #e2e8f0);
+  padding: 0.5rem 0.75rem;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.meta,
+.hint {
+  color: var(--color-text-secondary, #94a3b8);
+  margin: 0.4rem 0;
+}
+
+.grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 0.75rem;
+}
+
+.bin {
+  --tube-border: #64748b;
+  border: none;
+  border-radius: 14px;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.5rem 0.45rem 0.35rem;
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.14) 0%, rgba(30, 41, 59, 0.5) 100%);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.bin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-left: 3px solid var(--tube-border);
+  border-right: 3px solid var(--tube-border);
+  border-bottom: 3px solid var(--tube-border);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  pointer-events: none;
+}
+
+.bin::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(90deg, var(--tube-border) 0 20%, transparent 20% 80%, var(--tube-border) 80% 100%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.selected {
+  --tube-border: #22d3ee;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.25);
+}
+
+.validTarget {
+  --tube-border: #22c55e;
+}
+
+.slot {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.emptySlot {
+  opacity: 0.35;
+}
+
+.ball {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  box-shadow: inset -4px -4px 10px rgba(0, 0, 0, 0.22), inset 3px 3px 8px rgba(255, 255, 255, 0.25);
+}
+
+
+.solid {
+  background-image: radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 45%);
+}
+
+.stripe {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0 3px, rgba(255, 255, 255, 0) 3px 7px),
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%);
+}
+
+.dot {
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.65) 1.8px, transparent 2px),
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%);
+  background-size: 8px 8px, auto;
+}
+
+.cross {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.45) 0 2px, rgba(255, 255, 255, 0) 2px 7px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.45) 0 2px, rgba(255, 255, 255, 0) 2px 7px),
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%);
+}
+
+.diag {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 0 2px, rgba(255, 255, 255, 0) 2px 6px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.3) 0 2px, rgba(255, 255, 255, 0) 2px 6px),
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%);
+}
