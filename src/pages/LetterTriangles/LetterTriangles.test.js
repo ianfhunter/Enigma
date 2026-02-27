@@ -50,6 +50,19 @@ describe('Letter Triangles generator', () => {
     expect(isSolvedPlacement(solvedPlacement)).toBe(true);
   });
 
+
+
+  it('applies upside-down cell corner reversal when building lines', () => {
+    const placement = Array.from({ length: CELL_COUNT }, (_, index) => index);
+    const tiles = Array.from({ length: CELL_COUNT }, (_, id) => ({ id, letters: ['A', 'B', 'C'] }));
+    const tileById = new Map(tiles.map((tile) => [tile.id, tile]));
+
+    const lines = buildLineWordsFromPlacement(placement, tileById);
+
+    // Line 3 includes cell 2 B then C; for upside-down cells this should read C then B
+    expect(lines[2]).toBe('ACBA');
+  });
+
   it('unsolved placements are never falsely considered solved', () => {
     const placement = [0, 1, 2, 3, 4, 5, 6, 8, 7];
     expect(isSolvedPlacement(placement)).toBe(false);

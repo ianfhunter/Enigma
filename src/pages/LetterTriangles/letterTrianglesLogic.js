@@ -26,6 +26,15 @@ const COMMON_TWO_LETTER_WORDS = [
 
 const WORD_POOL_CACHE = new Map();
 
+const DOWN_CELLS = new Set([2, 5, 7]);
+
+function getPhysicalCorner(cell, displayCorner) {
+  if (!DOWN_CELLS.has(cell)) return displayCorner;
+  if (displayCorner === 'B') return 'C';
+  if (displayCorner === 'C') return 'B';
+  return displayCorner;
+}
+
 function slotKey(cell, corner) {
   return `${cell}:${corner}`;
 }
@@ -65,7 +74,7 @@ function generateAttempt(seed, preferCommon) {
 
   for (let lineIndex = 0; lineIndex < LINE_DEFINITIONS.length; lineIndex++) {
     const line = LINE_DEFINITIONS[lineIndex];
-    const pattern = line.map(({ cell, corner }) => assignedSlots.get(slotKey(cell, corner)) || null);
+    const pattern = line.map(({ cell, corner }) => assignedSlots.get(slotKey(cell, getPhysicalCorner(cell, corner))) || null);
 
     const matching = [];
     const matchingCommon = [];
@@ -87,7 +96,7 @@ function generateAttempt(seed, preferCommon) {
     usedWords.add(chosen);
 
     for (let i = 0; i < line.length; i++) {
-      const key = slotKey(line[i].cell, line[i].corner);
+      const key = slotKey(line[i].cell, getPhysicalCorner(line[i].cell, line[i].corner));
       if (!assignedSlots.has(key)) assignedSlots.set(key, chosen[i]);
     }
   }
@@ -123,7 +132,7 @@ export function buildLineWordsFromPlacement(placement, tileById) {
     const tileId = placement[cell];
     if (tileId === null || tileId === undefined) return '_';
     const tile = tileById.get(tileId);
-    const cornerIndex = CORNERS.indexOf(corner);
+    const cornerIndex = CORNERS.indexOf(getPhysicalCorner(cell, corner));
     return tile?.letters[cornerIndex] ?? '_';
   }).join(''));
 }
