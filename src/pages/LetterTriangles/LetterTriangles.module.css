@@ -1,0 +1,117 @@
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.topBar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.actionButton {
+  background: #334155;
+  color: white;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+
+.board {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.boardRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cell,
+.trayTile {
+  width: 88px;
+  height: 78px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tileFace {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 41, 59, 0.85);
+  clip-path: polygon(50% 4%, 4% 96%, 96% 96%);
+  border: 2px solid rgba(148, 163, 184, 0.75);
+}
+
+.down .tileFace {
+  transform: rotate(180deg);
+}
+
+.letter {
+  position: absolute;
+  color: #e2e8f0;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.top {
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.left {
+  bottom: 14%;
+  left: 25%;
+}
+
+.right {
+  bottom: 14%;
+  right: 25%;
+}
+
+.tray {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.selected .tileFace {
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+}
+
+.selectionHint {
+  margin-bottom: 0.75rem;
+  color: #93c5fd;
+}
+
+.linesPanel {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.lineRow {
+  display: grid;
+  grid-template-columns: 84px 1fr 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.lineLabel { color: #94a3b8; }
+.currentWord { color: #e2e8f0; }
+.correct { color: #22c55e; font-weight: 700; }
+.incorrect { color: #f97316; font-weight: 700; }
+.pending { color: #64748b; }

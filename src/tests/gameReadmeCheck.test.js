@@ -80,6 +80,7 @@ describe('Game README Files', () => {
     'language-quiz': 'LanguageQuiz',
     'letter-web': 'LetterWeb',
     'letter-orbit': 'LetterOrbit',
+    'letter-triangles': 'LetterTriangles',
     'lights-out': 'LightsOut',
     'lightup': 'Lightup',
     'lits': 'LITS',
