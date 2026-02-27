@@ -10,9 +10,9 @@ export const DIFFICULTY_CONFIG = {
 
 export function getTopRunLength(bin) {
   if (bin.length === 0) return 0;
-  const top = bin[bin.length - 1];
+  const top = bin[0];
   let count = 1;
-  for (let i = bin.length - 2; i >= 0; i--) {
+  for (let i = 1; i < bin.length; i++) {
     if (bin[i] !== top) break;
     count++;
   }
@@ -25,11 +25,11 @@ export function canMove(state, fromIndex, toIndex) {
   const to = state[toIndex];
   if (!from || !to || from.length === 0 || to.length >= BIN_CAPACITY) return false;
 
-  const movingColor = from[from.length - 1];
+  const movingColor = from[0];
   const toSpace = BIN_CAPACITY - to.length;
 
   if (to.length === 0) return toSpace > 0;
-  if (to[to.length - 1] !== movingColor) return false;
+  if (to[0] !== movingColor) return false;
   return toSpace > 0;
 }
 
@@ -39,12 +39,12 @@ export function moveBalls(state, fromIndex, toIndex) {
   const next = state.map((bin) => [...bin]);
   const from = next[fromIndex];
   const to = next[toIndex];
-  const movingColor = from[from.length - 1];
+  const movingColor = from[0];
   const movableCount = Math.min(getTopRunLength(from), BIN_CAPACITY - to.length);
 
   for (let i = 0; i < movableCount; i++) {
-    from.pop();
-    to.push(movingColor);
+    from.shift();
+    to.unshift(movingColor);
   }
 
   return next;

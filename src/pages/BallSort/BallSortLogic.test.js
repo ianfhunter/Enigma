@@ -12,7 +12,7 @@ import {
 describe('BallSortLogic', () => {
   it('moves entire top run onto matching color while respecting capacity', () => {
     const state = [
-      [0, 1, 1, 1],
+      [1, 1, 1, 0],
       [1],
       [],
     ];
@@ -31,6 +31,17 @@ describe('BallSortLogic', () => {
 
     expect(canMove(state, 0, 1)).toBe(false);
     expect(moveBalls(state, 0, 1)).toBe(state);
+  });
+
+  it('pours from the top of the source bin, not the bottom', () => {
+    const state = [
+      [2, 1, 1, 1],
+      [],
+    ];
+
+    const next = moveBalls(state, 0, 1);
+    expect(next[0]).toEqual([1, 1, 1]);
+    expect(next[1]).toEqual([2]);
   });
 
   it('detects solved and unsolved states', () => {
@@ -79,7 +90,7 @@ describe('BallSortLogic', () => {
 
   it('computes top run length correctly', () => {
     expect(getTopRunLength([])).toBe(0);
-    expect(getTopRunLength([1, 2, 2, 2])).toBe(3);
+    expect(getTopRunLength([2, 2, 2, 1])).toBe(3);
     expect(getTopRunLength([3, 3, 2, 2])).toBe(2);
   });
 });
