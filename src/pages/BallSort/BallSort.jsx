@@ -165,8 +165,11 @@ export default function BallSort() {
               aria-label={t('ballSort.binLabel', { defaultValue: 'Bin {{number}}', number: binIndex + 1 })}
             >
               {Array.from({ length: puzzle.capacity }).map((_, slotIndex) => {
-                const ball = bin[slotIndex];
+                const firstFilledRow = puzzle.capacity - bin.length;
+                const colorIndex = slotIndex - firstFilledRow;
+                const ball = colorIndex >= 0 ? bin[colorIndex] : undefined;
                 const empty = ball === undefined;
+
                 return (
                   <div
                     key={slotIndex}

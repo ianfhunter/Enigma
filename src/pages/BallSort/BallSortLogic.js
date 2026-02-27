@@ -40,7 +40,7 @@ export function moveBalls(state, fromIndex, toIndex) {
   const from = next[fromIndex];
   const to = next[toIndex];
   const movingColor = from[0];
-  const movableCount = Math.min(1, BIN_CAPACITY - to.length);
+  const movableCount = Math.min(getTopRunLength(from), BIN_CAPACITY - to.length);
 
   for (let i = 0; i < movableCount; i++) {
     from.shift();
