@@ -25,11 +25,7 @@ export function canMove(state, fromIndex, toIndex) {
   const to = state[toIndex];
   if (!from || !to || from.length === 0 || to.length >= BIN_CAPACITY) return false;
 
-  const movingColor = from[0];
   const toSpace = BIN_CAPACITY - to.length;
-
-  if (to.length === 0) return toSpace > 0;
-  if (to[0] !== movingColor) return false;
   return toSpace > 0;
 }
 

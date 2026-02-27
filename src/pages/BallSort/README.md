@@ -4,7 +4,7 @@ Sort colored balls so each non-empty bin contains balls of only one color.
 
 ## Rules
 - You can pour from one bin to another.
-- You may pour onto an empty bin or onto the same top color.
+- You may pour onto any bin that is not full (including empty bins).
 - Each bin has capacity 4.
 - Goal: all non-empty bins are full and monochrome.
 

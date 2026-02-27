@@ -45,15 +45,34 @@ describe('BallSortLogic', () => {
     expect(canMove(afterThird, 2, 1)).toBe(false);
   });
 
-  it('does not allow moves to non-matching non-empty bin', () => {
+  it('allows moving into non-full bins even when colors differ', () => {
     const state = [
       [0, 0],
       [1, 1],
       [],
     ];
 
-    expect(canMove(state, 0, 1)).toBe(false);
-    expect(moveBalls(state, 0, 1)).toBe(state);
+    expect(canMove(state, 0, 1)).toBe(true);
+    const next = moveBalls(state, 0, 1);
+    expect(next[0]).toEqual([0]);
+    expect(next[1]).toEqual([0, 1, 1]);
+  });
+
+
+  it('allows a second ball to be moved into a partially filled bin', () => {
+    const state = [
+      [2, 1, 1],
+      [],
+    ];
+
+    const afterFirst = moveBalls(state, 0, 1);
+    expect(afterFirst[0]).toEqual([1, 1]);
+    expect(afterFirst[1]).toEqual([2]);
+
+    expect(canMove(afterFirst, 0, 1)).toBe(true);
+    const afterSecond = moveBalls(afterFirst, 0, 1);
+    expect(afterSecond[0]).toEqual([1]);
+    expect(afterSecond[1]).toEqual([1, 2]);
   });
 
   it('pours from the top of the source bin, not the bottom', () => {
