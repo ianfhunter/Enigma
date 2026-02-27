@@ -46,24 +46,51 @@
 }
 
 .bin {
-  border: 2px solid #334155;
-  border-radius: 16px 16px 12px 12px;
-  min-height: 180px;
+  --tube-border: #64748b;
+  border: none;
+  border-radius: 14px;
+  min-height: 190px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0.4rem;
-  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+  padding: 0.5rem 0.45rem 0.35rem;
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.14) 0%, rgba(30, 41, 59, 0.5) 100%);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.bin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-left: 3px solid var(--tube-border);
+  border-right: 3px solid var(--tube-border);
+  border-bottom: 3px solid var(--tube-border);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  pointer-events: none;
+}
+
+.bin::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(90deg, var(--tube-border) 0 20%, transparent 20% 80%, var(--tube-border) 80% 100%);
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 .selected {
-  border-color: #22d3ee;
+  --tube-border: #22d3ee;
   box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.25);
 }
 
 .validTarget {
-  border-color: #22c55e;
+  --tube-border: #22c55e;
 }
 
 .slot {
@@ -71,6 +98,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .emptySlot {

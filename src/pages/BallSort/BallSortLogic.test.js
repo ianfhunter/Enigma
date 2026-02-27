@@ -10,7 +10,7 @@ import {
 } from './BallSortLogic';
 
 describe('BallSortLogic', () => {
-  it('moves entire top run onto matching color while respecting capacity', () => {
+  it('moves only one top ball at a time onto matching color', () => {
     const state = [
       [1, 1, 1, 0],
       [1],
@@ -18,8 +18,8 @@ describe('BallSortLogic', () => {
     ];
 
     const next = moveBalls(state, 0, 1);
-    expect(next[0]).toEqual([0]);
-    expect(next[1]).toEqual([1, 1, 1, 1]);
+    expect(next[0]).toEqual([1, 1, 0]);
+    expect(next[1]).toEqual([1, 1]);
   });
 
   it('does not allow moves to non-matching non-empty bin', () => {
