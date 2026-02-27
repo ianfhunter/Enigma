@@ -12,11 +12,7 @@ import {
   isSolved,
 } from './BallSortLogic';
 import styles from './BallSort.module.css';
-
-const BALL_COLORS = [
-  '#ef4444', '#f97316', '#eab308', '#22c55e', '#14b8a6', '#0ea5e9', '#3b82f6', '#6366f1',
-  '#8b5cf6', '#d946ef', '#ec4899', '#f43f5e', '#84cc16', '#10b981', '#06b6d4', '#a855f7', '#fb7185',
-];
+import { getBallAppearance } from './BallSortAppearance';
 
 const DIFFICULTY_ORDER = ['easy', 'medium', 'hard'];
 
@@ -175,12 +171,15 @@ export default function BallSort() {
                     key={slotIndex}
                     className={`${styles.slot} ${empty ? styles.emptySlot : ''}`}
                   >
-                    {!empty && (
-                      <span
-                        className={styles.ball}
-                        style={{ backgroundColor: BALL_COLORS[ball % BALL_COLORS.length] }}
-                      />
-                    )}
+                    {!empty && (() => {
+                      const appearance = getBallAppearance(ball);
+                      return (
+                        <span
+                          className={`${styles.ball} ${styles[appearance.pattern]}`}
+                          style={{ backgroundColor: appearance.color }}
+                        />
+                      );
+                    })()}
                   </div>
                 );
               })}
