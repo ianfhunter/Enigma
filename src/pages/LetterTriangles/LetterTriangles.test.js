@@ -5,6 +5,7 @@ import {
   generateLetterTrianglesPuzzle,
   buildLineWordsFromPlacement,
   isSolvedPlacement,
+  getTileLetterForLine,
 } from './letterTrianglesLogic';
 
 describe('Letter Triangles generator', () => {
@@ -15,6 +16,16 @@ describe('Letter Triangles generator', () => {
     expect(a.targetWords).toEqual(b.targetWords);
     expect(a.solvedTiles).toEqual(b.solvedTiles);
     expect(a.shuffledTiles).toEqual(b.shuffledTiles);
+    expect(a.initialRotations).toEqual(b.initialRotations);
+  });
+
+  it('seeds each tile with a random initial rotation', () => {
+    const puzzle = generateLetterTrianglesPuzzle(9876);
+    expect(Object.keys(puzzle.initialRotations)).toHaveLength(CELL_COUNT);
+    Object.values(puzzle.initialRotations).forEach((rotation) => {
+      expect(rotation).toBeGreaterThanOrEqual(0);
+      expect(rotation).toBeLessThanOrEqual(2);
+    });
   });
 
   it('generates valid English words with configured line lengths', () => {
@@ -40,31 +51,30 @@ describe('Letter Triangles generator', () => {
     expect(commonCount).toBeGreaterThanOrEqual(2);
   });
 
-  it('solved placement reconstructs exactly the target line words', () => {
+  it('solved placement reconstructs exactly the target line words when rotations are reset', () => {
     const puzzle = generateLetterTrianglesPuzzle(42);
     const solvedPlacement = Array.from({ length: CELL_COUNT }, (_, index) => index);
+    const zeroRotations = Object.fromEntries(solvedPlacement.map((id) => [id, 0]));
     const tileById = new Map(puzzle.solvedTiles.map((tile) => [tile.id, tile]));
 
-    const lines = buildLineWordsFromPlacement(solvedPlacement, tileById);
+    const lines = buildLineWordsFromPlacement(solvedPlacement, tileById, zeroRotations);
     expect(lines).toEqual(puzzle.targetWords);
-    expect(isSolvedPlacement(solvedPlacement)).toBe(true);
+    expect(isSolvedPlacement(solvedPlacement, zeroRotations)).toBe(true);
   });
 
+  it('applies upside-down cell reversal before rotation lookup', () => {
+    const tile = { letters: ['A', 'B', 'C'] };
 
-
-  it('applies upside-down cell corner reversal when building lines', () => {
-    const placement = Array.from({ length: CELL_COUNT }, (_, index) => index);
-    const tiles = Array.from({ length: CELL_COUNT }, (_, id) => ({ id, letters: ['A', 'B', 'C'] }));
-    const tileById = new Map(tiles.map((tile) => [tile.id, tile]));
-
-    const lines = buildLineWordsFromPlacement(placement, tileById);
-
-    // Line 3 includes cell 2 B then C; for upside-down cells this should read C then B
-    expect(lines[2]).toBe('ACBA');
+    // Cell 2 is down: display corner B maps to physical C.
+    // With one clockwise turn, display B should use previous corner -> B.
+    expect(getTileLetterForLine(tile, 'B', 1, 2)).toBe('B');
   });
 
-  it('unsolved placements are never falsely considered solved', () => {
+  it('unsolved placements or rotations are never falsely considered solved', () => {
     const placement = [0, 1, 2, 3, 4, 5, 6, 8, 7];
     expect(isSolvedPlacement(placement)).toBe(false);
+
+    const solvedPlacement = Array.from({ length: CELL_COUNT }, (_, index) => index);
+    expect(isSolvedPlacement(solvedPlacement, { 0: 1 })).toBe(false);
   });
 });

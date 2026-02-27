@@ -4,17 +4,11 @@ export const CELL_COUNT = 9;
 export const CORNERS = ['A', 'B', 'C'];
 
 export const LINE_DEFINITIONS = [
-  // Row 1 top (1)
   [{ cell: 0, corner: 'A' }],
-  // Row 1 bottom edge (2)
   [{ cell: 0, corner: 'B' }, { cell: 0, corner: 'C' }],
-  // Row 2 upper pattern (4)
   [{ cell: 1, corner: 'A' }, { cell: 2, corner: 'B' }, { cell: 2, corner: 'C' }, { cell: 3, corner: 'A' }],
-  // Row 2 lower pattern (5)
   [{ cell: 1, corner: 'B' }, { cell: 1, corner: 'C' }, { cell: 2, corner: 'A' }, { cell: 3, corner: 'B' }, { cell: 3, corner: 'C' }],
-  // Row 3 upper pattern (7)
   [{ cell: 4, corner: 'A' }, { cell: 5, corner: 'B' }, { cell: 5, corner: 'C' }, { cell: 6, corner: 'A' }, { cell: 7, corner: 'B' }, { cell: 7, corner: 'C' }, { cell: 8, corner: 'A' }],
-  // Row 3 lower pattern (8)
   [{ cell: 4, corner: 'B' }, { cell: 4, corner: 'C' }, { cell: 5, corner: 'A' }, { cell: 6, corner: 'B' }, { cell: 6, corner: 'C' }, { cell: 7, corner: 'A' }, { cell: 8, corner: 'B' }, { cell: 8, corner: 'C' }],
 ];
 
@@ -25,15 +19,7 @@ const COMMON_TWO_LETTER_WORDS = [
 ];
 
 const WORD_POOL_CACHE = new Map();
-
 const DOWN_CELLS = new Set([2, 5, 7]);
-
-function getPhysicalCorner(cell, displayCorner) {
-  if (!DOWN_CELLS.has(cell)) return displayCorner;
-  if (displayCorner === 'B') return 'C';
-  if (displayCorner === 'C') return 'B';
-  return displayCorner;
-}
 
 function slotKey(cell, corner) {
   return `${cell}:${corner}`;
@@ -43,11 +29,9 @@ function getWordPool(length) {
   if (WORD_POOL_CACHE.has(length)) return WORD_POOL_CACHE.get(length);
 
   let words;
-  if (length === 1) {
-    words = ONE_LETTER_WORDS;
-  } else if (length === 2) {
-    words = COMMON_TWO_LETTER_WORDS;
-  } else {
+  if (length === 1) words = ONE_LETTER_WORDS;
+  else if (length === 2) words = COMMON_TWO_LETTER_WORDS;
+  else {
     words = getWordsByLength(length)
       .map((word) => word.toUpperCase())
       .filter((word) => /^[A-Z]+$/.test(word));
@@ -62,6 +46,29 @@ function compatibleWithPattern(word, pattern) {
     if (pattern[i] && pattern[i] !== word[i]) return false;
   }
   return true;
+}
+
+export function isDownCell(cell) {
+  return DOWN_CELLS.has(cell);
+}
+
+export function getPhysicalCorner(cell, displayCorner) {
+  if (!isDownCell(cell)) return displayCorner;
+  if (displayCorner === 'B') return 'C';
+  if (displayCorner === 'C') return 'B';
+  return displayCorner;
+}
+
+export function getRotatedCornerIndex(displayCorner, rotation = 0) {
+  const displayIndex = CORNERS.indexOf(displayCorner);
+  const normalized = ((rotation % 3) + 3) % 3;
+  return (displayIndex - normalized + 3) % 3;
+}
+
+export function getTileLetterForLine(tile, displayCorner, rotation = 0, cellIndex = null) {
+  const effectiveCorner = cellIndex === null ? displayCorner : getPhysicalCorner(cellIndex, displayCorner);
+  const cornerIndex = getRotatedCornerIndex(effectiveCorner, rotation);
+  return tile?.letters[cornerIndex] ?? '_';
 }
 
 function generateAttempt(seed, preferCommon) {
@@ -82,9 +89,7 @@ function generateAttempt(seed, preferCommon) {
     for (const word of pools[lineIndex]) {
       if (usedWords.has(word) || !compatibleWithPattern(word, pattern)) continue;
       matching.push(word);
-      if (word.length <= 2 || isCommonWord(word)) {
-        matchingCommon.push(word);
-      }
+      if (word.length <= 2 || isCommonWord(word)) matchingCommon.push(word);
       if (matching.length >= 1200) break;
     }
 
@@ -106,10 +111,16 @@ function generateAttempt(seed, preferCommon) {
     letters: CORNERS.map((corner) => assignedSlots.get(slotKey(cell, corner))),
   }));
 
+  const initialRotations = {};
+  for (const tile of solvedTiles) {
+    initialRotations[tile.id] = Math.floor(random() * 3);
+  }
+
   return {
     targetWords: chosenWords,
     solvedTiles,
     shuffledTiles: seededShuffleArray([...solvedTiles], random),
+    initialRotations,
   };
 }
 
@@ -127,16 +138,16 @@ export function generateLetterTrianglesPuzzle(seed) {
   throw new Error('Failed to generate Letter Triangles puzzle using valid words');
 }
 
-export function buildLineWordsFromPlacement(placement, tileById) {
+export function buildLineWordsFromPlacement(placement, tileById, rotations = {}) {
   return LINE_DEFINITIONS.map((line) => line.map(({ cell, corner }) => {
     const tileId = placement[cell];
     if (tileId === null || tileId === undefined) return '_';
     const tile = tileById.get(tileId);
-    const cornerIndex = CORNERS.indexOf(getPhysicalCorner(cell, corner));
-    return tile?.letters[cornerIndex] ?? '_';
+    const rotation = rotations[tileId] ?? 0;
+    return getTileLetterForLine(tile, corner, rotation, cell);
   }).join(''));
 }
 
-export function isSolvedPlacement(placement) {
-  return placement.every((tileId, cellIndex) => tileId === cellIndex);
+export function isSolvedPlacement(placement, rotations = {}) {
+  return placement.every((tileId, cellIndex) => tileId === cellIndex && ((rotations[tileId] ?? 0) % 3) === 0);
 }

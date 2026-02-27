@@ -9,6 +9,7 @@ import {
   generateLetterTrianglesPuzzle,
   buildLineWordsFromPlacement,
   isSolvedPlacement,
+  isDownCell,
 } from './letterTrianglesLogic';
 import styles from './LetterTriangles.module.css';
 
@@ -22,12 +23,16 @@ export default function LetterTriangles() {
   const [placement, setPlacement] = useState(() => Array(CELL_COUNT).fill(null));
   const [selectedTileId, setSelectedTileId] = useState(null);
   const [gaveUp, setGaveUp] = useState(false);
+  const [rotations, setRotations] = useState(() => ({}));
+  const [draggingTileId, setDraggingTileId] = useState(null);
 
   useEffect(() => {
-    setPuzzle(generateLetterTrianglesPuzzle(seed));
+    const next = generateLetterTrianglesPuzzle(seed);
+    setPuzzle(next);
     setPlacement(Array(CELL_COUNT).fill(null));
     setSelectedTileId(null);
     setGaveUp(false);
+    setRotations(next.initialRotations || {});
   }, [seed]);
 
   const tileById = useMemo(() => new Map(puzzle.solvedTiles.map((tile) => [tile.id, tile])), [puzzle]);
@@ -37,8 +42,40 @@ export default function LetterTriangles() {
     return puzzle.shuffledTiles.map((tile) => tile.id).filter((id) => !placed.has(id));
   }, [placement, puzzle]);
 
-  const lineWords = useMemo(() => buildLineWordsFromPlacement(placement, tileById), [placement, tileById]);
-  const solved = isSolvedPlacement(placement);
+  const lineWords = useMemo(() => buildLineWordsFromPlacement(placement, tileById, rotations), [placement, tileById, rotations]);
+  const solved = isSolvedPlacement(placement, rotations);
+
+  const rotateTile = useCallback((tileId) => {
+    if (gaveUp || solved) return;
+    setRotations((prev) => ({
+      ...prev,
+      [tileId]: ((prev[tileId] ?? 0) + 1) % 3,
+    }));
+  }, [gaveUp, solved]);
+
+  const moveTileToCell = useCallback((tileId, targetCellIndex) => {
+    setPlacement((prev) => {
+      const next = [...prev];
+      const fromIndex = next.findIndex((id) => id === tileId);
+      const targetOccupant = next[targetCellIndex];
+
+      if (fromIndex !== -1) {
+        next[fromIndex] = targetOccupant;
+      }
+
+      next[targetCellIndex] = tileId;
+      return next;
+    });
+  }, []);
+
+  const returnTileToTray = useCallback((tileId) => {
+    setPlacement((prev) => {
+      const next = [...prev];
+      const idx = next.findIndex((id) => id === tileId);
+      if (idx !== -1) next[idx] = null;
+      return next;
+    });
+  }, []);
 
   const handleCellClick = useCallback((cellIndex) => {
     if (gaveUp || solved) return;
@@ -55,6 +92,8 @@ export default function LetterTriangles() {
         return next;
       }
 
+      const fromIndex = next.findIndex((id) => id === selectedTileId);
+      if (fromIndex !== -1) next[fromIndex] = occupant;
       next[cellIndex] = selectedTileId;
       setSelectedTileId(occupant);
       return next;
@@ -63,7 +102,6 @@ export default function LetterTriangles() {
 
   const handleTileClick = useCallback((tileId) => {
     if (gaveUp || solved) return;
-
     setSelectedTileId((current) => (current === tileId ? null : tileId));
   }, [gaveUp, solved]);
 
@@ -71,15 +109,54 @@ export default function LetterTriangles() {
     setPlacement(Array.from({ length: CELL_COUNT }, (_, index) => index));
     setSelectedTileId(null);
     setGaveUp(true);
+    setRotations(() => {
+      const reset = {};
+      for (let i = 0; i < CELL_COUNT; i++) reset[i] = 0;
+      return reset;
+    });
   }, []);
 
-  const renderTile = (tileId) => {
+  const handleDragStart = useCallback((tileId, event) => {
+    if (gaveUp || solved) return;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', String(tileId));
+    setDraggingTileId(tileId);
+  }, [gaveUp, solved]);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggingTileId(null);
+  }, []);
+
+  const handleDropOnCell = useCallback((cellIndex, event) => {
+    event.preventDefault();
+    if (gaveUp || solved) return;
+    const tileId = Number(event.dataTransfer.getData('text/plain'));
+    if (Number.isNaN(tileId)) return;
+    moveTileToCell(tileId, cellIndex);
+    setSelectedTileId(null);
+    setDraggingTileId(null);
+  }, [gaveUp, solved, moveTileToCell]);
+
+  const handleDropOnTray = useCallback((event) => {
+    event.preventDefault();
+    if (gaveUp || solved) return;
+    const tileId = Number(event.dataTransfer.getData('text/plain'));
+    if (Number.isNaN(tileId)) return;
+    returnTileToTray(tileId);
+    setSelectedTileId(null);
+    setDraggingTileId(null);
+  }, [gaveUp, solved, returnTileToTray]);
+
+  const renderTile = (tileId, cellIndex = null) => {
     if (tileId === null || tileId === undefined) return null;
     const tile = tileById.get(tileId);
     const [a, b, c] = tile.letters;
+    const rotation = rotations[tileId] ?? 0;
+    const isDown = cellIndex !== null && isDownCell(cellIndex);
+    const angle = rotation * 120 + (isDown ? 180 : 0);
 
     return (
-      <div className={styles.tileFace}>
+      <div className={`${styles.tileFace} ${isDown ? styles.down : ''}`} style={{ transform: `rotate(${angle}deg)` }}>
         <span className={`${styles.letter} ${styles.top}`}>{a}</span>
         <span className={`${styles.letter} ${styles.left}`}>{b}</span>
         <span className={`${styles.letter} ${styles.right}`}>{c}</span>
@@ -93,7 +170,7 @@ export default function LetterTriangles() {
     <div className={styles.container}>
       <GameHeader
         title={t('letterTriangles.title', { defaultValue: 'Letter Triangles' })}
-        instructions={t('letterTriangles.instructions', { defaultValue: 'Place all triangle tiles so every displayed line becomes the target English word.' })}
+        instructions={t('letterTriangles.instructions', { defaultValue: 'Drag and drop triangle tiles onto the board. Rotate them so every line spells its target word.' })}
       />
 
       <div className={styles.topBar}>
@@ -124,18 +201,46 @@ export default function LetterTriangles() {
       <div className={styles.board}>
         {BOARD_ROWS.map((rowSize, rowIdx) => (
           <div key={rowIdx} className={styles.boardRow}>
-            {Array.from({ length: rowSize }).map((_, i) => {
+            {Array.from({ length: rowSize }).map(() => {
               const current = cellIndex++;
-              const orientation = i % 2 === 1 ? styles.down : styles.up;
+              const tileId = placement[current];
               return (
-                <button
+                <div
                   key={current}
-                  className={`${styles.cell} ${orientation}`}
-                  onClick={() => handleCellClick(current)}
-                  aria-label={t('letterTriangles.boardCell', { defaultValue: 'Board cell {{index}}', index: current + 1 })}
+                  className={`${styles.cell} ${draggingTileId !== null ? styles.dragTarget : ''}`}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={(event) => handleDropOnCell(current, event)}
                 >
-                  {renderTile(placement[current])}
-                </button>
+                  <button
+                    className={styles.cellButton}
+                    onClick={() => handleCellClick(current)}
+                    aria-label={t('letterTriangles.boardCell', { defaultValue: 'Board cell {{index}}', index: current + 1 })}
+                  >
+                    {renderTile(tileId, current)}
+                  </button>
+
+                  {tileId !== null && tileId !== undefined && (
+                    <>
+                      <button
+                        className={styles.rotateButton}
+                        onClick={() => rotateTile(tileId)}
+                        aria-label={t('letterTriangles.rotateTile', { defaultValue: 'Rotate tile' })}
+                      >
+                        ↻
+                      </button>
+                      <div
+                        className={styles.dragHandle}
+                        draggable
+                        onDragStart={(event) => handleDragStart(tileId, event)}
+                        onDragEnd={handleDragEnd}
+                        aria-label={t('letterTriangles.dragTile', { defaultValue: 'Drag tile' })}
+                        title={t('letterTriangles.dragTile', { defaultValue: 'Drag tile' })}
+                      >
+                        ⋮⋮
+                      </div>
+                    </>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -148,16 +253,30 @@ export default function LetterTriangles() {
         </p>
       )}
 
-      <div className={styles.tray}>
+      <div className={styles.tray} onDragOver={(event) => event.preventDefault()} onDrop={handleDropOnTray}>
         {trayTileIds.map((tileId) => (
-          <button
+          <div
             key={tileId}
             className={`${styles.trayTile} ${selectedTileId === tileId ? styles.selected : ''}`}
-            onClick={() => handleTileClick(tileId)}
-            aria-label={t('letterTriangles.tileLabel', { defaultValue: 'Tile {{id}}', id: tileId + 1 })}
+            draggable
+            onDragStart={(event) => handleDragStart(tileId, event)}
+            onDragEnd={handleDragEnd}
           >
-            {renderTile(tileId)}
-          </button>
+            <button
+              className={styles.trayMainButton}
+              onClick={() => handleTileClick(tileId)}
+              aria-label={t('letterTriangles.tileLabel', { defaultValue: 'Tile {{id}}', id: tileId + 1 })}
+            >
+              {renderTile(tileId)}
+            </button>
+            <button
+              className={styles.rotateButton}
+              onClick={() => rotateTile(tileId)}
+              aria-label={t('letterTriangles.rotateTile', { defaultValue: 'Rotate tile' })}
+            >
+              ↻
+            </button>
+          </div>
         ))}
       </div>
 
