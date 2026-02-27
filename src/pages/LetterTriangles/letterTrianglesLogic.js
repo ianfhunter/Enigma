@@ -1,4 +1,4 @@
-import { createSeededRandom, seededShuffleArray, getWordsByLength } from '../../data/wordUtils';
+import { createSeededRandom, seededShuffleArray, getWordsByLength, isCommonWord } from '../../data/wordUtils';
 
 export const CELL_COUNT = 9;
 export const CORNERS = ['A', 'B', 'C'];
@@ -15,17 +15,33 @@ export const LINE_DEFINITIONS = [
 ];
 
 const ONE_LETTER_WORDS = ['A', 'I'];
-const LETTERS = 'ETAOINSHRDLUCMWFGYPBVKJXQZ';
+const COMMON_TWO_LETTER_WORDS = [
+  'AM', 'AN', 'AS', 'AT', 'BE', 'BY', 'DO', 'GO', 'HE', 'IF', 'IN', 'IS', 'IT', 'ME', 'MY',
+  'NO', 'OF', 'ON', 'OR', 'OX', 'SO', 'TO', 'UP', 'US', 'WE'
+];
+
+const WORD_POOL_CACHE = new Map();
 
 function slotKey(cell, corner) {
   return `${cell}:${corner}`;
 }
 
 function getWordPool(length) {
-  if (length === 1) return ONE_LETTER_WORDS;
-  return getWordsByLength(length)
-    .map((word) => word.toUpperCase())
-    .filter((word) => /^[A-Z]+$/.test(word));
+  if (WORD_POOL_CACHE.has(length)) return WORD_POOL_CACHE.get(length);
+
+  let words;
+  if (length === 1) {
+    words = ONE_LETTER_WORDS;
+  } else if (length === 2) {
+    words = COMMON_TWO_LETTER_WORDS;
+  } else {
+    words = getWordsByLength(length)
+      .map((word) => word.toUpperCase())
+      .filter((word) => /^[A-Z]+$/.test(word));
+  }
+
+  WORD_POOL_CACHE.set(length, words);
+  return words;
 }
 
 function compatibleWithPattern(word, pattern) {
@@ -35,101 +51,67 @@ function compatibleWithPattern(word, pattern) {
   return true;
 }
 
-export function generateLetterTrianglesPuzzle(seed) {
-  const baseRandom = createSeededRandom(seed);
+function generateAttempt(seed, preferCommon) {
+  const random = createSeededRandom(seed);
+  const pools = LINE_DEFINITIONS.map((_, idx) => seededShuffleArray([...getWordPool(idx + 1)], random));
 
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const attemptSeed = seed + attempt * 104729;
-    const random = createSeededRandom(attemptSeed);
+  const assignedSlots = new Map();
+  const usedWords = new Set();
+  const chosenWords = [];
 
-    const pools = LINE_DEFINITIONS.map((_, idx) => seededShuffleArray([...getWordPool(idx + 1)], random));
+  for (let lineIndex = 0; lineIndex < LINE_DEFINITIONS.length; lineIndex++) {
+    const line = LINE_DEFINITIONS[lineIndex];
+    const pattern = line.map(({ cell, corner }) => assignedSlots.get(slotKey(cell, corner)) || null);
 
-    const assignedSlots = new Map();
-    const usedWords = new Set();
-    const chosenWords = [];
+    const matching = [];
+    const matchingCommon = [];
 
-    function search(lineIndex) {
-      if (lineIndex === LINE_DEFINITIONS.length) return true;
-
-      const line = LINE_DEFINITIONS[lineIndex];
-      const pattern = line.map(({ cell, corner }) => assignedSlots.get(slotKey(cell, corner)) || null);
-
-      const candidates = pools[lineIndex]
-        .filter((word) => !usedWords.has(word) && compatibleWithPattern(word, pattern))
-        .slice(0, 900);
-
-      for (const word of candidates) {
-        const changed = [];
-
-        for (let i = 0; i < line.length; i++) {
-          const key = slotKey(line[i].cell, line[i].corner);
-          const existing = assignedSlots.get(key);
-          if (!existing) {
-            assignedSlots.set(key, word[i]);
-            changed.push(key);
-          }
-        }
-
-        usedWords.add(word);
-        chosenWords.push(word);
-
-        if (search(lineIndex + 1)) return true;
-
-        chosenWords.pop();
-        usedWords.delete(word);
-        changed.forEach((key) => assignedSlots.delete(key));
+    for (const word of pools[lineIndex]) {
+      if (usedWords.has(word) || !compatibleWithPattern(word, pattern)) continue;
+      matching.push(word);
+      if (word.length <= 2 || isCommonWord(word)) {
+        matchingCommon.push(word);
       }
-
-      return false;
+      if (matching.length >= 1200) break;
     }
 
-    if (!search(0)) continue;
+    const candidatePool = preferCommon && matchingCommon.length > 0 ? matchingCommon : matching;
+    if (candidatePool.length === 0) return null;
 
-    for (let cell = 0; cell < CELL_COUNT; cell++) {
-      for (const corner of CORNERS) {
-        const key = slotKey(cell, corner);
-        if (!assignedSlots.has(key)) {
-          assignedSlots.set(key, LETTERS[Math.floor(random() * LETTERS.length)]);
-        }
-      }
-    }
+    const chosen = candidatePool[Math.floor(random() * candidatePool.length)];
+    chosenWords.push(chosen);
+    usedWords.add(chosen);
 
-    const solvedTiles = Array.from({ length: CELL_COUNT }, (_, cell) => ({
-      id: cell,
-      letters: CORNERS.map((corner) => assignedSlots.get(slotKey(cell, corner))),
-    }));
-
-    return {
-      seed,
-      targetWords: chosenWords,
-      solvedTiles,
-      shuffledTiles: seededShuffleArray([...solvedTiles], baseRandom),
-    };
-  }
-
-  // Fallback: generate a guaranteed solvable letter layout even if dictionary matching fails
-  const fallbackSlots = new Map();
-  for (let cell = 0; cell < CELL_COUNT; cell++) {
-    for (const corner of CORNERS) {
-      fallbackSlots.set(slotKey(cell, corner), LETTERS[Math.floor(baseRandom() * LETTERS.length)]);
+    for (let i = 0; i < line.length; i++) {
+      const key = slotKey(line[i].cell, line[i].corner);
+      if (!assignedSlots.has(key)) assignedSlots.set(key, chosen[i]);
     }
   }
 
   const solvedTiles = Array.from({ length: CELL_COUNT }, (_, cell) => ({
     id: cell,
-    letters: CORNERS.map((corner) => fallbackSlots.get(slotKey(cell, corner))),
+    letters: CORNERS.map((corner) => assignedSlots.get(slotKey(cell, corner))),
   }));
 
-  const targetWords = LINE_DEFINITIONS.map((line) =>
-    line.map(({ cell, corner }) => fallbackSlots.get(slotKey(cell, corner))).join('')
-  );
-
   return {
-    seed,
-    targetWords,
+    targetWords: chosenWords,
     solvedTiles,
-    shuffledTiles: seededShuffleArray([...solvedTiles], baseRandom),
+    shuffledTiles: seededShuffleArray([...solvedTiles], random),
   };
+}
+
+export function generateLetterTrianglesPuzzle(seed) {
+  for (let attempt = 0; attempt < 80; attempt++) {
+    const generated = generateAttempt(seed + attempt * 7919, true);
+    if (generated) return { seed, ...generated };
+  }
+
+  for (let attempt = 0; attempt < 120; attempt++) {
+    const generated = generateAttempt(seed + 500000 + attempt * 1543, false);
+    if (generated) return { seed, ...generated };
+  }
+
+  throw new Error('Failed to generate Letter Triangles puzzle using valid words');
 }
 
 export function buildLineWordsFromPlacement(placement, tileById) {

@@ -45,14 +45,11 @@
   height: 78px;
   border: 2px solid #64748b;
   border-radius: 8px;
-  background: transparent;
+  background: #0f172a;
   cursor: pointer;
   padding: 0;
 }
 
-.cell {
-  background: rgba(148, 163, 184, 0.12);
-}
 
 .tileFace {
   position: relative;
