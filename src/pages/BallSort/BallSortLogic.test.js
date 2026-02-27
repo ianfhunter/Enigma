@@ -10,7 +10,7 @@ import {
 } from './BallSortLogic';
 
 describe('BallSortLogic', () => {
-  it('moves the full top run onto matching color until destination is full', () => {
+  it('moves exactly one ball onto matching color per step', () => {
     const state = [
       [1, 1, 1, 0],
       [1],
@@ -18,21 +18,31 @@ describe('BallSortLogic', () => {
     ];
 
     const next = moveBalls(state, 0, 1);
-    expect(next[0]).toEqual([0]);
-    expect(next[1]).toEqual([1, 1, 1, 1]);
+    expect(next[0]).toEqual([1, 1, 0]);
+    expect(next[1]).toEqual([1, 1]);
   });
 
 
-  it('stops moving when destination reaches full capacity', () => {
+  it('allows sequential one-ball transfers until destination becomes full', () => {
     const state = [
       [2, 2, 2],
-      [2, 2, 2],
+      [2],
       [],
     ];
 
-    const next = moveBalls(state, 0, 1);
-    expect(next[0]).toEqual([2, 2]);
-    expect(next[1]).toEqual([2, 2, 2, 2]);
+    const afterFirst = moveBalls(state, 0, 1);
+    expect(afterFirst[0]).toEqual([2, 2]);
+    expect(afterFirst[1]).toEqual([2, 2]);
+
+    const afterSecond = moveBalls(afterFirst, 0, 1);
+    expect(afterSecond[0]).toEqual([2]);
+    expect(afterSecond[1]).toEqual([2, 2, 2]);
+
+    const afterThird = moveBalls(afterSecond, 0, 1);
+    expect(afterThird[0]).toEqual([]);
+    expect(afterThird[1]).toEqual([2, 2, 2, 2]);
+
+    expect(canMove(afterThird, 2, 1)).toBe(false);
   });
 
   it('does not allow moves to non-matching non-empty bin', () => {
