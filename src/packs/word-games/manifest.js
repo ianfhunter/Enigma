@@ -22,6 +22,7 @@ import pyramidIcon from '../../assets/icons/pyramid.svg';
 import wordtilesIcon from '../../assets/icons/wordtiles.svg';
 import letterwebIcon from '../../assets/icons/letterweb.svg';
 import letterorbitIcon from '../../assets/icons/letter-orbit.svg';
+import letterTrianglesIcon from '../../assets/icons/letter-triangles.svg';
 import flipquotesIcon from '../../assets/icons/flipquotes.svg';
 import cryptogramIcon from '../../assets/icons/cryptogram.svg';
 import phraseguessIcon from '../../assets/icons/phraseguess.svg';
@@ -229,6 +230,17 @@ export const categories = [
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         component: () => import('../../pages/LetterOrbit'),
         lastModified: 1769540742000
+      },
+      {
+        title: 'Letter Triangles',
+        slug: 'letter-triangles',
+        description: 'Arrange triangle tiles so every line spells its target word.',
+        icon: letterTrianglesIcon,
+        emojiIcon: '🔺',
+        colors: { primary: '#0ea5e9', secondary: '#6366f1' },
+        gradient: 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
+        component: () => import('../../pages/LetterTriangles'),
+        lastModified: 1772400000000
       },
       {
         title: 'Word Search',

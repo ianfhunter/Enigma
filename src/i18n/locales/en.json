@@ -752,6 +752,14 @@
     "gaveUp": "Solution Revealed",
     "gaveUpMessage": "Review the route and try a new seed."
   },
+  "letterTriangles": {
+    "title": "Letter Triangles",
+    "instructions": "Place all triangle tiles so each line spells the target word.",
+    "selectedHint": "Tile selected: click a board cell to place it.",
+    "boardCell": "Board cell {{index}}",
+    "tileLabel": "Tile {{id}}",
+    "lineN": "Line {{num}}"
+  },
   "kana": {
     "rules": "Draw exactly one single closed loop by connecting centers of orthogonally adjacent cells.\n\nHow to play:\n1) Click between two neighboring cell centers to add/remove a segment.\n2) The final loop cannot branch or cross itself: every loop cell has exactly two connected segments.\n3) The loop is one continuous cycle (not multiple smaller loops).\n4) Every kana clue cell (あ, え, う, い, お) must be on the loop.\n5) If two clues show the same kana, the loop must pass straight through both in the same orientation (horizontal/vertical) and with the same distances to the next turn on each side.\n6) Different kana must have different orientation-and-distance patterns.\n\nTip: Use the Hint button to view each kana’s required orientation and turn distances for this puzzle.",
     "won": "Perfect loop! You solved Kana.",

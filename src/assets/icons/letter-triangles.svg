@@ -1,0 +1,14 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Letter Triangles icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="20" fill="#0f172a"/>
+  <polygon points="64,14 14,112 114,112" fill="url(#bg)" opacity="0.9"/>
+  <polygon points="64,32 34,92 94,92" fill="#1e293b" opacity="0.95"/>
+  <text x="64" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#e2e8f0">A</text>
+  <text x="46" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#e2e8f0">B</text>
+  <text x="82" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#e2e8f0">C</text>
+</svg>
