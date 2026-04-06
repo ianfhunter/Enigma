@@ -36,8 +36,8 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
-    "@vitest/coverage-v8": "^4.1.0",
-    "@vitest/ui": "^4.0.16",
+    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/ui": "^4.1.2",
     "better-sqlite3": "^12.6.2",
     "better-sqlite3-session-store": "^0.1.0",
     "cors": "^2.8.6",
@@ -50,7 +50,7 @@
     "express-session": "^1.19.0",
     "globals": "^17.4.0",
     "tar": "^7.5.11",
-    "vite": "^7.3.1",
-    "vitest": "^4.0.16"
+    "vite": "^7.3.2",
+    "vitest": "^4.1.2"
   }
 }
